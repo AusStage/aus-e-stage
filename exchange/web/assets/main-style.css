@@ -1,0 +1,244 @@
+/*
+ * This file is part of AusStage Data Exchange Service
+ *
+ * AusStage Data Exchange Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * AusStage Data Exchange Service is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with AusStage Data Exchange Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+*/
+
+body html {
+	margin:0;
+	padding:0;
+	color:#000;
+	background:#fff;
+}
+#wrap {
+	width:1000px;
+	margin:0 auto;
+	background:#7eba5e;
+}
+#header {
+	padding:5px 10px;
+	height: 99px;
+	padding:0px;
+	background: #333333;
+	background-image: url('images/ausstagehomebrand.gif');
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+#header h1 {
+	color: #fff;
+	text-align: right;
+	font-size: 150%;
+	padding-top: 40px;
+	padding-right: 10px;
+}
+
+h1 {
+    margin:0;
+}
+#nav {
+	padding:5px 10px;
+	background:#999999;
+}
+#nav ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+#nav li {
+	display:inline;
+	margin:0;
+	padding:0;
+}
+
+#nav a {
+	color: #fff;
+}
+
+#main {
+	float:right;
+	width:786px;
+	padding:10px;
+	background:#a0ca76;
+	font-size: 90%;
+}
+h2 {
+	margin:0 0 1em;
+	font-size: 125%;
+}
+#sidebar {
+	float:left;
+	width:174px;
+	padding:10px;
+	background-color: #7eba5e;
+}
+
+#sidebar ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+#sidebar ul a {
+	color: #fff;
+	font-size: 90%;
+	text-decoration: none;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+
+#footer {
+	clear:both;
+	padding:5px 10px;
+	background:#999999;
+}
+#footer p {
+	margin:0;
+	font-size: 75%;
+}
+* html #footer {
+	height:1px;
+	font-size: 90%;
+}
+
+/* Styles for forms */
+table.formTable {
+	border-width: 0px;
+	border-spacing: 3px;
+	border-collapse: separate;
+}
+
+table.formTable th {
+	text-align: left;
+
+}
+
+table.formTable th label {
+	text-align: left;
+
+}
+
+/* extends jquery ui button style */
+input.button {
+	/*float: right; */
+	margin: .5em .4em .5em 0; 
+	cursor: pointer; 
+	padding: .2em .6em .3em .6em; 
+	line-height: 1.4em; 
+	width:auto; 
+	overflow:visible; 
+}
+	
+
+/* Styles for Validation Errors */
+label.error { 
+	float: none; 
+	color: red; 
+	padding-left: .5em; 
+	vertical-align: top; 
+} 
+
+/* Styles for tables */
+table.searchResults {
+	background-color: #fff;
+	text-align: left;
+	border: 1px solid #333333;
+	border-collapse: collapse;
+	width: 98%;
+}
+
+table.searchResults th {
+	border: 1px solid #333333;
+	padding: 2px;
+}
+
+table.searchResults td {
+	padding: 2px;
+}
+
+tr.odd {
+	background-color: #e3e3e3;
+}
+
+table.searchResults tfoot {
+	border: 1px solid #333333;
+	font-size: 90%;
+}
+
+/* Styles for Maps */
+#map {
+	width: 780px;
+	height: 585px;
+	margin-top: 15px;
+}
+
+#map_legend {
+	margin-top: 25px;
+}
+
+table.mapLegend {
+	background-color: #fff;
+	text-align: left;
+	border: 1px solid #333333;
+	border-collapse: collapse;
+	width: 98%;
+}
+
+table.mapLegend th {
+	border: 1px solid #333333;
+	padding: 2px;
+	text-align: center;
+}
+
+table.mapLegend td {
+	padding: 2px;
+}
+
+table.mapLegend tfoot {
+	border: 1px solid #333333;
+	font-size: 90%;
+}
+
+#map_header {
+	background: #fff;
+}
+
+#map_header h3 {
+	text-align: center;
+}
+
+#map_links li {
+	display: inline;
+	list-style-type: none;
+	padding-right: 10px;
+}
+
+#map_links {
+	text-align: center;
+	font-size: 90%;
+	margin-top: -10px;
+}
+
+/* Dialog styles */
+.ui-dialog-content a {
+	color: blue!important;
+}
+
+.ui-dialog-content a:visited {
+	color: purple!important;
+}
+
