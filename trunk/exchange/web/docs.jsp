@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html;charset=UTF-8"%>
 <%
 /*
- * This file is part of AusStage Data Exchange Service
+ * This file is part of the AusStage Data Exchange Service
  *
  * AusStage Data Exchange Service is free software: you can redistribute
  * it and/or modify it under the terms of the GNU General Public License 
