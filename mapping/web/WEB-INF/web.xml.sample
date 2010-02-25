@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the AusStage Mapping Service
+ *
+ * The AusStage Mapping Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The AusStage Mapping Service is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+-->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+    <display-name>Aus-e-Stage Mapping Project</display-name>
+    <description>
+        This software takes data stored in the AusStage schema and visualises it on a map 
+    </description>
+    <!-- Servlets -->
+    <servlet>
+        <servlet-name>MappingServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mapping.MappingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GeocodeServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mapping.GeocodeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BrowseServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mapping.BrowseServlet</servlet-class>
+    </servlet>
+    <!-- Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>MappingServlet</servlet-name>
+        <url-pattern>/data/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GeocodeServlet</servlet-name>
+        <url-pattern>/geocode/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BrowseServlet</servlet-name>
+        <url-pattern>/browse/*</url-pattern>
+    </servlet-mapping>
+    <!-- Context Params to Share Common Information-->
+    <context-param>
+        <param-name>databaseConnectionString</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>systemName</param-name>
+        <param-value>AusStage Mapping System</param-value>
+    </context-param>    
+    <context-param>
+       	<param-name>systemVersion</param-name>
+       	<param-value>1.0 (Alpha)</param-value>
+    </context-param>
+    <context-param>
+        <param-name>buildVersion</param-name>
+        <param-value>1</param-value>
+    </context-param>
+    <context-param>
+        <param-name>moreInfo</param-name>
+        <param-value>http://www.ausstage.edu.au</param-value>
+    </context-param>
+    <context-param>
+        <param-name>systemUrl</param-name>
+        <!-- Include trailing slash -->
+        <param-value>http://beta.ausstage.edu.au/mapping/</param-value>
+    </context-param>    
+    <context-param>
+        <param-name>googleMapsAPIUrl</param-name>
+        <!-- Include the API key in the URL -->
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>eventURLTemplate</param-name>
+        <!-- The [event-id] string will be replaced with the id number for this event-->
+        <param-value>http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=[event-id]</param-value>
+    </context-param>
+    <context-param>
+    	<param-name>venueURLTemplate</param-name>
+    	<!-- The [event-id] string will be replaced with the id number for this event-->
+        <param-value>http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=[venue-id]</param-value>
+    </context-param>
+    <context-param>
+        <param-name>googleGeocodeUrl</param-name>
+        <!-- The [address] string will be replaced with the address prior to lookup-->
+        <param-value></param-value>
+    </context-param>
+    <!-- Add mime mapping for VUE files -->
+	<mime-mapping>
+		<extension>vue</extension>
+		<mime-type>text/xml</mime-type>
+	</mime-mapping> 
+    
+</web-app>
