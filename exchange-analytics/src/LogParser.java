@@ -57,6 +57,7 @@ public class LogParser {
 		String[] tockens    = null; // tockens from the string
 		String[] params     = null; // query parameters
 		String[] param      = null; // parameter name and value
+		String[] dateParts  = null; // parts of the date
 		int  logLines       = 0;
 		PreparedStatement statement = null;
 		
@@ -85,11 +86,13 @@ public class LogParser {
 					String limit   = null;
 					String script  = null;
 					String ip      = null;
-					String referer = null;					
+					String referer = null;				
 				
 					// get the date
 					tockens = previousLine.split(" ");
-					date = tockens[0] + " " + tockens[1] + " " + tockens[2];
+					//date = tockens[0] + " " + tockens[1] + " " + tockens[2];
+					dateParts = tockens[0].split("/");
+					date = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
 				
 					// this is a line to parse
 					tockens = logLine.split(" "); // tockens from the line
