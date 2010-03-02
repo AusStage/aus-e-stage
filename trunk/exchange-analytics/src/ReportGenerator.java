@@ -67,6 +67,7 @@ public class ReportGenerator {
 	
 		// declare helper variables
 		boolean status = false;
+		ChartManager chart = new ChartManager();
 		
 		// start the report
 		status = this.startReport();
@@ -87,8 +88,83 @@ public class ReportGenerator {
 		if(status == false) {
 			// an error has occured
 			return false;
-		}		
+		}
 		
+		// add a section
+		status = this.addSection("description", ReportConstants.DISPLAY_ALL, "Test descriptive section", "<p>Hello World</p>");
+		
+		// check to see if it is OK to proceed
+		if(status == false) {
+			// an error has occured
+			return false;
+		}
+		
+		/*
+		 * get the data for this month
+		 */
+
+		/*
+		 * debug code bring the month back to feb
+		 */
+		//int maxDays = Integer.parseInt(this.getLastDay(this.getCurrentYear(), this.getCurrentMonth())); // maximum number of days to search for data
+		int maxDays = Integer.parseInt(this.getLastDay(this.getCurrentYear(), "02")); // maximum number of days to search for data
+		int currentDay = 1; // the current day
+		int maxRequests = 0; // keep track of the maximum number of requests
+		String[] data    = new String[maxDays]; // array of data values
+		String[] xLabels = new String[maxDays]; // array of x axis labels
+		PreparedStatement statement;
+		ResultSet results;
+		
+		// prepare an SQL statement
+		try {
+			statement = database.prepareStatement("SELECT COUNT(date) FROM requests WHERE date = ?");
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to prepare current month SQL statement\n" + ex);
+			return false;
+		}
+		
+		try {
+		
+			// loop through the days getting the data
+			while (currentDay <= maxDays) {
+			
+				// set the dates
+				//statement.setString(1, this.getCurrentYear() + "-" + this.getCurrentMonth() + "-" + String.format("%02d", currentDay);
+				statement.setString(1, this.getCurrentYear() + "-" + "02" + "-" + String.format("%02d", currentDay)); // remember to use real month
+				results = statement.executeQuery();
+				
+				if(results.next() == true) {
+					data[currentDay -1] = results.getString(1);
+					
+					if(Integer.parseInt(results.getString(1)) > maxRequests) {
+						maxRequests = Integer.parseInt(results.getString(1));
+					}
+					
+				} else {
+					data[currentDay -1] = "0";
+				}
+
+				// increment the currentDay count
+				currentDay++;
+				
+				// play nice and close the resultset
+				results.close();	
+			} 
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to execute current month SQL\n" + ex);
+			return false;
+		}
+		
+		// build the x labels array
+		for(int i = 0; i < maxDays; i++) {
+			xLabels[i] = String.format("%02d", i + 1);
+		}
+		
+		//buildBarChart(String width, String height, String data, String title, String[] xLabels, String yMax) {
+		String chart_url = chart.buildBarChart("750", "125", chart.simpleEncode(data, maxRequests), "Requests by day for February 2010", xLabels, Integer.toString(maxRequests));
+		
+		System.out.println(chart_url);
+
 		// debug code
 		return true;
 	
@@ -175,11 +251,34 @@ public class ReportGenerator {
 	/**
 	 * A method to add a section to the report
 	 *
+	 * @param id      the section identifier
+	 * @param display display this section for mobile devices, desktop browsers or both
+	 * @param title   title of this section
+	 * @param content the html content of this section
+	 *
 	 * @return true if, and only if, the section was added successfully
 	 */
-	private boolean addSection() {
+	private boolean addSection(String id, String display, String title, String content) {
 	
 		try{
+		
+			//add the section
+			Element sectionElement = xmlDoc.createElement("section");
+			sectionElement.setAttribute("id", id);
+			sectionElement.setAttribute("display", display);
+			
+			// add the title
+			Element currentElement = xmlDoc.createElement("title");
+			currentElement.setTextContent(title);
+			sectionElement.appendChild(currentElement);
+			
+			// add the content
+			currentElement = xmlDoc.createElement("content");
+			currentElement.appendChild(xmlDoc.createCDATASection(content));
+			sectionElement.appendChild(currentElement);
+			
+			// add the section to the document
+			rootElement.appendChild(sectionElement);
 			
 		} catch (org.w3c.dom.DOMException ex) {
 			System.out.println("ERROR: Unable to create report metadata.\n" + ex);
@@ -258,7 +357,7 @@ public class ReportGenerator {
 	 
 	
 	/**
-	 * A method to get the current date and time to use in a timestamp
+	 * A method to get the current date and time
 	 *
 	 * @return  a string containing the timestamp
 	 */
@@ -270,5 +369,94 @@ public class ReportGenerator {
 		return formatter.format(calendar.getTime());
 	 
 	} // end getCurrentDateAndTime method
+	
+	/**
+	 * A method to get the current month
+	 *
+	 * @return a string containing the current month
+	 */
+	public String getCurrentMonth() {
+		// get an instance of the calendar
+		java.util.GregorianCalendar calendar = new java.util.GregorianCalendar();
+		
+		// set it to the current time
+	 	calendar.setTime(new java.util.Date());
+	 	
+	 	// get the current month
+	 	// zero based index so add 1
+	 	return String.format("%02d", (calendar.get(java.util.Calendar.MONTH) + 1));
+	 
+	} // end getCurrentMonth method
+	
+	/**
+	 * A method to get the current year
+	 *
+	 * @return a string containing the current month
+	 */
+	public String getCurrentYear() {
+		// get an instance of the calendar
+		java.util.GregorianCalendar calendar = new java.util.GregorianCalendar();
+		
+		// set it to the current time
+	 	calendar.setTime(new java.util.Date());
+	 	
+	 	// get the current month
+	 	// zero based index so add 1
+	 	return Integer.toString(calendar.get(java.util.Calendar.YEAR));
+	 
+	} // end getCurrentYear method
+	
+	/**
+	 * A method to get the last day of a month
+	 *
+	 * @param year  the four digit year
+	 * @param month the two digit month
+	 *
+	 * @return      the last day of the specified month
+	 */
+	public String getLastDay(String year, String month) {
+	
+		// get a calendar object
+		java.util.GregorianCalendar calendar = new java.util.GregorianCalendar();
+		
+		// convert the year and month to integers
+		int yearInt = Integer.parseInt(year);
+		int monthInt = Integer.parseInt(month);
+		
+		// adjust the month for a zero based index
+		monthInt = monthInt - 1;
+		
+		// set the date of the calendar to the date provided
+		calendar.set(yearInt, monthInt, 1);
+		
+		int dayInt = calendar.getActualMaximum(java.util.GregorianCalendar.DAY_OF_MONTH);
+		
+		return Integer.toString(dayInt);
+	} // end getLastDay method
+
+} // end class definition
+
+/**
+ * A class used to define constants for Report Generation
+ */
+class ReportConstants {
+
+	/**
+	 * A constant that is used for sections that are to be displayed
+	 * on mobile devices only
+	 */
+	public static final String MOBILE_DISPLAY  = "mobile";
+	
+	/**
+	 * A constant that is used for sections that are to be displayed
+	 * in desktop browsers only
+	 */
+	public static final String DESKTOP_DISPLAY = "desktop";
+	
+	/**
+	 * A constant that is used for sections that are to be displayed
+	 * on both mobile devices and desktop browsers
+	 */
+	public static final String DISPLAY_ALL     = "all";
 
 } // end class definition
