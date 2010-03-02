@@ -216,14 +216,46 @@ public class ExchangeAnalytics {
 				}
 			}
 			
-			// play nice and close the database
-			database.close();
+			// keep the user informed
 			System.out.println("INFO: " + fileCount + " new files processed");
 			
 		} catch(java.sql.SQLException ex) {
 			System.out.println("ERROR: Unable to execute file processed check or update SQL.\n" + ex);
 			System.exit(-1);
 		}
+		
+		// get an instance of the ReportGenerator class
+		ReportGenerator report = new ReportGenerator(database);
+		
+		// generate the report
+		boolean status = report.generate();
+		
+		// play nice and close the database
+		try {	
+			database.close();
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to close the database.\n" + ex);
+			System.exit(-1);
+		}
+		
+		if(status == true) {
+			// write report file
+			// debug code
+			status = report.writeReportFile(outputFile);
+			
+			if(status == true) {
+				// report success and quit
+				System.out.println("INFO: Report file successfully written");
+				System.exit(0);
+			} else {
+				System.out.println("ERROR: Unable to create report, check previous error message for details.");
+				System.exit(-1);
+			}
+		} else {
+			// report error and quit
+			System.out.println("ERROR: Unable to generate report, check previous error message for details.");
+			System.exit(-1);
+		}		
 				
 	} // end main method
 
@@ -237,8 +269,8 @@ public class ExchangeAnalytics {
 class FileListFilter implements FilenameFilter {
 
 	// declare helper variables
-	private final String name = "ausstage-exchange";
-	private final String ext  = ".log";
+	private final String NAME = "ausstage-exchange";
+	private final String EXT  = ".log";
 	
 	/**
 	 * Method to test if the specified file matches the predetermined
@@ -252,7 +284,7 @@ class FileListFilter implements FilenameFilter {
 	public boolean accept(File dir, String filename) {
 	
 		if(filename != null) {
-			if(filename.startsWith(name) && filename.endsWith(ext)) {
+			if(filename.startsWith(NAME) && filename.endsWith(EXT)) {
 				return true;
 			} else {
 				return false;
