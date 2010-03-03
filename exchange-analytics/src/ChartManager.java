@@ -30,7 +30,9 @@ import java.util.*;
 public class ChartManager {
 
 	// declare class level variables
-	private final String URL_START = "http://chart.apis.google.com/chart?";
+	private final String URL_START = "http://chart.apis.google.com/chart?";   // base URL
+	private final String BARCHART_DEFAULT_PARAMS = "cht=bvs&chbh=a&chxt=x,y"; // auto resize the size of the bars and show x and y labels
+	private final String BARCHART_SERIES_COLOUR = "&chco=CA77CA";             // default bar chart colour	
 
 	/**
 	 * A method to encode an array of values using the simple encoding 
@@ -50,16 +52,26 @@ public class ChartManager {
 		StringBuilder data = new StringBuilder("s:");
 		int currentValue;
 		
-		// loop through the array encoding data as we go
-		for (int i = 0; i < values.length; i++) {
-			currentValue = Integer.parseInt(values[i]);
-			
-			// find the aprpropriate encoded data value
-			// including scaling the value appropriately
-			if(currentValue >= 0) {
-				data.append(simpleEncoding.charAt(Math.round((simpleEncoding.length() - 1) * currentValue / maxValue)));
-			} else {
-				data.append("_");
+		// check to ensure maxValue is > 0
+		// could be that the current month doesn't have any data so the max value is 0
+		if(maxValue > 0) {
+		
+			// loop through the array encoding data as we go
+			for (int i = 0; i < values.length; i++) {
+				currentValue = Integer.parseInt(values[i]);
+				
+				// find the aprpropriate encoded data value
+				// including scaling the value appropriately
+				if(currentValue >= 0) {
+					data.append(simpleEncoding.charAt(Math.round((simpleEncoding.length() - 1) * currentValue / maxValue)));
+				} else {
+					data.append("_");
+				}
+			}
+		} else {
+			// just add enough zeros to reflect the number of values
+			for (int i = 0; i < values.length; i++) {
+				data.append("A");
 			}
 		}
 		
@@ -80,7 +92,7 @@ public class ChartManager {
 	 * 
 	 * @return  the URL for the bar chart
 	 */
-	public String buildBarChart(String width, String height, String data, String title, String[] xLabels, String yMax) {
+	public String buildBarChart(String width, String height, String data, String title, String yMax, String[] xLabels) {
 		
 		// set chart type to a bar char
 		// set the bar width to be automatically resized
@@ -88,7 +100,7 @@ public class ChartManager {
 		final String DEFAULT_PARAMS = "cht=bvs&chbh=a&chxt=x,y"; // auto resize the size of the bars and show x and y labels
 		
 		// declare helper variables
-		StringBuilder url = new StringBuilder(this.URL_START + DEFAULT_PARAMS);
+		StringBuilder url = new StringBuilder(this.URL_START + BARCHART_DEFAULT_PARAMS + BARCHART_SERIES_COLOUR);
 		
 		// add the chart size
 		url.append("&chs=" + width + "x" + height);
@@ -117,6 +129,30 @@ public class ChartManager {
 		// return the url
 		return url.toString();
 	
+	} // end buildBarChart method
+	
+	/**
+	 * A method to build a bar chart, the x axis labels will be calculated automatically
+	 *
+	 * @param title   the chart title
+	 * @param yMax    the maximum y value
+	 * @param data    the data to build the chart with
+	 * @param width   the width of the chart image
+	 * @param height  the height of the chart image
+	 * 
+	 * @return  the URL for the bar chart
+	 */
+	public String buildBarChart(String width, String height, String data, String title, String yMax) {
+	
+		// declare helper variables
+		String[] xLabels = new String[data.length() - 2];
+	
+		// calculate the default xLabels
+		for(int i = 0; i < data.length() - 2; i++) {
+			xLabels[i] = String.format("%02d", i + 1);
+		}
+	
+		return this.buildBarChart(width, height, data, title, yMax, xLabels);	
 	} // end buildBarChart method
 	
 

@@ -42,9 +42,13 @@ public class ReportGenerator {
 	private Element                rootElement = null;
 	
 	// report metadata
-	private final String title = "AusStage Data Exchange Service Analytics";
+	private final String REPORT_TITLE = "AusStage Data Exchange Service Analytics";
 	private String description;
-	private final String analysisID = "exchange-01";
+	private final String ANALYSIS_ID = "exchange-01";
+	
+	// chart defaults
+	private final int BAR_CHART_WIDTH  = 750;
+	private final int BAR_CHART_HEIGHT = 125;
 
 	/**
 	 * Constructor for this class
@@ -68,6 +72,7 @@ public class ReportGenerator {
 		// declare helper variables
 		boolean status = false;
 		ChartManager chart = new ChartManager();
+		String chartURL = null;
 		
 		// start the report
 		status = this.startReport();
@@ -99,19 +104,84 @@ public class ReportGenerator {
 			return false;
 		}
 		
-		/*
-		 * get the data for this month
-		 */
+		// get the chart for the current month
+		chartURL = this.buildMonthChart(ReportConstants.CURRENT_MONTH, chart, BAR_CHART_WIDTH, BAR_CHART_HEIGHT);
+		
+		// check on what is returned
+		if(chartURL == null) {
+			System.out.println("An error occured while building a chart, see previous error message for details");
+			return false;
+		}
+		
+		
+		System.out.println(chartURL);
 
-		/*
-		 * debug code bring the month back to feb
-		 */
-		//int maxDays = Integer.parseInt(this.getLastDay(this.getCurrentYear(), this.getCurrentMonth())); // maximum number of days to search for data
-		int maxDays = Integer.parseInt(this.getLastDay(this.getCurrentYear(), "02")); // maximum number of days to search for data
-		int currentDay = 1; // the current day
-		int maxRequests = 0; // keep track of the maximum number of requests
+		// debug code
+		return true;
+	
+	} // end generate method
+	
+	/**
+	 * A method to build a chart for a months worth of data
+	 * 
+	 * @param chartType one of the ReportConstants either CURRENT_MONTH or PREVIOUS_MONTH
+	 * @param chart     a valid ChartManager object used to build this chart
+	 * @param chartHeight the height of the chart
+	 * @param chartWidth  the width of the chart
+	 *
+	 * @return          the URL for this chart
+	 */
+	private String buildMonthChart(int chartType, ChartManager chart, int chartHeight, int chartWidth) {
+	
+		// declare helper variables
+		int monthInt       = 0;
+		String monthString = null;
+		String yearString  = null;
+		int    yearInt     = 0;
+		
+		// determine the month to be looking at
+		if(chartType == ReportConstants.CURRENT_MONTH) {
+			
+			// define month variables
+			monthString = this.getCurrentMonth();
+			monthInt    = Integer.parseInt(monthString);
+			
+			// define the year variables
+			yearString = this.getCurrentYear();
+			yearInt    = Integer.parseInt(yearString);
+			
+		} else if (chartType == ReportConstants.PREVIOUS_MONTH) {
+		
+			// define month variabls
+			monthInt    = Integer.parseInt(this.getCurrentMonth()) - 1;
+			monthString = String.format("%02d", monthInt);
+			
+			// check for rolling back too far
+			if(monthInt == 0) {
+			
+				// set the month to Dec 
+				monthInt = 12;
+				monthString = "12";
+				
+				// go back one year
+				yearInt    = Integer.parseInt(yearString) - 1;
+				yearString = Integer.toString(yearInt);
+			} else {
+				// define the year variables
+				yearString = this.getCurrentYear();
+				yearInt    = Integer.parseInt(yearString);
+			}
+		}
+		
+		// determine number of days in this month
+		int maxDays = Integer.parseInt(this.getLastDay(yearString, monthString));		
+
+		// declare additional helper variables
+		int currentDay   = 1; // the current day
+		int maxRequests  = 0; // keep track of the maximum number of requests
 		String[] data    = new String[maxDays]; // array of data values
-		String[] xLabels = new String[maxDays]; // array of x axis labels
+		
+		// database related helper variables
 		PreparedStatement statement;
 		ResultSet results;
 		
@@ -119,8 +189,8 @@ public class ReportGenerator {
 		try {
 			statement = database.prepareStatement("SELECT COUNT(date) FROM requests WHERE date = ?");
 		} catch(java.sql.SQLException ex) {
-			System.out.println("ERROR: Unable to prepare current month SQL statement\n" + ex);
-			return false;
+			System.out.println("ERROR: Unable to prepare SQL statement in buildMonthChart method\n" + ex);
+			return null;
 		}
 		
 		try {
@@ -128,9 +198,10 @@ public class ReportGenerator {
 			// loop through the days getting the data
 			while (currentDay <= maxDays) {
 			
-				// set the dates
-				//statement.setString(1, this.getCurrentYear() + "-" + this.getCurrentMonth() + "-" + String.format("%02d", currentDay);
-				statement.setString(1, this.getCurrentYear() + "-" + "02" + "-" + String.format("%02d", currentDay)); // remember to use real month
+				// build the date for this query
+				statement.setString(1, yearString + "-" + monthString + "-" + String.format("%02d", currentDay));
+				
+				// execute the query
 				results = statement.executeQuery();
 				
 				if(results.next() == true) {
@@ -151,24 +222,17 @@ public class ReportGenerator {
 				results.close();	
 			} 
 		} catch(java.sql.SQLException ex) {
-			System.out.println("ERROR: Unable to execute current month SQL\n" + ex);
-			return false;
+			System.out.println("ERROR: Unable to execute SQL in buildMonthChart method\n" + ex);
+			return null;
 		}
 		
-		// build the x labels array
-		for(int i = 0; i < maxDays; i++) {
-			xLabels[i] = String.format("%02d", i + 1);
-		}
+		// build the chart title
+		String chartTitle = "Requests by day for " + this.lookupMonth(monthInt) + " " + yearString;
 		
-		//buildBarChart(String width, String height, String data, String title, String[] xLabels, String yMax) {
-		String chart_url = chart.buildBarChart("750", "125", chart.simpleEncode(data, maxRequests), "Requests by day for February 2010", xLabels, Integer.toString(maxRequests));
-		
-		System.out.println(chart_url);
-
-		// debug code
-		return true;
+		return chart.buildBarChart(Integer.toString(chartHeight), Integer.toString(chartWidth), chart.simpleEncode(data, maxRequests), chartTitle, Integer.toString(maxRequests));	
 	
-	} // end generate method
+	} // end buildMonthChart method
+	 
 	
 	/**
 	 * A method to create the XML document ready for populating with data
@@ -221,7 +285,7 @@ public class ReportGenerator {
 		
 			// add the title
 			Element currentElement = xmlDoc.createElement("title");
-			currentElement.setTextContent(title);
+			currentElement.setTextContent(REPORT_TITLE);
 			rootElement.appendChild(currentElement);
 			
 			// add the description
@@ -231,7 +295,7 @@ public class ReportGenerator {
 			
 			// add the analysis id
 			currentElement = xmlDoc.createElement("analysis_id");
-			currentElement.setTextContent(analysisID);
+			currentElement.setTextContent(ANALYSIS_ID);
 			rootElement.appendChild(currentElement);
 			
 			// add the date and time
@@ -433,6 +497,74 @@ public class ReportGenerator {
 		
 		return Integer.toString(dayInt);
 	} // end getLastDay method
+	
+	/**
+	 * A method used to lookup the name of a month based on its number
+	 *
+	 * @param month the month as a digit
+	 *
+	 * @return      a string containing the name of the month
+	 */
+	private String lookupMonth(String month) {
+	 
+		// check on the month parameter
+	 	if(month == null || month.equals("")) {
+	 		return "";
+	 	}
+	 
+	 	// prepare the month
+	 	month = month.trim();
+	 	
+	 	// double check the month parameter
+	 	if(month == null || month.equals("")) {
+	 		return "";
+	 	}
+	 
+	 	// convert the string to an int
+	 	int i = Integer.parseInt(month);
+	 	
+	 	switch (i) {
+	 		case 1:  return "January";
+	 		case 2:  return "February";
+	 		case 3:  return "March";
+	 		case 4:  return "April";
+	 		case 5:  return "May";
+	 		case 6:  return "June";
+	 		case 7:  return "July";
+	 		case 8:  return "August";
+	 		case 9:  return "September";
+	 		case 10: return "October";
+	 		case 11: return "November";
+	 		case 12: return "December";
+	 		default: return "";
+	 		}
+	} // end lookupMonth method
+	
+	/**
+	 * A method used to lookup the name of a month based on its number
+	 *
+	 * @param month the month as a digit
+	 *
+	 * @return      a string containing the name of the month
+	 */
+	private String lookupMonth(int month) {
+	 	
+	 	switch (month) {
+	 		case 1:  return "January";
+	 		case 2:  return "February";
+	 		case 3:  return "March";
+	 		case 4:  return "April";
+	 		case 5:  return "May";
+	 		case 6:  return "June";
+	 		case 7:  return "July";
+	 		case 8:  return "August";
+	 		case 9:  return "September";
+	 		case 10: return "October";
+	 		case 11: return "November";
+	 		case 12: return "December";
+	 		default: return "";
+	 		}
+	} // end lookupMonth method
 
 } // end class definition
 
@@ -458,5 +590,16 @@ class ReportConstants {
 	 * on both mobile devices and desktop browsers
 	 */
 	public static final String DISPLAY_ALL     = "all";
+	
+	/**
+	 * A constant that is used to build charts for the current month
+	 */
+	public static final int CURRENT_MONTH = 1;
+	
+	/**
+	 * A constant that is used to build charts for the previous month
+	 */
+	public static final int PREVIOUS_MONTH = 2;
+	
 
 } // end class definition
