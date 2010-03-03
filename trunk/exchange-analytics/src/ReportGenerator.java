@@ -105,7 +105,7 @@ public class ReportGenerator {
 		}
 		
 		// get the chart for the current month
-		chartURL = this.buildMonthChart(ReportConstants.CURRENT_MONTH, chart, BAR_CHART_WIDTH, BAR_CHART_HEIGHT);
+		chartURL = this.buildMonthChart(ReportConstants.CURRENT_MONTH, chart, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
 		
 		// check on what is returned
 		if(chartURL == null) {
@@ -113,8 +113,20 @@ public class ReportGenerator {
 			return false;
 		}
 		
+		// add the section for the current month chart
+		status = this.addSectionWithChart("current-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Current Month", "<p>This chart provides an overview of the number of successful requests to the Exchange Data Service for the current month</p>", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT); 
 		
-		System.out.println(chartURL);
+		// get the chart for the previous month
+		chartURL = this.buildMonthChart(ReportConstants.PREVIOUS_MONTH, chart, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
+		
+		// check on what is returned
+		if(chartURL == null) {
+			System.out.println("An error occured while building a chart, see previous error message for details");
+			return false;
+		}
+		
+		// add the section for the current month chart
+		status = this.addSectionWithChart("prev-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Previous Month", "", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT); 
 
 		// debug code
 		return true;
@@ -131,7 +143,7 @@ public class ReportGenerator {
 	 *
 	 * @return          the URL for this chart
 	 */
-	private String buildMonthChart(int chartType, ChartManager chart, int chartHeight, int chartWidth) {
+	private String buildMonthChart(int chartType, ChartManager chart, int chartWidth, int chartHeight) {
 	
 		// declare helper variables
 		int monthInt       = 0;
@@ -229,7 +241,7 @@ public class ReportGenerator {
 		// build the chart title
 		String chartTitle = "Requests by day for " + this.lookupMonth(monthInt) + " " + yearString;
 		
-		return chart.buildBarChart(Integer.toString(chartHeight), Integer.toString(chartWidth), chart.simpleEncode(data, maxRequests), chartTitle, Integer.toString(maxRequests));	
+		return chart.buildBarChart(Integer.toString(chartWidth), Integer.toString(chartHeight), chart.simpleEncode(data, maxRequests), chartTitle, Integer.toString(maxRequests));	
 	
 	} // end buildMonthChart method
 	 
@@ -356,11 +368,44 @@ public class ReportGenerator {
 	/**
 	 * A method to add a section to the report which includes a chart
 	 *
+	 * @param id      the section identifier
+	 * @param display display this section for mobile devices, desktop browsers or both
+	 * @param title   title of this section
+	 * @param content the html content of this section
+	 * @param chartURL the url for the chart
+	 * @param chartHeight the height of the chart
+	 * @param chartWidth   the width of the chart
+	 *
 	 * @return true if, and only if, the section was added successfully
 	 */
-	private boolean addSectionWithChart() {
+	private boolean addSectionWithChart(String id, String display, String title, String content, String chartUrl, int chartWidth, int chartHeight) {
 	
 		try{
+		
+			//add the section
+			Element sectionElement = xmlDoc.createElement("section");
+			sectionElement.setAttribute("id", id);
+			sectionElement.setAttribute("display", display);
+			
+			// add the title
+			Element currentElement = xmlDoc.createElement("title");
+			currentElement.setTextContent(title);
+			sectionElement.appendChild(currentElement);
+			
+			// add the content
+			currentElement = xmlDoc.createElement("content");
+			currentElement.appendChild(xmlDoc.createCDATASection(content));
+			sectionElement.appendChild(currentElement);
+			
+			// add the chart element
+			currentElement = xmlDoc.createElement("chart");
+			currentElement.setAttribute("height", Integer.toString(chartHeight));
+			currentElement.setAttribute("width", Integer.toString(chartWidth));
+			currentElement.setAttribute("href", chartUrl);
+			sectionElement.appendChild(currentElement);
+			
+			// add the section to the document
+			rootElement.appendChild(sectionElement);
 			
 		} catch (org.w3c.dom.DOMException ex) {
 			System.out.println("ERROR: Unable to create report metadata.\n" + ex);
@@ -577,13 +622,13 @@ class ReportConstants {
 	 * A constant that is used for sections that are to be displayed
 	 * on mobile devices only
 	 */
-	public static final String MOBILE_DISPLAY  = "mobile";
+	public static final String DISPLAY_MOBILE  = "mobile";
 	
 	/**
 	 * A constant that is used for sections that are to be displayed
 	 * in desktop browsers only
 	 */
-	public static final String DESKTOP_DISPLAY = "desktop";
+	public static final String DISPLAY_DESKTOP = "desktop";
 	
 	/**
 	 * A constant that is used for sections that are to be displayed
