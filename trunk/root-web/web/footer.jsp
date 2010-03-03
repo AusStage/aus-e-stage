@@ -26,5 +26,5 @@
 		String buildVersion    = (String)context.getInitParameter("buildVersion");
 		String moreInfo		   = (String)context.getInitParameter("moreInfo");
 	%>
-	<p><%=systemName%> Version: <%=systemVersion%> Build: <%=buildVersion%> | <a href="<%=moreInfo%>" title="More Information About the System">More Info</a></p>
+	<p><%=systemName%> Version: <%=systemVersion%> Build: <%=buildVersion%> | <a href="<%=moreInfo%>" title="More Information About the System">More Info</a> | <a href="http://beta.ausstage.edu.au/" title="More info about the projet">Contact Us</a></p>
 </div>

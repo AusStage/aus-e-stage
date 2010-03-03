@@ -306,6 +306,19 @@
     <!-- Copy additional files to ${dist.home} as necessary -->
 
   </target>
+  
+  <!-- build a binary distribution without create the java doc -->
+  
+    <target name="dist2" depends="compile"
+   description="Create binary distribution">
+
+    <!-- Create application JAR file -->
+    <jar jarfile="${dist.home}/${app.name}.war"
+         basedir="${build.home}"/>
+
+    <!-- Copy additional files to ${dist.home} as necessary -->
+
+  </target>
 
 
 

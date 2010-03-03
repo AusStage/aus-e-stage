@@ -53,6 +53,8 @@
 				<li><a href="#tabs-1">Project Overview</a></li>
 				<li><a href="#tabs-2">Delicious Links</a></li>
 				<li><a href="#tabs-3">Zotero Links</a></li>
+				<li><a href="#tabs-4">Analytics</a></li>
+				<li><a href="#tabs-5">Contact Us</a></li>
 			</ul>
 			<div id="tabs-1">
 				<p>
@@ -109,6 +111,16 @@
 					Below are the 10 most recent items added to the library. 
 				</p>
 				<div id="zotero_feed"></div> 
+			</div>
+			<div id="tabs-4">
+				<p>Coming Soon!</p>
+			</div>
+			<div id="tabs-5">
+				<p>
+					We encourage you to explore our services and provide as much feedback as you wish. Please contact us using the details below:
+				</p>
+				<p><strong>Aus-e-Stage Project Manager: </strong>Mrs Liz Milford, (08) 8201 2085, <a href="mailto:liz.milford@flinders.edu.au" title="Email Liz">liz.milford@flinders.edu.au</a></p>
+				<p><strong>Aus-e-Stage Software Engineer: </strong>Mr Corey Wallis, (08) 8201 5818, <a href="mailto:corey.wallis@flinders.edu.au" title="Email Corey">corey.wallis@flinders.edu.au</a></p>
 			</div>
 		</div>
 	</div>
