@@ -50,6 +50,9 @@ public class ReportGenerator {
 	private final int BAR_CHART_WIDTH  = 750;
 	private final int BAR_CHART_HEIGHT = 125;
 
+	private final int PIE_CHART_WIDTH  = 400;
+	private final int PIE_CHART_HEIGHT = 125;
+
 	/**
 	 * Constructor for this class
 	 *
@@ -116,6 +119,12 @@ public class ReportGenerator {
 		// add the section for the current month chart
 		status = this.addSectionWithChart("current-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Current Month", "<p>This chart provides an overview of the number of successful requests to the Exchange Data Service for the current month</p>", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT); 
 		
+		// check to see if it is OK to proceed
+		if(status == false) {
+			// an error has occured
+			return false;
+		}
+		
 		// get the chart for the previous month
 		chartURL = this.buildMonthChart(ReportConstants.PREVIOUS_MONTH, chart, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
 		
@@ -126,9 +135,69 @@ public class ReportGenerator {
 		}
 		
 		// add the section for the current month chart
-		status = this.addSectionWithChart("prev-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Previous Month", "", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT); 
+		status = this.addSectionWithChart("prev-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Previous Month", "", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
+		
+		// check to see if it is OK to proceed
+		if(status == false) {
+			// an error has occured
+			return false;
+		}
+		
+		// get the chart for the year
+		chartURL = this.buildYearChart(this.getCurrentYear(), chart, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
+		
+		// check on what is returned
+		if(chartURL == null) {
+			System.out.println("An error occured while building a chart, see previous error message for details");
+			return false;
+		}
+		
+		// add the section for the current month chart
+		status = this.addSectionWithChart("year-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Year", "", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
+		
+		// check to see if it is OK to proceed
+		if(status == false) {
+			// an error has occured
+			return false;
+		}
+		
+		// build the request type chart 
+		chartURL = this.buildRequestTypeChart(this.getCurrentYear(), chart, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
+		
+		// check on what is returned
+		if(chartURL == null) {
+			System.out.println("An error occured while building a chart, see previous error message for details");
+			return false;
+		}
+		
+		// add the section for the request type chart
+		status = this.addSectionWithChart("req-type-chart", ReportConstants.DISPLAY_DESKTOP, "Requests by Request Type", "<p>Please note percentages may add up to more than 100% due to rounding for display purposes</p>", chartURL, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
+		
+		// check to see if it is OK to proceed
+		if(status == false) {
+			// an error has occured
+			return false;
+		}
+		
+		// build the output type chart 
+		chartURL = this.buildOutputTypeChart(this.getCurrentYear(), chart, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
+		
+		// check on what is returned
+		if(chartURL == null) {
+			System.out.println("An error occured while building a chart, see previous error message for details");
+			return false;
+		}
+		
+		// add the section for the request type chart
+		status = this.addSectionWithChart("output-type-chart", ReportConstants.DISPLAY_DESKTOP, "Requests by Output Type", "<p>Please note percentages may add up to more than 100% due to rounding for display purposes</p>", chartURL, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
+		
+		// check to see if it is OK to proceed
+		if(status == false) {
+			// an error has occured
+			return false;
+		}
 
-		// debug code
+		// return true to indicate success		
 		return true;
 	
 	} // end generate method
@@ -244,6 +313,290 @@ public class ReportGenerator {
 		return chart.buildBarChart(Integer.toString(chartWidth), Integer.toString(chartHeight), chart.simpleEncode(data, maxRequests), chartTitle, Integer.toString(maxRequests));	
 	
 	} // end buildMonthChart method
+	
+	/**
+	 * A method to build a chart for a years worth of data
+	 * 
+	 * @param year        the year to build the chart for
+	 * @param chart       a valid ChartManager object used to build this chart
+	 * @param chartHeight the height of the chart
+	 * @param chartWidth  the width of the chart
+	 *
+	 * @return          the URL for this chart
+	 */
+	private String buildYearChart(String year, ChartManager chart, int chartWidth, int chartHeight) {
+	
+		
+		// determine number of months to display
+		int maxMonths = 12;
+
+		// declare additional helper variables
+		int currentMonth   = 1; // the current day
+		int maxRequests  = 0; // keep track of the maximum number of requests
+		String[] data    = new String[maxMonths]; // array of data values
+		
+		// build an array of x axis labels
+		String[] xLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
+		
+		// database related helper variables
+		PreparedStatement statement;
+		ResultSet results;
+		
+		// prepare an SQL statement
+		try {
+			statement = database.prepareStatement("SELECT COUNT(date) FROM requests WHERE date LIKE ?");
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to prepare SQL statement in buildYearChart method\n" + ex);
+			return null;
+		}
+		
+		try {
+		
+			// loop through the days getting the data
+			while (currentMonth <= maxMonths) {
+			
+				// build the date for this query
+				statement.setString(1, year + "-" + String.format("%02d", currentMonth) + "%");
+				
+				// execute the query
+				results = statement.executeQuery();
+				
+				if(results.next() == true) {
+					data[currentMonth -1] = results.getString(1);
+					
+					if(Integer.parseInt(results.getString(1)) > maxRequests) {
+						maxRequests = Integer.parseInt(results.getString(1));
+					}
+					
+				} else {
+					data[currentMonth -1] = "0";
+				}
+
+				// increment the currentMonth count
+				currentMonth++;
+				
+				// play nice and close the resultset
+				results.close();	
+			} 
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to execute SQL in buildYearChart method\n" + ex);
+			return null;
+		}
+		
+		// build the chart title
+		String chartTitle = "Requests by Month for " + year;
+		
+		return chart.buildBarChart(Integer.toString(chartWidth), Integer.toString(chartHeight), chart.simpleEncode(data, maxRequests), chartTitle, Integer.toString(maxRequests), xLabels);	
+	
+	} // end buildYearChart method
+	
+	/**
+	 * A method to build a chart for requests
+	 * 
+	 * @param year        the year to build the chart for
+	 * @param chart       a valid ChartManager object used to build this chart
+	 * @param chartHeight the height of the chart
+	 * @param chartWidth  the width of the chart
+	 *
+	 * @return          the URL for this chart
+	 */
+	public String buildRequestTypeChart(String year, ChartManager chart, int chartWidth, int chartHeight) {
+	
+		// declare helper variables
+		int reqCount; // number of requests
+		String[] reqTypes = {"organisation", "contributor", "venue"};
+		String[] requests = new String[3];
+		String[] labels;
+
+		// database related helper variables
+		PreparedStatement statement;
+		ResultSet results;
+	
+		// get the total number of requests
+		
+		// prepare an SQL statement
+		try {
+			statement = database.prepareStatement("SELECT COUNT(date) FROM requests WHERE date LIKE ?");
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to prepare SQL statement in buildRequestTypeChart method\n" + ex);
+			return null;
+		}
+		
+		// get the total requests for the year
+		try {
+		
+			// set the query parameter
+			statement.setString(1, year + "-" + "%");
+
+			// execute the query
+			results = statement.executeQuery();
+				
+			if(results.next() == true) {  
+				// store the total
+				reqCount = results.getInt(1);
+				
+			} else {
+				System.out.println("ERROR: Unable to determine total request count for the year");
+				return null;
+			}
+			
+			// play nice and tidy up
+			results.close();
+			
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to execute SQL in the buildRequestTypeChart method\n" + ex);
+			return null;
+		}
+		
+		// get the requests for each type
+		
+		// prepare an SQL statement
+		try {
+			statement = database.prepareStatement("SELECT COUNT(date) FROM requests WHERE date LIKE ? AND request_type = ?");
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to prepare SQL statement in buildRequestTypeChart method\n" + ex);
+			return null;
+		}
+		
+		try {
+			// loop through the request types getting each one as we go
+			for(int i = 0; i < reqTypes.length; i++) {
+				
+				// set the query parameters
+				statement.setString(1, year + "-" + "%");
+				statement.setString(2, reqTypes[i]);
+				
+				// execute the query
+				results = statement.executeQuery();
+					
+				if(results.next() == true) { 
+					// calculate the percentage
+					requests[i] = Integer.toString(Math.round((new Float(results.getString(1)) / reqCount) * 100));
+				} else {
+					requests[i] = "0";
+				}
+			}
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to determine request count for the specified type\n" + ex);
+			return null;
+		}
+		
+		// build the chart type
+		String chartTitle = "Percentage of Requests by Request Type (" + year + ")";
+		
+		// build the labels for the slices
+		for(int i = 0; i < reqTypes.length; i++) {
+			reqTypes[i] = reqTypes[i] + " - " + requests[i] + "%";
+		}
+		
+		// build the pie chart
+		return chart.buildPieChart(Integer.toString(chartWidth), Integer.toString(chartHeight), chart.simpleEncode(requests, 100), chartTitle, reqTypes);
+
+	} // end buildRequestTypeChart
+	
+	/**
+	 * A method to build a chart for output types
+	 * 
+	 * @param year        the year to build the chart for
+	 * @param chart       a valid ChartManager object used to build this chart
+	 * @param chartHeight the height of the chart
+	 * @param chartWidth  the width of the chart
+	 *
+	 * @return          the URL for this chart
+	 */
+	public String buildOutputTypeChart(String year, ChartManager chart, int chartWidth, int chartHeight) {
+	
+		// declare helper variables
+		int reqCount; // number of requests
+		String[] reqTypes = {"html", "json", "xml", "rss"};
+		String[] requests = new String[4];
+		String[] labels;
+
+		// database related helper variables
+		PreparedStatement statement;
+		ResultSet results;
+	
+		// get the total number of requests
+		
+		// prepare an SQL statement
+		try {
+			statement = database.prepareStatement("SELECT COUNT(date) FROM requests WHERE date LIKE ?");
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to prepare SQL statement in buildOutputTypeChart method\n" + ex);
+			return null;
+		}
+		
+		// get the total requests for the year
+		try {
+		
+			// set the query parameter
+			statement.setString(1, year + "-" + "%");
+
+			// execute the query
+			results = statement.executeQuery();
+				
+			if(results.next() == true) {  
+				// store the total
+				reqCount = results.getInt(1);
+				
+			} else {
+				System.out.println("ERROR: Unable to determine total request count for the year");
+				return null;
+			}
+			
+			// play nice and tidy up
+			results.close();
+			
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to execute SQL in the buildOutputTypeChart method\n" + ex);
+			return null;
+		}
+		
+		// get the requests for each type
+		
+		// prepare an SQL statement
+		try {
+			statement = database.prepareStatement("SELECT COUNT(date) FROM requests WHERE date LIKE ? AND output_type = ?");
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to prepare SQL statement in buildRequestTypeChart method\n" + ex);
+			return null;
+		}
+		
+		try {
+			// loop through the request types getting each one as we go
+			for(int i = 0; i < reqTypes.length; i++) {
+				
+				// set the query parameters
+				statement.setString(1, year + "-" + "%");
+				statement.setString(2, reqTypes[i]);
+				
+				// execute the query
+				results = statement.executeQuery();
+					
+				if(results.next() == true) { 
+					// calculate the percentage
+					requests[i] = Integer.toString(Math.round((new Float(results.getString(1)) / reqCount) * 100));
+				} else {
+					requests[i] = "0";
+				}
+			}
+		} catch(java.sql.SQLException ex) {
+			System.out.println("ERROR: Unable to determine request count for the specified type\n" + ex);
+			return null;
+		}
+		
+		// build the chart type
+		String chartTitle = "Percentage of Requests by Output Type (" + year + ")";
+		
+		// build the labels for the slices
+		for(int i = 0; i < reqTypes.length; i++) {
+			reqTypes[i] = reqTypes[i] + " - " + requests[i] + "%";
+		}
+		
+		// build the pie chart
+		return chart.buildPieChart(Integer.toString(chartWidth), Integer.toString(chartHeight), chart.simpleEncode(requests, 100), chartTitle, reqTypes);
+
+	} // end buildOutputTypeChart
 	 
 	
 	/**

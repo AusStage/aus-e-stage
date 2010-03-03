@@ -31,8 +31,15 @@ public class ChartManager {
 
 	// declare class level variables
 	private final String URL_START = "http://chart.apis.google.com/chart?";   // base URL
+	
+	// bar charts
 	private final String BARCHART_DEFAULT_PARAMS = "cht=bvs&chbh=a&chxt=x,y"; // auto resize the size of the bars and show x and y labels
 	private final String BARCHART_SERIES_COLOUR = "&chco=CA77CA";             // default bar chart colour	
+	
+	// pie charts
+	private final String PIE_CHART_DEFAULT_PARAMS = "&cht=p3";
+	private final String PIE_CHART_COLOURS        = "&chco=A1CA77|77A1CA|A177CA|CAA177";
+	
 
 	/**
 	 * A method to encode an array of values using the simple encoding 
@@ -94,13 +101,8 @@ public class ChartManager {
 	 */
 	public String buildBarChart(String width, String height, String data, String title, String yMax, String[] xLabels) {
 		
-		// set chart type to a bar char
-		// set the bar width to be automatically resized
-		// show the x and y axis labels
-		final String DEFAULT_PARAMS = "cht=bvs&chbh=a&chxt=x,y"; // auto resize the size of the bars and show x and y labels
-		
-		// declare helper variables
-		StringBuilder url = new StringBuilder(this.URL_START + BARCHART_DEFAULT_PARAMS + BARCHART_SERIES_COLOUR);
+		// start url with appropriate defaults
+		StringBuilder url = new StringBuilder(this.URL_START + this.BARCHART_DEFAULT_PARAMS + this.BARCHART_SERIES_COLOUR);
 		
 		// add the chart size
 		url.append("&chs=" + width + "x" + height);
@@ -154,6 +156,49 @@ public class ChartManager {
 	
 		return this.buildBarChart(width, height, data, title, yMax, xLabels);	
 	} // end buildBarChart method
+	
+	/**
+	 * A method to build a pie chart
+	 *
+	 * @param width   the width of the chart image
+	 * @param height  the height of the chart image
+	 * @param data    the data to build the chart with
+	 * @param title   the chart title
+	 */
+	public String buildPieChart(String width, String height, String data, String title, String[] labels) {
+	
+		// start url with appropriate defaults
+		StringBuilder url = new StringBuilder(this.URL_START + this.PIE_CHART_DEFAULT_PARAMS + this.PIE_CHART_COLOURS);
+		
+		// add the chart size
+		url.append("&chs=" + width + "x" + height);
+		
+		// add the data
+		url.append("&chd=" + data);
+		
+		try {
+			// add the chart title
+			url.append("&chtt=" + java.net.URLEncoder.encode(title, "UTF-8"));
+		} catch (java.io.UnsupportedEncodingException ex) {
+			System.out.println("WARN: Unable to encode title '" + title + "' during chart building.");
+			url.append("&chtt=Default Title");
+		}
+		
+		// add the labels
+		url.append("&chl=");
+		
+		for(int i = 0; i < labels.length; i++) {
+			try {
+				url.append(java.net.URLEncoder.encode(labels[i], "UTF-8") + "|");
+			} catch (java.io.UnsupportedEncodingException ex) {
+				System.out.println("WARN: Pie chart label '" + labels[i] + "' during chart building.");
+				url.append("|Default label");
+			}
+		}
+				
+		// return the url
+		return url.toString();
+	} // end buildPieChart method
 	
 
 } // end class definition
