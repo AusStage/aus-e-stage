@@ -47,7 +47,7 @@ public class ReportGenerator {
 	private final String ANALYSIS_ID = "exchange-01";
 	
 	// chart defaults
-	private final int BAR_CHART_WIDTH  = 750;
+	private final int BAR_CHART_WIDTH  = 700;
 	private final int BAR_CHART_HEIGHT = 125;
 
 	private final int PIE_CHART_WIDTH  = 400;
