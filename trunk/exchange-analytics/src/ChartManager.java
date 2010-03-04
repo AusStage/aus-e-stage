@@ -34,7 +34,7 @@ public class ChartManager {
 	
 	// bar charts
 	private final String BARCHART_DEFAULT_PARAMS = "cht=bvs&chbh=a&chxt=x,y"; // auto resize the size of the bars and show x and y labels
-	private final String BARCHART_SERIES_COLOUR = "&chco=CA77CA";             // default bar chart colour	
+	private final String BARCHART_SERIES_COLOUR = "&chco=77A1CA";             // default bar chart colour	
 	
 	// pie charts
 	private final String PIE_CHART_DEFAULT_PARAMS = "&cht=p3";
