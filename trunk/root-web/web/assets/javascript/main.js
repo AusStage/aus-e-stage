@@ -16,11 +16,21 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
+// setup the analytics tabs
+$(document).ready(function() {
+	$("#analytics-tabs").tabs({ 
+		cookie: { 
+			name: 'root_analytics_tab', 
+			expires: 30
+		}
+	}); 
+});
+
 // set up the tabbed interface
 $(document).ready(function() {
 	$("#tabs").tabs({ 
 		cookie: { 
-			name: 'aus_e_stage_beta_tab', 
+			name: 'root_main_tab', 
 			expires: 30
 		}
 	}); 
@@ -75,3 +85,12 @@ function load_zotero() {
 	feedControl.draw(document.getElementById("zotero_feed"));
 }
 
+// get the Exchange Service Analytics
+$(document).ready(function() {
+	
+	// get the exchange data analytics information
+	$.get("analytics?type=exchange", function(html) {
+		$("#analytics-1").empty();
+		$("#analytics-1").append(html);
+	});
+});

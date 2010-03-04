@@ -113,7 +113,18 @@
 				<div id="zotero_feed"></div> 
 			</div>
 			<div id="tabs-4">
-				<p>Coming Soon!</p>
+				<div id="analytics-tabs">
+					<ul>
+						<li><a href="#analytics-1">Data Exchange Service</a></li>
+						<li><a href="#analytics-2">Mapping Service</a></li>
+					</ul>
+					<div id="analytics-1">
+						<p>An error has occured and the analytics information is not available. Please try again later and if the problem persists contact us.</p>
+					</div>
+					<div id="analytics-2">
+						<p>Coming Soon!</p>
+					</div>
+				</div>
 			</div>
 			<div id="tabs-5">
 				<p>

@@ -25,7 +25,15 @@
         This software powers the Aus-e-Stage Beta Root Website
     </description>
     <!-- Servlets -->
+    <servlet>
+        <servlet-name>AnalyticsServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.beta.AnalyticsServlet</servlet-class>
+    </servlet>
     <!-- Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>AnalyticsServlet</servlet-name>
+        <url-pattern>/analytics/*</url-pattern>
+    </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
         <param-name>systemName</param-name>
@@ -47,6 +55,16 @@
         <param-name>systemUrl</param-name>
         <!-- Include trailing slash -->
         <param-value>http://beta.ausstage.edu.au/mapping/</param-value>
+    </context-param>
+    <!-- XML and XSLT paths -->
+    <!-- IMPORTANT: specify a fully qualified path! -->
+    <context-param>
+        <param-name>analyticsXslt</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>analticsXml</param-name>
+        <param-value></param-value>
     </context-param>
     <!-- Add mime mapping for VUE files -->
 	<mime-mapping>
