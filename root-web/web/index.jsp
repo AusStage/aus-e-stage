@@ -25,6 +25,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/jquery-ui-1.7.2.custom.css"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/report-style.css"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.7.2.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
