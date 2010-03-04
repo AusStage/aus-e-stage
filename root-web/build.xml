@@ -290,7 +290,7 @@
 
 -->
 
-  <target name="dist" depends="compile"
+  <target name="dist" depends="compile,javadoc"
    description="Create binary distribution">
 
     <!-- Copy documentation subdirectories -->
