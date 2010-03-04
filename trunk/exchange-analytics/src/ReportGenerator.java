@@ -99,7 +99,7 @@ public class ReportGenerator {
 		}
 		
 		// add a section
-		status = this.addSection("description", ReportConstants.DISPLAY_ALL, "Test descriptive section", "<p>Hello World</p>");
+		status = this.addSection("description", ReportConstants.DISPLAY_ALL, "About These Analytics", "<p>These analytics show usage of the <a href=\"http://beta.ausstage.edu.au/exchange\" title=\"Service homepage\">AusStage Data Exchange</a> service for 2010. The service is designed to allow members of the AusStage community to retrieve data stored in the AusStage system in real time and incorporate the data into their own websites.</p>");
 		
 		// check to see if it is OK to proceed
 		if(status == false) {
