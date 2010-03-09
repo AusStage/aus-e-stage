@@ -19,6 +19,7 @@
 // import additional libraries
 import java.io.*;
 import java.sql.*;
+import java.util.*;
 
 /**
  * Main driving class for the AusStage Exchange Analytics application which is used
@@ -272,6 +273,10 @@ class FileListFilter implements FilenameFilter {
 	private final String NAME = "ausstage-exchange";
 	private final String EXT  = ".log";
 	
+	// get the current date as a string for file comparison
+	// get an instance of the calendar
+	private GregorianCalendar calendar = new GregorianCalendar();
+	
 	/**
 	 * Method to test if the specified file matches the predetermined
 	 * name and extension requirements
@@ -283,8 +288,16 @@ class FileListFilter implements FilenameFilter {
 	 */
 	public boolean accept(File dir, String filename) {
 	
+		// set it to the current time
+	 	calendar.setTime(new java.util.Date());
+	 	
+	 	// get the current date
+	 	String currentDate = Integer.toString(calendar.get(java.util.Calendar.YEAR));
+	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.MONTH));
+	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.DAY_OF_MONTH));
+	
 		if(filename != null) {
-			if(filename.startsWith(NAME) && filename.endsWith(EXT)) {
+			if(filename.startsWith(NAME) && filename.endsWith(EXT) && filename.indexOf(currentDate) == -1) {
 				return true;
 			} else {
 				return false;
