@@ -293,7 +293,7 @@ class FileListFilter implements FilenameFilter {
 	 	
 	 	// get the current date
 	 	String currentDate = Integer.toString(calendar.get(java.util.Calendar.YEAR));
-	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.MONTH));
+	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.MONTH) + 1);
 	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.DAY_OF_MONTH));
 	
 		if(filename != null) {
