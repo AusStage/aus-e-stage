@@ -55,7 +55,8 @@
 				<li><a href="#tabs-2">Delicious Links</a></li>
 				<li><a href="#tabs-3">Zotero Links</a></li>
 				<li><a href="#tabs-4">Analytics</a></li>
-				<li><a href="#tabs-5">Contact Us</a></li>
+				<li><a href="#tabs-5">Extras</a></li>
+				<li><a href="#tabs-6">Contact Us</a></li>
 			</ul>
 			<div id="tabs-1">
 				<p>
@@ -128,6 +129,19 @@
 				</div>
 			</div>
 			<div id="tabs-5">
+				<p>
+					On this page we list small applications, scripts and web pages that we're exploring that may be of use to others in the AusStage community. <br/>The first such extra is a bookmarklet to show maps in AusStage.
+				</p>
+				<h2>Map Bookmarklet</h2>
+				<p>This <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="Wikipedia article on this topic">bookmarklet</a> makes it easy to link into the <a href="http://beta.ausstage.edu.au/mapping/" title="Mapping Service Homepage">Mapping Service</a> from an organisation record in <a href="http://www.ausstage.edu.au/" title="AusStage homepage">AusStage</a>. 
+				   <br/>&nbsp;<br/>
+				   To use the bookmarklet simply drag the link below to your bookmarks bar. Then, when you're viewing an organisation record in AusStage, you can click the bookmark to view the map for the organisation in the Mapping Service.
+				   <br/>&nbsp;<br/>
+					<a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://beta.ausstage.edu.au/assets/javascript/map-bookmarklet.js';})();"
+					  title="Link directly from an organisation record to the Mapping Service"/>View AusStage Map</a>
+				</p>
+			</div>
+			<div id="tabs-6">
 				<p>
 					We encourage you to explore our services and provide as much feedback as you wish. Please contact us using the details below:
 				</p>
