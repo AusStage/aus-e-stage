@@ -16,6 +16,10 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
+// import additional packages
+import java.io.*;
+
+
 /**
  * Main driving class for the AusStage Google Analytics Report Generator app
  */
@@ -33,7 +37,12 @@ public class GoogleAnalytics {
 		String email    = parser.getValue("email");
 		String password = parser.getValue("password", "pass");
 		String action   = parser.getValue("action");
+		String table    = parser.getValue("profile");
+		String output   = parser.getValue("output");
+		File outputFile = null;
 		
+		
+		// check on the command line arguments
 		if(email == null || password == null || action == null) {
 			// output some helpful information
 			System.out.println("ERROR: the following parameters are expected");
@@ -42,11 +51,88 @@ public class GoogleAnalytics {
 			System.out.println("-action   either \"list\" or \"report\"");
 			System.out.println("          when set to \"list\" a list of available profiles will be returned");
 			System.out.println("          when set to \"report\" a report will be generated");
-			System.out.println("-profile  unique id of the profile used to generate the report");
+			System.out.println("-table    unique id of the table in the Google Analytics Service used to generate the report");
 			System.out.println("-output   the name & location of the report file to generate");
 			System.exit(-1);
 		}
-	
+		
+		// check on the action parameter
+		if(action.equals("list") == false && action.equals("report") == false) {
+			System.out.println("ERROR: unexpected action parameter value");
+			System.exit(-1);
+		}
+		
+		// check on the report generation parameters if required
+		if(action.equals("report") == true) {
+			if(table == null) {
+				System.out.println("ERROR: missing profile parameter");
+				System.exit(-1);
+			}
+			
+			if(output == null) {
+				System.out.println("ERROR: missing output parameter");
+				System.exit(-1);
+			}
+			
+			// check to see if the output file exists
+			outputFile = new File(output);
+			
+			if(outputFile.isFile() == true) {
+				System.out.println("ERROR: Output file already exists, refusing to delete / overwrite");
+				System.exit(-1);
+			} else {
+				// try to create the file
+				try {
+					boolean stat = outputFile.createNewFile();
+					if(stat == false) {
+						System.out.println("ERROR: Unable to create the output file");
+						System.exit(-1);
+					}
+				} catch (java.io.IOException ex) {
+					System.out.println("ERROR: Unable to create the output file");
+					System.out.println("Exception details are: " + ex.toString());
+					System.exit(-1);
+				}
+			}
+		}
+		
+		// set up the analytics manager object
+		AnalyticsManager analytics = new AnalyticsManager(email, password);
+		boolean status = false;
+		
+		// determine what task to do 
+		if(action.equals("list") == true) {
+			// list the profiles that can be accessed
+			
+			// connect to the analytics service
+			status = analytics.connect();
+			
+			// check on the status 
+			if(status == false) {
+				System.out.println("ERROR: Unable to list available accounts, check previous error message for details.");
+				System.exit(-1);
+			} else {
+				System.out.println("INFO: Successfully authenticated to Google Analytics service");
+			}
+			
+			// get a list of the accounts we can use
+			status = analytics.getAccountList();
+			
+			// check on the status 
+			if(status == false) {
+				System.out.println("ERROR: Unable to retrieve list available accounts, check previous error message for details.");
+				System.exit(-1);
+			} else {
+				System.out.println("INFO: Successfully retrieved a list of available accounts");
+			}
+			
+			// get the list of accounts
+			String accountList = analytics.buildAccountList();
+			
+			// output the list of accounts
+			System.out.println(accountList);
+			System.exit(0);
+		}	
 	} // end main method
 
 } // end class definition
