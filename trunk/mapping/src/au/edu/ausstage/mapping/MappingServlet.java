@@ -264,14 +264,6 @@ public class MappingServlet extends HttpServlet {
 		
 		// do an organisation search		
 		if(action.equals("org_search")) {
-		
-			// make sure this is an ajax request
-			String header = request.getHeader("X-Requested-With");
-			
-			// check on the header
-			if(header == null || header.equals("XMLHttpRequest") == false) {
-				throw new ServletException("Incorrect request type. Expected AJAX call via XMLHttpRequest");
-			}
 			
 			// get the requested search term
 			String searchTerm = request.getParameter("org_name");
@@ -414,14 +406,6 @@ public class MappingServlet extends HttpServlet {
 			// end export routine
 		} else if(action.equals("org_id_search")) {
 			// search for an organisation using an id
-			
-			// make sure this is an ajax request
-			String header = request.getHeader("X-Requested-With");
-			
-			// check on the header
-			if(header == null || header.equals("XMLHttpRequest") == false) {
-				throw new ServletException("Incorrect request type. Expected AJAX call via XMLHttpRequest");
-			}
 			
 			// get the requested search term
 			String searchTerm = request.getParameter("org_id");

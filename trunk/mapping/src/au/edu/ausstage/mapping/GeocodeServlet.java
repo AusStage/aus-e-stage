@@ -63,14 +63,6 @@ public class GeocodeServlet extends HttpServlet {
 		DataManager dataManager = new DataManager(servletConfig);
 		
 		if(action.equals("lookup")) {
-		
-			// make sure this is an ajax request
-			String header = request.getHeader("X-Requested-With");
-			
-			// check on the header
-			if(header == null || header.equals("XMLHttpRequest") == false) {
-				throw new ServletException("Incorrect request type. Expected AJAX call via XMLHttpRequest");
-			}
 			
 			// get remaining parameters
 			String type = request.getParameter("type");
@@ -145,14 +137,6 @@ public class GeocodeServlet extends HttpServlet {
 		
 		// do an organisation or venue search		
 		if(action.equals("org_search") || action.equals("venue_search")) {
-		
-			// make sure this is an ajax request
-			String header = request.getHeader("X-Requested-With");
-			
-			// check on the header
-			if(header == null || header.equals("XMLHttpRequest") == false) {
-				throw new ServletException("Incorrect request type. Expected AJAX call via XMLHttpRequest");
-			}
 			
 			// get the requested search term
 			String searchTerm = request.getParameter("search_term");
@@ -218,14 +202,6 @@ public class GeocodeServlet extends HttpServlet {
 			
 		} else if(action.equals("org_venue_search")) {
 			// get a list of venues associated with an organisation
-			
-			// make sure this is an ajax request
-			String header = request.getHeader("X-Requested-With");
-			
-			// check on the header
-			if(header == null || header.equals("XMLHttpRequest") == false) {
-				throw new ServletException("Incorrect request type. Expected AJAX call via XMLHttpRequest");
-			}
 			
 			// get the requested search term
 			String searchTerm = request.getParameter("search_term");
