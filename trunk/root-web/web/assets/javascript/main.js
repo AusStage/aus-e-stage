@@ -93,4 +93,12 @@ $(document).ready(function() {
 		$("#analytics-1").empty();
 		$("#analytics-1").append(html);
 	});
+	
+	window.setTimeout(function() {
+	// get the exchange data analytics information
+		$.get("analytics?type=mapping", function(html) {
+			$("#analytics-2").empty();
+			$("#analytics-2").append(html);
+		});
+	}, 1000);
 });
