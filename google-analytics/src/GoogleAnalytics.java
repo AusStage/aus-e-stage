@@ -37,7 +37,8 @@ public class GoogleAnalytics {
 		String email    = parser.getValue("email");
 		String password = parser.getValue("password", "pass");
 		String action   = parser.getValue("action");
-		String table    = parser.getValue("profile");
+		String table    = parser.getValue("table");
+		String urlPath  = parser.getValue("path");
 		String output   = parser.getValue("output");
 		File outputFile = null;
 		
@@ -65,7 +66,7 @@ public class GoogleAnalytics {
 		// check on the report generation parameters if required
 		if(action.equals("report") == true) {
 			if(table == null) {
-				System.out.println("ERROR: missing profile parameter");
+				System.out.println("ERROR: missing table parameter");
 				System.exit(-1);
 			}
 			
@@ -109,30 +110,80 @@ public class GoogleAnalytics {
 			
 			// check on the status 
 			if(status == false) {
-				System.out.println("ERROR: Unable to list available accounts, check previous error message for details.");
+				System.out.println("ERROR: Unable to authenticate to the Google Analytics service, check previous error message for details.");
 				System.exit(-1);
 			} else {
 				System.out.println("INFO: Successfully authenticated to Google Analytics service");
 			}
 			
 			// get a list of the accounts we can use
-			status = analytics.getAccountList();
+			String accountList = analytics.getAccountList();
 			
 			// check on the status 
-			if(status == false) {
+			if(accountList == null) {
 				System.out.println("ERROR: Unable to retrieve list available accounts, check previous error message for details.");
 				System.exit(-1);
 			} else {
-				System.out.println("INFO: Successfully retrieved a list of available accounts");
+				// output the list of accounts
+				System.out.println(accountList);
+				System.exit(0);
+			}
+		
+		} // end account list code
+		
+		if(action.equals("report") == true) {
+		
+			// connect to the analytics service
+			status = analytics.connect();
+			
+			// check on the status 
+			if(status == false) {
+				System.out.println("ERROR: Unable to authenticate to the Google Analytics service, check previous error message for details.");
+				System.exit(-1);
+			} else {
+				System.out.println("INFO: Successfully authenticated to Google Analytics service");
 			}
 			
-			// get the list of accounts
-			String accountList = analytics.buildAccountList();
+			// start generating the Mapping service report
+			ReportGenerator report = new ReportGenerator(analytics, "Visits to the AusStage Mapping Service", "<p>This report displays information about the usage of the <a href=\"http://beta.ausstage.edu.au/mapping\" title=\"AusStage Mapping Service Homepage\">AusStage Mapping Service</a> as measured using the <a href=\"http://www.google.com/analytics\" title=\"Google Analytics Homepage\">Google Analytics</a> service.", "mapping-service-01");
 			
-			// output the list of accounts
-			System.out.println(accountList);
-			System.exit(0);
-		}	
+			// set some parameters for querying the analytics service
+			analytics.setTableId(table);
+			
+			if(urlPath != null) {
+				analytics.setUrlPath(urlPath);
+			}
+			
+			// build the report
+			status = report.generate();
+			
+			if(status == false) {
+				System.out.println("ERROR: Unable to generate the report, see previous error messages for details");
+				System.exit(-1);
+			}
+			
+			// write the report filr
+			status = report.writeReportFile(outputFile);
+			
+			if(status == false) {
+				System.out.println("ERROR: Unable to write the report file, see previous error messages for details");
+				System.exit(-1);
+			} else {
+				System.out.println("INFO: Report file created successfully");
+				System.exit(0);
+			}
+			
+			/*
+			// debug code
+			String[] data = analytics.getVisits("2010-02-01", "2010-02-28", "^/mapping", table);
+			
+			if(data == null) {
+				System.out.println("ERROR: Unable to retrieve data, check previous error message for details.");
+				System.exit(-1);
+			}
+			*/
+		
+		} // end report generating code	
 	} // end main method
 
 } // end class definition
