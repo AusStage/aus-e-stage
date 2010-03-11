@@ -36,14 +36,17 @@ import java.net.MalformedURLException;
 public class AnalyticsManager {
 
 	// declare private class variables
-	private String email;
-	private String password;
+	private String           email;
+	private String           password;
 	private AnalyticsService service;
-	private AccountFeed accountFeed;
+	private AccountFeed      accountFeed;
+	private DataFeed         dataFeed;
+	private String           tableId = null;
+	private String           urlPath = null;
 	
 	// declare private class constants
 	private final String ACCOUNTS_URL     = "https://www.google.com/analytics/feeds/accounts/default";
-	private final String DATA_URL         = "https://www.google.com/analytics/feeds/data";
+	private final String BASE_DATA_URL    = "https://www.google.com/analytics/feeds/data";
 	private final String APPLICATION_NAME = "AusStage_Analytics";
 	
 	/**
@@ -81,9 +84,9 @@ public class AnalyticsManager {
 	 * A method to get a list of available Google Analytics accounts
 	 * that we can request data from
 	 *
-	 * @return true if the request succeeded
+	 * @return this list of accounts, ready to be printed to the screen
 	 */
-	public boolean getAccountList() {
+	public String getAccountList() {
 	
 		try {
 			// build the url for the query
@@ -93,13 +96,13 @@ public class AnalyticsManager {
 			accountFeed = service.getFeed(queryUrl, AccountFeed.class);
 		} catch(java.io.IOException ex) {
 			System.out.println("ERROR: Unable to retrieve account information.\n" + ex.toString());
-			return false;
+			return null;
 		} catch(ServiceException ex) {
 			System.out.println("ERROR: Unable to retrieve account information.\n" + ex.toString());
-			return false;
+			return null;
 		}
 		
-		return true;
+		return this.buildAccountList();
 			
 	} // end getAccountList method
 	
@@ -109,7 +112,7 @@ public class AnalyticsManager {
 	 * 
 	 * @return the list of accounts ready for output
 	 */
-	public String buildAccountList() {
+	private String buildAccountList() {
 	
 		// declare helper variables
 		StringBuilder list = new StringBuilder("---------- Available Accounts ----------\n");
@@ -126,5 +129,171 @@ public class AnalyticsManager {
 		return list.toString();
 	
 	} // end buildAccountList method
+	
+	/**
+	 * A method to set the table id parameter
+	 *
+	 * @param the unique table id in the Google Analytics system
+	 */ 
+	public void setTableId(String id) {
+		this.tableId = id;
+	}
+	
+	/**
+	 * A method to get the table id parameter
+	 *
+	 * @return the unique table id in the Google Analytics system
+	 */
+	public String getTableId() {
+		return this.tableId;
+	}
+	
+	/**
+	 * A method to set the url path parameter which is used to filter analytics data
+	 *
+	 * @param the url path as a regular expression
+	 */ 
+	public void setUrlPath(String path) {
+		this.urlPath = path;
+	}
+	
+	/**
+	 * A method to get the table id parameter
+	 *
+	 * @return the unique table id in the Google Analytics system
+	 */
+	public String getUrlPath() {
+		return this.urlPath;
+	}
+	
+	/**
+	 * A method to get the number of visits to a part of the site
+	 *
+	 * @param startDate the start of the required date range
+	 * @param endDate   the end of the required date range
+	 *
+	 * @return an array containing the data
+	 */
+	public String[] getVisitsForMonth(String startDate, String endDate) {
+		
+		// determine the number of records to expect
+		int recordCount = (Integer.parseInt(endDate.replace("-", "")) - Integer.parseInt(startDate.replace("-", ""))) + 1;
+		String[] visits = new String[recordCount];
+		int count = 0;
+		DataFeed dataFeed;
+		
+		try {
+		
+			// build the URL to request the data
+			DataQuery query = new DataQuery(new URL(BASE_DATA_URL));
+			
+			// set the parameters
+			if(this.tableId != null) {
+				query.setIds(tableId);
+			} else {
+				System.out.println("ERROR: The table id parameter must be set before trying to retrieve data.");
+				return null;
+			}
+			
+			query.setDimensions("ga:day");
+			query.setMetrics("ga:visits");
+			query.setSegment("gaid::-1");
+			
+			if (this.urlPath != null) {
+				query.setFilters("ga:pagePath=~" + this.urlPath);
+			}
+			
+			query.setSort("ga:day");
+			query.setStartDate(startDate);
+			query.setEndDate(endDate);
+			
+			// request the data
+			dataFeed = service.getFeed(query.getUrl(), DataFeed.class);
+			
+		} catch(java.io.IOException ex) {
+			System.out.println("ERROR: Unable to retrieve visit information.\n" + ex.toString());
+			return null;
+		} catch(ServiceException ex) {
+			System.out.println("ERROR: Unable to retrieve visit information.\n" + ex.toString());
+			return null;
+		}
+		
+		// process the results
+		for (DataEntry entry : dataFeed.getEntries()) {
+
+			visits[count] = entry.stringValueOf("ga:visits");
+			count++;
+		}
+		
+		// debug data
+		return visits;
+
+	} // end getVisitsForMonth method
+	
+	/**
+	 * A method to get the number of visits to a part of the site
+	 *
+	 * @param year the start of the required date range
+	 *
+	 * @return an array containing the data
+	 */
+	public String[] getVisitsForYear(String year) {
+		
+		// declare helper variables
+		String[] visits = new String[12];
+		int count = 0;
+		DataFeed dataFeed;
+		
+		// determine the start and end dates
+		String startDate = year + "-01-01";
+		String endDate   = year + "-12-31";
+		
+		try {
+		
+			// build the URL to request the data
+			DataQuery query = new DataQuery(new URL(BASE_DATA_URL));
+			
+			// set the parameters
+			if(this.tableId != null) {
+				query.setIds(tableId);
+			} else {
+				System.out.println("ERROR: The table id parameter must be set before trying to retrieve data.");
+				return null;
+			}
+			
+			query.setDimensions("ga:month");
+			query.setMetrics("ga:visits");
+			query.setSegment("gaid::-1");
+			
+			if (this.urlPath != null) {
+				query.setFilters("ga:pagePath=~" + this.urlPath);
+			}
+			
+			query.setSort("ga:month");
+			query.setStartDate(startDate);
+			query.setEndDate(endDate);
+			
+			// request the data
+			dataFeed = service.getFeed(query.getUrl(), DataFeed.class);
+			
+		} catch(java.io.IOException ex) {
+			System.out.println("ERROR: Unable to retrieve visit information.\n" + ex.toString());
+			return null;
+		} catch(ServiceException ex) {
+			System.out.println("ERROR: Unable to retrieve visit information.\n" + ex.toString());
+			return null;
+		}
+		
+		// process the results
+		for (DataEntry entry : dataFeed.getEntries()) {
+
+			visits[count] = entry.stringValueOf("ga:visits");
+			count++;
+		}
+		
+		// debug data
+		return visits;
+
+	} // end getVisitsForYear method
 
 } // end class definition
