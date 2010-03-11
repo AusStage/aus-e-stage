@@ -121,10 +121,22 @@
 						<li><a href="#analytics-2">Mapping Service</a></li>
 					</ul>
 					<div id="analytics-1">
-						<p>An error has occured and the analytics information is not available. Please try again later and if the problem persists contact us.</p>
+						<p style="text-align: center;">
+							<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+							<br/>Loading analytics report...
+						</p>
+						<p style="text-align: center;">
+							If you continue to see this message after 5 seconds please contact us.
+						</p>							
 					</div>
 					<div id="analytics-2">
-						<p>Coming Soon!</p>
+						<p style="text-align: center;">
+							<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+							<br/>Loading analytics report...
+						</p>
+						<p style="text-align: center;">
+							If you continue to see this message after 5 seconds please contact us.
+						</p>
 					</div>
 				</div>
 			</div>

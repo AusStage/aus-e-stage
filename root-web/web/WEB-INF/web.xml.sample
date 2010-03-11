@@ -54,7 +54,7 @@
     <context-param>
         <param-name>systemUrl</param-name>
         <!-- Include trailing slash -->
-        <param-value>http://beta.ausstage.edu.au/mapping/</param-value>
+        <param-value>http://beta.ausstage.edu.au/</param-value>
     </context-param>
     <!-- XML and XSLT paths -->
     <!-- IMPORTANT: specify a fully qualified path! -->
@@ -62,8 +62,12 @@
         <param-name>analyticsXslt</param-name>
         <param-value></param-value>
     </context-param>
+   <context-param>
+        <param-name>exchangeAnalyticsXml</param-name>
+        <param-value></param-value>
+    </context-param>
     <context-param>
-        <param-name>analticsXml</param-name>
+        <param-name>mappingAnalyticsXml</param-name>
         <param-value></param-value>
     </context-param>
     <!-- Add mime mapping for VUE files -->

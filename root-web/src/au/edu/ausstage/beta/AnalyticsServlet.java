@@ -88,7 +88,95 @@ public class AnalyticsServlet extends HttpServlet {
 			
 			// get the file paths
 			String xsltPath = servletConfig.getServletContext().getInitParameter("analyticsXslt");
-			String xmlPath  = servletConfig.getServletContext().getInitParameter("analyticsXml");
+			String xmlPath  = servletConfig.getServletContext().getInitParameter("exchangeAnalyticsXml");
+			
+			// check on the parameters
+			if(xsltPath == null || xmlPath == null) {
+				throw new ServletException("Unable to read required parameters from Servlet Config");
+			}
+			
+			if(xsltPath.equals("") || xmlPath.equals("")) {
+				throw new ServletException("Missing required parameters from Servlet Config");
+			}
+			
+			// open the XSL file
+			try {
+				xslFile = new File(xsltPath);
+				
+				// check to ensure we can read this file
+				if(xslFile.canRead() == false) {
+					throw new ServletException("Unable to read XSLT file");
+				}
+				
+			} catch (SecurityException ex) {
+				throw new ServletException("Unable to read XSLT file");
+			}
+			
+			// open the XML file
+			try {
+				xmlFile = new File(xmlPath);
+				
+				// check to ensure we can read this file
+				if(xmlFile.canRead() == false) {
+					throw new ServletException("Unable to read XSLT file");
+				}
+				
+			} catch (SecurityException ex) {
+				throw new ServletException("Unable to read the XML file");
+			}
+			
+			// set up the source objects for the transform
+			try {
+				// get a transformer factory
+				factory = TransformerFactory.newInstance();
+				
+				// load the XSLT source
+				xslSource = new StreamSource(xslFile);
+				
+				// load the XML
+				xmlSource = new StreamSource(xmlFile);
+				
+				// get a transformer using the XSL as a source of instructions
+				transformer = factory.newTransformer(xslSource);
+				
+				// get objects to handle the output of the transformation
+				writer = new StringWriter();
+				result = new StreamResult(writer);
+				
+				// do the transformation
+				transformer.transform(xmlSource, result);
+				
+				// get the results
+				htmlOutput = writer.toString();
+				
+			} catch (javax.xml.transform.TransformerException ex) {
+				throw new ServletException("Unable to transform the XML into HTML");
+			}
+			
+			// hack to fix wrong entities in the html output
+			htmlOutput = htmlOutput.replace("&lt;", "<");
+			htmlOutput = htmlOutput.replace("&gt;", ">");
+			
+			// ouput the XML
+			// set the appropriate content type
+			response.setContentType("text/plain; charset=UTF-8");
+			
+			// set the appropriate headers to disable caching
+			// particularly for IE
+			response.setHeader("Cache-Control", "max-age=0,no-cache,no-store,post-check=0,pre-check=0");
+			
+			//get the output print writer
+			PrintWriter out = response.getWriter();
+			
+			// send some output
+			out.print(htmlOutput);
+			
+		} else if(type.equals("mapping")) {
+			// AusStage Mapping Service Analytics
+			
+			// get the file paths
+			String xsltPath = servletConfig.getServletContext().getInitParameter("analyticsXslt");
+			String xmlPath  = servletConfig.getServletContext().getInitParameter("mappingAnalyticsXml");
 			
 			// check on the parameters
 			if(xsltPath == null || xmlPath == null) {
