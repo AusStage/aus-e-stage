@@ -16,15 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* show and hide navigation menus */
-if(window.innerWidth && window.innerWidth <= 480) {
-	$(document).ready(function() {
-		$('#header ul').addClass('hide');
-		$('#header').append('<div class="leftButton" onclick="toggleMenu()">Menu</div>');
+$(document).ready(function() {
+	$('#header .leftButton').click(function(e) {
+		$(e.target).addClass('clicked');
 	});
-	function toggleMenu() {
-		$('#header ul').toggleClass('hide');
-		$('#header .leftButton').toggleClass('pressed');
-	}
-}
 
+	var title = $('h2').html() || 'AusStage Mobile';
+	$('h1').html(title);
+	$('h2').remove();
+});

@@ -29,12 +29,17 @@
 	<script type="text/javascript" src="assets/javascript/mobile.js"></script>
 </head>
 <body>
-	<div id="header"><h1>AusStage Mobile</h1></div>
+	<div id="header">
+		<div class="leftButton"><a href="index.jsp">Back</a></div>
+		<h1>AusStage Mobile</h1>
+	</div>
 	<div id="content">
+		<h2>Performances Seeking Feedback</h2>
 		<ul>
-			<li><a href="about.jsp" title="">About</a></li>
-			<li><a href="performances.jsp" title="">Performances Seeking Feedback</a></li>
-			<li><a href="venues.jsp" title="">Venues Near Me</a></li>
+			<li><a href="feedback.jsp?id=" title="">Ibsen Rocks!</a></li>
+			<li><a href="feedback.jsp?id=" title="">A Doll's House</a></li>
+			<li><a href="feedback.jsp?id=" title="">The Wild Duck</a></li>
+			<li><a href="feedback.jsp?id=" title="">The Woman from Snowy River</a></li>
 		</ul>
 	</div>
 </body>
