@@ -19,23 +19,24 @@
 */
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" lang="en">
 <head>
 	<title>AusStage Mobile</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-	<meta name="viewport" content="user-scalable=no, width=device-width"/>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 	<link rel="stylesheet" type="text/css" href="assets/mobile.css" media="only screen and (max-width: 480px)"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
 	<script type="text/javascript" src="assets/javascript/mobile.js"></script>
+	<script type="text/javascript" src="assets/javascript/maps.js"></script>
 </head>
 <body>
-	<div id="header"><h1>AusStage Mobile</h1></div>
-	<div id="content">
-		<ul>
-			<li><a href="about.jsp" title="">About</a></li>
-			<li><a href="performances.jsp" title="">Performances Seeking Feedback</a></li>
-			<li><a href="venues.jsp" title="">Venues Near Me</a></li>
-		</ul>
+	<div id="header">
+		<div class="leftButton"><a href="index.jsp">Back</a></div>
+		<h1>AusStage Mobile</h1>
 	</div>
+		<h2>Venues Near Me</h2>
+		<div id="map_canvas"></div>
 </body>
 </html>

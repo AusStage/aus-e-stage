@@ -29,13 +29,22 @@
 	<script type="text/javascript" src="assets/javascript/mobile.js"></script>
 </head>
 <body>
-	<div id="header"><h1>AusStage Mobile</h1></div>
+	<div id="header">
+		<div class="leftButton"><a href="index.jsp">Back</a></div>
+		<h1>AusStage Mobile</h1>
+	</div>
 	<div id="content">
-		<ul>
-			<li><a href="about.jsp" title="">About</a></li>
-			<li><a href="performances.jsp" title="">Performances Seeking Feedback</a></li>
-			<li><a href="venues.jsp" title="">Venues Near Me</a></li>
-		</ul>
+		<h2>About this site</h2>
+		<p>
+			AusStage fulfils a national need for public access to reliable information on the full spectrum of live performance in Australia, 
+			delivering a data set of national significance to research, post graduate students, policy makers in government and industry practitioners; 
+			there is no other comparable database in existence. 
+		</p>
+		<p>
+			AusStage is expanding to include the collection of audience participation feedback using mobile technologies such as SMS and this mobile website. 
+			We encourage you to <a href="performances.jsp" title="">provide feedback</a> on the participating performances and help us build a valuable resource
+			and broaden the scope of AusStage into this new and exciting direction. 
+		</p>
 	</div>
 </body>
 </html>
