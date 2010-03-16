@@ -16,39 +16,6 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
-$(document).ready(function() {
-	
-	$('#map_canvas').append('<p>Hello!</p>');
-
-	// initialise geo library
-	if(geo_position_js.init()){
-		// initilisation successful so get the coordinates
-		geo_position_js.getCurrentPosition(use_coordinates, error_coordinates);
-	} else {
-		// initialisation didn't work
-		$('#map_canvas').empty();
-		$('#map_canvas').append('<p>Unfortunately location information on your phone isn\'t supported by your device</p>');
-	}
-	
-	// function to use the geolocation coordinates
-	function use_coordinates(info) {
-		// use the coordinates
-		$('#map_canvas').empty();
-		$('#map_canvas').append('<p>Latitude: ' + info.coords.latitude + '<br/>' + 'Longtitude: ' + info.coords.longitude + '</p>');	
-	}
-	
-	// function to respond to an error
-	function error_coordinates(info) {
-		// coordinates didn't work
-		$('#map_canvas').empty();
-		$('#map_canvas').append('<p>Unfortunately an error has occured while retrieving location information. <br/>' + info.message + '</p>');
-	}
-		
-});
-
-*/
-
 $(document).ready(function() {
 
 	// Try W3C Geolocation (Preferred)
@@ -66,8 +33,37 @@ $(document).ready(function() {
 			enableHighAccuracy: true
 		});
 	} else {
-		$('#map_canvas').empty();
-		$('#map_canvas').append('<p>The W3C Geolocation API isn\'t availble.</p>');
+		// W3C Geolocation method isn't available
+		// try Google Gears
+		if (google.gears) {
+			// google gears is available so use it
+			var geo = google.gears.factory.create('beta.geolocation');
+			geo.getCurrentPosition(function(position) {
+				// success
+				$('#map_canvas').empty();
+				$('#map_canvas').append('<p>Latitude: ' + position.latitude + '<br/>Longitude: ' + position.longitude + '</p>');
+			}, function(position_error) {
+				// hack to check if we're running in the emulator
+				if(navigator.userAgent.match(/sdk/i)) {
+					// running in the emulator so ignore error and fake coordinates
+					$('#map_canvas').empty();
+					$('#map_canvas').append('<p>Running in the emulator</p>');
+				} else {
+					// error
+					$('#map_canvas').empty();
+					$('#map_canvas').append('<p>An error occured while determining your location. Details are: <br/>' + position_error.message + '</p>');
+				}
+			}, {
+				// options
+				enableHighAccuracy: true,
+				gearsLocationProviderUrls: null
+			});
+		} else {
+			// not available
+			$('#map_canvas').empty();
+			$('#map_canvas').append('<p>The W3C Geolocation API isn\'t availble.</p><p>The Google Gears API isn\'t availble.</p>');
+		}
+		
 	}
 });
 	

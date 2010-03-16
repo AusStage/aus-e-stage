@@ -28,7 +28,6 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/geo.js"></script>
 	<script type="text/javascript" src="assets/javascript/mobile.js"></script>
 	<script type="text/javascript" src="assets/javascript/maps.js"></script>
 </head>
