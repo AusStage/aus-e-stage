@@ -36,9 +36,23 @@
 		<div class="leftButton"><a href="index.jsp">Back</a></div>
 		<h1>AusStage Mobile</h1>
 	</div>
-		<h2>Venues Near Me</h2>
-		<div id="map_canvas">
-			<p>Empty canvas</p>
-		</div>
+	<h2>Venues Near Me</h2>
+	<div id="map_canvas">
+		<p>Empty canvas</p>
+	</div>
+	<div id="error_form_div" style="display: none;">
+		<p>An error has occured while trying to determine your location.</p>
+		<p>Please refresh the page and try again.</p>
+		<p>If the problem persists please touch the button below to report the problem.</p>
+		<form action="mail/" method="post" id="error_form" name="error_form">
+			<input type="hidden" name="source"        id="source" value="venue-error"/>
+			<input type="hidden" name="error_message" id="error_message" value=""/>
+			<input type="hidden" name="error_code"    id="error_code" value=""/>
+			<input type="hidden" name="error_source"  id="error_source" value=""/>
+			<ul>
+				<li><a href="javascript:document.error_form.submit();">Report the problem</a></li>
+			</ul>
+		</form>
+	</div>
 </body>
 </html>
