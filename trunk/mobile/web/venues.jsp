@@ -26,7 +26,7 @@
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 	<link rel="stylesheet" type="text/css" href="assets/mobile.css" media="only screen and (max-width: 480px)"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 	<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
 	<script type="text/javascript" src="assets/javascript/mobile.js"></script>
 	<script type="text/javascript" src="assets/javascript/maps.js"></script>
@@ -37,7 +37,7 @@
 		<h1>AusStage Mobile</h1>
 	</div>
 	<h2>Venues Near Me</h2>
-	<div id="map_canvas">
+	<div id="map_canvas" style="width: 100%; height: 90%;">
 		<p>Empty canvas</p>
 	</div>
 	<div id="error_form_div" style="display: none;">
