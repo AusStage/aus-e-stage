@@ -276,6 +276,21 @@ class FileListFilter implements FilenameFilter {
 	// get the current date as a string for file comparison
 	// get an instance of the calendar
 	private GregorianCalendar calendar = new GregorianCalendar();
+	private String currentDate;
+	
+	/**
+	 * Constructor for this class
+	 */
+	public FileListFilter() {
+	
+		// set it to the current time
+	 	calendar.setTime(new java.util.Date());
+	 	
+		// get the current date
+	 	currentDate = Integer.toString(calendar.get(java.util.Calendar.YEAR));
+	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.MONTH) + 1);
+	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.DAY_OF_MONTH));
+	 }	
 	
 	/**
 	 * Method to test if the specified file matches the predetermined
@@ -287,14 +302,6 @@ class FileListFilter implements FilenameFilter {
 	 * @return true if and only if the file should be included
 	 */
 	public boolean accept(File dir, String filename) {
-	
-		// set it to the current time
-	 	calendar.setTime(new java.util.Date());
-	 	
-	 	// get the current date
-	 	String currentDate = Integer.toString(calendar.get(java.util.Calendar.YEAR));
-	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.MONTH) + 1);
-	 	currentDate += "-" + String.format("%02d", calendar.get(java.util.Calendar.DAY_OF_MONTH));
 	
 		if(filename != null) {
 			if(filename.startsWith(NAME) && filename.endsWith(EXT) && filename.indexOf(currentDate) == -1) {
