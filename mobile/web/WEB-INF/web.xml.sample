@@ -29,10 +29,18 @@
         <servlet-name>GathererServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mobile.GathererServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MailServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mobile.MailServlet</servlet-class>
+    </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>GathererServlet</servlet-name>
         <url-pattern>/gatherer/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MailServlet</servlet-name>
+        <url-pattern>/mail/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
@@ -72,6 +80,19 @@
     </context-param>
     <context-param>
         <param-name>twitterPassword</param-name>
+        <param-value></param-value>
+    </context-param>
+    <!-- email server details -->
+    <context-param>
+        <param-name>mailHost</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailFrom</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailTo</param-name>
         <param-value></param-value>
     </context-param>
 </web-app>

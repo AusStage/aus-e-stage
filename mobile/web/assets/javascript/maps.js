@@ -26,8 +26,7 @@ $(document).ready(function() {
 			$('#map_canvas').append('<p>Latitude: ' + position.coords.latitude + '<br/>Longitude: ' + position.coords.longitude + '</p>');
 		}, function(position_error) {
 			// failure
-			$('#map_canvas').empty();
-			$('#map_canvas').append('<p>An error occured while determining your location. Details are: <br/>' + position_error.message + '</p>');
+			showError(position_error, 'W3C Geolocation');
 		}, {
 			// options
 			enableHighAccuracy: true
@@ -43,15 +42,15 @@ $(document).ready(function() {
 				$('#map_canvas').empty();
 				$('#map_canvas').append('<p>Latitude: ' + position.latitude + '<br/>Longitude: ' + position.longitude + '</p>');
 			}, function(position_error) {
+				//failure
 				// hack to check if we're running in the emulator
 				if(navigator.userAgent.match(/sdk/i)) {
 					// running in the emulator so ignore error and fake coordinates
-					$('#map_canvas').empty();
-					$('#map_canvas').append('<p>Running in the emulator</p>');
+					//$('#map_canvas').empty();
+					//$('#map_canvas').append('<p>Running in the emulator</p>');
+					showError(position_error, 'Google Gears');
 				} else {
-					// error
-					$('#map_canvas').empty();
-					$('#map_canvas').append('<p>An error occured while determining your location. Details are: <br/>' + position_error.message + '</p>');
+					showError(position_error, 'Google Gears');
 				}
 			}, {
 				// options
@@ -60,71 +59,21 @@ $(document).ready(function() {
 			});
 		} else {
 			// not available
-			$('#map_canvas').empty();
-			$('#map_canvas').append('<p>The W3C Geolocation API isn\'t availble.</p><p>The Google Gears API isn\'t availble.</p>');
+			showError({message: 'no provider', code: '-1'}, 'No Provider');
 		}
 		
 	}
 });
+
+// function to build helpful errors
+function showError(position_error, error_source) {
+
+	$('#error_message').val(position_error.message);
+	$('#error_code').val(position_error.code);
+	$('#error_source').val(error_source);
 	
-
-/*
-$(document).ready(function() {
-
-	var myOptions = {
-	    zoom: 8,
-	    mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
-
-	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	$('#map_canvas').empty();
+	$('#map_canvas').hide();
 	
-	var initialLocation;
-var siberia = new google.maps.LatLng(60, 105);
-var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
-var browserSupportFlag =  new Boolean();
-
-function initialize() {
-  var myOptions = {
-    zoom: 6,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
- 
-  // Try W3C Geolocation (Preferred)
-  if(navigator.geolocation) {
-    browserSupportFlag = true;
-    navigator.geolocation.getCurrentPosition(function(position) {
-      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-      map.setCenter(initialLocation);
-    }, function() {
-      handleNoGeolocation(browserSupportFlag);
-    });
-  // Try Google Gears Geolocation
-  } else if (google.gears) {
-    browserSupportFlag = true;
-    var geo = google.gears.factory.create('beta.geolocation');
-    geo.getCurrentPosition(function(position) {
-      initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
-      map.setCenter(initialLocation);
-    }, function() {
-      handleNoGeoLocation(browserSupportFlag);
-    });
-  // Browser doesn't support Geolocation
-  } else {
-    browserSupportFlag = false;
-    handleNoGeolocation(browserSupportFlag);
-  }
- 
-  function handleNoGeolocation(errorFlag) {
-    if (errorFlag == true) {
-      alert("Geolocation service failed.");
-      initialLocation = newyork;
-    } else {
-      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
-      initialLocation = siberia;
-    }
-    map.setCenter(initialLocation);
-  }
+	$('#error_form_div').show();
 }
-});
-*/
