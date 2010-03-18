@@ -18,8 +18,13 @@
 
 // declare global variables
 var map;
-var mapOptions = {
+/*var mapOptions = {
 	zoom: 15,
+	mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+*/
+var mapOptions = {
+	zoom: 9,
 	mapTypeId: google.maps.MapTypeId.ROADMAP
 };
 
@@ -66,6 +71,7 @@ $(document).ready(function() {
 			}, {
 				// options
 				enableHighAccuracy: true
+				//gearsLocationProviderUrls: null
 			});
 		} else {
 			// not available

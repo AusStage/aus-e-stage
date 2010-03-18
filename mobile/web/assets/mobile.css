@@ -31,6 +31,7 @@ body {
 
 html, body {
 	height: 100%;
+	width: 100%;
 }
 
 /* header */
@@ -143,10 +144,4 @@ ul li:last-child a {
 #header div.leftButton a {
 	color: #fff;
 	text-decoration: none;
-}
-
-/* maps */
-#map_canvas {
-	width: 100%; 
-	height: 90%;
 }
