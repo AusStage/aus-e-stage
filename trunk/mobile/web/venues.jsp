@@ -32,12 +32,14 @@
 	<script type="text/javascript" src="assets/javascript/maps.js"></script>
 </head>
 <body>
+<!--
 	<div id="header">
 		<div class="leftButton"><a href="index.jsp">Back</a></div>
 		<h1>AusStage Mobile</h1>
 	</div>
 	<h2>Venues Near Me</h2>
-	<div id="map_canvas" style="width: 100%; height: 90%;">
+-->
+	<div id="map_canvas" style="width: 100% !important; height: 100% !important;">
 		<p>Empty canvas</p>
 	</div>
 	<div id="error_form_div" style="display: none;">
