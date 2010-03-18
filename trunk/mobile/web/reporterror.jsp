@@ -37,5 +37,7 @@
 		<h2>Report A Problem</h2>
 		<p>Thank you for reporting the problem, one of our engineers will look into the problem as soon as possible.</p>
 	</div>
+<!-- include the Google Analytics code -->
+<jsp:include page="analytics.jsp"/>
 </body>
 </html>

@@ -42,5 +42,7 @@
 			<li><a href="feedback.jsp?id=" title="">The Woman from Snowy River</a></li>
 		</ul>
 	</div>
+<!-- include the Google Analytics code -->
+<jsp:include page="analytics.jsp"/>
 </body>
 </html>

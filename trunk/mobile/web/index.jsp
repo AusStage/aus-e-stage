@@ -37,5 +37,7 @@
 			<li><a href="venues.jsp" title="">Venues Near Me</a></li>
 		</ul>
 	</div>
+<!-- include the Google Analytics code -->
+<jsp:include page="analytics.jsp"/>
 </body>
 </html>

@@ -46,5 +46,7 @@
 			and broaden the scope of AusStage into this new and exciting direction. 
 		</p>
 	</div>
+<!-- include the Google Analytics code -->
+<jsp:include page="analytics.jsp"/>
 </body>
 </html>
