@@ -56,5 +56,7 @@
 			</ul>
 		</form>
 	</div>
+<!-- include the Google Analytics code -->
+<jsp:include page="analytics.jsp"/>
 </body>
 </html>
