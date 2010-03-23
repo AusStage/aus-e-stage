@@ -18,26 +18,43 @@
 
 // declare global variables
 var map;
-/*var mapOptions = {
-	zoom: 15,
-	mapTypeId: google.maps.MapTypeId.ROADMAP
-};
-*/
 var mapOptions = {
-	zoom: 9,
+	zoom: 3,
 	mapTypeId: google.maps.MapTypeId.ROADMAP
 };
+var youAreHere = null;
+
 
 $(document).ready(function() {
 
+	// start the map
+	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	map.setCenter(new google.maps.LatLng(-25.947028, 133.209639));	
+
+	// determine where the device is
 	var startLocation;
 	
+	// check to see if this is an emulator
+	if(navigator.userAgent.match(/sdk/i)) {
+		// running in the emulator so fake coordinates
+		// success
+		startLocation = new google.maps.LatLng(-35.02597, 138.5727);
+		//startLocation = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+		initialMap(startLocation);
+	} else {
+		getLocation();		
+	}
+});
+
+// function to get the location of the device
+function getLocation() {
+
 	// Try W3C Geolocation (Preferred)
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			// success
 			startLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);		
-			showMap(startLocation);
+			initialMap(startLocation);
 		}, function(position_error) {
 			// failure
 			showError(position_error, 'W3C Geolocation');
@@ -54,7 +71,7 @@ $(document).ready(function() {
 			geo.getCurrentPosition(function(position) {
 				// success
 				startLocation = new google.maps.LatLng(position.latitude, position.longitude);
-				showMap(startLocation);
+				initialMap(startLocation);
 			}, function(position_error) {
 				//failure
 				// hack to check if we're running in the emulator
@@ -63,8 +80,9 @@ $(document).ready(function() {
 					//$('#map_canvas').empty();
 					//$('#map_canvas').append('<p>Running in the emulator</p>');
 					// success
-					startLocation = new google.maps.LatLng(138.5727, -35.02597);
-					showMap(startLocation);
+					//startLocation = new google.maps.LatLng(-35.02597, 138.5727);
+					startLocation = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+					initialMap(startLocation);
 				} else {
 					showError(position_error, 'Google Gears');
 				}
@@ -79,7 +97,7 @@ $(document).ready(function() {
 		}
 		
 	}
-});
+}
 
 // function to build helpful errors
 function showError(position_error, error_source) {
@@ -92,17 +110,33 @@ function showError(position_error, error_source) {
 	$('#map_canvas').hide();
 	
 	$('#error_form_div').show();
+	
+	$('#progress').hide();
 }
 
 // function to show the map
-function showMap(location) {
+function initialMap(newLocation) {
 
-	// get a new map object and set to the location we've found
-	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-	map.setCenter(location);
-	var marker = new google.maps.Marker({
-      position: location,
-      map: map,
-      title:"You Are Here!"
-  });
+	if(youAreHere == null) {
+		youAreHere = new google.maps.Marker({
+			position: newLocation,
+			map: map,
+			title:"You Are Here!"
+		});
+	} else {
+		youAreHere.setMap(null);
+		youAreHere = null;
+		youAreHere = new google.maps.Marker({
+			position: newLocation,
+			map: map,
+			title: 'You Are Here!'
+		});
+	}
+	
+	$('#progress').hide();
+	
+	// set map center to new location
+	map.setZoom(15);
+	map.setCenter(newLocation);
+	
 }

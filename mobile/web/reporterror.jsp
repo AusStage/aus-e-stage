@@ -23,7 +23,9 @@
 <head>
 	<title>AusStage Mobile</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-	<meta name="viewport" content="user-scalable=no, width=device-width"/>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width"/>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-startup-image" href="apple-touch-startup-image.png"/>
 	<link rel="stylesheet" type="text/css" href="/mobile/assets/mobile.css" media="only screen and (max-width: 480px)"/>
 	<script type="text/javascript" src="/mobile/assets/javascript/libraries/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="/mobile/assets/javascript/mobile.js"></script>
