@@ -23,7 +23,9 @@
 <head>
 	<title>AusStage Mobile</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width"/>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-startup-image" href="apple-touch-startup-image.png"/>
 	<link rel="stylesheet" type="text/css" href="assets/mobile.css" media="only screen and (max-width: 480px)"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -40,7 +42,6 @@
 	<h2>Venues Near Me</h2>
 -->
 	<div id="map_canvas" style="width: 100% !important; height: 100% !important;">
-		<p>Empty canvas</p>
 	</div>
 	<div id="error_form_div" style="display: none;">
 		<p>An error has occured while trying to determine your location.</p>
@@ -56,6 +57,7 @@
 			</ul>
 		</form>
 	</div>
+	<div id="progress">Loading...</div> 
 <!-- include the Google Analytics code -->
 <jsp:include page="analytics.jsp"/>
 </body>
