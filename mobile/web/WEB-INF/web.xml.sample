@@ -33,6 +33,10 @@
         <servlet-name>MailServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mobile.MailServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LookupServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mobile.LookupServlet</servlet-class>
+    </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>GathererServlet</servlet-name>
@@ -41,6 +45,10 @@
     <servlet-mapping>
         <servlet-name>MailServlet</servlet-name>
         <url-pattern>/mail/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LookupServlet</servlet-name>
+        <url-pattern>/lookup/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
@@ -86,6 +94,33 @@
     <context-param>
         <param-name>mailHost</param-name>
         <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailUser</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailPassword</param-name>
+        <param-value></param-value>
+    </context-param>
+    <!-- set to 'yes' to enable the use of TLS -->
+    <context-param>
+        <param-name>mailTls</param-name>
+        <param-value>no</param-value>
+    </context-param>
+    <!-- set to 'yes' to enable the use of SSL -->
+    <context-param>
+        <param-name>mailSsl</param-name>
+        <param-value>no</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailPort</param-name>
+        <param-value></param-value>
+    </context-param>
+    <!-- set to 'yes' to have debug info printed to catalina.out -->
+    <context-param>
+        <param-name>mailDebug</param-name>
+        <param-value>yes</param-value>
     </context-param>
     <context-param>
         <param-name>mailFrom</param-name>

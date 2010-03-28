@@ -112,9 +112,15 @@ public class MailServlet extends HttpServlet {
 			String userAgent = request.getHeader("user-agent");
 			
 			// get the mail configuration options
-			String mailHost = servletConfig.getServletContext().getInitParameter("mailHost");
-			String mailTo   = servletConfig.getServletContext().getInitParameter("mailTo");
-			String mailFrom = servletConfig.getServletContext().getInitParameter("mailFrom");
+			String mailHost     = servletConfig.getServletContext().getInitParameter("mailHost");
+			String mailTo       = servletConfig.getServletContext().getInitParameter("mailTo");
+			String mailFrom     = servletConfig.getServletContext().getInitParameter("mailFrom");
+			String mailUser     = servletConfig.getServletContext().getInitParameter("mailUser");
+			String mailPassword = servletConfig.getServletContext().getInitParameter("mailPassword");
+			String mailTls      = servletConfig.getServletContext().getInitParameter("mailTls");
+			String mailSsl      = servletConfig.getServletContext().getInitParameter("mailSsl");
+			String mailPort     = servletConfig.getServletContext().getInitParameter("mailPort");
+			String mailDebug    = servletConfig.getServletContext().getInitParameter("mailDebug");
 			
 			// check on the parameters
 			if(mailHost == null || mailTo == null || mailFrom == null) {
@@ -132,14 +138,59 @@ public class MailServlet extends HttpServlet {
 			message.append("Component: " + errorSource + "\n");
 			message.append("User-Agent: " + userAgent + "\n");
 			
-			// initialise the JavaMail classes
-			Properties systemProperties = System.getProperties();
-			systemProperties.put("mail.smtp.host", mailHost);
-			Session systemSession = Session.getInstance(systemProperties, null);
+			// prepare to use the JavaMail classes
+			Properties mailProperties = System.getProperties();
+			mailProperties.put("mail.transport.protocol", "smtp");
+			mailProperties.put("mail.smtp.host", mailHost);
+			
+			// check to see if we need to use a non standard port
+			if(mailPort != null) {	
+				mailProperties.put("mail.smtp.port", mailPort); 
+			}
+			
+			// check to see if we need to use SSL
+			if(mailSsl != null) {
+				mailProperties.put("mail.smtp.ssl.enable", "true");
+				mailProperties.put("mail.smtp.ssl.trust", "*");
+				
+				if(mailPort != null) {
+					mailProperties.put("mail.smtp.socketFactory.port", mailPort); 
+				} else {
+					// assume default standard port for SSL SMTP
+					mailProperties.put("mail.smtp.socketFactory.port", "465"); 
+				}
+				
+				mailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); 
+				mailProperties.put("mail.smtp.socketFactory.fallback", "false"); 
+			}
+			
+			// output debug messages
+			if(mailDebug != null && mailDebug.equals("yes")) {
+				mailProperties.put("mail.debug", "true"); 
+			}
+			
+			// do we need to authenticate?
+			if(mailUser != null) {
+				mailProperties.put("mail.smtp.auth", true); 
+			}
+			
+			// do we need to use TLS?
+			if(mailTls != null && mailTls.equals("yes")) {
+				mailProperties.put("mail.smtp.starttls.enable","true");
+			}
+			
+			Session mailSession;
+			
+			// do we need to do authentication
+			if(mailUser != null) {
+				mailSession = Session.getInstance(mailProperties, new SMTPAuthenticator(mailUser, mailPassword));
+			} else {
+				mailSession = Session.getInstance(mailProperties, null);
+			}
 			
 			try {
 				// construct the message
-				Message mailMessage = new MimeMessage(systemSession); // base object
+				Message mailMessage = new MimeMessage(mailSession); // base object
 				mailMessage.setFrom(new InternetAddress(mailFrom)); // set from address
 				mailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailTo, false)); // set to address
 				mailMessage.setSubject("Error report from " + servletConfig.getServletContext().getInitParameter("systemName")); // subject
@@ -149,12 +200,13 @@ public class MailServlet extends HttpServlet {
 				mailMessage.setHeader("X-Mailer", "JavaMail");
 				mailMessage.setSentDate(new Date());
 				
-				// send the message
-			    Transport.send(mailMessage);
+				// send the message				
+				Transport.send(mailMessage);
+				
 		    } catch(javax.mail.internet.AddressException ex) {
-		    	throw new ServletException("Unable to prepare mail message");
+		    	throw new ServletException("Unable to prepare mail message", ex);
 		    } catch(javax.mail.MessagingException ex) {
-		    	throw new ServletException("Unable to send mail message");
+		    	throw new ServletException("Unable to send mail message", ex);
 		    }
 		    
 		    // forward to the thank you page
@@ -167,5 +219,39 @@ public class MailServlet extends HttpServlet {
 		}
 	
 	} // end doPost method
+
+
+	/**
+	 * A private class to help with authentication of SMTP session
+	 */
+	private class SMTPAuthenticator extends javax.mail.Authenticator {
+		
+		// declare private variables
+		private String username;
+		private String password;
+	
+		/**
+		 * Constructor for this class
+		 *
+		 * @param user username to use for authentication
+		 * @param pass password to use for authentication
+		 */
+		public SMTPAuthenticator(String user, String pass) {
+			super();
+			username = user;
+			password = pass;
+		}
+		
+		/**
+		 * Method used to provide authentication information to JavaMail classes
+		 */
+        public PasswordAuthentication getPasswordAuthentication() {
+        	// debug code
+			System.out.println("!!!" + username + "###");
+			System.out.println("@@@" + password + "!!!");
+			
+           return new PasswordAuthentication(username, password);
+        }
+    } // end class definition
 
 } // end class definition
