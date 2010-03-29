@@ -72,7 +72,7 @@ public class DataManager {
 			}
 			
 			// do we need a new connection?
-			if(this.connection == null) {
+			if(this.connection == null || this.connection.isValid(5) == false) {
 			
 				// get a connection
 				this.connection = this.dataSource.getConnection();
@@ -102,7 +102,7 @@ public class DataManager {
 		try {
 		
 			// check on required objects
-			if(this.dataSource == null || this.connection == null) {
+			if(this.dataSource == null || this.connection == null || this.connection.isValid(5) == false) {
 				
 				// get a connection
 				this.connect();
@@ -140,7 +140,7 @@ public class DataManager {
 		try {
 		
 			// check on required objects
-			if(this.dataSource == null || this.connection == null) {
+			if(this.dataSource == null || this.connection == null || this.connection.isValid(5) == false) {
 				
 				// get a connection
 				this.connect();
@@ -183,20 +183,44 @@ public class DataManager {
 	}
 	
 	/**
+	 * A method used to tidy up statement objects
+	 */
+	public void tidyUp() {
+	
+		if(this.preparedStatement != null) {
+			try {
+				this.preparedStatement.close();
+				this.preparedStatement = null;
+			} catch(Exception e){}
+		}
+		
+		if(this.statement != null) {
+			try {
+				this.statement.close();
+				this.statement = null;
+			} catch(Exception e){}
+		}
+	
+	} // end tidy up method
+	
+	/**
 	 * Finalize method to be run when the object is destroyed
 	 * plays nice and free up Oracle connection resources etc. 
 	 */
 	protected void finalize() throws Throwable {
 		try {
 			this.preparedStatement.close();
+			this.preparedStatement = null;
 		} catch(Exception e){}
 		
 		try {
 			this.statement.close();
+			this.statement = null;
 		} catch(Exception e){}
 		
 		try {
 			this.connection.close();
+			this.connection = null;
 		} catch(Exception e){}
 	} // end finalize method
 
