@@ -16,6 +16,25 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
+// function to get parameters from url
+// taken from: http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
+$.extend({
+	getUrlVars: function(){
+		var vars = [], hash;
+		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		for(var i = 0; i < hashes.length; i++)
+		{
+			hash = hashes[i].split('=');
+			vars.push(hash[0]);
+			vars[hash[0]] = hash[1];
+		}
+		return vars;
+	},
+	getUrlVar: function(name){
+		return $.getUrlVars()[name];
+	}
+});
+
 // declare global variables
 var map;
 var mapOptions = {
@@ -23,6 +42,8 @@ var mapOptions = {
 	mapTypeId: google.maps.MapTypeId.ROADMAP
 };
 var youAreHere = null;
+var markerBag = [];
+var infoWindow = new google.maps.InfoWindow;
 
 
 $(document).ready(function() {
@@ -37,19 +58,22 @@ $(document).ready(function() {
 	// determine where the device is
 	var startLocation;
 	
-//	// check to see if this is an emulator
-//	if(navigator.userAgent.match(/sdk/i)) {
-//		// running in the emulator so fake coordinates
-//		// success
-//		startLocation = new google.maps.LatLng(-35.02597, 138.5727);
-//		//startLocation = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
-//		initialMap(startLocation);
-//	} else {
-//		getLocation();		
-//	}
+	var fakeIt = $.getUrlVar("fakeit");
+	
+	// check to see if this is an emulator
+	if(navigator.userAgent.match(/sdk/i)) {
+		// running in the emulator so fake coordinates
+		// success
+		startLocation = new google.maps.LatLng(-35.02597, 138.5727);
+		initialMap(startLocation);
+	} else if(fakeIt = 'yes') {
+		// fake the coordinates
+		startLocation = new google.maps.LatLng(-34.916667, 138.6);
+		initialMap(startLocation);	
+	} else {
+		getLocation();		
+	}
 
-// debug code
-showError({message: 'no provider', code: '-1'}, 'No Provider');
 });
 
 // function to get the location of the device
@@ -145,11 +169,51 @@ function updateMap() {
 	northEast = boundryCoords.getNorthEast();
 	southWest = boundryCoords.getSouthWest();
 	
+	// delete any existing markers
+	if(markerBag && markerBag.length > 0) {
+		for(i in markerBag) {
+			markerBag[i].setMap(null);
+		}
+		markerBag.length = 0;
+	}
+	
 	// get details of any venues close by
-	$.get('/mobile/lookup?type=venue-geo&ne=' + northEast.toUrlValue() + '&sw=' + southWest.toUrlValue(), function(data) {});
+	$.get('/mobile/lookup?type=venue-geo&ne=' + northEast.toUrlValue() + '&sw=' + southWest.toUrlValue(), function(data) {
+	
+		// process the xml
+		$(data).find('marker').each(function() { 
+			
+			// build a marker
+			var url    =  $(this).attr('url');
+			var venue  = $(this).attr('venue');
+			var suburb = $(this).attr('suburb');
+			var point = new google.maps.LatLng(
+				parseFloat($(this).attr('lat')),
+				parseFloat($(this).attr('lng'))
+			);
+			
+			var html = '<a href="' + url + '">' + venue + '</a>, <br/>' + suburb;
+			
+			var marker = new google.maps.Marker({
+				map: map,
+				position: point
+			});
+			
+			bindInfoWindow(marker, map, infoWindow, html);
+			
+			markerBag.push(marker);
+		});	
+	});
 	
 	// debug code
 	//console.log(northEast.toUrlValue());
 	//console.log(southWest.toUrlValue());
 
+}
+
+function bindInfoWindow(marker, map, infoWindow, html) {
+	google.maps.event.addListener(marker, 'click', function() {
+		infoWindow.setContent(html);
+		infoWindow.open(map, marker);
+	});
 }
