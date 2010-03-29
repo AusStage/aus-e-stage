@@ -246,9 +246,6 @@ public class MailServlet extends HttpServlet {
 		 * Method used to provide authentication information to JavaMail classes
 		 */
         public PasswordAuthentication getPasswordAuthentication() {
-        	// debug code
-			System.out.println("!!!" + username + "###");
-			System.out.println("@@@" + password + "!!!");
 			
            return new PasswordAuthentication(username, password);
         }
