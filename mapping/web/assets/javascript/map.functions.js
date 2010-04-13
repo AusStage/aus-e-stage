@@ -17,7 +17,7 @@
 */
 
 // function to load and show a map
-function showMap(type, id, traj, start, finish) {
+function showMap(type, id, traj, start, finish, limit) {
 
 	// tidy up any previous maps
 	GUnload();
@@ -38,12 +38,49 @@ function showMap(type, id, traj, start, finish) {
 		} else {
 			// pass date parameters to marker xml
 			markerUrl = "data?action=markers&type=orgdata&id=" + id + "&start=" + start + "&finish=" + finish;
+		}
+		
+		// add state limit if appropriate
+		if(limit != null && limit != "nolimit") {
+			markerUrl += "&state=" + limit;
 		}			
 	}
 	
 	// create a new map and centre it on australia
 	var map = new GMap2(document.getElementById("map"));
-	map.setCenter(new GLatLng(-25.947028, 133.209639), 4);
+	
+	// determine where to centre the map
+	switch(limit){
+		case '1':
+			map.setCenter(new GLatLng(-30.058333, 135.763333), 6);
+			break;
+		case '2':
+			map.setCenter(new GLatLng(-25.328055, 122.298333), 5);
+			break;
+		case '3':
+			map.setCenter(new GLatLng(-32.163333, 147.016666), 6);
+			break;
+		case '4':
+			map.setCenter(new GLatLng(-22.486944, 144.431666), 5);
+			break;
+		case '5':
+			map.setCenter(new GLatLng(-42.021388, 146.593333), 7);
+			break;
+		case '6':
+			map.setCenter(new GLatLng(-36.854166, 144.281111), 6);
+			break;
+		case '7':
+			map.setCenter(new GLatLng(-35.49, 149.001388), 9);
+			break;
+		case '8':
+			map.setCenter(new GLatLng(-19.383333, 133.357777), 6);
+			break;
+		default:
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 6);
+			break;
+	}
+	
+	// finish setting up the map
 	map.setUIToDefault();
     
     // get the marker data

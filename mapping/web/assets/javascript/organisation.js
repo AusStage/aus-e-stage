@@ -141,9 +141,10 @@ function showOrgMap(orgId) {
 	
 	// update values in the advanced map options form
 	$("#adv_map_org_id").val(orgId);
+	$("#adv_map_state").val($("#state").val());
 	
 	// use reusable function to show and load the map
-	showMap('org', orgId);
+	showMap('org', orgId, null, null, null, $("#state").val());
 	
 	// get the data to populate the selectboxes
 	$.getJSON("data?action=lookup&type=startdates&id=" + orgId, function(data) {
@@ -162,7 +163,6 @@ function showOrgMap(orgId) {
 		
 		// select the last option of the event_finish select
 		$("#event_start option:last").attr("selected", "selected");
-		//$("#event_finish").val($("#event_finish option:last").val());
 		
 		// remove any existing slider
 		$("#sliderComponent").remove();
@@ -188,11 +188,22 @@ function advFormSubmit() {
 	var startDate = $("#event_start").val();
 	var finishDate = $("#event_finish").val();
 	
+	// get the state limit
+	var stateLimit = $("#adv_map_state").val();
+	
 	// use the reusable function to update the map
 	if(showTraj != null) {
-		showMap('org', orgId, "true", startDate, finishDate);
+		if(stateLimit != 'nolimit') {
+			showMap('org', orgId, "true", startDate, finishDate, stateLimit);
+		} else {
+			showMap('org', orgId, "true", startDate, finishDate);
+		}
 	} else {
-		showMap('org', orgId, "false", startDate, finishDate);
+		if(stateLimit != 'nolimit') {
+			showMap('org', orgId, "false", startDate, finishDate, stateLimit);
+		} else {
+			showMap('org', orgId, "false", startDate, finishDate);
+		}
 	}
 	
 	// override default action on the form
