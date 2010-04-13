@@ -168,7 +168,6 @@ function showOrgMap(orgId) {
 		$("#sliderComponent").remove();
 		
 		// create the slider
-		//$(".slider").selectToUISlider({labels: 7})
 		$(".slider").selectToUISlider({labels: 10}).hide();
 		$(".tohide").hide();
 	});
@@ -209,3 +208,10 @@ function loadNewPage(responseText, statusText) {
 		showSearchResults("<p><strong>Error: </strong>No organisations were found matching the organisation id provided.</p>");
 	}
 }
+
+// add clue tips to the form labels
+$(document).ready(function() {
+	$('#org_name_label').cluetip({local:true, attribute: 'class', showTitle: false});
+	$('#operator_label').cluetip({local:true, attribute: 'class', showTitle: false});
+	$('#state_label').cluetip({local:true, attribute: 'class', showTitle: false});
+});
