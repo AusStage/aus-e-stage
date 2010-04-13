@@ -23,16 +23,18 @@
 <head>
 	<title>AusStage Mapping Service (Beta)</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/jquery-ui-1.7.2.custom.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/ui.slider.extras.css"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery.cluetip.css"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.36.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.6.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.7.2.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>	
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.cluetip.js"></script>	
 	<script type="text/javascript" src="assets/javascript/organisation.js"></script>
 	<script type="text/javascript" src="assets/javascript/map.functions.js"></script>
 	<%
@@ -65,7 +67,7 @@
 					<table class="formTable">
 						<tr>
 							<th scope="row">
-								<label for="org_name">Organisation Name: </label>
+								<label id="org_name_label" for="org_name" class="#cluetip_orgname" style="cursor: help;">Organisation Name: </label>
 							</th>
 							<td>
 								<input type="text" size="40" id="org_name" name="org_name"/>
@@ -73,7 +75,7 @@
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="operator">Search Operator: </label>
+								<label id="operator_label" for="operator" class="#cluetip_operator" style="cursor: help;">Search Operator: </label>
 							</th>
 							<td>
 								<select size="1" id="operator" name="operator">
@@ -84,8 +86,27 @@
 							</td>
 						</tr>
 						<tr>
+							<th scope="row">
+								<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
+							</th>
+							<td>
+								<select size="1" id="state" name="state">
+									<option value="nolimit" selected="selected">No Limit - All venues</option>
+									<option value="7">Australian Capital Territory</option>
+									<option value="3">New South Wales</option>
+									<option value="8">Northern Territory</option>
+									<option value="4">Queensland</option>
+									<option value="1">South Australia</option>
+									<option value="5">Tasmania</option>
+									<option value="6">Victoria</option>
+									<option value="2">Western Australia</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<td colspan="2">
-								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" value="Search"/>
+								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" value="Search"/><br/>
+								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
 							</td>
 						</tr>
 					</table>
@@ -112,7 +133,7 @@
 				</form>
 			</div>
 		</div>
-		<div id="search_waiting">
+		<div id="search_waiting" style="visibility:hidden;">
 		<p style="text-align: center;">
 			<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
 			<br/>Loading Search Results...
@@ -210,6 +231,27 @@
 					</tr>
 				</tbody>
 			</table>					
+		</div>
+		<!-- clue tip content -->
+		<div id="cluetip_orgname">
+			<p>
+				Enter a few keywords, or the exact name, of the organisation that is of interest.
+			</p>
+		</div>
+		<div id="cluetip_operator">
+			<p>
+				There are three search operators available:
+			</p>
+			<ul>
+				<li>And: All of the keywords must appear in the name</li>
+				<li>Or:  Any of the keywords must appear in the name</li>
+				<li>Exact Phrase: The organisation name must much exactly what is entered</li>
+			</ul>
+		</div>
+		<div id="cluetip_state">
+			<p>
+				Limit the display of venues to only those that appear in the selected state or territory
+			</p>
 		</div>
 	</div>
 	<!-- include the footer -->
