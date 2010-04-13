@@ -1,19 +1,18 @@
-<!-- Tufts VUE 3.0 concept-map (ausstage-mapping-service-beta-component-overview.vue) 2010-02-15 -->
+<!-- Tufts VUE 3.0 concept-map (component-overview.vue) 2010-04-13 -->
 <!-- Tufts VUE: http://vue.tufts.edu/ -->
 <!-- Do Not Remove: VUE mapping @version(1.1) jar:file:/opt/VUE/VUE.jar!/tufts/vue/resources/lw_mapping_1_1.xml -->
-<!-- Do Not Remove: Saved date Mon Feb 15 09:14:00 CST 2010 by wall0252 on platform Linux 2.6.31-19-generic in JVM 1.6.0_15-b03 -->
+<!-- Do Not Remove: Saved date Tue Apr 13 14:29:48 CST 2010 by wall0252 on platform Linux 2.6.31-20-generic in JVM 1.6.0_15-b03 -->
 <!-- Do Not Remove: Saving version @(#)VUE: built February 3 2010 at 1428 by vue on Linux 2.4.21-57.EL i386 JVM 1.5.0_06-b05(bits=32) -->
 <?xml version="1.0" encoding="US-ASCII"?>
 <LW-MAP xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="none" ID="0"
-    label="ausstage-mapping-service-beta-component-overview.vue"
-    created="1263340196976" x="0.0" y="0.0" width="1.4E-45"
-    height="1.4E-45" strokeWidth="0.0" autoSized="false">
-    <resource referenceCreated="1266187440099" size="131202"
-        spec="/home/wall0252/aus-e-stage/documentation/diagrams/ausstage-mapping-service-beta-component-overview.vue"
+    label="component-overview.vue" created="1263340196976" x="0.0"
+    y="0.0" width="1.4E-45" height="1.4E-45" strokeWidth="0.0" autoSized="false">
+    <resource referenceCreated="1271134788228" size="131202"
+        spec="/home/wall0252/aus-e-stage/mapping/diagrams/component-overview.vue"
         type="1" xsi:type="URLResource">
-        <title>ausstage-mapping-service-beta-component-overview.vue</title>
-        <property key="File" value="/home/wall0252/aus-e-stage/documentation/diagrams/ausstage-mapping-service-beta-component-overview.vue"/>
+        <title>component-overview.vue</title>
+        <property key="File" value="/home/wall0252/aus-e-stage/mapping/diagrams/component-overview.vue"/>
     </resource>
     <fillColor>#FFFFFF</fillColor>
     <strokeColor>#404040</strokeColor>
@@ -66,17 +65,17 @@
   &lt;head style="color: #404040" color="#404040"&gt;
     &lt;style type="text/css"&gt;
       &lt;!--
-        body { margin-top: 0px; color: #404040; margin-right: 0px; font-size: 11; margin-bottom: 0px; font-family: Arial; margin-left: 0px }
-        ol { margin-top: 6; vertical-align: middle; list-style-position: outside; font-size: 11; font-family: Arial; margin-left: 30 }
-        p { margin-top: 0; color: #404040; margin-right: 0; margin-bottom: 0; margin-left: 0 }
-        ul { margin-top: 6; vertical-align: middle; list-style-position: outside; font-size: 11; font-family: Arial; margin-left: 30 }
+        body { font-size: 11; margin-right: 0px; font-family: Arial; margin-left: 0px; color: #404040; margin-bottom: 0px; margin-top: 0px }
+        ol { font-size: 11; font-family: Arial; margin-left: 30; vertical-align: middle; list-style-position: outside; margin-top: 6 }
+        p { margin-right: 0; margin-left: 0; color: #404040; margin-bottom: 0; margin-top: 0 }
+        ul { font-size: 11; margin-left: 30; font-family: Arial; vertical-align: middle; list-style-position: outside; margin-top: 6 }
       --&gt;
     &lt;/style&gt;
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;p style="text-align: center; color: #404040" color="#404040"&gt;
-      &lt;font style="font-size:14;"&gt;&lt;b&gt;Legend&lt;/b&gt;&lt;/font&gt;
+    &lt;p style="color: #404040; text-align: center" color="#404040"&gt;
+      &lt;b&gt;&lt;font style="font-size:14;"&gt;Legend&lt;/font&gt;&lt;/b&gt;
     &lt;/p&gt;
   &lt;/body&gt;
 &lt;/html&gt;
@@ -605,19 +604,19 @@
   &lt;head style="color: #000000" color="#000000"&gt;
     &lt;style type="text/css"&gt;
       &lt;!--
-        body { margin-top: 0px; color: #000000; margin-right: 0px; font-size: 12; margin-bottom: 0px; font-family: Arial; margin-left: 0px }
-        ol { margin-top: 6; vertical-align: middle; list-style-position: outside; font-size: 12; font-family: Arial; margin-left: 30 }
-        p { margin-top: 0; color: #000000; margin-right: 0; margin-bottom: 0; margin-left: 0 }
-        ul { margin-top: 6; vertical-align: middle; list-style-position: outside; font-size: 12; font-family: Arial; margin-left: 30 }
+        body { font-size: 12; margin-right: 0px; font-family: Arial; margin-left: 0px; color: #000000; margin-bottom: 0px; margin-top: 0px }
+        ol { font-size: 12; font-family: Arial; margin-left: 30; vertical-align: middle; list-style-position: outside; margin-top: 6 }
+        p { margin-right: 0; margin-left: 0; color: #000000; margin-bottom: 0; margin-top: 0 }
+        ul { font-size: 12; margin-left: 30; font-family: Arial; vertical-align: middle; list-style-position: outside; margin-top: 6 }
       --&gt;
     &lt;/style&gt;
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;p style="text-align: center; color: #000000" color="#000000"&gt;
+    &lt;p style="color: #000000; text-align: center" color="#000000"&gt;
       &lt;font style="font-size:18;"&gt;AusStage Mapping Service - Beta &lt;/font&gt;
     &lt;/p&gt;
-    &lt;p style="text-align: center; color: #000000" color="#000000"&gt;
+    &lt;p style="color: #000000; text-align: center" color="#000000"&gt;
       &lt;font style="font-size:18;"&gt;Component Overview Diagram&lt;/font&gt;
     &lt;/p&gt;
   &lt;/body&gt;
@@ -760,10 +759,10 @@
   &lt;head&gt;
     &lt;style type="text/css"&gt;
       &lt;!--
-        body { margin-top: 0px; color: #000000; margin-right: 0px; font-size: 11; margin-bottom: 0px; font-family: Arial; margin-left: 0px }
-        ol { margin-top: 6; vertical-align: middle; list-style-position: outside; font-size: 11; font-family: Arial; margin-left: 30 }
-        p { margin-top: 0; color: #000000; margin-right: 0; margin-bottom: 0; margin-left: 0 }
-        ul { margin-top: 6; vertical-align: middle; list-style-position: outside; font-size: 11; font-family: Arial; margin-left: 30 }
+        body { font-size: 11; margin-right: 0px; font-family: Arial; margin-left: 0px; color: #000000; margin-bottom: 0px; margin-top: 0px }
+        ol { font-size: 11; font-family: Arial; margin-left: 30; vertical-align: middle; list-style-position: outside; margin-top: 6 }
+        p { margin-right: 0; margin-left: 0; color: #000000; margin-bottom: 0; margin-top: 0 }
+        ul { font-size: 11; margin-left: 30; font-family: Arial; vertical-align: middle; list-style-position: outside; margin-top: 6 }
       --&gt;
     &lt;/style&gt;
     
@@ -1070,7 +1069,7 @@
         <ID1 xsi:type="node">4</ID1>
         <ID2 xsi:type="node">83</ID2>
     </child>
-    <child ID="91" label="Last Updated: 15 Feb 2010&#xa;Version: 1.0.9"
+    <child ID="91" label="Last Updated: 13 Mar 2010&#xa;Version: 1.1.0"
         layerID="1" created="1263364823060" x="-623.5534" y="733.50885"
         width="188.26819" height="59.903484" strokeWidth="1.0"
         autoSized="false" xsi:type="node">
@@ -2372,8 +2371,8 @@
         <URIString>http://vue.tufts.edu/rdf/resource/b65e1fbc7f00010101a437b6515c08de</URIString>
         <shape arcwidth="20.0" archeight="20.0" xsi:type="roundRect"/>
     </child>
-    <child ID="159" layerID="1" created="1265779846289" x="-1319.0841"
-        y="332.77057" width="264.47656" height="204.396"
+    <child ID="159" layerID="1" created="1265779846289" x="-1327.7611"
+        y="332.77057" width="271.7473" height="230.3067"
         strokeWidth="1.0" autoSized="false" controlCount="2"
         arrowState="2" xsi:type="link">
         <strokeColor>#000000</strokeColor>
@@ -2389,11 +2388,11 @@
             </metadata>
         </metadata-list>
         <URIString>http://vue.tufts.edu/rdf/resource/b65e1fbd7f00010101a437b6bd19a23f</URIString>
-        <point1 x="-1318.5841" y="533.6928"/>
+        <point1 x="-1327.2611" y="544.9099"/>
         <point2 x="-1194.4167" y="333.27057"/>
         <ID1 xsi:type="node">158</ID1>
         <ID2 xsi:type="node">148</ID2>
-        <ctrlPoint0 x="-1133.114" y="536.63654" xsi:type="point"/>
+        <ctrlPoint0 x="-1137.644" y="586.83746" xsi:type="point"/>
         <ctrlPoint1 x="-901.4984" y="568.2773" xsi:type="point"/>
     </child>
     <child ID="160" layerID="1" created="1265779865580" x="-1471.1326"
@@ -2582,6 +2581,49 @@
         <ID2 xsi:type="node">145</ID2>
         <ctrlPoint0 x="-741.0952" y="483.03317" xsi:type="point"/>
     </child>
+    <child ID="168" label="JQuery clueTip" layerID="1"
+        created="1271134695372" x="-1316.084" y="518.9665" width="113.0"
+        height="25.0" strokeWidth="1.0" autoSized="false" xsi:type="node">
+        <fillColor>#CACA77</fillColor>
+        <strokeColor>#000000</strokeColor>
+        <textColor>#000000</textColor>
+        <font>Arial-plain-12</font>
+        <metadata-list category-list-size="1" other-list-size="0"
+            ontology-list-size="0" RCategoryListSize="0">
+            <ontology-list-string></ontology-list-string>
+            <metadata xsi:type="vue-metadata-element">
+                <value></value>
+                <key>http://vue.tufts.edu/vue.rdfs#none</key>
+                <type>1</type>
+            </metadata>
+        </metadata-list>
+        <URIString>http://vue.tufts.edu/rdf/resource/f5899b427f00010100287ca7e0cabec0</URIString>
+        <shape arcwidth="20.0" archeight="20.0" xsi:type="roundRect"/>
+    </child>
+    <child ID="169" layerID="1" created="1271134739555" x="-1644.6967"
+        y="147.354" width="610.87134" height="383.28967"
+        strokeWidth="1.0" autoSized="false" controlCount="2"
+        arrowState="2" xsi:type="link">
+        <strokeColor>#000000</strokeColor>
+        <textColor>#404040</textColor>
+        <font>Arial-plain-11</font>
+        <metadata-list category-list-size="1" other-list-size="0"
+            ontology-list-size="0" RCategoryListSize="0">
+            <ontology-list-string></ontology-list-string>
+            <metadata xsi:type="vue-metadata-element">
+                <value></value>
+                <key>http://vue.tufts.edu/vue.rdfs#none</key>
+                <type>1</type>
+            </metadata>
+        </metadata-list>
+        <URIString>http://vue.tufts.edu/rdf/resource/f5899b437f00010100287ca7c5330dbe</URIString>
+        <point1 x="-1203.084" y="530.1437"/>
+        <point2 x="-1642.6415" y="147.854"/>
+        <ID1 xsi:type="node">168</ID1>
+        <ID2 xsi:type="node">2</ID2>
+        <ctrlPoint0 x="-633.11237" y="516.79895" xsi:type="point"/>
+        <ctrlPoint1 x="-1692.9412" y="289.76654" xsi:type="point"/>
+    </child>
     <layer ID="1" label="Layer 1" created="1263340196981" x="0.0"
         y="0.0" width="1.4E-45" height="1.4E-45" strokeWidth="0.0" autoSized="false">
         <metadata-list category-list-size="0" other-list-size="0"
@@ -2591,7 +2633,7 @@
         <URIString>http://vue.tufts.edu/rdf/resource/250deadb7f00010100262adc670cbd28</URIString>
     </layer>
     <userZoom>1.0</userZoom>
-    <userOrigin x="-1384.9648" y="-206.19377"/>
+    <userOrigin x="-2053.084" y="-117.53351"/>
     <presentationBackground>#202020</presentationBackground>
     <PathwayList currentPathway="0" revealerIndex="-1">
         <pathway ID="0" label="Untitled Pathway" created="1263340196975"
@@ -2664,6 +2706,6 @@
     <date>2010-01-13</date>
     <mapFilterModel/>
     <modelVersion>5</modelVersion>
-    <saveLocation>/home/wall0252/aus-e-stage/documentation/diagrams</saveLocation>
-    <saveFile>/home/wall0252/aus-e-stage/documentation/diagrams/ausstage-mapping-service-beta-component-overview.vue</saveFile>
+    <saveLocation>/home/wall0252/aus-e-stage/mapping/diagrams</saveLocation>
+    <saveFile>/home/wall0252/aus-e-stage/mapping/diagrams/component-overview.vue</saveFile>
 </LW-MAP>

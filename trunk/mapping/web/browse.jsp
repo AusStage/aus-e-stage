@@ -81,6 +81,24 @@
 					</td>
 				</tr>
 				<tr>
+					<th scope="row">
+						<label for="limit">Only show venues located in: </label> &nbsp;
+						<select size="1" id="limit" name="limit">
+							<option value="nolimit" selected="selected">No Limit - All venues</option>
+							<option value="a">Australia</option>
+							<option value="7"> - Australian Capital Territory</option>
+							<option value="3"> - New South Wales</option>
+							<option value="8"> - Northern Territory</option>
+							<option value="4"> - Queensland</option>
+							<option value="1"> - South Australia</option>
+							<option value="5"> - Tasmania</option>
+							<option value="6"> - Victoria</option>
+							<option value="2"> - Western Australia</option>
+							<option value="9">Outside Australia</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<td colspan="2">
 						<input class="ui-state-default ui-corner-all button" type="button" name="reload_map" id="reload_map" value="Reload Map"/>
 					</td>
