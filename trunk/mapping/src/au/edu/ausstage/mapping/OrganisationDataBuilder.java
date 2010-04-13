@@ -54,6 +54,19 @@ public class OrganisationDataBuilder extends DataBuilder {
 	 * @return               the results of the search
 	 */	
 	public String doSearch(String queryParameter) throws javax.servlet.ServletException {
+		return doSearch(queryParameter, null);
+	} // end doSearch method
+	
+	
+	/**
+	 * A method to search for all organisations matching the search term provided
+	 *
+	 * @param queryParameter the search term to be used in the query
+	 * @param stateLimit     the state code to limit the search to
+	 *
+	 * @return               the results of the search
+	 */	
+	public String doSearch(String queryParameter, String stateLimit) throws javax.servlet.ServletException {
 	
 		// define private variable to hold results
 		StringBuilder results = new StringBuilder();
@@ -63,30 +76,66 @@ public class OrganisationDataBuilder extends DataBuilder {
 		// try to connect to the database
 		this.dataManager.connect(); // dataManager defined in parent object
 		
-		// define the sql
-		String sql = "SELECT organisationid, "
-					 + "name, "
-					 + "COUNT(eventid) as eventcount, "
-					 + "COUNT(longitude) as pointcount "
-					 + "FROM (SELECT DISTINCT search_organisation.organisationid, "
-					 + "search_organisation.name, "
-					 + "events.eventid, "
-					 + "venue.longitude, "
-					 + "venue.latitude "
-					 + "FROM search_organisation, "
-					 + "orgevlink, "
-					 + "events, "
-					 + "venue "
-					 + "WHERE CONTAINS(search_organisation.combined_all, ?, 1) > 0 "
-					 + "AND search_organisation.organisationid = orgevlink.organisationid "
-					 + "AND events.eventid = orgevlink.eventid "
-					 + "AND venue.venueid = events.venueid) "
-					 + "GROUP BY organisationid, name "
-					 + "ORDER BY name";
-					 
-		// define the paramaters
-		String[] parameters = new String[1];
-		parameters[0] = queryParameter;
+		// declare helper variables
+		String sql;
+		String[] parameters;
+		
+		if(stateLimit == null) {
+		
+			// define the sql
+			sql = "SELECT organisationid, "
+						 + "name, "
+						 + "COUNT(eventid) as eventcount, "
+						 + "COUNT(longitude) as pointcount "
+						 + "FROM (SELECT DISTINCT search_organisation.organisationid, "
+						 + "search_organisation.name, "
+						 + "events.eventid, "
+						 + "venue.longitude, "
+						 + "venue.latitude "
+						 + "FROM search_organisation, "
+						 + "orgevlink, "
+						 + "events, "
+						 + "venue "
+						 + "WHERE CONTAINS(search_organisation.combined_all, ?, 1) > 0 "
+						 + "AND search_organisation.organisationid = orgevlink.organisationid "
+						 + "AND events.eventid = orgevlink.eventid "
+						 + "AND venue.venueid = events.venueid) "
+						 + "GROUP BY organisationid, name "
+						 + "ORDER BY name";
+						 
+			// define the paramaters
+			parameters = new String[1];
+			parameters[0] = queryParameter;
+		
+		} else {
+		
+			// define the sql
+			sql = "SELECT organisationid, "
+						 + "name, "
+						 + "COUNT(eventid) as eventcount, "
+						 + "COUNT(longitude) as pointcount "
+						 + "FROM (SELECT DISTINCT search_organisation.organisationid, "
+						 + "search_organisation.name, "
+						 + "events.eventid, "
+						 + "venue.longitude, "
+						 + "venue.latitude "
+						 + "FROM search_organisation, "
+						 + "orgevlink, "
+						 + "events, "
+						 + "venue "
+						 + "WHERE CONTAINS(search_organisation.combined_all, ?, 1) > 0 "
+						 + "AND search_organisation.organisationid = orgevlink.organisationid "
+						 + "AND events.eventid = orgevlink.eventid "
+						 + "AND venue.venueid = events.venueid "
+						 + "AND venue.state = ?) "
+						 + "GROUP BY organisationid, name "
+						 + "ORDER BY name";
+						 
+			// define the paramaters
+			parameters = new String[2];
+			parameters[0] = queryParameter;
+			parameters[1] = stateLimit;
+		}
 					 
 		// get the resultset
 		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
@@ -173,6 +222,21 @@ public class OrganisationDataBuilder extends DataBuilder {
 	 * @return               the string representation of the Marker XML
 	 */
 	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate) throws javax.servlet.ServletException {
+		return getMarkerXMLString(queryParameter, startDate, finishDate, null);
+	}
+	
+	/**
+	 * A method used to get the the Marker XML for an organisation restricted to a date range
+	 * using the first date fields in the database
+	 *
+	 * @param queryParameter the parameter to determine which organisation is of interest
+	 * @param startDate      the start date of the date range limit
+	 * @param finishDate     the finish date of the date range limit
+	 * @param stateLimit     the state id that venues must be in to be part of the dataset
+	 *
+	 * @return               the string representation of the Marker XML
+	 */
+	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate, String stateLimit) throws javax.servlet.ServletException {
 	
 		// define private variables
 		String xmlString;			// string to hold xml 
@@ -187,57 +251,113 @@ public class OrganisationDataBuilder extends DataBuilder {
 		// try to connect to the database
 		this.dataManager.connect(); // dataManager defined in parent object
 		
-		// define the sql
-		if(startDate == null || finishDate == null) {
-			// define the standard sql
-			sql = "SELECT DISTINCT orgevlink.eventid, events.event_name, events.yyyyfirst_date, events.mmfirst_date, events.ddfirst_date, "
-					   + "events.yyyylast_date, events.mmlast_date, events.ddlast_date, "
-					   + "venue.venue_name, venue.suburb, venue.latitude, venue.longitude "
-					   + "FROM orgevlink, events, venue "
-					   + "WHERE organisationid = ? "
-					   + "AND orgevlink.eventid = events.eventid "
-					   + "AND events.venueid = venue.venueid "
-					   + "AND venue.longitude IS NOT NULL "
-					   + "ORDER BY events.yyyyfirst_date DESC, events.mmfirst_date DESC, events.ddfirst_date DESC"; 
-						 
-			// define the paramaters
-			parameters = new String[1];
-			parameters[0] = queryParameter;
-		} else {
-			// define the date restricted sql
-			sql = "SELECT DISTINCT orgevlink.eventid, events.event_name, events.yyyyfirst_date, events.mmfirst_date, events.ddfirst_date, "
-					   + "events.yyyylast_date, events.mmlast_date, events.ddlast_date, "
-					   + "venue.venue_name, venue.suburb, venue.latitude, venue.longitude "
-					   + "FROM orgevlink, events, venue "
-					   + "WHERE organisationid = ? "
-					   + "AND (events.first_date >= to_date(?, 'yyyy-mm-dd')) "
-					   + "AND (events.first_date <= to_date(?, 'yyyy-mm-dd')) "
-					   + "AND orgevlink.eventid = events.eventid "
-					   + "AND events.venueid = venue.venueid "
-					   + "AND venue.longitude IS NOT NULL "
-					   + "ORDER BY events.yyyyfirst_date DESC, events.mmfirst_date DESC, events.ddfirst_date DESC"; 
-					   
-			// manipulate the dates used in the comparison
-			if(startDate.indexOf("-") != -1) {
-				startDate = startDate + "-01";
+		//define the sql
+		if(startDate == null) {
+			if(stateLimit == null) {
+				// define the standard sql
+				sql = "SELECT DISTINCT orgevlink.eventid, events.event_name, events.yyyyfirst_date, events.mmfirst_date, events.ddfirst_date, "
+						   + "events.yyyylast_date, events.mmlast_date, events.ddlast_date, "
+						   + "venue.venue_name, venue.suburb, venue.latitude, venue.longitude "
+						   + "FROM orgevlink, events, venue "
+						   + "WHERE organisationid = ? "
+						   + "AND orgevlink.eventid = events.eventid "
+						   + "AND events.venueid = venue.venueid "
+						   + "AND venue.longitude IS NOT NULL "
+						   + "ORDER BY events.yyyyfirst_date DESC, events.mmfirst_date DESC, events.ddfirst_date DESC"; 
+							 
+				// define the paramaters
+				parameters = new String[1];
+				parameters[0] = queryParameter;
 			} else {
-				startDate = startDate + "01-01";
+				// define the standard sql
+				sql = "SELECT DISTINCT orgevlink.eventid, events.event_name, events.yyyyfirst_date, events.mmfirst_date, events.ddfirst_date, "
+						   + "events.yyyylast_date, events.mmlast_date, events.ddlast_date, "
+						   + "venue.venue_name, venue.suburb, venue.latitude, venue.longitude "
+						   + "FROM orgevlink, events, venue "
+						   + "WHERE organisationid = ? "
+						   + "AND orgevlink.eventid = events.eventid "
+						   + "AND events.venueid = venue.venueid "
+						   + "AND venue.longitude IS NOT NULL "
+						   + "AND venue.state = ? "
+						   + "ORDER BY events.yyyyfirst_date DESC, events.mmfirst_date DESC, events.ddfirst_date DESC"; 
+							 
+				// define the paramaters
+				parameters = new String[2];
+				parameters[0] = queryParameter;
+				parameters[1] = stateLimit;
 			}
-			
-			// check for year only dates
-			if(finishDate.indexOf("-") != -1) {
-				finishDate = finishDate + "-" + this.getLastDay(finishDate.split("-")[0], finishDate.split("-")[1]);
+		} else {			
+			if(stateLimit == null) {
+				// define the date restricted sql
+				sql = "SELECT DISTINCT orgevlink.eventid, events.event_name, events.yyyyfirst_date, events.mmfirst_date, events.ddfirst_date, "
+						   + "events.yyyylast_date, events.mmlast_date, events.ddlast_date, "
+						   + "venue.venue_name, venue.suburb, venue.latitude, venue.longitude "
+						   + "FROM orgevlink, events, venue "
+						   + "WHERE organisationid = ? "
+						   + "AND (events.first_date >= to_date(?, 'yyyy-mm-dd')) "
+						   + "AND (events.first_date <= to_date(?, 'yyyy-mm-dd')) "
+						   + "AND orgevlink.eventid = events.eventid "
+						   + "AND events.venueid = venue.venueid "
+						   + "AND venue.longitude IS NOT NULL "
+						   + "ORDER BY events.yyyyfirst_date DESC, events.mmfirst_date DESC, events.ddfirst_date DESC"; 
+						   
+				// manipulate the dates used in the comparison
+				if(startDate.indexOf("-") != -1) {
+					startDate = startDate + "-01";
+				} else {
+					startDate = startDate + "01-01";
+				}
+				
+				// check for year only dates
+				if(finishDate.indexOf("-") != -1) {
+					finishDate = finishDate + "-" + this.getLastDay(finishDate.split("-")[0], finishDate.split("-")[1]);
+				} else {
+					finishDate = finishDate + "-12-31";
+				}
+							 
+				// define the paramaters
+				parameters = new String[3];
+				parameters[0] = queryParameter;
+				parameters[1] = startDate;
+				parameters[2] = finishDate;
 			} else {
-				finishDate = finishDate + "-12-31";
+				// define the date restricted sql
+				sql = "SELECT DISTINCT orgevlink.eventid, events.event_name, events.yyyyfirst_date, events.mmfirst_date, events.ddfirst_date, "
+						   + "events.yyyylast_date, events.mmlast_date, events.ddlast_date, "
+						   + "venue.venue_name, venue.suburb, venue.latitude, venue.longitude "
+						   + "FROM orgevlink, events, venue "
+						   + "WHERE organisationid = ? "
+						   + "AND (events.first_date >= to_date(?, 'yyyy-mm-dd')) "
+						   + "AND (events.first_date <= to_date(?, 'yyyy-mm-dd')) "
+						   + "AND orgevlink.eventid = events.eventid "
+						   + "AND events.venueid = venue.venueid "
+						   + "AND venue.longitude IS NOT NULL "
+						   + "AND venue.state = ?"
+						   + "ORDER BY events.yyyyfirst_date DESC, events.mmfirst_date DESC, events.ddfirst_date DESC"; 
+						   
+				// manipulate the dates used in the comparison
+				if(startDate.indexOf("-") != -1) {
+					startDate = startDate + "-01";
+				} else {
+					startDate = startDate + "01-01";
+				}
+				
+				// check for year only dates
+				if(finishDate.indexOf("-") != -1) {
+					finishDate = finishDate + "-" + this.getLastDay(finishDate.split("-")[0], finishDate.split("-")[1]);
+				} else {
+					finishDate = finishDate + "-12-31";
+				}
+							 
+				// define the paramaters
+				parameters = new String[4];
+				parameters[0] = queryParameter;
+				parameters[1] = startDate;
+				parameters[2] = finishDate;
+				parameters[3] = stateLimit;
 			}
-						 
-			// define the paramaters
-			parameters = new String[3];
-			parameters[0] = queryParameter;
-			parameters[1] = startDate;
-			parameters[2] = finishDate;
 		}
-		
+				
 		// get the resultset
 		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
 		

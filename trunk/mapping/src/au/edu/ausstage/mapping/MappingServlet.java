@@ -71,6 +71,7 @@ public class MappingServlet extends HttpServlet {
 			String id         = request.getParameter("id");
 			String startDate  = request.getParameter("start");
 			String finishDate = request.getParameter("finish");
+			String stateLimit = request.getParameter("state");
 			
 			// check on the parameters
 			if(type == null || id == null) {
@@ -105,9 +106,17 @@ public class MappingServlet extends HttpServlet {
 				
 				// get the markers XML
 				if(startDate == null || finishDate == null) {
-					results = orgData.getMarkerXMLString(id);
+					if(stateLimit == null) {
+						results = orgData.getMarkerXMLString(id);
+					} else {
+						results = orgData.getMarkerXMLString(id, null, null, stateLimit);
+					}
 				} else {
-					results = orgData.getMarkerXMLString(id, finishDate, startDate);
+					if(stateLimit == null) {
+						results = orgData.getMarkerXMLString(id, finishDate, startDate);
+					} else {
+						results = orgData.getMarkerXMLString(id, finishDate, startDate, stateLimit);
+					}
 				}
 				
 				// ouput the XML
@@ -305,13 +314,23 @@ public class MappingServlet extends HttpServlet {
 				// rewrite the search terms
 				searchTerm = searchTerm.replace(" ", " " + searchOperator + " ");
 				
-			}					
+			}
+			
+			// get the limit parameter
+			String searchStateLimit = request.getParameter("state");		
 			
 			// get an instance of the OrganisationDataBuilder class
 			OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
 			
+			// declare helper variables
+			String results = "";
+			
 			// do the search
-			String results = orgData.doSearch(searchTerm);
+			if(searchStateLimit == null || searchStateLimit.equals("nolimit")) {
+				results = orgData.doSearch(searchTerm);
+			} else {
+				results = orgData.doSearch(searchTerm, searchStateLimit);
+			}
 
 			// ouput the results
 			// set the appropriate content type

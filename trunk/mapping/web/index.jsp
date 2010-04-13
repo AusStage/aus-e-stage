@@ -139,7 +139,7 @@
 			<br/>Loading Search Results...
 		</p>
 		</div>
-		<div id="search_results">
+		<div id="search_results" style="padding-top: 10px;">
 		</div>
 		<div id="map_header" class="map_header_footer">
 			<h3></h3>
@@ -156,6 +156,7 @@
 			<h3>Advanced Display Options</h3>
 			<form action="" method="" id="adv_map_display_form" name="adv_map_display_form">
 			<input type="hidden" name="adv_map_org_id" id="adv_map_org_id"/>
+			<input type="hidden" name="adv_map_state" id="adv_map_state"/>
 			<table class="formTable" width="100%">
 				<tr>
 					<th scope="row" colspan="2">
@@ -235,7 +236,7 @@
 		<!-- clue tip content -->
 		<div id="cluetip_orgname">
 			<p>
-				Enter a few keywords, or the exact name, of the organisation that is of interest.
+				Enter a few keywords, or the exact name, of the organisation that is of interest
 			</p>
 		</div>
 		<div id="cluetip_operator">

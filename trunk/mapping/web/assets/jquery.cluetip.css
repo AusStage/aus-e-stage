@@ -34,6 +34,7 @@
 
 .cluetip-default {
   background-color: #d9d9c2;
+  font-size: 90%;
 }
 .cluetip-default #cluetip-outer {
   position: relative;
