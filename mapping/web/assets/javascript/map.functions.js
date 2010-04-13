@@ -76,7 +76,7 @@ function showMap(type, id, traj, start, finish, limit) {
 			map.setCenter(new GLatLng(-19.383333, 133.357777), 6);
 			break;
 		default:
-			map.setCenter(new GLatLng(-25.947028, 133.209639), 6);
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4);
 			break;
 	}
 	

@@ -291,14 +291,6 @@ function loadTimeline(id, lyear) {
 	bandInfos[1].syncWith = 0;
 	bandInfos[1].highlight = true;
 	
-	/*
-	// override the InfoBubble and just open a new window at the AusStage page
-	Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
-		//document.location.href=evt.getLink();
-		window.open(evt.getLink(), "timlineInfoBubble");
-	}
-	*/
-	
 	// override the default date formatter
 	Timeline.DefaultEventSource.Event.prototype.fillTime = function(elmt, labeller) {
 		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -399,8 +391,18 @@ function loadTimeline(id, lyear) {
 	return false;
 }
 
-// function to reload the map
+// function to start the process of reloading the map
 function advFormSubmit() {
+
+	// show the loading dialog
+	$("#map_loading").dialog("open");
+	
+	// delay the start of the reloadMap function to let the window redraw
+	setTimeout("reloadMap()",500);
+
+}
+// function to reload the map
+function reloadMap() {
 
 	// clear any existing overlays
 	map.clearOverlays();
@@ -416,13 +418,85 @@ function advFormSubmit() {
 	var minDate = $("#event_start").val();
 	var maxDate  = $("#event_finish").val();
 	
+	// get the limiter
+	var limit = $("#limit").val();
+	
 	// build a list of points
 	for (var i = 0; i < points.length; i++) {
 	
+		// get the first and last years
 		var firstYear = points[i].getAttribute("fyear");
 		var lastYear  = points[i].getAttribute("lyear");
+		
+		// get the state
+		var state = points[i].getAttribute("state");
+		var include = true;
+		
+		if(limit != "nolimit") {
+			// set the include flag
+			include = false;
+			
+			// limiting by geographic region
+			// update the include flag accordingly
+			switch(limit) {
+				case '1':
+					if(state == '1') {
+						include = true;
+					}
+					break;
+				case '2':
+					if(state == '2') {
+						include = true;
+					}
+					break;
+				case '3':
+					if(state == '3') {
+						include = true;
+					}
+					break;
+				case '4':
+					if(state == '4') {
+						include = true;
+					}
+					break;
+				case '5':
+					if(state == '5') {
+						include = true;
+					}
+					break;
+				case '6':
+					if(state == '6') {
+						include = true;
+					}
+					break;
+				case '7':
+					if(state == '7') {
+						include = true;
+					}
+					break;
+				case '8':
+					if(state == '8') {
+						include = true;
+					}
+					break;
+				case '9':
+					if(state == '9') {
+						include = true;
+					}
+					break;
+				case 'a':
+					//all australia
+					if(state >= 1 && state <= 8) {
+						include = true;
+					}
+					break;
+				default:
+					include = false;
+					break;
+				}
+		}
 
-		if((firstYear >= minDate && firstYear <= maxDate) || (lastYear >= minDate && lastYear <= maxDate)) {
+		if(((firstYear >= minDate && firstYear <= maxDate) || (lastYear >= minDate && lastYear <= maxDate)) && include == true) {
 		
 			// get the coordinates
     		var hash = points[i].getAttribute("lat") + points[i].getAttribute("lng");
@@ -486,7 +560,6 @@ function advFormSubmit() {
     		var marker = new GMarker(latlng, {icon: newIcon, title: venueName});
     		
     		// build the url for the info
-    		//var url = "/mapping/browse?action=lookup&id=" + points[i].getAttribute("id") +"&myear=" + myear;
     		var url = "/mapping/browse?action=lookup&id=" + points[i].getAttribute("id") +"&lyear=" + lyear;
     		
     		// add an event listener to listen for the click on a marker
@@ -505,6 +578,46 @@ function advFormSubmit() {
     		map.addOverlay(marker);
 		}	
 	}
+	
+	//recentre the map
+	switch(limit){
+		case '1':
+			map.setCenter(new GLatLng(-30.058333, 135.763333), 6);
+			break;
+		case '2':
+			map.setCenter(new GLatLng(-25.328055, 122.298333), 5);
+			break;
+		case '3':
+			map.setCenter(new GLatLng(-32.163333, 147.016666), 6);
+			break;
+		case '4':
+			map.setCenter(new GLatLng(-22.486944, 144.431666), 5);
+			break;
+		case '5':
+			map.setCenter(new GLatLng(-42.021388, 146.593333), 7);
+			break;
+		case '6':
+			map.setCenter(new GLatLng(-36.854166, 144.281111), 6);
+			break;
+		case '7':
+			map.setCenter(new GLatLng(-35.49, 149.001388), 9);
+			break;
+		case '8':
+			map.setCenter(new GLatLng(-19.383333, 133.357777), 6);
+			break;
+		case '9':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 2);
+			break;
+		case 'a':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4);
+			break;
+		default:
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4);
+			break;
+	}
+	
+	// close the loading dialog
+	$("#map_loading").dialog("close");
 }
 
 // Make Google API Scripts clean up

@@ -59,12 +59,12 @@ public class BrowseDataBuilder extends DataBuilder {
 		
 		// define the sql
 		String sql = "SELECT sq1.venueid, sq1.venue_name, sq1.latitude, sq1.longitude, sq1.event_count, " 
-				   + "       sq2.first_year, sq2.last_year "
-				   + "FROM (SELECT venue.venueid, venue.venue_name, latitude, longitude, COUNT(eventid) as event_count "
+				   + "       sq2.first_year, sq2.last_year, sq1.state "
+				   + "FROM (SELECT venue.venueid, venue.venue_name, state, latitude, longitude, COUNT(eventid) as event_count "
 				   + "      FROM venue, events "
 				   + "      WHERE longitude IS NOT NULL "
 				   + "      AND events.venueid = venue.venueid "
-				   + "      GROUP BY venue.venueid, venue.venue_name, latitude, longitude) sq1, "
+				   + "      GROUP BY venue.venueid, venue.venue_name, state, latitude, longitude) sq1, "
 				   + "     (SELECT venue.venueid, MAX(yyyylast_date) as last_year, MIN(yyyyfirst_date) as first_year "
 				   + "      FROM venue, events "
 				   + "      WHERE latitude IS NOT NULL "
@@ -85,9 +85,6 @@ public class BrowseDataBuilder extends DataBuilder {
 			// add the root element
 			Element rootElement = xmlDoc.createElement("markers");
 			xmlDoc.appendChild(rootElement);
-			
-			// debug code
-			//while (resultSet.next() && recordCount < 16) {
 		
 			// build the documnet by adding individual events
 			while (resultSet.next()) {
@@ -103,6 +100,7 @@ public class BrowseDataBuilder extends DataBuilder {
 				marker.setAttribute("cnt",   resultSet.getString(5)); // count
 				marker.setAttribute("fyear", resultSet.getString(6)); // first year
 				marker.setAttribute("lyear", resultSet.getString(7)); // last year
+				marker.setAttribute("state", resultSet.getString(8)); // state
 				
 				// add this element to the document
 				rootElement.appendChild(marker);
