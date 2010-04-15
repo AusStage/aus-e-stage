@@ -346,6 +346,80 @@ public class MappingServlet extends HttpServlet {
 			// send some output
 			out.print(results);
 
+		} else if(action.equals("contributor_search")) {
+			
+			// get the requested search term
+			String searchTerm = request.getParameter("contributor_name");
+			
+			// check on the search term
+			if(searchTerm == null) {
+				throw new ServletException("Missing search terms, invalid post?");
+			}
+			
+			// double check for empty string
+			searchTerm = searchTerm.trim();
+			
+			if(searchTerm == null || searchTerm.equals("")) {
+				throw new ServletException("Missing search terms");
+			}
+			
+			// get the selected operator
+			String searchOperator = request.getParameter("operator");
+			
+			if(searchOperator == null) {
+				throw new ServletException("Missing search operator, invalid post?");
+			}
+			
+			if(searchOperator.equals("and") == false && searchOperator.equals("or") == false && searchOperator.equals("exact") == false) {
+				throw new ServletException("Invalid search operator, invalid post?");
+			}
+			
+			// determine what to do with the search terms
+			if(searchOperator.equals("and") || searchOperator.equals("or")) {
+			
+				// change search query to lower case
+				searchTerm = searchTerm.toLowerCase();
+				
+				// remove any existing search terms
+				searchTerm = searchTerm.replace(" and ", "");
+				searchTerm = searchTerm.replace(" or ", "");
+				searchTerm = searchTerm.replace(" not ", "");
+				
+				// rewrite the search terms
+				searchTerm = searchTerm.replace(" ", " " + searchOperator + " ");
+				
+			}
+			
+			// get the limit parameter
+			String searchStateLimit = request.getParameter("state");		
+			
+			// get an instance of the OrganisationDataBuilder class
+			ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
+			
+			// declare helper variables
+			String results = "";
+			
+			// do the search
+			if(searchStateLimit == null || searchStateLimit.equals("nolimit")) {
+				results = data.doSearch(searchTerm);
+			} else {
+				results = data.doSearch(searchTerm, searchStateLimit);
+			}
+
+			// ouput the results
+			// set the appropriate content type
+			response.setContentType("text/plain; charset=UTF-8");
+			
+			// set the appropriate headers to disable caching
+			// particularly for IE
+			response.setHeader("Cache-Control", "max-age=0,no-cache,no-store,post-check=0,pre-check=0");
+			
+			//get the output print writer
+			PrintWriter out = response.getWriter();
+			
+			// send some output
+			out.print(results);
+
 		} else if(action.equals("export")) {
 			
 			// need to export some data in the KML format
