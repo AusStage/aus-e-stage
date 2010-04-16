@@ -16,6 +16,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
+// declare global variables
+var contributorMapData = null;
+
 // setup the page
 $(document).ready(function(){
 	// attach the validation plugin to the name search form
@@ -61,7 +64,7 @@ $(document).ready(function(){
 
 // override the default action of some form buttons
 $(document).ready(function() {
-	$("#reload_map").click(advFormSubmit);
+	$("#reload_map").click(reloadMap);
 });
 
 // set up the tabbed interface
@@ -188,6 +191,9 @@ function showContributorMap(id) {
 		
 		// build the time slider
 		buildTimeSlider(data);
+		
+		// store reference to marker data for reuse
+		contributorMapData = data;
 	});
 }
 
@@ -199,6 +205,25 @@ function multiContribMap() {
 	return false;
 }
 
-function advFormSubmit() {
+// function to reload a map
+function reloadMap() {
 
+	// check to ensure map data is present
+	if(contributorMapData == null) {
+		$("#map").empty();
+		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
+	}
+
+	// get the show trajectory option
+	var showTraj = $("#show_trajectory:checked").val();
+	
+	// get the start date
+	var startDate  = $("#event_start").val();
+	var finishDate = $("#event_finish").val();
+	
+	// determine if the trajectory option is set
+	if(showTraj != null) {
+		// reload the map with trajectory information
+		showMap2(contributorMapData, true, $("#state").val());
+	}
 }
