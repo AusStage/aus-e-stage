@@ -292,7 +292,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 				
 				// add selection box
 				if(Integer.parseInt(resultSet.getString(5)) > 0) {
-					results.append("<td><input type=\"checkbox\" name=\"contributor\" id=\"contributor_" + resultSet.getString(1) + "\" value=\"" + resultSet.getString(1) + "\"/></td></tr>");
+					results.append("<td><input type=\"checkbox\" name=\"contributor\" id=\"contributor\" value=\"" + resultSet.getString(1) + "\"/></td></tr>");
 				} else {
 					results.append("<td>&nbsp;</td></tr>\n");
 				}
@@ -383,89 +383,168 @@ AND markers.contributorid(+) = search_contributor.contributorid
 		int recordCount = 0;		// count number of markers created
 		String sql = null;			// the sql to execute
 		String[] parameters = null; // variable to hold sql parameters
-				
+		String[] ids = null;        // variable to hold individual contributor id numbers
 		
 		// get the persistent URL template for event
 		String eventURLTemplate = this.dataManager.getContextParam("eventURLTemplate");
 		
 		// try to connect to the database
 		this.dataManager.connect(); // dataManager defined in parent object
+		
+		// check to see if multiple contributors are specified
+		if(queryParameter.indexOf(',') != -1) {
+			// yes - so break out the ids into an array
+			ids = queryParameter.split(", ");
+		}
 
-		if(stateLimit == null) {
-			// all evenues
+		if(stateLimit == null || stateLimit.equals("nolimit")) {
+			// all venues
 			
 			// check to see if we need to add the contributor name to the event name
 			if(queryParameter.indexOf(',') != -1) {
-				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', ";
+				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
+					+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
+					+ "FROM conevlink c, "
+					+ "     events e, "
+					+ "     venue v, "
+					+ "     search_contributor sc "
+					+ "WHERE c.contributorid = ANY (";
+					
+					// add sufficient place holders for all of the ids
+					for(int i = 0; i < ids.length; i++) {
+						sql += "?,";
+					}
+					
+					// tidy up the sql
+					sql = sql.substring(0, sql.length() -1);
+					
+					// finish the sql					
+					sql += ") AND c.contributorid = sc.contributorid "
+					+ "AND e.eventid = c.eventid "
+					+ "AND v.venueid = e.venueid "
+					+ "AND v.longitude IS NOT NULL "
+					+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
+					
+					// define the paramaters
+					parameters = ids;
+
 			} else {
-				sql = "SELECT e.eventid, e.event_name, ";
+				sql = "SELECT e.eventid, e.event_name, "
+					+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
+					+ "FROM conevlink c, "
+					+ "     events e, "
+					+ "     venue v, "
+					+ "     search_contributor sc "
+					+ "WHERE c.contributorid = ? "
+					+ "AND c.contributorid = sc.contributorid "
+					+ "AND e.eventid = c.eventid "
+					+ "AND v.venueid = e.venueid "
+					+ "AND v.longitude IS NOT NULL "
+					+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
+					
+					// define the paramaters
+					parameters = new String[1];
+					parameters[0] = queryParameter;
 			}
-			
-			sql	+= "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-				+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
-				+ "FROM conevlink c, "
-				+ "     events e, "
-				+ "     venue v, "
-				+ "     search_contributor sc "
-				+ "WHERE c.contributorid = ANY (?) "
-				+ "AND c.contributorid = sc.contributorid "
-				+ "AND e.eventid = c.eventid "
-				+ "AND v.venueid = e.venueid "
-				+ "AND v.longitude IS NOT NULL "
-				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
-			
-			// define the paramaters
-			parameters = new String[1];
-			parameters[0] = queryParameter;
 			
 		} else {
 		
 			// check to see if we need to add the contributor name to the event name
 			if(queryParameter.indexOf(',') != -1) {
-				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', ";
+				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
+					+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
+					+ "FROM conevlink c, "
+					+ "     events e, "
+					+ "     venue v, "
+					+ "     search_contributor sc "
+					+ "WHERE c.contributorid = ANY (";
+					
+					// add sufficient place holders for all of the ids
+					for(int i = 0; i < ids.length; i++) {
+						sql += "?,";
+					}
+					
+					// tidy up the sql
+					sql = sql.substring(0, sql.length() -1);
+					
+					// finish the sql segment					
+					sql += ") AND c.contributorid = sc.contributorid "
+					+ "AND e.eventid = c.eventid "
+					+ "AND v.venueid = e.venueid ";
+
 			} else {
-				sql = "SELECT e.eventid, e.event_name, ";
+				sql = "SELECT e.eventid, e.event_name, "
+					+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
+					+ "FROM conevlink c, "
+					+ "     events e, "
+					+ "     venue v, "
+					+ "     search_contributor sc "
+					+ "WHERE c.contributorid = ? "
+					+ "AND c.contributorid = sc.contributorid "
+					+ "AND e.eventid = c.eventid "
+					+ "AND v.venueid = e.venueid ";
 			}
-			
-			sql	+= "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-				+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
-				+ "FROM conevlink c, "
-				+ "     events e, "
-				+ "     venue v, "
-				+ "     search_contributor sc "
-				+ "WHERE c.contributorid = ANY (?) "
-				+ "AND c.contributorid = sc.contributorid "
-				+ "AND e.eventid = c.eventid "
-				+ "AND v.venueid = e.venueid ";
 				
 			if(stateLimit.equals("a")) {
 				// add australia state limit clause
 				sql += "AND v.state < 9 ";
 				
-				// define the paramaters
-				parameters = new String[1];
-				parameters[0] = queryParameter;
-				
 			} else {
 				// add state specific limit clause 
 				// includes overseas option
-				sql += "AND v.state = ? ";
-				
-				// define the paramaters
-				parameters = new String[2];
-				parameters[0] = queryParameter;
-				parameters[1] = stateLimit;				
+				sql += "AND v.state = ? ";	
 			}
 			
 			// finalise the sql
 			sql += "AND v.longitude IS NOT NULL "
 				+  "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
+				
+			// define the parameters
+			if (queryParameter.indexOf(',') != -1) {
+				// must deal with multiple ids
+				if (stateLimit.equals("a")) {
+					// no need for a state limit parameter
+					parameters = ids;
+				} else {
+					// must add the state limit parameter
+					parameters = new String[ids.length + 1];
+					
+					// add is to the list of parameters
+					for(int i = 0; i < ids.length; i++) {
+						parameters[i] = ids[i];
+					}
+					
+					// add the state parameter
+					parameters[ids.length] = stateLimit;
+				}
+			
+			} else {
+				// only one id
+				if (stateLimit.equals("a")) {
+					// no need for a state limit parameter
+					// define the paramaters
+					parameters = new String[1];
+					parameters[0] = queryParameter;
+				} else {
+					// define the paramaters
+					parameters = new String[2];
+					parameters[0] = queryParameter;
+					parameters[1] = stateLimit;
+				}				
+			}
 		}
 			
 		// get the resultset
 		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+		//ResultSet resultSet = this.dataManager.executeStatement(sql);
 		
 		// build the xml document
 		try {
