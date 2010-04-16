@@ -582,7 +582,8 @@ function reloadMap() {
 	//recentre the map
 	switch(limit){
 		case '1':
-			map.setCenter(new GLatLng(-30.058333, 135.763333), 6);
+			//map.setCenter(new GLatLng(-30.058333, 135.763333), 6);
+			map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
 			break;
 		case '2':
 			map.setCenter(new GLatLng(-25.328055, 122.298333), 5);

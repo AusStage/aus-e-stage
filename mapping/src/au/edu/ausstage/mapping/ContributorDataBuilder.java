@@ -237,9 +237,9 @@ AND markers.contributorid(+) = search_contributor.contributorid
 				parameters[0] = queryParameter;
 			} else {
 				parameters = new String[3];
-				parameters[0] = queryParameter;
+				parameters[0] = stateLimit;
 				parameters[1] = stateLimit;
-				parameters[2] = stateLimit;
+				parameters[2] = queryParameter;
 			}
 		}
 		
@@ -401,7 +401,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 				sql = "SELECT e.eventid, e.event_name, ";
 			}
 			
-			sql	+= "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+			sql	+= "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
 				+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
 				+ "FROM conevlink c, "
@@ -420,7 +420,48 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			parameters[0] = queryParameter;
 			
 		} else {
-			//TODO add state limit sql
+		
+			// check to see if we need to add the contributor name to the event name
+			if(queryParameter.indexOf(',') != -1) {
+				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', ";
+			} else {
+				sql = "SELECT e.eventid, e.event_name, ";
+			}
+			
+			sql	+= "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
+				+ "FROM conevlink c, "
+				+ "     events e, "
+				+ "     venue v, "
+				+ "     search_contributor sc "
+				+ "WHERE c.contributorid = ANY (?) "
+				+ "AND c.contributorid = sc.contributorid "
+				+ "AND e.eventid = c.eventid "
+				+ "AND v.venueid = e.venueid ";
+				
+			if(stateLimit.equals("a")) {
+				// add australia state limit clause
+				sql += "AND v.state < 9 ";
+				
+				// define the paramaters
+				parameters = new String[1];
+				parameters[0] = queryParameter;
+				
+			} else {
+				// add state specific limit clause 
+				// includes overseas option
+				sql += "AND v.state = ? ";
+				
+				// define the paramaters
+				parameters = new String[2];
+				parameters[0] = queryParameter;
+				parameters[1] = stateLimit;				
+			}
+			
+			// finalise the sql
+			sql += "AND v.longitude IS NOT NULL "
+				+  "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
 		}
 			
 		// get the resultset

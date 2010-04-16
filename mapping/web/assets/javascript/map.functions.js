@@ -52,7 +52,8 @@ function showMap(type, id, traj, start, finish, limit) {
 	// determine where to centre the map
 	switch(limit){
 		case '1':
-			map.setCenter(new GLatLng(-30.058333, 135.763333), 6);
+			//map.setCenter(new GLatLng(-30.058333, 135.763333), 6);
+			map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
 			break;
 		case '2':
 			map.setCenter(new GLatLng(-25.328055, 122.298333), 5);
@@ -210,7 +211,8 @@ function showMap2(data, traj, focus, start, finish) {
 	//recentre the map
 	switch(focus){
 		case '1':
-			map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+			//map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+			map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
 			break;
 		case '2':
 			map.setCenter(new GLatLng(-25.328055, 122.298333), 5); //WA
