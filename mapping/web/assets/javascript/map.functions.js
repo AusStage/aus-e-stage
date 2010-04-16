@@ -353,6 +353,50 @@ function showMap2(data, traj, focus) {
 	}		
 }
 
+// function to build the time slider
+function buildTimeSlider(data) {
+
+	// define an array to store the dates
+	var dates = {};
+
+	// extract the markers from the xml
+	var markers = data.documentElement.getElementsByTagName("marker");
+	
+	// build a group of dates
+	for (var i = 0; i < markers.length; i++) {
+		
+		//get the date	
+		var first = markers[i].getAttribute("first");
+		
+		// add the date to the has if required
+		if(dates[first] == null) {
+			dates[first] = first;
+		}
+	}
+	
+	// clear the time slider
+	$("#event_start").removeOption(/./);
+	$("#event_finish").removeOption(/./);
+	
+	// add the new options
+	$("#event_start").addOption(dates, false);
+	$("#event_finish").addOption(dates, false);
+	
+	// clear any current selected values
+	$("#event_start").selectOptions('clear');
+	$("#event_finish").selectOptions('clear');
+	
+	// select the last option of the event_finish select
+	$("#event_start option:last").attr("selected", "selected");
+	
+	// remove any existing slider
+	$("#sliderComponent").remove();
+	
+	// create the slider
+	$(".slider").selectToUISlider({labels: 10}).hide();
+	$(".tohide").hide();
+}
+
 // build a single marker
 function createMarker(events) {
 	// get the event
