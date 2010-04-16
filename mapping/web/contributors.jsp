@@ -172,9 +172,9 @@
 					<td colspan="2">
 						<fieldset>
 							<label for="event_finish" class="tohide">First Date: </label>
-								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
-							<label for="event_start" class="tohide">Last Date: </label>
 								<select name="event_start" id="event_start" size="1" class="slider"></select>
+							<label for="event_start" class="tohide">Last Date: </label>
+								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
 						</fieldset>
 					</td>
 				</tr>
@@ -194,13 +194,6 @@
 						<th colspan="2">Map Legend</th>
 					</tr>
 				</thead>
-				<tfoot>
-					<tr>
-						<td colspan="2">
-							The map is automatically centred on Australia, pan and zoom the map to see events in other locations.
-						</td>
-					</tr>
-				</tfoot>
 				<tbody>
 					<tr>
 						<th style="background: #CCBAD7; width: 20px;" scope="row">&nbsp;</th>

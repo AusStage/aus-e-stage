@@ -366,7 +366,7 @@ function buildTimeSlider(data) {
 	for (var i = 0; i < markers.length; i++) {
 		
 		//get the date	
-		var first = markers[i].getAttribute("first");
+		var first = markers[i].getAttribute("sliderDate");
 		
 		// add the date to the has if required
 		if(dates[first] == null) {
@@ -386,8 +386,13 @@ function buildTimeSlider(data) {
 	$("#event_start").selectOptions('clear');
 	$("#event_finish").selectOptions('clear');
 	
+	// sort the options
+	$("#event_start").sortOptions();
+	$("#event_finish").sortOptions();
+	
 	// select the last option of the event_finish select
-	$("#event_start option:last").attr("selected", "selected");
+	$("#event_start option:first").attr("selected", "selected");
+	$("#event_finish option:last").attr("selected", "selected");
 	
 	// remove any existing slider
 	$("#sliderComponent").remove();

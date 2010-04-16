@@ -466,6 +466,10 @@ AND markers.contributorid(+) = search_contributor.contributorid
 				date = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)); 
 				marker.setAttribute("finishDate", date);
 				
+				// add start and end date for program purposes
+				date = this.buildDate(resultSet.getString(3), resultSet.getString(4), null); 
+				marker.setAttribute("sliderDate", date);
+				
 				// add remaining attributes
 				marker.setAttribute("venue",  resultSet.getString(9));  // venue name
 				marker.setAttribute("suburb", resultSet.getString(10));  // venue name
