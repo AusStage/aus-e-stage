@@ -198,7 +198,7 @@ function showMap(type, id, traj, start, finish, limit) {
 }
 
 // function to show a map - version 2
-function showMap2(data, traj, focus) {
+function showMap2(data, traj, focus, start, finish) {
 
 	// tidy up any previous maps
 	GUnload();
@@ -254,11 +254,20 @@ function showMap2(data, traj, focus) {
 	// need to use an array as order is significant
 	var trajectoryPoints = Array();
 	
+	// if necessary convert the start and finish dates
+	if(start != null && finish != null) {
+		start = parseDateToNumber(start);
+		finish = parseDateToNumber(finish);
+	}
+	
 	// extract the markers from the xml
 	var markers = data.documentElement.getElementsByTagName("marker");
 	
 	// build a group of markers
 	for (var i = 0; i < markers.length; i++) {
+	
+		// declare helper variable
+		var okToAdd = true;
 		
 		// get data from the xml
 		var event  = markers[i].getAttribute("event");
@@ -267,22 +276,40 @@ function showMap2(data, traj, focus) {
 		var last   = markers[i].getAttribute("last");
 		var suburb = markers[i].getAttribute("suburb");
 		var url    = markers[i].getAttribute("url");
-		var latlng = new GLatLng(parseFloat(markers[i].getAttribute("lat")), parseFloat(markers[i].getAttribute("lng")));
 		
-		// add coordinates to the array
-		trajectoryPoints.push(markers[i].getAttribute("lat") + " " + markers[i].getAttribute("lng"));
-		
-		// build javascript objects
-		var location   = {latlng: latlng, event: event, venue: venue, first: first, last: last, suburb: suburb, url: url};
-		var latlngHash = (latlng.lat().toFixed(6) + "" + latlng.lng().toFixed(6));
-		latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
-		
-		// add marker to a hash of markers
-		if (locations[latlngHash] == null) {
-			locations[latlngHash] = []
+		// check on the dates for this event if necessary
+		if(start != null && finish != null) {
+			// compare the dates
+			var firstAsNum = parseDateToNumber(markers[i].getAttribute("sliderDate"));
+			
+			if(firstAsNum >= start && firstAsNum <= finish) {
+				okToAdd = true;
+			} else {
+				okToAdd = false;
+			}
 		}
-	
-		locations[latlngHash].push(location);
+		
+		// do we add this marker to the map?
+		if(okToAdd == true) {
+		
+			// build a latlng object for this marker
+			var latlng = new GLatLng(parseFloat(markers[i].getAttribute("lat")), parseFloat(markers[i].getAttribute("lng")));
+			
+			// add coordinates to the array
+			trajectoryPoints.push(markers[i].getAttribute("lat") + " " + markers[i].getAttribute("lng"));
+			
+			// build javascript objects
+			var location   = {latlng: latlng, event: event, venue: venue, first: first, last: last, suburb: suburb, url: url};
+			var latlngHash = (latlng.lat().toFixed(6) + "" + latlng.lng().toFixed(6));
+			latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
+			
+			// add marker to a hash of markers
+			if (locations[latlngHash] == null) {
+				locations[latlngHash] = []
+			}
+		
+			locations[latlngHash].push(location);
+		}
 	}
 	
 	// create markers
@@ -534,4 +561,15 @@ function getScaledColour(index, maximum) {
 	
 	// return the final colour
 	return "#" + redHex + greenHex + blueHex;
+}
+
+// helper function to parse a date into a number
+function parseDateToNumber(data) {
+
+	// strip the dashes
+	data = data.replace('-', '');
+	
+	// turn the string as a number
+	return new Number(data);
+	
 }

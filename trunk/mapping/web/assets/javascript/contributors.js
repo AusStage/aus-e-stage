@@ -161,9 +161,6 @@ $(document).ready(function() {
 
 	// getting marker xml for contributors
 	$("#map").ajaxError(function(e, xhr, settings, exception) {
-		console.log("error function called");
-		console.log(settings.url.search("action=markers&type=contributor"));
-		console.log(settings.url);
 		if(settings.url.search("action=markers&type=contributor") != -1) {
 			$(this).empty();
 			$(this).append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please try again.<br/>If the problem persists please contact the site administrator.</p>'); 
@@ -187,7 +184,7 @@ function showContributorMap(id) {
 	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
 		
 		// show the map
-		showMap2(data, null, $("#state").val());
+		showMap2(data, null, $("#state").val(), null, null);
 		
 		// build the time slider
 		buildTimeSlider(data);
@@ -207,7 +204,7 @@ function multiContribMap() {
 
 // function to reload a map
 function reloadMap() {
-
+	
 	// check to ensure map data is present
 	if(contributorMapData == null) {
 		$("#map").empty();
@@ -224,9 +221,9 @@ function reloadMap() {
 	// determine if the trajectory option is set
 	if(showTraj != null) {
 		// reload the map with trajectory information
-		showMap2(contributorMapData, true, $("#state").val());
+		showMap2(contributorMapData, true, $("#state").val(), startDate, finishDate);
 	} else {
 		// reload the map with trajectory information
-		showMap2(contributorMapData, false, $("#state").val());
+		showMap2(contributorMapData, false, $("#state").val(), startDate, finishDate);
 	}
 }
