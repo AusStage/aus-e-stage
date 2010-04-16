@@ -394,7 +394,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 		// check to see if multiple contributors are specified
 		if(queryParameter.indexOf(',') != -1) {
 			// yes - so break out the ids into an array
-			ids = queryParameter.split(", ");
+			ids = queryParameter.split(",");
 		}
 
 		if(stateLimit == null || stateLimit.equals("nolimit")) {
@@ -544,7 +544,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			
 		// get the resultset
 		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
-		//ResultSet resultSet = this.dataManager.executeStatement(sql);
 		
 		// build the xml document
 		try {
