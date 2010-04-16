@@ -107,7 +107,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" value="Search"/><br/>
+								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="name_search_btn" value="Search"/><br/>
 								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
 							</td>
 						</tr>
@@ -128,7 +128,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" value="Search"/>
+								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="id_search_btn" value="Search"/>
 							</td>
 						</tr>
 					</table>

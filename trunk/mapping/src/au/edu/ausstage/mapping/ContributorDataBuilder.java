@@ -33,10 +33,6 @@ import javax.xml.transform.stream.*;
  */
 public class ContributorDataBuilder extends DataBuilder {
 
-	// declare private variables
-	private String orgIdCache;
-	private String orgNameCache;
-
 	/**
 	 * Constructor for this class
 	 *
@@ -47,7 +43,7 @@ public class ContributorDataBuilder extends DataBuilder {
 	}
 	
 	/**
-	 * A method to search for all organisations matching the search term provided
+	 * A method to search for all contributors matching the search term provided
 	 *
 	 * @param queryParameter the search term to be used in the query
 	 *
@@ -59,7 +55,7 @@ public class ContributorDataBuilder extends DataBuilder {
 	
 	
 	/**
-	 * A method to search for all organisations matching the search term provided
+	 * A method to search for all contributors matching the search term provided
 	 *
 	 * @param queryParameter the search term to be used in the query
 	 * @param stateLimit     the state code to limit the search to
@@ -256,7 +252,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 		
 		// add a table footer
 		results.append("<tfoot>");
-		results.append("<tr style=\"border: 1px solid #333333;\"><td colspan=\"5\"><input class=\"ui-state-default ui-corner-all button\" id=\"multi_contrib\" type=\"submit\" name=\"submit\" value=\"Map Contributors\"/></td></tr>");
 		results.append("<tr><td colspan=\"5\"><ul><li>Click the name of a contributor to view a map</li>");
 		results.append("<li>Alternatively select a number of contributors and click the \"View Map\" button</li>");
 		results.append("<li>Only events at venues that have geographic information in the database can be mapped</li>");
@@ -309,6 +304,8 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			// check to see if record count reached
 			if(recordCount == 16) {
 				results.append("<tr><td colspan=\"5\"><strong>Note: </strong>Record limit of 15 records reached, please adjust your search terms to be more specific</td></tr>");
+			}else if(recordCount == 0) {
+				results.append("<tr class=\"odd\"><td colspan=\"5\" style=\"text-align: center\">No contributors matching the specified search criteria were found.<br/>Please check your criteria and try again</td></tr>");
 			}
 			
 		} catch(java.sql.SQLException ex) {
@@ -316,6 +313,14 @@ AND markers.contributorid(+) = search_contributor.contributorid
 		}
 		
 		// finalise the table
+		if(stateLimit != null && recordCount != 0) {
+			results.append("<tr><td colspan=\"5\"><strong>Note: </strong>If a contributor is not listed they may not be associated with a venue in the specified region</td></tr>");
+		}
+		
+		if(recordCount != 0) {
+			results.append("<tr style=\"border: 1px solid #333333;\"><td colspan=\"5\"><input class=\"ui-state-default ui-corner-all button\" id=\"multi_contrib\" type=\"submit\" name=\"submit\" value=\"Map Contributors\"/></td></tr>");
+		}
+		
 		results.append("</tbody></table></form>");
 		
 		return results.toString();
@@ -323,44 +328,187 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	}
 	
 	/**
-	 * A method used to get the Marker XML for an organisation
+	 * A method used to get the Marker XML for contributors
 	 *
-	 * @param queryParameter the parameter to determine which organisation is of interest
+	 * @param queryParameter the parameter to determine which record(s) are of interest
 	 *
 	 * @return               the string representation of the Marker XML
 	 */
 	public String getMarkerXMLString(String queryParameter) throws javax.servlet.ServletException {
-		return getMarkerXMLString(queryParameter, null, null);
+		return getMarkerXMLString(queryParameter, null);
 	}
 	
 	/**
-	 * A method used to get the the Marker XML for an organisation restricted to a date range
+	 * A method used to get the Marker XML for contributors restricted to a date range
 	 * using the first date fields in the database
 	 *
-	 * @param queryParameter the parameter to determine which organisation is of interest
+	 * @param queryParameter the parameter to determine which record(s) are of interest
 	 * @param startDate      the start date of the date range limit
 	 * @param finishDate     the finish date of the date range limit
 	 *
 	 * @return               the string representation of the Marker XML
 	 */
-	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate) throws javax.servlet.ServletException {
+	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate) throws javax.servlet.ServletException, java.lang.NoSuchMethodException{
 		return getMarkerXMLString(queryParameter, startDate, finishDate, null);
 	}
 	
 	/**
-	 * A method used to get the the Marker XML for an organisation restricted to a date range
+	 * A method used to get the Marker XML for contributors restricted to a date range & state limit
 	 * using the first date fields in the database
 	 *
-	 * @param queryParameter the parameter to determine which organisation is of interest
+	 * @param queryParameter the parameter to determine which record(s) are of interest
 	 * @param startDate      the start date of the date range limit
 	 * @param finishDate     the finish date of the date range limit
 	 * @param stateLimit     the state id that venues must be in to be part of the dataset
 	 *
 	 * @return               the string representation of the Marker XML
 	 */
-	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate, String stateLimit) throws javax.servlet.ServletException {
-		return "";
+	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate, String stateLimit) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
+		throw new java.lang.NoSuchMethodException("Method not implemented");
 	} // end getMarkerXMLString function
+	
+	/**
+	 * A method used to get the the Marker XML for an organisation restricted to a date range
+	 * using the first date fields in the database
+	 *
+	 * @param queryParameter the parameter to determine which record(s) are of interest
+	 * @param stateLimit     the state id that venues must be in to be part of the dataset
+	 *
+	 * @return               the string representation of the Marker XML
+	 */
+	public String getMarkerXMLString(String queryParameter, String stateLimit) throws javax.servlet.ServletException {
+	
+		// define private variables
+		String xmlString;			// string to hold xml 
+		int recordCount = 0;		// count number of markers created
+		String sql = null;			// the sql to execute
+		String[] parameters = null; // variable to hold sql parameters
+				
+		
+		// get the persistent URL template for event
+		String eventURLTemplate = this.dataManager.getContextParam("eventURLTemplate");
+		
+		// try to connect to the database
+		this.dataManager.connect(); // dataManager defined in parent object
+
+		if(stateLimit == null) {
+			// all evenues
+			
+			// check to see if we need to add the contributor name to the event name
+			if(queryParameter.indexOf(',') != -1) {
+				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', ";
+			} else {
+				sql = "SELECT e.eventid, e.event_name, ";
+			}
+			
+			sql	+= "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
+				+ "FROM conevlink c, "
+				+ "     events e, "
+				+ "     venue v, "
+				+ "     search_contributor sc "
+				+ "WHERE c.contributorid = ANY (?) "
+				+ "AND c.contributorid = sc.contributorid "
+				+ "AND e.eventid = c.eventid "
+				+ "AND v.venueid = e.venueid "
+				+ "AND v.longitude IS NOT NULL "
+				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
+			
+			// define the paramaters
+			parameters = new String[1];
+			parameters[0] = queryParameter;
+			
+		} else {
+			//TODO add state limit sql
+		}
+			
+		// get the resultset
+		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+		
+		// build the xml document
+		try {
+			// create the xml document object
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder        builder = factory.newDocumentBuilder();
+			Document			   xmlDoc  = builder.newDocument();
+			
+			// add the root element
+			Element rootElement = xmlDoc.createElement("markers");
+			xmlDoc.appendChild(rootElement);
+			
+			// debug code
+			//while (resultSet.next() && recordCount < 16) {
+		
+			// build the documnet by adding individual events
+			while (resultSet.next()) {
+			
+				// create a marker element
+				Element marker = xmlDoc.createElement("marker");
+				
+				// add attributes to this element
+				marker.setAttribute("event", resultSet.getString(2)); // event name
+				
+				// build the event url
+				String url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));  // replace the constant with the event id
+				marker.setAttribute("url", url);  // persistent URL to this event		
+				
+				// add start date
+				String date = this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+				marker.setAttribute("first", date);
+				date = this.buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+				marker.setAttribute("last", date);
+				
+				// add start and end date for program purposes
+				date = this.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)); 
+				marker.setAttribute("startDate", date);
+				
+				date = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)); 
+				marker.setAttribute("finishDate", date);
+				
+				// add remaining attributes
+				marker.setAttribute("venue",  resultSet.getString(9));  // venue name
+				marker.setAttribute("suburb", resultSet.getString(10));  // venue name
+				marker.setAttribute("lat",    resultSet.getString(11)); // latitude
+				marker.setAttribute("lng",    resultSet.getString(12)); // longitude							
+				
+				// add this element to the document
+				rootElement.appendChild(marker);
+				
+				// increment counter
+				recordCount++;
+			}
+			
+			// add a comment to help in debugging and testing
+			rootElement.appendChild(xmlDoc.createComment("Number of markers created: " + recordCount));
+			
+			// create a transformer 
+			TransformerFactory transFactory = TransformerFactory.newInstance();
+			Transformer        transformer  = transFactory.newTransformer();
+			
+			// set some options on the transformer
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			
+			// get a transformer and supporting classes
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			DOMSource    source = new DOMSource(xmlDoc);
+			
+			// transform the xml document into a string
+			transformer.transform(source, result);
+			xmlString = writer.toString();
+			
+		} catch(javax.xml.parsers.ParserConfigurationException ex) {
+			throw new javax.servlet.ServletException("Unable to build marker xml", ex);
+		} catch(Exception ex) {
+			throw new javax.servlet.ServletException("Unable to build marker xml", ex);
+		}
+		
+		// return the string
+		return xmlString;
+	
+	} // end getMarkerXMLString method
 	
 	/**
 	 * A abstract method used to get the String representation of the KML document
