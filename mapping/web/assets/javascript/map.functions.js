@@ -197,6 +197,162 @@ function showMap(type, id, traj, start, finish, limit) {
 	});
 }
 
+// function to show a map - version 2
+function showMap2(data, traj, focus) {
+
+	// tidy up any previous maps
+	GUnload();
+	
+	// create a new map and centre it on australia
+	var map = new GMap2(document.getElementById("map"));
+	
+	// determine where to centre the map
+	//recentre the map
+	switch(focus){
+		case '1':
+			map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+			break;
+		case '2':
+			map.setCenter(new GLatLng(-25.328055, 122.298333), 5); //WA
+			break;
+		case '3':
+			map.setCenter(new GLatLng(-32.163333, 147.016666), 6); //NSW
+			break;
+		case '4':
+			map.setCenter(new GLatLng(-22.486944, 144.431666), 5); //QLD
+			break;
+		case '5':
+			map.setCenter(new GLatLng(-42.021388, 146.593333), 7); //TAS
+			break;
+		case '6':
+			map.setCenter(new GLatLng(-36.854166, 144.281111), 6); //VIC
+			break;
+		case '7':
+			map.setCenter(new GLatLng(-35.49, 149.001388), 9); //ACT
+			break;
+		case '8':
+			map.setCenter(new GLatLng(-19.383333, 133.357777), 6); //NT
+			break;
+		case '9':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 2); //outside Aus
+			break;
+		case 'a':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // Aus only
+			break;
+		default:
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // defult, AUS
+			break;
+	}
+	
+	// finish setting up the map
+	map.setUIToDefault();
+    
+    // object to hold marker locations
+	var locations = {};
+	
+	// array to hold point locations for trajectory info
+	// need to use an array as order is significant
+	var trajectoryPoints = Array();
+	
+	// extract the markers from the xml
+	var markers = data.documentElement.getElementsByTagName("marker");
+	
+	// build a group of markers
+	for (var i = 0; i < markers.length; i++) {
+		
+		// get data from the xml
+		var event  = markers[i].getAttribute("event");
+		var venue  = markers[i].getAttribute("venue");
+		var first  = markers[i].getAttribute("first");
+		var last   = markers[i].getAttribute("last");
+		var suburb = markers[i].getAttribute("suburb");
+		var url    = markers[i].getAttribute("url");
+		var latlng = new GLatLng(parseFloat(markers[i].getAttribute("lat")), parseFloat(markers[i].getAttribute("lng")));
+		
+		// add coordinates to the array
+		trajectoryPoints.push(markers[i].getAttribute("lat") + " " + markers[i].getAttribute("lng"));
+		
+		// build javascript objects
+		var location   = {latlng: latlng, event: event, venue: venue, first: first, last: last, suburb: suburb, url: url};
+		var latlngHash = (latlng.lat().toFixed(6) + "" + latlng.lng().toFixed(6));
+		latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
+		
+		// add marker to a hash of markers
+		if (locations[latlngHash] == null) {
+			locations[latlngHash] = []
+		}
+	
+		locations[latlngHash].push(location);
+	}
+	
+	// create markers
+	for (var latlngHash in locations) {
+		
+		// get locations	
+		var events = locations[latlngHash];
+		
+		// more than one marker at the same location?
+		if (events.length > 1) {
+			
+			// yes, create a clustered marker
+			map.addOverlay(createClusteredMarker(events));
+			
+		} else {
+			
+			// no, create just a marker
+			map.addOverlay(createMarker(events));
+		}
+	}
+	
+	// create trajectory lines - if required
+	if(traj == "true") {
+		//trajectoryPoints = unique(trajectoryPoints);
+		var current = null;
+		var previous = null;
+		var colourGradient = getColourGradient();
+		var lineColour = null;
+		var index = null;
+		
+		for(var i = 0; i < trajectoryPoints.length; i++) {
+			if(i == 0) {
+				previous = trajectoryPoints[0];
+			} else {
+				
+				// get the current point
+				current = trajectoryPoints[i];
+				
+				// get the colour for this line
+				if (trajectoryPoints.length > 255) {
+					// use array if over 255 colours
+					index = Math.round((255 / trajectoryPoints.length) * i);
+					
+					if(index == 0) {
+						index = 1;
+					}
+					
+					lineColour = colourGradient[index];
+				} else {
+					// use scale function if less than 255
+					lineColour = getScaledColour(i - 1, trajectoryPoints.length - 1);
+				}
+				
+				// create a new polyline
+				var polyline = new GPolyline(
+					[
+						new GLatLng(parseFloat(previous.split(" ")[0]), parseFloat(previous.split(" ")[1])),
+						new GLatLng(parseFloat(current.split(" ")[0]), parseFloat(current.split(" ")[1]))
+					], 
+					lineColour, 6);
+					
+				// add plyline to the map
+				map.addOverlay(polyline);
+				
+				previous = current;
+			}
+		}
+	}		
+}
+
 // build a single marker
 function createMarker(events) {
 	// get the event

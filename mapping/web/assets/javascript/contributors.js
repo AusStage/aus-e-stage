@@ -88,6 +88,8 @@ $(document).ready(function() {
 /** helper functions **/
 function hideLoader() {
 	$("#search_waiting").hide();
+	$("#name_search_btn").removeAttr("disabled");
+	$("#id_search_btn").removeAttr("disabled");
 }
 
 // functions for showing and hiding the loading message
@@ -101,6 +103,9 @@ function showLoader() {
 	$("#map").hide();
 	$("#map_legend").hide();
 	$("#map_footer").hide();
+	
+	$("#name_search_btn").attr("disabled", "disabled");
+	$("#id_search_btn").attr("disabled", "disabled");
 	
 	GUnload();	
 }
@@ -148,9 +153,38 @@ function showErrorMessage() {
 	hideLoader();	
 }
 
+// register ajax error handlers
+$(document).ready(function() {
+
+	// getting marker xml for contributors
+	$("#map").ajaxError(function(e, xhr, settings, exception) {
+		console.log("error function called");
+		console.log(settings.url.search("action=markers&type=contributor"));
+		console.log(settings.url);
+		if(settings.url.search("action=markers&type=contributor") != -1) {
+			$(this).empty();
+			$(this).append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please try again.<br/>If the problem persists please contact the site administrator.</p>'); 
+		}
+	});
+});
+
 // function to show a map
 function showContributorMap(id) {
-	alert(id);
+	// show the map container
+	$("#map_header").show();
+	$("#map").show();
+	$("#map_legend").show();
+	$("#map_footer").show();
+	
+	// update values in the advanced map options form
+	$("#adv_map_org_id").val(id);
+	$("#adv_map_state").val($("#state").val());
+	
+	// get the marker xml data
+	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
+		// process the returned data
+		showMap2(data, null, $("#state").val());
+	});
 }
 
 // function to map multiple contributors

@@ -133,6 +133,35 @@ public class MappingServlet extends HttpServlet {
 				// send some output
 				out.print(results);
 				
+			} else if(type.equals("contributor")) {
+				// build marker XML related to organisations
+			
+				// get an instance of the OrganisationDataBuilder class
+				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
+				
+				// declare helper variable
+				String results = null;
+				
+				if(stateLimit == null) {
+					results = data.getMarkerXMLString(id);
+				} else {
+					results = data.getMarkerXMLString(id, stateLimit);
+				}
+				
+				// ouput the XML
+				// set the appropriate content type
+				response.setContentType("text/xml; charset=UTF-8");
+				
+				// set the appropriate headers to disable caching
+				// particularly for IE
+				response.setHeader("Cache-Control", "max-age=0,no-cache,no-store,post-check=0,pre-check=0");
+				
+				//get the output print writer
+				PrintWriter out = response.getWriter();
+				
+				// send some output
+				out.print(results);
+				
 			} else {
 				throw new ServletException("Unknown type parameter value");
 			}
