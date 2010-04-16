@@ -181,7 +181,7 @@ function showContributorMap(id) {
 	$("#adv_map_state").val($("#state").val());
 	
 	// get the marker xml data
-	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
+	$.get("data?action=markers&type=contributor&id=" + id + "&state=" + $("#state").val(), function(data) {
 		
 		// show the map
 		showMap2(data, null, $("#state").val(), null, null);
