@@ -225,5 +225,8 @@ function reloadMap() {
 	if(showTraj != null) {
 		// reload the map with trajectory information
 		showMap2(contributorMapData, true, $("#state").val());
+	} else {
+		// reload the map with trajectory information
+		showMap2(contributorMapData, false, $("#state").val());
 	}
 }
