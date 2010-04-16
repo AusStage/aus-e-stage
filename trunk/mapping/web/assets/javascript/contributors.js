@@ -182,8 +182,12 @@ function showContributorMap(id) {
 	
 	// get the marker xml data
 	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
-		// process the returned data
+		
+		// show the map
 		showMap2(data, null, $("#state").val());
+		
+		// build the time slider
+		buildTimeSlider(data);
 	});
 }
 
