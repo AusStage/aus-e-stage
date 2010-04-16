@@ -199,6 +199,28 @@ function multiContribMap() {
 	$("#map_header h3").empty();
 	$("#map_header h3").append("Map of events for multiple contributors");
 	
+	// select all of the checkboxes
+	var checkboxes = $('input:checkbox').serializeArray();
+	var ids = ""; // store a list of ids
+	
+	// loop through looking for contributor checkboxes
+	for (var i = 0; i < checkboxes.length; i++) {
+		if(checkboxes[i].name == "contributor") {
+			ids += checkboxes[i].value + ',';
+		}
+	}
+	
+	// tidy up the list of ids
+	ids = ids.substr(0, ids.length -2);
+	
+	// check on the list of ids
+	if(ids == "") {
+		alert("You must select at least one contributor");
+	}
+	
+	// build the map
+	showContributorMap(ids);
+	
 	return false;
 }
 
