@@ -305,7 +305,7 @@ function showMap2(data, traj, focus) {
 	}
 	
 	// create trajectory lines - if required
-	if(traj == "true") {
+	if(traj == "true" || traj == true) {
 		//trajectoryPoints = unique(trajectoryPoints);
 		var current = null;
 		var previous = null;
