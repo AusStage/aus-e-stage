@@ -230,6 +230,19 @@ public class OrganisationDataBuilder extends DataBuilder {
 	 * using the first date fields in the database
 	 *
 	 * @param queryParameter the parameter to determine which organisation is of interest
+	 * @param stateLimit     the state id that venues must be in to be part of the dataset
+	 *
+	 * @return               the string representation of the Marker XML
+	 */
+	public String getMarkerXMLString(String queryParameter, String stateLimit) throws javax.servlet.ServletException {
+		throw new javax.servlet.ServletException("Method not implemented");
+	}
+	
+	/**
+	 * A method used to get the the Marker XML for an organisation restricted to a date range
+	 * using the first date fields in the database
+	 *
+	 * @param queryParameter the parameter to determine which organisation is of interest
 	 * @param startDate      the start date of the date range limit
 	 * @param finishDate     the finish date of the date range limit
 	 * @param stateLimit     the state id that venues must be in to be part of the dataset

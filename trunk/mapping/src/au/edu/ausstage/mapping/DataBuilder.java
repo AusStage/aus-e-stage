@@ -42,13 +42,6 @@ public abstract class DataBuilder {
 	}
 	
 	/**
-	 * A method to get XML used to add markers to a Google Map
-	 *
-	 * @return  the marker XML as a string
-	 */
-	public abstract String getMarkerXMLString() throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
-	
-	/**
 	 * A abstract method used to get the String representation of the Marker XML
 	 *
 	 * @param queryParameter the parameter to determine what is of interest
@@ -62,25 +55,11 @@ public abstract class DataBuilder {
 	 * using the first date fields in the database
 	 *
 	 * @param queryParameter the parameter to determine which organisation is of interest
-	 * @param startDate      the start date of the date range limit
-	 * @param finishDate     the finish date of the date range limit
-	 *
-	 * @return               the string representation of the Marker XML
-	 */
-	public abstract String getMarkerXMLString(String queryParameter, String startDate, String finishDate) throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
-	
-	/**
-	 * A method used to get the the Marker XML for an organisation restricted to a date range
-	 * using the first date fields in the database
-	 *
-	 * @param queryParameter the parameter to determine which organisation is of interest
-	 * @param startDate      the start date of the date range limit
-	 * @param finishDate     the finish date of the date range limit
 	 * @param stateLimit     the state id that venues must be in to be part of the dataset
 	 *
 	 * @return               the string representation of the Marker XML
 	 */
-	public abstract String getMarkerXMLString(String queryParameter, String startDate, String finishDate, String stateLimit) throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
+	public abstract String getMarkerXMLString(String queryParameter, String stateLimit) throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
 	
 	/**
 	 * A abstract method used to get the String representation of the KML document

@@ -115,6 +115,7 @@
 				</form>
 			</div>
 			<div id="tabs-2">
+				<!--
 				<form action="data/" method="post" id="id_search" name="id_search">
 					<input type="hidden" name="action" value="contributor_id_search"/>
 					<table class="formTable">
@@ -133,6 +134,8 @@
 						</tr>
 					</table>
 				</form>
+				-->
+				<p>Under Development</p>
 			</div>
 		</div>
 		<div id="search_waiting" style="visibility:hidden;">
@@ -146,8 +149,8 @@
 		<div id="map_header" class="map_header_footer">
 			<h3></h3>
 			<ul class="map_links">
-				<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
-				<!--<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
+				<!--<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
+				<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
 				<li><a href="#" title="Export data using advanced options" id="map_header_export">Download KML data with advanced options</a></li>-->
 			</ul>
 		</div>

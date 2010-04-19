@@ -210,12 +210,16 @@ function multiContribMap() {
 		}
 	}
 	
-	// tidy up the list of ids
-	ids = ids.substr(0, ids.length -2);
+	// check to see if we need to tidy the id string
+	if(ids.indexOf(',',0) != -1) {
+		// tidy up the list of ids
+		ids = ids.substr(0, ids.length -1);
+	}
 	
 	// check on the list of ids
 	if(ids == "") {
 		alert("You must select at least one contributor");
+		return false;
 	}
 	
 	// build the map

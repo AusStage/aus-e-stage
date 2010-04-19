@@ -339,35 +339,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	}
 	
 	/**
-	 * A method used to get the Marker XML for contributors restricted to a date range
-	 * using the first date fields in the database
-	 *
-	 * @param queryParameter the parameter to determine which record(s) are of interest
-	 * @param startDate      the start date of the date range limit
-	 * @param finishDate     the finish date of the date range limit
-	 *
-	 * @return               the string representation of the Marker XML
-	 */
-	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate) throws javax.servlet.ServletException, java.lang.NoSuchMethodException{
-		return getMarkerXMLString(queryParameter, startDate, finishDate, null);
-	}
-	
-	/**
-	 * A method used to get the Marker XML for contributors restricted to a date range & state limit
-	 * using the first date fields in the database
-	 *
-	 * @param queryParameter the parameter to determine which record(s) are of interest
-	 * @param startDate      the start date of the date range limit
-	 * @param finishDate     the finish date of the date range limit
-	 * @param stateLimit     the state id that venues must be in to be part of the dataset
-	 *
-	 * @return               the string representation of the Marker XML
-	 */
-	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate, String stateLimit) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
-		throw new java.lang.NoSuchMethodException("Method not implemented");
-	} // end getMarkerXMLString function
-	
-	/**
 	 * A method used to get the the Marker XML for an organisation restricted to a date range
 	 * using the first date fields in the database
 	 *
@@ -662,14 +633,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	 public String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException {
 	 	return "";
 	 } // end doKMLExport function
-	 
-	 
-	 /**
-	 * A method declared in abstract class but not used in this class
-	 */
-	public String getMarkerXMLString() throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
-		throw new java.lang.NoSuchMethodException("Method not implemented");
-	}
 	
 	/**
 	 * A abstract method used to get the String representation of the KML document
