@@ -635,13 +635,36 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	 } // end doKMLExport function
 	
 	/**
-	 * A abstract method used to get the String representation of the KML document
-	 * using the default options
+	 * Function to get the name of the contributor
 	 *
-	 * @return               a string containing the KML XML
+	 * @param queryParameter the parameter to determine which contributor to lookup
+	 *
+	 * @return               a string containing the name of the contributor
 	 */
-	public String getKMLString() throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
-		throw new java.lang.NoSuchMethodException("Method not implemented");
-	}
+	public String getNameByID(String queryParameter) throws javax.servlet.ServletException {
+	
+		// build the sql
+		String sql = "SELECT contrib_name FROM search_contributor WHERE contributorid = ?";
+		
+		// define the parameters
+		String[] parameters = new String[1];
+		parameters[0] = queryParameter;
+		
+		// try to connect to the database
+		this.dataManager.connect(); // dataManager defined in parent object
+		
+		// get the resultset
+		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+		
+		try {			
+			// move to the first record in the recordset
+			resultSet.next();
+			
+			// return the name
+			return resultSet.getString(1);
+		} catch(Exception ex) {
+				throw new javax.servlet.ServletException("Unable to lookup contributor name", ex);
+		}
+	} // get the full name of a contributor
 
 } // end class definition

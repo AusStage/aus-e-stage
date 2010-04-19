@@ -65,14 +65,6 @@ public abstract class DataBuilder {
 	 * A abstract method used to get the String representation of the KML document
 	 * using the default options
 	 *
-	 * @return               a string containing the KML XML
-	 */
-	public abstract String getKMLString() throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
-	
-	/**
-	 * A abstract method used to get the String representation of the KML document
-	 * using the default options
-	 *
 	 * @param queryParameter the parameter to determine what is of interest
 	 *
 	 * @return               a string containing the KML XML

@@ -35,10 +35,13 @@ $.extend({
 	}
 });
 
-// determine the type of map and adjust function calls accordingly
-$(document).ready(function(){
+// declare global variables
+var mapData = null;
 
-	// get the map type
+// load the appropriate map
+$(document).ready(function() {
+
+	// get the parameters to this page
 	var type = $.getUrlVar("type");
 	var id   = $.getUrlVar("id");
 	
@@ -46,32 +49,76 @@ $(document).ready(function(){
 	if(typeof(type) == "undefined" || typeof(id) == "undefined") {
 		showErrorMessage();
 	} else {
-	
-		// determine what to do
 		if(type == "org") {
+			// this is an organisation map
 			// this is an organisation map so get the organisation name
 			$.get("data?action=lookup&type=orgname&id=" + id, function(html) {
 				$("#map_name").empty();
 				$("#map_name").append("Map events of events for: " + html);
-				
-				// show the map
-				showOrgMap(id);
 			});
 			
+			// get the marker xml data
+			$.get("data?action=markers&type=org&id=" + id, function(data) {
+				
+				// show the map
+				showMap2(data, null, null, null, null);
+				
+				// build the time slider
+				buildTimeSlider(data);
+				
+				// store reference to marker data for reuse
+				mapData = data;
+			});
+			
+			// update the persistent link
+			$("#map_header_link").attr("href", "maplinks.jsp?type=org&id=" + id);
+			
+		} else if(type == "contrib") {
+			// this is a contributor map
+			
+			// this is an organisation map so get the organisation name
+			$.get("data?action=lookup&type=contribname&id=" + id, function(html) {
+				$("#map_name").empty();
+				$("#map_name").append("Map events of events for: " + html);
+			});
+			
+			// get the marker xml data
+			$.get("data?action=markers&type=contributor&id=" + id, function(data) {
+				
+				// show the map
+				showMap2(data, null, null, null, null);
+				
+				// build the time slider
+				buildTimeSlider(data);
+				
+				// store reference to marker data for reuse
+				mapData = data;
+			});
+			
+			// update the persistent link
+			$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
+		
 		} else {
-			// unknown type parameter
-			showErrorMessage();
+			// this is an unknown type
+			showErrorMessag();
 		}
+		
+		// override the default form action
+		$("#reload_map").click(reloadMap);
+		
+		// hide the other two links
+		$("#map_header_kml").hide();
+		$("#map_header_export").hide();
 	}
-	
 });
 
-//// function to show error when Ajax fails
-$(document).ready(function(){
+// register ajax error handlers
+$(document).ready(function() {
 
-	jQuery().ajaxError(function(a, b, e) {
-			showErrorMessage();
-		});
+	// getting marker xml for contributors
+	$("#map").ajaxError(function(e, xhr, settings, exception) {
+		showErrorMessage();
+	});
 });
 
 // function to show an error message
@@ -80,83 +127,30 @@ function showErrorMessage() {
 	$("#map_name").hide();
 	$("#map_header").hide();
 	$("#map_legend").hide();
-	$("#map").append("<p><strong>An Error has occured.</strong><br/>");
-	$("#map").append("Check the URL and try again. If the problem persists contact the site administrator.</p>");
+	$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please try again.<br/>If the problem persists please contact the site administrator.</p>'); 
 }
 
-// override the advanced map display functionality with our own function
-$(document).ready(function() {
+// function to reload a map
+function reloadMap() {
+	
+	// check to ensure map data is present
+	if(mapData == null) {
+		showErrorMessage();
+	}
 
-	$("#reload_map").click(advFormSubmit);
-});
-
-// function to load and show the map
-function showOrgMap(orgId) {
-	
-	// show the map container
-	$("#map_header").show();
-	$("#map").show();
-	$("#map_legend").show();
-	$("#map_footer").show();
-	
-	// update values in the advanced map options form
-	$("#adv_map_org_id").val(orgId);
-	
-	// use reusable function to show and load the map
-	showMap('org', orgId);
-	
-	// get the data to populate the selectboxes
-	$.getJSON("data?action=lookup&type=startdates&id=" + orgId, function(data) {
-	
-		// remove any existing options
-		$("#event_start").removeOption(/./);
-		$("#event_finish").removeOption(/./);
-		
-		// add the new options
-		$("#event_start").addOption(data, false);
-		$("#event_finish").addOption(data, false);
-		
-		// clear any current selected values
-		$("#event_start").selectOptions('clear');
-		$("#event_finish").selectOptions('clear');
-		
-		// select the last option of the event_finish select
-		$("#event_start option:last").attr("selected", "selected");
-		//$("#event_finish").val($("#event_finish option:last").val());
-		
-		// remove any existing slider
-		$("#sliderComponent").remove();
-		
-		// create the slider
-		//$(".slider").selectToUISlider({labels: 7})
-		$(".slider").selectToUISlider({labels: 10}).hide();
-		$(".tohide").hide();
-	});
-	
-	return false;
-}
-
-
-// function to take action when the advanced map options form is submitted
-function advFormSubmit() {
-
-	// get the org id
-	var orgId = $("#adv_map_org_id").val();
-	
 	// get the show trajectory option
 	var showTraj = $("#show_trajectory:checked").val();
 	
 	// get the start date
-	var startDate = $("#event_start").val();
+	var startDate  = $("#event_start").val();
 	var finishDate = $("#event_finish").val();
 	
-	// use the reusable function to update the map
+	// determine if the trajectory option is set
 	if(showTraj != null) {
-		showMap('org', orgId, "true", startDate, finishDate);
+		// reload the map with trajectory information
+		showMap2(mapData, true, null, startDate, finishDate);
 	} else {
-		showMap('org', orgId, "false", startDate, finishDate);
+		// reload the map with trajectory information
+		showMap2(mapData, false, null, startDate, finishDate);
 	}
-	
-	// override default action on the form
-	return false;
 }
