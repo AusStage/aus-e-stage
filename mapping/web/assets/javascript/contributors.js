@@ -40,7 +40,7 @@ $(document).ready(function(){
 	// attach the validation plugin to the id search form
 	$("#id_search").validate({
 		rules: { // validation rules
-			contributor_id: {
+			id: {
 				required: true,
 				digits: true
 			}
@@ -74,8 +74,10 @@ $(document).ready(function() {
 			name: 'contributor_search_tab', 
 			expires: 30
 		},
-		select: function(event, ui) { 
-			$("#search_results").hide(); 
+		select: function(event, ui) {
+			$("#search_results").hide();
+			$("#search_results").empty();
+			hideMap();			
 		} 
 	}); 
 });
@@ -180,6 +182,18 @@ function showContributorMap(id) {
 	$("#adv_map_org_id").val(id);
 	$("#adv_map_state").val($("#state").val());
 	
+	if(id.indexOf(',',0) != -1) {
+		// hide the peristent link
+		$("#map_header_link").hide();	
+	} else {
+		// update the persistent link
+		$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
+		$("#map_header_link").show();
+		
+		// uncheck all of the checkboxes
+		$('input:checkbox').attr('checked', false);
+	}		
+	
 	// get the marker xml data
 	$.get("data?action=markers&type=contributor&id=" + id + "&state=" + $("#state").val(), function(data) {
 		
@@ -196,6 +210,8 @@ function showContributorMap(id) {
 
 // function to map multiple contributors
 function multiContribMap() {
+
+	// update the header
 	$("#map_header h3").empty();
 	$("#map_header h3").append("Map of events for multiple contributors");
 	
@@ -252,4 +268,10 @@ function reloadMap() {
 		// reload the map with trajectory information
 		showMap2(contributorMapData, false, $("#state").val(), startDate, finishDate);
 	}
+}
+
+// function to load the maplinks page
+// function to load the map in the new page
+function loadNewPage(responseText, statusText) {
+	window.location = "maplinks.jsp?type=contrib&id=" + $("#id").val();
 }

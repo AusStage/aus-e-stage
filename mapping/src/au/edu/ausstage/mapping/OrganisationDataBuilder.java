@@ -414,6 +414,10 @@ public class OrganisationDataBuilder extends DataBuilder {
 				date = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)); 
 				marker.setAttribute("finishDate", date);
 				
+				// add start and end date for program purposes
+				date = this.buildDate(resultSet.getString(3), resultSet.getString(4), null); 
+				marker.setAttribute("sliderDate", date);
+				
 				// add remaining attributes
 				marker.setAttribute("venue",  resultSet.getString(9));  // venue name
 				marker.setAttribute("suburb", resultSet.getString(10));  // venue name
@@ -1114,16 +1118,6 @@ public class OrganisationDataBuilder extends DataBuilder {
 	 * A method declared in abstract class but not used in this class
 	 */
 	public String getMarkerXMLString() throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
-		throw new java.lang.NoSuchMethodException("Method not implemented");
-	}
-	
-	/**
-	 * A abstract method used to get the String representation of the KML document
-	 * using the default options
-	 *
-	 * @return               a string containing the KML XML
-	 */
-	public String getKMLString() throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
 		throw new java.lang.NoSuchMethodException("Method not implemented");
 	}
 

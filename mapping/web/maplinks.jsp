@@ -43,18 +43,6 @@
 <div id="wrap">
 	<div id="header"><h1>AusStage Mapping Service (Beta)</h1></div>
 	<div id="nav">
-		<!--<ul>
-			<li><a href="#">Option 1</a></li>
-			<li><a href="#">Option 2</a></li>
-			<li><a href="#">Option 3</a></li>
-
-			<li><a href="#">Option 4</a></li>
-			<li><a href="#">Option 5</a></li>
-		</ul>
-		-->
-		<ul>
-			<li>&nbsp;</li>
-		</ul>
 	</div>
 	<!-- Include the sidebar -->
 	<jsp:include page="sidebar.jsp"/>
@@ -86,10 +74,10 @@
 				<tr>
 					<td colspan="2">
 						<fieldset>
-							<label for="event_finish" class="tohide">First Date: </label>
-								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
 							<label for="event_start" class="tohide">Last Date: </label>
 								<select name="event_start" id="event_start" size="1" class="slider"></select>
+							<label for="event_finish" class="tohide">First Date: </label>
+								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
 						</fieldset>
 					</td>
 				</tr>

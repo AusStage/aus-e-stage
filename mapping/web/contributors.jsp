@@ -115,16 +115,16 @@
 				</form>
 			</div>
 			<div id="tabs-2">
-				<!--
-				<form action="data/" method="post" id="id_search" name="id_search">
-					<input type="hidden" name="action" value="contributor_id_search"/>
+				<form action="data/" method="get" id="id_search" name="id_search">
+					<input type="hidden" name="action" value="lookup"/>
+					<input type="hidden" name="type"   value="contribname"/>
 					<table class="formTable">
 						<tr>
 							<th scope="row">
 								<label for="contributor_id">Contributor ID: </label>
 							</th>
 							<td>
-								<input type="text" size="40" id="contributor_id" name="contributor_id"/>
+								<input type="text" size="40" id="id" name="id"/>
 							</td>
 						</tr>
 						<tr>
@@ -134,8 +134,6 @@
 						</tr>
 					</table>
 				</form>
-				-->
-				<p>Under Development</p>
 			</div>
 		</div>
 		<div id="search_waiting" style="visibility:hidden;">
@@ -149,8 +147,8 @@
 		<div id="map_header" class="map_header_footer">
 			<h3></h3>
 			<ul class="map_links">
-				<!--<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
-				<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
+				<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
+				<!--<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
 				<li><a href="#" title="Export data using advanced options" id="map_header_export">Download KML data with advanced options</a></li>-->
 			</ul>
 		</div>

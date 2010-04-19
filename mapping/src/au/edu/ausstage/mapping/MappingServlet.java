@@ -95,7 +95,7 @@ public class MappingServlet extends HttpServlet {
 			}
 			
 			// determine the type of Marker XML we need
-			if(type.equals("orgdata")) {
+			if(type.equals("orgdata") || type.equals("org")) {
 				// build marker XML related to organisations
 			
 				// get an instance of the OrganisationDataBuilder class
@@ -187,7 +187,7 @@ public class MappingServlet extends HttpServlet {
 			}
 			
 			// determine the type of Marker XML we need
-			if(type.equals("orgdata")) {
+			if(type.equals("orgdata") || type.equals("org")) {
 				// build marker KML related to organisations
 			
 				// get an instance of the OrganisationDataBuilder class
@@ -247,6 +247,15 @@ public class MappingServlet extends HttpServlet {
 				
 				// get the organisation name
 				results = orgData.getOrgNameByID(id);				
+			
+			} else if (type.equals("contribname")) {
+				// need to lookup the name of an organisation
+				
+				// get an instance of the OrganisationDataBuilder class
+				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
+				
+				// get the organisation name
+				results = data.getNameByID(id);				
 			
 			} else if(type.equals("startdates")) {
 				// need to lookup the start dates of events that can be mapped
