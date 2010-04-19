@@ -564,7 +564,7 @@ public class BrowseDataBuilder extends DataBuilder {
 	/**
 	 * A method declared in abstract class but not used in this class
 	 */
-	public String getMarkerXMLString(String queryParameter, String startDate, String finishDate) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
+	public String getMarkerXMLString(String queryParameter, String stateLimit) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
 		throw new java.lang.NoSuchMethodException("Method not implemented");
 	}
 	
