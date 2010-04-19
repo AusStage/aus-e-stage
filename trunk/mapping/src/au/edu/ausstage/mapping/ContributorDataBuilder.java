@@ -141,9 +141,9 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			    + "            WHERE contributor.contributorid = contfunctlink.contributorid "
 			    + "            AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid) "
 			    + "      GROUP BY contributorid) functions, "
-			    + "     (SELECT contributorid, count(*) over (partition by contributorid) event_count "
+			    + "     (SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) event_count "
 			    + "      FROM conevlink) events, "
-			    + "     (SELECT contributorid, count(*) over (partition by contributorid) marker_count "
+			    + "     (SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) marker_count "
 			    + "      FROM conevlink, "
 			    + "           events, "
 			    + "           venue "
@@ -189,14 +189,14 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			// determine state specific code to use
 			if(stateLimit.equals("a")) {
 				// add australia state limit clause
-				sql += "(SELECT contributorid, count(*) over (partition by contributorid) event_count "
+				sql += "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) event_count "
 					+  " FROM conevlink, "
 					+  "      events, "
 					+  "      venue "
 					+  " WHERE conevlink.eventid = events.eventid "
 					+  " AND events.venueid = venue.venueid "
 					+  " AND venue.state < 9 ) events, "
-					+  "(SELECT contributorid, count(*) over (partition by contributorid) marker_count "
+					+  "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) marker_count "
 					+  " FROM conevlink, "
 					+  "      events, "
  					+  "      venue "
@@ -207,14 +207,14 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			} else {
 				// add state specific limit clause 
 				// includes overseas option
-				sql += "(SELECT contributorid, count(*) over (partition by contributorid) event_count "
+				sql += "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) event_count "
 					+  " FROM conevlink, "
 					+  "      events, "
 					+  "      venue "
 					+  " WHERE conevlink.eventid = events.eventid "
 					+  " AND events.venueid = venue.venueid "
 					+  " AND venue.state = ? ) events, "
-					+  "(SELECT contributorid, count(*) over (partition by contributorid) marker_count "
+					+  "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) marker_count "
 					+  " FROM conevlink, "
 					+  "      events, "
  					+  "      venue "
@@ -373,7 +373,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			
 			// check to see if we need to add the contributor name to the event name
 			if(queryParameter.indexOf(',') != -1) {
-				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
+				sql = "SELECT DISTINCT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
 					+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
 					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
@@ -402,7 +402,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 					parameters = ids;
 
 			} else {
-				sql = "SELECT e.eventid, e.event_name, "
+				sql = "SELECT DISTINCT e.eventid, e.event_name, "
 					+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
 					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
@@ -426,7 +426,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 		
 			// check to see if we need to add the contributor name to the event name
 			if(queryParameter.indexOf(',') != -1) {
-				sql = "SELECT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
+				sql = "SELECT DISTINCT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
 					+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
 					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
@@ -450,7 +450,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 					+ "AND v.venueid = e.venueid ";
 
 			} else {
-				sql = "SELECT e.eventid, e.event_name, "
+				sql = "SELECT DISTINCT e.eventid, e.event_name, "
 					+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
 					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
