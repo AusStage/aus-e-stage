@@ -199,6 +199,42 @@ public class KMLExportFile {
 		}
 		
 	} // end add Folder method
+	
+	/**
+	 * A method to add a folder element to the KML file
+	 *
+	 * @param parent the parent folder
+	 * @param name the name of the folder
+	 *
+	 * @return     the element representing this folder
+	 */
+	public Element addFolder(Element parent, String name) throws java.lang.Exception {
+	
+		try {
+			// create the folder element
+			Element folder = xmlDoc.createElement("Folder");
+			
+			// create the name element
+			Element folderName = xmlDoc.createElement("name");
+			folderName.setTextContent(name);
+			
+			// add the name element to the folder
+			folder.appendChild(folderName);
+			
+			// add the folder to the tree
+			parent.appendChild(folder);
+			
+			// store reference to this folder
+			folderElement = folder;
+			
+			// return this Element
+			return folder;		
+		
+		} catch (Exception ex) {
+			throw new java.lang.Exception ("Unable to add a folder to the KML Export File", ex);
+		}
+		
+	} // end add Folder method
 
 	/**
 	 * A method to add a document element to the KML file
@@ -361,6 +397,45 @@ public class KMLExportFile {
 			} else {
 				throw new java.lang.Exception ("Unable to add style element, KML must contain a folder and document element before adding style elements");
 			}
+		} catch (Exception ex) {
+			throw new java.lang.Exception ("Unable to add style element to the KML Export File", ex);
+		}
+	} // end addIconStyle method
+	
+	/**
+	 * A method to add an icon style element as a child to the folder element
+	 *
+	 * @param folder  the folder to add the style to
+	 * @param styleId the id attribute for this style
+	 * @param iconUrl the url to the icon
+	 */
+	public void addIconStyle(Element folder, String styleId, String iconUrl) throws java.lang.Exception {
+	
+		try {
+			// create the element
+			Element style = xmlDoc.createElement("Style");
+			
+			// add the id attribute
+			style.setAttribute("id", styleId);
+			
+			// add the icon style element
+			Element iconStyle = xmlDoc.createElement("IconStyle");
+			style.appendChild(iconStyle);
+			
+			// add the icon element
+			Element icon = xmlDoc.createElement("Icon");
+			iconStyle.appendChild(icon);
+			
+			// add the href element
+			Element href = xmlDoc.createElement("href");
+			icon.appendChild(href);
+			
+			// add the url to the icon
+			href.setTextContent(iconUrl);
+			
+			// add the style to the folder
+			folder.appendChild(style);
+			
 		} catch (Exception ex) {
 			throw new java.lang.Exception ("Unable to add style element to the KML Export File", ex);
 		}

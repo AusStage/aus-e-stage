@@ -186,7 +186,7 @@ public class MappingServlet extends HttpServlet {
 				throw new ServletException("Missing required parameters");
 			}
 			
-			// determine the type of Marker XML we need
+			// determine the type of kml we need
 			if(type.equals("orgdata") || type.equals("org")) {
 				// build marker KML related to organisations
 			
@@ -214,6 +214,37 @@ public class MappingServlet extends HttpServlet {
 				// send some output
 				out.print(results);
 			
+			} else if(type.equals("contrib")) {
+				// build KML data for contributors
+				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
+				
+				// get the KML data
+				String results = data.getKMLString(id);
+				
+				// build a file name
+				String fileName = null;
+				
+				if(id.indexOf(',') != -1) {
+					fileName = "multiple-contributor-map.kml";
+				} else {
+					fileName = data.getNameByID(id);
+					fileName = fileName.toLowerCase();					   // lower case
+					fileName = fileName.replaceAll("[^a-zA-Z0-9\\s]", ""); // remove anything not alphanumeric
+					fileName = fileName.replaceAll(" ", "-");			   // replace spaces with dashes
+					fileName += ".kml";
+				}
+				
+				// ouput the XML
+				// set the appropriate content type
+				response.setContentType("application/vnd.google-earth.kml+xml; charset=UTF-8");
+				response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+				//get the output print writer
+				PrintWriter out = response.getWriter();
+				
+				// send some output
+				out.print(results);
+							
 			} else {
 				throw new ServletException("Unknown type parameter value");
 			}
