@@ -184,7 +184,10 @@ function showContributorMap(id) {
 	
 	// update the persistent link
 	$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
-	$("#map_header_link").show();	
+	$("#map_header_link").show();
+	
+	// update the download as KML link
+	$("#map_header_kml").attr("href", "data?action=kml&type=contrib&id=" + id);
 	
 	if(id.indexOf(',',0) == -1) {
 		
