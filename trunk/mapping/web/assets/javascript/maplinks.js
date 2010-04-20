@@ -76,11 +76,18 @@ $(document).ready(function() {
 		} else if(type == "contrib") {
 			// this is a contributor map
 			
-			// this is an organisation map so get the organisation name
-			$.get("data?action=lookup&type=contribname&id=" + id, function(html) {
+			if(id.indexOf(',',0) != -1) {
+				// multiple contributors
 				$("#map_name").empty();
-				$("#map_name").append("Map events of events for: " + html);
-			});
+				$("#map_name").append("Map events of events for Multiple Contributors");
+								
+			} else {
+				// get the contributors name
+				$.get("data?action=lookup&type=contribname&id=" + id, function(html) {
+					$("#map_name").empty();
+					$("#map_name").append("Map events of events for: " + html);
+				});
+			}
 			
 			// get the marker xml data
 			$.get("data?action=markers&type=contributor&id=" + id, function(data) {

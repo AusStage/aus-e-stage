@@ -182,13 +182,11 @@ function showContributorMap(id) {
 	$("#adv_map_org_id").val(id);
 	$("#adv_map_state").val($("#state").val());
 	
-	if(id.indexOf(',',0) != -1) {
-		// hide the peristent link
-		$("#map_header_link").hide();	
-	} else {
-		// update the persistent link
-		$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
-		$("#map_header_link").show();
+	// update the persistent link
+	$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
+	$("#map_header_link").show();	
+	
+	if(id.indexOf(',',0) == -1) {
 		
 		// uncheck all of the checkboxes
 		$('input:checkbox').attr('checked', false);
