@@ -83,7 +83,7 @@ public class KMLBuilder {
 	 *
 	 * @return    the newly constructed element
 	 */
-	public Element createElement(String name) throws IllegalArgumentException {
+	public Element createElement(String name) {
 	
 		// check the parameters
 		if(name == null) {
@@ -108,7 +108,7 @@ public class KMLBuilder {
 	 *
 	 * @return       the CDATASection element
 	 */
-	public CDATASection createCDATASection(String content) throws IllegalArgumentException {
+	public CDATASection createCDATASection(String content) {
 		
 		if(content == null) {
 			throw new IllegalArgumentException("The content of the CDATA Section must be specified");
@@ -133,7 +133,7 @@ public class KMLBuilder {
 	 *
 	 * @return the newly constructed folder
 	 */
-	public Element addFolder(Element parentElement, String folderName) throws IllegalArgumentException {
+	public Element addFolder(Element parentElement, String folderName) {
 	
 		// check the parameters
 		if(folderName == null) {
@@ -179,7 +179,7 @@ public class KMLBuilder {
 	 *
 	 * @return the newly constructed folder
 	 */
-	public Element addFolder(String folderName) throws IllegalArgumentException {
+	public Element addFolder(String folderName) {
 	
 		// add the folder to the tree
 		Element folder = addFolder(null, folderName);
@@ -201,7 +201,7 @@ public class KMLBuilder {
 	 *
 	 * @return              the element representing this document
 	 */
-	public Element addDocument(Element folder, String name) throws IllegalArgumentException {
+	public Element addDocument(Element folder, String name) {
 	
 		// check the parameters
 		if(folder == null && rootFolder == null) {
@@ -247,7 +247,7 @@ public class KMLBuilder {
 	 * @param parentElement an element which is the parent element of this comment
 	 * @param content       the text of the comment
 	 */
-	public void addComment(Element parentElement, String content) throws IllegalArgumentException {
+	public void addComment(Element parentElement, String content) {
 	
 		// check the parameters
 		if(content == null) {
@@ -275,7 +275,7 @@ public class KMLBuilder {
 	 *
 	 * @param content     the text of the comment
 	 */
-	public void addComment(String content) throws IllegalArgumentException {
+	public void addComment(String content) {
 	
 		addComment(null, content);
 		
@@ -289,7 +289,7 @@ public class KMLBuilder {
 	 * @param name          the name of the author
 	 * @param href          the href to a webpage containing more information about this map
 	 */
-	public void addAuthorElement(Element parentElement, String name, String href) throws IllegalArgumentException {
+	public void addAuthorElement(Element parentElement, String name, String href) {
 	
 		// check on the parameters
 		if(name == null || href == null) {
@@ -337,7 +337,7 @@ public class KMLBuilder {
 	 * @param name          the name of the author
 	 * @param href          the href to a webpage containing more information about this map
 	 */
-	public void addAuthorElement(String name, String href) throws IllegalArgumentException {
+	public void addAuthorElement(String name, String href) {
 	
 		addAuthorElement(null, name, href);
 	
@@ -349,7 +349,7 @@ public class KMLBuilder {
 	 * @param parentElement the parent element of this description element
 	 * @param content       the content of the description element
 	 */
-	public void addDescriptionElement(Element parentElement, String content) throws IllegalArgumentException {
+	public void addDescriptionElement(Element parentElement, String content) {
 	
 		// check on the pararmeters
 		if(parentElement == null) {
@@ -382,7 +382,7 @@ public class KMLBuilder {
 	 * @param id            the unique style identifier for this style
 	 * @param href          the href (URL) for this style
 	 */
-	public void addIconStyle(Element parentElement, String id, String href) throws IllegalArgumentException {
+	public void addIconStyle(Element parentElement, String id, String href) {
 	
 		// check on the parameters
 		if(parentElement == null && rootFolder == null) {
@@ -431,12 +431,125 @@ public class KMLBuilder {
 		
 		// check where to add this style
 		if(parentElement == null) {
-			rootFolder.insertBefore(style, rootFolder.getFirstChild());
+			//rootFolder.insertBefore(style, rootFolder.getFirstChild());
+			rootFolder.appendChild(style);
 		} else {
-			parentElement.insertBefore(style, parentElement.getFirstChild());
+			//parentElement.insertBefore(style, parentElement.getFirstChild());
+			parentElement.appendChild(style);
 		}
 		
 	} // end addIconStyle element
+	
+	/**
+	 * Add a placemark to the KML
+	 *
+	 * @param document    the document to add the placemark to
+	 * @param name        the name of the placemark
+	 * @param link        the link for further information
+	 * @param description the description for this placemark
+	 * @param style       the style for this placemark
+	 * @param latitude    the latitidude for this placemark
+	 * @param longitude   the longitude for this placemark
+	 *
+	 * @return            the Element representing this placemark
+	 */
+	public Element addPlacemark(Element document, String name, String link, String description, String style, String latitude, String longitude) {
+	
+		// check the parameters
+		if(document == null) {
+			throw new IllegalArgumentException("The document that holds this placemark must be specified");
+		}
+		
+		if(name == null) {
+			throw new IllegalArgumentException("The name of this placemark must be specified");
+		}
+		
+		name = name.trim();
+		
+		if(name == "") {
+			throw new IllegalArgumentException("The name of this placemark must be specified");
+		}
+		
+		if(description == null) {
+			throw new IllegalArgumentException("The description of this placemark must be specified");
+		}
+		
+		description = description.trim();
+		
+		if(description == "") {
+			throw new IllegalArgumentException("The description of this placemark must be specified");
+		}
+		
+		if(style == null) {
+			throw new IllegalArgumentException("The style id for use with this placemark must be specified");
+		}
+		
+		style = style.trim();
+		
+		if(style == "") {
+			throw new IllegalArgumentException("The style id for use with this placemark must be specified");
+		}
+		
+		if(latitude == null) {
+			throw new IllegalArgumentException("The latitude for use with this placemark must be specified");
+		}
+		
+		latitude = latitude.trim();
+		
+		if(latitude == "") {
+			throw new IllegalArgumentException("The latitude for use with this placemark must be specified");
+		}
+		
+		if(longitude == null) {
+			throw new IllegalArgumentException("The longitude for use with this placemark must be specified");
+		}
+		
+		longitude = longitude.trim();
+		
+		if(longitude == "") {
+			throw new IllegalArgumentException("The longitude for use with this placemark must be specified");
+		}
+		
+		// add a placemark to the document
+		Element placemark = xmlDoc.createElement("Placemark");
+		document.appendChild(placemark);
+		
+		// add the name to the placemark
+		Element eventName = xmlDoc.createElement("name");
+		placemark.appendChild(eventName);
+		eventName.setTextContent(name);
+
+		// add a link element
+		Element eventLink = xmlDoc.createElement("atom:link");
+		eventLink.setAttribute("href", link);
+		placemark.appendChild(eventLink);
+		
+		// add the description to the placemark
+		Element descriptionElement = xmlDoc.createElement("description");
+		placemark.appendChild(descriptionElement);
+		
+		// create the CDATASection to hold the html
+		CDATASection cdata = xmlDoc.createCDATASection(description);
+		descriptionElement.appendChild(cdata);
+		
+		// add the style information
+		Element styleElement = xmlDoc.createElement("styleUrl");
+		placemark.appendChild(styleElement);
+		styleElement.setTextContent(style);
+		
+		// create the point element
+		Element point = xmlDoc.createElement("Point");
+		placemark.appendChild(point);
+	
+		// add the coordinates
+		Element coordinates = xmlDoc.createElement("coordinates");
+		point.appendChild(coordinates);
+		coordinates.setTextContent(latitude + "," + longitude);
+		
+		// return the placemark
+		return placemark;	
+	
+	} // end addPlacemark method
 	
 	/**
 	 * A method to return the string representation of this KML file

@@ -699,11 +699,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 					// execute the sql
 					ResultSet resultSet = dataManager.executePreparedStatement(sql, parameters);
 					
-//					// determine how many rows are in the resultset
-//					resultSet.last();
-//					int rowCount = resultSet.getRow();
-//					resultSet.first();
-					
 					// add a folder for this contributor
 					Element contribFolder = exportFile.addFolder(firstFolder, currentContributor); // add a folder to hold all of the maps
 					exportFile.addDescriptionElement(contribFolder, "Maps of events associated with: " + currentContributor);
@@ -715,22 +710,8 @@ AND markers.contributorid(+) = search_contributor.contributorid
 					// loop through the dataset adding placemarks to the basic doc
 					while (resultSet.next()) {
 					
-						// add a placemark to the document
-						Element placemark = exportFile.createElement("Placemark");
-						document.appendChild(placemark);
-						
-						// add the name to the placemark
-						Element eventName = exportFile.createElement("name");
-						placemark.appendChild(eventName);
-						eventName.setTextContent(resultSet.getString(2));
-
 						// build the event url
 						String url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));  // replace the constant with the event id
-						
-						// add a link element
-						Element eventLink = exportFile.createElement("atom:link");
-						eventLink.setAttribute("href", url);
-						placemark.appendChild(eventLink);
 						
 						// build the description						
 						String html = "";
@@ -750,29 +731,10 @@ AND markers.contributorid(+) = search_contributor.contributorid
 						}
 						
 						// add the more information link
-						html += " <br/><a href=\"" + url + "\">More Information</a></p>";			
+						html += " <br/><a href=\"" + url + "\">More Information</a></p>";
 						
-						// add the description to the placemark
-						Element description = exportFile.createElement("description");
-						placemark.appendChild(description);
-						
-						// create the CDATASection to hold the html
-						CDATASection cdata = exportFile.createCDATASection(html);
-						description.appendChild(cdata);
-						
-						// add the style information
-						Element style = exportFile.createElement("styleUrl");
-						placemark.appendChild(style);
-						style.setTextContent("basic-event");
-						
-						// create the point element
-						Element point = exportFile.createElement("Point");
-						placemark.appendChild(point);
-					
-						// add the coordinates
-						Element coordinates = exportFile.createElement("coordinates");
-						point.appendChild(coordinates);
-						coordinates.setTextContent(resultSet.getString(15) + "," + resultSet.getString(16));					
+						// add the placemark
+						exportFile.addPlacemark(document, resultSet.getString(2), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));				
 					}
 				
 				} catch (java.sql.SQLException e) {
