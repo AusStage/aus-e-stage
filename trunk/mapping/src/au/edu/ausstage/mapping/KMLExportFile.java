@@ -28,6 +28,8 @@ import javax.xml.transform.stream.*;
 
 /**
  * A class used to represent and manipulate a KML export file
+ *
+
  */
 public class KMLExportFile {
 
