@@ -499,7 +499,7 @@ public class MappingServlet extends HttpServlet {
 			String timeSpan     = request.getParameter("time_span");
 			String trajectory   = request.getParameter("trajectory");
 			String elevation    = request.getParameter("elevation");
-			String groupEvents = request.getParameter("groupevents");
+			String groupEvents  = request.getParameter("groupevents");
 			
 			// check on the parameters
 			if(type == null || id == null) {
@@ -562,6 +562,37 @@ public class MappingServlet extends HttpServlet {
 				// send some output
 				out.print(results);
 			
+			} else if(type.equals("contrib")) {
+				// build KML data for contributors
+				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
+				
+				// get the KML data
+				String results = data.doKMLExport(id, exportOptions);
+				
+				// build a file name
+				String fileName = null;
+				
+				if(id.indexOf(',') != -1) {
+					fileName = "multiple-contributor-map.kml";
+				} else {
+					fileName = data.getNameByID(id);
+					fileName = fileName.toLowerCase();					   // lower case
+					fileName = fileName.replaceAll("[^a-zA-Z0-9\\s]", ""); // remove anything not alphanumeric
+					fileName = fileName.replaceAll(" ", "-");			   // replace spaces with dashes
+					fileName += ".kml";
+				}
+				
+				// ouput the XML
+				// set the appropriate content type
+				response.setContentType("application/vnd.google-earth.kml+xml; charset=UTF-8");
+				response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+				//get the output print writer
+				PrintWriter out = response.getWriter();
+				
+				// send some output
+				out.print(results);
+				
 			} else {
 				throw new ServletException("Unknown type parameter value");
 			}

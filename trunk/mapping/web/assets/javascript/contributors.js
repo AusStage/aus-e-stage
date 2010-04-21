@@ -189,6 +189,9 @@ function showContributorMap(id) {
 	// update the download as KML link
 	$("#map_header_kml").attr("href", "data?action=kml&type=contrib&id=" + id);
 	
+	// update the export KML link
+	$("#map_header_export").attr("href", "exportdata.jsp?type=contrib&id=" + id);
+	
 	if(id.indexOf(',',0) == -1) {
 		
 		// uncheck all of the checkboxes

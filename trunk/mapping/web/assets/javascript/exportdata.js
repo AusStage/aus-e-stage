@@ -59,6 +59,24 @@ $(document).ready(function(){
 				$("#export_id").val(id);
 			});
 			
+		} else if(type == "contrib") {
+			// this is a contributor map
+			if(id.indexOf(',',0) == -1) {
+				// single contributor
+				$.get("data?action=lookup&type=contribname&id=" + id, function(html) {
+					$("#export_name").empty();
+					$("#export_name").append("Download Map Data on: " + html);
+					$("#export_type").val(type);
+					$("#export_id").val(id);
+				});
+			} else {
+				// multiple contributors
+				$("#export_name").empty();
+				$("#export_name").append("Download Map Data on multiple contributors");
+				$("#export_type").val(type);
+				$("#export_id").val(id);
+			}
+					
 		} else {
 			// unknown type parameter
 			showErrorMessage();

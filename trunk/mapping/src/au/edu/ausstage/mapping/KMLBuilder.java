@@ -552,6 +552,65 @@ public class KMLBuilder {
 	} // end addPlacemark method
 	
 	/**
+	 * A function to add the timespan element to a placemark
+	 *
+	 * @param placemark the placemark to add the timespan element to
+	 * @param begin     the date the event began
+	 * @param end       the date the event ended
+	 */
+	public void addTimeSpan(Element placemark, String begin, String end) {
+	
+		// declare helper variables
+		Node styleElement = null;
+		Node childElement = null;
+	
+		// locate the style Element child
+		NodeList children = placemark.getChildNodes();
+		
+		for(int i = 0; i < children.getLength(); i++) {
+			
+			// get the child at this position
+			childElement = children.item(i);
+			
+			// compare the name of the node to the one for the style
+			if(childElement.getNodeName().equals("styleUrl")) {
+				styleElement = childElement;
+			}
+		}
+		
+		// check to make sure we found the right element
+		if(styleElement == null) {
+			throw new RuntimeException("Unable to locate the style element");
+		}
+		
+		// build the timepan element
+		Element timeSpan  = xmlDoc.createElement("TimeSpan");
+			
+		// add the begin element
+		Element timeBegin = xmlDoc.createElement("begin");
+		timeBegin.setTextContent(begin);
+		timeSpan.appendChild(timeBegin);
+		
+		// add the end element
+		Element timeEnd = xmlDoc.createElement("end");
+		
+		if(!end.equals("")) {
+			// set end element to actual known end						
+			timeEnd.setTextContent(end);
+		} else {
+			// set end element to same as begin
+			timeEnd.setTextContent(begin);
+		}
+		
+		// add the end element
+		timeSpan.appendChild(timeEnd);
+		
+		// add the element to the placemark
+		placemark.insertBefore(timeSpan, styleElement);	
+	
+	} // end addTimeSpan element
+	
+	/**
 	 * A method to return the string representation of this KML file
 	 *
 	 * @return a string containing the XML that makes up this KML file
