@@ -635,8 +635,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	 	// define helper variables
 	 	String previousCoords = null;   // used to store previous coordinates when linking placemarks
 	 	String currentContributor = null;
-	 	
-	 	//TODO add option processing code
 		
 		// get the persisten URL template for event
 		String eventURLTemplate = dataManager.getContextParam("eventURLTemplate");
@@ -736,11 +734,61 @@ AND markers.contributorid(+) = search_contributor.contributorid
 						// add the placemark
 						exportFile.addPlacemark(document, resultSet.getString(2), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));				
 					}
+					
+					// add additional documents as necessary
+					if (exportOptions.getOption("includeTimeSpanElements").equals("yes")) {
+						// need to add a document that includes timespan elements
+						// add a document for the standard map
+						document = exportFile.addDocument(contribFolder, "Events with TimeSpan");
+						exportFile.addDescriptionElement(document, "One place marker for each event, with time span information");
+						
+						// rewind the resultset
+						resultSet.first();
+						
+						// loop through the dataset adding placemarks to the basic doc
+						while (resultSet.next()) {
+						
+							// build the event url
+							String url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));  // replace the constant with the event id
+							
+							// build the description						
+							String html = "";
+					
+							if (resultSet.getString(11) != null) {
+								if(resultSet.getString(6) != null) {
+									html = "<p>" + resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								} else {
+									html = "<p>" + resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								}
+							} else {
+								if(resultSet.getString(6) != null) {
+									html = "<p>" + resultSet.getString(9) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								} else {
+									html = "<p>" + resultSet.getString(9) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								}
+							}
+							
+							// add the more information link
+							html += " <br/><a href=\"" + url + "\">More Information</a></p>";
+							
+							// add the placemark
+							Element placemark = exportFile.addPlacemark(document, resultSet.getString(2), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));
+							
+							// add the timspan element
+							// build the dates
+							String begin = this.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+							String end   = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+							
+							// double check the date
+							if(!begin.equals("")) {
+								// we have at least a beginning date therefore add the element to the placemark
+								exportFile.addTimeSpan(placemark, begin, end);
+							}				
+						}						
+					} // end adding timespan elements
 				
 				} catch (java.sql.SQLException e) {
 					throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentContributor, e);
-				} catch(java.lang.Exception ex) {
-					throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentContributor, ex);
 				}		
 			}
 			

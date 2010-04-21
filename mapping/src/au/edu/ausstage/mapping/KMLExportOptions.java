@@ -28,7 +28,6 @@ public class KMLExportOptions {
 
 	// define private instance variables
 	Map<String, String> optionsMap = new HashMap<String, String>();
-	int optionCount = 4; // number of options managed by this class
 
 	/**
 	 * Constructor for this class, by default all options are set to false
@@ -85,7 +84,7 @@ public class KMLExportOptions {
 	public String[] getOptionNames() {
 	
 		// declare helper variables
-		String[] names = new String[optionCount];
+		String[] names = new String[optionsMap.size()];
 		int count = 0;
 		
 		// get the option names
@@ -94,6 +93,7 @@ public class KMLExportOptions {
 		for (Object name : optionNames) {
 		
 			names[count] = name.toString();
+			count++;
 		}
 		
 		return names;
