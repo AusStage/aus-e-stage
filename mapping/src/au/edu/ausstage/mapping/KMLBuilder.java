@@ -92,7 +92,7 @@ public class KMLBuilder {
 		
 		name = name.trim();
 		
-		if(name == "") {
+		if(name.equals("") == true) {
 			throw new IllegalArgumentException("The name of the element must be specified");
 		}
 		
@@ -116,7 +116,7 @@ public class KMLBuilder {
 		
 		content = content.trim();
 		
-		if(content == "") {
+		if(content.equals("") == true) {
 			throw new IllegalArgumentException("The content of the CDATA Section must be specified");
 		}
 	
@@ -142,7 +142,7 @@ public class KMLBuilder {
 		
 		folderName = folderName.trim();
 		
-		if(folderName == "") {
+		if(folderName.equals("") == true) {
 			throw new IllegalArgumentException("The name of the folder must be specified");
 		}
 	
@@ -214,7 +214,7 @@ public class KMLBuilder {
 		
 		name = name.trim();
 		
-		if(name == "") {
+		if(name.equals("") == true) {
 			throw new IllegalArgumentException("The name of the folder must be specified");
 		}
 	
@@ -257,7 +257,7 @@ public class KMLBuilder {
 		// trim the content
 		content = content.trim();
 		
-		if(content == "") {
+		if(content.equals("") == true) {
 			throw new IllegalArgumentException("The content of the comment must be specified");
 		}
 		
@@ -300,7 +300,7 @@ public class KMLBuilder {
 		name = name.trim();
 		href = href.trim();
 		
-		if(name == "" || href == "") {
+		if(name.equals("") == true || href.equals("") == true) {
 			throw new IllegalArgumentException("Both the name and href parameters must be specified");
 		}
 	
@@ -362,7 +362,7 @@ public class KMLBuilder {
 		
 		content = content.trim();
 		
-		if(content == "") {
+		if(content.equals("") == true) {
 			throw new IllegalArgumentException("Content for the description element must be specified");
 		}
 		
@@ -400,11 +400,11 @@ public class KMLBuilder {
 		id   = id.trim();
 		href = href.trim();
 		
-		if(id == "") {
+		if(id.equals("") == true) {
 			throw new IllegalArgumentException("The id for the style must be specified");
 		}
 		
-		if(href == "") {
+		if(href.equals("") == true) {
 			throw new IllegalArgumentException("The href (URL) for the style must be specified");
 		}
 		
@@ -441,6 +441,18 @@ public class KMLBuilder {
 	} // end addIconStyle element
 	
 	/**
+	 * A method to add an IconStyleElement to the root folder
+	 *
+	 * @param id            the unique style identifier for this style
+	 * @param href          the href (URL) for this style
+	 */
+	public void addIconStyle(String id, String href) {
+	
+		addIconStyle(null, id, href);
+		
+	} // end addIconStyle element
+	
+	/**
 	 * Add a placemark to the KML
 	 *
 	 * @param document    the document to add the placemark to
@@ -466,7 +478,7 @@ public class KMLBuilder {
 		
 		name = name.trim();
 		
-		if(name == "") {
+		if(name.equals("") == true) {
 			throw new IllegalArgumentException("The name of this placemark must be specified");
 		}
 		
@@ -476,7 +488,7 @@ public class KMLBuilder {
 		
 		description = description.trim();
 		
-		if(description == "") {
+		if(description.equals("") == true) {
 			throw new IllegalArgumentException("The description of this placemark must be specified");
 		}
 		
@@ -486,7 +498,7 @@ public class KMLBuilder {
 		
 		style = style.trim();
 		
-		if(style == "") {
+		if(style.equals("") == true) {
 			throw new IllegalArgumentException("The style id for use with this placemark must be specified");
 		}
 		
@@ -496,7 +508,7 @@ public class KMLBuilder {
 		
 		latitude = latitude.trim();
 		
-		if(latitude == "") {
+		if(latitude.equals("") == true) {
 			throw new IllegalArgumentException("The latitude for use with this placemark must be specified");
 		}
 		
@@ -506,7 +518,7 @@ public class KMLBuilder {
 		
 		longitude = longitude.trim();
 		
-		if(longitude == "") {
+		if(longitude.equals("") == true) {
 			throw new IllegalArgumentException("The longitude for use with this placemark must be specified");
 		}
 		
@@ -560,6 +572,22 @@ public class KMLBuilder {
 	 */
 	public void addTimeSpan(Element placemark, String begin, String end) {
 	
+		// check the parameters
+		if(placemark == null) {
+			throw new IllegalArgumentException("A placemark must be specified");
+		}
+		
+		if(begin == null) {
+			throw new IllegalArgumentException("The first date/time when the event occured must be defined");
+		}
+		
+		begin = begin.trim();
+		end   = end.trim();
+		
+		if(begin.equals("") == true) {
+			throw new IllegalArgumentException("The first date/time when the event occured must be defined");
+		}
+	
 		// declare helper variables
 		Node styleElement = null;
 		Node childElement = null;
@@ -594,7 +622,7 @@ public class KMLBuilder {
 		// add the end element
 		Element timeEnd = xmlDoc.createElement("end");
 		
-		if(!end.equals("")) {
+		if(end.length() > 0) {
 			// set end element to actual known end						
 			timeEnd.setTextContent(end);
 		} else {
@@ -611,6 +639,258 @@ public class KMLBuilder {
 	} // end addTimeSpan element
 	
 	/**
+	 * A method to add a line style element
+	 *
+	 * @param parentElement the parent element (document or folder) for this line style
+	 * @param styleId    the id attribute for this style
+	 * @param lineColour the colour of this line
+	 * @param lineWidth  the width of the line
+	 */
+	public void addLineStyle(Element parentElement, String styleId, String lineColour, String lineWidth) {
+	
+		// check the parameters
+		if(parentElement == null && rootFolder == null) {
+			throw new IllegalArgumentException("The parent of this line style element must be specified or the root folder element must exist");
+		}
+		
+		if(styleId == null) {
+			throw new IllegalArgumentException("The id for this style must be defined");
+		}
+		
+		if(lineColour == null) {
+			throw new IllegalArgumentException("The colour of the line for this style must be defined");
+		}
+		
+		if(lineWidth == null) {
+			throw new IllegalArgumentException("The width of the line for this style must be defined");
+		}
+		
+		styleId    = styleId.trim();
+		lineColour = lineColour.trim();
+		lineWidth  = lineWidth.trim();
+		
+		if(styleId.equals("") == true) {
+			throw new IllegalArgumentException("The id for this style must be defined");
+		}
+		
+		if(lineColour.equals("") == true) {
+			throw new IllegalArgumentException("The colour of the line for this style must be defined");
+		}
+		
+		if(lineWidth.equals("") == true) {
+			throw new IllegalArgumentException("The width of the line for this style must be defined");
+		}
+		
+		// build the style element
+		Element style = xmlDoc.createElement("Style");
+		
+		// add the id attribute
+		style.setAttribute("id", styleId);
+		
+		// add the line style element
+		Element lineStyle = xmlDoc.createElement("LineStyle");
+		style.appendChild(lineStyle);
+		
+		// add the colour element
+		Element color = xmlDoc.createElement("color");
+		lineStyle.appendChild(color);
+		color.setTextContent(lineColour);
+		
+		// add the width element
+		Element width = xmlDoc.createElement("width");
+		lineStyle.appendChild(width);
+		width.setTextContent(lineWidth);
+		
+		// add the element to the tree
+		// check where to add this style
+		if(parentElement == null) {
+			rootFolder.insertBefore(style, rootFolder.getLastChild());
+			//rootFolder.appendChild(style);
+		} else {
+			parentElement.insertBefore(style, parentElement.getLastChild());
+			//parentElement.appendChild(style);
+		}
+		
+	} // end addLineStyle method
+	
+	/**
+	 * A method to add a trajectory line to the map
+	 *
+	 * @param parentElement the document to add this trajectory line to
+	 * @param name          the name of this trajectory line
+ 	 * @param styleId       the ID of the style for this trajectory line
+	 * @param startCoords   the start coordinates for this trajectory
+	 * @param endCoords     the end coordinates for this trajectory
+	 */
+	public Element addTrajectory(Element parentElement, String name, String styleId, String startCoords, String endCoords) {
+	
+		// check the parameters
+		if(parentElement == null) {
+			throw new RuntimeException("The parent document element for this trajectory must be specified");
+		}
+		
+		if(name == null) {
+			throw new RuntimeException("The name of this trajectory must be specified");
+		}
+		
+		if(startCoords == null) {
+			throw new RuntimeException("The coordinates for the start point of this trajectory must be specified");
+		}
+		
+		if(endCoords == null) {
+			throw new RuntimeException("The coordinates for the end point of this trajectory must be specified");
+		}
+		
+		if(styleId == null) {
+			throw new RuntimeException("The id for the line style used by this trajectory must be specified");
+		}
+		
+		name        = name.trim();
+		startCoords = startCoords.trim();
+		endCoords   = endCoords.trim();
+		styleId     = styleId.trim();
+		
+		if(name.equals("") == true) {
+			throw new RuntimeException("The name of this trajectory must be specified");
+		}
+		
+		if(startCoords.equals("") == true) {
+			throw new RuntimeException("The coordinates for the start point of this trajectory must be specified");
+		}
+		
+		if(endCoords.equals("") == true) {
+			throw new RuntimeException("The coordinates for the end point of this trajectory must be specified");
+		}
+		
+		if(styleId.equals("") == true) {
+			throw new RuntimeException("The id for the line style used by this trajectory must be specified");
+		}
+		
+		// build the trajectory element
+		Element placemark = xmlDoc.createElement("Placemark");
+		
+		Element nameElement = xmlDoc.createElement("name");
+		placemark.appendChild(nameElement);
+		nameElement.setTextContent(name);
+		
+		Element styleUrl = xmlDoc.createElement("styleUrl");
+		placemark.appendChild(styleUrl);
+		styleUrl.setTextContent(styleId);
+		
+		// add the lineString element and associated boilerplate
+		Element lineString = xmlDoc.createElement("LineString");
+			
+		Element extrude = xmlDoc.createElement("extrude");
+		extrude.setTextContent("0");
+		lineString.appendChild(extrude);
+			
+		Element tessellate = xmlDoc.createElement("tessellate");
+		tessellate.setTextContent("1");
+		lineString.appendChild(tessellate);
+			
+		Element altitudeMode = xmlDoc.createElement("altitudeMode");
+		altitudeMode.setTextContent("clampToGround");
+		lineString.appendChild(altitudeMode);
+			
+		// add the coordinates
+		Element lineCoordinates = xmlDoc.createElement("coordinates");
+		lineCoordinates.setTextContent(startCoords + " " + endCoords);
+		lineString.appendChild(lineCoordinates);
+			
+		// add the lineString element to the placemark
+		placemark.appendChild(lineString);
+		
+		// add the trajectory to the document
+		parentElement.appendChild(placemark);
+		
+		// return the new trajectory
+		return placemark;
+			
+	} // end addTrajectory element
+	
+	/**
+	 * A method to add a line style element to the root folder
+	 *
+	 * @param styleId    the id attribute for this style
+	 * @param lineColour the colour of this line
+	 * @param lineWidth  the width of the line
+	 */
+	public void addLineStyle(String styleId, String lineColour, String lineWidth) {
+		addLineStyle(null, styleId, lineColour, lineWidth);
+	} // end add LineStyle method
+	
+	/**
+	 * A method to determine the colour in a gradient at a particular index, assuming a zero based index
+	 * The gradient is from pure red to pure yellow, with the alpha channel set to fully opaque
+	 *
+	 * @param index   the index number for this part of the colour gradient
+	 * @param maximum the maximum number of parts in the gradient
+	 *
+	 * @return    the colour value in KML notation - AABBGGRR
+	 */
+	public String getGradientColour(int index, int maximum) {
+	
+		// declare helper variables
+		String redHex   = "FF";
+		String greenHex = null;
+		String blueHex  = "00";
+		
+		// declare values for the formula
+		float minGreen = 0;
+		float maxGreen = 255;
+		
+		// change the integers to floats
+		float myIndex = index;
+		float myMaximum = maximum;
+		
+		// calculate the green value & round to nearest integer
+		int greenValue =  Math.round(minGreen + ((maxGreen - minGreen) * (myIndex / (myMaximum -1))));
+		
+		// convert the green value to hex
+		greenHex = Integer.toHexString(greenValue).toUpperCase();
+		
+		// ensure the hex is the right length
+		if(greenHex.length() == 1) {
+			greenHex = "0" + greenHex;
+		}
+		
+		// return the colour value
+		return "FF" + blueHex + greenHex + redHex;
+	
+	} // end getGradientColour method
+	
+	/**
+	 * A method to normalise a potential colour index into the allowed range
+	 *
+	 * @param index   the current index
+	 * @param maximum the current maximum index
+	 *
+	 * @return        the normalised value
+	 */
+	public int getNormalisedColourIndex(int index, int maximum) {
+	
+		// declare constants
+		final float allowedMin = 1;
+		final float allowedMax = 255;
+		final float rangeMin   = 1;
+		
+		// convert parameters to floats
+		float rangeIndex = index;
+		float rangeMax   = maximum;
+		
+		// calculate the index		
+		int newIndex =  Math.round(((allowedMax - allowedMin) / (rangeMax - rangeMin)) * (rangeIndex - rangeMin) + allowedMin);
+		
+		// sanitise the index and return
+		if(newIndex < 2) {
+			return 2;
+		}else {
+			return newIndex;
+		}
+
+	} // end getNormalisedColourIndex method
+	
+	/**
 	 * A method to return the string representation of this KML file
 	 *
 	 * @return a string containing the XML that makes up this KML file
@@ -625,7 +905,7 @@ public class KMLBuilder {
 			// set some options on the transformer
 			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.INDENT, "no");
 			
 			// get a transformer and supporting classes
 			StringWriter writer = new StringWriter();

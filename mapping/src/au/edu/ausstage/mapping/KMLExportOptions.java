@@ -71,7 +71,7 @@ public class KMLExportOptions {
 		if(this.optionsMap.containsKey(optionName) == false) {
 			throw new IllegalArgumentException("Unknown option name");
 		} else {
-			return this.optionsMap.get(optionName);
+			return this.optionsMap.get(optionName).toLowerCase();
 		}
 			
 	} // end getOption method
