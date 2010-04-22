@@ -633,7 +633,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	 public String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException {
 	 
 	 	// define helper variables
-	 	String previousCoords = null;   // used to store previous coordinates when linking placemarks
 	 	String currentContributor = null;
 		
 		// get the persisten URL template for event
@@ -733,7 +732,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 						
 						// add the placemark
 						exportFile.addPlacemark(document, resultSet.getString(2), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));				
-					}
+					} // end basic document
 					
 					// add additional documents as necessary
 					if (exportOptions.getOption("includeTimeSpanElements").equals("yes")) {
@@ -786,6 +785,127 @@ AND markers.contributorid(+) = search_contributor.contributorid
 							}				
 						}						
 					} // end adding timespan elements
+					
+					// add additional documents as necessary
+					if (exportOptions.getOption("includeTrajectoryInfo").equals("yes")) {
+					
+						// declare additional helper variables
+						boolean addTimeSpan = false;
+						
+						if(exportOptions.getOption("includeTimeSpanElements").equals("yes")) {
+							addTimeSpan = true;
+						}
+						
+						String previousCoords = null;
+						String previousStart  = null;
+						String start          = null;
+						String finish         = null;
+					
+						// need to add a document that includes timespan elements
+						// add a document for the standard map
+						document = exportFile.addDocument(contribFolder, "Events with Trajectory");
+						exportFile.addDescriptionElement(document, "One place marker for each event, linked with trajectory information. Note: Trajectory information links venues based on the earliest event to occur at that venue and does not indicate a tour.");
+						
+						// get the number of records
+						resultSet.last();
+						int rowCount = resultSet.getRow();
+						resultSet.first();
+						
+						// add the right number of line style elements
+						if(rowCount > 255) {
+							// add the maximum number of lines
+							for(int x = 1; x <= 255; x++) {
+								exportFile.addLineStyle("traj-" + x, exportFile.getGradientColour(x - 1, 255), "4");
+							}
+						} else {
+							// add the require number of lines
+							for(int x = 1; x <= rowCount; x++) {
+								exportFile.addLineStyle("traj-" + x, exportFile.getGradientColour(x - 1, rowCount), "4");
+							}
+						}
+												
+						// loop through the dataset adding placemarks to the basic doc
+						while (resultSet.next()) {
+						
+							// build the event url
+							String url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));  // replace the constant with the event id
+							
+							// build the description						
+							String html = "";
+					
+							if (resultSet.getString(11) != null) {
+								if(resultSet.getString(6) != null) {
+									html = "<p>" + resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								} else {
+									html = "<p>" + resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								}
+							} else {
+								if(resultSet.getString(6) != null) {
+									html = "<p>" + resultSet.getString(9) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								} else {
+									html = "<p>" + resultSet.getString(9) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								}
+							}
+							
+							// add the more information link
+							html += " <br/><a href=\"" + url + "\">More Information</a></p>";
+							
+							// add the placemark
+							Element placemark = exportFile.addPlacemark(document, resultSet.getString(2), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));
+							
+							// add the timspan element if required
+							if(addTimeSpan == true) {
+								// build the dates
+								start  = buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								finish = buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								
+								// double check the date
+								if(start.equals("") == false) {
+									// we have at least a beginning date therefore add the element to the placemark
+									exportFile.addTimeSpan(placemark, start, finish);
+								}
+							}
+							
+							// add the trajectory information
+							if(previousCoords != null) {
+								
+								String name    = "trajectory-" + Integer.toString(resultSet.getRow() - 2);
+								String styleId = null;
+								
+								// calculate the style ID
+								if (rowCount <= 255) {
+									styleId = "traj-" + Integer.toString(resultSet.getRow() - 2);
+								} else {
+									styleId = "traj-" + (exportFile.getNormalisedColourIndex(resultSet.getRow(), rowCount) - 1);
+								}
+								
+								// create the trajectory element
+								Element trajectory = exportFile.addTrajectory(document, name, styleId, previousCoords, resultSet.getString(15) + "," + resultSet.getString(16));
+								
+								// add the timspan element if required
+								if(addTimeSpan == true) {
+								
+									// build the dates
+									String end   = buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								
+									// double check the date
+									if(previousStart.equals("") == false) {
+										// we have at least a beginning date therefore add the element to the placemark
+										if(finish.equals("") == false) {
+											exportFile.addTimeSpan(trajectory, previousStart, finish);
+										} else {
+											exportFile.addTimeSpan(trajectory, previousStart, start);
+										}
+									}
+								}
+							}
+							
+							// store details for next loop iteration
+							previousCoords = resultSet.getString(15) + "," + resultSet.getString(16);
+							previousStart  = start;
+						}
+											
+					} // end adding trajectory elements
 				
 				} catch (java.sql.SQLException e) {
 					throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentContributor, e);
