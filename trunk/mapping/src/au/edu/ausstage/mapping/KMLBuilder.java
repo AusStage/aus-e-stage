@@ -431,8 +431,35 @@ public class KMLBuilder {
 		
 		// check where to add this style
 		if(parentElement == null) {
-			//rootFolder.insertBefore(style, rootFolder.getFirstChild());
-			rootFolder.appendChild(style);
+			// add to the root folder
+			
+			// declare helper variables
+			Node subFolderElement = null;
+			Node childElement = null;
+		
+			// locate the style Element child
+			NodeList children = rootFolder.getChildNodes();
+			
+			for(int i = 0; i < children.getLength(); i++) {
+				
+				// get the child at this position
+				childElement = children.item(i);
+				
+				// compare the name of the node to the one for the style
+				if(childElement.getNodeName().equals("Folder")) {
+					subFolderElement = childElement;
+					
+					// exit after first match
+					i = children.getLength() + 1;
+				}
+			}
+			
+			if(subFolderElement != null) {
+				
+				rootFolder.insertBefore(style, subFolderElement);
+			} else {
+				rootFolder.appendChild(style);
+			}
 		} else {
 			//parentElement.insertBefore(style, parentElement.getFirstChild());
 			parentElement.appendChild(style);
@@ -532,9 +559,11 @@ public class KMLBuilder {
 		eventName.setTextContent(name);
 
 		// add a link element
-		Element eventLink = xmlDoc.createElement("atom:link");
-		eventLink.setAttribute("href", link);
-		placemark.appendChild(eventLink);
+		if(link != null && link.equals("") == false) {
+			Element eventLink = xmlDoc.createElement("atom:link");
+			eventLink.setAttribute("href", link);
+			placemark.appendChild(eventLink);
+		}
 		
 		// add the description to the placemark
 		Element descriptionElement = xmlDoc.createElement("description");
@@ -704,14 +733,49 @@ public class KMLBuilder {
 		// add the element to the tree
 		// check where to add this style
 		if(parentElement == null) {
-			rootFolder.insertBefore(style, rootFolder.getLastChild());
-			//rootFolder.appendChild(style);
+			// declare helper variables
+			Node subFolderElement = null;
+			Node childElement = null;
+		
+			// locate the style Element child
+			NodeList children = rootFolder.getChildNodes();
+			
+			for(int i = 0; i < children.getLength(); i++) {
+				
+				// get the child at this position
+				childElement = children.item(i);
+				
+				// compare the name of the node to the one for the style
+				if(childElement.getNodeName().equals("Folder")) {
+					subFolderElement = childElement;
+					
+					// exit after first match
+					i = children.getLength() + 1;
+				}
+			}
+			
+			if(subFolderElement != null) {				
+				rootFolder.insertBefore(style, subFolderElement);
+			} else {
+				rootFolder.appendChild(style);
+			}
 		} else {
 			parentElement.insertBefore(style, parentElement.getLastChild());
 			//parentElement.appendChild(style);
 		}
 		
 	} // end addLineStyle method
+	
+	/**
+	 * A method to add a line style element to the root folder
+	 *
+	 * @param styleId    the id attribute for this style
+	 * @param lineColour the colour of this line
+	 * @param lineWidth  the width of the line
+	 */
+	public void addLineStyle(String styleId, String lineColour, String lineWidth) {
+		addLineStyle(null, styleId, lineColour, lineWidth);
+	} // end add LineStyle method
 	
 	/**
 	 * A method to add a trajectory line to the map
@@ -809,15 +873,43 @@ public class KMLBuilder {
 	} // end addTrajectory element
 	
 	/**
-	 * A method to add a line style element to the root folder
+	 * A method to add the icon styles for all of the different placemarks that
+	 * can be used for grouped events
 	 *
-	 * @param styleId    the id attribute for this style
-	 * @param lineColour the colour of this line
-	 * @param lineWidth  the width of the line
+	 * @param parentElement the folder of document element that will be the parent for these styles
 	 */
-	public void addLineStyle(String styleId, String lineColour, String lineWidth) {
-		addLineStyle(null, styleId, lineColour, lineWidth);
-	} // end add LineStyle method
+	public void addGroupedEventIconStyles(Element parentElement) {
+	
+		// check the parameters
+		if(parentElement == null && rootFolder == null) {
+			throw new IllegalArgumentException("The parent of these icon style elements must be specified or the root folder element must exist");
+		}
+	
+		// add the style information
+		addIconStyle(parentElement, "grp-1-event",       "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,CCBAD7,000000&ext=.png");
+		addIconStyle(parentElement, "grp-2-5-event",     "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,9A7BAB,000000&ext=.png");
+		addIconStyle(parentElement, "grp-6-15-event",    "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,7F649B,000000&ext=.png");
+		addIconStyle(parentElement, "grp-16-30-event",   "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,69528E,000000&ext=.png");
+		addIconStyle(parentElement, "grp-30-plus-event", "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,4D3779,000000&ext=.png");
+			
+	} // end add GroupIconStyles method
+	
+	/**
+	 * A method to add the icon styles for all of the different placemarks that
+	 * can be used for grouped events
+	 *
+	 * @param parentElement the folder of document element that will be the parent for these styles
+	 */
+	public void addGroupedEventIconStyles() {
+	
+		// add the style information
+		addIconStyle(null, "grp-1-event",       "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,CCBAD7,000000&ext=.png");
+		addIconStyle(null, "grp-2-5-event",     "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,9A7BAB,000000&ext=.png");
+		addIconStyle(null, "grp-6-15-event",    "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,7F649B,000000&ext=.png");
+		addIconStyle(null, "grp-16-30-event",   "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,69528E,000000&ext=.png");
+		addIconStyle(null, "grp-30-plus-event", "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,4D3779,000000&ext=.png");
+			
+	} // end add GroupIconStyles method
 	
 	/**
 	 * A method to determine the colour in a gradient at a particular index, assuming a zero based index

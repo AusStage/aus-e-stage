@@ -684,13 +684,13 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			exportFile.addIconStyle(firstFolder, "basic-event", "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,CCBAD7,000000&ext=.png"); // basic event marker
 		
 			// loop through each of the contributors 
-			for(int i = 0; i < ids.length; i++) {
+			for(int contribCount = 0; contribCount < ids.length; contribCount++) {
 			
 				// define the query parameters
-				parameters[0] = ids[i];
+				parameters[0] = ids[contribCount];
 				
 				// store the current contributor name
-				currentContributor = getNameByID(ids[i]);
+				currentContributor = getNameByID(ids[contribCount]);
 				
 				try {
 					// execute the sql
@@ -737,7 +737,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 					// add additional documents as necessary
 					if (exportOptions.getOption("includeTimeSpanElements").equals("yes")) {
 						// need to add a document that includes timespan elements
-						// add a document for the standard map
 						document = exportFile.addDocument(contribFolder, "Events with TimeSpan");
 						exportFile.addDescriptionElement(document, "One place marker for each event, with time span information");
 						
@@ -801,30 +800,23 @@ AND markers.contributorid(+) = search_contributor.contributorid
 						String start          = null;
 						String finish         = null;
 					
-						// need to add a document that includes timespan elements
-						// add a document for the standard map
+						// need to add a document that includes trajectory info
 						document = exportFile.addDocument(contribFolder, "Events with Trajectory");
 						exportFile.addDescriptionElement(document, "One place marker for each event, linked with trajectory information. Note: Trajectory information links venues based on the earliest event to occur at that venue and does not indicate a tour.");
 						
-						// get the number of records
+						// rewind the result set
 						resultSet.last();
 						int rowCount = resultSet.getRow();
 						resultSet.first();
 						
-						// add the right number of line style elements
-						if(rowCount > 255) {
-							// add the maximum number of lines
-							for(int x = 1; x <= 255; x++) {
-								exportFile.addLineStyle("traj-" + x, exportFile.getGradientColour(x - 1, 255), "4");
-							}
-						} else {
-							// add the require number of lines
-							for(int x = 1; x <= rowCount; x++) {
-								exportFile.addLineStyle("traj-" + x, exportFile.getGradientColour(x - 1, rowCount), "4");
+						if (contribCount == 0) {
+							// add the maximum number of line styles
+							for(int i = 1; i <= 255; i++) {
+								exportFile.addLineStyle("traj-" + i, exportFile.getGradientColour(i - 1, 255), "4");
 							}
 						}
 												
-						// loop through the dataset adding placemarks to the basic doc
+						// loop through the dataset adding placemarks
 						while (resultSet.next()) {
 						
 							// build the event url
@@ -873,11 +865,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 								String styleId = null;
 								
 								// calculate the style ID
-								if (rowCount <= 255) {
-									styleId = "traj-" + Integer.toString(resultSet.getRow() - 2);
-								} else {
-									styleId = "traj-" + (exportFile.getNormalisedColourIndex(resultSet.getRow(), rowCount) - 1);
-								}
+								styleId = "traj-" + (exportFile.getNormalisedColourIndex(resultSet.getRow(), rowCount) - 1);
 								
 								// create the trajectory element
 								Element trajectory = exportFile.addTrajectory(document, name, styleId, previousCoords, resultSet.getString(15) + "," + resultSet.getString(16));
@@ -903,9 +891,160 @@ AND markers.contributorid(+) = search_contributor.contributorid
 							// store details for next loop iteration
 							previousCoords = resultSet.getString(15) + "," + resultSet.getString(16);
 							previousStart  = start;
-						}
+						} // end adding trajectory information
 											
 					} // end adding trajectory elements
+					
+					// add events grouped by venue if required
+					if (exportOptions.getOption("includeGroupedEventInfo").equals("yes")) {
+					
+						// need to add a document that includes trajectory info
+						document = exportFile.addDocument(contribFolder, "Events Grouped by Venue");
+						exportFile.addDescriptionElement(document, "One place marker for each venue, with all events that occured at that venue associated with it.");
+						
+						// add the grouped venue styles
+						if (contribCount == 0) {
+							exportFile.addGroupedEventIconStyles();
+						}
+						
+						// declare other helper variables
+						Map<String, String[]> groupedEventInfo = new HashMap<String, String[]>();
+						
+						// declare additional helper variables
+						boolean addTimeSpan = false;
+						
+						if(exportOptions.getOption("includeTimeSpanElements").equals("yes")) {
+							addTimeSpan = true;
+						}
+						
+						// rewind the result set
+						resultSet.first();
+						
+						// loop through the dataset compiling a list of placemarks
+						while (resultSet.next()) {
+						
+							// build the key for this venue
+							String key = resultSet.getString(15) + resultSet.getString(16);
+							key = key.replaceAll("\\.","");
+							key = key.replaceAll(",", "");
+							key = key.replaceAll("-","");
+							
+							// build the event url
+							String url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));  // replace the constant with the event id
+							
+							// is this venue in the group already
+							if(groupedEventInfo.containsKey(key) == false) {
+							
+								// add a new entry for this venue
+								String[] eventEntry = new String[6];
+								
+								// add the coordinates
+								eventEntry[0] = resultSet.getString(15) + "," + resultSet.getString(16);
+								
+								// add the event name
+								eventEntry[1] = resultSet.getString(9);
+								
+								// build the description for this event								
+								String eventDetails = "<ul><li><a href=\"" + url + "\">" + resultSet.getString(2) + "</a>, ";
+						
+								if (resultSet.getString(11) != null) {
+									eventDetails += resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + this.buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)) + "</li>";
+								} else {
+									eventDetails += resultSet.getString(9) + ", " + this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + this.buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)) + "</li>";
+								}
+								
+								// add the details for the event to the array
+								eventEntry[2] = eventDetails;
+								
+								// start a count
+								eventEntry[3] = "1";
+								
+								// get the first date
+								eventEntry[4] = this.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								
+								// get the last date
+								eventEntry[5] = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								
+								// add this array to the larger collection
+								groupedEventInfo.put(key, eventEntry);							
+							} else {
+							
+								// use existing entry for this venue
+								String[] eventEntry = groupedEventInfo.get(key);
+								
+								// get the existing details for this venue
+								String eventDetails = eventEntry[2];
+											 
+								eventDetails += "<li><a href=\"" + url + "\">" + resultSet.getString(2) + "</a>, ";
+								
+								if (resultSet.getString(11) != null) {
+									if(resultSet.getString(6) != null) {
+										eventDetails += resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + this.buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)) + "</li>";
+									} else {
+										eventDetails += resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + "</li>";
+									}
+								} else {
+									if(resultSet.getString(6) != null) {
+										eventDetails += resultSet.getString(9) + ", " + this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + this.buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)) + "</li>";
+									} else {
+										eventDetails += resultSet.getString(9) + ", " + this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + "</li>";
+									}
+								}
+											 
+								// update the details back
+								eventEntry[2] = eventDetails;
+								
+								// update the count
+								int count = Integer.parseInt(eventEntry[3]);
+								count++;
+								eventEntry[3] = Integer.toString(count);
+								
+								// update the last date
+								eventEntry[5] = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								
+								// update this venue
+								groupedEventInfo.put(key, eventEntry); 
+							}
+						
+						} // end loop
+						
+						// loop through the hashmap of all of the venues
+						for(Map.Entry<String, String[]> mapEntry : groupedEventInfo.entrySet()) {
+						
+							// get the details for this event
+							String[] eventDetails = mapEntry.getValue();
+							
+							String[] coords = eventDetails[0].split(",");
+							
+							// determine which style to use
+							String style = null;
+							int eventCount = Integer.parseInt(eventDetails[3]);
+							
+							// add the placemark
+							if (eventCount == 1) {
+								style = "grp-1-event";
+							} else if(eventCount > 1 && eventCount < 6) {
+								style = "grp-2-5-event";
+							} else if(eventCount > 5 && eventCount < 16) {
+								style = "grp-6-15-event";
+							} else if(eventCount > 15 && eventCount < 31) {
+								style = "grp-16-30-event";
+							} else {
+								style = "grp-30-plus-event";
+							}
+							
+							// add the placemark
+							Element placemark = exportFile.addPlacemark(document, eventDetails[1], null, eventDetails[2] + "</ul>", style, coords[0], coords[1]);
+							
+							// add the time span element if necessary
+							if (addTimeSpan == true) {
+							
+								exportFile.addTimeSpan(placemark, eventDetails[4], eventDetails[5]);							
+							}
+							
+						} // end hashmap loop
+					
+					}// end adding grouped event info
 				
 				} catch (java.sql.SQLException e) {
 					throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentContributor, e);
