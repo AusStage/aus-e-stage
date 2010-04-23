@@ -91,7 +91,16 @@ public class TerminatorServlet extends HttpServlet {
 			// declare helper variables
 			ScriptManager scripts = new ScriptManager(servletConfig);
 			
-			String results = scripts.executeById(id);			
+			String results = scripts.executeById(id);
+			
+			// send the email message
+			try {
+				MailManager mail = new MailManager(servletConfig, request);
+				mail.sendMail("A script was successfully executed by the AusStage Terminator.\n\n" + results, "Message from the AusStage Terminator");			
+			} catch (Exception ex) {
+				results += "<p><strong>Note: </strong>Sending of the status email failed</p>";
+				System.out.println(ex.toString());
+			}
 			
 			// ouput the results
 			// set the appropriate content type
@@ -183,6 +192,46 @@ public class TerminatorServlet extends HttpServlet {
 			
 		} else if(action.equals("new_token")) {
 			// generate a new authentication token
+			
+			// check on the status of the session
+			HttpSession session = request.getSession(false); 
+			
+			if(session == null) {
+				throw new ServletException("Unauthorised access attempt detected");
+			}
+			
+			if((Boolean)session.getAttribute("authenticated") != true) {
+				throw new ServletException("Unauthorised access attempt detected");
+			}
+			
+			// get the new token parameter
+			String authToken = request.getParameter("auth_token");
+			
+			// check on the authToken
+			if(authToken == null) {
+				throw new ServletException("Missing auth_token parameter");
+			}
+			
+			// declare helper variables
+			AuthenticationManager auth = new AuthenticationManager();
+			
+			String results = auth.hashNewToken(authToken);
+			
+			// ouput the results
+			// set the appropriate content type
+			response.setContentType("text/plain; charset=UTF-8");
+			
+			// set the appropriate headers to disable caching
+			// particularly for IE
+			response.setHeader("Cache-Control", "max-age=0,no-cache,no-store,post-check=0,pre-check=0");
+			
+			//get the output print writer
+			PrintWriter out = response.getWriter();
+			
+			// send some output
+			out.print(results);	
+			
+			
 		} else {
 			// unknown action parameter
 			throw new ServletException("Unknown action parameter value");

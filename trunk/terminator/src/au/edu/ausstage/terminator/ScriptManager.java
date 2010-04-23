@@ -28,7 +28,7 @@ import java.io.*;
 public class ScriptManager {
 
 	// declare private variables
-	ServletConfig servletConfig = null;
+	private ServletConfig servletConfig = null;
 
 	/** 
 	 * Constructor for this class

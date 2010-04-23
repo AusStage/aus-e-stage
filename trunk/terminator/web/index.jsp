@@ -40,7 +40,7 @@
 	<h1>AusStage Terminator Service</h1>
 	<div id="auth_form">
 		<p>
-			Enter the authentication token into the form below and click the Authenticate button.
+			Enter the authentication token into the form below and click the <em>Authenticate</em> button.
 		</p>
 		<form action="terminate/" method="post" id="authenticate" name="authenticate">
 			<input type="hidden" name="action" id="action" value="auth"/>
@@ -61,9 +61,35 @@
 			</table>
 		</form>
 	</div>
-	<div id="script_list" class="hidden">
+	<div id="script_list" class="to_hide">
 	</div>
-	<div id="status" class="hidden">
+	<div id="status" class="to_hide">
+	</div>
+	<div id="new_hash_form" class="to_hide">
+		<h2>Generate a new Authentication Hash</h2>
+		<p>
+			Enter the new authentication token into the form below and click the <em>Generate</em> button.
+		</p>
+		<form action="terminate/" method="post" id="new_hash" name="new_hash">
+			<input type="hidden" name="action" id="action" value="new_token"/>
+			<table class="formTable">
+				<tr>
+					<th scope="row">
+						<label for="auth_token">New Authentication Token: </label>
+					</th>
+					<td>
+						<input type="text" size="15" id="auth_token" name="auth_token"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" name="submit" value="Generate"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id="new_hash_status" class="to_hide">
 	</div>
 </body>
 </html>
