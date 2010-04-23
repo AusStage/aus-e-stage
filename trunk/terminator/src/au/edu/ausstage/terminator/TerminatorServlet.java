@@ -51,6 +51,67 @@ public class TerminatorServlet extends HttpServlet {
 	 */
 	public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
+		// get the action parameter
+		String action = request.getParameter("action");
+		
+		// check the action parameter
+		if(action == null) {
+			throw new ServletException("Missing action parameter");
+		}
+		
+		// determine what action to perform
+		if(action.equals("execute")) {
+			// execute the identified script
+			
+			// check on the status of the session
+			HttpSession session = request.getSession(false); 
+			
+			if(session == null) {
+				throw new ServletException("Unauthorised access attempt detected");
+			}
+			
+			if((Boolean)session.getAttribute("authenticated") != true) {
+				throw new ServletException("Unauthorised access attempt detected");
+			}
+			
+			// get the id parameter
+			String id = request.getParameter("id");
+			
+			// check the id parameter
+			if(id == null) {
+				throw new ServletException("Missing id parameter");
+			}
+			
+			try {
+				Integer.parseInt(id);
+			} catch (NumberFormatException ex) {
+				throw new ServletException("ID parameter must be an integer");
+			}
+			
+			// declare helper variables
+			ScriptManager scripts = new ScriptManager(servletConfig);
+			
+			String results = scripts.executeById(id);			
+			
+			// ouput the results
+			// set the appropriate content type
+			response.setContentType("text/plain; charset=UTF-8");
+			
+			// set the appropriate headers to disable caching
+			// particularly for IE
+			response.setHeader("Cache-Control", "max-age=0,no-cache,no-store,post-check=0,pre-check=0");
+			
+			//get the output print writer
+			PrintWriter out = response.getWriter();
+			
+			// send some output
+			out.print(results);
+			
+			
+		} else {
+			throw new ServletException("Unknown action parameter value");
+		}
+	
 	} // end doGet method
 	
 	/**
@@ -91,7 +152,17 @@ public class TerminatorServlet extends HttpServlet {
 			AuthenticationManager auth = new AuthenticationManager();
 			
 			if(auth.checkAuthToken(authToken, securityToken) == true) {
-				results = "authentication worked";
+				// get a new session
+				HttpSession session = request.getSession(true); 
+				
+				// add a value to the session
+				session.setAttribute("authenticated", true);
+				
+				// get a list of available scripts
+				ScriptManager scripts = new ScriptManager(servletConfig);
+				
+				results = scripts.getScriptList();
+				
 			} else {
 				throw new ServletException("Authentication failed");
 			}

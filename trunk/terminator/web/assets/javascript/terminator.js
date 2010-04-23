@@ -65,4 +65,41 @@ function showAuthError() {
 	$("#status").show();
 }
 
+// function to execute a script
+function doScript(id) {
+
+	// do an ajax request to execute the script
+	$.ajax({
+		cache: false,
+		url:   'terminate?action=execute&id=' + id, 
+		error: showExecuteError,
+		success: showExecuteStatus
+	});
+}
+
+// function for script execute status
+function showExecuteError() {
+
+	$("#script_list").hide();
+	$("#script_list").empty();
+	
+	$("#status").hide();
+	$("#status").empty();
+	$("#status").append('<p class="error">Script Execution failed, please try again. <br/>If the problem persists contact the system adminstrator</p>');
+	$("#status").append('<p class="error">If this tomcat instance was restarted, please check a web app other than this one before trying again.</p>');
+	$("#status").show();
+
+}
+
+function showExecuteStatus(responseText, statusText) {
+
+	$("#status").hide();
+	$("#script_list").hide();
+	$("#script_list").empty();
+	
+	$("#status").empty();
+	$("#status").append(responseText);
+	$("#status").show();
+}
+
 
