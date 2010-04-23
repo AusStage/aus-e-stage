@@ -59,7 +59,7 @@ public class AuthenticationManager {
 	 * 
 	 * @return the base64 encoded string of the hash
 	 */
-	public String doHash(String toHash) {
+	private String doHash(String toHash) {
 	
 		// check the parameters
 		if(toHash == null) {
@@ -69,5 +69,18 @@ public class AuthenticationManager {
 		return DigestUtils.shaHex(toHash);
 		
 	} // end doHash
+	
+	/**
+	 * A method to generate a new hash value
+	 * 
+	 * @param newToken the new security token
+	 *
+	 * @return the base64 encoded string of the hash
+	 */
+	public String hashNewToken(String newToken) {
+		
+		return "<p>The new hash value is as follows:<br/><br/>" + doHash(newToken) + "<br/><br/>Please have the system administrator add this value to the web.xml file before use";
+		
+	} // end hashNewToken method
 
 } // end class definition

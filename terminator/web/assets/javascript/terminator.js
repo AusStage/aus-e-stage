@@ -34,8 +34,24 @@ $(document).ready(function() {
 		}
 	});
 	
-	// hide unnecessary divs
-	$(".hidden").hide();
+	// attach the validation library
+	$("#new_hash").validate({
+		rules: { // validation rules
+			auth_token: {
+				required: true
+			}
+		},
+		submitHandler: function(form) {
+			jQuery(form).ajaxSubmit({
+				beforeSubmit: showNewHashStatus,
+				success:      showNewHash,
+				error:        showNewHashError
+			});
+		}
+	});
+	
+	// hide all of the elements that need to be hidden
+	$(".to_hide").hide();
 });
 
 // ajax related functions
@@ -56,6 +72,8 @@ function showScriptList(responseText, statusText) {
 	$("#script_list").empty();
 	$("#script_list").append(responseText);
 	$("#script_list").show();
+	
+	$("#new_hash_form").show();
 }
 
 function showAuthError() {
@@ -100,6 +118,22 @@ function showExecuteStatus(responseText, statusText) {
 	$("#status").empty();
 	$("#status").append(responseText);
 	$("#status").show();
+}
+
+// functions related to generating a new hash
+function showNewHashStatus() {
+	$("#new_hash_status").hide();
+	$("#new_hash_status").empty();
+}
+
+function showNewHash(responseText, statusText) {
+	$("#new_hash_status").append(responseText);
+	$("#new_hash_status").show();
+}
+
+function showNewHashError() {
+	$("#new_hash_status").append('<p class="error">New hash generation failed, please try again. <br/>If the problem persists contact the system adminstrator</p>');
+	$("#new_hash_status").show();
 }
 
 
