@@ -1,14 +1,14 @@
 <!-- Tufts VUE 3.0 concept-map (database-structure.vue) 2010-04-28 -->
 <!-- Tufts VUE: http://vue.tufts.edu/ -->
 <!-- Do Not Remove: VUE mapping @version(1.1) jar:file:/opt/VUE/VUE.jar!/tufts/vue/resources/lw_mapping_1_1.xml -->
-<!-- Do Not Remove: Saved date Wed Apr 28 15:51:20 CST 2010 by wall0252 on platform Linux 2.6.31-20-generic in JVM 1.6.0_15-b03 -->
+<!-- Do Not Remove: Saved date Wed Apr 28 15:56:55 CST 2010 by wall0252 on platform Linux 2.6.31-20-generic in JVM 1.6.0_15-b03 -->
 <!-- Do Not Remove: Saving version @(#)VUE: built February 3 2010 at 1428 by vue on Linux 2.4.21-57.EL i386 JVM 1.5.0_06-b05(bits=32) -->
 <?xml version="1.0" encoding="US-ASCII"?>
 <LW-MAP xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="none" ID="0"
     label="database-structure.vue" created="1266206917103" x="0.0"
     y="0.0" width="1.4E-45" height="1.4E-45" strokeWidth="0.0" autoSized="false">
-    <resource referenceCreated="1272435680893" size="102575"
+    <resource referenceCreated="1272436015489" size="102976"
         spec="/home/wall0252/aus-e-stage/mobile/diagrams/database-structure.vue"
         type="1" xsi:type="URLResource">
         <title>database-structure.vue</title>
@@ -65,22 +65,22 @@
         </metadata-list>
         <URIString>http://vue.tufts.edu/rdf/resource/cfe472bb7f00010101479a6b24b0a4c2</URIString>
         <richText>&lt;html&gt;
-  &lt;head style="color: #000000" color="#000000"&gt;
+  &lt;head color="#000000" style="color: #000000"&gt;
     &lt;style type="text/css"&gt;
       &lt;!--
-        body { font-family: Arial; margin-top: 0px; margin-bottom: 0px; margin-right: 0px; color: #000000; font-size: 13; margin-left: 0px }
-        ol { margin-top: 6; font-family: Arial; vertical-align: middle; list-style-position: outside; font-size: 13; margin-left: 30 }
-        p { margin-top: 0; margin-bottom: 0; margin-right: 0; color: #000000; margin-left: 0 }
-        ul { margin-top: 6; font-family: Arial; vertical-align: middle; list-style-position: outside; font-size: 13; margin-left: 30 }
+        body { margin-top: 0px; font-family: Arial; color: #000000; font-size: 13; margin-right: 0px; margin-bottom: 0px; margin-left: 0px }
+        ol { margin-top: 6; font-family: Arial; vertical-align: middle; font-size: 13; list-style-position: outside; margin-left: 30 }
+        p { margin-top: 0; color: #000000; margin-right: 0; margin-bottom: 0; margin-left: 0 }
+        ul { margin-top: 6; font-family: Arial; vertical-align: middle; font-size: 13; list-style-position: outside; margin-left: 30 }
       --&gt;
     &lt;/style&gt;
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;p style="color: #000000" color="#000000"&gt;
+    &lt;p color="#000000" style="color: #000000"&gt;
       &lt;font style="font-size:18;"&gt;AusStage Audience Participation via Mobile&lt;/font&gt;
     &lt;/p&gt;
-    &lt;p style="text-align: center; color: #000000" color="#000000"&gt;
+    &lt;p color="#000000" style="text-align: center; color: #000000"&gt;
       &lt;font style="font-size:18;"&gt;Database Structure&lt;/font&gt;
     &lt;/p&gt;
   &lt;/body&gt;
@@ -1353,19 +1353,19 @@
         </metadata-list>
         <URIString>http://vue.tufts.edu/rdf/resource/cff1b53c7f00010101479a6bd6d79271</URIString>
         <richText>&lt;html&gt;
-  &lt;head style="color: #404040" color="#404040"&gt;
+  &lt;head color="#404040" style="color: #404040"&gt;
     &lt;style type="text/css"&gt;
       &lt;!--
-        body { font-family: Arial; margin-top: 0px; margin-bottom: 0px; margin-right: 0px; color: #404040; font-size: 11; margin-left: 0px }
-        ol { margin-top: 6; font-family: Arial; vertical-align: middle; list-style-position: outside; font-size: 11; margin-left: 30 }
-        p { margin-top: 0; margin-bottom: 0; margin-right: 0; color: #404040; margin-left: 0 }
-        ul { margin-top: 6; font-family: Arial; vertical-align: middle; list-style-position: outside; font-size: 11; margin-left: 30 }
+        body { margin-top: 0px; font-family: Arial; color: #404040; font-size: 11; margin-right: 0px; margin-bottom: 0px; margin-left: 0px }
+        ol { margin-top: 6; font-family: Arial; vertical-align: middle; font-size: 11; list-style-position: outside; margin-left: 30 }
+        p { margin-top: 0; color: #404040; margin-right: 0; margin-bottom: 0; margin-left: 0 }
+        ul { margin-top: 6; font-family: Arial; vertical-align: middle; font-size: 11; list-style-position: outside; margin-left: 30 }
       --&gt;
     &lt;/style&gt;
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;p style="text-align: center; color: #404040" color="#404040"&gt;
+    &lt;p color="#404040" style="text-align: center; color: #404040"&gt;
       &lt;font style="font-size:14;"&gt;Legend&lt;/font&gt;
     &lt;/p&gt;
   &lt;/body&gt;
@@ -1373,7 +1373,7 @@
 </richText>
         <label>Legend</label>
     </child>
-    <child ID="87" label="Last Updated: 03 Mar 2010&#xa;Version 1.0.5"
+    <child ID="87" label="Last Updated: 28 Apr 2010&#xa;Version 1.0.6"
         layerID="1" created="1266209206180" x="766.6179" y="874.318"
         width="174.0" height="64.0" strokeWidth="1.0" autoSized="false" xsi:type="node">
         <fillColor>#FFFFFF</fillColor>
@@ -1804,7 +1804,7 @@
         <ctrlPoint1 x="671.3518" y="628.7037" xsi:type="point"/>
     </child>
     <child ID="150"
-        label="Notes &#xa;    &#xa;    &#xa;      The three content fields in the feedback &#xa;      table will have values stored in them dependent on the source type that &#xa;      provided the feedback. For example: &#xa;    &#xa;    &#xa;      &#xa;        short_content will be used for SMS, Twitter and mobile web feedback&#xa;      &#xa;      &#xa;        long_content will be used for larger feedback that can be stored in &#xa;        the database such as XML data received from biomedical devices or &#xa;        longer form feedback from blog posts&#xa;      &#xa;      &#xa;        content_uri will be used to store a link to a peice of content outside &#xa;        the database, for example a blog post on an originating blog, or files &#xa;        from external datasource&#xa;      &#xa;      &#xa;        A custom URI format will also be defined for linking into the &#xa;        emotive_images table&#xa;      &#xa;    &#xa;    &#xa;      Such flexibility in the database table means that the additional &#xa;      complexity of managing the different feedback types, including issues &#xa;      around referential integrity, will need to be managed by the middleware &#xa;      layer."
+        label="Notes The three content fields in the feedback table will have values stored in them dependent on the source type that &#xa;      provided the feedback. For example: short_content will be used for SMS, Twitter and mobile web feedback long_content will be used for larger feedback that can be stored in &#xa;        the database such as XML data received from biomedical devices or longer form feedback from blog posts content_uri will be used to store a link to a peice of content outside the database, for example a blog post on an originating blog, or files &#xa;        from external datasource A custom URI format will also be defined for linking into the &#xa;        emotive_images table Such flexibility in the database table means that the additional complexity of managing the different feedback types, including issues &#xa;      around referential integrity, will need to be managed by the middleware layer."
         layerID="1" created="1267593467084" x="-81.23207" y="603.7031"
         width="483.0" height="285.0" strokeWidth="0.0" autoSized="false" xsi:type="text">
         <strokeColor>#404040</strokeColor>
@@ -1821,19 +1821,19 @@
         </metadata-list>
         <URIString>http://vue.tufts.edu/rdf/resource/227ac6ee7f00010100344a470d836362</URIString>
         <richText>&lt;html&gt;
-  &lt;head style="color: #000000" color="#000000"&gt;
+  &lt;head color="#000000" style="color: #000000"&gt;
     &lt;style type="text/css"&gt;
       &lt;!--
-        body { font-family: Arial; margin-top: 0px; margin-bottom: 0px; margin-right: 0px; color: #000000; font-size: 12; margin-left: 0px }
-        ol { margin-top: 6; font-family: Arial; vertical-align: middle; list-style-position: outside; font-size: 12; margin-left: 30 }
-        p { margin-top: 0; margin-bottom: 0; margin-right: 0; color: #000000; margin-left: 0 }
-        ul { margin-top: 6; font-family: Arial; vertical-align: middle; list-style-position: outside; font-size: 12; margin-left: 30 }
+        body { margin-top: 0px; font-family: Arial; color: #000000; font-size: 12; margin-right: 0px; margin-bottom: 0px; margin-left: 0px }
+        ol { margin-top: 6; font-family: Arial; vertical-align: middle; font-size: 12; list-style-position: outside; margin-left: 30 }
+        p { margin-top: 0; color: #000000; margin-right: 0; margin-bottom: 0; margin-left: 0 }
+        ul { margin-top: 6; font-family: Arial; vertical-align: middle; font-size: 12; list-style-position: outside; margin-left: 30 }
       --&gt;
     &lt;/style&gt;
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;p style="text-align: center; color: #000000" color="#000000"&gt;
+    &lt;p color="#000000" style="text-align: center; color: #000000"&gt;
       &lt;font style="font-size:14;"&gt;Notes &lt;/font&gt;
     &lt;/p&gt;
     &lt;p color="#000000"&gt;
@@ -1842,20 +1842,20 @@
       provided the feedback. For example: &lt;/font&gt;
     &lt;/p&gt;
     &lt;ul color="#000000"&gt;
-      &lt;li style="color: #000000" color="#000000"&gt;
+      &lt;li color="#000000" style="color: #000000"&gt;
         short_content will be used for SMS, Twitter and mobile web feedback
       &lt;/li&gt;
-      &lt;li style="color: #000000" color="#000000"&gt;
+      &lt;li color="#000000" style="color: #000000"&gt;
         long_content will be used for larger feedback that can be stored in 
         the database such as XML data received from biomedical devices or 
         longer form feedback from blog posts
       &lt;/li&gt;
-      &lt;li style="color: #000000" color="#000000"&gt;
+      &lt;li color="#000000" style="color: #000000"&gt;
         content_uri will be used to store a link to a peice of content outside 
         the database, for example a blog post on an originating blog, or files 
         from external datasource
       &lt;/li&gt;
-      &lt;li style="color: #000000" color="#000000"&gt;
+      &lt;li color="#000000" style="color: #000000"&gt;
         A custom URI format will also be defined for linking into the 
         emotive_images table
       &lt;/li&gt;
@@ -1869,37 +1869,12 @@
   &lt;/body&gt;
 &lt;/html&gt;
 </richText>
-        <label>Notes 
-    
-    
-      The three content fields in the feedback 
-      table will have values stored in them dependent on the source type that 
-      provided the feedback. For example: 
-    
-    
-      
-        short_content will be used for SMS, Twitter and mobile web feedback
-      
-      
-        long_content will be used for larger feedback that can be stored in 
-        the database such as XML data received from biomedical devices or 
-        longer form feedback from blog posts
-      
-      
-        content_uri will be used to store a link to a peice of content outside 
-        the database, for example a blog post on an originating blog, or files 
-        from external datasource
-      
-      
-        A custom URI format will also be defined for linking into the 
-        emotive_images table
-      
-    
-    
-      Such flexibility in the database table means that the additional 
-      complexity of managing the different feedback types, including issues 
-      around referential integrity, will need to be managed by the middleware 
-      layer.</label>
+        <label>Notes The three content fields in the feedback table will have values stored in them dependent on the source type that 
+      provided the feedback. For example: short_content will be used for SMS, Twitter and mobile web feedback long_content will be used for larger feedback that can be stored in 
+        the database such as XML data received from biomedical devices or longer form feedback from blog posts content_uri will be used to store a link to a peice of content outside the database, for example a blog post on an originating blog, or files 
+        from external datasource A custom URI format will also be defined for linking into the 
+        emotive_images table Such flexibility in the database table means that the additional complexity of managing the different feedback types, including issues 
+      around referential integrity, will need to be managed by the middleware layer.</label>
     </child>
     <layer ID="1" label="Layer 1" created="1266206917107" x="0.0"
         y="0.0" width="1.4E-45" height="1.4E-45" strokeWidth="0.0" autoSized="false">
