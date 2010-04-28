@@ -21,6 +21,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import org.hsqldb.jdbc.jdbcDataSource;
+
 /**
  * Main driving class for the AusStage Exchange Analytics application which is used
  * to parse the log files created by the AusStage Exchange Service and generate
@@ -39,9 +41,9 @@ public class ExchangeAnalytics {
 			// output some helpful text
 			System.out.println("ERROR: Expected three command line arguments.");
 			System.out.println("- directory containing the log files");
-			System.out.println("- name & location of the SQLite database file");
+			System.out.println("- name & location of the HSQLDB database file");
 			System.out.println("- name & location of the XML report output file");
-			System.out.println("Eg. java ExchangeAnalytics ./log-files ./analytics.db ./analytics-report.xml");
+			System.out.println("Eg. java ExchangeAnalytics ./log-files ./analytics ./analytics-report.xml");
 			System.exit(-1);
 		}
 		
@@ -76,16 +78,19 @@ public class ExchangeAnalytics {
 		}
 		
 		// check on the database parameter
-		File dbFile = new File(args[1]);
+		File dbFile = new File(args[1] + ".properties");
 		
 		if(dbFile.isFile() == false) {
-			System.out.println("WARN: Unable to locate the database file, a new database file will be created.");			
+			System.out.println("WARN: Unable to locate the database file, a new database file will be created.");
 		} else {
 			if(dbFile.canRead() == false || dbFile.canWrite() == false) {
 				System.out.println("ERROR: Unable to access the database file.");
 				System.exit(-1);
 			}
 		}
+		
+		// reset the dbFile variables
+		dbFile = new File(args[1]);
 		
 		// check on the output file
 		File outputFile = new File(args[2]);
@@ -110,18 +115,19 @@ public class ExchangeAnalytics {
 		
 		// instantiate database classes
 		Connection database = null;
+		jdbcDataSource dataSource = null;
 		
 		try {
 		
-			// load the database driver and get a connection to the database
-			Class.forName("org.sqlite.JDBC");
-				
-			// connect to the database
-			database = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
+			// get a new Data Source object
+			dataSource = new jdbcDataSource();
+
+			// set the database to the file specified
+        	dataSource.setDatabase("jdbc:hsqldb:" + dbFile.getAbsolutePath());
+
+			// get a standalone connection to the database
+	        database = dataSource.getConnection("sa", "");
 			
-		} catch (java.lang.ClassNotFoundException ex) {
-			System.out.println("ERROR: Unable to load the SQLite classes.\n" + ex);
-			System.exit(-1);
 		} catch(java.sql.SQLException ex) {
 			System.out.println("ERROR: Unable to connect to the database.\n" + ex);
 			System.exit(-1);
@@ -131,45 +137,79 @@ public class ExchangeAnalytics {
 		Statement statement = null;
 		ResultSet results   = null;
 		
-		// processed files list
+		// ensure the tables are present
+		// processed files
 		try {
-			String sql = "SELECT * FROM sqlite_master WHERE tbl_name = 'processed_files'";
-			statement = database.createStatement();
-			results = statement.executeQuery(sql);
-			
-			if(results.next() == false) {
-				// table doesn't exist so create it
-				sql = "CREATE TABLE processed_files (file_name)";
-				statement.execute(sql);
-			}
-			
-			// play nice and tidy up
-			results.close();
-			
-		} catch(java.sql.SQLException ex) {
-			System.out.println("ERROR: Unable to create the 'processed_files' table in the database.\n" + ex);
-			System.exit(-1);
-		}
 		
-		// data
-		try {
-			String sql = "SELECT * FROM sqlite_master WHERE tbl_name = 'requests'";
+			// if the query succeeds the table is present
+			String sql = "SELECT MAX(file_name) FROM processed_files";
+			
+			// create a statement
 			statement = database.createStatement();
+			
+			// get the results
 			results = statement.executeQuery(sql);
 			
-			if(results.next() == false) {
-				// table doesn't exist so create it
-				sql = "CREATE TABLE requests (date, request_type, id_value, output_type, record_limit, javascript, ip_address, referer)";
-				statement.execute(sql);
-			}
-			
-			// play nice and tidy up
-			results.close();
+			// play nice and close the statement
 			statement.close();
 			
-		} catch(java.sql.SQLException ex) {
-			System.out.println("ERROR: Unable to create the 'requests' table in the database.\n" + ex);
-			System.exit(-1);
+		}  catch(java.sql.SQLException e) {
+			// table appears to be missing
+			try {
+				String sql = "CREATE TABLE processed_files (file_name VARCHAR)";
+			
+				// create a statement
+				statement = database.createStatement();
+				
+				// execute the statement
+				int result = statement.executeUpdate(sql);
+				
+				// check on the result of the execute
+				if(result == -1) {
+					System.out.println("Unable to create the 'processed_files' table");
+					System.exit(-1);
+				}
+			} catch(java.sql.SQLException ex) {
+				System.out.println("ERROR: Unable to create the 'processed_files' table in the database.\n" + ex);
+				System.exit(-1);
+			}
+		}
+		
+		// requests
+		try {
+		
+			// if the query succeeds the table is present
+			String sql = "SELECT MAX(date) FROM requests";
+			
+			// create a statement
+			statement = database.createStatement();
+			
+			// get the results
+			results = statement.executeQuery(sql);
+			
+			// play nice and close the statement
+			statement.close();
+			
+		}  catch(java.sql.SQLException e) {
+			// table appears to be missing
+			try {
+				String sql = "CREATE TABLE requests (date VARCHAR, request_type VARCHAR, id_value VARCHAR, output_type VARCHAR, record_limit VARCHAR, javascript VARCHAR, ip_address VARCHAR, referer VARCHAR)";
+			
+				// create a statement
+				statement = database.createStatement();
+				
+				// execute the statement
+				int result = statement.executeUpdate(sql);
+				
+				// check on the result of the execute
+				if(result == -1) {
+					System.out.println("ERROR: Unable to create the 'requests' table");
+					System.exit(-1);
+				}
+			} catch(java.sql.SQLException ex) {
+				System.out.println("ERROR: Unable to create the 'requests' table in the database.\n" + ex);
+				System.exit(-1);
+			}
 		}
 		
 		// build a log parse object
@@ -180,12 +220,13 @@ public class ExchangeAnalytics {
 		try {
 		
 			// prepare a statement for checking on the file and storing the file name
-			PreparedStatement fileCheck  = database.prepareStatement("SELECT * FROM processed_files WHERE file_name = ?");
-			PreparedStatement fileUpdate = database.prepareStatement("INSERT INTO processed_files VALUES (?)");
+			PreparedStatement fileCheck  = null;
+			PreparedStatement fileUpdate = null;
 				
 			// loop through the list of files and processes as appropriate
 			for(File logFile : logFiles) {
 				// check to see if the log file has been parsed before
+				fileCheck = database.prepareStatement("SELECT * FROM processed_files WHERE file_name = ?");
 				fileCheck.setString(1, logFile.getName());
 				
 				results = fileCheck.executeQuery();
@@ -193,6 +234,7 @@ public class ExchangeAnalytics {
 				if(results.next() == false) {
 					// play nice and close the result set
 					results.close();
+					fileCheck.close();
 					
 					// parse this file
 					recordCount = logParser.parseLog(logFile);
@@ -205,8 +247,13 @@ public class ExchangeAnalytics {
 						System.out.println("INFO: " + recordCount + " new records added from " + logFile);
 						
 						// add the file name to the list of processed files
+						fileUpdate = database.prepareStatement("INSERT INTO processed_files VALUES (?)");
 						fileUpdate.setString(1, logFile.getName());
-						fileUpdate.executeUpdate();
+						int result = fileUpdate.executeUpdate();
+						if(result == -1) {
+							System.out.println("ERROR: Unable to update processed_files table");
+						}
+						fileUpdate.close();
 						
 						// increment the count
 						fileCount++;
@@ -231,8 +278,10 @@ public class ExchangeAnalytics {
 		// generate the report
 		boolean status = report.generate();
 		
-		// play nice and close the database
-		try {	
+		// shutdown the database
+		try {
+			statement = database.createStatement();
+			statement.execute("SHUTDOWN");
 			database.close();
 		} catch(java.sql.SQLException ex) {
 			System.out.println("ERROR: Unable to close the database.\n" + ex);
@@ -256,8 +305,8 @@ public class ExchangeAnalytics {
 			// report error and quit
 			System.out.println("ERROR: Unable to generate report, check previous error message for details.");
 			System.exit(-1);
-		}		
-				
+		}
+						
 	} // end main method
 
 } // end class definition
