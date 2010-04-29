@@ -198,10 +198,11 @@ public class KMLBuilder {
 	 *
 	 * @param parentElement the parent element of the new document element
 	 * @param name          the name of the document
+	 * @param visibility    if this document should be visible when the map initially loads
 	 *
 	 * @return              the element representing this document
 	 */
-	public Element addDocument(Element folder, String name) {
+	public Element addDocument(Element folder, String name, boolean visibility) {
 	
 		// check the parameters
 		if(folder == null && rootFolder == null) {
@@ -228,6 +229,13 @@ public class KMLBuilder {
 		// add the name element to the folder
 		document.appendChild(documentName);
 		
+		// add the visibility tag if necessary
+		if(visibility == false) {
+			Element documentVisibility = xmlDoc.createElement("visibility");
+			documentVisibility.setTextContent("0");
+			document.appendChild(documentVisibility);
+		}
+		
 		// add the document to the element tree
 		if(folder == null) {
 			rootFolder.appendChild(document);
@@ -238,6 +246,18 @@ public class KMLBuilder {
 		// return this Element
 		return document;
 		
+	} // end addDocument method
+	
+	/**
+	 * A method to add a document element to a folder inside the KML file
+	 *
+	 * @param parentElement the parent element of the new document element
+	 * @param name          the name of the document
+	 *
+	 * @return              the element representing this document
+	 */
+	public Element addDocument(Element folder, String name) {
+		return addDocument(folder, name, true);
 	} // end addDocument method
 	
 	

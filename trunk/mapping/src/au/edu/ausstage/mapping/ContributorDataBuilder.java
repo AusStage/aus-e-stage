@@ -737,7 +737,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 					// add additional documents as necessary
 					if (exportOptions.getOption("includeTimeSpanElements").equals("yes")) {
 						// need to add a document that includes timespan elements
-						document = exportFile.addDocument(contribFolder, "Events with TimeSpan");
+						document = exportFile.addDocument(contribFolder, "Events with TimeSpan", false);
 						exportFile.addDescriptionElement(document, "One place marker for each event, with time span information");
 						
 						// rewind the resultset
@@ -801,7 +801,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 						String finish         = null;
 					
 						// need to add a document that includes trajectory info
-						document = exportFile.addDocument(contribFolder, "Events with Trajectory");
+						document = exportFile.addDocument(contribFolder, "Events with Trajectory", false);
 						exportFile.addDescriptionElement(document, "One place marker for each event, linked with trajectory information. Note: Trajectory information links venues based on the earliest event to occur at that venue and does not indicate a tour.");
 						
 						// rewind the result set
@@ -899,7 +899,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 					if (exportOptions.getOption("includeGroupedEventInfo").equals("yes")) {
 					
 						// need to add a document that includes trajectory info
-						document = exportFile.addDocument(contribFolder, "Events Grouped by Venue");
+						document = exportFile.addDocument(contribFolder, "Events Grouped by Venue", false);
 						exportFile.addDescriptionElement(document, "One place marker for each venue, with all events that occured at that venue associated with it.");
 						
 						// add the grouped venue styles
