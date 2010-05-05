@@ -16,6 +16,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+package au.edu.ausstage.xmldata;
+
 // import java libraries as required
 import java.io.*;
 
