@@ -16,7 +16,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package au.edu.ausstage.terminator;
+package au.edu.ausstage.xmldata;
 
 // import additional classes
 import java.io.*;
@@ -83,7 +83,7 @@ public class XMLDataServlet extends HttpServlet {
 		 */
 
 		 // get an instance of the XMLDataManager object
-		 XMLDataManager dataManager = new XMLDataManager()
+		 XMLDataManager dataManager = new XMLDataManager();
 
 		 // execute the query against the XML file and get the results
 		 String results = dataManager.executeQuery(xmlFile, xPathString);
