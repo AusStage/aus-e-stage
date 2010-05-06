@@ -134,13 +134,6 @@ function showSearchResults(responseText, statusText)  {
 	
 	hideLoader();
 	
-	// associate a click event with the links
-	$("#search_results a").click(function() {
-		$("#map_header h3").empty();
-		$("#map_header h3").append("Map of " + $(this).text() + " events");
-		return false;
-	});
-	
 	// overide the default form action
 	$("#multi_contrib").click(multiContribMap);
 	
@@ -171,16 +164,16 @@ $(document).ready(function() {
 });
 
 // function to show a map
-function showContributorMap(id) {
+function showContributorMap(id, contrib, url) {
 	// show the map container
 	$("#map_header").show();
 	$("#map").show();
 	$("#map_legend").show();
 	$("#map_footer").show();
-	
-	// update values in the advanced map options form
-	$("#adv_map_org_id").val(id);
-	$("#adv_map_state").val($("#state").val());
+
+	// update the map heading
+	$("#map_heading").empty();
+	$("#map_heading").append('Map of Events for <a href="' + url + '" target="ausstage">' + contrib + '</a>');
 	
 	// update the persistent link
 	$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
@@ -199,7 +192,7 @@ function showContributorMap(id) {
 	}		
 	
 	// get the marker xml data
-	$.get("data?action=markers&type=contributor&id=" + id + "&state=" + $("#state").val(), function(data) {
+	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
 		
 		// show the map
 		showMap2(data, null, $("#state").val(), null, null);

@@ -86,26 +86,6 @@
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">
-								<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
-							</th>
-							<td>
-								<select size="1" id="state" name="state">
-									<option value="nolimit" selected="selected">No Limit - All venues</option>
-									<option value="a">Australia</option>
-									<option value="7"> - Australian Capital Territory</option>
-									<option value="3"> - New South Wales</option>
-									<option value="8"> - Northern Territory</option>
-									<option value="4"> - Queensland</option>
-									<option value="1"> - South Australia</option>
-									<option value="5"> - Tasmania</option>
-									<option value="6"> - Victoria</option>
-									<option value="2"> - Western Australia</option>
-									<option value="9">Outside Australia</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
 							<td colspan="2">
 								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="name_search_btn" value="Search"/><br/>
 								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
@@ -145,7 +125,7 @@
 		<div id="search_results" style="padding-top: 10px;">
 		</div>
 		<div id="map_header" class="map_header_footer">
-			<h3></h3>
+			<h3 id="map_heading"></h3>
 			<ul class="map_links">
 				<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
 				<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
@@ -158,14 +138,14 @@
 		<div id="map_footer" class="map_header_footer">
 			<h3>Advanced Display Options</h3>
 			<form action="" method="" id="adv_map_display_form" name="adv_map_display_form">
-			<input type="hidden" name="adv_map_org_id" id="adv_map_org_id"/>
-			<input type="hidden" name="adv_map_state" id="adv_map_state"/>
 			<table class="formTable" width="100%">
+				<!--
 				<tr>
 					<th scope="row" colspan="2">
 						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" value="on"/>
 					</th>
 				</tr>
+				-->
 				<tr>
 					<th scop="row" colspan="2">Show events that occured between:</th>
 				</tr>
@@ -177,6 +157,24 @@
 							<label for="event_start" class="tohide">Last Date: </label>
 								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
 						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+					<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
+						<select size="1" id="state" name="state">
+							<option value="nolimit" selected="selected">No Limit - All venues</option>
+							<option value="a">Australia</option>
+							<option value="7"> - Australian Capital Territory</option>
+							<option value="3"> - New South Wales</option>
+							<option value="8"> - Northern Territory</option>
+							<option value="4"> - Queensland</option>
+							<option value="1"> - South Australia</option>
+							<option value="5"> - Tasmania</option>
+							<option value="6"> - Victoria</option>
+							<option value="2"> - Western Australia</option>
+							<option value="9">Outside Australia</option>
+						</select>
 					</td>
 				</tr>
 				<tr>

@@ -142,11 +142,7 @@ public class MappingServlet extends HttpServlet {
 				// declare helper variable
 				String results = null;
 				
-				if(stateLimit == null) {
-					results = data.getMarkerXMLString(id);
-				} else {
-					results = data.getMarkerXMLString(id, stateLimit);
-				}
+				results = data.getMarkerXMLString(id);
 				
 				// ouput the XML
 				// set the appropriate content type

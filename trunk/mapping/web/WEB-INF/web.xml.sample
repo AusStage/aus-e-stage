@@ -92,6 +92,11 @@
         <param-value>http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=[venue-id]</param-value>
     </context-param>
     <context-param>
+    	<param-name>contributorURLTemplate</param-name>
+    	<!-- The [contrib-id] string will be replaced with the id number for this event-->
+        <param-value>http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=[contrib-id]</param-value>
+    </context-param>
+    <context-param>
         <param-name>googleGeocodeUrl</param-name>
         <!-- The [address] string will be replaced with the address prior to lookup-->
         <param-value></param-value>

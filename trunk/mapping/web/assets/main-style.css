@@ -248,3 +248,7 @@ table.mapLegend tfoot {
 	height: 20px;
 }
 
+#results_form th {
+	text-align: center;
+}
+
