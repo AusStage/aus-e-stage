@@ -64,196 +64,74 @@ public class ContributorDataBuilder extends DataBuilder {
 	 */	
 	public String doSearch(String queryParameter, String stateLimit) throws javax.servlet.ServletException {
 	
-/*
- * basic contributor search
- * copy stored here for reference
- * note, at most three functions will be listed, more than three and a ... is used
- *
-SELECT DISTINCT search_contributor.contributorid,
-       contrib_name as contributor_name,
-       functions.function,
-       events.event_count,
-       DECODE(markers.marker_count, NULL, 0, markers.marker_count) as marker_count
-FROM search_contributor, 
-     (SELECT contributorid, 
-             MAX(DECODE(val_number, 1, preferredterm, null)) ||
-             MAX(DECODE(val_number, 2, ', ' || preferredterm, null)) ||
-             MAX(DECODE(val_number, 3, ', ' || preferredterm, null)) ||
-             MAX(DECODE(val_number, 4, '...', null)) as function
-      FROM (SELECT contributor.contributorid, 
-                   row_number() over (partition by contributor.contributorid order by preferredterm) as val_number, 
-                   preferredterm
-            FROM contributor,
-                 contfunctlink,
-                 contributorfunctpreferred
-            WHERE contributor.contributorid = contfunctlink.contributorid
-            AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid)
-      GROUP BY contributorid) functions,
-     (SELECT contributorid, count(*) over (partition by contributorid) event_count
-      FROM conevlink) events,
-     (SELECT contributorid, count(*) over (partition by contributorid) marker_count
-      FROM conevlink,
-           events,
-           venue
-      WHERE conevlink.eventid = events.eventid
-      AND events.venueid = venue.venueid
-      AND venue.latitude IS NOT NULL) markers
-WHERE CONTAINS(search_contributor.combined_all, ?, 1) > 0
-AND functions.contributorid = search_contributor.contributorid
-AND events.contributorid = search_contributor.contributorid
-AND markers.contributorid(+) = search_contributor.contributorid
-
-*/
-	
 		// define private variable to hold results
 		StringBuilder results = new StringBuilder();
 		
 		int recordCount = 0;
 		
 		// try to connect to the database
-		this.dataManager.connect(); // dataManager defined in parent object
+		dataManager.connect(); // dataManager defined in parent object
 		
 		// declare helper variables
 		String sql;
 		String[] parameters;
-		
-		if(stateLimit == null) {
-		
-			// define the sql
-			sql = "SELECT DISTINCT search_contributor.contributorid, "
-			    + "       contrib_name as contributor_name, "
-   			    + "       functions.function, "
-			    + "       events.event_count, "
-			    + "       DECODE(markers.marker_count, NULL, 0, markers.marker_count) as marker_count, "
-			    + "       search_contributor.last_name "
-			    + "FROM search_contributor,  "
-			    + "     (SELECT contributorid,  "
-			    + "             MAX(DECODE(val_number, 1, preferredterm, null)) || "
-			    + "             MAX(DECODE(val_number, 2, ', ' || preferredterm, null)) || "
-			    + "             MAX(DECODE(val_number, 3, ', ' || preferredterm, null)) || "
-			    + "             MAX(DECODE(val_number, 4, '...', null)) as function "
-			    + "      FROM (SELECT contributor.contributorid,  "
-			    + "                   row_number() over (partition by contributor.contributorid order by preferredterm) as val_number, "
-			    + "                   preferredterm "
-			    + "            FROM contributor, "
-			    + "                 contfunctlink, "
-			    + "                 contributorfunctpreferred "
-			    + "            WHERE contributor.contributorid = contfunctlink.contributorid "
-			    + "            AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid) "
-			    + "      GROUP BY contributorid) functions, "
-			    + "     (SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) event_count "
-			    + "      FROM conevlink) events, "
-			    + "     (SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) marker_count "
-			    + "      FROM conevlink, "
-			    + "           events, "
-			    + "           venue "
-			    + "      WHERE conevlink.eventid = events.eventid "
-			    + "      AND events.venueid = venue.venueid "
-			    + "      AND venue.latitude IS NOT NULL) markers "
-			    + "WHERE CONTAINS(search_contributor.combined_all, ?, 1) > 0 "
-			    + "AND functions.contributorid = search_contributor.contributorid "
-			    + "AND events.contributorid = search_contributor.contributorid "
-			    + "AND markers.contributorid(+) = search_contributor.contributorid "
-			    + "ORDER BY search_contributor.last_name";
-						 
-			// define the paramaters
-			parameters = new String[1];
-			parameters[0] = queryParameter;
-		
-		} else {
-		
-			// define the sql
-			sql = "SELECT DISTINCT search_contributor.contributorid, "
-			    + "       contrib_name as contributor_name, "
-   			    + "       functions.function, "
-			    + "       events.event_count, "
-			    + "       DECODE(markers.marker_count, NULL, 0, markers.marker_count) as marker_count , "
-			    + "       search_contributor.last_name "
-			    + "FROM search_contributor,  "
-			    + "     (SELECT contributorid,  "
-			    + "             MAX(DECODE(val_number, 1, preferredterm, null)) || "
-			    + "             MAX(DECODE(val_number, 2, ', ' || preferredterm, null)) || "
-			    + "             MAX(DECODE(val_number, 3, ', ' || preferredterm, null)) || "
-			    + "             MAX(DECODE(val_number, 4, '...', null)) as function "
-			    + "      FROM (SELECT contributor.contributorid,  "
-			    + "                   row_number() over (partition by contributor.contributorid order by preferredterm) as val_number, "
-			    + "                   preferredterm "
-			    + "            FROM contributor, "
-			    + "                 contfunctlink, "
-			    + "                 contributorfunctpreferred "
-			    + "            WHERE contributor.contributorid = contfunctlink.contributorid "
-			    + "            AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid) "
-			    + "      GROUP BY contributorid) functions, ";
-			    
-			    
-			// determine state specific code to use
-			if(stateLimit.equals("a")) {
-				// add australia state limit clause
-				sql += "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) event_count "
-					+  " FROM conevlink, "
-					+  "      events, "
-					+  "      venue "
-					+  " WHERE conevlink.eventid = events.eventid "
-					+  " AND events.venueid = venue.venueid "
-					+  " AND venue.state < 9 ) events, "
-					+  "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) marker_count "
-					+  " FROM conevlink, "
-					+  "      events, "
- 					+  "      venue "
-					+  " WHERE conevlink.eventid = events.eventid "
-					+  " AND events.venueid = venue.venueid "
-					+  " AND venue.latitude IS NOT NULL "
-					+  " AND venue.state < 9) markers ";
-			} else {
-				// add state specific limit clause 
-				// includes overseas option
-				sql += "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) event_count "
-					+  " FROM conevlink, "
-					+  "      events, "
-					+  "      venue "
-					+  " WHERE conevlink.eventid = events.eventid "
-					+  " AND events.venueid = venue.venueid "
-					+  " AND venue.state = ? ) events, "
-					+  "(SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) marker_count "
-					+  " FROM conevlink, "
-					+  "      events, "
- 					+  "      venue "
-					+  " WHERE conevlink.eventid = events.eventid "
-					+  " AND events.venueid = venue.venueid "
-					+  " AND venue.latitude IS NOT NULL "
-					+  " AND venue.state = ?) markers ";
-			}
-			
-			// finalise the sql
-			sql += "WHERE CONTAINS(search_contributor.combined_all, ?, 1) > 0 "
-			    +  "AND functions.contributorid = search_contributor.contributorid "
-			    +  "AND events.contributorid = search_contributor.contributorid "
-			    +  "AND markers.contributorid(+) = search_contributor.contributorid "
-			    +  "ORDER BY search_contributor.last_name";
-			
-			// define the paramaters
-			if(stateLimit.equals("a")) {
-				parameters = new String[1];
-				parameters[0] = queryParameter;
-			} else {
-				parameters = new String[3];
-				parameters[0] = stateLimit;
-				parameters[1] = stateLimit;
-				parameters[2] = queryParameter;
-			}
-		}
+
+		// define the sql
+		sql = "SELECT DISTINCT search_contributor.contributorid, "
+		    + "       contrib_name as contributor_name, "
+		    + "       functions.function, "
+		    + "       events.event_count, "
+		    + "       DECODE(markers.marker_count, NULL, 0, markers.marker_count) as marker_count, "
+		    + "       search_contributor.event_dates, "
+		    + "       search_contributor.last_name "
+		    + "FROM search_contributor,  "
+		    + "     (SELECT contributorid,  "
+		    + "             MAX(DECODE(val_number, 1, preferredterm, null)) || "
+		    + "             MAX(DECODE(val_number, 2, ', ' || preferredterm, null)) || "
+		    + "             MAX(DECODE(val_number, 3, ', ' || preferredterm, null)) || "
+		    + "             MAX(DECODE(val_number, 4, '...', null)) as function "
+		    + "      FROM (SELECT contributor.contributorid,  "
+		    + "                   row_number() over (partition by contributor.contributorid order by preferredterm) as val_number, "
+		    + "                   preferredterm "
+		    + "            FROM contributor, "
+		    + "                 contfunctlink, "
+		    + "                 contributorfunctpreferred "
+		    + "            WHERE contributor.contributorid = contfunctlink.contributorid "
+		    + "            AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid) "
+		    + "      GROUP BY contributorid) functions, "
+		    + "     (SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) event_count "
+		    + "      FROM conevlink) events, "
+		    + "     (SELECT contributorid, COUNT(DISTINCT conevlink.eventid) over (partition by contributorid) marker_count "
+		    + "      FROM conevlink, "
+		    + "           events, "
+		    + "           venue "
+		    + "      WHERE conevlink.eventid = events.eventid "
+		    + "      AND events.venueid = venue.venueid "
+		    + "      AND venue.latitude IS NOT NULL) markers "
+		    + "WHERE CONTAINS(search_contributor.combined_all, ?, 1) > 0 "
+		    + "AND functions.contributorid = search_contributor.contributorid "
+		    + "AND events.contributorid = search_contributor.contributorid "
+		    + "AND markers.contributorid(+) = search_contributor.contributorid "
+		    + "ORDER BY search_contributor.last_name";
+					 
+		// define the paramaters
+		parameters = new String[1];
+		parameters[0] = queryParameter;
 		
 		// get the resultset
 		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+
+		// get the contributor URL template
+		String urlTemplate = dataManager.getContextParam("contributorURLTemplate");
 		
 		// start the table
 		results.append("<form action=\"\" id=\"results_form\" name=\"results_form\">");
-		results.append("<table class=\"searchResults\"><thead><tr><th>Contributor</th><th>Function(s)</th><th>Events in Database</th><th>Events to be Mapped</th><th>&nbsp;</th></tr></thead>");
+		results.append("<table class=\"searchResults\"><thead><tr><th>&nbsp;</th><th>Contributor</th><th>Function(s)</th><th>Event Dates</th><th style=\"width: 65px\">Events</th><th style=\"width: 65px\">Mapped Events</th><th style=\"width: 10px\">&nbsp;</th></tr></thead>");
 		
 		// add a table footer
 		results.append("<tfoot>");
-		results.append("<tr><td colspan=\"5\"><ul><li>Click the name of a contributor to view a map</li>");
-		results.append("<li>Alternatively select a number of contributors and click the \"View Map\" button</li>");
+		results.append("<tr><td colspan=\"7\"><ul><li>Click the map icon next to a contributors name to view their map</li>");
+		results.append("<li>Alternatively select a contributor and add them to the contributor list to be mapped</li>");
 		results.append("<li>Only events at venues that have geographic information in the database can be mapped</li>");
 		results.append("<li>Where a contributor has had more than one role at an event, only one marker will be added to the map</li>");
 		results.append("</ul></tfoot>");
@@ -275,18 +153,25 @@ AND markers.contributorid(+) = search_contributor.contributorid
 				} else {
 					results.append("<tr>");
 				}
-				
-				// enable selection of this contributor
+
+				// start contributor row
 				if(Integer.parseInt(resultSet.getString(5)) > 0) {
-					// at least one event can be mapped
-					results.append("<td><a href=\"#\" onclick=\"showContributorMap('" + resultSet.getString(1) + "'); return false;\">" + resultSet.getString(2) + "</a></td>");
+					// there are venues that can be mapped
+					// add the map icon
+					results.append("<td><a href=\"#\" onclick=\"showContributorMap('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" title=\"Map events for " + resultSet.getString(2) + "\">");
+					results.append("<img src=\"assets/images/mapicongreen.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Map events for " + resultSet.getString(2) + "\"/></a></td>");
+
+					// add the contributor page link
+					results.append("<td><a href=\"" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "\" title=\"View record for " + resultSet.getString(2) + " in AusStage\" target=\"ausstage\">");
+					results.append(resultSet.getString(2) + "</a></td>");
 				} else {
-					// no events can be mapped
-					results.append("<td>" + resultSet.getString(2) + "</td>");
-				}				
+					// no venues can be mapped
+					results.append("<td>&nbsp;</td><td>" + resultSet.getString(2) + "</td>");
+				}		
 				
 				// add remaining data
 				results.append("<td>" + resultSet.getString(3) + "</td>");
+				results.append("<td>" + resultSet.getString(6) + "</td>");
 				results.append("<td>" + resultSet.getString(4) + "</td>");
 				results.append("<td>" + resultSet.getString(5) + "</td>");
 				
@@ -328,17 +213,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	}
 	
 	/**
-	 * A method used to get the Marker XML for contributors
-	 *
-	 * @param queryParameter the parameter to determine which record(s) are of interest
-	 *
-	 * @return               the string representation of the Marker XML
-	 */
-	public String getMarkerXMLString(String queryParameter) throws javax.servlet.ServletException {
-		return getMarkerXMLString(queryParameter, null);
-	}
-	
-	/**
 	 * A method used to get the the Marker XML for an organisation restricted to a date range
 	 * using the first date fields in the database
 	 *
@@ -347,7 +221,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 	 *
 	 * @return               the string representation of the Marker XML
 	 */
-	public String getMarkerXMLString(String queryParameter, String stateLimit) throws javax.servlet.ServletException {
+	public String getMarkerXMLString(String queryParameter) throws javax.servlet.ServletException {
 	
 		// define private variables
 		String xmlString;			// string to hold xml 
@@ -368,149 +242,59 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			ids = queryParameter.split(",");
 		}
 
-		if(stateLimit == null || stateLimit.equals("nolimit")) {
-			// all venues
+		// all venues
+	
+		// check to see if we need to add the contributor name to the event name
+		if(queryParameter.indexOf(',') != -1) {
+			sql = "SELECT DISTINCT e.eventid, e.event_name, "
+				+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venue_name, v.suburb, v.state, v.postcode, "
+				+ "       v.latitude, v.longitude, c.contributorid "
+				+ "FROM conevlink c, "
+				+ "     events e, "
+				+ "     venue v, "
+				+ "     search_contributor sc "
+				+ "WHERE c.contributorid = ANY (";
 			
-			// check to see if we need to add the contributor name to the event name
-			if(queryParameter.indexOf(',') != -1) {
-				sql = "SELECT DISTINCT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
-					+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
-					+ "FROM conevlink c, "
-					+ "     events e, "
-					+ "     venue v, "
-					+ "     search_contributor sc "
-					+ "WHERE c.contributorid = ANY (";
-					
-					// add sufficient place holders for all of the ids
-					for(int i = 0; i < ids.length; i++) {
-						sql += "?,";
-					}
-					
-					// tidy up the sql
-					sql = sql.substring(0, sql.length() -1);
-					
-					// finish the sql					
-					sql += ") AND c.contributorid = sc.contributorid "
-					+ "AND e.eventid = c.eventid "
-					+ "AND v.venueid = e.venueid "
-					+ "AND v.longitude IS NOT NULL "
-					+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
-					
-					// define the paramaters
-					parameters = ids;
-
-			} else {
-				sql = "SELECT DISTINCT e.eventid, e.event_name, "
-					+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
-					+ "FROM conevlink c, "
-					+ "     events e, "
-					+ "     venue v, "
-					+ "     search_contributor sc "
-					+ "WHERE c.contributorid = ? "
-					+ "AND c.contributorid = sc.contributorid "
-					+ "AND e.eventid = c.eventid "
-					+ "AND v.venueid = e.venueid "
-					+ "AND v.longitude IS NOT NULL "
-					+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
-					
-					// define the paramaters
-					parameters = new String[1];
-					parameters[0] = queryParameter;
-			}
-			
-		} else {
-		
-			// check to see if we need to add the contributor name to the event name
-			if(queryParameter.indexOf(',') != -1) {
-				sql = "SELECT DISTINCT e.eventid, e.event_name || ' (' || sc.contrib_name || ')', "
-					+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
-					+ "FROM conevlink c, "
-					+ "     events e, "
-					+ "     venue v, "
-					+ "     search_contributor sc "
-					+ "WHERE c.contributorid = ANY (";
-					
-					// add sufficient place holders for all of the ids
-					for(int i = 0; i < ids.length; i++) {
-						sql += "?,";
-					}
-					
-					// tidy up the sql
-					sql = sql.substring(0, sql.length() -1);
-					
-					// finish the sql segment					
-					sql += ") AND c.contributorid = sc.contributorid "
-					+ "AND e.eventid = c.eventid "
-					+ "AND v.venueid = e.venueid ";
-
-			} else {
-				sql = "SELECT DISTINCT e.eventid, e.event_name, "
-					+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-					+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-					+ "       v.venue_name, v.suburb, v.latitude, v.longitude "
-					+ "FROM conevlink c, "
-					+ "     events e, "
-					+ "     venue v, "
-					+ "     search_contributor sc "
-					+ "WHERE c.contributorid = ? "
-					+ "AND c.contributorid = sc.contributorid "
-					+ "AND e.eventid = c.eventid "
-					+ "AND v.venueid = e.venueid ";
-			}
-				
-			if(stateLimit.equals("a")) {
-				// add australia state limit clause
-				sql += "AND v.state < 9 ";
-				
-			} else {
-				// add state specific limit clause 
-				// includes overseas option
-				sql += "AND v.state = ? ";	
-			}
-			
-			// finalise the sql
-			sql += "AND v.longitude IS NOT NULL "
-				+  "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
-				
-			// define the parameters
-			if (queryParameter.indexOf(',') != -1) {
-				// must deal with multiple ids
-				if (stateLimit.equals("a")) {
-					// no need for a state limit parameter
-					parameters = ids;
-				} else {
-					// must add the state limit parameter
-					parameters = new String[ids.length + 1];
-					
-					// add is to the list of parameters
-					for(int i = 0; i < ids.length; i++) {
-						parameters[i] = ids[i];
-					}
-					
-					// add the state parameter
-					parameters[ids.length] = stateLimit;
+				// add sufficient place holders for all of the ids
+				for(int i = 0; i < ids.length; i++) {
+					sql += "?,";
 				}
 			
-			} else {
-				// only one id
-				if (stateLimit.equals("a")) {
-					// no need for a state limit parameter
-					// define the paramaters
-					parameters = new String[1];
-					parameters[0] = queryParameter;
-				} else {
-					// define the paramaters
-					parameters = new String[2];
-					parameters[0] = queryParameter;
-					parameters[1] = stateLimit;
-				}				
-			}
+				// tidy up the sql
+				sql = sql.substring(0, sql.length() -1);
+			
+				// finish the sql					
+				sql += ") AND c.contributorid = sc.contributorid "
+				+ "AND e.eventid = c.eventid "
+				+ "AND v.venueid = e.venueid "
+				+ "AND v.longitude IS NOT NULL "
+				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
+			
+				// define the paramaters
+				parameters = ids;
+
+		} else {
+			sql = "SELECT DISTINCT e.eventid, e.event_name, "
+				+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venue_name, v.suburb, v.state, v.postcode, "
+				+ "       v.latitude, v.longitude, c.contributorid "
+				+ "FROM conevlink c, "
+				+ "     events e, "
+				+ "     venue v, "
+				+ "     search_contributor sc "
+				+ "WHERE c.contributorid = ? "
+				+ "AND c.contributorid = sc.contributorid "
+				+ "AND e.eventid = c.eventid "
+				+ "AND v.venueid = e.venueid "
+				+ "AND v.longitude IS NOT NULL "
+				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
+				
+				// define the paramaters
+				parameters = new String[1];
+				parameters[0] = queryParameter;
 		}
 			
 		// get the resultset
@@ -526,9 +310,6 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			// add the root element
 			Element rootElement = xmlDoc.createElement("markers");
 			xmlDoc.appendChild(rootElement);
-			
-			// debug code
-			//while (resultSet.next() && recordCount < 16) {
 		
 			// build the documnet by adding individual events
 			while (resultSet.next()) {
@@ -556,15 +337,18 @@ AND markers.contributorid(+) = search_contributor.contributorid
 				date = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)); 
 				marker.setAttribute("finishDate", date);
 				
-				// add start and end date for program purposes
+				// add start date for program purposes
 				date = this.buildDate(resultSet.getString(3), resultSet.getString(4), null); 
 				marker.setAttribute("sliderDate", date);
 				
 				// add remaining attributes
-				marker.setAttribute("venue",  resultSet.getString(9));  // venue name
-				marker.setAttribute("suburb", resultSet.getString(10));  // venue name
-				marker.setAttribute("lat",    resultSet.getString(11)); // latitude
-				marker.setAttribute("lng",    resultSet.getString(12)); // longitude							
+				marker.setAttribute("venue",    resultSet.getString(9));  // venue name
+				marker.setAttribute("suburb",   resultSet.getString(10));  // venue suburb
+				marker.setAttribute("state",    resultSet.getString(11));  // venue state
+				marker.setAttribute("postcode", resultSet.getString(12));  // venue postcode
+				marker.setAttribute("lat",      resultSet.getString(13)); // latitude
+				marker.setAttribute("lng",      resultSet.getString(14)); // longitude
+				marker.setAttribute("contrib",  resultSet.getString(15)); // contributorid
 				
 				// add this element to the document
 				rootElement.appendChild(marker);
@@ -582,7 +366,7 @@ AND markers.contributorid(+) = search_contributor.contributorid
 			
 			// set some options on the transformer
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.INDENT, "no");
 			
 			// get a transformer and supporting classes
 			StringWriter writer = new StringWriter();
