@@ -196,7 +196,6 @@ public class KMLBuilder {
 	/**
 	 * A method to add a document element to a folder inside the KML file
 	 *
-	 * @param parentElement the parent element of the new document element
 	 * @param name          the name of the document
 	 * @param visibility    if this document should be visible when the map initially loads
 	 *
@@ -251,8 +250,8 @@ public class KMLBuilder {
 	/**
 	 * A method to add a document element to a folder inside the KML file
 	 *
-	 * @param parentElement the parent element of the new document element
-	 * @param name          the name of the document
+	 * @param folder the parent folder of the new document element
+	 * @param name   the name of the document
 	 *
 	 * @return              the element representing this document
 	 */
@@ -918,7 +917,6 @@ public class KMLBuilder {
 	 * A method to add the icon styles for all of the different placemarks that
 	 * can be used for grouped events
 	 *
-	 * @param parentElement the folder of document element that will be the parent for these styles
 	 */
 	public void addGroupedEventIconStyles() {
 	

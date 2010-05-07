@@ -189,9 +189,11 @@ public class ContributorDataBuilder extends DataBuilder {
 			
 			// check to see if record count reached
 			if(recordCount == 16) {
-				results.append("<tr><td colspan=\"5\"><strong>Note: </strong>Record limit of 15 records reached, please adjust your search terms to be more specific</td></tr>");
+				results.append("<tr><td colspan=\"7\"><strong>Note: </strong>Record limit of 15 records reached, please adjust your search terms to be more specific</td></tr>");
 			}else if(recordCount == 0) {
-				results.append("<tr class=\"odd\"><td colspan=\"5\" style=\"text-align: center\">No contributors matching the specified search criteria were found.<br/>Please check your criteria and try again</td></tr>");
+				// no records were found
+				results = new StringBuilder();
+				results.append("<table class=\"searchResults\"><tbody><tr class=\"odd\"><td colspan=\"7\" style=\"text-align: center\">No contributors matching the specified search criteria were found.<br/>Please check your criteria and try again</td></tr></tbody></table>");
 			}
 			
 		} catch(java.sql.SQLException ex) {
@@ -207,18 +209,34 @@ public class ContributorDataBuilder extends DataBuilder {
 		
 		return results.toString();
 		
-	}
+	} // end doDear method
 	
 	/**
 	 * A method used to get the the Marker XML for an organisation restricted to a date range
 	 * using the first date fields in the database
 	 *
 	 * @param queryParameter the parameter to determine which record(s) are of interest
-	 * @param stateLimit     the state id that venues must be in to be part of the dataset
 	 *
 	 * @return               the string representation of the Marker XML
 	 */
 	public String getMarkerXMLString(String queryParameter) throws javax.servlet.ServletException {
+	
+		// define private variables
+		
+		
+		return "";
+	
+	} // end getMarkerXMLString method
+	
+	/**
+	 * A method used to get the the Marker XML for an organisation restricted to a date range
+	 * using the first date fields in the database
+	 *
+	 * @param queryParameter the parameter to determine which record(s) are of interest
+	 *
+	 * @return               the string representation of the Marker XML
+	 */
+	public String getMarkerXMLString(String queryParameter, String foobar) throws javax.servlet.ServletException {
 	
 		// define private variables
 		String xmlString;			// string to hold xml 
