@@ -65,6 +65,7 @@
 				<form action="data/" method="post" id="name_search" name="name_search">
 					<input type="hidden" name="action" value="contributor_search"/>
 					<table class="formTable">
+						<tbody>
 						<tr>
 							<th scope="row">
 								<label id="name_label" for="contributor_name" class="#cluetip_name" style="cursor: help;">Contributor Name: </label>
@@ -91,6 +92,7 @@
 								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
 							</td>
 						</tr>
+						</tbody>
 					</table>
 				</form>
 			</div>
@@ -99,9 +101,10 @@
 					<input type="hidden" name="action" value="lookup"/>
 					<input type="hidden" name="type"   value="contribname"/>
 					<table class="formTable">
+						<tbody>
 						<tr>
 							<th scope="row">
-								<label for="contributor_id">Contributor ID: </label>
+								<label for="id">Contributor ID: </label>
 							</th>
 							<td>
 								<input type="text" size="40" id="id" name="id"/>
@@ -112,17 +115,41 @@
 								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="id_search_btn" value="Search"/>
 							</td>
 						</tr>
+						</tbody>
 					</table>
 				</form>
 			</div>
 		</div>
-		<div id="search_waiting" style="visibility:hidden;">
+		<div id="search_waiting">
 		<p style="text-align: center;">
 			<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
 			<br/>Loading Search Results...
 		</p>
 		</div>
 		<div id="search_results" style="padding-top: 10px;">
+		</div>
+		<div id="to_map_list" style="padding-top: 10px;">
+			<div class="map_header_footer">
+				<h3>List of Contributors in the Map</h3>
+				<table id="contrib_list" class="searchResults">
+					<thead>
+						<tr>
+							<th>Contributor</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td colspan="2">
+								<form action="" method="get">
+									<input class="ui-state-default ui-corner-all button" type="button" onclick="buildListMap(); return false;" value="Build Map"/>
+								</form>
+							</td>
+						</tr>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div id="map_header" class="map_header_footer">
 			<h3 id="map_heading"></h3>
@@ -137,7 +164,7 @@
 		<p></p>
 		<div id="map_footer" class="map_header_footer">
 			<h3>Advanced Display Options</h3>
-			<form action="" method="" id="adv_map_display_form" name="adv_map_display_form">
+			<form action="" method="get" id="adv_map_display_form" name="adv_map_display_form">
 			<table class="formTable" width="100%">
 				<!--
 				<tr>
@@ -147,7 +174,7 @@
 				</tr>
 				-->
 				<tr>
-					<th scop="row" colspan="2">Show events that occured between:</th>
+					<th scope="row" colspan="2">Show events that occured between:</th>
 				</tr>
 				<tr>
 					<td colspan="2">

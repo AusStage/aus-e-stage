@@ -17,7 +17,8 @@
 */
 
 // declare global variables
-var contributorMapData = null;
+var contributorMapData = null
+var contributorIDs = null;
 
 // setup the page
 $(document).ready(function(){
@@ -60,6 +61,7 @@ $(document).ready(function(){
 	// hide the map div
 	hideMap();
 	
+	$("#to_map_list").hide();	
 });
 
 // override the default action of some form buttons
@@ -111,8 +113,6 @@ function showLoader() {
 	
 	$("#name_search_btn").attr("disabled", "disabled");
 	$("#id_search_btn").attr("disabled", "disabled");
-	
-	GUnload();	
 }
 
 function hideMap() {
@@ -133,9 +133,6 @@ function showSearchResults(responseText, statusText)  {
 	$("#search_results").show();
 	
 	hideLoader();
-	
-	// overide the default form action
-	$("#multi_contrib").click(multiContribMap);
 	
 }
 
@@ -172,24 +169,28 @@ function showContributorMap(id, contrib, url) {
 	$("#map_footer").show();
 
 	// update the map heading
-	$("#map_heading").empty();
-	$("#map_heading").append('Map of Events for <a href="' + url + '" target="ausstage">' + contrib + '</a>');
+	if(contrib != null) {
+		$("#map_heading").empty();
+		$("#map_heading").append('Map of Events for <a href="' + url + '" target="ausstage">' + contrib + '</a>');
+		$("#to_map_list").hide();
+	} else {
+		$("#map_heading").empty();
+		$("#map_heading").append('Map of Events for multiple contributors');
+	}
 	
-	// update the persistent link
-	$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
-	$("#map_header_link").show();
+	if(id.indexOf(',',0) == -1) {
+		// update the persistent link
+		$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
+		$("#map_header_link").show();
+	} else {
+		$("#map_header_link").hide();
+	}
 	
 	// update the download as KML link
 	$("#map_header_kml").attr("href", "data?action=kml&type=contrib&id=" + id);
 	
 	// update the export KML link
-	$("#map_header_export").attr("href", "exportdata.jsp?type=contrib&id=" + id);
-	
-	if(id.indexOf(',',0) == -1) {
-		
-		// uncheck all of the checkboxes
-		$('input:checkbox').attr('checked', false);
-	}		
+	$("#map_header_export").attr("href", "exportdata.jsp?type=contrib&id=" + id);	
 	
 	// get the marker xml data
 	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
@@ -205,42 +206,62 @@ function showContributorMap(id, contrib, url) {
 	});
 }
 
-// function to map multiple contributors
-function multiContribMap() {
+// function to add contribtor to the list of contributors
+function addContrib(id, contrib, url) {
 
-	// update the header
-	$("#map_header h3").empty();
-	$("#map_header h3").append("Map of events for multiple contributors");
+	// hide the map
+	hideMap();
+
+	// get the number of rows
+	var rows = $("#contrib_list").attr('rows').length;
+	var j = 2;
 	
-	// select all of the checkboxes
-	var checkboxes = $('input:checkbox').serializeArray();
-	var ids = ""; // store a list of ids
-	
-	// loop through looking for contributor checkboxes
-	for (var i = 0; i < checkboxes.length; i++) {
-		if(checkboxes[i].name == "contributor") {
-			ids += checkboxes[i].value + ',';
-		}
+	if(rows % j == 1) {
+		$('#contrib_list > tbody:last').append('<tr class="odd" id="list' + id + '"><td><a href="' + url + '" target="ausstage">' + contrib + '</a></td><td><input class="ui-state-default ui-corner-all button" type="button" onclick="delContrib(\'' + id + '\'); return false;" value="Delete"/></td></tr>');
+	} else {
+		$('#contrib_list > tbody:last').append('<tr id="list' + id + '"><td><a href="' + url + '" target="ausstage">' + contrib + '</a></td><td><input class="ui-state-default ui-corner-all button" type="button" onclick="delContrib(\'' + id + '\'); return false;" value="Delete"/></td></tr>');
+	}
+
+	if(contributorIDs == null) {
+		contributorIDs = id;
+	} else {
+		contributorIDs += ',' + id;
 	}
 	
-	// check to see if we need to tidy the id string
-	if(ids.indexOf(',',0) != -1) {
-		// tidy up the list of ids
-		ids = ids.substr(0, ids.length -1);
-	}
+	$("#to_map_list").show();
 	
-	// check on the list of ids
-	if(ids == "") {
-		alert("You must select at least one contributor");
-		return false;
-	}
+	alert(contrib + " has been added to the list of contributors");
 	
-	// build the map
-	showContributorMap(ids);
+	// override default form behaviour
+	return false;
+}
+
+// function to delete a contributor
+function delContrib(id) {
+
+	hideMap();
+	
+	$("#list" + id).remove();
+	
+	contributorIDs = contributorIDs.replace(id, "");
+	contributorIDs = contributorIDs.replace(',,', ',');
 	
 	return false;
 }
 
+// function to build a map from a list of contributors
+function buildListMap() {
+
+	// update the header
+	$("#map_header h3").empty();
+	$("#map_header h3").append("Map of events for multiple contributors");
+
+	// build the map
+	showContributorMap(contributorIDs, null, null);
+
+	return false;
+}
+	
 // function to reload a map
 function reloadMap() {
 	

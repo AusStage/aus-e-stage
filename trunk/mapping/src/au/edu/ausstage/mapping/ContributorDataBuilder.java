@@ -126,7 +126,7 @@ public class ContributorDataBuilder extends DataBuilder {
 		
 		// start the table
 		results.append("<form action=\"\" id=\"results_form\" name=\"results_form\">");
-		results.append("<table class=\"searchResults\"><thead><tr><th>&nbsp;</th><th>Contributor</th><th>Function(s)</th><th>Event Dates</th><th style=\"width: 65px\">Events</th><th style=\"width: 65px\">Mapped Events</th><th style=\"width: 10px\">&nbsp;</th></tr></thead>");
+		results.append("<table class=\"searchResults\"><thead><tr><th>&nbsp;</th><th>Contributor</th><th>Function(s)</th><th>Event Dates</th><th style=\"width: 65px; \">Events</th><th style=\"width: 65px; \">Mapped Events</th><th style=\"width: 10px; \">&nbsp;</th></tr></thead>");
 		
 		// add a table footer
 		results.append("<tfoot>");
@@ -177,7 +177,8 @@ public class ContributorDataBuilder extends DataBuilder {
 				
 				// add selection box
 				if(Integer.parseInt(resultSet.getString(5)) > 0) {
-					results.append("<td><input type=\"checkbox\" name=\"contributor\" id=\"contributor\" value=\"" + resultSet.getString(1) + "\"/></td></tr>");
+					results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"addContrib('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Add\"/></td></tr>");
+					//results.append("<td><input type=\"checkbox\" name=\"contributor\" id=\"contributor\" value=\"" + resultSet.getString(1) + "\"/></td></tr>");
 				} else {
 					results.append("<td>&nbsp;</td></tr>\n");
 				}
@@ -201,11 +202,7 @@ public class ContributorDataBuilder extends DataBuilder {
 		if(stateLimit != null && recordCount != 0) {
 			results.append("<tr><td colspan=\"5\"><strong>Note: </strong>If a contributor is not listed they may not be associated with a venue in the specified region</td></tr>");
 		}
-		
-		if(recordCount != 0) {
-			results.append("<tr style=\"border: 1px solid #333333;\"><td colspan=\"5\"><input class=\"ui-state-default ui-corner-all button\" id=\"multi_contrib\" type=\"submit\" name=\"submit\" value=\"Map Contributors\"/></td></tr>");
-		}
-		
+				
 		results.append("</tbody></table></form>");
 		
 		return results.toString();

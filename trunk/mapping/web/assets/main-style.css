@@ -171,13 +171,35 @@ table.searchResults td {
 	padding: 2px;
 }
 
-tr.odd {
-	background-color: #e3e3e3;
-}
-
 table.searchResults tfoot {
 	border: 1px solid #333333;
 	font-size: 90%;
+}
+
+table.toMapList {
+	background-color: #fff;
+	text-align: left;
+	border: 1px solid #333333;
+	border-collapse: collapse;
+	width: 98%;
+}
+
+table.toMapList th {
+	border: 1px solid #333333;
+	padding: 2px;
+}
+
+table.toMapList td {
+	padding: 2px;
+}
+
+table.toMapList tfoot {
+	border: 1px solid #333333;
+	font-size: 90%;
+}
+
+tr.odd {
+	background-color: #e3e3e3;
 }
 
 /* Styles for Maps */
