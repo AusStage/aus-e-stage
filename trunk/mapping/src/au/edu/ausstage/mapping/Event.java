@@ -31,6 +31,7 @@ public class Event extends DataClasses implements Comparable<Event> {
 	private String name = null;
 	private String firstDate = null;
 	private String firstDisplayDate = null;
+	private String url = null;
 	
 	/**
 	 * Constructor for this class
@@ -50,12 +51,13 @@ public class Event extends DataClasses implements Comparable<Event> {
 	/**
 	 * Constructor for this class
 	 *
-	 * @param id        the unique identifier for this contributor
-	 * @param name      the name of this contributor
-	 * @param firstDate the firstDate of this event
+	 * @param id               the unique identifier for this contributor
+	 * @param name             the name of this contributor
+	 * @param firstDate        the firstDate of this event
 	 * @param firstDisplayDate the firstDate of this event (used for display)
+	 * @param url              the url for this event in AusStage
 	 */
-	public Event(String id, String name, String firstDate, String firstDisplayDate) {
+	public Event(String id, String name, String firstDate, String firstDisplayDate, String url) {
 		
 		// check the parameters
 		try {
@@ -63,6 +65,7 @@ public class Event extends DataClasses implements Comparable<Event> {
 			this.name      = filterString(name);
 			this.firstDate = filterString(firstDate);
 			this.firstDisplayDate = filterString(firstDisplayDate);
+			this.url       = filterString(url);
 		} catch (IllegalArgumentException ex) {
 			throw new IllegalArgumentException("All arguments must not be null or empty strings: " + ex.toString());
 		}
@@ -109,6 +112,19 @@ public class Event extends DataClasses implements Comparable<Event> {
 	
 	public void setFirstDisplayDate(String value) {
 		this.firstDisplayDate = filterString(value);
+	}
+	
+	public String getUrl() {
+		return name;
+	}
+	
+	public void setUrl(String value) {
+		this.url = filterString(value);
+	}
+	
+	public int getFirstDateAsInt() {
+		String date = firstDate.replace("-", "");
+		return Integer.valueOf(date);
 	}
 
 	/*

@@ -44,9 +44,18 @@ public class EventFirstDateComparator implements Comparator<Event>, java.io.Seri
 		firstDate  = firstDate.replace("-", "");
 		secondDate = secondDate.replace("-", "");
 		
+		// double check the dates
+		if(firstDate == null || firstDate.equals("")) {
+			firstDate = "0";
+		}
+		
+		if(secondDate == null || secondDate.equals("")) {
+			secondDate = "0";
+		}
+		
 		// convert to integers
-		int first  = Integer.getInteger(firstDate);
-		int second = Integer.getInteger(secondDate);
+		int first  = Integer.valueOf(firstDate);
+		int second = Integer.valueOf(secondDate);
 		
 		// compare the dates
 		if(first < second) {

@@ -30,21 +30,23 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	private String id = null;
 	private String name = null;
 	private String suburb = null;
+	private String state = null;
 	private String postcode = null;
 	private String latitude = null;
 	private String longitude = null;
+	private String url = null;
 	private Set<Contributor> contributors;
 	
 	// declare public constants
 	/**
 	 * Sort events by id
 	 */
-	public final int CONTRIBUTOR_ID_SORT = 0;
+	public final static int CONTRIBUTOR_ID_SORT = 0;
 	
 	/**
 	 * sort events by first date
 	 */
-	public final int CONTRIBUTOR_NAME_SORT = 1;
+	public final static int CONTRIBUTOR_NAME_SORT = 1;
 	
 	/**
 	 * Constructor for this class
@@ -74,20 +76,24 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	 * @param id        the unique identifier for this venue
 	 * @param name      the name of this venue
 	 * @param suburb    the suburb for this venue
+	 * @param state     the state for this venue
 	 * @param postcode  the postcode for this venue
 	 * @param latitude  the latitude for this venue
 	 * @param longitude the longitude for this venue
+	 * @param url       the URL for this venue in AusStage
 	 */
-	public Venue(String id, String name, String suburb, String postcode, String latitude, String longitude) {
+	public Venue(String id, String name, String suburb, String state, String postcode, String latitude, String longitude, String url) {
 		
 		// check the parameters
 		try {
 			this.id        = filterString(id);
 			this.name      = filterString(name);
 			this.suburb    = filterString(suburb);
-			this.postcode  = filterString(postcode);
+			this.state     = filterString(state);
+			this.postcode  = postcode;
 			this.latitude  = filterString(latitude);
 			this.longitude = filterString(longitude);
+			this.url       = filterString(url);
 		} catch (IllegalArgumentException ex) {
 			throw new IllegalArgumentException("All arguments must not be null or empty strings: " + ex.toString());
 		}
@@ -118,7 +124,16 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 		} else {
 			throw new IllegalArgumentException("Contributor cannot be null");
 		}
-	} // end addNewEvent method
+	} // end addNewContributor method
+	
+	/**
+	 * A method to add a contributor to this venue
+	 *
+	 * @param contributor the new contributor
+	 */
+	public void addContributor(Contributor contributor) {
+		addNewContributor(contributor);
+	} // end addNewContributor method
 	
 	/**
 	 * A method to check if this venue has contributor
@@ -128,6 +143,9 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	 * @return       true if this venue has this contributor
 	 */
 	public boolean hasContributor(String id) {
+		// filter the parameter
+		id = filterString(id);
+		
 		Contributor contributor = new Contributor(id);
 		
 		return hasContributor(contributor);
@@ -141,7 +159,12 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	 * @return       true if this venue has this contributor
 	 */
 	public boolean hasContributor(Contributor contributor) {
-		return contributors.contains(contributor);
+		// check on the parameter
+		if(contributor != null) {
+			return contributors.contains(contributor);
+		} else {
+			throw new IllegalArgumentException("Contributor cannot be null");
+		}
 	}
 	
 	/**
@@ -152,6 +175,9 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	 * @return   the event if found, null if nothing is found
 	 */
 	public Contributor getContributor(String id) {
+	
+		// filter the parameter
+		id = filterString(id);
 		
 		// get an iterator for this set
 		Iterator iterator = contributors.iterator();
@@ -176,7 +202,7 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	 *
 	 * @return the list of contributors
 	 */
-	public Set getContributors() {
+	public Set<Contributor> getContributors() {
 		return contributors;
 	} // end getEvents method
 	
@@ -252,6 +278,14 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 		this.name = filterString(value);
 	}
 	
+	public String getState() {
+		return state;
+	}
+	
+	public void setState(String value) {
+		this.state = filterString(value);
+	}
+	
 	public String getSuburb() {
 		return suburb;
 	}
@@ -265,7 +299,7 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	}
 	
 	public void setPostcode(String value) {
-		this.postcode = filterString(value);
+		this.postcode = value;
 	}
 	
 	public String getLatitude() {
@@ -282,6 +316,14 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	
 	public void setLongitude(String value) {
 		this.longitude = filterString(value);
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String value) {
+		this.url = filterString(value);
 	}
 	
 	/*
