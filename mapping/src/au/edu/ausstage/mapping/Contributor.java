@@ -105,6 +105,57 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	} // end addNewEvent method
 	
 	/**
+	 * A method to check if this contributor has an event 
+	 *
+	 * @param id the unique identifer of this event
+	 *
+	 * @return       true if this contributor has this event
+	 */
+	public boolean hasEvent(String id) {
+		Event newEvent = new Event(id);
+		
+		return hasEvent(newEvent);
+	}
+	
+	/**
+	 * A method to check if this contributor has an event 
+	 *
+	 * @param event the event object to check
+	 *
+	 * @return      true if this contributor has this event
+	 */
+	public boolean hasEvent(Event event) {
+		return events.contains(event);
+	}
+	
+	/**
+	 * A method to get a specific event
+	 *
+	 * @param id the unique identifer of the event
+	 *
+	 * @return   the event if found, null if nothing is found
+	 */
+	public Event getEvent(String id) {
+		
+		// get an iterator for this set
+		Iterator iterator = events.iterator();
+		
+		// loop through the list of events looking through 
+		while(iterator.hasNext()) {
+			// get the event at this place in the set
+			Event event = (Event)iterator.next();
+			
+			// compare ids
+			if(event.getId().equals(id) == true) {
+				return event;
+			}
+		}
+		
+		// if we get here, nothing was found
+		return null;
+	}
+	
+	/**
 	 * A method to get the list of events for this contributor
 	 *
 	 * @return the list of events
