@@ -115,7 +115,7 @@ public class Event extends DataClasses implements Comparable<Event> {
 	}
 	
 	public String getUrl() {
-		return name;
+		return url;
 	}
 	
 	public void setUrl(String value) {
