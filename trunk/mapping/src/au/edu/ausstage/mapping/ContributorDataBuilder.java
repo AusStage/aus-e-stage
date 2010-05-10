@@ -50,7 +50,7 @@ public class ContributorDataBuilder extends DataBuilder {
 	 * @return               the results of the search
 	 */	
 	public String doSearch(String queryParameter) throws javax.servlet.ServletException {
-		return doSearch(queryParameter, null);
+		return doSearch(queryParameter, "single");
 	} // end doSearch method
 	
 	
@@ -58,11 +58,11 @@ public class ContributorDataBuilder extends DataBuilder {
 	 * A method to search for all contributors matching the search term provided
 	 *
 	 * @param queryParameter the search term to be used in the query
-	 * @param stateLimit     the state code to limit the search to
+	 * @param searchType     the type of search, either for single or multi contributor maps
 	 *
 	 * @return               the results of the search
 	 */	
-	public String doSearch(String queryParameter, String stateLimit) throws javax.servlet.ServletException {
+	public String doSearch(String queryParameter, String searchType) throws javax.servlet.ServletException {
 	
 		// define private variable to hold results
 		StringBuilder results = new StringBuilder();
@@ -126,7 +126,7 @@ public class ContributorDataBuilder extends DataBuilder {
 		
 		// start the table
 		results.append("<form action=\"\" id=\"results_form\" name=\"results_form\">");
-		results.append("<table class=\"searchResults\"><thead><tr><th>&nbsp;</th><th>Contributor</th><th>Function(s)</th><th>Event Dates</th><th style=\"width: 65px; \">Events</th><th style=\"width: 65px; \">Mapped Events</th><th style=\"width: 10px; \">&nbsp;</th></tr></thead>");
+		results.append("<table class=\"searchResults\"><thead><tr><th>Contributor</th><th>Function(s)</th><th>Event Dates</th><th style=\"width: 65px; \">Events</th><th style=\"width: 65px; \">Mapped Events</th><th style=\"width: 10px; \">&nbsp;</th></tr></thead>");
 		
 		// add a table footer
 		results.append("<tfoot>");
@@ -154,20 +154,9 @@ public class ContributorDataBuilder extends DataBuilder {
 					results.append("<tr>");
 				}
 
-				// start contributor row
-				if(Integer.parseInt(resultSet.getString(5)) > 0) {
-					// there are venues that can be mapped
-					// add the map icon
-					results.append("<td><a href=\"#\" onclick=\"showContributorMap('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" title=\"Map events for " + resultSet.getString(2) + "\">");
-					results.append("<img src=\"assets/images/mapicongreen.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Map events for " + resultSet.getString(2) + "\"/></a></td>");
-
-					// add the contributor page link
-					results.append("<td><a href=\"" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "\" title=\"View record for " + resultSet.getString(2) + " in AusStage\" target=\"ausstage\">");
-					results.append(resultSet.getString(2) + "</a></td>");
-				} else {
-					// no venues can be mapped
-					results.append("<td>&nbsp;</td><td>" + resultSet.getString(2) + "</td>");
-				}		
+				// add the contributor page link
+				results.append("<td><a href=\"" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "\" title=\"View record for " + resultSet.getString(2) + " in AusStage\" target=\"ausstage\">");
+				results.append(resultSet.getString(2) + "</a></td>");	
 				
 				// add remaining data
 				results.append("<td>" + resultSet.getString(3) + "</td>");
@@ -177,8 +166,13 @@ public class ContributorDataBuilder extends DataBuilder {
 				
 				// add selection box
 				if(Integer.parseInt(resultSet.getString(5)) > 0) {
-					results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"addContrib('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Add\"/></td></tr>");
-					//results.append("<td><input type=\"checkbox\" name=\"contributor\" id=\"contributor\" value=\"" + resultSet.getString(1) + "\"/></td></tr>");
+					if(searchType.equals("single")) {
+						// single map
+						results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"showContributorMap('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Show Map\"/></td></tr>");
+					} else {
+						// multi map
+						results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"addContrib('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Add\"/></td></tr>");
+					}
 				} else {
 					results.append("<td>&nbsp;</td></tr>\n");
 				}
@@ -201,7 +195,7 @@ public class ContributorDataBuilder extends DataBuilder {
 		}
 		
 		// finalise the table
-		if(stateLimit != null && recordCount != 0) {
+		if(recordCount != 0) {
 			results.append("<tr><td colspan=\"5\"><strong>Note: </strong>If a contributor is not listed they may not be associated with a venue in the specified region</td></tr>");
 		}
 				
@@ -252,13 +246,12 @@ public class ContributorDataBuilder extends DataBuilder {
 			sql = "SELECT DISTINCT e.eventid, e.event_name, "
 				+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-				+ "       v.venueid, v.venue_name, v.suburb, s.state, v.postcode, "
+				+ "       v.venueid, v.venue_name, v.suburb, v.state, v.postcode, "
 				+ "       v.latitude, v.longitude, c.contributorid, sc.contrib_name "
 				+ "FROM conevlink c, "
 				+ "     events e, "
 				+ "     venue v, "
-				+ "     search_contributor sc, "
-				+ "     states s "
+				+ "     search_contributor sc "
 				+ "WHERE c.contributorid = ANY (";
 			
 				// add sufficient place holders for all of the ids
@@ -273,7 +266,6 @@ public class ContributorDataBuilder extends DataBuilder {
 				sql += ") AND c.contributorid = sc.contributorid "
 				+ "AND e.eventid = c.eventid "
 				+ "AND v.venueid = e.venueid "
-				+ "AND v.state = s.stateid "
 				+ "AND v.longitude IS NOT NULL ";
 			
 				// define the paramaters
@@ -283,18 +275,16 @@ public class ContributorDataBuilder extends DataBuilder {
 			sql = "SELECT DISTINCT e.eventid, e.event_name, "
 				+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-				+ "       v.venueid, v.venue_name, v.suburb, s.state, v.postcode, "
+				+ "       v.venueid, v.venue_name, v.suburb, v.state, v.postcode, "
 				+ "       v.latitude, v.longitude, c.contributorid, sc.contrib_name "
 				+ "FROM conevlink c, "
 				+ "     events e, "
 				+ "     venue v, "
-				+ "     search_contributor sc, "
-				+ "     states s "
+				+ "     search_contributor sc "
 				+ "WHERE c.contributorid = ? "
 				+ "AND c.contributorid = sc.contributorid "
 				+ "AND e.eventid = c.eventid "
 				+ "AND v.venueid = e.venueid "
-				+ "AND v.state = s.stateid "
 				+ "AND v.longitude IS NOT NULL";
 				
 				// define the paramaters

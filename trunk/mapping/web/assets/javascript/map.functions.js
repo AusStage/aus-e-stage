@@ -382,6 +382,122 @@ function showMap2(data, traj, focus, start, finish) {
 	}		
 }
 
+// function to show a map - version 2
+function showMap3(data, focus, start, finish) {
+
+	// tidy up any previous maps
+	GUnload();
+	
+	// create a new map and centre it on australia
+	var map = new GMap2(document.getElementById("map"));
+	
+	// determine where to centre the map
+	//recentre the map
+	switch(focus){
+		case '1':
+			//map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+			map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
+			break;
+		case '2':
+			map.setCenter(new GLatLng(-25.328055, 122.298333), 5); //WA
+			break;
+		case '3':
+			map.setCenter(new GLatLng(-32.163333, 147.016666), 6); //NSW
+			break;
+		case '4':
+			map.setCenter(new GLatLng(-22.486944, 144.431666), 5); //QLD
+			break;
+		case '5':
+			map.setCenter(new GLatLng(-42.021388, 146.593333), 7); //TAS
+			break;
+		case '6':
+			map.setCenter(new GLatLng(-36.854166, 144.281111), 6); //VIC
+			break;
+		case '7':
+			map.setCenter(new GLatLng(-35.49, 149.001388), 9); //ACT
+			break;
+		case '8':
+			map.setCenter(new GLatLng(-19.383333, 133.357777), 6); //NT
+			break;
+		case '9':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 2); //outside Aus
+			break;
+		case 'a':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // Aus only
+			break;
+		default:
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // defult, AUS
+			break;
+	}
+	
+	// finish setting up the map
+	map.setUIToDefault();
+	
+	// extract the markers from the xml
+	var markers = data.documentElement.getElementsByTagName("marker");
+	
+	// object to hold marker locations
+	var locations = {};
+	
+	// build a group of markers
+	for (var i = 0; i < markers.length; i++) {
+	
+		// build a hash of this location
+		var lat = parseFloat(markers[i].getAttribute("lat"));
+		var lng = parseFloat(markers[i].getAttribute("lng"));
+		var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
+		latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
+		
+		if(locations[latlngHash] == null) {
+			// not seen this location before
+			// add to hash
+			locations[latlngHash] = true;
+		} else {
+			// have seen this location before
+			// adjust the lat and lng
+			var randomNumber = Math.floor(Math.random()*20);
+			randomNumber = "0.000" + randomNumber;
+			randomNumber = parseFloat(randomNumber);
+			
+			lat = lat + randomNumber;
+			lng = lng + randomNumber;
+		}
+		
+		// build a latlng object for this marker
+		var latlng = new GLatLng(lat, lng);
+		var info   = markers[i].textContent;
+		
+		if(info == "" || info == undefined) {
+			info = markers[i].innerText;
+		}
+		
+		// debug code
+		count = 1;
+		var marker = createMarker2(latlng, info, count);
+		
+		// add marker to the map
+		map.addOverlay(marker);
+	}	
+}
+
+// build a single marker
+function createMarker2(latlng, info, count) {
+	
+	// make a new icon
+	var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: "#CCBAD7"});
+	
+	// make a new marker
+	var marker = new GMarker(latlng, {icon: newIcon});
+	
+	// add an event listener to listen for a click and show the InfoWindow
+	GEvent.addListener(marker, 'click', function() {
+		marker.openInfoWindowHtml(info, {maxWidth:520, maxHeight:400,autoScroll:true});
+	});
+	
+	return marker;
+}
+
+
 // function to build the time slider
 function buildTimeSlider(data) {
 

@@ -64,6 +64,7 @@
 			<div id="tabs-1">
 				<form action="data/" method="post" id="name_search" name="name_search">
 					<input type="hidden" name="action" value="contributor_search"/>
+					<input type="hidden" name="searchType" value="single"/>
 					<table class="formTable">
 						<tbody>
 						<tr>

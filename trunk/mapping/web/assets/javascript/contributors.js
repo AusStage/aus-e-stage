@@ -178,14 +178,6 @@ function showContributorMap(id, contrib, url) {
 		$("#map_heading").append('Map of Events for multiple contributors');
 	}
 	
-	if(id.indexOf(',',0) == -1) {
-		// update the persistent link
-		$("#map_header_link").attr("href", "maplinks.jsp?type=contrib&id=" + id);
-		$("#map_header_link").show();
-	} else {
-		$("#map_header_link").hide();
-	}
-	
 	// update the download as KML link
 	$("#map_header_kml").attr("href", "data?action=kml&type=contrib&id=" + id);
 	
@@ -193,10 +185,11 @@ function showContributorMap(id, contrib, url) {
 	$("#map_header_export").attr("href", "exportdata.jsp?type=contrib&id=" + id);	
 	
 	// get the marker xml data
-	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
+	//$.get("data?action=markers&type=contributor&id=" + id, function(data) {
+	$.get("data?action=markers&type=contributor&id=2256,580", function(data) {
 		
 		// show the map
-		showMap2(data, null, $("#state").val(), null, null);
+		showMap3(data, null, $("#state").val(), null, null);
 		
 		// build the time slider
 		buildTimeSlider(data);
