@@ -222,10 +222,268 @@ public class ContributorDataBuilder extends DataBuilder {
 	public String getMarkerXMLString(String queryParameter) throws javax.servlet.ServletException {
 	
 		// define private variables
+		String sql = null;			// the sql to execute
+		String[] parameters = null; // variable to hold sql parameters
+		String[] ids = null;        // variable to hold individual contributor id numbers
 		
+		// get the persistent URL templates
+		String eventURLTemplate       = dataManager.getContextParam("eventURLTemplate"); //[event-id]
+		String contributorURLTemplate = dataManager.getContextParam("contributorURLTemplate"); //[contrib-id]
+		String venueURLTemplate       = dataManager.getContextParam("venueURLTemplate"); //[venue-id]
 		
-		return "";
-	
+		// venue, contributor and event variables
+		VenueList   venues      = new VenueList();
+		Venue       venue       = null;
+		Contributor contributor = null;
+		Event       event       = null;
+		
+		// date management variables
+		int firstDate = Integer.MAX_VALUE;
+		int lastDate  = Integer.MIN_VALUE;
+		
+		// try to connect to the database
+		dataManager.connect(); // dataManager defined in parent object
+		
+		// check to see if we need to add the contributor name to the event name
+		if(queryParameter.indexOf(',') != -1) {
+			// yes - so break out the ids into an array
+			ids = queryParameter.split(",");
+			
+			sql = "SELECT DISTINCT e.eventid, e.event_name, "
+				+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venueid, v.venue_name, v.suburb, s.state, v.postcode, "
+				+ "       v.latitude, v.longitude, c.contributorid, sc.contrib_name "
+				+ "FROM conevlink c, "
+				+ "     events e, "
+				+ "     venue v, "
+				+ "     search_contributor sc, "
+				+ "     states s "
+				+ "WHERE c.contributorid = ANY (";
+			
+				// add sufficient place holders for all of the ids
+				for(int i = 0; i < ids.length; i++) {
+					sql += "?,";
+				}
+			
+				// tidy up the sql
+				sql = sql.substring(0, sql.length() -1);
+			
+				// finish the sql					
+				sql += ") AND c.contributorid = sc.contributorid "
+				+ "AND e.eventid = c.eventid "
+				+ "AND v.venueid = e.venueid "
+				+ "AND v.state = s.stateid "
+				+ "AND v.longitude IS NOT NULL ";
+			
+				// define the paramaters
+				parameters = ids;
+
+		} else {
+			sql = "SELECT DISTINCT e.eventid, e.event_name, "
+				+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venueid, v.venue_name, v.suburb, s.state, v.postcode, "
+				+ "       v.latitude, v.longitude, c.contributorid, sc.contrib_name "
+				+ "FROM conevlink c, "
+				+ "     events e, "
+				+ "     venue v, "
+				+ "     search_contributor sc, "
+				+ "     states s "
+				+ "WHERE c.contributorid = ? "
+				+ "AND c.contributorid = sc.contributorid "
+				+ "AND e.eventid = c.eventid "
+				+ "AND v.venueid = e.venueid "
+				+ "AND v.state = s.stateid "
+				+ "AND v.longitude IS NOT NULL";
+				
+				// define the paramaters
+				parameters = new String[1];
+				parameters[0] = queryParameter;
+		}
+			
+		// get the resultset
+		ResultSet resultSet = dataManager.executePreparedStatement(sql, parameters);
+		
+		// build a list of venues, contributors and events
+		try {
+			// build the documnet by adding individual events
+			while (resultSet.next()) {
+				// build a list of venues, contributors and events
+				
+				// get the current venue, or make a new one
+				if(venues.hasVenue(resultSet.getString(9)) == false) {
+					// make a new venue
+					venue = new Venue(resultSet.getString(9));
+					venue.setName(resultSet.getString(10));
+					venue.setSuburb(resultSet.getString(11));
+					venue.setState(resultSet.getString(12));
+					venue.setPostcode(resultSet.getString(13));
+					venue.setLatitude(resultSet.getString(14));
+					venue.setLongitude(resultSet.getString(15));
+					venue.setUrl(venueURLTemplate.replace("[venue-id]", resultSet.getString(9)));
+				
+					// add the venue to the list
+					venues.addVenue(venue);
+
+				} else {
+					venue = venues.getVenue(resultSet.getString(9));
+				}
+				
+				// get this contributor for this venue or make a new one
+				if(venue.hasContributor(resultSet.getString(16)) == false) {
+					// make a new contributor
+					contributor = new Contributor(resultSet.getString(16));
+					contributor.setName(resultSet.getString(17));
+					contributor.setUrl(contributorURLTemplate.replace("[contrib-id]", resultSet.getString(16)));
+				
+					// add the contrbutor to this venue
+					venue.addContributor(contributor);
+				} else {
+					contributor = venue.getContributor(resultSet.getString(16));
+				}
+				
+				// see if this event has already been added
+				if(contributor.hasEvent(resultSet.getString(1)) == false) {
+					// add this event to this contributor
+					event = new Event(resultSet.getString(1));
+					event.setName(resultSet.getString(2));
+					event.setFirstDate(buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+					event.setFirstDisplayDate(buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+					event.setUrl(eventURLTemplate.replace("[event-id]", resultSet.getString(1)));
+					
+					// add this event to this contributor
+					contributor.addEvent(event);
+				}
+			}
+			
+			// close the resultset
+			resultSet.close();
+		}catch (java.sql.SQLException ex) {
+			throw new javax.servlet.ServletException("Unable to build the list of venues, contributors and events", ex);
+		}
+		
+		// build the marker XML
+		try {
+			// create the xml document object
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder        builder = factory.newDocumentBuilder();
+			Document			   xmlDoc  = builder.newDocument();
+			
+			// add the root element
+			Element rootElement = xmlDoc.createElement("markers");
+			xmlDoc.appendChild(rootElement);
+			
+			// get the list of venues
+			Set<Venue> venueList = venues.getVenues();
+			
+			// get the iterator for the list
+			Iterator venueIterator = venueList.iterator();
+			
+			// iterate over the venues
+			while(venueIterator.hasNext()) {
+				// get the current venue
+				venue = (Venue)venueIterator.next();
+									
+				// set the first and last date variables
+				firstDate = Integer.MIN_VALUE;
+				lastDate  = Integer.MAX_VALUE;
+				
+				// add a marker to the xml
+				Element marker = xmlDoc.createElement("marker");
+				
+				// set the venue attributes
+				marker.setAttribute("name",     venue.getName());
+				marker.setAttribute("suburb",   venue.getSuburb());
+				marker.setAttribute("state",    venue.getState());
+				marker.setAttribute("postcode", venue.getPostcode());
+				marker.setAttribute("lat",      venue.getLatitude());
+				marker.setAttribute("lng",      venue.getLongitude());
+				
+				// build the description
+				StringBuilder description = new StringBuilder();
+				description.append("<p><a href=\"" + venue.getUrl() + "\" target=\"ausstage\">" + venue.getName() + "</a></p><ul>");
+				
+				// get a list of contributors
+				Set<Contributor> contributors = venue.getSortedContributors(Venue.CONTRIBUTOR_NAME_SORT);
+				
+				// get the iterator for the list of contributors
+				Iterator contributorIterator = contributors.iterator();
+				
+				// iterate over the contributors
+				while(contributorIterator.hasNext()) {
+					// get the current contributor
+					contributor = (Contributor)contributorIterator.next();
+					
+					// start the description for this contributor
+					description.append("<li><a href=\"" + contributor.getUrl() + "\" target=\"ausstage\">" + contributor.getName() + "</a><ul>");
+					
+					// get all of the events for this contributor
+					Set<Event> events = contributor.getSortedEvents(Contributor.EVENT_FIRST_DATE_SORT);
+					
+					// get the iterator for the list of events
+					Iterator eventIterator = events.iterator();
+					
+					// iterate over the events
+					while(eventIterator.hasNext()) {
+						// get the current event
+						event = (Event)eventIterator.next();
+						
+						// add this event
+						description.append("<li><a href=\"" + event.getUrl() + "\" target=\"ausstage\">" + event.getName() + "</a>, " + event.getFirstDisplayDate() + "</li>");
+						
+						// update the date variables
+						if(firstDate < event.getFirstDateAsInt()) {
+							firstDate = event.getFirstDateAsInt();
+						}
+						
+						if(lastDate > event.getFirstDateAsInt()) {
+							lastDate = event.getFirstDateAsInt();
+						}						
+					}
+					
+					// finish the list of events & contributor
+					description.append("</ul></li>");
+				}
+				
+				// finish the list of contributors
+				description.append("</ul>");
+								
+				// add the description to the venue
+				CDATASection cdata = xmlDoc.createCDATASection(description.toString());
+				marker.appendChild(cdata);
+				
+				// add the date attributes
+				marker.setAttribute("fdate", Integer.toString(firstDate));
+				marker.setAttribute("ldate", Integer.toString(lastDate));
+				
+				// add the marker to the XML
+				rootElement.appendChild(marker);
+			}
+			
+			// create a transformer 
+			TransformerFactory transFactory = TransformerFactory.newInstance();
+			Transformer        transformer  = transFactory.newTransformer();
+			
+			// set some options on the transformer
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			transformer.setOutputProperty(OutputKeys.INDENT, "no");
+			
+			// get a transformer and supporting classes
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			DOMSource    source = new DOMSource(xmlDoc);
+			
+			// transform the xml document into a string
+			transformer.transform(source, result);
+			return writer.toString();			
+			
+		} catch(javax.xml.parsers.ParserConfigurationException ex) {
+			throw new javax.servlet.ServletException("Unable to build marker xml", ex);
+		} catch(javax.xml.transform.TransformerException e) {
+			throw new javax.servlet.ServletException("Unable to build marker xml", e);
+		}
+
 	} // end getMarkerXMLString method
 	
 	/**

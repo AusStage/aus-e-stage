@@ -29,18 +29,19 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	// declare private variables
 	private String id = null;
 	private String name = null;
+	private String url  = null;
 	private Set<Event> events;
 	
 	// declare public constants
 	/**
 	 * Sort events by id
 	 */
-	public final int EVENT_ID_SORT = 0;
+	public final static int EVENT_ID_SORT = 0;
 	
 	/**
 	 * sort events by first date
 	 */
-	public final int EVENT_FIRST_DATE_SORT = 1;
+	public final static int EVENT_FIRST_DATE_SORT = 1;
 	
 	
 	/**
@@ -65,13 +66,15 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	 *
 	 * @param id        the unique identifier for this contributor
 	 * @param name      the name of this contributor
+	 * @param url       the url for this contributor in AusStage
 	 */
-	public Contributor(String id, String name) {
+	public Contributor(String id, String name, String url) {
 		
 		// check the parameters
 		try {
 			this.id        = filterString(id);
 			this.name      = filterString(name);
+			this.url       = filterString(url);
 		} catch (IllegalArgumentException ex) {
 			throw new IllegalArgumentException("All arguments must not be null or empty strings: " + ex.toString());
 		}
@@ -105,6 +108,15 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	} // end addNewEvent method
 	
 	/**
+	 * A method to add an event for this contributor
+	 *
+	 * @param event the new event
+	 */
+	public void addEvent(Event event) {
+		addNewEvent(event);
+	} // end addNewEvent method
+	
+	/**
 	 * A method to check if this contributor has an event 
 	 *
 	 * @param id the unique identifer of this event
@@ -112,6 +124,8 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	 * @return       true if this contributor has this event
 	 */
 	public boolean hasEvent(String id) {
+		id = filterString(id);
+		
 		Event newEvent = new Event(id);
 		
 		return hasEvent(newEvent);
@@ -125,7 +139,12 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	 * @return      true if this contributor has this event
 	 */
 	public boolean hasEvent(Event event) {
-		return events.contains(event);
+		// check on the parameter
+		if(event != null) {
+			return events.contains(event);
+		} else {
+			throw new IllegalArgumentException("Event cannot be null");
+		}
 	}
 	
 	/**
@@ -234,6 +253,14 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	
 	public void setName(String value) {
 		this.name = filterString(value);
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String value) {
+		this.url = filterString(value);
 	}
 	
 	/*
