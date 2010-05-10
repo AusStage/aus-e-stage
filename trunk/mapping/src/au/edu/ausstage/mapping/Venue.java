@@ -121,6 +121,57 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	} // end addNewEvent method
 	
 	/**
+	 * A method to check if this venue has contributor
+	 *
+	 * @param id the unique identifer of this contributor
+	 *
+	 * @return       true if this venue has this contributor
+	 */
+	public boolean hasContributor(String id) {
+		Contributor contributor = new Contributor(id);
+		
+		return hasContributor(contributor);
+	}
+	
+	/**
+	 * A method to check if this venue has contributor
+	 *
+	 * @param contributor the contributor we're looking for
+	 *
+	 * @return       true if this venue has this contributor
+	 */
+	public boolean hasContributor(Contributor contributor) {
+		return contributors.contains(contributor);
+	}
+	
+	/**
+	 * A method to get a specific event
+	 *
+	 * @param id the unique identifer of the event
+	 *
+	 * @return   the event if found, null if nothing is found
+	 */
+	public Contributor getContributor(String id) {
+		
+		// get an iterator for this set
+		Iterator iterator = contributors.iterator();
+		
+		// loop through the list of events looking through 
+		while(iterator.hasNext()) {
+			// get the event at this place in the set
+			Contributor contributor = (Contributor)iterator.next();
+			
+			// compare ids
+			if(contributor.getId().equals(id) == true) {
+				return contributor;
+			}
+		}
+		
+		// if we get here, nothing was found
+		return null;
+	}
+	
+	/**
 	 * A method to get the list of contributors for this venue
 	 *
 	 * @return the list of contributors
