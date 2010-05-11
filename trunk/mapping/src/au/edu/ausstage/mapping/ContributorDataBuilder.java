@@ -206,8 +206,7 @@ public class ContributorDataBuilder extends DataBuilder {
 	} // end doDear method
 	
 	/**
-	 * A method used to get the the Marker XML for an organisation restricted to a date range
-	 * using the first date fields in the database
+	 * A method used to get the the Marker XML for an series of contributors
 	 *
 	 * @param queryParameter the parameter to determine which record(s) are of interest
 	 *
@@ -234,6 +233,8 @@ public class ContributorDataBuilder extends DataBuilder {
 		// date management variables
 		int firstDate = Integer.MAX_VALUE;
 		int lastDate  = Integer.MIN_VALUE;
+		String firstDateAsString = "";
+		String lastDateAsString  = "";
 		
 		// event count variables
 		int eventCount = 0;
@@ -381,6 +382,8 @@ public class ContributorDataBuilder extends DataBuilder {
 				// set the first and last date variables
 				firstDate = Integer.MIN_VALUE;
 				lastDate  = Integer.MAX_VALUE;
+				firstDateAsString = "";
+				lastDateAsString  = "";
 				
 				// reset the event count variable
 				eventCount = 0;
@@ -434,10 +437,12 @@ public class ContributorDataBuilder extends DataBuilder {
 						// update the date variables
 						if(firstDate < event.getFirstDateAsInt()) {
 							firstDate = event.getFirstDateAsInt();
+							firstDateAsString = event.getFirstDate();
 						}
 						
 						if(lastDate > event.getFirstDateAsInt()) {
 							lastDate = event.getFirstDateAsInt();
+							lastDateAsString = event.getFirstDate();
 						}						
 					}
 					
@@ -455,6 +460,8 @@ public class ContributorDataBuilder extends DataBuilder {
 				// add the date attributes
 				marker.setAttribute("fdate", Integer.toString(firstDate));
 				marker.setAttribute("ldate", Integer.toString(lastDate));
+				marker.setAttribute("fdatestr", firstDateAsString);
+				marker.setAttribute("ldatestr", lastDateAsString);
 				
 				// add the event count attributes
 				marker.setAttribute("events", Integer.toString(eventCount));
@@ -486,181 +493,6 @@ public class ContributorDataBuilder extends DataBuilder {
 			throw new javax.servlet.ServletException("Unable to build marker xml", e);
 		}
 
-	} // end getMarkerXMLString method
-	
-	/**
-	 * A method used to get the the Marker XML for an organisation restricted to a date range
-	 * using the first date fields in the database
-	 *
-	 * @param queryParameter the parameter to determine which record(s) are of interest
-	 *
-	 * @return               the string representation of the Marker XML
-	 */
-	public String getMarkerXMLString(String queryParameter, String foobar) throws javax.servlet.ServletException {
-	
-		// define private variables
-		String xmlString;			// string to hold xml 
-		int recordCount = 0;		// count number of markers created
-		String sql = null;			// the sql to execute
-		String[] parameters = null; // variable to hold sql parameters
-		String[] ids = null;        // variable to hold individual contributor id numbers
-		
-		// get the persistent URL template for event
-		String eventURLTemplate = this.dataManager.getContextParam("eventURLTemplate");
-		
-		// try to connect to the database
-		this.dataManager.connect(); // dataManager defined in parent object
-		
-		// check to see if multiple contributors are specified
-		if(queryParameter.indexOf(',') != -1) {
-			// yes - so break out the ids into an array
-			ids = queryParameter.split(",");
-		}
-
-		// all venues
-	
-		// check to see if we need to add the contributor name to the event name
-		if(queryParameter.indexOf(',') != -1) {
-			sql = "SELECT DISTINCT e.eventid, e.event_name, "
-				+ "      e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-				+ "       v.venue_name, v.suburb, v.state, v.postcode, "
-				+ "       v.latitude, v.longitude, c.contributorid "
-				+ "FROM conevlink c, "
-				+ "     events e, "
-				+ "     venue v, "
-				+ "     search_contributor sc "
-				+ "WHERE c.contributorid = ANY (";
-			
-				// add sufficient place holders for all of the ids
-				for(int i = 0; i < ids.length; i++) {
-					sql += "?,";
-				}
-			
-				// tidy up the sql
-				sql = sql.substring(0, sql.length() -1);
-			
-				// finish the sql					
-				sql += ") AND c.contributorid = sc.contributorid "
-				+ "AND e.eventid = c.eventid "
-				+ "AND v.venueid = e.venueid "
-				+ "AND v.longitude IS NOT NULL "
-				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
-			
-				// define the paramaters
-				parameters = ids;
-
-		} else {
-			sql = "SELECT DISTINCT e.eventid, e.event_name, "
-				+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-				+ "       v.venue_name, v.suburb, v.state, v.postcode, "
-				+ "       v.latitude, v.longitude, c.contributorid "
-				+ "FROM conevlink c, "
-				+ "     events e, "
-				+ "     venue v, "
-				+ "     search_contributor sc "
-				+ "WHERE c.contributorid = ? "
-				+ "AND c.contributorid = sc.contributorid "
-				+ "AND e.eventid = c.eventid "
-				+ "AND v.venueid = e.venueid "
-				+ "AND v.longitude IS NOT NULL "
-				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC ";
-				
-				// define the paramaters
-				parameters = new String[1];
-				parameters[0] = queryParameter;
-		}
-			
-		// get the resultset
-		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
-		
-		// build the xml document
-		try {
-			// create the xml document object
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder        builder = factory.newDocumentBuilder();
-			Document			   xmlDoc  = builder.newDocument();
-			
-			// add the root element
-			Element rootElement = xmlDoc.createElement("markers");
-			xmlDoc.appendChild(rootElement);
-		
-			// build the documnet by adding individual events
-			while (resultSet.next()) {
-			
-				// create a marker element
-				Element marker = xmlDoc.createElement("marker");
-				
-				// add attributes to this element
-				marker.setAttribute("event", resultSet.getString(2)); // event name
-				
-				// build the event url
-				String url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));  // replace the constant with the event id
-				marker.setAttribute("url", url);  // persistent URL to this event		
-				
-				// add start date
-				String date = this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
-				marker.setAttribute("first", date);
-				date = this.buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
-				marker.setAttribute("last", date);
-				
-				// add start and end date for program purposes
-				date = this.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)); 
-				marker.setAttribute("startDate", date);
-				
-				date = this.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)); 
-				marker.setAttribute("finishDate", date);
-				
-				// add start date for program purposes
-				date = this.buildDate(resultSet.getString(3), resultSet.getString(4), null); 
-				marker.setAttribute("sliderDate", date);
-				
-				// add remaining attributes
-				marker.setAttribute("venue",    resultSet.getString(9));  // venue name
-				marker.setAttribute("suburb",   resultSet.getString(10));  // venue suburb
-				marker.setAttribute("state",    resultSet.getString(11));  // venue state
-				marker.setAttribute("postcode", resultSet.getString(12));  // venue postcode
-				marker.setAttribute("lat",      resultSet.getString(13)); // latitude
-				marker.setAttribute("lng",      resultSet.getString(14)); // longitude
-				marker.setAttribute("contrib",  resultSet.getString(15)); // contributorid
-				
-				// add this element to the document
-				rootElement.appendChild(marker);
-				
-				// increment counter
-				recordCount++;
-			}
-			
-			// add a comment to help in debugging and testing
-			rootElement.appendChild(xmlDoc.createComment("Number of markers created: " + recordCount));
-			
-			// create a transformer 
-			TransformerFactory transFactory = TransformerFactory.newInstance();
-			Transformer        transformer  = transFactory.newTransformer();
-			
-			// set some options on the transformer
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-			transformer.setOutputProperty(OutputKeys.INDENT, "no");
-			
-			// get a transformer and supporting classes
-			StringWriter writer = new StringWriter();
-			StreamResult result = new StreamResult(writer);
-			DOMSource    source = new DOMSource(xmlDoc);
-			
-			// transform the xml document into a string
-			transformer.transform(source, result);
-			xmlString = writer.toString();
-			
-		} catch(javax.xml.parsers.ParserConfigurationException ex) {
-			throw new javax.servlet.ServletException("Unable to build marker xml", ex);
-		} catch(Exception ex) {
-			throw new javax.servlet.ServletException("Unable to build marker xml", ex);
-		}
-		
-		// return the string
-		return xmlString;
-	
 	} // end getMarkerXMLString method
 	
 	/**

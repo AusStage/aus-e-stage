@@ -129,29 +129,6 @@
 		</div>
 		<div id="search_results" style="padding-top: 10px;">
 		</div>
-		<div id="to_map_list" style="padding-top: 10px;">
-			<div class="map_header_footer">
-				<h3>List of Contributors in the Map</h3>
-				<table id="contrib_list" class="searchResults">
-					<thead>
-						<tr>
-							<th>Contributor</th>
-							<th>&nbsp;</th>
-						</tr>
-					</thead>
-					<tfoot>
-						<tr>
-							<td colspan="2">
-								<form action="" method="get">
-									<input class="ui-state-default ui-corner-all button" type="button" onclick="buildListMap(); return false;" value="Build Map"/>
-								</form>
-							</td>
-						</tr>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-		</div>
 		<div id="map_header" class="map_header_footer">
 			<h3 id="map_heading"></h3>
 			<ul class="map_links">
