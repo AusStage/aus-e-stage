@@ -142,7 +142,10 @@ function showMap(data, traj, focus, start, finish) {
 			colour = "#4D3779";
 		}
 		
-		// determine if we add this marker
+		// filter markers
+		var okToAdd = false;
+		
+		// filter markers by date
 		if(start != null) {
 			// filter using date
 			var fDate = parseInt(markers[i].getAttribute("fdate"));
@@ -150,10 +153,71 @@ function showMap(data, traj, focus, start, finish) {
 			
 			// check on the fdate
 			if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
-				map.addOverlay(createMarker(latlng, info, colour));
+				// filter markers by state
+				if(focus != null && focus != "nolimit") {
+					// use the state to filter
+					var state = markers[i].getAttribute("state")
+			
+					if(focus == "a" && state != "9") {
+						okToAdd = true;
+					}else if(focus == "1" && state == "1") {
+						okToAdd = true;
+					}else if(focus == "2" && state == "2") {
+						okToAdd = true;
+					}else if(focus == "3" && state == "3") {
+						okToAdd = true;
+					}else if(focus == "4" && state == "4") {
+						okToAdd = true;
+					}else if(focus == "5" && state == "5") {
+						okToAdd = true;
+					}else if(focus == "6" && state == "6") {
+						okToAdd = true;
+					}else if(focus == "7" && state == "7") {
+						okToAdd = true;
+					}else if(focus == "8" && state == "8") {
+						okToAdd = true;
+					}else if(focus == "9" && state == "9") {
+						okToAdd = true;
+					}			
+				} else {
+					okToAdd = true;
+				}
 			}
+			
 		} else {
-			// just add the marker to the map
+			// filter markers by state
+			if(focus != null && focus != "nolimit") {
+				// use the state to filter
+				var state = markers[i].getAttribute("state")
+			
+				if(focus == "a" && state != "9") {
+					okToAdd = true;
+				}else if(focus == "1" && state == "1") {
+					okToAdd = true;
+				}else if(focus == "2" && state == "2") {
+					okToAdd = true;
+				}else if(focus == "3" && state == "3") {
+					okToAdd = true;
+				}else if(focus == "4" && state == "4") {
+					okToAdd = true;
+				}else if(focus == "5" && state == "5") {
+					okToAdd = true;
+				}else if(focus == "6" && state == "6") {
+					okToAdd = true;
+				}else if(focus == "7" && state == "7") {
+					okToAdd = true;
+				}else if(focus == "8" && state == "8") {
+					okToAdd = true;
+				}else if(focus == "9" && state == "9") {
+					okToAdd = true;
+				}			
+			} else {
+				okToAdd = true;
+			}
+		}
+		
+		// add marker
+		if(okToAdd == true) {
 			map.addOverlay(createMarker(latlng, info, colour));
 		}
 	}	
