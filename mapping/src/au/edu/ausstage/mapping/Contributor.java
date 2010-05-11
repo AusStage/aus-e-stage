@@ -235,6 +235,15 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	
 	} // end getSortedEvents method
 	
+	/**
+	 * A method to get the number of events for this contributor
+	 *
+	 * @return the number of evens for this contributor
+	 */
+	public int getEventCount() {
+		return events.size();
+	} // end getEventCount method
+	
 	/*
 	 * getter and setter methods
 	 */

@@ -471,9 +471,24 @@ function showMap3(data, focus, start, finish) {
 			info = markers[i].innerText;
 		}
 		
-		// debug code
-		count = 1;
-		var marker = createMarker2(latlng, info, count);
+		// get the colour of the icon
+		var eventCount = parseInt(markers[i].getAttribute("events"));
+		var colour;
+	
+		if(eventCount == 1) {
+			colour = "#CCBAD7";
+		}else if(eventCount < 6) {
+			colour = "#9A7BAB";
+		}else if(eventCount > 5 && eventCount < 16) {
+			colour = "#7F649B";
+		}else if(eventCount > 15 && eventCount < 31) {
+			colour = "#69528E";
+		} else {
+			colour = "#4D3779";
+		}
+		
+		// build the marker
+		var marker = createMarker2(latlng, info, colour);
 		
 		// add marker to the map
 		map.addOverlay(marker);
@@ -481,10 +496,10 @@ function showMap3(data, focus, start, finish) {
 }
 
 // build a single marker
-function createMarker2(latlng, info, count) {
+function createMarker2(latlng, info, colour) {
 	
 	// make a new icon
-	var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: "#CCBAD7"});
+	var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: colour});
 	
 	// make a new marker
 	var marker = new GMarker(latlng, {icon: newIcon});

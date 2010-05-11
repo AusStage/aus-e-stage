@@ -235,6 +235,9 @@ public class ContributorDataBuilder extends DataBuilder {
 		int firstDate = Integer.MAX_VALUE;
 		int lastDate  = Integer.MIN_VALUE;
 		
+		// event count variables
+		int eventCount = 0;
+		
 		// try to connect to the database
 		dataManager.connect(); // dataManager defined in parent object
 		
@@ -379,6 +382,9 @@ public class ContributorDataBuilder extends DataBuilder {
 				firstDate = Integer.MIN_VALUE;
 				lastDate  = Integer.MAX_VALUE;
 				
+				// reset the event count variable
+				eventCount = 0;
+				
 				// add a marker to the xml
 				Element marker = xmlDoc.createElement("marker");
 				
@@ -410,6 +416,9 @@ public class ContributorDataBuilder extends DataBuilder {
 					
 					// get all of the events for this contributor
 					Set<Event> events = contributor.getSortedEvents(Contributor.EVENT_FIRST_DATE_SORT);
+					
+					// keep track of the number of events
+					eventCount += events.size();
 					
 					// get the iterator for the list of events
 					Iterator eventIterator = events.iterator();
@@ -446,6 +455,9 @@ public class ContributorDataBuilder extends DataBuilder {
 				// add the date attributes
 				marker.setAttribute("fdate", Integer.toString(firstDate));
 				marker.setAttribute("ldate", Integer.toString(lastDate));
+				
+				// add the event count attributes
+				marker.setAttribute("events", Integer.toString(eventCount));
 				
 				// add the marker to the XML
 				rootElement.appendChild(marker);
