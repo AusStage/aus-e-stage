@@ -455,8 +455,8 @@ function showMap3(data, focus, start, finish) {
 		} else {
 			// have seen this location before
 			// adjust the lat and lng
-			var randomNumber = Math.floor(Math.random()*20);
-			randomNumber = "0.000" + randomNumber;
+			var randomNumber = Math.floor(Math.random()*10) + 10;
+			randomNumber = "0.0000" + randomNumber;
 			randomNumber = parseFloat(randomNumber);
 			
 			lat = lat + randomNumber;
