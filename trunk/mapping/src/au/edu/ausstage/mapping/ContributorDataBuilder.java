@@ -380,8 +380,8 @@ public class ContributorDataBuilder extends DataBuilder {
 				venue = (Venue)venueIterator.next();
 									
 				// set the first and last date variables
-				firstDate = Integer.MIN_VALUE;
-				lastDate  = Integer.MAX_VALUE;
+				firstDate = Integer.MAX_VALUE;
+				lastDate  = Integer.MIN_VALUE;
 				firstDateAsString = "";
 				lastDateAsString  = "";
 				
@@ -435,12 +435,12 @@ public class ContributorDataBuilder extends DataBuilder {
 						description.append("<li><a href=\"" + event.getUrl() + "\" target=\"ausstage\">" + event.getName() + "</a>, " + event.getFirstDisplayDate() + "</li>");
 						
 						// update the date variables
-						if(firstDate < event.getFirstDateAsInt()) {
+						if(firstDate > event.getFirstDateAsInt()) {
 							firstDate = event.getFirstDateAsInt();
 							firstDateAsString = event.getFirstDate();
 						}
 						
-						if(lastDate > event.getFirstDateAsInt()) {
+						if(lastDate < event.getFirstDateAsInt()) {
 							lastDate = event.getFirstDateAsInt();
 							lastDateAsString = event.getFirstDate();
 						}						

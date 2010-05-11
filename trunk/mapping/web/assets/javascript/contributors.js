@@ -216,10 +216,10 @@ function reloadMap() {
 	// determine if the trajectory option is set
 	if(showTraj != null) {
 		// reload the map with trajectory information
-		showMap2(contributorMapData, true, $("#state").val(), startDate, finishDate);
+		showMap(contributorMapData, true, $("#state").val(), startDate, finishDate);
 	} else {
 		// reload the map with trajectory information
-		showMap2(contributorMapData, false, $("#state").val(), startDate, finishDate);
+		showMap(contributorMapData, false, $("#state").val(), startDate, finishDate);
 	}
 }
 
