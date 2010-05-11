@@ -59,9 +59,7 @@ $(document).ready(function(){
 	hideLoader();
 	
 	// hide the map div
-	hideMap();
-	
-	$("#to_map_list").hide();	
+	hideMap();	
 });
 
 // override the default action of some form buttons
@@ -189,7 +187,7 @@ function showContributorMap(id, contrib, url) {
 	$.get("data?action=markers&type=contributor&id=2256,580", function(data) {
 		
 		// show the map
-		showMap3(data, null, $("#state").val(), null, null);
+		showMap(data, null, $("#state").val(), null, null);
 		
 		// build the time slider
 		buildTimeSlider(data);
@@ -197,62 +195,6 @@ function showContributorMap(id, contrib, url) {
 		// store reference to marker data for reuse
 		contributorMapData = data;
 	});
-}
-
-// function to add contribtor to the list of contributors
-function addContrib(id, contrib, url) {
-
-	// hide the map
-	hideMap();
-
-	// get the number of rows
-	var rows = $("#contrib_list").attr('rows').length;
-	var j = 2;
-	
-	if(rows % j == 1) {
-		$('#contrib_list > tbody:last').append('<tr class="odd" id="list' + id + '"><td><a href="' + url + '" target="ausstage">' + contrib + '</a></td><td><input class="ui-state-default ui-corner-all button" type="button" onclick="delContrib(\'' + id + '\'); return false;" value="Delete"/></td></tr>');
-	} else {
-		$('#contrib_list > tbody:last').append('<tr id="list' + id + '"><td><a href="' + url + '" target="ausstage">' + contrib + '</a></td><td><input class="ui-state-default ui-corner-all button" type="button" onclick="delContrib(\'' + id + '\'); return false;" value="Delete"/></td></tr>');
-	}
-
-	if(contributorIDs == null) {
-		contributorIDs = id;
-	} else {
-		contributorIDs += ',' + id;
-	}
-	
-	$("#to_map_list").show();
-	
-	alert(contrib + " has been added to the list of contributors");
-	
-	// override default form behaviour
-	return false;
-}
-
-// function to delete a contributor
-function delContrib(id) {
-
-	hideMap();
-	
-	$("#list" + id).remove();
-	
-	contributorIDs = contributorIDs.replace(id, "");
-	contributorIDs = contributorIDs.replace(',,', ',');
-	
-	return false;
-}
-
-// function to build a map from a list of contributors
-function buildListMap() {
-
-	// update the header
-	$("#map_header h3").empty();
-	$("#map_header h3").append("Map of events for multiple contributors");
-
-	// build the map
-	showContributorMap(contributorIDs, null, null);
-
-	return false;
 }
 	
 // function to reload a map
