@@ -195,6 +195,9 @@ function showContributorMap(id, contrib, url) {
 		// store reference to marker data for reuse
 		contributorMapData = data;
 	});
+	
+	// scroll to the map
+	$.scrollTo("#map_header");
 }
 	
 // function to reload a map
