@@ -17,7 +17,7 @@
 */
 
 // function to show a map - version 2
-function showMap(data, focus, start, finish) {
+function showMap(data, traj, focus, start, finish) {
 
 	// tidy up any previous maps
 	GUnload();
@@ -67,6 +67,27 @@ function showMap(data, focus, start, finish) {
 	// finish setting up the map
 	map.setUIToDefault();
 	
+	// adjust the dates if necessary
+	if(start != null && finish != null) {
+		start = start.replace("-", "");
+		start = start.replace("-", "");
+		if(start.length == 4) {
+			start += "0101";
+		} else if(start.length == 6) {
+			start += "01";
+		}
+		start = parseInt(start);
+		
+		finish = finish.replace("-", "");
+		finish = finish.replace("-", "");
+		if(finish.length == 4) {
+			finish += "1231";
+		} else if(finish.length == 6) {
+			finish += "31";
+		}		
+		finish = parseInt(finish);
+	}
+	
 	// extract the markers from the xml
 	var markers = data.documentElement.getElementsByTagName("marker");
 	
@@ -89,8 +110,8 @@ function showMap(data, focus, start, finish) {
 		} else {
 			// have seen this location before
 			// adjust the lat and lng
-			var randomNumber = Math.floor(Math.random()*10) + 20;
-			randomNumber = "0.0000" + randomNumber;
+			var randomNumber = Math.floor(Math.random()*3) + 1;
+			randomNumber = "0.000" + randomNumber;
 			randomNumber = parseFloat(randomNumber);
 			
 			lat = lat + randomNumber;
@@ -121,8 +142,20 @@ function showMap(data, focus, start, finish) {
 			colour = "#4D3779";
 		}
 		
-		// add marker to the map
-		map.addOverlay(createMarker(latlng, info, colour));
+		// determine if we add this marker
+		if(start != null) {
+			// filter using date
+			var fDate = parseInt(markers[i].getAttribute("fdate"));
+			var lDate = parseInt(markers[i].getAttribute("ldate"));
+			
+			// check on the fdate
+			if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
+				map.addOverlay(createMarker(latlng, info, colour));
+			}
+		} else {
+			// just add the marker to the map
+			map.addOverlay(createMarker(latlng, info, colour));
+		}
 	}	
 }
 
@@ -193,7 +226,7 @@ function buildTimeSlider(data) {
 	$(".tohide").hide();
 	
 	// add some descriptive text
-	$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.</p>');
+	$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.<br/>Only venues where all events fall outside the selected date range will be removed.</p>');
 }
 
 // Make Google API Scripts clean up
