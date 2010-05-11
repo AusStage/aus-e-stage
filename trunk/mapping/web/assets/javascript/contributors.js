@@ -183,8 +183,8 @@ function showContributorMap(id, contrib, url) {
 	$("#map_header_export").attr("href", "exportdata.jsp?type=contrib&id=" + id);	
 	
 	// get the marker xml data
-	//$.get("data?action=markers&type=contributor&id=" + id, function(data) {
-	$.get("data?action=markers&type=contributor&id=2256,580", function(data) {
+	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
+	//$.get("data?action=markers&type=contributor&id=2256,580", function(data) {
 		
 		// show the map
 		showMap(data, null, $("#state").val(), null, null);
