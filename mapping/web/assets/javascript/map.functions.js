@@ -328,7 +328,7 @@ function buildTimeSlider(data) {
 	$("#event_start").sortOptions();
 	$("#event_finish").sortOptions();
 	
-	// select the last option of the event_finish select
+	// select the last and first options before building the time slider
 	$("#event_start option:first").attr("selected", "selected");
 	$("#event_finish option:last").attr("selected", "selected");
 	
@@ -339,8 +339,39 @@ function buildTimeSlider(data) {
 	$(".slider").selectToUISlider({labels: 0}).hide();
 	$(".tohide").hide();
 	
+	addSliderDescription();
+}
+
+// add a description to the slider
+function addSliderDescription() {
 	// add some descriptive text
 	$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.<br/>Only venues where all events fall outside the selected date range will be removed.</p>');
+}
+
+// function to manage clicking the show trajectory option
+function showTrajectory() {
+
+	var showTraj = $("#show_trajectory:checked").val();
+	
+	if(showTraj != null) {
+		// reset and disable time slider
+		$("#event_start option:first").attr("selected", "selected");
+		$("#event_finish option:last").attr("selected", "selected");
+		$("#sliderComponent").hide();
+		$("#sliderComponent").remove();
+		
+		// reset and disable state limit
+		$("#state option:first").attr("selected", "selected");
+		$("#state").attr("disabled", "disabled");
+	} else {
+		// enable time slider
+		$(".slider").selectToUISlider({labels: 0}).hide();
+		addSliderDescription();
+	
+		
+		// enable state limit
+		$("#state").removeAttr("disabled", "disabled");
+	}
 }
 
 // Make Google API Scripts clean up

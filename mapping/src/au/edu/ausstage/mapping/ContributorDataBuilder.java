@@ -504,9 +504,6 @@ public class ContributorDataBuilder extends DataBuilder {
 			// get the list of venues
 			Set<Contributor> trajectoryList = trajectories.getContributors();
 			
-			// debug code
-			System.out.println("###" + trajectoryList.size() + "###");
-			
 			// get the iterator for the list
 			Iterator trajectoriesIterator = trajectoryList.iterator();
 			
