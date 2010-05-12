@@ -31,6 +31,9 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	private String name = null;
 	private String url  = null;
 	private Set<Event> events;
+	private TreeMap<String, String> trajectory;
+	private String[] trajKeyDiff = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+	private int trajKeyDiffIndex = 0;
 	
 	// declare public constants
 	/**
@@ -59,6 +62,8 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 		}
 		
 		events = new HashSet<Event>();
+		trajectory = new TreeMap<String, String>();
+
 	} // end constructor
 	
 	/**
@@ -86,6 +91,7 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 		}
 		
 		events = new HashSet<Event>();
+		trajectory = new TreeMap<String, String>();
 		
 	} // end constructor
 	
@@ -243,6 +249,61 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	public int getEventCount() {
 		return events.size();
 	} // end getEventCount method
+	
+	/*
+	 * methods to manage a trajectory
+	 */
+	 
+	/**
+	 * A method to add a coordinate to the list for the trajectory
+	 *
+	 * @param key    the date that this event occured
+	 * @param coords the coordinates of where the event occured
+	 *
+	 */
+	public void addTrajectoryPoint(String key, String coords) {
+	
+		// filter the input
+		key    = filterString(key);
+		coords = filterString(coords);
+		
+		// check to see if this key has been used before
+		if(trajectory.containsKey(key) == true) {
+			key = key + trajKeyDiff[trajKeyDiffIndex];
+			trajKeyDiffIndex++;
+		}
+		
+		// add this coordinate to the hash
+		trajectory.put(key, coords);
+		
+	} // end add trajectory point method
+	
+	/**
+	 * A method to return the list of coordinates to build a trajectory
+	 *
+	 * @return the list of coordinates
+	 */
+	public Collection<String> getTrajectory() {
+	
+		// get the collection of values
+		return trajectory.values();
+	
+	} // end get trajectory method
+	
+	/**
+	 * A method to return the list of coordinates to build a trajectory
+	 *
+	 * @return the list of coordinates
+	 */
+	public String[] getTrajectoryArray() {
+	
+		// get the collection of values
+		Collection<String> coords = getTrajectory();
+		
+		// return the collection as an array
+		return coords.toArray(new String[0]);
+	
+	} // end getTrajectoryArray
 	
 	/*
 	 * getter and setter methods
