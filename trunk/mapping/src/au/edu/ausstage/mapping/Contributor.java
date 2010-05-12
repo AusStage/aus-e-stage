@@ -380,9 +380,9 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
      * negative integer, 0, or a positive integer depending on whether the receiving object is 
      * less than, equal to, or greater than the specified object.
      *
-     * @param e the event to compare this one to
+     * @param c the event to compare this one to
      *
-     * @return a integer indicating comparison result
+     * @return  an integer indicating comparison result
      */    
 	public int compareTo(Contributor c) {
 		int myId   = Integer.getInteger(id);
