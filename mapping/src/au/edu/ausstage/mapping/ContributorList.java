@@ -81,9 +81,9 @@ public class ContributorList extends DataClasses {
 	/**
 	 * A method to check if this list has this contributor already
 	 *
-	 * @param id the unique identifer of this contributor
+	 * @param contributor a contributor object to use for comparison
 	 *
-	 * @return       true if this list has this contributor
+	 * @return            true if this list has this contributor
 	 */
 	public boolean hasContributor(Contributor contributor) {
 		if(contributor != null) {
