@@ -147,7 +147,7 @@
 			<table class="formTable" width="100%">
 				<tr>
 					<th scope="row" colspan="2">
-						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" value="on"/>
+						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" onclick="showTrajectory();" value="on"/>
 					</th>
 				</tr>
 				<tr>

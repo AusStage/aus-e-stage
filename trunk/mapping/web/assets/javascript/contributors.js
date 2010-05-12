@@ -132,6 +132,9 @@ function showSearchResults(responseText, statusText)  {
 	
 	hideLoader();
 	
+	// scroll to the map
+	$.scrollTo("#search_results");
+	
 }
 
 // function to show a generic error message
