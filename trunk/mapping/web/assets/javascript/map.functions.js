@@ -16,8 +16,11 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-// function to show a map - version 2
-function showMap(data, traj, focus, start, finish) {
+// define helper variables
+var trajectoryColours = ["#CD2626", "#FF5333", "#AA5303", "#FFA824"]; // colours for trajectories
+
+// function to show a map
+function showMap(data, trajectory, focus, start, finish) {
 
 	// tidy up any previous maps
 	GUnload();
@@ -221,7 +224,54 @@ function showMap(data, traj, focus, start, finish) {
 			map.addOverlay(createMarker(latlng, info, colour));
 		}
 	}	
+	
+	// build the trajectories if required
+	if(trajectory == true && focus == "nolimit") {
+		buildTrajectory(data, map);
+	}
 }
+
+// function to build a trajectory
+function buildTrajectory(data, map) {
+
+	// declare additional variables
+	var colourIndex = 0;
+	var maxColourIndex = trajectoryColours.length;
+
+	// extract the trajectory from the xml
+	var trajectories = data.documentElement.getElementsByTagName("trajectory");
+	
+	// loop through all of the trajectories
+	for(var i = 0; i < trajectories.length; i++) {
+	
+		// get the colour
+		var trajectoryColour = trajectoryColours[colourIndex];
+		colourIndex++;
+		
+		if(colourIndex == maxColourIndex) {
+			colourIndex = 0;
+		}
+		
+		// get the coordinates
+		var coordinateList = trajectories[i].childNodes;
+		
+		// loop through the coordinates adding lines
+		for(var x = 0; x < coordinateList.length; x++) {
+		
+			// get the individual coordinates
+			var coordinates = coordinateList[x].textContent;
+			
+			// split into the pair of coordinates
+			coordinates = coordinates.split(" ");
+			
+			var start = coordinates[0].split(",");
+			var finish = coordinates[1].split(",");
+			
+			map.addOverlay(new GPolyline([new GLatLng(start[0], start[1]), new GLatLng(finish[0], finish[1])], trajectoryColour, 5));		
+		} // coordinates loop
+	} // trajectories loop
+
+} // end buildTrajectory function
 
 // build a single marker
 function createMarker(latlng, info, colour) {
@@ -298,59 +348,8 @@ $(document).unload(function(){
 	GUnload();
 });
 
-// generate a series of colours from pure red to pure yellow
-function getColourGradient() {
 
-	var redHex = "FF";
-	var greenHex;
-	var blueHex = "00";
-	var colourGradient = new Array(256);
-	
-	for(i = 1; i <= 255; i++) {
-		// get the yellow colour
-		greenHex = i.toString(16);
-		
-		if(greenHex.length < 2) {
-			greenHex = "0" + greenHex;
-		}
-		
-		// add the new colour to the gradient
-		colourGradient[i] = "#" + redHex + greenHex + blueHex;
-	}
-	
-	return colourGradient;
-}
-
-// function to get a colour along a scale from red to yellow
-function getScaledColour(index, maximum) {
-
-	// determine starting colour components
-	var redHex   = "FF";
-	var greenHex = null;
-	var blueHex  = "00";
-	
-	// define values for formula
-	var startGreen = 0;
-	var endGreen   = 255;
-	
-	// calculate the green value
-	var greenVal = startGreen + ((endGreen - startGreen) * (index / (maximum -1)));
-	
-	// round the green value to an integer
-	greenVal = Math.round(greenVal);
-	
-	// convert from decimal to hexadecimal
-	greenHex = greenVal.toString(16);
-	
-	// pad the hexadecimal number if required
-	if(greenHex.length < 2) {
-		greenHex = "0" + greenHex;
-	}
-	
-	// return the final colour
-	return "#" + redHex + greenHex + blueHex;
-}
-
+/*
 // helper function to parse a date into a number
 function parseDateToNumber(data) {
 
@@ -361,3 +360,4 @@ function parseDateToNumber(data) {
 	return new Number(data);
 	
 }
+*/
