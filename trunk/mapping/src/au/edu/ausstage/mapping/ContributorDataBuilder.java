@@ -360,9 +360,9 @@ public class ContributorDataBuilder extends DataBuilder {
 					contributor.setUrl(contributorURLTemplate.replace("[contrib-id]", resultSet.getString(16)));
 				
 					// add the contrbutor to this venue
-					venue.addContributor(contributor);
+					trajectories.addContributor(contributor);
 				} else {
-					contributor = venue.getContributor(resultSet.getString(16));
+					contributor = trajectories.getContributor(resultSet.getString(16));
 				}
 				
 				// build the date
@@ -389,8 +389,12 @@ public class ContributorDataBuilder extends DataBuilder {
 			Document			   xmlDoc  = builder.newDocument();
 			
 			// add the root element
-			Element rootElement = xmlDoc.createElement("markers");
+			Element rootElement = xmlDoc.createElement("mapdata");
 			xmlDoc.appendChild(rootElement);
+			
+			// add the element for the markers
+			Element markers = xmlDoc.createElement("markers");
+			rootElement.appendChild(markers);
 			
 			// get the list of venues
 			Set<Venue> venueList = venues.getVenues();
@@ -491,8 +495,75 @@ public class ContributorDataBuilder extends DataBuilder {
 				marker.setAttribute("events", Integer.toString(eventCount));
 				
 				// add the marker to the XML
-				rootElement.appendChild(marker);
+				markers.appendChild(marker);
 			}
+			
+			/*
+			 * build the trajectories 
+			 */
+			// get the list of venues
+			Set<Contributor> trajectoryList = trajectories.getContributors();
+			
+			// debug code
+			System.out.println("###" + trajectoryList.size() + "###");
+			
+			// get the iterator for the list
+			Iterator trajectoriesIterator = trajectoryList.iterator();
+			
+			// add an element to hold the trajectories
+			Element trajectoriesElement = xmlDoc.createElement("trajectories");
+			rootElement.appendChild(trajectoriesElement);
+			
+			// iterate over the contributors
+			while(trajectoriesIterator.hasNext()) {
+			
+				// get the current contributor
+				contributor = (Contributor)trajectoriesIterator.next();
+				
+				// create an element for this contributor
+				Element trajectory = xmlDoc.createElement("trajectory");
+				trajectoriesElement.appendChild(trajectory);
+				
+				// add the id to this trajectory
+				trajectory.setAttribute("id", contributor.getId());
+				
+				// get the list of coordinates
+				Collection<String> contributorTrajectory = contributor.getTrajectory();
+				Iterator contributorTrajectoryIterator = contributorTrajectory.iterator();
+				
+				// declare helper variables
+				String previousCoords = null;
+				String coords         = null;
+				
+				// loop through the list of coordinates
+				while(contributorTrajectoryIterator.hasNext()) {
+				
+					// get the current coordinates
+					coords = (String)contributorTrajectoryIterator.next();
+					
+					// check to see if the previous coords are available
+					if(previousCoords == null) {
+						// no they aren't - must be first time through the loop
+						previousCoords = coords;
+					} else {
+						// yes the are - must be the nth time through the loop
+						
+						// build the xml element to hold the coordinates
+						Element trajectoryCoords = xmlDoc.createElement("coords");
+						trajectoryCoords.setTextContent(previousCoords + " " + coords);
+						
+						// add the element to the coordinates
+						trajectory.appendChild(trajectoryCoords);
+						
+						// store these coordinates for the next loop
+						previousCoords = coords;
+					}
+				} // end contributorTrajectoryIterator loop
+				
+				// add the trajectory to the list of trajectories
+				trajectoriesElement.appendChild(trajectory);
+				
+			} // end trajectoriesIterator loop
 			
 			// create a transformer 
 			TransformerFactory transFactory = TransformerFactory.newInstance();
