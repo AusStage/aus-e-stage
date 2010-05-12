@@ -225,10 +225,11 @@ public class ContributorDataBuilder extends DataBuilder {
 		String venueURLTemplate       = dataManager.getContextParam("venueURLTemplate"); //[venue-id]
 		
 		// venue, contributor and event variables
-		VenueList   venues      = new VenueList();
-		Venue       venue       = null;
-		Contributor contributor = null;
-		Event       event       = null;
+		VenueList       venues       = new VenueList();
+		ContributorList trajectories = new ContributorList();
+		Venue           venue        = null;
+		Contributor     contributor  = null;
+		Event           event        = null;
 		
 		// date management variables
 		int firstDate = Integer.MAX_VALUE;
@@ -270,7 +271,7 @@ public class ContributorDataBuilder extends DataBuilder {
 				sql += ") AND c.contributorid = sc.contributorid "
 				+ "AND e.eventid = c.eventid "
 				+ "AND v.venueid = e.venueid "
-				+ "AND v.longitude IS NOT NULL ";
+				+ "AND v.longitude IS NOT NULL";
 			
 				// define the paramaters
 				parameters = ids;
@@ -290,6 +291,7 @@ public class ContributorDataBuilder extends DataBuilder {
 				+ "AND e.eventid = c.eventid "
 				+ "AND v.venueid = e.venueid "
 				+ "AND v.longitude IS NOT NULL";
+				
 				
 				// define the paramaters
 				parameters = new String[1];
@@ -349,10 +351,32 @@ public class ContributorDataBuilder extends DataBuilder {
 					// add this event to this contributor
 					contributor.addEvent(event);
 				}
-			}
+				
+				// build trajectory data
+				if(trajectories.hasContributor(resultSet.getString(16)) == false) {
+					// make a new contributor
+					contributor = new Contributor(resultSet.getString(16));
+					contributor.setName(resultSet.getString(17));
+					contributor.setUrl(contributorURLTemplate.replace("[contrib-id]", resultSet.getString(16)));
+				
+					// add the contrbutor to this venue
+					venue.addContributor(contributor);
+				} else {
+					contributor = venue.getContributor(resultSet.getString(16));
+				}
+				
+				// build the date
+				String trajDate = buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+				trajDate = trajDate.replace("-", "");
+				
+				// add the trajectory information
+				contributor.addTrajectoryPoint(trajDate, resultSet.getString(14) + "," + resultSet.getString(15));
+				
+			} // end record set loop
 			
 			// close the resultset
 			resultSet.close();
+			
 		}catch (java.sql.SQLException ex) {
 			throw new javax.servlet.ServletException("Unable to build the list of venues, contributors and events", ex);
 		}
