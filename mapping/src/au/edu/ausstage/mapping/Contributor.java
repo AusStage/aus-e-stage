@@ -267,6 +267,13 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 		key    = filterString(key);
 		coords = filterString(coords);
 		
+		// double check the key
+		if(key.length() == 4) {
+			key += "0101";
+		} else if(key.length() == 6) {
+			key += "01";
+		}
+		
 		// check to see if this key has been used before
 		if(trajectory.containsKey(key) == true) {
 			key = key + trajKeyDiff[trajKeyDiffIndex];

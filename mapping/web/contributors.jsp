@@ -145,13 +145,11 @@
 			<h3>Advanced Display Options</h3>
 			<form action="" method="get" id="adv_map_display_form" name="adv_map_display_form">
 			<table class="formTable" width="100%">
-				<!--
 				<tr>
 					<th scope="row" colspan="2">
 						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" value="on"/>
 					</th>
 				</tr>
-				-->
 				<tr>
 					<th scope="row" colspan="2">Show events that occured between:</th>
 				</tr>
@@ -220,6 +218,7 @@
 						<th style="background: #4D3779; width: 20px;" scope="row">&nbsp;</th>
 						<td>Markers this colour indicate more than 30 events</td>
 					</tr>
+					<!--
 					<tr>
 						<td scope="row" colspan="2">
 							Trajectory lines are coloured using a scale:
@@ -230,6 +229,7 @@
 							</ul>
 						</td>
 					</tr>
+					-->
 				</tbody>
 			</table>					
 		</div>
