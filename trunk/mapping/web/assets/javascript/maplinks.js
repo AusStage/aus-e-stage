@@ -73,7 +73,7 @@ $(document).ready(function() {
 			// update the persistent link
 			$("#map_header_link").attr("href", "maplinks.jsp?type=org&id=" + id);
 			
-		} else if(type == "contrib") {
+		} else if(type == "contributor") {
 			// this is a contributor map
 			
 			if(id.indexOf(',',0) != -1) {
@@ -93,7 +93,7 @@ $(document).ready(function() {
 			$.get("data?action=markers&type=contributor&id=" + id, function(data) {
 				
 				// show the map
-				showMap2(data, null, null, null, null);
+				showMap(data, null, null, null, null);
 				
 				// build the time slider
 				buildTimeSlider(data);
