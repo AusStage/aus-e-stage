@@ -125,8 +125,8 @@ function showMap(data, trajectory, focus, start, finish) {
 		var latlng = new GLatLng(lat, lng);
 		var info   = markers[i].textContent;
 		
-		if(info == "") {
-			info = markers[i].childNodes[0].data;
+		if(typeof(info) == "undefined") {
+			info = markers[i].text;
 		}
 		
 		// get the colour of the icon
@@ -260,6 +260,10 @@ function buildTrajectory(data, map) {
 		
 			// get the individual coordinates
 			var coordinates = coordinateList[x].textContent;
+			
+			if(typeof(coordinates) == "undefined") {
+				coordinates = coordinateList[x].text;
+			}	
 			
 			// split into the pair of coordinates
 			coordinates = coordinates.split(" ");

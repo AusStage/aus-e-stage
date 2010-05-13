@@ -208,10 +208,12 @@ function showContributorMap(id, contrib, url) {
 	$("#map_header_kml").attr("href", "data?action=kml&type=contributor&id=" + id);
 	
 	// update the export KML link
-	$("#map_header_export").attr("href", "exportdata.jsp?type=contributor&id=" + id);	
+	$("#map_header_export").attr("href", "exportdata.jsp?type=contributor&id=" + id);
+	
+	var rnd = Math.random();
 	
 	// get the marker xml data
-	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
+	$.get("data?action=markers&type=contributor&id=" + id + '&rnd=' + rnd.toString(), null, function(data) {
 		
 		// show the map
 		showMap(data, null, $("#state").val(), null, null);
@@ -221,7 +223,7 @@ function showContributorMap(id, contrib, url) {
 		
 		// store reference to marker data for reuse
 		contributorMapData = data;
-	});
+	}, "xml");
 	
 	// scroll to the map
 	$.scrollTo("#map_header");

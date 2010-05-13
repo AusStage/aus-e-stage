@@ -478,8 +478,9 @@ public class ContributorDataBuilder extends DataBuilder {
 				description.append("</ul>");
 								
 				// add the description to the venue
-				CDATASection cdata = xmlDoc.createCDATASection(description.toString());
-				marker.appendChild(cdata);
+				//CDATASection cdata = xmlDoc.createCDATASection(description.toString());
+				//marker.appendChild(cdata);
+				marker.setTextContent(description.toString());
 				
 				// add the date attributes
 				marker.setAttribute("fdate", Integer.toString(firstDate));
