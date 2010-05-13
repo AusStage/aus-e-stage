@@ -210,7 +210,7 @@ public class MappingServlet extends HttpServlet {
 				// send some output
 				out.print(results);
 			
-			} else if(type.equals("contrib")) {
+			} else if(type.equals("contributor")) {
 				// build KML data for contributors
 				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
 				
@@ -415,6 +415,7 @@ public class MappingServlet extends HttpServlet {
 			
 			// get the requested search term
 			String searchTerm = request.getParameter("contributor_name");
+			String searchType = request.getParameter("search_type");
 			
 			// check on the search term
 			if(searchTerm == null) {
@@ -455,8 +456,10 @@ public class MappingServlet extends HttpServlet {
 				
 			}
 			
-			// get the limit parameter
-			String searchStateLimit = request.getParameter("state");		
+			// check the search type
+			if(searchType == null) {
+				searchType = "single";
+			}
 			
 			// get an instance of the OrganisationDataBuilder class
 			ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
@@ -464,13 +467,8 @@ public class MappingServlet extends HttpServlet {
 			// declare helper variables
 			String results = "";
 			
-			// do the search
-			if(searchStateLimit == null || searchStateLimit.equals("nolimit")) {
-				results = data.doSearch(searchTerm);
-			} else {
-				results = data.doSearch(searchTerm, searchStateLimit);
-			}
-
+			results = data.doSearch(searchTerm, searchType);
+			
 			// ouput the results
 			// set the appropriate content type
 			response.setContentType("text/plain; charset=UTF-8");
@@ -558,7 +556,7 @@ public class MappingServlet extends HttpServlet {
 				// send some output
 				out.print(results);
 			
-			} else if(type.equals("contrib")) {
+			} else if(type.equals("contributor")) {
 				// build KML data for contributors
 				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
 				

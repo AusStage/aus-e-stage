@@ -61,16 +61,17 @@
 			<ul>
 				<li><a href="#tabs-1">Search by Name</a></li>
 				<li><a href="#tabs-2">Search by ID</a></li>
+				<li><a href="#tabs-3">Map Multiple Contributors</a></li>
 			</ul>
 			<div id="tabs-1">
 				<form action="data/" method="post" id="name_search" name="name_search">
 					<input type="hidden" name="action" value="contributor_search"/>
-					<input type="hidden" name="searchType" value="single"/>
+					<input type="hidden" name="search_type" value="single"/>
 					<table class="formTable">
 						<tbody>
 						<tr>
 							<th scope="row">
-								<label id="name_label" for="contributor_name" class="#cluetip_name" style="cursor: help;">Contributor Name: </label>
+								<label id="name_label_1" for="contributor_name" class="#cluetip_name" style="cursor: help;">Contributor Name: </label>
 							</th>
 							<td>
 								<input type="text" size="40" id="contributor_name" name="contributor_name"/>
@@ -78,7 +79,7 @@
 						</tr>
 						<tr>
 							<th scope="row">
-								<label id="operator_label" for="operator" class="#cluetip_operator" style="cursor: help;">Search Operator: </label>
+								<label id="operator_label_1" for="operator" class="#cluetip_operator" style="cursor: help;">Search Operator: </label>
 							</th>
 							<td>
 								<select size="1" id="operator" name="operator">
@@ -121,6 +122,42 @@
 					</table>
 				</form>
 			</div>
+			<div id="tabs-3">
+				<form action="data/" method="post" id="multi_name_search" name="multi_name_search">
+					<input type="hidden" name="action" value="contributor_search"/>
+					<input type="hidden" name="search_type" value="multi"/>
+					<table class="formTable">
+						<tbody>
+						<tr>
+							<th scope="row">
+								<label id="name_label_2" for="contributor_name" class="#cluetip_name" style="cursor: help;">Contributor Name: </label>
+							</th>
+							<td>
+								<input type="text" size="40" id="multi_contributor_name" name="contributor_name"/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label id="operator_label_2" for="multi_operator" class="#cluetip_operator" style="cursor: help;">Search Operator: </label>
+							</th>
+							<td>
+								<select size="1" id="operator" name="operator">
+									<option value="and" selected="selected">And</option>
+									<option value="or">Or</option>
+									<option value="exact">Exact Phrase</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="multi_name_search_btn" value="Search"/><br/>
+								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
 		</div>
 		<div id="search_waiting">
 		<p style="text-align: center;">
@@ -145,16 +182,23 @@
 			<h3>Advanced Display Options</h3>
 			<form action="" method="get" id="adv_map_display_form" name="adv_map_display_form">
 			<table class="formTable" width="100%">
+				<tr id="map_content_list">
+					<td>						
+						<div id="map_contents">
+							<span style="font-weight: bold">Contributors on the Map: </span>
+						</div>
+					</td>
+				</tr>
 				<tr>
-					<th scope="row" colspan="2">
+					<th scope="row">
 						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" onclick="showTrajectory();" value="on"/>
 					</th>
 				</tr>
 				<tr>
-					<th scope="row" colspan="2">Show events that occured between:</th>
+					<th scope="row">Show events that occured between:</th>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<td>
 						<fieldset>
 							<label for="event_finish" class="tohide">First Date: </label>
 								<select name="event_start" id="event_start" size="1" class="slider"></select>
@@ -164,7 +208,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<td>
 					<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
 						<select size="1" id="state" name="state">
 							<option value="nolimit" selected="selected">No Limit - All venues</option>
@@ -182,7 +226,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<td>
 						<input class="ui-state-default ui-corner-all button" type="button" name="reload_map" id="reload_map" value="Reload Map"/>
 					</td>
 				</tr>

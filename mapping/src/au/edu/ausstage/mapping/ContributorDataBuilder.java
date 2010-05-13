@@ -195,15 +195,11 @@ public class ContributorDataBuilder extends DataBuilder {
 		}
 		
 		// finalise the table
-		if(recordCount != 0) {
-			results.append("<tr><td colspan=\"5\"><strong>Note: </strong>If a contributor is not listed they may not be associated with a venue in the specified region</td></tr>");
-		}
-				
 		results.append("</tbody></table></form>");
 		
 		return results.toString();
 		
-	} // end doDear method
+	} // end doSearch method
 	
 	/**
 	 * A method used to get the the Marker XML for an series of contributors

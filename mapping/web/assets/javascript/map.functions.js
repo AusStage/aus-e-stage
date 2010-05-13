@@ -17,7 +17,7 @@
 */
 
 // define helper variables
-var trajectoryColours = ["#CD2626", "#FF5333", "#AA5303", "#FFA824"]; // colours for trajectories
+var trajectoryColours = ["#FF0000", "#00FF00", "#00FF00", "#FF00FF", "#FFFF00"]; // colours for trajectories
 
 // function to show a map
 function showMap(data, trajectory, focus, start, finish) {
@@ -125,8 +125,8 @@ function showMap(data, trajectory, focus, start, finish) {
 		var latlng = new GLatLng(lat, lng);
 		var info   = markers[i].textContent;
 		
-		if(info == "" || info == undefined) {
-			info = markers[i].innerText;
+		if(info == "") {
+			info = markers[i].childNodes[0].data;
 		}
 		
 		// get the colour of the icon
@@ -367,8 +367,7 @@ function showTrajectory() {
 		// enable time slider
 		$(".slider").selectToUISlider({labels: 0}).hide();
 		addSliderDescription();
-	
-		
+
 		// enable state limit
 		$("#state").removeAttr("disabled", "disabled");
 	}

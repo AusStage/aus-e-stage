@@ -38,6 +38,22 @@ $(document).ready(function(){
 		}
 	});
 	
+	// attach the validation plugin to the name search form
+	$("#multi_name_search").validate({
+		rules: { // validation rules
+			multi_contributor_name: {
+				required: true
+			}
+		},
+		submitHandler: function(form) {
+			jQuery(form).ajaxSubmit({
+				beforeSubmit: showMultiLoader,
+				success:      showSearchResults,
+				error:        showErrorMessage
+			});
+		}
+	});
+	
 	// attach the validation plugin to the id search form
 	$("#id_search").validate({
 		rules: { // validation rules
@@ -59,7 +75,9 @@ $(document).ready(function(){
 	hideLoader();
 	
 	// hide the map div
-	hideMap();	
+	hideMap();
+	
+	$("#map_content_list").hide();
 });
 
 // override the default action of some form buttons
@@ -84,8 +102,10 @@ $(document).ready(function() {
 
 // add clue tips to the form labels
 $(document).ready(function() {
-	$('#name_label').cluetip({local:true, attribute: 'class', cursor: 'help', showTitle: false});
-	$('#operator_label').cluetip({local:true, attribute: 'class', cursor: 'help', showTitle: false});
+	$('#name_label_1').cluetip({local:true, attribute: 'class', cursor: 'help', showTitle: false});
+	$('#operator_label_1').cluetip({local:true, attribute: 'class', cursor: 'help', showTitle: false});
+	$('#name_label_2').cluetip({local:true, attribute: 'class', cursor: 'help', showTitle: false});
+	$('#operator_label_2').cluetip({local:true, attribute: 'class', cursor: 'help', showTitle: false});
 	$('#state_label').cluetip({local:true, attribute: 'class', cursor: 'help', showTitle: false});
 });
 
@@ -98,7 +118,8 @@ function hideLoader() {
 }
 
 // functions for showing and hiding the loading message
-function showLoader() {
+function showLoader(type) {
+
 	$("#search_waiting").show();
 	
 	$("#search_results").hide();
@@ -109,8 +130,14 @@ function showLoader() {
 	$("#map_legend").hide();
 	$("#map_footer").hide();
 	
-	$("#name_search_btn").attr("disabled", "disabled");
-	$("#id_search_btn").attr("disabled", "disabled");
+}
+
+// functions for showing and hiding the loading message
+function showMultiLoader() {
+	$("#search_waiting").show();
+	
+	$("#search_results").hide();
+	$("#search_results").empty();
 }
 
 function hideMap() {
@@ -170,24 +197,21 @@ function showContributorMap(id, contrib, url) {
 	$("#map_footer").show();
 
 	// update the map heading
-	if(contrib != null) {
-		$("#map_heading").empty();
-		$("#map_heading").append('Map of Events for <a href="' + url + '" target="ausstage">' + contrib + '</a>');
-		$("#to_map_list").hide();
-	} else {
-		$("#map_heading").empty();
-		$("#map_heading").append('Map of Events for multiple contributors');
-	}
+	$("#map_heading").empty();
+	$("#map_heading").append('Map of Events for <a href="' + url + '" target="ausstage">' + contrib + '</a>');
+	$("#to_map_list").hide();
+	
+	// update the persistent link
+	$("#map_header_link").attr("href", "maplinks.jsp?type=contributor&id=" + id);
 	
 	// update the download as KML link
-	$("#map_header_kml").attr("href", "data?action=kml&type=contrib&id=" + id);
+	$("#map_header_kml").attr("href", "data?action=kml&type=contributor&id=" + id);
 	
 	// update the export KML link
-	$("#map_header_export").attr("href", "exportdata.jsp?type=contrib&id=" + id);	
+	$("#map_header_export").attr("href", "exportdata.jsp?type=contributor&id=" + id);	
 	
 	// get the marker xml data
 	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
-	//$.get("data?action=markers&type=contributor&id=2256,580", function(data) {
 		
 		// show the map
 		showMap(data, null, $("#state").val(), null, null);
@@ -201,6 +225,114 @@ function showContributorMap(id, contrib, url) {
 	
 	// scroll to the map
 	$.scrollTo("#map_header");
+	
+	$("#map_content_list").hide();
+	contributorIDs = null;
+}
+
+// function to add a contributor to a multi contributor map
+function addContrib(id, contrib, url) {
+
+	// show the map container
+	$("#map_header").show();
+	$("#map").show();
+	$("#map_legend").show();
+	$("#map_footer").show();
+	
+	// show the list of contributors
+	$("#map_content_list").show();
+	$("#map_contents").show();
+	
+	// update the map heading
+	$("#map_heading").empty();
+	$("#map_heading").append('Map of Events for multiple contributors');
+
+	// add contributor to list of contributors
+	$("#map_contents").append('<span id="' + id + '"><a href="' + url + '" target="ausstage" title="View record for ' + contrib + ' in AusStage">' + contrib + '</a> (<a href="#" title="Delete ' + contrib + ' from the map" onclick="delContrib(\'' + id + '\',\'' + contrib + '\'); return false;">Delete</a>)  </span>');
+	
+	// add this id to the list of contributors
+	if (contributorIDs == null) {
+		contributorIDs = id;
+	} else {
+		contributorIDs += ',' + id;
+		contributorIDs = contributorIDs.replace(",,", ",");		
+	}
+	
+	// update the persistent link	
+	$("#map_header_link").attr("href", "maplinks.jsp?type=contributor&id=" + contributorIDs);
+	
+	// update the download as KML link
+	$("#map_header_kml").attr("href", "data?action=kml&type=contributor&id=" + contributorIDs);
+	
+	// update the export KML link
+	$("#map_header_export").attr("href", "exportdata.jsp?type=contributor&id=" + contributorIDs);	
+	
+	// get the marker xml data
+	$.get("data?action=markers&type=contributor&id=" + contributorIDs, function(data) {
+		
+		// show the map
+		showMap(data, null, $("#state").val(), null, null);
+		
+		// build the time slider
+		buildTimeSlider(data);
+		
+		// store reference to marker data for reuse
+		contributorMapData = data;
+	});
+	
+	// untick the trajectory checkbox
+	$("#show_trajectory").attr('checked', false);
+	
+	// inform the user
+	alert(contrib + " has been added to the map");	
+}
+
+// function to delete a contributor from the map
+function delContrib(id, contrib) {
+
+	// delete the span element
+	$("#" + id).remove();
+	
+	// delete the id
+	contributorIDs = contributorIDs.replace(id, "");
+	contributorIDs = contributorIDs.replace(",,", ",");
+	
+	// reload the map if necessary
+	if(contributorIDs != "" && contributorIDs != ",") {
+	
+		// update the map
+		// update the persistent link	
+		$("#map_header_link").attr("href", "maplinks.jsp?type=contributor&id=" + contributorIDs);
+	
+		// update the download as KML link
+		$("#map_header_kml").attr("href", "data?action=kml&type=contributor&id=" + contributorIDs);
+	
+		// update the export KML link
+		$("#map_header_export").attr("href", "exportdata.jsp?type=contributor&id=" + contributorIDs);	
+	
+		// get the marker xml data
+		$.get("data?action=markers&type=contributor&id=" + contributorIDs, function(data) {
+		
+			// show the map
+			showMap(data, null, $("#state").val(), null, null);
+		
+			// build the time slider
+			buildTimeSlider(data);
+		
+			// store reference to marker data for reuse
+			contributorMapData = data;
+		});
+	
+		// untick the trajectory checkbox
+		$("#show_trajectory").attr('checked', false);
+	} else {
+		hideMap();
+		contributorIDs = null;
+	}
+	
+	// inform the user
+	alert(contrib + " has been deleted from the map");
+
 }
 	
 // function to reload a map
@@ -232,5 +364,5 @@ function reloadMap() {
 // function to load the maplinks page
 // function to load the map in the new page
 function loadNewPage(responseText, statusText) {
-	window.location = "maplinks.jsp?type=contrib&id=" + $("#id").val();
+	window.location = "maplinks.jsp?type=contributor&id=" + $("#id").val();
 }
