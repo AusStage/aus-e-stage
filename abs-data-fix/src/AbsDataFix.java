@@ -31,7 +31,7 @@ public class AbsDataFix {
 	public static void main(String args[]) {
 	
 		// declare helper variables
-		String[] fixTypes = {"agebysex", "fix"};
+		String[] fixTypes = {"agebysex", "databuilder"};
 		File inputFile;
 		File outputFile;		
 	
@@ -105,6 +105,9 @@ public class AbsDataFix {
 			}
 		}
 		
+		// keep track of the status of the task
+		boolean stat = false;
+			
 		// undertake the required task
 		if(fixType.equals("agebysex") == true) {
 			// undertake the age by sex task
@@ -113,12 +116,24 @@ public class AbsDataFix {
 			AbsAgeBySex task = new AbsAgeBySex(inputFile, outputFile);
 			
 			// run the task
-			boolean stat = task.doTask();
+			stat = task.doTask();			
+		} else if(fixType.equals("databuilder") == true) {
+			// undertake the data builder task
+			System.out.println("INFO: Undertaking the Data Builder task");
 			
-			if(stat == false) {
-				System.err.println("ERROR: The specified task has failed, see previous error messae for details");
-				System.exit(-1);
-			}
+			DataBuilder task = new DataBuilder(inputFile, outputFile);
+			
+			// run the task
+			stat = task.doTask();
+		}
+		
+		// check on the status of this task
+		if(stat == false) {
+			System.err.println("ERROR: The specified task has failed, see previous error message for details");
+			System.exit(-1);
+		} else {
+			System.out.println("INFO: Output file successfully created at:\n" + outputFile.getAbsolutePath());
+			System.exit(0);
 		}
 		
 	} // end main method
