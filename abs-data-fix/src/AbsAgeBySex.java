@@ -121,7 +121,7 @@ public class AbsAgeBySex {
 				dataElems = dataLine.split(",");
 				
 				// check on the line
-				if(dataLine.startsWith(",\"") != true || dataLine.startsWith(",\"Total") == true) {
+				if(dataLine.startsWith(",\"") == false || dataLine.startsWith(",\"Total") == true) {
 					// not a data line
 					System.out.println("INFO: Skiping line: " + lineCount);
 					
@@ -133,6 +133,14 @@ public class AbsAgeBySex {
 					// get the district
 					district = dataElems[1];
 					district = district.replaceAll("\"", "");
+					
+					// reset the people array
+					people = new int[DATA_COLUMNS];
+					
+					// reset the average variables
+					avgPartOne = 0;
+					avgPartTwo = 0;
+					average    = 0;
 										
 					// get the male populations
 					for(int i = 0; i < DATA_COLUMNS; i++) {
@@ -164,6 +172,9 @@ public class AbsAgeBySex {
 					} else {
 						avgMaleAge = "N/A";
 					}
+					
+					// reset the people array
+					people = new int[DATA_COLUMNS];
 					
 					// reset the average variables
 					avgPartOne = 0;
@@ -203,6 +214,9 @@ public class AbsAgeBySex {
 					} else {
 						avgFemaleAge = "N/A";
 					}
+					
+					// reset the people array
+					people = new int[DATA_COLUMNS];
 					
 					// reset the average variables
 					avgPartOne = 0;
