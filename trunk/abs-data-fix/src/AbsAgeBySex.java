@@ -30,11 +30,7 @@ import javax.xml.transform.stream.*;
  * The AbsAgeBySex task is a task that opens an ABS Data File contain Age By Sex data
  * and constructs an intermediatary XML file for later processing
  */
-public class AbsAgeBySex {
-
-	// declare private variables
-	File input;
-	File output;
+public class AbsAgeBySex extends Tasks {
 
 	/**
 	 * Constructor for this class
@@ -44,13 +40,7 @@ public class AbsAgeBySex {
 	 */
 	public AbsAgeBySex(File input, File output) {
 	
-		// check on the parameters
-		if(input == null || output == null) {
-			throw new IllegalArgumentException("ERROR: This constructor requires valid file object as parameters");
-		} else {
-			this.input  = input;
-			this.output = output;
-		}
+		super(input, output);
 		
 	} // end constructor
 	
@@ -355,7 +345,7 @@ public class AbsAgeBySex {
 	 */
 	private void writeXmlDataset(HashSet<DataElement> dataElements, File outputFile) {
 	
-		// build the marker XML
+		// build and write the XML
 		try {
 			// create the xml document object
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -363,7 +353,7 @@ public class AbsAgeBySex {
 			Document			   xmlDoc  = builder.newDocument();
 			
 			// add the root element
-			Element rootElement = xmlDoc.createElement("ABSData");
+			Element rootElement = xmlDoc.createElement(ROOT_SNIPPET_ELEMENT_NAME);
 			xmlDoc.appendChild(rootElement);
 			
 			// get an iterator over the collection
@@ -376,7 +366,7 @@ public class AbsAgeBySex {
 				DataElement dataElem = (DataElement)iterator.next();
 				
 				// build the XML for this collection district
-				Element district = xmlDoc.createElement("district");
+				Element district = xmlDoc.createElement(DISTRICT_ELEMENT_NAME);
 				
 				// add the collection district id
 				district.setAttribute("id", dataElem.getId());
@@ -430,7 +420,7 @@ public class AbsAgeBySex {
 		} catch(javax.xml.transform.TransformerException e) {
 			throw new RuntimeException("ERROR: Unable to build xml", e);
 		}catch (java.io.IOException ex) {
-			System.out.println("ERROR: Unable to write xml file\n" + ex);
+			throw new RuntimeException("ERROR: Unable to write xml file" + ex);
 		}
 			
 	} // end buildXmlDataset
