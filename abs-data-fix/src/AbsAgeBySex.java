@@ -446,7 +446,7 @@ class DataElement {
 	 */
 	public DataElement (String id) {
 	
-		this.id = id;
+		this.id = filterString(id);
 		
 		html = new StringBuilder();
 		
@@ -456,11 +456,11 @@ class DataElement {
 	 * get and set methods
 	 */
 	public String getId() {
-		return id;
+		return filterString(id);
 	}
 		 
 	public void setAvgMaleAge(String value) {
-		avgMaleAge = value;
+		avgMaleAge = filterString(value);
 	}
 	
 	public String getAvgMaleAge() {
@@ -468,7 +468,7 @@ class DataElement {
 	}
 	
 	public void setAvgFemaleAge(String value) {
-		avgFemaleAge = value;
+		avgFemaleAge = filterString(value);
 	}
 	
 	public String getAvgFemaleAge() {
@@ -476,7 +476,7 @@ class DataElement {
 	}
 	
 	public void setAvgTotalAge(String value) {
-		avgTotalAge = value;
+		avgTotalAge = filterString(value);
 	}
 	
 	public String getAvgTotalAge() {
@@ -487,10 +487,58 @@ class DataElement {
 	 * html methods
 	 */
 	public void addHtml(String value) {
-		html.append(value);
+		html.append(filterString(value));
 	}
 	
 	public String getHtml() {
 		return html.toString();
 	}
+	
+	
+	/*
+	 * filter parameter methods
+	 */
+	 
+	/**
+	 * A method to filter a peice of string based input data
+	 *
+	 * @param value       the value to filter
+	 * @param nullAllowed if true a null value is allowed
+	 *
+	 * @return            the filtered value
+	 */
+	public String filterString(String value, boolean nullAllowed) {
+		
+		// check for nulls	
+		if(nullAllowed == false && value == null) {
+			throw new IllegalArgumentException("Value cannot be null");
+		}
+		
+		// trim the string
+		value = value.trim();
+		
+		// check for nulls again
+		if(nullAllowed == false && value.equals("")) {
+			throw new IllegalArgumentException("Value cannot be empty");
+		}
+	
+		// return the filtered value
+		return value;	
+	
+	} // end filterString method
+	
+	/**
+	 * A method to filter a peice of string based input data
+	 * by default null values are not allowed
+	 *
+	 * @param value       the value to filter
+	 *
+	 * @return            the filtered value
+	 */
+	public String filterString(String value) {
+		
+		// return the filtered value
+		return filterString(value, false);	
+	
+	} // end filterString method
 } // end class definition
