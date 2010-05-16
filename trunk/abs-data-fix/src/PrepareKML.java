@@ -27,6 +27,9 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*; 
 import javax.xml.transform.stream.*;
 
+// import third party classes
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * The PrepareKML class is used to prepare a KML file for later processing. This includes
  * deleting any existing style information, updating the description element for each placemark
@@ -60,13 +63,7 @@ public class PrepareKML extends Tasks {
 		// XML data 
 		Document xmlDoc;
 		Element  rootElement;
-		NodeList foundNodes;
-		Node currentNode;
-		Node parentNode;
 		
-		// store collections of nodes
-		Set<Node> targetNodes = new HashSet<Node>();
-		Iterator  targetIterator;
 		
 		// open the data file
 		try {
@@ -76,7 +73,7 @@ public class PrepareKML extends Tasks {
 			xmlDoc  = builder.parse(input);
 						
 			// normalize the document
-			xmlDoc.normalizeDocument();
+			//xmlDoc.normalizeDocument();
 			
 			// get a reference to the root element of the source document
 			rootElement = xmlDoc.getDocumentElement();
@@ -92,11 +89,86 @@ public class PrepareKML extends Tasks {
 			return false;
 		}
 		
-		// delete any style elements
-		foundNodes = rootElement.getElementsByTagName("Style");
+		// delete any style nodes
+		deleteNodes(xmlDoc, "Style");
+		
+		// delete any name nodes
+		deleteNodes(xmlDoc, "name");
+		
+		// delete any styleUrl nodes
+		deleteNodes(xmlDoc, "styleUrl");
+		
+		// update the placemarks
+		boolean status = updatePlacemarks(xmlDoc);
+		
+		if(status == false) {
+			System.err.println("ERROR: An error occured while processing the Placemark nodes");
+			return false;
+		}
+		
+		
+		// write the output file
+		// output the new document
+		try {
+		
+			// create a transformer 
+			TransformerFactory transFactory = TransformerFactory.newInstance();
+			Transformer        transformer  = transFactory.newTransformer();
+			
+			// set some options on the transformer
+			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+			transformer.setOutputProperty(OutputKeys.INDENT, "no");
+
+			// get a transformer and supporting classes
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			DOMSource    source = new DOMSource(xmlDoc);
+			
+			// transform the xml document into a string
+			transformer.transform(source, result);
+			
+			// open the output file
+			FileWriter outputWriter = new FileWriter(output);
+			outputWriter.write(writer.toString());
+			outputWriter.close();
+			
+		} catch(javax.xml.transform.TransformerException e) {
+			System.err.println("ERROR: Unable to transform xml for output\n" + e.toString());
+			return false;
+		}catch (java.io.IOException ex) {
+			System.err.println("ERROR: Unable to write xml file\n" + ex.toString());
+			return false;
+		}
+	
+		// if we get this far, everything went ok
+		return true;
+	} // end doTask method
+	
+	/**
+	 * A method to delete all nodes with the specified name
+	 *
+	 * @param xmlDoc the DOM object containing the XML
+	 * @param nodeName the name of the nodes to remove
+	 */
+	private void deleteNodes(Document xmlDoc, String nodeName) {
+	
+		// declare helper variables
+		Element rootElement;
+		NodeList foundNodes;
+		Node currentNode;
+		Node parentNode;
+		
+		// store collections of nodes
+		Set<Node> targetNodes = new HashSet<Node>();
+		Iterator  targetIterator;
+	
+		// find nodes with the specified name
+		rootElement = xmlDoc.getDocumentElement();
+		foundNodes = rootElement.getElementsByTagName(nodeName);
 		
 		if(foundNodes.getLength() > 0) {
-			System.out.println("INFO: Deleting "  + foundNodes.getLength() + " <Style> nodes");
+			System.out.println("INFO: Deleting "  + foundNodes.getLength() + " <" + nodeName + "> nodes");
 			
 			// loop through all of the nodes
 			for(int i = 0; i < foundNodes.getLength(); i++) {
@@ -136,48 +208,126 @@ public class PrepareKML extends Tasks {
 			targetNodes.clear();
 				
 		} else {
-			System.out.println("INFO: No Style Nodes to delete");
-		}
-		
-		// write the output file
-		// output the new document
-		try {
-		
-			// normalise the document before writing
-			xmlDoc.normalizeDocument();
-		
-			// create a transformer 
-			TransformerFactory transFactory = TransformerFactory.newInstance();
-			Transformer        transformer  = transFactory.newTransformer();
-			
-			// set some options on the transformer
-			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-			transformer.setOutputProperty(OutputKeys.INDENT, "no");
-
-			// get a transformer and supporting classes
-			StringWriter writer = new StringWriter();
-			StreamResult result = new StreamResult(writer);
-			DOMSource    source = new DOMSource(xmlDoc);
-			
-			// transform the xml document into a string
-			transformer.transform(source, result);
-			
-			// open the output file
-			FileWriter outputWriter = new FileWriter(output);
-			outputWriter.write(writer.toString());
-			outputWriter.close();
-			
-		} catch(javax.xml.transform.TransformerException e) {
-			System.err.println("ERROR: Unable to transform xml for output\n" + e.toString());
-			return false;
-		}catch (java.io.IOException ex) {
-			System.err.println("ERROR: Unable to write xml file\n" + ex.toString());
-			return false;
-		}
+			System.out.println("INFO: No <" + nodeName + "> Nodes to delete");
+		}	
+	} // end deleteNodes method
 	
-		// if we get this far, everything went ok
+	/**
+	 * A method to fix the placemark nodes by updating the description tag
+	 * and adding an id attribute that contains the collection district code
+	 *
+	 * @param xmlDoc the DOM object containing the XML
+	 *
+	 * @return true if, and only if, everything went as expected
+	 */
+	private boolean updatePlacemarks(Document xmlDoc) {
+	
+		// define the basic description
+		final String DESCRIPTION_TEMPLATE = "<iframe width=\"450px\" height=\"400px\" scrolling=\"auto\" src=\"http://beta.ausstage.edu.au/mapping/browsedata.jsp?type=abs-data&id={id}\"</iframe>";
+	
+		// declare helper variables
+		Element rootElement;
+		NodeList foundNodes;
+		NodeList childNodes;
+		Element  currentElement;
+		Node     childNode;
+		Element descriptionElement;
+		CDATASection descriptionCDATA;
+		String oldDescription;
+		
+		// find nodes with the specified name
+		rootElement = xmlDoc.getDocumentElement();
+		foundNodes = rootElement.getElementsByTagName("Placemark");
+		
+		if(foundNodes.getLength() > 0) {
+			System.out.println("INFO: Updating "  + foundNodes.getLength() + " <Placemark> nodes");
+			
+			// loop through all of the nodes
+			for(int i = 0; i < foundNodes.getLength(); i++) {
+			
+				// get the current node in this list
+				currentElement = (Element)foundNodes.item(i);
+				
+				// get all the child nodes
+				childNodes = currentElement.getChildNodes();
+				
+				// reset the description element variable
+				descriptionElement = null;
+				
+				// loop through the children looking for the description element
+				for(int x = 0; x < childNodes.getLength(); x++) {
+					
+					// get the current element in the list
+					childNode = childNodes.item(x);
+					
+					if(childNode.getNodeName().equals("description")) {
+						descriptionElement = (Element)childNode;
+					}
+				}
+				
+				// check the description element variable
+				if(descriptionElement == null) {
+					System.err.println("INFO: Unable to locate the description element of Placemark node number: " + i);
+					return false;
+				}
+				
+				// get the children of the description element
+				childNodes = descriptionElement.getChildNodes();
+				
+				// reset the cdata section
+				descriptionCDATA = null;
+				
+				// loop through the children looking for the description element
+				for(int x = 0; x < childNodes.getLength(); x++) {
+					
+					// get the current element in the list
+					childNode = childNodes.item(x);
+					
+					if(childNode.getNodeType() == Node.CDATA_SECTION_NODE) {
+						descriptionCDATA = (CDATASection)childNode;
+					}
+				}
+				
+				// double check the descriptionCDATA variable
+				if(descriptionCDATA == null) {
+					System.err.println("INFO: Unable to locate the text of the description element of Placemark node number: " + i);
+					return false;
+				}
+				
+				// get the text stored in the CDATA section
+				oldDescription = descriptionCDATA.getData();
+				
+				// fix the description data as best we can
+				oldDescription = oldDescription.replaceAll(" ", ""); // remove spaces
+				oldDescription = StringEscapeUtils.unescapeHtml(oldDescription); // unescape any html entities
+				
+				// find the first and second <i> tags, these should be encapsulating the collection district code
+				int firstTag  = oldDescription.indexOf("<i>");
+				int secondTag = oldDescription.indexOf("</i>");
+				
+				if(firstTag == -1 || secondTag == -1) {
+					System.err.println("INFO: Unable to locate the <i> tags encapsulating the collection district code at Placemark node number: " + i);
+					return false;
+				}
+				
+				// get the collection district code
+				String code = oldDescription.substring(firstTag + 3, secondTag);
+				
+				// add the id to this placemark
+				currentElement.setAttribute("id", "_" + code);
+				
+				// update the description
+				descriptionCDATA.setData(DESCRIPTION_TEMPLATE.replace("{id}", code));				
+			}			
+			
+		} else {
+			System.out.println("INFO: No Placemark nodes found");
+			return false;
+		}
+		
+		// everything went as expected
 		return true;
-	} // end doTask method
+		
+	} // end updatePlacemarks method
 
 } // end class definition
