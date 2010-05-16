@@ -10,10 +10,14 @@ MYPATH=`pwd`
 #INPUT_PATH=$MYPATH/input/act-age-by-sex.xml
 #OUTPUT_PATH=$MYPATH/output/abs-data-act.xml
 # append collection district code to an existing data file
-FIX_TYPE=appendcdinfo
-INPUT_PATH=$MYPATH/input/abs-data-act.xml
-OUTPUT_PATH=$MYPATH/output/abs-data-act-with-cd-info.xml
-CODES_PATH=$MYPATH/input/act-collection-district-list.txt
+#FIX_TYPE=appendcdinfo
+#INPUT_PATH=$MYPATH/input/abs-data-act.xml
+#OUTPUT_PATH=$MYPATH/output/abs-data-act-with-cd-info.xml
+#CODES_PATH=$MYPATH/input/act-collection-district-list.txt
+# prepare a KML file as a base KML file
+FIX_TYPE=prepkml
+INPUT_PATH=$MYPATH/input/ACT-color-black-line.kml
+OUTPUT_PATH=$MYPATH/output/abs-overlay-act-base.kml
 # delete the output file if it already exists
 if [ -e "$OUTPUT_PATH" ]; then 
   /bin/rm $OUTPUT_PATH

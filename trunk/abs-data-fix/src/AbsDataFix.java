@@ -31,7 +31,7 @@ public class AbsDataFix {
 	public static void main(String args[]) {
 	
 		// declare helper variables
-		String[] fixTypes = {"agebysex", "databuilder", "appendcdinfo"};
+		String[] fixTypes = {"agebysex", "databuilder", "appendcdinfo", "prepkml"};
 		File inputFile;
 		File outputFile;		
 	
@@ -51,6 +51,7 @@ public class AbsDataFix {
 			System.err.println("-fixtype   the type of fix to undertake");
 			System.err.println("-input     the input file of ABS Data");
 			System.err.println("-output    the output file\n");
+			System.err.println("-codes     (optional) a file containing codes such as district ids or colour codes");
 			System.err.println("Valid fix types are:");
 			System.err.println(java.util.Arrays.toString(fixTypes).replaceAll("[\\]\\[]", ""));
 			System.exit(-1);
@@ -151,6 +152,14 @@ public class AbsDataFix {
 			}
 			
 			AppendCDInfo task = new AppendCDInfo(inputFile, outputFile, codesFile);
+			
+			// run the task
+			stat = task.doTask();
+		} else if(fixType.equals("prepkml") == true) {
+			// undertake the data builder task
+			System.out.println("INFO: Undertaking the Prepare KML task");
+			
+			PrepareKML task = new PrepareKML(inputFile, outputFile);
 			
 			// run the task
 			stat = task.doTask();

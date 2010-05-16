@@ -31,9 +31,10 @@ import javax.xml.transform.stream.*;
 import javax.xml.xpath.*;
 
 /**
- * The DataBuilder task is a task that takes an intermediatory XML file
- * and constructs the data XML file that will be used by the AusStage Mapping Service
- * to populate the infoWindows in Google Earth
+ * The AppendCDInfo class is used to append collection district information
+ * to the ABS data file. The HTML element for each collection district is updated
+ * with the collection district code, the Statistical Local Area code and name, as well
+ * as the Local Government Area code and name.
  */
 public class AppendCDInfo extends Tasks {
 
@@ -76,7 +77,7 @@ public class AppendCDInfo extends Tasks {
 		Document xmlDoc;
 		Element  rootElement;
 		
-		// xPath relate variables
+		// xPath related variables
 		XPath xPath;
 		String xPathQuery = "/ABSData/district[@id=\"{id}\"]/html";
 		
