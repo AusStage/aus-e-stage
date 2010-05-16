@@ -27,6 +27,7 @@ public abstract class Tasks {
 	// declare private variables
 	File input;
 	File output;
+	File codes;
 	
 	// declare public constants
 	public static final String ROOT_SNIPPET_ELEMENT_NAME = "ABSDataSnippet";
@@ -47,6 +48,26 @@ public abstract class Tasks {
 		} else {
 			this.input  = input;
 			this.output = output;
+		}
+		
+	} // end constructor
+	
+	/**
+	 * Constructor for this class
+	 *
+	 * @param input  the input file
+	 * @param output the output file
+	 * @param codes  the file with the CD code list
+	 */
+	public Tasks(File input, File output, File codes) {
+	
+		// check on the parameters
+		if(input == null || output == null || codes == null) {
+			throw new IllegalArgumentException("ERROR: This constructor requires valid file object as parameters");
+		} else {
+			this.input  = input;
+			this.output = output;
+			this.codes  = codes;
 		}
 		
 	} // end constructor

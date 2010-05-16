@@ -31,7 +31,7 @@ public class AbsDataFix {
 	public static void main(String args[]) {
 	
 		// declare helper variables
-		String[] fixTypes = {"agebysex", "databuilder"};
+		String[] fixTypes = {"agebysex", "databuilder", "appendcdinfo"};
 		File inputFile;
 		File outputFile;		
 	
@@ -39,9 +39,10 @@ public class AbsDataFix {
 		SimpleCommandLineParser parser = new SimpleCommandLineParser(args); // use a Google class to do manage command line params
 		
 		// get the parameters
-		String fixType    = parser.getValue("fix", "fixtype");
-		String input  = parser.getValue("input");
-		String output = parser.getValue("output");
+		String fixType = parser.getValue("fix", "fixtype");
+		String input   = parser.getValue("input");
+		String output  = parser.getValue("output");
+		String codes   = parser.getValue("codes");
 		
 		// check on the parameters
 		if(fixType == null || input == null || output == null) {
@@ -122,6 +123,34 @@ public class AbsDataFix {
 			System.out.println("INFO: Undertaking the Data Builder task");
 			
 			DataBuilder task = new DataBuilder(inputFile, outputFile);
+			
+			// run the task
+			stat = task.doTask();
+		} else if(fixType.equals("appendcdinfo") == true) {
+			// undertake the data builder task
+			System.out.println("INFO: Undertaking the Append CD Info task");
+			
+			// check on the additional parameters
+			if(codes == null) {
+				System.err.println("ERROR: the following additional parameter was expected");
+				System.err.println("-codes the MIF file listing the collection district code information");
+				System.exit(-1);
+			}
+			
+			// check the input file
+			File codesFile = new File(codes);
+	
+			if(codesFile.isFile() != true) {
+				System.err.println("ERROR: Unable to locate the collection district MIF file");
+				System.exit(-1);
+			}
+	
+			if(codesFile.canRead() == false) {
+				System.err.println("ERROR: Unable to access the collection district MIF file");
+				System.exit(-1);
+			}
+			
+			AppendCDInfo task = new AppendCDInfo(inputFile, outputFile, codesFile);
 			
 			// run the task
 			stat = task.doTask();
