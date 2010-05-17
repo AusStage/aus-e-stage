@@ -408,9 +408,6 @@ public class PrepareKML extends Tasks {
 					
 					// see if this is a text node
 					if(childNode.getNodeType() == Node.TEXT_NODE) {
-						//System.out.println("@@@" + childNode.getParentNode().getNodeName() + "@@@");
-						//System.out.println("!!!" + childNode.getNextSibling().getNodeName() + "!!!");
-						//System.out.println("###" + childNode.getNodeValue() + "###");
 						targetNodes.add(childNode);
 					}
 				} // end child node loop
