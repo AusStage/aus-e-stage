@@ -425,12 +425,6 @@ public class PrepareKML extends Tasks {
 			// get the node
 			currentNode = (Node)targetIterator.next();
 			
-			// delete the text node after this node, to stop a blank line from appearing
-			// in the output
-//			while(currentNode.hasChildNodes()) {
-//				currentNode.removeChild(currentNode.getFirstChild());
-//			}
-			
 			// get the parent node
 			parentNode = currentNode.getParentNode();
 			
