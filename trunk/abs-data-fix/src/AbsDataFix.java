@@ -31,7 +31,8 @@ public class AbsDataFix {
 	public static void main(String args[]) {
 	
 		// declare helper variables
-		String[] fixTypes = {"agebysex", "databuilder", "appendcdinfo", "prepkml"};
+		String[] fixTypes     = {"agebysex", "databuilder", "appendcdinfo", "prepkml", "mapagebysex"};
+		String[] ageBySexSets = {"male", "female", "total"};
 		File inputFile;
 		File outputFile;		
 	
@@ -43,6 +44,7 @@ public class AbsDataFix {
 		String input   = parser.getValue("input");
 		String output  = parser.getValue("output");
 		String codes   = parser.getValue("codes");
+		String dataset = parser.getValue("dataset");
 		
 		// check on the parameters
 		if(fixType == null || input == null || output == null) {
@@ -52,6 +54,7 @@ public class AbsDataFix {
 			System.err.println("-input     the input file of ABS Data");
 			System.err.println("-output    the output file\n");
 			System.err.println("-codes     (optional) a file containing codes such as district ids or colour codes");
+			System.err.println("-dataset   (optional) the identifer for the dataset to map");
 			System.err.println("Valid fix types are:");
 			System.err.println(java.util.Arrays.toString(fixTypes).replaceAll("[\\]\\[]", ""));
 			System.exit(-1);
@@ -128,7 +131,7 @@ public class AbsDataFix {
 			// run the task
 			stat = task.doTask();
 		} else if(fixType.equals("appendcdinfo") == true) {
-			// undertake the data builder task
+			// undertake the append collection district info task
 			System.out.println("INFO: Undertaking the Append CD Info task");
 			
 			// check on the additional parameters
@@ -156,10 +159,64 @@ public class AbsDataFix {
 			// run the task
 			stat = task.doTask();
 		} else if(fixType.equals("prepkml") == true) {
-			// undertake the data builder task
+			// undertake the required task
 			System.out.println("INFO: Undertaking the Prepare KML task");
 			
 			PrepareKML task = new PrepareKML(inputFile, outputFile);
+			
+			// run the task
+			stat = task.doTask();
+		} else if(fixType.equals("mapagebysex") == true) {
+			// undertake the required task
+			System.out.println("INFO: Undertaking building maps for the Age By Sex dataset");
+			
+			// check on the additional parameters
+			if(codes == null) {
+				System.err.println("ERROR: the following additional parameter was expected");
+				System.err.println("-codes the XML file containing the age by sex dataset");
+				System.exit(-1);
+			}
+			
+			// check the input file
+			File codesFile = new File(codes);
+	
+			if(codesFile.isFile() != true) {
+				System.err.println("ERROR: Unable to locate the XML file containing the age by sex dataset");
+				System.exit(-1);
+			}
+	
+			if(codesFile.canRead() == false) {
+				System.err.println("ERROR: Unable to access the XML file containing the age by sex dataset");
+				System.exit(-1);
+			}
+			
+			// check on the datset parameter
+			if(dataset == null) {
+				System.err.println("ERROR: You must specify the dataset to map, valid sets are:");
+				System.err.println(java.util.Arrays.toString(ageBySexSets).replaceAll("[\\]\\[]", ""));
+				System.exit(-1);
+			}
+			
+			// check on the dataset
+			boolean validSet = false;
+	
+			for(int i = 0; i < ageBySexSets.length; i++) {
+				if(ageBySexSets[i].equals(dataset)) {
+					validSet = true;
+				}
+			}
+			
+			if(validSet == false) {
+				System.err.println("ERROR: Invalid dataset specified, valid sets are:");
+				System.err.println(java.util.Arrays.toString(ageBySexSets).replaceAll("[\\]\\[]", ""));
+				System.exit(-1);
+			}
+			
+			// keep the user informed
+			System.out.println("INFO: Working with the \"" + dataset + "\" dataset");
+			
+			MapAgeBySex task = new MapAgeBySex(inputFile, outputFile, codesFile);
+			task.setDataSet(dataset);
 			
 			// run the task
 			stat = task.doTask();
