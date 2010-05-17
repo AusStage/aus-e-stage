@@ -106,6 +106,14 @@ public class PrepareKML extends Tasks {
 			return false;
 		}
 		
+		// delete empty text nodes
+		status = deleteEmptyNodes(xmlDoc);
+		
+		if(status == false) {
+			System.err.println("ERROR: An error occured while processing empty text nodes");
+			return false;
+		}
+		
 		
 		// write the output file
 		// output the new document
@@ -118,7 +126,9 @@ public class PrepareKML extends Tasks {
 			// set some options on the transformer
 			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-			transformer.setOutputProperty(OutputKeys.INDENT, "no");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
 
 			// get a transformer and supporting classes
 			StringWriter writer = new StringWriter();
@@ -200,12 +210,6 @@ public class PrepareKML extends Tasks {
 				// delete this child node
 				parentNode.removeChild(currentNode);
 			}
-			
-			// reset the objects
-			parentNode = null;
-			currentNode = null;
-			targetIterator = null;
-			targetNodes.clear();
 				
 		} else {
 			System.out.println("INFO: No <" + nodeName + "> Nodes to delete");
@@ -329,5 +333,113 @@ public class PrepareKML extends Tasks {
 		return true;
 		
 	} // end updatePlacemarks method
+	
+	/**
+	 * A method to delete empty text nodes
+	 *
+	 * @param xmlDoc the DOM object containing the XML
+	 *
+	 * @return true if, and only if, everything went as expected
+	 */
+	private boolean deleteEmptyNodes(Document xmlDoc) {
+	
+		// declare helper variables
+		Element rootElement;
+		NodeList foundNodes;
+		NodeList childNodes;
+		Node     childNode;
+		Node currentNode;
+		Node parentNode;
+		
+		// store collections of nodes
+		Set<Node> targetNodes = new HashSet<Node>();
+		Iterator  targetIterator;
+		
+		// delete the empty text nodes who are children of the Folder node
+		String nodeName = "Folder";
+	
+		// find the first node that we know will have empty text nodes
+		rootElement = xmlDoc.getDocumentElement();
+		foundNodes = rootElement.getElementsByTagName(nodeName);
+		
+		if(foundNodes.getLength() > 0) {
+			
+			// loop through all of the nodes
+			for(int i = 0; i < foundNodes.getLength(); i++) {
+			
+				// get the current node in this list
+				currentNode = (Node)foundNodes.item(i);
+				
+				// get the child nodes
+				childNodes = currentNode.getChildNodes();
+				
+				// loop through all of the child nodes looking for text nodes
+				for(int x = 0; x < childNodes.getLength(); x++) {
+				
+					childNode = (Node)childNodes.item(x);
+					
+					// see if this is a text node
+					if(childNode.getNodeType() == Node.TEXT_NODE) {
+						targetNodes.add(childNode);
+					}
+				} // end child node loop
+			} // end found node loop
+		} // end if for found nodes
+		
+		// delete the empty text nodes who are children of the Placemark node
+		nodeName = "Placemark";
+		foundNodes = rootElement.getElementsByTagName(nodeName);
+		
+		if(foundNodes.getLength() > 0) {
+			
+			// loop through all of the nodes
+			for(int i = 0; i < foundNodes.getLength(); i++) {
+			
+				// get the current node in this list
+				currentNode = (Node)foundNodes.item(i);
+				
+				// get the child nodes
+				childNodes = currentNode.getChildNodes();
+				
+				// loop through all of the child nodes looking for text nodes
+				for(int x = 0; x < childNodes.getLength(); x++) {
+				
+					childNode = (Node)childNodes.item(x);
+					
+					// see if this is a text node
+					if(childNode.getNodeType() == Node.TEXT_NODE) {
+						//System.out.println("@@@" + childNode.getParentNode().getNodeName() + "@@@");
+						//System.out.println("!!!" + childNode.getNextSibling().getNodeName() + "!!!");
+						//System.out.println("###" + childNode.getNodeValue() + "###");
+						targetNodes.add(childNode);
+					}
+				} // end child node loop
+			} // end found node loop
+		} // end if for found nodes
+		
+		// delete these nodes
+		targetIterator = targetNodes.iterator();
+		
+		while(targetIterator.hasNext()) {
+		
+			// get the node
+			currentNode = (Node)targetIterator.next();
+			
+			// delete the text node after this node, to stop a blank line from appearing
+			// in the output
+//			while(currentNode.hasChildNodes()) {
+//				currentNode.removeChild(currentNode.getFirstChild());
+//			}
+			
+			// get the parent node
+			parentNode = currentNode.getParentNode();
+			
+			// delete this child node
+			parentNode.removeChild(currentNode);
+		}
+	
+		return true;		
+	
+	} // end deleteEmptyNodes
 
 } // end class definition
