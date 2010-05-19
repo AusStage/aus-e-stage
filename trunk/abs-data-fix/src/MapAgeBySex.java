@@ -30,6 +30,9 @@ import javax.xml.transform.stream.*;
 // import XPath related classes
 import javax.xml.xpath.*;
 
+// import color related classes
+import java.awt.Color;
+
 
 /**
  * The MapAgeBySex class is used to map an Age by Sex dataset, as prepared by the AbsAgeBySex class
@@ -70,10 +73,22 @@ public class MapAgeBySex extends Tasks {
 	public boolean doTask() {
 	
 		// define the colours
+		//final String MALE_COLOUR   = "306EFF"; //in html "306EFF";
+		//final String FEMALE_COLOUR = "F778A1"; //in html "F778A1";
+		//final String TOTAL_COLOUR  = "8E35EF"; //in html "8E35EF";
+		final String MALE_COLOUR   = "00FFFF"; // bright blue
+		final String FEMALE_COLOUR = "FF0080"; // bright pink
+		final String TOTAL_COLOUR  = "FFF600"; // cadmium yellow
+		final String LINE_COLOUR   = "FFFFFFFF";
+		/*
 		final String MALE_COLOUR   = "FF6E30"; //in html "306EFF";
 		final String FEMALE_COLOUR = "A178F7"; //in html "F778A1";
 		final String TOTAL_COLOUR  = "EF358E"; //in html "8E35EF";
 		final String LINE_COLOUR   = "FFFFFFFF";
+		*/
+		
+		// keep track of the ages used
+		//String[] usedAges = new String[22]; // maximum size to hold all possible ages
 	
 		// check on the dataset variable
 		if(dataset == null) {
@@ -179,6 +194,36 @@ public class MapAgeBySex extends Tasks {
 				return false;
 			}
 			
+			/*
+			// exploring the option of adjusting the levels of transparency
+			// to match the number of actual averages
+			//
+			// Possibly not a good idea due to differences between datasets
+			//
+			// store a copy of this age if necessary
+			// look for a reference to this age
+			boolean foundAge = false;
+			for(int x = 0; x < usedAges.length; x++) {
+				if(usedAges[x]!= null && usedAges[x].equals(styleUrl)) {
+					foundAge = true;
+				}
+			}
+			
+			// was it found?
+			if(foundAge == false) {
+				// no it wasn't so add it to the array
+				foundAge = false;
+				for(int x = 0; x < usedAges.length; x++) {
+					if(usedAges[x] == null && foundAge == false) {
+						// empty spot to populate it with the age
+						foundAge = true;
+						usedAges[x] = styleUrl;
+					}
+				}
+			}
+			
+			*/			
+			
 			// process the styleUrl
 			styleUrl = styleUrl.replaceAll(" ", "_");
 			styleUrl = styleUrl.replaceAll("/", "");
@@ -263,8 +308,10 @@ public class MapAgeBySex extends Tasks {
 			ages[i] = "_" + ages[i];
 		}
 		
+		// get a color object for the chosen colour
+		Color colorObject = createColorObject(useColour);
+		
 		// Find the folder node
-		///kml/Document/Folder
 		
 		try {
 			// compile the xpath
@@ -311,6 +358,7 @@ public class MapAgeBySex extends Tasks {
 			return false;
 		}
 		
+		
 		// add the style nodes
 		for(int i = 0; i < ages.length; i++) {
 			// create a new style element
@@ -334,7 +382,18 @@ public class MapAgeBySex extends Tasks {
 			
 			// add the colour element
 			colour = kmlDoc.createElement("color");
-			colour.setTextContent(alphas[i] + useColour);
+			//colour.setTextContent(alphas[i] + useColour);
+			
+			// use the colour object to determine the colour,
+			// and ensure the N/A colour style is fully transparent
+			// use a 50% transparency by default for the coloured areas
+			if(i == 0) {
+				colour.setTextContent("00FFFFFF");
+			} else {
+				colour.setTextContent("BE" + colorObjectToHTML(colorObject, true)); //50% transparency 7F / 75% transparency BE
+				colorObject = colorObject.darker();
+			}
+			
 			polyStyle.appendChild(colour);
 			
 			// add this element into the tree

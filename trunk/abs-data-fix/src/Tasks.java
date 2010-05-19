@@ -17,6 +17,7 @@
 */
 
 import java.io.*;
+import java.awt.Color;
 
 /**
  * An abstract class used to store common methods & provide the basis for an API
@@ -136,5 +137,75 @@ public abstract class Tasks {
 			throw new IllegalArgumentException("Value must represent an integer");
 		}
 	}
-
+	
+	/**
+	 * A method to take a HTML colour representation and 
+	 * build a Java Color object
+	 *
+	 * @param value the colour value in HTML notation
+	 *
+	 * @return      the newly constructed color object
+	 */
+	public Color createColorObject(String value) {
+	
+		value = filterString(value);
+		
+		if(value.length() != 6) {
+			throw new IllegalArgumentException("The HTML colour notation must be six characters long");
+		}
+		
+		// deconstruct the HTML colour into its component parts		
+		int red   = Integer.parseInt(value.substring(0, 2), 16);
+		int green = Integer.parseInt(value.substring(2, 4), 16);
+		int blue  = Integer.parseInt(value.substring(4, 6), 16);
+		
+		// build a new color object		
+		return new Color(red, green, blue);
+	}
+	
+	/** 
+	 * A method to take a Java Color object and return
+	 * the HTML representation
+	 *
+	 * @param color  the color object
+	 * @param kml    if set to true return the colour in KML notation
+	 *
+	 * @return       the colour in HTML notation and optionally ordered for use in KML
+	 */
+	public String colorObjectToHTML(Color color, boolean kml) {
+	
+		if(color == null) {
+			throw new IllegalArgumentException("The color object can not be null");
+		}
+		
+		// deconstruct the color
+		String red   = Integer.toHexString(color.getRed());
+		String green = Integer.toHexString(color.getGreen());
+		String blue  = Integer.toHexString(color.getBlue());
+		
+		String colour = null;
+		
+		// double check the values
+		if(red.length() == 1) {
+			red = "0" + red;
+		}
+		
+		if(blue.length() == 1) {
+			blue = "0" + blue;
+		}
+		
+		if(green.length() == 1) {
+			green = "0" + green;
+		}
+		
+		if(kml == true) {
+			colour = blue + green + red;
+		} else {
+			colour = red + green + blue;
+		}
+		
+		return colour.toUpperCase();
+	}
+	
+	
 } // end class definition
