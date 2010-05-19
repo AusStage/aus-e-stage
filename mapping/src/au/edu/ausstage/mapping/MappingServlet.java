@@ -155,22 +155,27 @@ public class MappingServlet extends HttpServlet {
 			}
 			
 			// determine the type of kml we need
-			if(type.equals("orgdata") || type.equals("org")) {
+			if(type.equals("organisation")) {
 				// build marker KML related to organisations
 			
 				// get an instance of the OrganisationDataBuilder class
-				OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
+				OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
 				
 				// get the markers XML
-				String results = orgData.getKMLString(id);
+				String results = data.getKMLString(id);
 				
-				// get the organisation name
-//				String fileName = orgData.getOrgNameByID(id);
-				String fileName = "";
-				fileName = fileName.toLowerCase();					   // lower case
-				fileName = fileName.replaceAll("[^a-zA-Z0-9\\s]", ""); // remove anything not alphanumeric
-				fileName = fileName.replaceAll(" ", "-");			   // replace spaces with dashes
-				fileName += ".kml";
+				// build a file name
+				String fileName = null;
+				
+				if(id.indexOf(',') != -1) {
+					fileName = "multiple-organisation-map.kml";
+				} else {
+					fileName = data.getNameByID(id);
+					fileName = fileName.toLowerCase();					   // lower case
+					fileName = fileName.replaceAll("[^a-zA-Z0-9\\s]", ""); // remove anything not alphanumeric
+					fileName = fileName.replaceAll(" ", "-");			   // replace spaces with dashes
+					fileName += ".kml";
+				}
 				
 				// ouput the XML
 				// set the appropriate content type
@@ -256,15 +261,6 @@ public class MappingServlet extends HttpServlet {
 				
 				// get the organisation name
 				results = data.getNameByID(id);				
-			
-			} else if(type.equals("startdates")) {
-				// need to lookup the start dates of events that can be mapped
-				
-				// get an instance of the OrganisationDataBuilder class
-				OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
-				
-				// get the organisation name
-//				results = orgData.getStartDatesForMap(id);
 			
 			} else {
 				throw new ServletException("Unknown type parameter value");
@@ -503,18 +499,27 @@ public class MappingServlet extends HttpServlet {
 			}
 			
 			// check on the type parameter
-			if(type.equals("org")) {
+			if(type.equals("organisation")) {
 				// build marker KML related to organisations
 			
 				// get an instance of the OrganisationDataBuilder class
-				OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
+				OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
 				
 				// get the markers XML
-				String results = orgData.doKMLExport(id, exportOptions);
+				String results = data.doKMLExport(id, exportOptions);
 				
-				// get the file name
-//				String fileName = orgData.getFileName(orgData.getOrgNameByID(id), "kml");
-				String fileName = "";
+				// build a file name
+				String fileName = null;
+				
+				if(id.indexOf(',') != -1) {
+					fileName = "multiple-organisation-map.kml";
+				} else {
+					fileName = data.getNameByID(id);
+					fileName = fileName.toLowerCase();					   // lower case
+					fileName = fileName.replaceAll("[^a-zA-Z0-9\\s]", ""); // remove anything not alphanumeric
+					fileName = fileName.replaceAll(" ", "-");			   // replace spaces with dashes
+					fileName += ".kml";
+				}
 				
 				
 				// ouput the XML

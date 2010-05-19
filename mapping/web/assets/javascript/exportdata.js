@@ -50,7 +50,7 @@ $(document).ready(function(){
 	} else {
 	
 		// determine what to do
-		if(type == "org") {
+		if(type == "organisation") {
 			// this is an organisation map so get the organisation name
 			$.get("data?action=lookup&type=orgname&id=" + id, function(html) {
 				$("#export_name").empty();
