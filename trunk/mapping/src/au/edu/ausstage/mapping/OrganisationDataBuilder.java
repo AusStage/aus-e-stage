@@ -591,7 +591,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 	 public String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException {
 	 
 	 	// define helper variables
-	 	String currentContributor = null;
+	 	String currentOrganisation = null;
 		
 		// get the persisten URL template for event
 		String eventURLTemplate = dataManager.getContextParam("eventURLTemplate");
@@ -603,9 +603,9 @@ public class OrganisationDataBuilder extends DataBuilder {
 		String sql = "SELECT DISTINCT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
 				   + "                v.venue_name, v.street, v.suburb, s.state, v.postcode, c.countryname, "
 				   + "                v.longitude, v.latitude "
-				   + "FROM conevlink ce, events e, venue v, states s, country c "
-				   + "WHERE ce.contributorid = ? "
-				   + "AND ce.eventid = e.eventid "
+				   + "FROM orgevlink ol, events e, venue v, states s, country c "
+				   + "WHERE ol.organisationid = ? "
+				   + "AND ol.eventid = e.eventid "
 				   + "AND e.venueid = v.venueid "
 				   + "AND v.state = s.stateid "
 				   + "AND v.countryid = c.countryid "
@@ -626,7 +626,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 		try {
 			// start a new KML file	
 			KMLBuilder exportFile = new KMLBuilder();
-			Element firstFolder = exportFile.addFolder("Maps of events by contributor"); // add a folder to hold all of the maps
+			Element firstFolder = exportFile.addFolder("Maps of events by organisation"); // add a folder to hold all of the maps
 			
 			// add some additional information
 			exportFile.addComment("Map data generated: " + getCurrentDateAndTime());	
@@ -636,30 +636,30 @@ public class OrganisationDataBuilder extends DataBuilder {
 			exportFile.addAuthorElement(firstFolder, dataManager.getContextParam("systemName"), dataManager.getContextParam("systemUrl"));
 				
 			// add a description element to this folder
-			exportFile.addDescriptionElement(firstFolder, "Maps of events by contributor exported from the AusStage system on " + getCurrentDate() + ".");
+			exportFile.addDescriptionElement(firstFolder, "Maps of events by organisation exported from the AusStage system on " + getCurrentDate() + ".");
 		
 			// add the style
 			exportFile.addIconStyle(firstFolder, "basic-event", "http://chart.apis.google.com/chart?cht=mm&chs=32x32&chco=FFFFFF,CCBAD7,000000&ext=.png"); // basic event marker
 		
 			// loop through each of the contributors 
-			for(int contribCount = 0; contribCount < ids.length; contribCount++) {
+			for(int organisationCount = 0; organisationCount < ids.length; organisationCount++) {
 			
 				// define the query parameters
-				parameters[0] = ids[contribCount];
+				parameters[0] = ids[organisationCount];
 				
 				// store the current contributor name
-				currentContributor = getNameByID(ids[contribCount]);
+				currentOrganisation = getNameByID(ids[organisationCount]);
 				
 				try {
 					// execute the sql
 					ResultSet resultSet = dataManager.executePreparedStatement(sql, parameters);
 					
 					// add a folder for this contributor
-					Element contribFolder = exportFile.addFolder(firstFolder, currentContributor); // add a folder to hold all of the maps
-					exportFile.addDescriptionElement(contribFolder, "Maps of events associated with: " + currentContributor);
+					Element organisationFolder = exportFile.addFolder(firstFolder, currentOrganisation); // add a folder to hold all of the maps
+					exportFile.addDescriptionElement(organisationFolder, "Maps of events associated with: " + currentOrganisation);
 					
 					// add a document for the standard map
-					Element document = exportFile.addDocument(contribFolder, "Events");
+					Element document = exportFile.addDocument(organisationFolder, "Events");
 					exportFile.addDescriptionElement(document, "One place marker for each event");
 					
 					// loop through the dataset adding placemarks to the basic doc
@@ -695,7 +695,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 					// add additional documents as necessary
 					if (exportOptions.getOption("includeTimeSpanElements").equals("yes")) {
 						// need to add a document that includes timespan elements
-						document = exportFile.addDocument(contribFolder, "Events with TimeSpan", false);
+						document = exportFile.addDocument(organisationFolder, "Events with TimeSpan", false);
 						exportFile.addDescriptionElement(document, "One place marker for each event, with time span information");
 						
 						// rewind the resultset
@@ -759,7 +759,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 						String finish         = null;
 					
 						// need to add a document that includes trajectory info
-						document = exportFile.addDocument(contribFolder, "Events with Trajectory", false);
+						document = exportFile.addDocument(organisationFolder, "Events with Trajectory", false);
 						exportFile.addDescriptionElement(document, "One place marker for each event, linked with trajectory information. Note: Trajectory information links venues based on the earliest event to occur at that venue and does not indicate a tour.");
 						
 						// rewind the result set
@@ -767,7 +767,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 						int rowCount = resultSet.getRow();
 						resultSet.first();
 						
-						if (contribCount == 0) {
+						if (organisationCount == 0) {
 							// add the maximum number of line styles
 							for(int i = 1; i <= 255; i++) {
 								exportFile.addLineStyle("traj-" + i, exportFile.getGradientColour(i - 1, 255), "4");
@@ -857,11 +857,11 @@ public class OrganisationDataBuilder extends DataBuilder {
 					if (exportOptions.getOption("includeGroupedEventInfo").equals("yes")) {
 					
 						// need to add a document that includes trajectory info
-						document = exportFile.addDocument(contribFolder, "Events Grouped by Venue", false);
+						document = exportFile.addDocument(organisationFolder, "Events Grouped by Venue", false);
 						exportFile.addDescriptionElement(document, "One place marker for each venue, with all events that occured at that venue associated with it.");
 						
 						// add the grouped venue styles
-						if (contribCount == 0) {
+						if (organisationCount == 0) {
 							exportFile.addGroupedEventIconStyles();
 						}
 						
@@ -1005,7 +1005,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 					}// end adding grouped event info
 				
 				} catch (java.sql.SQLException e) {
-					throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentContributor, e);
+					throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentOrganisation, e);
 				}		
 			}
 			
@@ -1013,7 +1013,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 			return exportFile.toString();
 			
 		} catch (java.lang.Exception e) {
-			throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentContributor, e);
+			throw new javax.servlet.ServletException("Unable to build KML xml for contributor: " + currentOrganisation, e);
 		}
 		
 	 } // end doKMLExport function
