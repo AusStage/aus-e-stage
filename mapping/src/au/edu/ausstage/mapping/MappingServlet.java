@@ -69,9 +69,6 @@ public class MappingServlet extends HttpServlet {
 			// get remaining parameters
 			String type       = request.getParameter("type");
 			String id         = request.getParameter("id");
-			String startDate  = request.getParameter("start");
-			String finishDate = request.getParameter("finish");
-			String stateLimit = request.getParameter("state");
 			
 			// check on the parameters
 			if(type == null || id == null) {
@@ -86,38 +83,15 @@ public class MappingServlet extends HttpServlet {
 				throw new ServletException("Missing required parameters");
 			}
 			
-			if(startDate != null) {
-				startDate = startDate.trim();
-			}
-			
-			if(finishDate != null) {
-				finishDate = finishDate.trim();
-			}
-			
 			// determine the type of Marker XML we need
-			if(type.equals("orgdata") || type.equals("org")) {
+			if(type.equals("organisation") || type.equals("organisation")) {
 				// build marker XML related to organisations
 			
 				// get an instance of the OrganisationDataBuilder class
-				OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
+				OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
 				
 				// declare helper variable
-				String results = null;
-				
-				// get the markers XML
-				if(startDate == null || finishDate == null) {
-					if(stateLimit == null) {
-						results = orgData.getMarkerXMLString(id);
-					} else {
-						results = orgData.getMarkerXMLString(id, null, null, stateLimit);
-					}
-				} else {
-					if(stateLimit == null) {
-						results = orgData.getMarkerXMLString(id, finishDate, startDate);
-					} else {
-						results = orgData.getMarkerXMLString(id, finishDate, startDate, stateLimit);
-					}
-				}
+				String results = data.getMarkerXMLString(id);
 				
 				// ouput the XML
 				// set the appropriate content type
@@ -140,9 +114,7 @@ public class MappingServlet extends HttpServlet {
 				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
 				
 				// declare helper variable
-				String results = null;
-				
-				results = data.getMarkerXMLString(id);
+				String results = data.getMarkerXMLString(id);
 				
 				// ouput the XML
 				// set the appropriate content type
@@ -193,7 +165,8 @@ public class MappingServlet extends HttpServlet {
 				String results = orgData.getKMLString(id);
 				
 				// get the organisation name
-				String fileName = orgData.getOrgNameByID(id);
+//				String fileName = orgData.getOrgNameByID(id);
+				String fileName = "";
 				fileName = fileName.toLowerCase();					   // lower case
 				fileName = fileName.replaceAll("[^a-zA-Z0-9\\s]", ""); // remove anything not alphanumeric
 				fileName = fileName.replaceAll(" ", "-");			   // replace spaces with dashes
@@ -273,7 +246,7 @@ public class MappingServlet extends HttpServlet {
 				OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
 				
 				// get the organisation name
-				results = orgData.getOrgNameByID(id);				
+//				results = orgData.getOrgNameByID(id);				
 			
 			} else if (type.equals("contribname")) {
 				// need to lookup the name of an organisation
@@ -291,7 +264,7 @@ public class MappingServlet extends HttpServlet {
 				OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
 				
 				// get the organisation name
-				results = orgData.getStartDatesForMap(id);
+//				results = orgData.getStartDatesForMap(id);
 			
 			} else {
 				throw new ServletException("Unknown type parameter value");
@@ -337,10 +310,11 @@ public class MappingServlet extends HttpServlet {
 		DataManager dataManager = new DataManager(servletConfig);
 		
 		// do an organisation search		
-		if(action.equals("org_search")) {
+		if(action.equals("organisation_search")) {
 			
 			// get the requested search term
-			String searchTerm = request.getParameter("org_name");
+			String searchTerm = request.getParameter("organisation_name");
+			String searchType = request.getParameter("search_type");
 			
 			// check on the search term
 			if(searchTerm == null) {
@@ -381,22 +355,19 @@ public class MappingServlet extends HttpServlet {
 				
 			}
 			
-			// get the limit parameter
-			String searchStateLimit = request.getParameter("state");		
+			// check the search type
+			if(searchType == null) {
+				searchType = "single";
+			}	
 			
 			// get an instance of the OrganisationDataBuilder class
-			OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
+			OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
 			
 			// declare helper variables
 			String results = "";
 			
-			// do the search
-			if(searchStateLimit == null || searchStateLimit.equals("nolimit")) {
-				results = orgData.doSearch(searchTerm);
-			} else {
-				results = orgData.doSearch(searchTerm, searchStateLimit);
-			}
-
+			results = data.doSearch(searchTerm, searchType);
+			
 			// ouput the results
 			// set the appropriate content type
 			response.setContentType("text/plain; charset=UTF-8");
@@ -542,7 +513,8 @@ public class MappingServlet extends HttpServlet {
 				String results = orgData.doKMLExport(id, exportOptions);
 				
 				// get the file name
-				String fileName = orgData.getFileName(orgData.getOrgNameByID(id), "kml");
+//				String fileName = orgData.getFileName(orgData.getOrgNameByID(id), "kml");
+				String fileName = "";
 				
 				
 				// ouput the XML
@@ -616,7 +588,7 @@ public class MappingServlet extends HttpServlet {
 			// if the id isn't in the database this method will throw an exception
 			String results = null;
 			try {
-				results = orgData.getOrgNameByID(searchTerm);
+//				results = orgData.getOrgNameByID(searchTerm);
 			} catch (Exception ex) {
 				// leave results at the null value
 			}

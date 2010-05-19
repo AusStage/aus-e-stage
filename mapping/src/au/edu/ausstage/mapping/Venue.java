@@ -36,17 +36,28 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	private String longitude = null;
 	private String url = null;
 	private Set<Contributor> contributors;
+	private Set<Organisation> organisations;
 	
 	// declare public constants
 	/**
-	 * Sort events by id
+	 * Sort contributors by id
 	 */
 	public final static int CONTRIBUTOR_ID_SORT = 0;
 	
 	/**
-	 * sort events by first date
+	 * sort contributors by name
 	 */
 	public final static int CONTRIBUTOR_NAME_SORT = 1;
+	
+	/**
+	 * Sort organisations by id
+	 */
+	public final static int ORGANISATION_ID_SORT = 0;
+	
+	/**
+	 * sort organisations by name
+	 */
+	public final static int ORGANISATION_NAME_SORT = 1;
 	
 	/**
 	 * Constructor for this class
@@ -68,6 +79,7 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 		}
 		
 		contributors = new HashSet<Contributor>();
+		organisations = new HashSet<Organisation>();
 	} // end constructor
 	
 	/**
@@ -105,6 +117,7 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 		}
 		
 		contributors = new HashSet<Contributor>();
+		organisations = new HashSet<Organisation>();
 		
 	} // end constructor
 	
@@ -257,6 +270,155 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 		return sortedContributors.toArray(new Contributor[0]);
 	
 	} // end getSortedEvents method
+	
+	/*
+	 * Organisation Management
+	 */
+	
+	/**
+	 * A method to add an organisation to this venue
+	 *
+	 * @param organisation the new organisation
+	 */
+	public void addNewOrganisation(Organisation organisation) {
+		// check on the parameter
+		if(organisation != null) {
+			organisations.add(organisation);
+		} else {
+			throw new IllegalArgumentException("Organisation cannot be null");
+		}
+	} // end addNewOrganisationmethod
+	
+	/**
+	 * A method to add an organisation to this venue
+	 *
+	 * @param organisation the new organisation
+	 */
+	public void addOrganisation(Organisation organisation) {
+		addNewOrganisation(organisation);
+	} // end addNewContributor method
+	
+	/**
+	 * A method to check if this venue has an organisation
+	 *
+	 * @param id the unique identifer of this organisation
+	 *
+	 * @return       true if this venue has this organisation
+	 */
+	public boolean hasOrganisation(String id) {
+		// filter the parameter
+		id = filterString(id);
+
+		Organisation organisation = new Organisation(id);
+		return hasOrganisation(organisation);
+	}
+	
+	/**
+	 * A method to check if this venue has an organisation
+	 *
+	 * @param organisation the organisation object
+	 *
+	 * @return       true if this venue has this organisation
+	 */
+	public boolean hasOrganisation(Organisation organisation) {
+		// check on the parameter
+		if(organisation != null) {
+			return organisations.contains(organisation);
+		} else {
+			throw new IllegalArgumentException("Organisation cannot be null");
+		}
+	}
+	
+	/**
+	 * A method to get a specific organisation
+	 *
+	 * @param id the unique identifer of the organisation
+	 *
+	 * @return   the event if found, null if nothing is found
+	 */
+	public Organisation getOrganisation(String id) {
+	
+		// filter the parameter
+		id = filterString(id);
+		
+		// get an iterator for this set
+		Iterator iterator = organisations.iterator();
+		
+		// loop through the list of events looking through 
+		while(iterator.hasNext()) {
+			// get the organisation at this place in the set
+			Organisation organisation = (Organisation)iterator.next();
+			
+			// compare ids
+			if(organisation.getId().equals(id) == true) {
+				return organisation;
+			}
+		}
+		
+		// if we get here, nothing was found
+		return null;
+	}
+	
+	/**
+	 * A method to get the list of organisations for this venue
+	 *
+	 * @return the list of organisations
+	 */
+	public Set<Organisation> getOrganisations() {
+		return organisations;
+	}
+	
+	/**
+	 * A method to get the list of organisations for this venue as an array
+	 *
+	 * @return the list of organisations
+	 */
+	public Organisation[] getOrganisationsArray() {
+		return organisations.toArray(new Organisation[0]);
+	}
+	
+	/**
+	 * A method to get the sorted list of organisations for this venue
+	 *
+	 * @param sortType the type of sort to use on the list of organisations
+	 *
+	 * @return the sorted list of events
+	 */
+	public Set<Organisation> getSortedOrganisations(int sortType) {
+	
+		// declare helper variables
+		Set<Organisation> sortedOrganisations;
+	
+		// determine what type of sort to do
+		if(sortType == ORGANISATION_ID_SORT) {
+			sortedOrganisations = new TreeSet<Organisation>(organisations);
+		} else if (sortType == ORGANISATION_NAME_SORT) {
+			sortedOrganisations = new TreeSet<Organisation>(new OrganisationNameComparator());
+			sortedOrganisations.addAll(organisations);
+		} else {
+			throw new IllegalArgumentException("Unknown sort type specified");
+		}
+		
+		return sortedOrganisations;
+	
+	}
+	
+	/**
+	 * A method to get the sorted list of contributors for this venue as an array
+	 *
+	 * @param sortType the type of sort to use on the list of contributors
+	 *
+	 * @return the sorted list of events
+	 */
+	public Organisation[] getSortedOrganisationsArray(int sortType) {
+	
+		// get the sorted events
+		Set<Organisation> sortedOrganisations = getSortedOrganisations(sortType);
+		
+		// convert to an array
+		return sortedOrganisations.toArray(new Organisation[0]);
+	
+	}
 	
 	/*
 	 * getter and setter methods
