@@ -243,10 +243,10 @@ public class MappingServlet extends HttpServlet {
 				// need to lookup the name of an organisation
 				
 				// get an instance of the OrganisationDataBuilder class
-				OrganisationDataBuilder orgData = new OrganisationDataBuilder(dataManager);
+				OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
 				
 				// get the organisation name
-//				results = orgData.getOrgNameByID(id);				
+				results = data.getNameByID(id);				
 			
 			} else if (type.equals("contribname")) {
 				// need to lookup the name of an organisation
