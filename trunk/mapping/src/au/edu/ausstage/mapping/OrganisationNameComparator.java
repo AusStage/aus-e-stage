@@ -24,21 +24,21 @@ import java.util.Comparator;
 /**
  * A class to compare events using first dates for reverse chronological sorting
  */
-public class ContributorNameComparator implements Comparator<Contributor>, java.io.Serializable{
+public class OrganisationNameComparator implements Comparator<Organisation>, java.io.Serializable{
 
 	/**
-	 * Compare two events for contributors
+	 * Compare two organisations sorting by name
 	 *
-	 * @param firstContributor  a contributor object for comparison
-	 * @param secondContributor a contributor object for comparison
+	 * @param firstContributor  a organisation object for comparison
+	 * @param secondContributor a organisation object for comparison
 	 *
 	 * @return the result of the comparison
 	 */
-	public int compare(Contributor firstContributor, Contributor secondContributor) {
+	public int compare(Organisation first, Organisation second) {
 	
 		// get the dates
-		String firstName  = firstContributor.getName();
-		String secondName = secondContributor.getName();
+		String firstName  = first.getName();
+		String secondName = second.getName();
 		
 		return firstName.compareTo(secondName);
 	
