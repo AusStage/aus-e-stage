@@ -1019,16 +1019,16 @@ public class OrganisationDataBuilder extends DataBuilder {
 	 } // end doKMLExport function
 	
 	/**
-	 * Function to get the name of the contributor
+	 * Function to get the name of the organisation
 	 *
 	 * @param queryParameter the parameter to determine which contributor to lookup
 	 *
-	 * @return               a string containing the name of the contributor
+	 * @return               a string containing the name of the organisation
 	 */
 	public String getNameByID(String queryParameter) throws javax.servlet.ServletException {
 	
 		// build the sql
-		String sql = "SELECT contrib_name FROM search_contributor WHERE contributorid = ?";
+		String sql = "SELECT name FROM search_organisation WHERE organisationid = ?";
 		
 		// define the parameters
 		String[] parameters = new String[1];
@@ -1047,8 +1047,8 @@ public class OrganisationDataBuilder extends DataBuilder {
 			// return the name
 			return resultSet.getString(1);
 		} catch(Exception ex) {
-				throw new javax.servlet.ServletException("Unable to lookup contributor name", ex);
+				throw new javax.servlet.ServletException("Unable to lookup organisation name", ex);
 		}
-	} // get the full name of a contributor
+	} // get the full name of an organisation
 
 } // end class definition

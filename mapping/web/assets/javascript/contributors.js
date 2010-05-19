@@ -344,6 +344,7 @@ function reloadMap() {
 	if(contributorMapData == null) {
 		$("#map").empty();
 		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
+		return false;
 	}
 
 	// get the show trajectory option

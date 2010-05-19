@@ -49,7 +49,7 @@ $(document).ready(function() {
 	if(typeof(type) == "undefined" || typeof(id) == "undefined") {
 		showErrorMessage();
 	} else {
-		if(type == "org") {
+		if(type == "organisation") {
 			// this is an organisation map
 			// this is an organisation map so get the organisation name
 			$.get("data?action=lookup&type=orgname&id=" + id, function(html) {
@@ -58,10 +58,10 @@ $(document).ready(function() {
 			});
 			
 			// get the marker xml data
-			$.get("data?action=markers&type=org&id=" + id, function(data) {
+			$.get("data?action=markers&type=organisation&id=" + id, function(data) {
 				
 				// show the map
-				showMap2(data, null, null, null, null);
+				showMap(data, null, null, null, null);
 				
 				// build the time slider
 				buildTimeSlider(data);
@@ -107,7 +107,7 @@ $(document).ready(function() {
 		
 		} else {
 			// this is an unknown type
-			showErrorMessag();
+			showErrorMessage();
 		}
 		
 		// override the default form action
@@ -142,7 +142,9 @@ function reloadMap() {
 	
 	// check to ensure map data is present
 	if(mapData == null) {
-		showErrorMessage();
+		$("#map").empty();
+		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
+		return false;
 	}
 
 	// get the show trajectory option
@@ -155,9 +157,9 @@ function reloadMap() {
 	// determine if the trajectory option is set
 	if(showTraj != null) {
 		// reload the map with trajectory information
-		showMap2(mapData, true, null, startDate, finishDate);
+		showMap(mapData, true, $("#state").val(), startDate, finishDate);
 	} else {
 		// reload the map with trajectory information
-		showMap2(mapData, false, null, startDate, finishDate);
+		showMap(mapData, false, $("#state").val(), startDate, finishDate);
 	}
 }

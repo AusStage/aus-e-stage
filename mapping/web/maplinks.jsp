@@ -65,7 +65,7 @@
 			<table class="formTable" width="100%">
 				<tr>
 					<th scope="row">
-						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" value="on"/>
+						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" onclick="showTrajectory();" value="on"/>
 					</th>
 				</tr>
 				<tr>
@@ -79,6 +79,24 @@
 							<label for="event_finish" class="tohide">First Date: </label>
 								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
 						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
+						<select size="1" id="state" name="state">
+							<option value="nolimit" selected="selected">No Limit - All venues</option>
+							<option value="a">Australia</option>
+							<option value="7"> - Australian Capital Territory</option>
+							<option value="3"> - New South Wales</option>
+							<option value="8"> - Northern Territory</option>
+							<option value="4"> - Queensland</option>
+							<option value="1"> - South Australia</option>
+							<option value="5"> - Tasmania</option>
+							<option value="6"> - Victoria</option>
+							<option value="2"> - Western Australia</option>
+							<option value="9">Outside Australia</option>
+						</select>
 					</td>
 				</tr>
 				<tr>
@@ -125,6 +143,7 @@
 						<th style="background: #4D3779; width: 20px;" scope="row">&nbsp;</th>
 						<td>Markers this colour indicate more than 30 events</td>
 					</tr>
+					<!--
 					<tr>
 						<td scope="row" colspan="2">
 							Trajectory lines are coloured using a scale:
@@ -135,6 +154,7 @@
 							</ul>
 						</td>
 					</tr>
+					-->
 				</tbody>
 			</table>					
 		</div>
