@@ -25,9 +25,9 @@ MYPATH=`pwd`
 # map the age by sex dataset
 FIX_TYPE=mapagebysex
 INPUT_PATH=$MYPATH/input/abs-overlay-act-base.kml
-OUTPUT_PATH=$MYPATH/output/abs-overlay-act-agebysex-male.kml
+OUTPUT_PATH=$MYPATH/output/abs-overlay-act-agebysex-total.kml
 CODES_PATH=$MYPATH/input/act-age-by-sex.xml
-DATA_SET=male
+DATA_SET=total
 # delete the output file if it already exists
 if [ -e "$OUTPUT_PATH" ]; then 
   /bin/rm $OUTPUT_PATH
@@ -41,6 +41,6 @@ else
   if [ -z "$DATA_SET" ]; then
     /usr/bin/java -cp .:$MYPATH/lib/* AbsDataFix -fixtype $FIX_TYPE -input $INPUT_PATH -output $OUTPUT_PATH -codes $CODES_PATH
   else 
-    /usr/bin/java -cp .:$MYPATH/lib/* AbsDataFix -fixtype $FIX_TYPE -input $INPUT_PATH -output $OUTPUT_PATH -codes $CODES_PATH -dataset male
+    /usr/bin/java -cp .:$MYPATH/lib/* AbsDataFix -fixtype $FIX_TYPE -input $INPUT_PATH -output $OUTPUT_PATH -codes $CODES_PATH -dataset $DATA_SET
   fi
 fi
