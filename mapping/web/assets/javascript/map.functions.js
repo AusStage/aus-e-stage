@@ -164,7 +164,6 @@ function showMap(data, trajectory, focus, start, finish) {
 			
 				// check on the fdate
 				if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
-				//if(fDate >= start && lDate <= finish) {
 					// filter markers by state
 					if(focus != null && focus != "nolimit") {
 						// use the state to filter
@@ -283,13 +282,13 @@ function buildTrajectory(data, map) {
 			var start = coordinates[0].split(",");
 			var finish = coordinates[1].split(",");
 			
+			// filter the values
 			start[0] = parseFloat(start[0]).toFixed(6);
 			start[1] = parseFloat(start[1]).toFixed(6);
 			
 			finish[0] = parseFloat(finish[0]).toFixed(6);
 			finish[1] = parseFloat(finish[1]).toFixed(6);
-			
-			
+						
 			map.addOverlay(new GPolyline([new GLatLng(start[0], start[1]), new GLatLng(finish[0], finish[1])], trajectoryColour, 5));		
 		} // coordinates loop
 	} // trajectories loop
@@ -365,7 +364,7 @@ function buildTimeSlider(data) {
 	$("#sliderComponent").remove();
 	
 	// create the slider
-	$(".slider").selectToUISlider({labels: 0}).hide();
+	$(".slider").selectToUISlider({labels: 5}).hide();
 	$(".tohide").hide();
 	
 	addSliderDescription();
@@ -375,33 +374,14 @@ function buildTimeSlider(data) {
 function addSliderDescription() {
 	// add some descriptive text
 	//$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.<br/>Only venues where all events fall outside the selected date range will be removed.</p>');
-	$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.</p>');
+	//$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.</p>');
 }	
 
 // function to manage clicking the show trajectory option
 function showTrajectory() {
 
 	var showTraj = $("#show_trajectory:checked").val();
-	
-/*	if(showTraj != null) {
-		// reset and disable time slider
-		$("#event_start option:first").attr("selected", "selected");
-		$("#event_finish option:last").attr("selected", "selected");
-		$("#sliderComponent").hide();
-		$("#sliderComponent").remove();
-		
-		// reset and disable state limit
-		$("#state option:first").attr("selected", "selected");
-		$("#state").attr("disabled", "disabled");
-	} else {
-		// enable time slider
-		$(".slider").selectToUISlider({labels: 0}).hide();
-		addSliderDescription();
 
-		// enable state limit
-		$("#state").removeAttr("disabled", "disabled");
-	}
-*/
 	if(showTraj != null) {
 		// hide the time slider and state limit
 		$("#time_slider_option_row_1").hide();

@@ -229,6 +229,11 @@ function showContributorMap(id, contrib, url) {
 	$.scrollTo("#map_header");
 	
 	$("#map_content_list").hide();
+	
+	// untick the trajectory checkbox & reset the advanced form options
+	$("#show_trajectory").attr('checked', false);
+	showTrajectory();
+	
 	contributorIDs = null;
 }
 
@@ -288,8 +293,9 @@ function addContrib(id, contrib, url) {
 		contributorMapData = data;
 	});
 	
-	// untick the trajectory checkbox
+	// untick the trajectory checkbox & reset the advanced form options
 	$("#show_trajectory").attr('checked', false);
+	showTrajectory();
 
 }
 
@@ -329,8 +335,10 @@ function delContrib(id, contrib) {
 			contributorMapData = data;
 		});
 	
-		// untick the trajectory checkbox
+		// untick the trajectory checkbox & reset the advanced form options
 		$("#show_trajectory").attr('checked', false);
+		showTrajectory();
+		
 	} else {
 		hideMap();
 		contributorIDs = null;

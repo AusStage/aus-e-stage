@@ -231,6 +231,11 @@ function showOrganisationMap(id, contrib, url) {
 	$.scrollTo("#map_header");
 	
 	$("#map_content_list").hide();
+	
+	// untick the trajectory checkbox & reset the advanced form options
+	$("#show_trajectory").attr('checked', false);
+	showTrajectory();
+
 	organisationIDs = null;
 }
 
