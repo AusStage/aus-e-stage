@@ -112,12 +112,25 @@ public class OrganisationDataBuilder extends DataBuilder {
 		results.append("<table class=\"searchResults\"><thead><tr><th>Organisation</th><th style=\"width: 65px; \">Events</th><th style=\"width: 65px; \">Mapped Events</th><th style=\"width: 10px; \">&nbsp;</th></tr></thead>");
 		
 		// add a table footer
-		results.append("<tfoot>");
-		results.append("<tr><td colspan=\"4\"><ul><li>Click the \"Show Map\" button to view an organisations map</li>");
-		//results.append("<li>Alternatively select a contributor and add them to the contributor list to be mapped</li>");
-		results.append("<li>Only events at venues that have geographic information in the database can be mapped</li>");
-		results.append("<li>Where an organisation has had more than one role at an event, only one marker will be added to the map</li>");
-		results.append("</ul></tfoot>");
+		if(searchType.equals("single")) {
+		
+			// single search instructions
+			results.append("<tfoot>");
+			results.append("<tr><td colspan=\"7\"><ul><li>Click the name of an organisation to see their record in AusStage</li>");
+			results.append("<li>Click the \"Show Map\" button to show a map of the organisations events</li>");
+			results.append("<li>Only events at venues that have geographic information in the database can be mapped</li>");
+			results.append("<li>Where an organisation has had more than one role at an event, only one marker will be added to the map</li>");
+			results.append("</ul></tfoot>");
+		} else {
+		
+			// multi search instructions
+			results.append("<tfoot>");
+			results.append("<tr><td colspan=\"7\"><ul><li>Click the name of an organisation to see their record in AusStage</li>");
+			results.append("<li>Click the \"Add\" button to add the organisations events to the map</li>");
+			results.append("<li>Only events at venues that have geographic information in the database can be mapped</li>");
+			results.append("<li>Where an organisation has had more than one role at an event, only one marker will be added to the map</li>");
+			results.append("</ul></tfoot>");		
+		}
 		
 		// start the table body
 		results.append("<tbody>");
