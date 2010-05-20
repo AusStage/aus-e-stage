@@ -29,8 +29,8 @@ public class OrganisationNameComparator implements Comparator<Organisation>, jav
 	/**
 	 * Compare two organisations sorting by name
 	 *
-	 * @param firstContributor  a organisation object for comparison
-	 * @param secondContributor a organisation object for comparison
+	 * @param first  a organisation object for comparison
+	 * @param second a organisation object for comparison
 	 *
 	 * @return the result of the comparison
 	 */

@@ -235,6 +235,12 @@ function showContributorMap(id, contrib, url) {
 // function to add a contributor to a multi contributor map
 function addContrib(id, contrib, url) {
 
+	// check to make sure this contributor hasn't been added already
+	if(contributorIDs != null && contributorIDs.indexOf(id) != -1) {
+		alert(contrib + " has already been added to the map");
+		return false;
+	}
+
 	// show the map container
 	$("#map_header").show();
 	$("#map").show();
@@ -284,9 +290,7 @@ function addContrib(id, contrib, url) {
 	
 	// untick the trajectory checkbox
 	$("#show_trajectory").attr('checked', false);
-	
-	// inform the user
-	alert(contrib + " has been added to the map");	
+
 }
 
 // function to delete a contributor from the map
@@ -331,9 +335,6 @@ function delContrib(id, contrib) {
 		hideMap();
 		contributorIDs = null;
 	}
-	
-	// inform the user
-	alert(contrib + " has been deleted from the map");
 
 }
 	

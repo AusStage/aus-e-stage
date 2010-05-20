@@ -256,6 +256,12 @@ table.mapLegend tfoot {
 	margin-top: -10px;
 }
 
+#map_content_list {
+	border: 1px solid #333333;
+	padding: 2px;
+	font-size: 90%;
+}
+
 /* Dialog styles */
 .ui-dialog-content a {
 	color: blue!important;

@@ -24,47 +24,52 @@ function showMap(data, trajectory, focus, start, finish) {
 
 	// tidy up any previous maps
 	GUnload();
+	$("#hidden_options_row").hide();
 	
 	// create a new map and centre it on australia
 	var map = new GMap2(document.getElementById("map"));
 	
 	// determine where to centre the map
-	//recentre the map
-	switch(focus){
-		case '1':
-			//map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
-			map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
-			break;
-		case '2':
-			map.setCenter(new GLatLng(-25.328055, 122.298333), 5); //WA
-			break;
-		case '3':
-			map.setCenter(new GLatLng(-32.163333, 147.016666), 6); //NSW
-			break;
-		case '4':
-			map.setCenter(new GLatLng(-22.486944, 144.431666), 5); //QLD
-			break;
-		case '5':
-			map.setCenter(new GLatLng(-42.021388, 146.593333), 7); //TAS
-			break;
-		case '6':
-			map.setCenter(new GLatLng(-36.854166, 144.281111), 6); //VIC
-			break;
-		case '7':
-			map.setCenter(new GLatLng(-35.49, 149.001388), 9); //ACT
-			break;
-		case '8':
-			map.setCenter(new GLatLng(-19.383333, 133.357777), 6); //NT
-			break;
-		case '9':
-			map.setCenter(new GLatLng(-25.947028, 133.209639), 2); //outside Aus
-			break;
-		case 'a':
-			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // Aus only
-			break;
-		default:
-			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // defult, AUS
-			break;
+	//recentre the map if required
+	if(trajectory == false) {
+		switch(focus){
+			case '1':
+				//map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+				map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
+				break;
+			case '2':
+				map.setCenter(new GLatLng(-25.328055, 122.298333), 5); //WA
+				break;
+			case '3':
+				map.setCenter(new GLatLng(-32.163333, 147.016666), 6); //NSW
+				break;
+			case '4':
+				map.setCenter(new GLatLng(-22.486944, 144.431666), 5); //QLD
+				break;
+			case '5':
+				map.setCenter(new GLatLng(-42.021388, 146.593333), 7); //TAS
+				break;
+			case '6':
+				map.setCenter(new GLatLng(-36.854166, 144.281111), 6); //VIC
+				break;
+			case '7':
+				map.setCenter(new GLatLng(-35.49, 149.001388), 9); //ACT
+				break;
+			case '8':
+				map.setCenter(new GLatLng(-19.383333, 133.357777), 6); //NT
+				break;
+			case '9':
+				map.setCenter(new GLatLng(-25.947028, 133.209639), 2); //outside Aus
+				break;
+			case 'a':
+				map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // Aus only
+				break;
+			default:
+				map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // defult, AUS
+				break;
+		}
+	} else {
+		map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // defult, AUS
 	}
 	
 	// finish setting up the map
@@ -145,17 +150,53 @@ function showMap(data, trajectory, focus, start, finish) {
 			colour = "#4D3779";
 		}
 		
-		// filter markers
-		var okToAdd = false;
+		// filter markers if required
+		if(trajectory == false) {
 		
-		// filter markers by date
-		if(start != null) {
-			// filter using date
-			var fDate = parseInt(markers[i].getAttribute("fdate"));
-			var lDate = parseInt(markers[i].getAttribute("ldate"));
+			// filter markers
+			var okToAdd = false;
+		
+			// filter markers by date
+			if(start != null) {
+				// filter using date
+				var fDate = parseInt(markers[i].getAttribute("fdate"));
+				var lDate = parseInt(markers[i].getAttribute("ldate"));
 			
-			// check on the fdate
-			if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
+				// check on the fdate
+				if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
+				//if(fDate >= start && lDate <= finish) {
+					// filter markers by state
+					if(focus != null && focus != "nolimit") {
+						// use the state to filter
+						var state = markers[i].getAttribute("state")
+			
+						if(focus == "a" && state != "9") {
+							okToAdd = true;
+						}else if(focus == "1" && state == "1") {
+							okToAdd = true;
+						}else if(focus == "2" && state == "2") {
+							okToAdd = true;
+						}else if(focus == "3" && state == "3") {
+							okToAdd = true;
+						}else if(focus == "4" && state == "4") {
+							okToAdd = true;
+						}else if(focus == "5" && state == "5") {
+							okToAdd = true;
+						}else if(focus == "6" && state == "6") {
+							okToAdd = true;
+						}else if(focus == "7" && state == "7") {
+							okToAdd = true;
+						}else if(focus == "8" && state == "8") {
+							okToAdd = true;
+						}else if(focus == "9" && state == "9") {
+							okToAdd = true;
+						}			
+					} else {
+						okToAdd = true;
+					}
+				}
+			
+			} else {
 				// filter markers by state
 				if(focus != null && focus != "nolimit") {
 					// use the state to filter
@@ -186,47 +227,18 @@ function showMap(data, trajectory, focus, start, finish) {
 					okToAdd = true;
 				}
 			}
-			
-		} else {
-			// filter markers by state
-			if(focus != null && focus != "nolimit") {
-				// use the state to filter
-				var state = markers[i].getAttribute("state")
-			
-				if(focus == "a" && state != "9") {
-					okToAdd = true;
-				}else if(focus == "1" && state == "1") {
-					okToAdd = true;
-				}else if(focus == "2" && state == "2") {
-					okToAdd = true;
-				}else if(focus == "3" && state == "3") {
-					okToAdd = true;
-				}else if(focus == "4" && state == "4") {
-					okToAdd = true;
-				}else if(focus == "5" && state == "5") {
-					okToAdd = true;
-				}else if(focus == "6" && state == "6") {
-					okToAdd = true;
-				}else if(focus == "7" && state == "7") {
-					okToAdd = true;
-				}else if(focus == "8" && state == "8") {
-					okToAdd = true;
-				}else if(focus == "9" && state == "9") {
-					okToAdd = true;
-				}			
-			} else {
-				okToAdd = true;
-			}
-		}
 		
-		// add marker
-		if(okToAdd == true) {
+			// add marker
+			if(okToAdd == true) {
+				map.addOverlay(createMarker(latlng, info, colour));
+			}
+		} else {
 			map.addOverlay(createMarker(latlng, info, colour));
 		}
 	}	
 	
 	// build the trajectories if required
-	if(trajectory == true && focus == "nolimit") {
+	if(trajectory == true) {
 		buildTrajectory(data, map);
 	}
 }
@@ -253,7 +265,7 @@ function buildTrajectory(data, map) {
 		}
 		
 		// get the coordinates
-		var coordinateList = trajectories[i].childNodes;
+		var coordinateList = trajectories[i].getElementsByTagName("coords");
 		
 		// loop through the coordinates adding lines
 		for(var x = 0; x < coordinateList.length; x++) {
@@ -270,6 +282,13 @@ function buildTrajectory(data, map) {
 			
 			var start = coordinates[0].split(",");
 			var finish = coordinates[1].split(",");
+			
+			start[0] = parseFloat(start[0]).toFixed(6);
+			start[1] = parseFloat(start[1]).toFixed(6);
+			
+			finish[0] = parseFloat(finish[0]).toFixed(6);
+			finish[1] = parseFloat(finish[1]).toFixed(6);
+			
 			
 			map.addOverlay(new GPolyline([new GLatLng(start[0], start[1]), new GLatLng(finish[0], finish[1])], trajectoryColour, 5));		
 		} // coordinates loop
@@ -309,11 +328,17 @@ function buildTimeSlider(data) {
 		
 		//get the date	
 		var first = markers[i].getAttribute("fdatestr");
+		var last  = markers[i].getAttribute("ldatestr");
 		
-		// add the date to the has if required
+		// add the date to the hash if required
 		if(dates[first] == null) {
 			dates[first] = first;
 		}
+		
+		if(dates[last] == null) {
+			dates[last] = last;
+		}
+		
 	}
 	
 	// clear the time slider
@@ -349,15 +374,16 @@ function buildTimeSlider(data) {
 // add a description to the slider
 function addSliderDescription() {
 	// add some descriptive text
-	$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.<br/>Only venues where all events fall outside the selected date range will be removed.</p>');
-}
+	//$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.<br/>Only venues where all events fall outside the selected date range will be removed.</p>');
+	$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.</p>');
+}	
 
 // function to manage clicking the show trajectory option
 function showTrajectory() {
 
 	var showTraj = $("#show_trajectory:checked").val();
 	
-	if(showTraj != null) {
+/*	if(showTraj != null) {
 		// reset and disable time slider
 		$("#event_start option:first").attr("selected", "selected");
 		$("#event_finish option:last").attr("selected", "selected");
@@ -375,23 +401,24 @@ function showTrajectory() {
 		// enable state limit
 		$("#state").removeAttr("disabled", "disabled");
 	}
+*/
+	if(showTraj != null) {
+		// hide the time slider and state limit
+		$("#time_slider_option_row_1").hide();
+		$("#time_slider_option_row_2").hide();
+		$("#state_option_row").hide();
+		$("#hidden_options_row").show();
+	} else {
+		// hide the time slider and state limit
+		$("#time_slider_option_row_1").show();
+		$("#time_slider_option_row_2").show();
+		$("#state_option_row").show();
+		$("#hidden_options_row").hide();
+		
+	}
 }
 
 // Make Google API Scripts clean up
 $(document).unload(function(){
 	GUnload();
 });
-
-
-/*
-// helper function to parse a date into a number
-function parseDateToNumber(data) {
-
-	// strip the dashes
-	data = data.replace('-', '');
-	
-	// turn the string as a number
-	return new Number(data);
-	
-}
-*/
