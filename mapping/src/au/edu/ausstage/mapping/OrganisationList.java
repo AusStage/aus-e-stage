@@ -81,7 +81,7 @@ public class OrganisationList extends DataClasses {
 	/**
 	 * A method to check if this list has this organisation already
 	 *
-	 * @param id the unique identifer of this organisation
+	 * @param organisation the unique identifer of this organisation
 	 *
 	 * @return       true if this list has this organisation
 	 */

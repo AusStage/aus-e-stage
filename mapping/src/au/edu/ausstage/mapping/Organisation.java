@@ -380,7 +380,7 @@ public class Organisation extends DataClasses implements Comparable<Organisation
      * negative integer, 0, or a positive integer depending on whether the receiving object is 
      * less than, equal to, or greater than the specified object.
      *
-     * @param c the organisation to compare this one to
+     * @param o the organisation to compare this one to
      *
      * @return  an integer indicating comparison result
      */    

@@ -174,6 +174,11 @@
 				<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
 				<li><a href="#" title="Export data using advanced options" id="map_header_export">Download KML data with advanced options</a></li>
 			</ul>
+			<div id="map_content_list">
+				<div id="map_contents">
+					<span style="font-weight: bold">Contributors on the Map: </span>
+				</div>
+			</div>
 		</div>
 		<div id="map">
 		</div>
@@ -182,22 +187,10 @@
 			<h3>Advanced Display Options</h3>
 			<form action="" method="get" id="adv_map_display_form" name="adv_map_display_form">
 			<table class="formTable" width="100%">
-				<tr id="map_content_list">
-					<td>						
-						<div id="map_contents">
-							<span style="font-weight: bold">Contributors on the Map: </span>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" onclick="showTrajectory();" value="on"/>
-					</th>
-				</tr>
-				<tr>
+				<tr id="time_slider_option_row_1">
 					<th scope="row">Show events that occured between:</th>
 				</tr>
-				<tr>
+				<tr id="time_slider_option_row_2">
 					<td>
 						<fieldset>
 							<label for="event_finish" class="tohide">First Date: </label>
@@ -207,8 +200,8 @@
 						</fieldset>
 					</td>
 				</tr>
-				<tr>
-					<td>
+				<tr id="state_option_row">
+					<th scope="row">
 					<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
 						<select size="1" id="state" name="state">
 							<option value="nolimit" selected="selected">No Limit - All venues</option>
@@ -223,7 +216,17 @@
 							<option value="2"> - Western Australia</option>
 							<option value="9">Outside Australia</option>
 						</select>
+					</th>
+				</tr>
+				<tr id="hidden_options_row">
+					<td>
+						<strong>Note: </strong> Limiting the display of markers by location and time are only possible when trajectory information is not displayed.
 					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" onclick="showTrajectory();" value="on"/>
+					</th>
 				</tr>
 				<tr>
 					<td>
