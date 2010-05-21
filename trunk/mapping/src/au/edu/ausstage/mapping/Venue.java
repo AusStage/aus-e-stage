@@ -453,7 +453,7 @@ public class Venue extends DataClasses implements Comparable<Venue>{
 	}
 	
 	public void setSuburb(String value) {
-		this.suburb = filterString(value);
+		this.suburb = filterString(value, true);
 	}
 	
 	public String getPostcode() {
