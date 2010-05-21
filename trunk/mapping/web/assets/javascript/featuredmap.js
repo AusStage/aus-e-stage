@@ -18,7 +18,7 @@
 
 // declare variables to determine what type of map to build
 var type = "contributor"; // valid values are contributor and organisation
-var id   = "54";          // id of the contributor / organisation to feature
+var id   = "2";          // id of the contributor / organisation to feature
  
 /*
  * Do not edit below this line
