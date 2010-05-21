@@ -112,8 +112,8 @@ function showExecuteError() {
 function showExecuteStatus(responseText, statusText) {
 
 	$("#status").hide();
-	$("#script_list").hide();
-	$("#script_list").empty();
+	//$("#script_list").hide();
+	//$("#script_list").empty();
 	
 	$("#status").empty();
 	$("#status").append(responseText);
