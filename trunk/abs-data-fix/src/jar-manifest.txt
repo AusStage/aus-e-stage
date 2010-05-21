@@ -1,3 +1,15 @@
 Main-Class: AbsDataFix
 Class-Path: commons-lang-2.5.jar
+Implementation-Title: ABS Data Fix
+Implementation-Vendor: AusStage
+Implementation-Vendor-Id: au.edu.ausstage
+Implementation-Version: 1.0
+Specification-Title: ABS Data Fix
+Specification-Vendor: AusStage
+Specification-Version: 1.0
+Bundle-Name: ABS Data Fix
+Bundle-Vendor: AusStage
+Bundle-Version: 1.0
+Bundle-License: http://www.gnu.org/licenses/gpl.html
+Bundle-Description: A package to manipulate ABS data sets for use as overlays with the AusStage Mapping Service
 
