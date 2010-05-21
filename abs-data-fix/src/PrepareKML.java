@@ -321,7 +321,14 @@ public class PrepareKML extends Tasks {
 				currentElement.setAttribute("id", "_" + code);
 				
 				// update the description
-				descriptionCDATA.setData(DESCRIPTION_TEMPLATE.replace("{id}", code));				
+				descriptionCDATA.setData(DESCRIPTION_TEMPLATE.replace("{id}", code));
+				
+				// update the name
+				Element nameElement = xmlDoc.createElement("name");
+				nameElement.setTextContent("Collection District: " + code);
+				
+				// add the name element
+				currentElement.insertBefore(nameElement, descriptionElement);				
 			}			
 			
 		} else {
