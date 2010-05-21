@@ -43,3 +43,6 @@ _Note: Only those datasets that the AbsDataFix application has been configured t
  # Click on the *Select all Census Collection Districts...* link under the item you clicked on in step 3.6
  # Repeat steps 3.6 and 3.7 for each item in the list excluding the *No Usual Address* item
  # Click the *Next* button
+<wiki:comment>
+Does unticking the "Display Map" check box speed this up?
+</wiki:comment>
