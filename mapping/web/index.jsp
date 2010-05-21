@@ -24,18 +24,8 @@
 	<title>AusStage Mapping Service (Beta)</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/jquery-ui-1.7.2.custom.css"/>
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/ui.slider.extras.css"/>
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery.cluetip.css"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.36.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.6.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.7.2.custom.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.cluetip.js"></script>	
-	<script type="text/javascript" src="assets/javascript/organisation.js"></script>
+	<script type="text/javascript" src="assets/javascript/featuredmap.js"></script>
 	<script type="text/javascript" src="assets/javascript/map.functions.js"></script>
 	<%
 		ServletContext context = getServletContext();
@@ -52,138 +42,29 @@
 	<!-- Include the sidebar -->
 	<jsp:include page="sidebar.jsp"/>
 	<div id="main">
-		<h2>Map Events by Organisation</h2>
+		<h2>Map Events in the AusStage database</h2>
 		<p>
-			Use the form below to search for, and then select, an organisation to create a map of their events.
+			The aim of the AusStage Mapping Service is to provide an interactive, map-based interface with which to search, manage and display <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> data. 
+			The maps produced by the service allows users to build visual representations of geography of event data in a meaningful way.
 		</p>
-		<div id="tabs">
-			<ul>
-				<li><a href="#tabs-1">Search by Name</a></li>
-				<li><a href="#tabs-2">Search by ID</a></li>
-			</ul>
-			<div id="tabs-1">
-				<form action="data/" method="post" id="org_search_form" name="org_search_form">
-					<input type="hidden" name="action" value="org_search"/>
-					<table class="formTable">
-						<tr>
-							<th scope="row">
-								<label id="org_name_label" for="org_name" class="#cluetip_orgname" style="cursor: help;">Organisation Name: </label>
-							</th>
-							<td>
-								<input type="text" size="40" id="org_name" name="org_name"/>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<label id="operator_label" for="operator" class="#cluetip_operator" style="cursor: help;">Search Operator: </label>
-							</th>
-							<td>
-								<select size="1" id="operator" name="operator">
-									<option value="and" selected="selected">And</option>
-									<option value="or">Or</option>
-									<option value="exact">Exact Phrase</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
-							</th>
-							<td>
-								<select size="1" id="state" name="state">
-									<option value="nolimit" selected="selected">No Limit - All venues</option>
-									<option value="7">Australian Capital Territory</option>
-									<option value="3">New South Wales</option>
-									<option value="8">Northern Territory</option>
-									<option value="4">Queensland</option>
-									<option value="1">South Australia</option>
-									<option value="5">Tasmania</option>
-									<option value="6">Victoria</option>
-									<option value="2">Western Australia</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" value="Search"/><br/>
-								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>
-			<div id="tabs-2">
-				<form action="data/" method="post" id="org_id_search_form" name="org_id_search_form">
-					<input type="hidden" name="action" value="org_id_search"/>
-					<table class="formTable">
-						<tr>
-							<th scope="row">
-								<label for="org_id">Organisation ID: </label>
-							</th>
-							<td>
-								<input type="text" size="40" id="org_id" name="org_id"/>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" value="Search"/>
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>
-		</div>
-		<div id="search_waiting" style="visibility:hidden;">
-		<p style="text-align: center;">
-			<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
-			<br/>Loading Search Results...
+		<p>
+			Users of this system can build maps that chart the geographic distribution of performance events and related information stored in the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> database. 
+			There are currently three different types of maps under development and they are:
 		</p>
-		</div>
-		<div id="search_results" style="padding-top: 10px;">
-		</div>
-		<div id="map_header" class="map_header_footer">
-			<h3></h3>
-			<ul class="map_links">
-				<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
-				<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
-				<li><a href="#" title="Export data using advanced options" id="map_header_export">Download KML data with advanced options</a></li>
-			</ul>
+		<ol>
+			<li><a href="/mapping/organisations.jsp" title="Search for Organisations and create a map of their events">Maps By Organisation</a></li>
+			<li><a href="/mapping/contributors.jsp" title="Search for Contributors and create a map of their events">Maps By Contributor</a></li>
+			<li>Search for Events by Name and create a map (Under Development)</li>
+		</ol>
+		<p>
+			Development of the Mapping Service is part of the larger <a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage project homepage">Aus-e-Stage</a> project. Aus-e-Stage is a <a href="https://www.pfc.org.au/bin/view/Main/NeAT" title="More information about NeAt">NeAT funded</a> project with the aim of developing three new services that will be designed, tested and deployed to operate alongside the current <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> text-based search-and-retrieval service. 
+		<p>
+			We encourage you to use this service and explore the functionality that it provides. If you have any questions, queries or comments please <a href="http://beta.ausstage.edu.au/" title="Contact Project Members">Contact Us</a>.
+		</p>
+		<div id="map_header" class="featured_map_header_footer map_header_footer">
+			<h3 id="map_name"></h3>
 		</div>
 		<div id="map">
-		</div>
-		<p></p>
-		<div id="map_footer" class="map_header_footer">
-			<h3>Advanced Display Options</h3>
-			<form action="" method="" id="adv_map_display_form" name="adv_map_display_form">
-			<input type="hidden" name="adv_map_org_id" id="adv_map_org_id"/>
-			<input type="hidden" name="adv_map_state" id="adv_map_state"/>
-			<table class="formTable" width="100%">
-				<tr>
-					<th scope="row" colspan="2">
-						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" value="on"/>
-					</th>
-				</tr>
-				<tr>
-					<th scop="row" colspan="2">Show events that occured between:</th>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<fieldset>
-							<label for="event_finish" class="tohide">First Date: </label>
-								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
-							<label for="event_start" class="tohide">Last Date: </label>
-								<select name="event_start" id="event_start" size="1" class="slider"></select>
-						</fieldset>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<input class="ui-state-default ui-corner-all button" type="button" name="reload_map" id="reload_map" value="Reload Map"/>
-					</td>
-				</tr>
-			</table>
-			
-			</form>
 		</div>
 		<div id="map_legend">
 			<table class="mapLegend">
@@ -192,14 +73,16 @@
 						<th colspan="2">Map Legend</th>
 					</tr>
 				</thead>
-				<tfoot>
-					<tr>
-						<td colspan="2">
-							The map is automatically centred on Australia, pan and zoom the map to see events in other locations.
+				<tbody>
+					<tr style="border-bottom: 1px solid #333333;">
+						<td style="font-size: 90%" colspan="2">
+							<ul>
+								<li>This is a featured map constructed using data retrieved live from the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> database</li>
+								<li>The map is automatically centred on Australia, pan and zoom the map to see events in other locations
+								</li>
+							</ul>
 						</td>
 					</tr>
-				</tfoot>
-				<tbody>
 					<tr>
 						<th style="background: #CCBAD7; width: 20px;" scope="row">&nbsp;</th>
 						<td>Markers this colour indicate only 1 event</td>
@@ -220,39 +103,8 @@
 						<th style="background: #4D3779; width: 20px;" scope="row">&nbsp;</th>
 						<td>Markers this colour indicate more than 30 events</td>
 					</tr>
-					<tr>
-						<td scope="row" colspan="2">
-							Trajectory lines are coloured using a scale:
-							<ul>
-								<li><span style="background: #FF0000">red</span> is the earliest</li>
-								<li><span style="background: #FFFF00">yellow</span> is the latest</li>
-								<li>Other times are shades between these two colours</li>
-							</ul>
-						</td>
-					</tr>
 				</tbody>
-			</table>					
-		</div>
-		<!-- clue tip content -->
-		<div id="cluetip_orgname">
-			<p>
-				Enter a few keywords, or the exact name, of the organisation that is of interest
-			</p>
-		</div>
-		<div id="cluetip_operator">
-			<p>
-				There are three search operators available:
-			</p>
-			<ul>
-				<li>And: All of the keywords must appear in the name</li>
-				<li>Or:  Any of the keywords must appear in the name</li>
-				<li>Exact Phrase: The organisation name must much exactly what is entered</li>
-			</ul>
-		</div>
-		<div id="cluetip_state">
-			<p>
-				Limit the display of venues to only those that appear in the selected state or territory
-			</p>
+			</table>
 		</div>
 	</div>
 	<!-- include the footer -->

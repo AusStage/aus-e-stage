@@ -244,6 +244,10 @@ table.mapLegend tfoot {
 	background: #fff;
 }
 
+.featured_map_header_footer {
+	margin-bottom: -10px;
+}
+
 .map_header_footer h3 {
 	text-align: center;
 }

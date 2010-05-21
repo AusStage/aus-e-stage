@@ -33,17 +33,28 @@ public class DataClasses {
 	 */
 	public String filterString(String value, boolean nullAllowed) {
 		
-		// check for nulls	
-		if(nullAllowed == false && value == null) {
-			throw new IllegalArgumentException("Value cannot be null");
-		}
+		// check for nulls
+		if(nullAllowed == false) {
+			// null values are not allowed
+			if(value == null) {
+				throw new IllegalArgumentException("Value cannot be null");
+			}
 		
-		// trim the string
-		value = value.trim();
+			// trim the string
+			value = value.trim();
 		
-		// check for nulls again
-		if(nullAllowed == false && value.equals("")) {
-			throw new IllegalArgumentException("Value cannot be empty");
+			// check for nulls again
+			if(value.equals("")) {
+				throw new IllegalArgumentException("Value cannot be empty");
+			}
+		} else {
+			// null values are allowed
+			if(value == null) {
+				value = "";
+			}
+			
+			// trim the string
+			value = value.trim();
 		}
 	
 		// return the filtered value
