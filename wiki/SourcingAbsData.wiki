@@ -1,0 +1,16 @@
+#summary Sourcing Census Data from the ABS
+
+<h1>Sourcing Census Data</h1>
+
+One of the many and varied goals of the Mapping Service is to develop a series overlays. These overlays will be used to add information to a map to assist users in gaining the most insight from the !AusStage data.
+
+One of the first sets overlays that were developing are derived from data obtained from the [http://www.abs.gov.au/ Australian Bureau of Statistics] and in particular the [http://www.abs.gov.au/census 2006 Census].
+
+The purpose of this page is to outline the procedure for collecting data for use with the AbsDataFix application and the construction of overlays.
+
+It is recommended that you print this page or open the link to the ABS in a new window. 
+
+<wiki:toc max_depth="2" />
+
+= Access the Census Data Website = 
+
