@@ -146,7 +146,7 @@ public class ScriptManager {
 		}
 		
 		// return the output from the script
-		return scriptOutput.toString().replaceAll("\n", "<br/>");
+		return scriptOutput.toString();
 	
 	} // end executeById method
 

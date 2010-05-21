@@ -114,7 +114,7 @@ public class TerminatorServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			
 			// send some output
-			out.print(results);
+			out.print(results.replaceAll("\n", "<br/>"));
 			
 			
 		} else {
