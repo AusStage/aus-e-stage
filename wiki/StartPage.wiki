@@ -1,0 +1,20 @@
+#summary Wiki Start Page
+
+= Introduction =
+
+The [http://beta.ausstage.edu.au/ Aus-e-Stage] project is a [https://www.pfc.org.au/bin/view/Main/NeAT NeAT funded] project that is working on developing services that extend the capabilities of the existing text-based search-and-retrieval [http://www.ausstage.edu.au AusStage] website.
+
+[http://www.ausstage.edu.au AusStage]  fulfils a national need for public access to reliable information on the full spectrum of live performance in Australia, delivering a data set of national significance to research, post graduate students, policy makers in government and industry practitioners; there is no other comparable database in existence. 
+
+
+= Services =
+
+The services currently under development are:
+
+ * [http://beta.ausstage.edu.au/mapping/ Mapping Events]
+ * Navigating Networks
+ * Researching Audiences
+
+= Purpose of this Wiki =
+
+The purpose of this Wiki is to manage documentation specifically related to the development activities that are building the above services. For example a list of [Articles How To Articles] on how to use the various tools developed as part of the project. Or maintain a list of UsefulLinks. 
