@@ -166,9 +166,14 @@ public class ContributorDataBuilder extends DataBuilder {
 				} else {
 					results.append("<tr>");
 				}
+				
+				// filter the organisation name
+				String name = resultSet.getString(2);
+				name = name.replaceAll("'", "&#146;");
+				name = name.replaceAll("\"", "&quot;");
 
 				// add the contributor page link
-				results.append("<td><a href=\"" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "\" title=\"View record for " + resultSet.getString(2) + " in AusStage\" target=\"ausstage\">");
+				results.append("<td><a href=\"" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "\" title=\"View record for " + name + " in AusStage\" target=\"ausstage\">");
 				results.append(resultSet.getString(2) + "</a></td>");	
 				
 				// add remaining data
@@ -181,10 +186,10 @@ public class ContributorDataBuilder extends DataBuilder {
 				if(Integer.parseInt(resultSet.getString(5)) > 0) {
 					if(searchType.equals("single")) {
 						// single map
-						results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"showContributorMap('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Show Map\"/></td></tr>");
+						results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"showContributorMap('" + resultSet.getString(1) + "', '" + name + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Show Map\"/></td></tr>");
 					} else {
 						// multi map
-						results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"addContrib('" + resultSet.getString(1) + "', '" + resultSet.getString(2) + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Add\"/></td></tr>");
+						results.append("<td><input class=\"ui-state-default ui-corner-all button\" type=\"button\" onclick=\"addContrib('" + resultSet.getString(1) + "', '" + name + "','" + urlTemplate.replace("[contrib-id]", resultSet.getString(1)) + "'); return false;\" value=\"Add\"/></td></tr>");
 					}
 				} else {
 					results.append("<td>&nbsp;</td></tr>\n");
