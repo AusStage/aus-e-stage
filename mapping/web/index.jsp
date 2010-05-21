@@ -78,8 +78,8 @@
 						<td style="font-size: 90%" colspan="2">
 							<ul>
 								<li>This is a featured map constructed using data retrieved live from the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> database</li>
-								<li>The map is automatically centred on Australia, pan and zoom the map to see events in other locations
-								</li>
+								<li>The map is automatically centred on Australia, pan and zoom the map to see events in other locations</li>
+								<li>A darker shadow under a marker indicates that there are large number of markers in close proximity to that marker that can only be seen at a higher zoom level</li>
 							</ul>
 						</td>
 					</tr>
