@@ -19,7 +19,7 @@ The lists of links are categorised to provide a structure to this page.
  * [http://tomcat.apache.org/ Apache Tomcat]
  * [http://tomcat.apache.org/tomcat-6.0-doc/api/index.html Apache Tomcat 6.0 API]
 
-= JavaScript and HTML =
+= !JavaScript and HTML =
  * [http://www.w3schools.com/jsref/ JavaScript and HTML DOM Reference]
  * [http://jquery.org JQuery]
 
