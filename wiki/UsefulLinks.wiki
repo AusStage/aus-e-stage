@@ -1,0 +1,28 @@
+#summary Links to Useful Websites and Information
+
+<h1> Useful Links </h1>
+
+The links listed here are to useful information to those who are actively developing source code and other tools as part of the Aus-e-Stage project.
+
+The lists of links are categorised to provide a structure to this page.
+
+<wiki:toc max_depth="2" />
+
+= Apache Subversion Information =
+ * [http://subversion.apache.org/ Apache Subversion Project]
+ * [http://svnbook.red-bean.com/ Subversion Book]
+ * [http://tortoisesvn.tigris.org/ Tortoise SVN (Windows Client)]
+
+= Java Development =
+ * [http://java.sun.com/javase/6/docs/api/ Java SE 6 API Documentation]
+ * [http://java.sun.com/products/servlet/2.5/docs/servlet-2_5-mr2/index.html Java Servlet API Documentation]
+ * [http://tomcat.apache.org/ Apache Tomcat]
+ * [http://tomcat.apache.org/tomcat-6.0-doc/api/index.html Apache Tomcat 6.0 API]
+
+= JavaScript and HTML =
+ * [http://www.w3schools.com/jsref/ JavaScript and HTML DOM Reference]
+ * [http://jquery.org JQuery]
+
+= Maps and KML =
+  * [http://code.google.com/apis/maps/ Google Maps API]
+  * [http://code.google.com/apis/kml/documentation/kmlreference.html Google KML Reference]
