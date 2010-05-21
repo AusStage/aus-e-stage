@@ -1,0 +1,19 @@
+#summary How To articles on the tools and techniques we've developed
+
+<h1>How To Articles</h1>
+
+Development of the Aus-e-Stage project will not only result in the three [StartPage#Services Services] that are the goal of the project. Along the way software tools, libraries and data management techniques are being constructed and learnt. 
+
+These pages are designed to contain documentation on software tools and libraries that we've developed, as well as data management techniques and documentation on processes. 
+
+The articles are categorised to provide a structure to this page.
+
+<wiki:toc max_depth="2" />
+
+= Aus-e-Stage Software Tools =
+ * [AbsDataFix Building Overlays] using data sourced from the ABS
+
+= Data Management Techniques =
+
+= Processes =
+ * [SourcingAbsData Sourcing data from the ABS] that can be used for overlays
