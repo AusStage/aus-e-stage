@@ -71,7 +71,7 @@
 						<tbody>
 						<tr>
 							<th scope="row">
-								<label id="name_label_1" for="organisation_name" class="#cluetip_name" style="cursor: help;">Organisationan Name: </label>
+								<label id="name_label_1" for="organisation_name" class="#cluetip_name" style="cursor: help;">Organisation Name: </label>
 							</th>
 							<td>
 								<input type="text" size="40" id="organisation_name" name="organisation_name"/>
