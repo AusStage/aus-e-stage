@@ -8,7 +8,9 @@ The data is manipulated in a variety of different ways to build overlays for use
 
 Outlined below are the steps necessary to use the AbsDataFix application to prepare a dataset sourced from the ABS using the SourcingAbsData procedure.
 
-_Note: This procedure assumes that you are familiar with executing commands in a command line environment such as a terminal or command prompt window_
+_Note 1: This procedure assumes that you are familiar with executing commands in a command line environment such as a terminal or command prompt window_
+
+_Note 2: Ensure that all file and directory names do not include spaces_
 
 <wiki:toc max_depth="2" />
 
@@ -25,7 +27,7 @@ _Note: This procedure assumes that you are familiar with executing commands in a
  # Download the !AbsDataFix-#.zip file listed under the *Featured Downloads* heading where # is the version number
  # Extract the contents of the archive and and copy them into the *bin* directory created in step 1
 
-= Step 3. Building Datasets = 
+= Step 3. Building First Stage XML File = 
  # Choose one of the following steps to create the required dataset
 
 == Step 3a. Build an Age by Sex Dataset ==
@@ -35,7 +37,22 @@ _Note: This procedure assumes that you are familiar with executing commands in a
  # Change directory to the *bin* directory 
  # Execute the following command where:
    # input-file: is the source data copied to the input directory in step 3a.1
-   # output-file: is the name of the output file to create _Note: Specify the *output* directory as part of the path_
+   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
    {{{java -jar AbsDataFix.jar -fixtype agebysex -input input-file -output output-file}}}
- # If an error occurs please adjust the parameters and try again
- # Take note of the file that was successfully created 
+ # If an error occurs adjust the parameters and try again
+ # Take note of the file that was successfully created
+
+= Step 4. Start a Collection District Dataset =
+Collection District Dataset is an XML based file that is used for further processing and for use by the !AusStage Mapping Service for the population of infoWindows in Google Earth.
+
+This step will only needed to be undertaken once for each state using the Age by Sex Dataset created in step 3a.
+
+ # Copy the XML file created in step 3a into the *input* directory
+ # If necessary, open a terminal window / command prompt
+ # If necessary, change directory to the *bin* directory 
+ # Execute the following command where:
+   # input-file: is the file copied to the input directory in step 4.1
+   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   {{{java -jar AbsDataFix.jar -fixtype databuilder -input input-file -output output-file}}}
+ # If an error occurs adjust the parameters and try again
+ # Take note of the file that was successfully created
