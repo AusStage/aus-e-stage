@@ -1,0 +1,9 @@
+#summary TableBuilder application at the ABS Website
+
+<h1>Access the ABS TableBuilder website</h1>
+
+The TableBuilder website is the prefered method of exporting data from the [http://www.abs.gov.au Australian Bureau of Statistics] website as it is much faster, and provides a richer experience than the [http://www.abs.gov.au/census CDATA Online] website. 
+
+Access to the TableBuilder website is restricted to those with a username and password. Users at Australian Universities are recommended to talk to their library in order to arrange access.
+
+Other users can read about how to gain access at the [http://www.abs.gov.au/TableBuilder TableBuilder] website.
