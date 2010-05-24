@@ -8,16 +8,31 @@ The data is manipulated in a variety of different ways to build overlays for use
 
 Outlined below are the steps necessary to use the AbsDataFix application to prepare a dataset sourced from the ABS using the SourcingAbsData procedure.
 
+_Note: This procedure assumes that you are familiar with executing commands in a command line environment such as a terminal or command prompt window_
+
 <wiki:toc max_depth="2" />
 
-= Prepare your System =
+= Step 1. Prepare your System =
  # Ensure that you have the latest version of [http://java.com Java] installed and properly configured on your system. The AbsDataFix application was written using Java version 1.6.
- # To assist in following these procedures it is recommended that you create a folder structure that starts with an *abs-data-fix* folder and has the following child folders
+ # To assist in following these procedures it is recommended that you create a directory structure that starts with an *abs-data-fix* directory and has the following child directories
   # *bin* for storing the executable
   # *input* for storing the input files
   # *output* for storing the output files
   # *repository* for storing finalised files
 
+= Step 2. Download and install the !AbsDataFix application =
+ # Enter the following URL into the address bar of your browser http://code.google.com/p/aus-e-stage/
+ # Download the !AbsDataFix-#.zip file listed under the *Featured Downloads* heading where # is the version number
+ # Extract the contents of the archive and and copy them into the *bin* directory created in step 1
 
-
-= Step 1. Download !AbsDataFix application =
+= Step 3a. Build an Age by Sex Dataset =
+ # Copy the file downloaded at the end of the SourcingAbsData procedure into the *input* directory 
+ # Ensure the file name does not contain any spaces and is all lower case
+ # Open a terminal window / command prompt
+ # Change directory to the *bin* directory 
+ # Execute the following command where:
+   # input-file: is the source data copied to the input directory in step 3a.1
+   # output-file: is the name of the output file to create _Note: Specify the *output* directory as part of the path_
+   {{{java -jar AbsDataFix.jar -fixtype agebysex -input input-file -output output-file}}}
+ # If an error occurs please adjust the parameters and try again
+ # Take note of the file that was successfully created 
