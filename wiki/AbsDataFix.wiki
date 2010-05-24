@@ -25,7 +25,10 @@ _Note: This procedure assumes that you are familiar with executing commands in a
  # Download the !AbsDataFix-#.zip file listed under the *Featured Downloads* heading where # is the version number
  # Extract the contents of the archive and and copy them into the *bin* directory created in step 1
 
-= Step 3a. Build an Age by Sex Dataset =
+= Step 3. Building Datasets = 
+ # Choose one of the following steps to create the required dataset
+
+== Step 3a. Build an Age by Sex Dataset ==
  # Copy the file downloaded at the end of the SourcingAbsData procedure into the *input* directory 
  # Ensure the file name does not contain any spaces and is all lower case
  # Open a terminal window / command prompt
