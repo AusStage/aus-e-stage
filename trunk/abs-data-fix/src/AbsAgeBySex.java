@@ -401,19 +401,18 @@ public class AbsAgeBySex extends Tasks {
 			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
-			// get a transformer and supporting classes
-			StringWriter writer = new StringWriter();
+			// get the supporting classes for the transformer
+			FileWriter writer = new FileWriter(output);
 			StreamResult result = new StreamResult(writer);
 			DOMSource    source = new DOMSource(xmlDoc);
 			
 			// transform the xml document into a string
 			transformer.transform(source, result);
 			
-			// open the output file
-			FileWriter output = new FileWriter(outputFile);
-			output.write(writer.toString());
-			output.close();			
+			// close the output file
+			writer.close();		
 			
 		} catch(javax.xml.parsers.ParserConfigurationException ex) {
 			throw new RuntimeException("ERROR: Unable to build xml", ex);
