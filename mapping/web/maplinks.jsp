@@ -51,9 +51,6 @@
 		<div id="map_header" class="map_header_footer">
 			<h3></h3>
 			<ul class="map_links">
-				<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
-				<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
-				<li><a href="#" title="Export data using advanced options" id="map_header_export">Download KML data with advanced options</a></li>
 			</ul>
 		</div>
 		<div id="map">
@@ -61,7 +58,6 @@
 		<div id="map_footer" class="map_header_footer">
 			<h3>Advanced Display Options</h3>
 			<form action="" method="" id="adv_map_display_form" name="adv_map_display_form">
-			<input type="hidden" name="adv_map_org_id" id="adv_map_org_id"/>
 			<table class="formTable" width="100%">
 				<tr>
 					<th scope="row">

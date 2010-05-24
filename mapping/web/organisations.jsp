@@ -178,7 +178,7 @@
 			</ul>
 			<div id="map_content_list">
 				<div id="map_contents">
-					<span style="font-weight: bold">Contributors on the Map: </span>
+					<span style="font-weight: bold">Organisations on the Map: </span>
 				</div>
 			</div>
 		</div>
