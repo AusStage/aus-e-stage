@@ -55,7 +55,7 @@ _Note 2: Only users who have access to the TableBuilder site will be able to use
  # Enter a name for the table in the pop-up window that appeared in step 4.3
  # Click the *Queue Job* button
  # Click the *My Tables* link located to the left of the *Submit Table* drop down box
- # Periodically refresh the page (approximately one ever 30 seconds) until the *Completed, Click here to download* link appears in the content status of the *Queued Jobs* table
+ # Periodically refresh the page (approximately once ever 30 seconds) until the *Completed, Click here to download* link appears in the content status of the *Queued Jobs* table
  # Click the *Completed, Click here to download* link
  # Save the file in to your computer
  
