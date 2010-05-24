@@ -98,7 +98,7 @@ The AbsDataFix application does not undertake this task currently, once the seco
 
 The MapInfo files provided by the ABS need to be converted into KML so that they can be used with applications such as Google Earth. Details of the way in which this conversion is achieved is available on the MapInfoToKML page. 
 
-Once the conversion is complete the KML files are prepared for further processing specific to the AbsDataFix application. This step undertakes these changes and will only need to be undertaken once for each KML file
+Once the conversion is complete the KML files are prepared for further processing specific to the AbsDataFix application. This step undertakes these changes and will only need to be undertaken once for each base KML file.
 
  # Copy the KML file into the *input* directory
  # If necessary, open a terminal window / command prompt
@@ -110,4 +110,9 @@ Once the conversion is complete the KML files are prepared for further processin
    <br/>_Note: This may take some time to complete_
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
+
+= Step 8. Compile an overlay = 
+Combining a prepared KML file with one of the [AbsDataFix#first_stage_xml_files First Stage XML Files] will produce the finalised overlay for that dataset.
+
+
  
