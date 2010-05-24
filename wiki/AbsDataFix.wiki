@@ -107,6 +107,7 @@ Once the conversion is complete the KML files are prepared for further processin
    # input-file: is the file copied to the input directory in step 7.1
    # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
    {{{java -jar AbsDataFix.jar -fixtype prepkml -input input-file -output output-file}}}
+   <br/>_Note: This may take some time to complete_
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
  
