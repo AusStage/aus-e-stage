@@ -203,19 +203,18 @@ public class AppendCDInfo extends Tasks {
 			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
-			// get a transformer and supporting classes
-			StringWriter writer = new StringWriter();
+			// get the supporting classes for the transformer
+			FileWriter writer = new FileWriter(output);
 			StreamResult result = new StreamResult(writer);
 			DOMSource    source = new DOMSource(xmlDoc);
 			
 			// transform the xml document into a string
 			transformer.transform(source, result);
 			
-			// open the output file
-			FileWriter outputWriter = new FileWriter(output);
-			outputWriter.write(writer.toString());
-			outputWriter.close();
+			// close the output file
+			writer.close();
 			
 		} catch(javax.xml.transform.TransformerException e) {
 			System.err.println("ERROR: Unable to transform xml for output\n" + e.toString());
