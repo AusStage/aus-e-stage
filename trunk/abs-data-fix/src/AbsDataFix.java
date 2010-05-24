@@ -25,10 +25,20 @@ import java.io.*;
  */
 public class AbsDataFix {
 
+	// Store the version information 
+	private static final String VERSION    = "1.0";
+	private static final String BUILD_DATE = "2010-05-24";
+	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/AbsDataFix";
+
 	/**
 	 * Main driving method for the AusStage ABS Data Fix App
 	 */
 	public static void main(String args[]) {
+	
+		// output some basic information
+		System.out.println("AbsDataFix - Use ABS data to build overlays for AusStage Maps");
+		System.out.println("Version: " + VERSION + " Build Date: " + BUILD_DATE);
+		System.out.println("More Info: " + INFO_URL + "\n");
 	
 		// declare helper variables
 		String[] fixTypes     = {"agebysex", "databuilder", "appendcdinfo", "prepkml", "mapagebysex"};

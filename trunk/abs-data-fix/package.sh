@@ -14,8 +14,9 @@ fi
 # copy the class files to the tmp directory
 /bin/cp $MY_PATH/bin/*.class $MY_PATH/dist/tmp/
 #
-# copy the license file to the dist directory
+# copy the license & readme files to the dist directory
 /bin/cp $MY_PATH/LICENSE.txt $MY_PATH/dist/
+/bin/cp $MY_PATH/README.txt $MY_PATH/dist/
 #
 # build the jar file
 cd $MY_PATH
@@ -33,4 +34,4 @@ fi
 #
 # change to the dist directory and create a new zip file
 cd $MY_PATH/dist
-/usr/bin/zip AbsDataFix.zip *.jar LICENSE.txt
+/usr/bin/zip AbsDataFix.zip *.jar LICENSE.txt README.txt
