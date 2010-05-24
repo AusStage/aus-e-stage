@@ -26,6 +26,12 @@ The lists of links are categorised to provide a structure to this page.
 = Maps and KML =
   * [http://code.google.com/apis/maps/ Google Maps API]
   * [http://code.google.com/apis/kml/documentation/kmlreference.html Google KML Reference]
+  * [http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd Official KML Schema]
+  
+= Metadata =
+  * [http://dublincore.org/documents/usageguide/elements.shtml Dublin Core Metadata Elements]
 
 = Overlays and Data Sources =
  * [http://www.abs.gov.au/census ABS 2006 Census]
+ * [http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1259.0.30.0022006 1259.0.30.002 - Statistical Geography - Australian Standard Geographical Classification (ASGC), Digital Boundaries, 2006]
+ * [http://www.ga.gov.au/ Geoscience Australia]

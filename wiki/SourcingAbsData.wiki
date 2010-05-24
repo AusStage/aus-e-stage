@@ -10,39 +10,57 @@ The purpose of this page is to outline the procedure for collecting data for use
 
 It is recommended that you print this page or open the link to the ABS in a new window. 
 
-_Note: Only those datasets that the AbsDataFix application has been configured to work with can be turned into overlays_
+_Note 1: Only those datasets that the AbsDataFix application has been configured to work with can be turned into overlays_
+_Note 2: Only users who have access to the TableBuilder site will be able to use this procedure
 
 <wiki:toc max_depth="2" />
 
-= Access the Census Data Website = 
- # Enter the following URL into the address bar of your browser http://www.abs.gov.au/census
- # Click on the *CDATA Online* link
- # Click on the *ENTER CDATA ONLINE* button
- # Click the *Guest Login* button
+= Access the ABS TableBuilder website = 
+ # Enter the following URL into the address bar of your browser http://www.abs.gov.au/TableBuilder
+ # Click the *Enter TABLEBUILDER* button
+ # Enter your email address into the *Email address* field
+ # Enter your password into the *Password* field
+ # Click the *Login* button
 
-= Construct a Dataset =
-== Age by Sex ==
-== Step 1 ==
- # Leave the *Select a Census Year* option at the default
- # Select the *CDATA Online by Topic* option
- # Click the *Next* button
+= Construct an Age by Sex Dataset =
 
-== Step 2 ==
- # Leave the *Select a Method of Counting* option at the default
- # Select the *Age & Population* option of the *Select a topic* drop down box
- # Select the *Age By Sex* option of the *Select a table* list
+== Step 1 - Select the Database ==
+ # Select the *Counting Persons, Please of Usual Residence* database
  # Click the *Next* button
-
-== Step 3 == 
- # Select the *Census Collection District* option of the *Choose a type of location* drop down box
- # Click on the *by Statistical Division* item in the tree on the left of the map of Australia
- # Click on the name of the state that is of interest
- # Click on the first item in the tree under the name of the state
- # Click on the *Select all Census Collection Districts...* link under the item you clicked on in step 3.4
- # Click on the next item in the list in the tree under the name of the state
- # Click on the *Select all Census Collection Districts...* link under the item you clicked on in step 3.6
- # Repeat steps 3.6 and 3.7 for each item in the list excluding the *No Usual Address* item
- # Click the *Next* button
-<wiki:comment>
-Does unticking the "Display Map" check box speed this up?
-</wiki:comment>
+ 
+== Step 2 - Select the Rows ==
+ # Click the arrow to the left of the *Geographic Areas (Please of Usual Residence)* item in the tree on the left hand side of the page
+ # Click the arrow to the left of the *Main ASGC* item in the tree
+ # Locate the Australian state that is of interest
+ # Click the arrow to the right of the name of the state
+ # Select the *CD Level* option in the drop down box that appeared at step 2.4
+ # Click the *Add to Row* button above the tree on the left hand side of the page
+ # Click the *OK* button on the *Entering Large Table Preview Mode* window when it appears
+ # Click the *Collapse All* link above the tree on the left hand side of the page
+ 
+== Step 3 - Select the Columns ==
+ # Click the arrow to the left of the *Person Variables* item in the tree on the left hand side of the page
+ # Click the arrow to the left of the *People Characteristics* item in the tree
+ # Click the arrow to the right of the *SEXP Sex* item in the tree
+ # Select the *SEXP* option in the drop down box that appeared in step 3.3
+ # Click the *Add to Column* button above the tree on the left hand side of the page
+ # Click the arrow to the right of the *AGEP Age (5 Year Groups)* item in the tree
+ # Select the *AGEP - 5 Year Age Groups* option in the drop down box that appeared in step 3.3
+ # Click the *Add to Column* button above the tree on the left hand side of the page
+ 
+== Step 4 - Export the Data ==
+ # Select the *Comma Seperated Value (.csv)* item from the *Submit Table* drop down box
+ # Click the *Queue Job* button located to the right of the *Submit Table* drop down box
+ # Enter a name for the table in the pop-up window that appeared in step 4.3
+ # Click the *Queue Job* button
+ # Click the *My Tables* link located to the left of the *Submit Table* drop down box
+ # Periodically refresh the page (approximately one ever 30 seconds) until the *Completed, Click here to download* link appears in the content status of the *Queued Jobs* table
+ # Click the *Completed, Click here to download* link
+ # Save the file in to your computer
+ 
+== Step 5 - Prepare the Data for Use ==
+ # Extract the csv file from the zip file saved in step 4.8
+ # Copy the csv file to the input directory for use by the AbsDataFix application
+ # Rename the csv file so that the name is all lower case and does not contain spaces
+ 
+ 
