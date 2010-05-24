@@ -1,3 +1,11 @@
 #summary How to build overlays using ABS Data
 
 <h1>!AbsDataFix - Building Map Overlays using ABS Data</h1>
+
+The AbsDataFix application has been designed to provide a flexible framework for the manipulation of data sourced from the [http://www.abs.gov.au Australian Bureau of Statistics (ABS)] on the 2006 census. 
+
+The data is manipulated in a variety of different ways to build overlays for use with [http://earth.google.com Google Earth] and other GIS enabled systems. Datasets are also constructed so that the [http://beta.ausstage.edu.au/mapping/ AusStage Mapping Service] can be used to dynamically populate the infoWindows in each overlay.
+
+Outlined below are the steps necessary to use the AbsDataFix application to prepare a dataset sourced from the ABS using the SourcingAbsData procedure.
+
+<wiki:toc max_depth="2" />
