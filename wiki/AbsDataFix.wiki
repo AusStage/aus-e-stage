@@ -9,3 +9,15 @@ The data is manipulated in a variety of different ways to build overlays for use
 Outlined below are the steps necessary to use the AbsDataFix application to prepare a dataset sourced from the ABS using the SourcingAbsData procedure.
 
 <wiki:toc max_depth="2" />
+
+= Prepare your System =
+ # Ensure that you have the latest version of [http://java.com Java] installed and properly configured on your system. The AbsDataFix application was written using Java version 1.6.
+ # To assist in following these procedures it is recommended that you create a folder structure that starts with an *abs-data-fix* folder and has the following child folders
+  # *bin* for storing the executable
+  # *input* for storing the input files
+  # *output* for storing the output files
+  # *repository* for storing finalised files
+
+
+
+= Step 1. Download !AbsDataFix application =
