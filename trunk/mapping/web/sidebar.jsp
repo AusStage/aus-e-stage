@@ -19,12 +19,12 @@
 */
 %>
 <div id="sidebar">
-		<ul>
-			<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
-			<li><a href="/mapping/browse.jsp" title="Browse a map of venues and list events">Browse Map of Venues</a></li>
-			<li><a href="/mapping/organisations.jsp" title="Search for Organisations and create a map of their events">Maps By Organisation</a></li>
-			<li><a href="/mapping/contributors.jsp" title="Search for Contributors and create a map of their events">Maps By Contributor</a></li>
-			<li><a href="docs.jsp" title="System Overview Diagrams etc.">System Documents</a></li>
-			<li><a href="/mapping/geocode.jsp" title="Lookup geographic coordinates to add to AusStage">Geocode Lookup</a></li>
-		</ul>
-	</div>
+	<ul>
+		<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
+		<li><a href="/mapping/browse.jsp" title="Browse a map of venues and list events">Browse Map of Venues</a></li>
+		<li><a href="/mapping/organisations.jsp" title="Search for Organisations and create a map of their events">Maps By Organisation</a></li>
+		<li><a href="/mapping/contributors.jsp" title="Search for Contributors and create a map of their events">Maps By Contributor</a></li>
+		<li><a href="docs.jsp" title="System Overview Diagrams etc.">System Documents</a></li>
+		<li><a href="/mapping/geocode.jsp" title="Lookup geographic coordinates to add to AusStage">Geocode Lookup</a></li>
+	</ul>
+</div>

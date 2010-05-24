@@ -61,6 +61,9 @@
 		<p>
 			We encourage you to use this service and explore the functionality that it provides. If you have any questions, queries or comments please <a href="http://beta.ausstage.edu.au/" title="Contact Project Members">Contact Us</a>.
 		</p>
+		<p>
+			The Alpha 1 Testing phase was conducted during March and April 2010. The outcomes from the testing were encouraging and the report summarising the feedback is <a href="/mapping/docs/mapping-service-alpha-1-testing-report.pdf" title="Mapping Service Alpha 1 Testing Report">now available</a>. 
+		</p>
 		<div id="map_header" class="featured_map_header_footer map_header_footer">
 			<h3 id="map_name"></h3>
 		</div>
