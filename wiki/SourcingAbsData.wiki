@@ -11,6 +11,7 @@ The purpose of this page is to outline the procedure for collecting data for use
 It is recommended that you print this page or open the link to the ABS in a new window. 
 
 _Note 1: Only those datasets that the AbsDataFix application has been configured to work with can be turned into overlays_
+
 _Note 2: Only users who have access to the TableBuilder site will be able to use this procedure
 
 <wiki:toc max_depth="2" />
