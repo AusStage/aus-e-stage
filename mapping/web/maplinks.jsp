@@ -47,7 +47,7 @@
 	<!-- Include the sidebar -->
 	<jsp:include page="sidebar.jsp"/>
 	<div id="main">
-		<h2 id="map_name">Map of events for: ...</h2>
+		<h2 id="map_name"></h2>
 		<div id="map_header" class="map_header_footer">
 			<h3></h3>
 			<ul class="map_links">
@@ -57,28 +57,23 @@
 		</div>
 		<div id="map_footer" class="map_header_footer">
 			<h3>Advanced Display Options</h3>
-			<form action="" method="" id="adv_map_display_form" name="adv_map_display_form">
+			<form action="" method="get" id="adv_map_display_form" name="adv_map_display_form">
 			<table class="formTable" width="100%">
-				<tr>
-					<th scope="row">
-						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" onclick="showTrajectory();" value="on"/>
-					</th>
+				<tr id="time_slider_option_row_1">
+					<th scope="row">Show events that occured between:</th>
 				</tr>
-				<tr>
-					<th scop="row" colspan="2">Show events that occured between:</th>
-				</tr>
-				<tr>
-					<td colspan="2">
+				<tr id="time_slider_option_row_2">
+					<td>
 						<fieldset>
-							<label for="event_start" class="tohide">Last Date: </label>
-								<select name="event_start" id="event_start" size="1" class="slider"></select>
 							<label for="event_finish" class="tohide">First Date: </label>
+								<select name="event_start" id="event_start" size="1" class="slider"></select>
+							<label for="event_start" class="tohide">Last Date: </label>
 								<select name="event_finish" id="event_finish" size="1" class="slider"></select>
 						</fieldset>
 					</td>
 				</tr>
-				<tr>
-					<td>
+				<tr id="state_option_row">
+					<th scope="row">
 					<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
 						<select size="1" id="state" name="state">
 							<option value="nolimit" selected="selected">No Limit - All venues</option>
@@ -93,10 +88,20 @@
 							<option value="2"> - Western Australia</option>
 							<option value="9">Outside Australia</option>
 						</select>
+					</th>
+				</tr>
+				<tr id="hidden_options_row">
+					<td>
+						<strong>Note: </strong> Limiting the display of markers by location and time are only possible when trajectory information is not displayed.
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<th scope="row">
+						<label for="show_trajectory">Show Trajectory Information: </label> &nbsp; <input type="checkbox" id="show_trajectory" name="show_trajectory" onclick="showTrajectory();" value="on"/>
+					</th>
+				</tr>
+				<tr>
+					<td>
 						<input class="ui-state-default ui-corner-all button" type="button" name="reload_map" id="reload_map" value="Reload Map"/>
 					</td>
 				</tr>
