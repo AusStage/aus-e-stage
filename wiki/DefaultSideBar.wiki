@@ -6,7 +6,6 @@
  * [Articles HowTo articles]
    * Aus-e-Stage Software Tools
      * [AbsDataFix Building ABS Overlays]
-   * Data Management Techniques
    * Processes
      * [SourcingAbsData Sourcing data from the ABS]
  * [UsefulLinks Useful Links]
