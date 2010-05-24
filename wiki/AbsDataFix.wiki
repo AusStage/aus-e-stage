@@ -45,7 +45,7 @@ _Note 2: Ensure that all file and directory names do not include spaces_
 = Step 4. Start a Collection District Dataset =
 Collection District Dataset is an XML based file that is used for further processing and for use by the !AusStage Mapping Service for the population of infoWindows in Google Earth.
 
-This step will only needed to be undertaken once for each state using the Age by Sex Dataset created in step 3a.
+This step will only need to be undertaken once for each state using the Age by Sex Dataset created in step 3a.
 
  # Copy the XML file created in step 3a into the *input* directory
  # If necessary, open a terminal window / command prompt
@@ -56,3 +56,57 @@ This step will only needed to be undertaken once for each state using the Age by
    {{{java -jar AbsDataFix.jar -fixtype databuilder -input input-file -output output-file}}}
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
+
+= Step 5. Append additional information to the Collection District Dataset =
+
+The Collection District Dataset requires additional information such as the Statistical Local Area and Local Government Area names. The easiest source of data to use for this step is the MapInfo files available from the [http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1259.0.30.0022006 ABS website]
+
+This step will only need to be undertaken once for each state using the Collection District Dataset created in step 4.
+
+== Step 5.a Download the MapInfo File for the state currently being processed ==
+
+ # Download the Zip file containing the MapInfo data for the state that is currently being worked on
+ # Extract the files contained in the Zip File
+ # Copy the extracted MID file into the *input* directory
+
+== Step 5.b Use the MapInfo data to complete the Collection District Dataset == 
+
+ # Copy the XML file created in step 4 to the *input* directory
+ # If necessary, open a terminal window / command prompt
+ # If necessary, change directory to the *bin* directory 
+ # Execute the following command where:
+   # input-file: is the file copied to the input directory in step 5.b.1
+   # code-file: is the file copied into the *input* directory in step 5a.
+   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   {{{java -jar AbsDataFix.jar -fixtype appendcdinfo -input input-file -output output-file -codes code-file}}}
+ # If an error occurs adjust the parameters and try again
+ # Take note of the file that was successfully created
+
+== Step 5.c Store the completed Collection District Dataset ==
+ 
+ # Copy the XML file created in step 5.b to the *repository* directory
+
+This file will form the basis for the Collection District Dataset that will be used by the AusStage Mapping Service to populate infoWindows and other web pages
+
+= Step 6. Append the Dataset to the Collection District Dataset =
+
+The ABS provides a variety of datasets that we will be making use of to construct overlays. Each new type of dataset will need to be appended to the Collection District Dataset file so that infoWindows and other parts of the Mapping Service can be maintained.
+
+The AbsDataFix application does not undertake this task currently, once the second dataset has been decided upon the application will be amended.
+
+= Step 7. Prepare the KML files ==
+
+The MapInfo files provided by the ABS need to be converted into KML so that they can be used with applications such as Google Earth. Details of the way in which this conversion is achieved is available on the MapInfoToKML page. 
+
+Once the conversion is complete the KML files are prepared for further processing specific to the AbsDataFix application. This step undertakes these changes and will only need to be undertaken once for each KML file
+
+ # Copy the KML file into the *input* directory
+ # If necessary, open a terminal window / command prompt
+ # If necessary, change directory to the *bin* directory 
+ # Execute the following command where:
+   # input-file: is the file copied to the input directory in step 7.1
+   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   {{{java -jar AbsDataFix.jar -fixtype prepkml -input input-file -output output-file}}}
+ # If an error occurs adjust the parameters and try again
+ # Take note of the file that was successfully created
+ 
