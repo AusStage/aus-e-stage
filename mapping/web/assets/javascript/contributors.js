@@ -241,9 +241,22 @@ function showContributorMap(id, contrib, url) {
 function addContrib(id, contrib, url) {
 
 	// check to make sure this contributor hasn't been added already
-	if(contributorIDs != null && contributorIDs.indexOf(id) != -1) {
-		alert(contrib + " has already been added to the map");
-		return false;
+	if(contributorIDs != null) {
+		if(contributorIDs.indexOf(",") != -1) {
+			var ids = contributorIDs.split(",");
+		
+			for(var i = 0; i < ids.length; i++) {
+				if(ids[i] == id) {
+					alert(contrib + " has already been added to the map");
+					return false;
+				}
+			}
+		} else {
+			if(contributorIDs == id) {
+				alert(contrib + " has already been added to the map");
+				return false;
+			}
+		}
 	}
 
 	// show the map container
