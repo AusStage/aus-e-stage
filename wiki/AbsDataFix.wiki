@@ -144,7 +144,7 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
  # Copy this file into the *repository* directory and rename it as follows where:
    # state-abbr: is the state abbreviation for example qld, nsw, sa etc.
    # dataset: is the dataset used in step 8a.5 
-   {{{state-abbr-abs-dataset-age-by-sex.kml}}}
+   {{{abs-state-abbr-dataset-age-by-sex.kml}}}
 
 
 
