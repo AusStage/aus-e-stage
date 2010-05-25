@@ -156,7 +156,7 @@ public class AppendCDInfo extends Tasks {
 						System.out.println("INFO: Unable to locate data element with id: " + dataElems[1]);
 					} else {
 						// a node was found so update it
-						System.out.println("INFO: Updating node with id: " + dataElems[1]);
+						//System.out.println("INFO: Updating node with id: " + dataElems[1]);
 						
 						// get the cdata node
 						Node cdata = foundNode.getFirstChild();
