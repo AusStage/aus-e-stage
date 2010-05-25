@@ -37,6 +37,10 @@
         <servlet-name>BrowseServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mapping.BrowseServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>XmlDataServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mapping.XmlDataServlet</servlet-class>
+    </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>MappingServlet</servlet-name>
@@ -49,6 +53,10 @@
     <servlet-mapping>
         <servlet-name>BrowseServlet</servlet-name>
         <url-pattern>/browse/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>XmlDataServlet</servlet-name>
+        <url-pattern>/xmldata/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
@@ -105,6 +113,10 @@
         <param-name>googleGeocodeUrl</param-name>
         <!-- The [address] string will be replaced with the address prior to lookup-->
         <param-value></param-value>
+    </context-param>
+    <context-param>
+    	<param-name>xmlDataStore</param-name>
+    	<param-value></param-value>
     </context-param>
     <!-- Add mime mapping for VUE files -->
 	<mime-mapping>
