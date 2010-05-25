@@ -32,7 +32,10 @@ public class Organisation extends DataClasses implements Comparable<Organisation
 	private String url  = null;
 	private Set<Event> events;
 	private TreeMap<String, String> trajectory;
-	private String[] trajKeyDiff = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+	private String[] trajKeyDiff  = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+	private String[] trajKeyDiff2 = {"za", "zb", "zc", "zd", "ze", "zf", "zg", "zh", "zi", "zj", "zk", "zl", "zm", "zn", "zo", "zp", "zq", "zr", "zs", "zt", "zu", "zv", "zw", "zx", "zy", "zz"};
+	private String[] trajKeyDiff3 = {"zza", "zzb", "zzc", "zzd", "zze", "zzf", "zzg", "zzh", "zzi", "zzj", "zzk", "zzl", "zzm", "zzn", "zzo", "zzp", "zzq", "zzr", "zzs", "zzt", "zzu", "zzv", "zzw", "zzx", "zzy", "zzz"};
+	private String[] trajKeyDiff4 = {"zzza", "zzzb", "zzzc", "zzzd", "zzze", "zzzf", "zzzg", "zzzh", "zzzi", "zzzj", "zzzk", "zzzl", "zzzm", "zzzn", "zzzo", "zzzp", "zzzq", "zzzr", "zzzs", "zzzt", "zzzu", "zzzv", "zzzw", "zzzx", "zzzy", "zzzz"};
 	private int trajKeyDiffIndex = 0;
 	
 	// declare public constants
@@ -63,6 +66,8 @@ public class Organisation extends DataClasses implements Comparable<Organisation
 		
 		events = new HashSet<Event>();
 		trajectory = new TreeMap<String, String>();
+		
+		trajKeyDiff = concatAll(trajKeyDiff, trajKeyDiff2, trajKeyDiff3, trajKeyDiff4);
 
 	} // end constructor
 	
@@ -92,6 +97,8 @@ public class Organisation extends DataClasses implements Comparable<Organisation
 		
 		events = new HashSet<Event>();
 		trajectory = new TreeMap<String, String>();
+		
+		trajKeyDiff = concatAll(trajKeyDiff, trajKeyDiff2, trajKeyDiff3, trajKeyDiff4);
 		
 	} // end constructor
 	
