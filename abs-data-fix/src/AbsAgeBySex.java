@@ -92,7 +92,7 @@ public class AbsAgeBySex extends Tasks {
 		}
 		
 		// keep the user informed
-		System.out.println("INFO: Skipping lines 1 - " + SKIP_LINES);
+		//System.out.println("INFO: Skipping lines 1 - " + SKIP_LINES);
 		
 		// skip the required number of lines
 		for(int i = 1; i <= SKIP_LINES; i++) {
@@ -119,7 +119,7 @@ public class AbsAgeBySex extends Tasks {
 				// check on the line
 				if(dataLine.startsWith(",\"") == false || dataLine.startsWith(",\"Total") == true) {
 					// not a data line
-					System.out.println("INFO: Skiping line: " + lineCount);
+					//System.out.println("INFO: Skiping line: " + lineCount);
 					
 					// increment the line counter
 					lineCount++;
@@ -234,7 +234,7 @@ public class AbsAgeBySex extends Tasks {
 					people = new int[DATA_COLUMNS];
 					
 					// keep the user 
-					System.out.println("INFO: District: " + district + " Avg. Male Age: " + avgMaleAge + " Avg. Female Age: " + avgFemaleAge + " Avg. Population Age: " + avgTotalAge); 			
+					//System.out.println("INFO: District: " + district + " Avg. Male Age: " + avgMaleAge + " Avg. Female Age: " + avgFemaleAge + " Avg. Population Age: " + avgTotalAge); 			
 					
 					// increment the line counter
 					lineCount++;

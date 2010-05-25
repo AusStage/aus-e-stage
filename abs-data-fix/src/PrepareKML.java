@@ -36,6 +36,9 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public class PrepareKML extends Tasks {
 
+			// define the basic description
+		final String DESCRIPTION_TEMPLATE = "<iframe width=\"450px\" height=\"400px\" scrolling=\"auto\" src=\"http://beta.ausstage.edu.au/mapping/xmldata?type=abs-data&id={id}\"</iframe>";
+
 	/**
 	 * Constructor for this class
 	 *
@@ -222,9 +225,6 @@ public class PrepareKML extends Tasks {
 	 * @return true if, and only if, everything went as expected
 	 */
 	private boolean updatePlacemarks(Document xmlDoc) {
-	
-		// define the basic description
-		final String DESCRIPTION_TEMPLATE = "<iframe width=\"450px\" height=\"400px\" scrolling=\"auto\" src=\"http://beta.ausstage.edu.au/mapping/browsedata.jsp?type=abs-data&id={id}\"</iframe>";
 	
 		// declare helper variables
 		Element rootElement;
