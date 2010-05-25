@@ -63,17 +63,17 @@ This step will only need to be undertaken once for each state using the Age by S
 
 = Step 5. Append additional information to the Collection District Dataset =
 
-The Collection District Dataset requires additional information such as the Statistical Local Area and Local Government Area names. The easiest source of data to use for this step is the MapInfo files available from the [http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1259.0.30.0022006 ABS website]
+The Collection District Dataset requires additional information such as the Statistical Local Area and Local Government Area names. The easiest source of data to use for this step is the !MapInfo files available from the [http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1259.0.30.0022006 ABS website]
 
 This step will only need to be undertaken once for each state using the Collection District Dataset created in step 4.
 
-== Step 5.a Download the MapInfo File for the state currently being processed ==
+== Step 5.a Download the !MapInfo File for the state currently being processed ==
 
- # Download the Zip file containing the MapInfo data for the state that is currently being worked on
+ # Download the Zip file containing the !MapInfo data for the state that is currently being worked on
  # Extract the files contained in the Zip File
  # Copy the extracted MID file into the *input* directory
 
-== Step 5.b Use the MapInfo data to complete the Collection District Dataset == 
+== Step 5.b Use the !MapInfo data to complete the Collection District Dataset == 
 
  # Copy the XML file created in step 4 to the *input* directory
  # If necessary, open a terminal window / command prompt
@@ -103,7 +103,7 @@ The AbsDataFix application does not undertake this task currently, once the seco
 
 = Step 7. Prepare the KML files ==
 
-The MapInfo files provided by the ABS need to be converted into KML so that they can be used with applications such as Google Earth. Details of the way in which this conversion is achieved is available on the MapInfoToKML page. 
+The !MapInfo files provided by the ABS need to be converted into KML so that they can be used with applications such as Google Earth. Details of the way in which this conversion is achieved is available on the MapInfoToKML page. 
 
 Once the conversion is complete the KML files are prepared for further processing specific to the AbsDataFix application. This step undertakes these changes and will only need to be undertaken once for each base KML file.
 
