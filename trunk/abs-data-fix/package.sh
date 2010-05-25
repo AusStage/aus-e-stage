@@ -2,6 +2,10 @@
 # get the current path
 MY_PATH=`pwd`
 #
+# delete any existing files
+/bin/rm -rf $MY_PATH/dist/*
+#
+#
 # copy the library to the dist directory
 /bin/cp $MY_PATH/lib/commons-lang-2.5.jar $MY_PATH/dist
 #
@@ -26,12 +30,6 @@ cd $MY_PATH
 if [ -d $MY_PATH/dist/tmp ]; then
         /bin/rm -rf $MY_PATH/dist/tmp
 fi
-#
-# delete any existing zip file
-if [ -f $MY_PATH/dist/AbsDataFix.zip ]; then
-        /bin/rm -rf $MY_PATH/dist/AbsDataFix.zip
-fi
-#
 # change to the dist directory and create a new zip file
 cd $MY_PATH/dist
 /usr/bin/zip AbsDataFix.zip *.jar LICENSE.txt README.txt

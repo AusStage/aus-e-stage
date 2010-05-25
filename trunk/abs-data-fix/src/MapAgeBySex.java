@@ -416,7 +416,7 @@ public class MapAgeBySex extends Tasks {
 			// get the supporting classes for the transformer
 			FileWriter writer = new FileWriter(output);
 			StreamResult result = new StreamResult(writer);
-			DOMSource    source = new DOMSource(xmlDoc);
+			DOMSource    source = new DOMSource(kmlDoc);
 			
 			// transform the xml document into a string
 			transformer.transform(source, result);

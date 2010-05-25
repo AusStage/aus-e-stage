@@ -26,8 +26,8 @@ import java.io.*;
 public class AbsDataFix {
 
 	// Store the version information 
-	private static final String VERSION    = "1.0";
-	private static final String BUILD_DATE = "2010-05-24";
+	private static final String VERSION    = "1.0.1";
+	private static final String BUILD_DATE = "2010-05-25";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/AbsDataFix";
 
 	/**
@@ -62,9 +62,9 @@ public class AbsDataFix {
 			System.err.println("ERROR: the following parameters are expected");
 			System.err.println("-fixtype   the type of fix to undertake");
 			System.err.println("-input     the input file of ABS Data");
-			System.err.println("-output    the output file\n");
+			System.err.println("-output    the output file");
 			System.err.println("-codes     (optional) a file containing codes such as district ids or colour codes");
-			System.err.println("-dataset   (optional) the identifer for the dataset to map");
+			System.err.println("-dataset   (optional) the identifer for the dataset to map\n");
 			System.err.println("Valid fix types are:");
 			System.err.println(java.util.Arrays.toString(fixTypes).replaceAll("[\\]\\[]", ""));
 			System.exit(-1);
@@ -147,7 +147,7 @@ public class AbsDataFix {
 			// check on the additional parameters
 			if(codes == null) {
 				System.err.println("ERROR: the following additional parameter was expected");
-				System.err.println("-codes the MIF file listing the collection district code information");
+				System.err.println("-codes the MID file listing the collection district code information");
 				System.exit(-1);
 			}
 			
@@ -155,12 +155,12 @@ public class AbsDataFix {
 			File codesFile = new File(codes);
 	
 			if(codesFile.isFile() != true) {
-				System.err.println("ERROR: Unable to locate the collection district MIF file");
+				System.err.println("ERROR: Unable to locate the collection district MID file");
 				System.exit(-1);
 			}
 	
 			if(codesFile.canRead() == false) {
-				System.err.println("ERROR: Unable to access the collection district MIF file");
+				System.err.println("ERROR: Unable to access the collection district MID file");
 				System.exit(-1);
 			}
 			
