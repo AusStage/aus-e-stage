@@ -41,7 +41,11 @@ _Note 2: Ensure that all file and directory names do not include spaces_
    {{{java -jar AbsDataFix.jar -fixtype agebysex -input input-file -output output-file}}}
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
-
+ # Copy the XML file to the *repository* directory
+ # Rename the file as follows where:
+   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
+   {{{state-abbr-age-by-sex.xml}}}
+ 
 = Step 4. Start a Collection District Dataset =
 Collection District Dataset is an XML based file that is used for further processing and for use by the !AusStage Mapping Service for the population of infoWindows in Google Earth.
 
@@ -85,6 +89,9 @@ This step will only need to be undertaken once for each state using the Collecti
 == Step 5.c Store the completed Collection District Dataset ==
  
  # Copy the XML file created in step 5.b to the *repository* directory
+ # Rename the file as follows where:
+   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
+   {{{abs-data-state-abbr.xml}}}
 
 This file will form the basis for the Collection District Dataset that will be used by the AusStage Mapping Service to populate infoWindows and other web pages
 
@@ -110,9 +117,34 @@ Once the conversion is complete the KML files are prepared for further processin
    <br/>_Note: This may take some time to complete_
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
+ # Copy this file into the *repository* directory and rename it as follows where:
+   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
+   {{{state-abbr-abs-base-kml.kml}}}
 
 = Step 8. Compile an overlay = 
-Combining a prepared KML file with one of the [AbsDataFix#first_stage_xml_files First Stage XML Files] will produce the finalised overlay for that dataset.
+Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_First_Stage_XML_File First Stage XML Files] will produce the finalised overlay for that dataset.
+
+== Step 8a. Building an Age By Sex Overlay ==
+ # Copy the base KML file, as created in step 7, for the required state from the *repository* directory to the *input* directory
+ # Copy the Age By Sex dataset, as created in step 3a from the *repository* directory to the *input* directory
+ # If necessary, open a terminal window / command prompt
+ # If necessary, change directory to the *bin* directory 
+ # Execute the following command where:
+   # input-file: is the file copied to the input directory in step 8a.1
+   # code-file: is the file copied into the *input* directory in step 8a.2
+   # data-set: is one of the following options
+     * male: male ages
+     * female: female ages
+     * total: total population ages
+   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   {{{java -jar AbsDataFix.jar -fixtype appendcdinfo -input input-file -output output-file -codes code-file -dataset data-set}}}
+   <br/>_Note: This may take some time to complete_
+ # If an error occurs adjust the parameters and try again
+ # Take note of the file that was successfully created
+ # Copy this file into the *repository* directory and rename it as follows where:
+   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
+   {{{state-abbr-abs-age-by-sex-kml.kml}}}
+
 
 
  
