@@ -119,7 +119,7 @@ Once the conversion is complete the KML files are prepared for further processin
  # Take note of the file that was successfully created
  # Copy this file into the *repository* directory and rename it as follows where:
    # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
-   {{{state-abbr-abs-base-kml.kml}}}
+   {{{state-abbr-abs-base.kml}}}
 
 = Step 8. Compile an overlay = 
 Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_First_Stage_XML_File First Stage XML Files] will produce the finalised overlay for that dataset.
@@ -142,8 +142,9 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
  # Copy this file into the *repository* directory and rename it as follows where:
-   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
-   {{{state-abbr-abs-age-by-sex-kml.kml}}}
+   # state-abbr: is the state abbreviation for example qld, nsw, sa etc.
+   # dataset: is the dataset used in step 8a.5 
+   {{{state-abbr-abs-dataset-age-by-sex.kml}}}
 
 
 
