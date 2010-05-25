@@ -137,7 +137,7 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
      * female: female ages
      * total: total population ages
    # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
-   {{{java -jar AbsDataFix.jar -fixtype appendcdinfo -input input-file -output output-file -codes code-file -dataset data-set}}}
+   {{{java -jar AbsDataFix.jar -fixtype mapagebysex -input input-file -output output-file -codes code-file -dataset data-set}}}
    <br/>_Note: This may take some time to complete_
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
