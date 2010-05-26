@@ -102,7 +102,7 @@
 			<div id="tabs-2">
 				<form action="data/" method="get" id="id_search" name="id_search">
 					<input type="hidden" name="action" value="lookup"/>
-					<input type="hidden" name="type"   value="contribname"/>
+					<input type="hidden" name="type"   value="orgname"/>
 					<table class="formTable">
 						<tbody>
 						<tr>
