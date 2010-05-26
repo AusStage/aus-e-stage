@@ -41,7 +41,7 @@ public class AbsDataFix {
 		System.out.println("More Info: " + INFO_URL + "\n");
 	
 		// declare helper variables
-		String[] fixTypes     = {"agebysex", "databuilder", "appendcdinfo", "prepkml", "mapagebysex"};
+		String[] fixTypes     = {"agebysex", "databuilder", "appendcdinfo", "prepkml", "mapagebysex", "addmetadata"};
 		String[] ageBySexSets = {"male", "female", "total"};
 		File inputFile;
 		File outputFile;		
@@ -227,6 +227,14 @@ public class AbsDataFix {
 			
 			MapAgeBySex task = new MapAgeBySex(inputFile, outputFile, codesFile);
 			task.setDataSet(dataset);
+			
+			// run the task
+			stat = task.doTask();
+		} else if(fixType.equals("addmetadata") == true) {
+			// undertake the required task
+			System.out.println("INFO: Undertaking the Add Metadata task");
+			
+			AddMetadata task = new AddMetadata(inputFile, outputFile);
 			
 			// run the task
 			stat = task.doTask();

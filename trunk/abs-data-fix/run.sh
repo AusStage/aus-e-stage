@@ -18,9 +18,9 @@ MYPATH=`pwd`
 #CODES_PATH=$MYPATH/input/act-collection-district-list.txt
 #
 # prepare a KML file as a base KML file
-FIX_TYPE=prepkml
-INPUT_PATH=$MYPATH/input/ACT-color-black-line.kml
-OUTPUT_PATH=$MYPATH/output/abs-overlay-act-base.kml
+#FIX_TYPE=prepkml
+#INPUT_PATH=$MYPATH/input/ACT-color-black-line.kml
+#OUTPUT_PATH=$MYPATH/output/abs-overlay-act-base.kml
 #
 # map the age by sex dataset
 #FIX_TYPE=mapagebysex
@@ -28,6 +28,11 @@ OUTPUT_PATH=$MYPATH/output/abs-overlay-act-base.kml
 #OUTPUT_PATH=$MYPATH/output/abs-overlay-act-agebysex-total.kml
 #CODES_PATH=$MYPATH/input/act-age-by-sex.xml
 #DATA_SET=total
+#
+# add standard metadata to the file
+FIX_TYPE=addmetadata
+INPUT_PATH=$MYPATH/input/abs-overlay-act-agebysex-male.kml
+OUTPUT_PATH=$MYPATH/output/abs-overlay-act-agebysex-male-incl-metadata.kml
 # delete the output file if it already exists
 if [ -e "$OUTPUT_PATH" ]; then 
   /bin/rm $OUTPUT_PATH
