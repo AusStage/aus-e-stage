@@ -95,7 +95,7 @@ $(document).ready(function() {
 		select: function(event, ui) {
 			$("#search_results").hide();
 			$("#search_results").empty();
-			hideMap();			
+			hideMap();
 		} 
 	}); 
 });
@@ -145,7 +145,14 @@ function hideMap() {
 	$("#map").hide();
 	$("#map_header").hide();
 	$("#map_legend").hide();
-	$("#map_footer").hide();	
+	$("#map_footer").hide();
+	
+	// reset the data variables
+	contributorMapData = null;
+	contributorIDs = null;
+	
+	$("#map_contents").empty();
+	$("#map_contents").append('<span style="font-weight: bold">Contributors on the Map: </span>');
 }
 
 /** form processing functions **/

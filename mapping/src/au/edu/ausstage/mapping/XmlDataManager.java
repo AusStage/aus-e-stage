@@ -50,7 +50,7 @@ public class XmlDataManager {
 	/**
 	 * A method to validate the path to the XML file
 	 *
-	 * @param the XML file that is expected to be valid
+	 * @param fileName the XML file that is expected to be valid
 	 */
 	public boolean validatePath(String fileName) {
 
