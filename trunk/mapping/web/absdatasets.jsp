@@ -384,7 +384,7 @@ public String colorObjectToHTML(Color color) {
 %>
 <%!
 /**
-* Make a color darker.
+* Make a colour darker.
 * 
 * @param color     Color to make darker.
 * @param fraction  Darkness fraction.
