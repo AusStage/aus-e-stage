@@ -207,5 +207,39 @@ public abstract class Tasks {
 		return colour.toUpperCase();
 	}
 	
+	/**
+	* Make a colour darker.
+	* 
+	* @param color     Color to make darker.
+	* @param fraction  Darkness fraction.
+	* @return          Darker color.
+	*/
+	public Color darkerColour (Color colour, double fraction)
+	{
+		int red   = (int) Math.round (colour.getRed()   * (1.0 - fraction));
+		int green = (int) Math.round (colour.getGreen() * (1.0 - fraction));
+		int blue  = (int) Math.round (colour.getBlue()  * (1.0 - fraction));
+
+		if (red < 0) {
+			red = 0;
+		} else if (red   > 255) {
+			red = 255;
+		}
+	
+		if (green < 0) {
+			green = 0; 
+		} else if (green > 255) {
+			green = 255;
+		}
+	
+		if (blue  < 0) {
+			blue = 0; 
+		} else if (blue  > 255) {
+			blue  = 255;
+		}
+
+		return new Color (red, green, blue);
+	}
+	
 	
 } // end class definition
