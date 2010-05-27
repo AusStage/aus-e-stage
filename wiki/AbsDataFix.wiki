@@ -12,6 +12,8 @@ _Note 1: This procedure assumes that you are familiar with executing commands in
 
 _Note 2: Ensure that all file and directory names do not include spaces_
 
+_Note 3: When specifying file names on the command line ensure that you specify the full path or relative path to the file_
+
 <wiki:toc max_depth="2" />
 
 = Step 1. Prepare your System =
@@ -141,9 +143,28 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
    <br/>_Note: This may take some time to complete_
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
+
+= Step 9. Add Dublin Core Metadata to the Overlay file =
+ # Copy the KML file created in step 8 to the *input* directory from the *output* directory
+ # If necessary, open a terminal window / command prompt
+ # If necessary, change directory to the *bin* directory 
+ # Execute the following command where:
+   # input-file: is the file copied to the input directory in step 8a.1
+   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   {{{java -jar AbsDataFix.jar -fixtype addmetadata -input input-file -output output-file}}}
+ # Enter the title of the ABS Data Set used to construct the overlay, for example:<br/>Age By Sex in 5 year groups (Male)
+ # Enter a description of the ABS Data Set used to construct the overlay, for example:<br/>Average age male population
+ # Enter the 2 - 3 letter State abbreviation, for example:<br/>ACT
+ # Enter the full URL to the web page containing more information about the ABS overlays, for example: http://beta.ausstage.edu.au/mapping/absoverlays.jsp
+ # Enter the full URL to the KML file in the Overaly repository, for example: _Note: The repository has yet to be determined_
+ # Check to ensure the information that you've entered is correct
+ # If the information is correct, enter y
+ # If the information is not correct enter n and repeat steps 9.5 - 9.10
+ # If you wish to exit the application, enter abort
+ # Wait for the file to complete
  # Copy this file into the *repository* directory and rename it as follows where:
    # state-abbr: is the state abbreviation for example qld, nsw, sa etc.
-   # dataset: is the dataset used in step 8a.5 
+   # dataset: is the dataset used in step 8
    {{{abs-state-abbr-dataset-age-by-sex.kml}}}
 
 
