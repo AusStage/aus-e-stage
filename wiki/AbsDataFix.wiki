@@ -169,14 +169,24 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
 
 = Change Log =
 See the source code repository for a [list of commit messages http://code.google.com/p/aus-e-stage/source/list] related to the !AbsDataFix App
-== Version 1.0 == 
- * Initial Release
-== Version 1.0.1 ==
- * Various minor bugfixes
-== Version 1.0.2 == 
- * Various minor bugfixes
+== Version 1.0.4 ==
+ * Refined the colour algorithm for the !AgeBySex dataset
+ * Removed the data table from the HTML used to populate infoWindows
+ * Added the list of average ages and population counts to populate infoWindows
+ * Added link to the new page in the mapping service about the ABS Datasets
+ * Various minor bug fixes
 == Version 1.0.3 == 
  * Various minor bugfixes
  * Include the first version of the !AddMetadata Fix
+== Version 1.0.2 == 
+ * Various minor bug fixes
+== Version 1.0.1 ==
+ * Various minor bug fixes
+== Version 1.0 == 
+ * Initial Release
+
+
+
+
 
  
