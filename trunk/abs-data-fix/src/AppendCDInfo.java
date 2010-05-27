@@ -82,7 +82,7 @@ public class AppendCDInfo extends Tasks {
 		String xPathQuery = "/ABSData/district[@id=\"{id}\"]/html";
 		
 		// data update variables
-		String newData = "<ul>\n<li>Collection District Code: {id}</li>\n<li>Statistical Local Area Code: {slac}</li>\n<li>Statistical Local Area Name: {slan}</li>\n<li>Local Government Area Code: {lgac}</li>\n<li>Local Government Area Name: {lgan}</li>\n</ul>\n";
+		String newData = "<h2>Collection District Details</h2><ul>\n<li>Collection District Code: {id}</li>\n<li>Statistical Local Area Code: {slac}</li>\n<li>Statistical Local Area Name: {slan}</li>\n<li>Local Government Area Code: {lgac}</li>\n<li>Local Government Area Name: {lgan}</li>\n</ul>\n";
 	
 		// open the codes file
 		try {

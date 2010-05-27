@@ -160,9 +160,7 @@ public class AbsAgeBySex extends Tasks {
 					
 					// save the male average
 					dataElem.setAvgMaleAge(avgMaleAge);
-					
-					// build and save the table
-					dataElem.addHtml(buildTable("Male Age by 5 Year Age Groups (Place of Usual Residence)", people, ages));
+					dataElem.setMalePopulation(Integer.toString(calculatePopulation(people)));
 					
 					// reset the people array
 					people = new int[DATA_COLUMNS];
@@ -193,9 +191,10 @@ public class AbsAgeBySex extends Tasks {
 					
 					// save the male average
 					dataElem.setAvgFemaleAge(avgFemaleAge);
+					dataElem.setFemalePopulation(Integer.toString(calculatePopulation(people)));
 					
 					// build and save the table
-					dataElem.addHtml(buildTable("Female Age by 5 Year Age Groups (Place of Usual Residence)", people, ages));
+					//dataElem.addHtml(buildTable("Female Age by 5 Year Age Groups (Place of Usual Residence)", people, ages));
 					
 					// reset the people array
 					people = new int[DATA_COLUMNS];
@@ -218,7 +217,7 @@ public class AbsAgeBySex extends Tasks {
 					
 					// double check the average
 					if(average > 0) {
-						// get the average male age
+						// get the average age
 						avgTotalAge = ages[average - 1];
 					} else {
 						avgTotalAge = "N/A";
@@ -226,9 +225,10 @@ public class AbsAgeBySex extends Tasks {
 					
 					// save the male average
 					dataElem.setAvgTotalAge(avgTotalAge);
+					dataElem.setTotalPopulation(Integer.toString(calculatePopulation(people)));
 					
 					// build and save the table
-					dataElem.addHtml(buildTable("Total Population Age by 5 Year Age Groups (Place of Usual Residence)", people, ages));
+					//dataElem.addHtml(buildTable("Total Population Age by 5 Year Age Groups (Place of Usual Residence)", people, ages));
 					
 					// reset the people array
 					people = new int[DATA_COLUMNS];
@@ -296,46 +296,23 @@ public class AbsAgeBySex extends Tasks {
 	} // end calculateAverage method
 	
 	/**
-	 * A method to build the data table
+	 * A method to calculate the total population
 	 *
-	 * @param caption the caption of the table
-	 * @param values  the values of the data row of the table
-	 * @param headers the values of the header row
-	 *
-	 * @return the completed table
+	 * @param values an array of values
+	 * 
+	 * @return       the calculated population total
 	 */
-	private String buildTable(String caption, int[] values, String[] headers) {
+	private int calculatePopulation(int[] values) {
 	
-		// declare helper variables
-		StringBuilder table = new StringBuilder();
+		int population = 0;
 		
-		// start the table
-		table.append("<table>\n<caption>" + caption + "</caption>\n");
-		table.append("<thead><tr>");
-		
-		// add the headers
-		for(int i = 0; i < headers.length; i++) {
-			table.append("<th>" + headers[i] + "</th>");
-		}
-		
-		// finalise the header
-		table.append("</tr></thead>\n");
-		
-		// start the body of the table
-		table.append("<tbody><tr>");
-		
-		// add the values
+		// get the second part of the average
 		for(int i = 0; i < values.length; i++) {
-			table.append("<td>" + Integer.toString(values[i]) + "</td>");
+			population += values[i];
 		}
 		
-		// finalse the table
-		table.append("</tr></tbody>\n</table>\n");
-		
-		// return the generated table
-		return table.toString();
-
-	} // end buildTable method
+		return population;
+	}
 	
 	/**
 	 * A method to build and write the XML file
@@ -386,7 +363,7 @@ public class AbsAgeBySex extends Tasks {
 				
 				// add the description
 				xmlElement = xmlDoc.createElement("table");
-				xmlElement.appendChild(xmlDoc.createCDATASection(dataElem.getHtml()));
+				xmlElement.appendChild(xmlDoc.createCDATASection(dataElem.buildList()));
 				district.appendChild(xmlElement);
 				
 				// add this element to the tree
@@ -423,121 +400,158 @@ public class AbsAgeBySex extends Tasks {
 		}
 			
 	} // end buildXmlDataset
-
-} // end class definition
-
-/**
- * A class to manage the age by sex data for a collection district
- */
-class DataElement {
-
-	// declare private variables
-	private String id;           // collection district id
-	private String avgMaleAge;   // calculated average male age
-	private String avgFemaleAge; // calculated average female age
-	private String avgTotalAge;  // calculated total age
-	private StringBuilder html;  // html version of the data including tables
-
+	
 	/**
-	 * Constructor for this class
-	 *
-	 * @param id the collection district id
+	 * A class to manage the age by sex data for a collection district
 	 */
-	public DataElement (String id) {
-	
-		this.id = filterString(id);
+	class DataElement {
+
+		// declare private variables
+		private String id;           // collection district id
+		private String avgMaleAge;   // calculated average male age
+		private String avgFemaleAge; // calculated average female age
+		private String avgTotalAge;  // calculated total age
 		
-		html = new StringBuilder();
+		private String malePopulation;   // male population
+		private String femalePopulation; // female population
+		private String totalPopulation;  // total population
 		
-	} // end constructor
+
+		/**
+		 * Constructor for this class
+		 *
+		 * @param id the collection district id
+		 */
+		public DataElement (String id) {
 	
-	/*
-	 * get and set methods
-	 */
-	public String getId() {
-		return filterString(id);
-	}
-		 
-	public void setAvgMaleAge(String value) {
-		avgMaleAge = filterString(value);
-	}
-	
-	public String getAvgMaleAge() {
-		return avgMaleAge;
-	}
-	
-	public void setAvgFemaleAge(String value) {
-		avgFemaleAge = filterString(value);
-	}
-	
-	public String getAvgFemaleAge() {
-		return avgFemaleAge;
-	}
-	
-	public void setAvgTotalAge(String value) {
-		avgTotalAge = filterString(value);
-	}
-	
-	public String getAvgTotalAge() {
-		return avgTotalAge;
-	}
-	
-	/*
-	 * html methods
-	 */
-	public void addHtml(String value) {
-		html.append(filterString(value));
-	}
-	
-	public String getHtml() {
-		return html.toString();
-	}
-	
-	
-	/*
-	 * filter parameter methods
-	 */
-	 
-	/**
-	 * A method to filter a peice of string based input data
-	 *
-	 * @param value       the value to filter
-	 * @param nullAllowed if true a null value is allowed
-	 *
-	 * @return            the filtered value
-	 */
-	public String filterString(String value, boolean nullAllowed) {
+			this.id = filterString(id);
 		
-		// check for nulls	
-		if(nullAllowed == false && value == null) {
-			throw new IllegalArgumentException("Value cannot be null");
+		} // end constructor
+	
+		/*
+		 * get and set methods
+		 */
+		public String getId() {
+			return filterString(id);
 		}
-		
-		// trim the string
-		value = value.trim();
-		
-		// check for nulls again
-		if(nullAllowed == false && value.equals("")) {
-			throw new IllegalArgumentException("Value cannot be empty");
+			 
+		public void setAvgMaleAge(String value) {
+			avgMaleAge = filterString(value);
 		}
 	
-		// return the filtered value
-		return value;	
+		public String getAvgMaleAge() {
+			return avgMaleAge;
+		}
 	
-	} // end filterString method
+		public void setAvgFemaleAge(String value) {
+			avgFemaleAge = filterString(value);
+		}
 	
-	/**
-	 * A method to filter a peice of string based input data
-	 * by default null values are not allowed
-	 *
-	 * @param value       the value to filter
-	 *
-	 * @return            the filtered value
-	 */
-	public String filterString(String value) {
+		public String getAvgFemaleAge() {
+			return avgFemaleAge;
+		}
+	
+		public void setAvgTotalAge(String value) {
+			avgTotalAge = filterString(value);
+		}
+	
+		public String getAvgTotalAge() {
+			return avgTotalAge;
+		}
 		
-		// return the filtered value
-		return filterString(value, false);	
+		public void setMalePopulation(String value) {
+			malePopulation = filterString(value);
+		}
 	
-	} // end filterString method
+		public String getMalePopulation() {
+			return malePopulation;
+		}
+		
+		public void setFemalePopulation(String value) {
+			femalePopulation = filterString(value);
+		}
+	
+		public String getFemalePopulation() {
+			return femalePopulation;
+		}
+		
+		public void setTotalPopulation(String value) {
+			totalPopulation = filterString(value);
+		}
+	
+		public String getTotalPopulation() {
+			return totalPopulation;
+		}
+		
+		/**
+		 * A method to build the data list containing averages and population counts
+		 */
+		public String buildList() {
+	
+			// declare helper variables
+			StringBuilder list = new StringBuilder("<h2>Average Age by Sex</h2><ul>");
+		
+			// add the averages
+			list.append("<li><strong>Male Average Age: </strong> "   + avgMaleAge   + "</li>");
+			list.append("<li><strong>Female Average Age: </strong> " + avgFemaleAge + "</li>");
+			list.append("<li><strong>Total Population Average Age: </strong> " + avgTotalAge + "</li>");
+			
+			// add the population counts
+			list.append("<li><strong>Male Population: </strong> "   + malePopulation   + "</li>");
+			list.append("<li><strong>Female Population: </strong> " + femalePopulation + "</li>");
+			list.append("<li><strong>Total Population: </strong> " + totalPopulation + "</li>");
+			
+			// add the link for more information
+			list.append("<li><a href=\"http://beta.ausstage.edu.au/mapping/absdatasets.jsp#agebysex\" target=\"_blank\">More Information</a> about this dataset</li>");
+		
+			// finalise the list
+			list.append("</ul>");
+		
+			return list.toString();	
+		}
+		
+		/**
+		 * A method to filter a peice of string based input data
+		 *
+		 * @param value       the value to filter
+		 * @param nullAllowed if true a null value is allowed
+		 *
+		 * @return            the filtered value
+		 */
+		public String filterString(String value, boolean nullAllowed) {
+		
+			// check for nulls	
+			if(nullAllowed == false && value == null) {
+				throw new IllegalArgumentException("Value cannot be null");
+			}
+		
+			// trim the string
+			value = value.trim();
+		
+			// check for nulls again
+			if(nullAllowed == false && value.equals("")) {
+				throw new IllegalArgumentException("Value cannot be empty");
+			}
+	
+			// return the filtered value
+			return value;	
+	
+		} // end filterString method
+	
+		/**
+		 * A method to filter a peice of string based input data
+		 * by default null values are not allowed
+		 *
+		 * @param value       the value to filter
+		 *
+		 * @return            the filtered value
+		 */
+		public String filterString(String value) {
+		
+			// return the filtered value
+			return filterString(value, false);	
+	
+		} // end filterString method
+	} // end class definition
+
 } // end class definition

@@ -80,6 +80,7 @@ public class MapAgeBySex extends Tasks {
 		final String FEMALE_COLOUR = "FF0080"; // bright pink
 		final String TOTAL_COLOUR  = "FFF600"; // cadmium yellow
 		final String LINE_COLOUR   = "FFFFFFFF";
+		final double DARKEN_FACTOR = 0.1;
 		/*
 		final String MALE_COLOUR   = "FF6E30"; //in html "306EFF";
 		final String FEMALE_COLOUR = "A178F7"; //in html "F778A1";
@@ -391,7 +392,7 @@ public class MapAgeBySex extends Tasks {
 				colour.setTextContent("00FFFFFF");
 			} else {
 				colour.setTextContent("BE" + colorObjectToHTML(colorObject, true)); //50% transparency 7F / 75% transparency BE
-				colorObject = colorObject.darker();
+				colorObject = darkerColour(colorObject, DARKEN_FACTOR);
 			}
 			
 			polyStyle.appendChild(colour);
