@@ -20,6 +20,12 @@
 import java.io.*;
 import java.util.Scanner;
 
+// import DOM related classes
+import org.w3c.dom.*;
+import javax.xml.parsers.*; 
+import javax.xml.transform.*; 
+import javax.xml.transform.dom.*; 
+import javax.xml.transform.stream.*;
 
 /**
  * A class used to add the dublin core metadata to the overlays
@@ -50,6 +56,7 @@ public class AddMetadata extends Tasks {
 		String[] validStates = {"QLD", "NSW", "ACT", "VIC", "TAS", "NT", "SA", "WA"}; // list of valid states
 		Scanner inputFromUser = new Scanner(System.in);                               // scanner to get input from user
 		String datasetTitle = "";													  // title of this dataset
+		String datasetTopic = "";													  // topic of this dataset
 		String stateAbbr    = "";													  // 2 - 3 letter state abbreviation
 		String moreInfoLink = "";													  // link to more information about the overlay
 		String urlToTheFile = "";													  // url to the file
@@ -60,6 +67,9 @@ public class AddMetadata extends Tasks {
 		
 			// get the dataset title
 			datasetTitle = getInfoFromUser(inputFromUser, "PROMPT: Enter the title of the ABS dataset used to construct the overlay:");
+			
+			// get the dataset topic
+			datasetTopic = getInfoFromUser(inputFromUser, "PROMPT: Enter the topic of the ABS dataset used to construct the overlay:");
 	
 			// get the state
 			while(stateAbbr.length() == 0) {
@@ -95,6 +105,7 @@ public class AddMetadata extends Tasks {
 			// output the collected information
 			System.out.println("\nINFO: Collected information is:");
 			System.out.println("Dataset Title:       " + datasetTitle);
+			System.out.println("Dataset Topic:       " + datasetTopic);
 			System.out.println("State Abbr:          " + stateAbbr);
 			System.out.println("More Info Link:      " + moreInfoLink);
 			System.out.println("URL to the KML File: " + urlToTheFile);
@@ -118,7 +129,176 @@ public class AddMetadata extends Tasks {
 			
 		} // end data gathering loop
 		
-		return false;
+		/*
+		 * start processing the file
+		 */
+		
+		// Declare additional helper variables for processing the XML data 
+		Document xmlDoc;
+		Element  rootElement;
+		NodeList nodeList;
+		Node     documentNode = null;
+		Node     folderNode   = null;
+		Element  extendedData;
+		Element  dublinCoreData;
+		String   dublinCoreValue;
+		
+		// open the data file
+		try {
+			// create the xml document object
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder        builder = factory.newDocumentBuilder();
+			xmlDoc  = builder.parse(input);
+			
+			// get a reference to the root element of the source document
+			//rootElement = xmlDoc.getDocumentElement();
+			
+		} catch(javax.xml.parsers.ParserConfigurationException ex) {
+			System.err.println("ERROR: Unable to instantiate XML classes\n" + ex.toString());
+			return false;
+		} catch(org.xml.sax.SAXException ex) {
+			System.err.println("ERROR: Unable to parse the input document\n" + ex.toString());
+			return false;
+		}catch (java.io.IOException ex) {
+			System.err.println("ERROR: Unable to read the input xml file\n" + ex);
+			return false;
+		}
+		
+		/*
+		 * get the nodes
+		 */
+
+		// get the first document node
+		nodeList = xmlDoc.getElementsByTagName("Document");
+		
+		if(nodeList.getLength() == 0) {
+			System.err.println("ERROR: Unable to locate the Document Element");
+			return false;
+		} else {
+			documentNode = nodeList.item(0);
+		}
+		
+		// get the first folder node
+		nodeList = documentNode.getChildNodes();
+		
+		for(int i = 0; i < nodeList.getLength(); i++) {
+			if(nodeList.item(i).getNodeName().equals("Folder")) {
+				folderNode = nodeList.item(i);
+				i = nodeList.getLength() + 1;
+			}
+		}
+		
+		/*
+		 * build the dublin core metadata
+		 */
+		
+		// start building the metadata
+		extendedData = xmlDoc.createElement("ExtendedData");
+		
+		// add the dublin core namespace
+		extendedData.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:dc", "http://purl.org/dc/elements/1.1/");
+		
+		/*
+		 * start adding the dublin core data
+		 */
+		
+		// title
+		dublinCoreValue = "AusStage Mapping Service ABS Data Overlay: " + datasetTitle + " Dataset by Collection District for the " + stateAbbr + ".";
+		dublinCoreData = xmlDoc.createElement("dc:title");
+		dublinCoreData.setTextContent(dublinCoreValue);
+		extendedData.appendChild(dublinCoreData);
+		
+		// creator
+		dublinCoreData = xmlDoc.createElement("dc:creator");
+		dublinCoreData.setTextContent("AusStage");
+		extendedData.appendChild(dublinCoreData);
+		
+		// description
+		dublinCoreValue = "This is an overlay comprising Australian Bureau of Statistics data. The " + datasetTitle + " has been used to construct an overlay "
+		                + "depicting " + datasetTopic + " by Collection District for the" + stateAbbr + ", Australia. "
+		                + "Additional overlays, including the datasets used to construct the information displayed in the infoWindows, is available here: "
+		                + moreInfoLink;
+		dublinCoreData = xmlDoc.createElement("dc:description");
+		dublinCoreData.setTextContent(dublinCoreValue);
+		extendedData.appendChild(dublinCoreData);
+		
+		// publisher
+		dublinCoreData = xmlDoc.createElement("dc:publisher");
+		dublinCoreData.setTextContent("AusStage");
+		extendedData.appendChild(dublinCoreData);
+		
+		// source [1]
+		dublinCoreData = xmlDoc.createElement("dc:source");
+		dublinCoreData.setTextContent("Australian Bureau of Statistics - Census Data: " + datasetTitle);
+		extendedData.appendChild(dublinCoreData);
+		
+		// source [2]
+		dublinCoreData = xmlDoc.createElement("dc:source");
+		dublinCoreData.setTextContent("1259.0.30.002 - Statistical Geography - Australian Standard Geographical Classification (ASGC), Digital Boundaries , 2006");
+		extendedData.appendChild(dublinCoreData);
+		
+		// coverage
+		dublinCoreData = xmlDoc.createElement("dc:coverage");
+		dublinCoreData.setTextContent(stateAbbr + ", Australia");
+		extendedData.appendChild(dublinCoreData);
+		
+		// rights
+		dublinCoreData = xmlDoc.createElement("dc:rights");
+		dublinCoreData.setTextContent("http://creativecommons.org/licenses/by/2.5/au/");
+		extendedData.appendChild(dublinCoreData);
+		
+		// format
+		dublinCoreData = xmlDoc.createElement("dc:format");
+		dublinCoreData.setTextContent("application/vnd.google-earth.kml+xml");
+		extendedData.appendChild(dublinCoreData);
+		
+		// identifier
+		dublinCoreData = xmlDoc.createElement("dc:identifier");
+		dublinCoreData.setTextContent(urlToTheFile);
+		extendedData.appendChild(dublinCoreData);
+		
+		// identifier
+		dublinCoreData = xmlDoc.createElement("dc:language");
+		dublinCoreData.setTextContent("en");
+		extendedData.appendChild(dublinCoreData);
+		
+		// add the extended data node into the tree
+		documentNode.insertBefore(extendedData, folderNode);
+		
+		// output the xml
+		try {
+			// create a transformer 
+			TransformerFactory transFactory = TransformerFactory.newInstance();
+			Transformer        transformer  = transFactory.newTransformer();
+			
+			// set some options on the transformer
+			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+			// get the supporting classes for the transformer
+			FileWriter writer = new FileWriter(output);
+			StreamResult result = new StreamResult(writer);
+			DOMSource    source = new DOMSource(xmlDoc);
+			
+			// transform the xml document into a string
+			transformer.transform(source, result);
+			
+			// close the output file
+			writer.close();
+			
+		} catch(javax.xml.transform.TransformerException e) {
+			System.err.println("ERROR: Unable to transform xml for output\n" + e.toString());
+			return false;
+		}catch (java.io.IOException ex) {
+			System.err.println("ERROR: Unable to write xml file\n" + ex.toString());
+			return false;
+		}
+				
+		// if we get this far everything went as expected
+		return true;		
 	}
 	
 	/**
