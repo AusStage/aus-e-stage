@@ -167,6 +167,16 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
    # dataset: is the dataset used in step 8
    {{{abs-state-abbr-dataset-age-by-sex.kml}}}
 
-
+= Change Log =
+See the source code repository for a [list of commit messages http://code.google.com/p/aus-e-stage/source/list] related to the !AbsDataFix App
+== Version 1.0 == 
+ * Initial Release
+== Version 1.0.1 ==
+ * Various minor bugfixes
+== Version 1.0.2 == 
+ * Various minor bugfixes
+== Version 1.0.3 == 
+ * Various minor bugfixes
+ * Include the first version of the !AddMetadata Fix
 
  
