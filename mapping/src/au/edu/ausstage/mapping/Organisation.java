@@ -36,6 +36,12 @@ public class Organisation extends DataClasses implements Comparable<Organisation
 	private String[] trajKeyDiff2 = {"za", "zb", "zc", "zd", "ze", "zf", "zg", "zh", "zi", "zj", "zk", "zl", "zm", "zn", "zo", "zp", "zq", "zr", "zs", "zt", "zu", "zv", "zw", "zx", "zy", "zz"};
 	private String[] trajKeyDiff3 = {"zza", "zzb", "zzc", "zzd", "zze", "zzf", "zzg", "zzh", "zzi", "zzj", "zzk", "zzl", "zzm", "zzn", "zzo", "zzp", "zzq", "zzr", "zzs", "zzt", "zzu", "zzv", "zzw", "zzx", "zzy", "zzz"};
 	private String[] trajKeyDiff4 = {"zzza", "zzzb", "zzzc", "zzzd", "zzze", "zzzf", "zzzg", "zzzh", "zzzi", "zzzj", "zzzk", "zzzl", "zzzm", "zzzn", "zzzo", "zzzp", "zzzq", "zzzr", "zzzs", "zzzt", "zzzu", "zzzv", "zzzw", "zzzx", "zzzy", "zzzz"};
+	private String[] trajKeyDiff5 = {"zzzza", "zzzzb", "zzzzc", "zzzzd", "zzzze", "zzzzf", "zzzzg", "zzzzh", "zzzzi", "zzzzj", "zzzzk", "zzzzl", "zzzzm", "zzzzn", "zzzzo", "zzzzp", "zzzzq", "zzzzr", "zzzzs", "zzzzt", "zzzzu", "zzzzv", "zzzzw", "zzzzx", "zzzzy", "zzzzz"};
+	private String[] trajKeyDiff6 = {"zzzzza", "zzzzzb", "zzzzzc", "zzzzzd", "zzzzze", "zzzzzf", "zzzzzg", "zzzzzh", "zzzzzi", "zzzzzj", "zzzzzk", "zzzzzl", "zzzzzm", "zzzzzn", "zzzzzo", "zzzzzp", "zzzzzq", "zzzzzr", "zzzzzs", "zzzzzt", "zzzzzu", "zzzzzv", "zzzzzw", "zzzzzx", "zzzzzy", "zzzzzz"};
+	private String[] trajKeyDiff7 = {"zzzzzza", "zzzzzzb", "zzzzzzc", "zzzzzzd", "zzzzzze", "zzzzzzf", "zzzzzzg", "zzzzzzh", "zzzzzzi", "zzzzzzj", "zzzzzzk", "zzzzzzl", "zzzzzzm", "zzzzzzn", "zzzzzzo", "zzzzzzp", "zzzzzzq", "zzzzzzr", "zzzzzzs", "zzzzzzt", "zzzzzzu", "zzzzzzv", "zzzzzzw", "zzzzzzx", "zzzzzzy", "zzzzzzz"};
+	private String[] trajKeyDiff8 = {"zzzzzzza", "zzzzzzzb", "zzzzzzzc", "zzzzzzzd", "zzzzzzze", "zzzzzzzf", "zzzzzzzg", "zzzzzzzh", "zzzzzzzi", "zzzzzzzj", "zzzzzzzk", "zzzzzzzl", "zzzzzzzm", "zzzzzzzn", "zzzzzzzo", "zzzzzzzp", "zzzzzzzq", "zzzzzzzr", "zzzzzzzs", "zzzzzzzt", "zzzzzzzu", "zzzzzzzv", "zzzzzzzw", "zzzzzzzx", "zzzzzzzy", "zzzzzzzz"};
+	private String[] trajKeyDiff9 = {"zzzzzzzza", "zzzzzzzzb", "zzzzzzzzc", "zzzzzzzzd", "zzzzzzzze", "zzzzzzzzf", "zzzzzzzzg", "zzzzzzzzh", "zzzzzzzzi", "zzzzzzzzj", "zzzzzzzzk", "zzzzzzzzl", "zzzzzzzzm", "zzzzzzzzn", "zzzzzzzzo", "zzzzzzzzp", "zzzzzzzzq", "zzzzzzzzr", "zzzzzzzzs", "zzzzzzzzt", "zzzzzzzzu", "zzzzzzzzv", "zzzzzzzzw", "zzzzzzzzx", "zzzzzzzzy", "zzzzzzzzz"};
+	private String[] trajKeyDiff10 = {"zzzzzzzzza", "zzzzzzzzzb", "zzzzzzzzzc", "zzzzzzzzzd", "zzzzzzzzze", "zzzzzzzzzf", "zzzzzzzzzg", "zzzzzzzzzh", "zzzzzzzzzi", "zzzzzzzzzj", "zzzzzzzzzk", "zzzzzzzzzl", "zzzzzzzzzm", "zzzzzzzzzn", "zzzzzzzzzo", "zzzzzzzzzp", "zzzzzzzzzq", "zzzzzzzzzr", "zzzzzzzzzs", "zzzzzzzzzt", "zzzzzzzzzu", "zzzzzzzzzv", "zzzzzzzzzw", "zzzzzzzzzx", "zzzzzzzzzy", "zzzzzzzzzz"};
 	private int trajKeyDiffIndex = 0;
 	
 	// declare public constants
@@ -67,7 +73,7 @@ public class Organisation extends DataClasses implements Comparable<Organisation
 		events = new HashSet<Event>();
 		trajectory = new TreeMap<String, String>();
 		
-		trajKeyDiff = concatAll(trajKeyDiff, trajKeyDiff2, trajKeyDiff3, trajKeyDiff4);
+		trajKeyDiff = concatAll(trajKeyDiff, trajKeyDiff2, trajKeyDiff3, trajKeyDiff4, trajKeyDiff5 ,trajKeyDiff6, trajKeyDiff7, trajKeyDiff8, trajKeyDiff9, trajKeyDiff10);
 
 	} // end constructor
 	

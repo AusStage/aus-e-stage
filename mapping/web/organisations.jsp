@@ -92,7 +92,7 @@
 						<tr>
 							<td colspan="2">
 								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="name_search_btn" value="Search"/><br/>
-								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
+								<span style="font-size: 90%"><strong>Note:</strong> Hover your mouse over the label next to the input box for more information</span>
 							</td>
 						</tr>
 						</tbody>
@@ -152,7 +152,7 @@
 						<tr>
 							<td colspan="2">
 								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="multi_name_search_btn" value="Search"/><br/>
-								<span style="font-size: 90%"><strong>Note:</strong> Hover over a form label to see additional help information</span>
+								<span style="font-size: 90%"><strong>Note:</strong> Hover your mouse over the label next to the input box for more information</span>
 							</td>
 						</tr>
 						</tbody>
