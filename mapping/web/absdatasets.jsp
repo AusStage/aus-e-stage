@@ -46,6 +46,9 @@
 			to describe overlays that may be loaded in Geographic Information Systems (GIS) such as <a href="http://earth.google.com" title="Google Earth homepage">Google Earth</a>. 
 		</p>
 		<p>
+			All you need to do is click one of the download KML links above the map and a kml file will be downloaded to your computer. 
+		</p>
+		<p>
 			In the near future available for download will be a series of overlays. These overlays are used in conjunction with an organisation, contributor or event map downloaded from the AusStage mapping service and they
 			provide additional information and context to the basic map. 
 		</p>
