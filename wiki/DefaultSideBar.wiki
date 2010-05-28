@@ -4,6 +4,7 @@
  * [http://beta.ausstage.edu.au Aus-e-Stage Project Homepage]
  * [StartPage Wiki Start Page]
  * [Articles HowTo articles]
+   * [SubversionRepository Using our Subversion Repository]
    * Aus-e-Stage Software Tools
      * [AbsDataFix Building ABS Overlays]
    * Processes
