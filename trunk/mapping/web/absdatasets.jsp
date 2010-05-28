@@ -46,11 +46,14 @@
 			to describe overlays that may be loaded in Geographic Information Systems (GIS) such as <a href="http://earth.google.com" title="Google Earth homepage">Google Earth</a>. 
 		</p>
 		<p>
-			Also available for download are a series of overlays. These overlays are used in conjunction with an organisation, contributor or event map downloaded from the AusStage mappig service and they
+			In the near future available for download will be a series of overlays. These overlays are used in conjunction with an organisation, contributor or event map downloaded from the AusStage mapping service and they
 			provide additional information and context to the basic map. 
 		</p>
 		<p>
-			The first set of overlays that we're making available are those that use data from the <a href="http://www.abs.gov.au/" title="ABS Homepage">Australian Bureau Statistics</a> and more specifically the <a href="http://www.abs.gov.au/census" title="Information about the 2006 census">2006 census</a>. 
+			Current versions of the overlay files are available to those users participating in the Alpha 2 round of testing. Please <a href="http://beta.ausstage.edu.au/" title="Project Homepage">contact us</a> should you wish to receive some sample overlays. 
+		</p>
+		<p>
+			The first set of overlays that we're going to make available are those that use data from the <a href="http://www.abs.gov.au/" title="ABS Homepage">Australian Bureau Statistics</a> and more specifically the <a href="http://www.abs.gov.au/census" title="Information about the 2006 census">2006 census</a>. 
 		</p>
 		<p>
 			Each overlay uses one specific dataset and creates a map using the smallest geographic unit available for the 2006 census data, namely the Collection District. More information on the datasets and their associated overlays is outlined below.
