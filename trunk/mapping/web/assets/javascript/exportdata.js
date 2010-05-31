@@ -59,7 +59,7 @@ $(document).ready(function(){
 				$("#export_id").val(id);
 			});
 			
-		} else if(type == "contrib") {
+		} else if(type == "contributor") {
 			// this is a contributor map
 			if(id.indexOf(',',0) == -1) {
 				// single contributor
