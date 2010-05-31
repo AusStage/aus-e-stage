@@ -65,13 +65,21 @@
 			Information about how we collect and manipulate the data to construct these overlays is available <a href="http://code.google.com/p/aus-e-stage/wiki/StartPage" title="Start Page of the Wiki">on the Wiki</a> that is part of the <a href="http://code.google.com/p/aus-e-stage/" title="Aus-e-Stage project homepage">Aus-e-Stage project</a> hosted on the <a href="http://code.google.com/" title="Google Code Service Homepage">Google Code service</a>. 
 		</p>
 		<a name="agebysex"></a>
-		<h3>Average Age By Sex in 5 Year Groupings</h3>
+		<h3>Average Age by Sex in 5 Year Groupings</h3>
 		<p>
 			The average age by sex overlays are constructed using age and population data sources from the 2006 census and matched to collection districts. The average age is determined using a formula similar to that used to determine the average response for a lickert scale question in a survey. 
 		</p>
 		<p>
 			Once the average is determined it is used to choose the approriate fill colour for the collection district in the overlay. The table below outlines the age groupings and the colour used for the male, female and total population datasets.
 		</p>
+		<p>
+			For the purposes of Alpha 2 testing, the following three overlays are available for download:
+		<p>
+		<ul>
+			<li><a href="/mapping/docs/abs-overlay-act-agebysex-male.kmz" title="Open this Overlay in Google Earth">Average Age by Sex (Male) - ACT</a></li>
+			<li><a href="/mapping/docs/abs-overlay-act-agebysex-female.kmz" title="Open this Overlay in Google Earth">Average Age by Sex (Female) - ACT</a></li>
+			<li><a href="/mapping/docs/abs-overlay-act-agebysex-total.kmz" title="Open this Overlay in Google Earth">Average Age by Sex (Total Population) - ACT</a></li>
+		</ul>
 		<table class="searchResults" width="100%">
 			<thead>
 				<tr>
