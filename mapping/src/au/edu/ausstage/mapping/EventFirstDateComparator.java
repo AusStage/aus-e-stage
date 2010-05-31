@@ -59,10 +59,18 @@ public class EventFirstDateComparator implements Comparator<Event>, java.io.Seri
 		
 		// compare the dates
 		if(first < second) {
+			// first date is before second
 			return 1;
 		} else if (first == second) {
-			return 0;
+
+			// both dates are the same so sort by name
+			String firstName = firstEvent.getName();
+			String secondName = secondEvent.getName();
+			
+			return firstName.compareTo(secondName);
+			
 		} else {
+			// first date is after second
 			return -1;
 		}	
 	} // end compare method

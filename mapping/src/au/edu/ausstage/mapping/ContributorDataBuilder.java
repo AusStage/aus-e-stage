@@ -317,6 +317,7 @@ public class ContributorDataBuilder extends DataBuilder {
 		
 		// build a list of venues, contributors and events
 		try {
+		
 			// build the documnet by adding individual events
 			while (resultSet.next()) {
 				// build a list of venues, contributors and events
@@ -335,6 +336,7 @@ public class ContributorDataBuilder extends DataBuilder {
 				
 					// add the venue to the list
 					venues.addVenue(venue);
+					
 
 				} else {
 					venue = venues.getVenue(resultSet.getString(9));
@@ -349,6 +351,7 @@ public class ContributorDataBuilder extends DataBuilder {
 				
 					// add the contrbutor to this venue
 					venue.addContributor(contributor);
+					
 				} else {
 					contributor = venue.getContributor(resultSet.getString(16));
 				}
@@ -364,6 +367,7 @@ public class ContributorDataBuilder extends DataBuilder {
 					
 					// add this event to this contributor
 					contributor.addEvent(event);
+					
 				}
 				
 				// build trajectory data

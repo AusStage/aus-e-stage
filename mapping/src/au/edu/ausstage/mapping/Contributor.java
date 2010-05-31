@@ -191,7 +191,7 @@ public class Contributor extends DataClasses implements Comparable<Contributor>{
 	 *
 	 * @return the list of events
 	 */
-	public Set getEvents() {
+	public Set<Event> getEvents() {
 		return events;
 	} // end getEvents method
 	
