@@ -60,7 +60,7 @@ public class AbsAgeBySex extends Tasks {
 		String   dataLine;
 		
 		// data format 
-		final int SKIP_LINES = 9;
+		final int SKIP_LINES = 6;
 		final int ELEM_LENGTH = 65;
 		final int DATA_COLUMNS = 21;
 		
