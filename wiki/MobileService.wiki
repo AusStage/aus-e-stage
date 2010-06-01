@@ -1,0 +1,9 @@
+#summary Information about the Mobile Service
+
+= Mobile Service =
+
+The mobile service will be used to solicit feedback in real time from audience members who are attending, or have just attended, a performance. 
+
+The feedback will be solicited using a combination of [http://en.wikipedia.org/wiki/SMS SMS] and [http://twitter.com Twitter] and will be analysed using a variety of qualitative techniques. 
+
+More information about the service will be posted here and to the [http://beta.ausstage.edu.au/ Aus-e-Stage project website] as development progresses. 
