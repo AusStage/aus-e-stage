@@ -163,6 +163,8 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
 
 = Change Log =
 See the source code repository for a [list of commit messages http://code.google.com/p/aus-e-stage/source/list] related to the !AbsDataFix App
+== Version 1.0.5 == 
+ * Added a more informative error message when a file expected to be XML is found not to be
 == Version 1.0.4 ==
  * Refined the colour algorithm for the !AgeBySex dataset
  * Removed the data table from the HTML used to populate infoWindows
