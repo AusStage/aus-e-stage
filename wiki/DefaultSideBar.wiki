@@ -7,11 +7,11 @@
    * Processes
      * [SourcingAbsData Sourcing data from the ABS]
      * [SubversionRepository Using our Subversion Repository]
- * [UsefulLinks Useful Links]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
    * [MappingService Mapping Service]
    * [MobileService  Mobile Service]
-   * [AusStageTerminator AusStage Terminator Service]   
+   * [AusStageTerminator AusStage Terminator Service]
+ * [UsefulLinks Useful Links]   
  * [http://www.ausstage.edu.au AusStage Homepage]
  * [http://beta.ausstage.edu.au Aus-e-Stage Project Homepage]
