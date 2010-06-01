@@ -9,7 +9,7 @@
      * [SubversionRepository Using our Subversion Repository]
  * [UsefulLinks Useful Links]
  * Services Under Development
-   * [ExchangeDataService Exchange Data Service]
+   * [DataExchangeService Data Exchange Service]
    * [MappingService Mapping Service]
    * [MobileService  Mobile Service]
    * [AusStageTerminator AusStage Terminator Service]   
