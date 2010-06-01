@@ -84,6 +84,14 @@ public class PrepareKML extends Tasks {
 		} catch(javax.xml.parsers.ParserConfigurationException ex) {
 			System.err.println("ERROR: Unable to instantiate XML classes\n" + ex.toString());
 			return false;
+		} catch(org.xml.sax.SAXParseException ex) {
+			try {
+				System.err.println("ERROR: Specified file isn't an XML file:\n" + input.getCanonicalPath());
+				return false;
+			} catch (java.io.IOException e) {
+				System.err.println("ERROR: Specified file isn't an XML file");
+				return false;
+			}
 		} catch(org.xml.sax.SAXException ex) {
 			System.err.println("ERROR: Unable to parse the input document\n" + ex.toString());
 			return false;

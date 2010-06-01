@@ -6,7 +6,7 @@ Implementation-Vendor-Id: au.edu.ausstage
 Implementation-Version: 1.0
 Specification-Title: ABS Data Fix
 Specification-Vendor: AusStage
-Specification-Version: 1.0
+Specification-Version: 1.0.5
 Bundle-Name: ABS Data Fix
 Bundle-Vendor: AusStage
 Bundle-Version: 1.0
