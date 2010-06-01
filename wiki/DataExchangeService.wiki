@@ -1,0 +1,14 @@
+#summary Information About the Exchange Data Service
+
+<h1>Data Exchange Service</h1>
+
+The ExchangeDataService is designed to allow users to retrieve in real time data from the [http://www.ausstage.edu.au AusStage] database. The data can be retrieved in the following formats:
+
+ # html - as an unordered list
+ # json - data formatted as a series of objects encoded using the [http://en.wikipedia.org/wiki/JSON JSON] syntax
+ # xml  - as a series of elements in an [http://en.wikipedia.org/wiki/XML XML] file
+ # rss  - as a standard [http://en.wikipedia.org/wiki/RSS RSS] feed
+
+An optional parameter can also be used which will cause the data to be wrapped in a [http://en.wikipedia.org/wiki/JavaScript JavaScript] function to make it easier to integrate with existing websites. 
+
+More information about the service is available on the [http://beta.ausstage.edu.au/exchange/ AusStage Data Exchange Service] homepage
