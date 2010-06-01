@@ -14,11 +14,13 @@ _Note 2: Ensure that all file and directory names do not include spaces_
 
 _Note 3: When specifying file names on the command line ensure that you specify the full path or relative path to the file_
 
+_Note 4: 'state-abbr' in the following instructions should be replaced with the appropriate state abbreviation - sa, qld, act, nsw etc...
+
 <wiki:toc max_depth="2" />
 
 = Step 1. Prepare your System =
  # Ensure that you have the latest version of [http://java.com Java] installed and properly configured on your system. The AbsDataFix application was written using Java version 1.6.
- # To assist in following these procedures it is recommended that you create a directory structure that starts with an *abs-data-fix* directory and has the following child directories
+ # These procedures assume that you have created a directory structure that starts with an *abs-data-fix* directory and has the following child directories
   # *bin* for storing the executable
   # *input* for storing the input files
   # *output* for storing the output files
@@ -33,31 +35,28 @@ _Note 3: When specifying file names on the command line ensure that you specify 
  # Choose one of the following steps to create the required dataset
 
 == Step 3a. Build an Age by Sex Dataset ==
- # Copy the file downloaded at the end of the SourcingAbsData procedure into the *input* directory 
- # Ensure the file name does not contain any spaces and is all lower case
+ # Copy the file downloaded at the end of the SourcingAbsData procedure into the *input* directory. 
+ # Name the file _state-abbr_-age-by-sex.csv
  # Open a terminal window / command prompt
  # Change directory to the *bin* directory 
  # Execute the following command where:
-   # input-file: is the source data copied to the input directory in step 3a.1
-   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   # input-file: is the name of the input file, namely _state-abbr_-age-by-sex.csv
+   # output-file: is the name of the output XML file to create. _state-abbr_-age-by-sex.xml _Note: Specify the *output* directory as part of the path_
    {{{java -jar AbsDataFix.jar -fixtype agebysex -input input-file -output output-file}}}
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
- # Copy the XML file to the *repository* directory
- # Rename the file as follows where:
-   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
-   {{{state-abbr-age-by-sex.xml}}}
+ # Move the XML file to the *repository* directory
  
 = Step 4. Start a Collection District Dataset =
 Collection District Dataset is an XML based file that is used for further processing and for use by the !AusStage Mapping Service for the population of infoWindows in Google Earth.
 
 This step will only need to be undertaken once for each state using the Age by Sex Dataset created in step 3a.
 
- # Copy the XML file created in step 3a into the *input* directory
+ # Copy the XML file _state-abbr_-age-by-sex.xml from the *repository* to the *input* directory
  # If necessary, open a terminal window / command prompt
  # If necessary, change directory to the *bin* directory 
  # Execute the following command where:
-   # input-file: is the file copied to the input directory in step 4.1
+   # input-file: is _state-abbr_-age-by-sex.xml
    # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
    {{{java -jar AbsDataFix.jar -fixtype databuilder -input input-file -output output-file}}}
  # If an error occurs adjust the parameters and try again
@@ -77,23 +76,20 @@ This step will only need to be undertaken once for each state using the Collecti
 
 == Step 5.b Use the !MapInfo data to complete the Collection District Dataset == 
 
- # Copy the XML file created in step 4 to the *input* directory
+ # Move the XML file created in step 4 to the *input* directory
  # If necessary, open a terminal window / command prompt
  # If necessary, change directory to the *bin* directory 
  # Execute the following command where:
    # input-file: is the file copied to the input directory in step 5.b.1
-   # code-file: is the file copied into the *input* directory in step 5a.
-   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   # output-file: is the name of the output XML file to create, in this case abs-data-_state-abbr_.xml _Note: Specify the *output* directory as part of the path_
+   # code-file: is the map info file copied into the *input* directory in step 5a.
    {{{java -jar AbsDataFix.jar -fixtype appendcdinfo -input input-file -output output-file -codes code-file}}}
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
 
 == Step 5.c Store the completed Collection District Dataset ==
  
- # Copy the XML file created in step 5.b to the *repository* directory
- # Rename the file as follows where:
-   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
-   {{{abs-data-state-abbr.xml}}}
+ # Move the XML file created in step 5.b to the *repository* directory
 
 This file will form the basis for the Collection District Dataset that will be used by the AusStage Mapping Service to populate infoWindows and other web pages
 
@@ -114,31 +110,29 @@ Once the conversion is complete the KML files are prepared for further processin
  # If necessary, change directory to the *bin* directory 
  # Execute the following command where:
    # input-file: is the file copied to the input directory in step 7.1
-   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
+   # output-file: is the name of the output KML file to create, _state-abbr_-abs-base.kml _Note: Specify the *output* directory as part of the path_
    {{{java -jar AbsDataFix.jar -fixtype prepkml -input input-file -output output-file}}}
    <br/>_Note: This may take some time to complete_
  # If an error occurs adjust the parameters and try again
  # Take note of the file that was successfully created
- # Copy this file into the *repository* directory and rename it as follows where:
-   # state-abbr: is the state abbreviation for example qld, nsw, sa etc. 
-   {{{state-abbr-abs-base.kml}}}
+ # Move this file into the *repository* directory.
 
 = Step 8. Compile an overlay = 
 Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_First_Stage_XML_File First Stage XML Files] will produce the finalised overlay for that dataset.
 
 == Step 8a. Building an Age By Sex Overlay ==
  # Copy the base KML file, as created in step 7, for the required state from the *repository* directory to the *input* directory
- # Copy the Age By Sex dataset, as created in step 3a from the *repository* directory to the *input* directory
+ # If necessary, copy the Age By Sex dataset, as created in step 3a from the *repository* directory to the *input* directory
  # If necessary, open a terminal window / command prompt
  # If necessary, change directory to the *bin* directory 
  # Execute the following command where:
    # input-file: is the file copied to the input directory in step 8a.1
+   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
    # code-file: is the file copied into the *input* directory in step 8a.2
    # data-set: is one of the following options
      * male: male ages
      * female: female ages
      * total: total population ages
-   # output-file: is the name of the output XML file to create _Note: Specify the *output* directory as part of the path_
    {{{java -jar AbsDataFix.jar -fixtype mapagebysex -input input-file -output output-file -codes code-file -dataset data-set}}}
    <br/>_Note: This may take some time to complete_
  # If an error occurs adjust the parameters and try again
