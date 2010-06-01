@@ -1,0 +1,16 @@
+#summary Information about the Mapping Service
+
+<h1>AusStage Mapping Service</h1>
+
+The goal of the Mapping Service is to allow users to create maps that visualise event data. 
+
+Currently the two maps that are available are:
+
+ # [http://beta.ausstage.edu.au/mapping/organisations.jsp Maps by Organisation]
+ # [http://beta.ausstage.edu.au/mapping/contributors.jsp Maps by Contributor]
+
+A third map, based on an event title search, is planned. 
+
+These maps allow users to focus on a specific geographic area, as well as a time period. Trajectory information is also available which provides some sense of where an organisation or contributor has been involved in events. 
+
+More information on the service is available via the [http://beta.ausstage.edu.au/mapping AusStage Mapping Service Homepage]
