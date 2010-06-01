@@ -26,7 +26,7 @@ The parent directory of our repository is the *trunk* directory. Everything rela
 
 || *Main Directory* || Purpose ||
 || abs-data-fix || The AbsDataFix application ||
-|| exchange || The source code for the ExchangeDataService ||
+|| exchange || The source code for the DataExchangeService ||
 || exchange-analytics || The ExchangeAnalytics service used to build the analytics report for the ExchangeDataService ||
 || google-analytics   || the GoogleAnalytics application used to build the analytics reports about the use of the Mapping Service ||
 || mapping || The source code for the MappingService ||
