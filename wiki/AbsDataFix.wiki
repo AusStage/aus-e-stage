@@ -149,7 +149,7 @@ Combining a prepared KML file with one of the [AbsDataFix##Step_3._Building_Firs
  # Enter the title of the ABS Data Set used to construct the overlay, for example:<br/>Age By Sex in 5 year groups (Male)
  # Enter a description of the ABS Data Set used to construct the overlay, for example:<br/>Average age male population
  # Enter the 2 - 3 letter State abbreviation, for example:<br/>ACT
- # Enter the full URL to the web page containing more information about the ABS overlays, for example: http://beta.ausstage.edu.au/mapping/absoverlays.jsp
+ # Enter the full URL to the web page containing more information about the ABS overlays, for example: http://beta.ausstage.edu.au/mapping/absdatasets.jsp
  # Enter the full URL to the KML file in the Overaly repository, for example: _Note: The full URL to the KML file in the overlay repository has yet to be determined._
  # Check to ensure the information that you've entered is correct
  # If the information is correct, enter y
