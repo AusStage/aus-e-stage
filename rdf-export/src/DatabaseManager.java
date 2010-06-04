@@ -27,40 +27,19 @@ import oracle.jdbc.pool.OracleDataSource;
 public class DatabaseManager {
 
 	// declare private variables
-	private String            connectionString;
 	private OracleDataSource  dataSource;
 	private Connection        connection;
 	private Statement         statement;
 	private PreparedStatement preparedStatement;
-
-	/**
-	 * Constructor for this class
-	 *
-	 * @param connectionString the string used to connect to the database
-	 */
-	public DatabaseManager(String connectionString) {
-		
-		// filter the parameter
-		if(connectionString == null) {
-			throw new IllegalArgumentException("The connection string cannot be null");
-		}
-		
-		connectionString = connectionString.trim();
-		
-		if(connectionString.equals("")) {
-			throw new IllegalArgumentException("The connection string cannot be blank");
-		}
-		
-		this.connectionString = connectionString;	
-	
-	} // end constructor
 	
 	/**
 	 * A method to connect to the database
+	 *
+	 * @param connectionString the string used to connect to the database
 	 * 
 	 * @return true if, and only if, the connection was successful
 	 */
-	public boolean connect() {
+	public boolean connect(String connectionString) {
 	
 		// enclose code in a try block
 		// return false if this doesn't work
@@ -74,7 +53,7 @@ public class DatabaseManager {
 				this.dataSource = new OracleDataSource();
 				
 				// set the connection string
-				this.dataSource.setURL(this.connectionString);
+				this.dataSource.setURL(connectionString);
 			}
 			
 			// do we need a new connection?
