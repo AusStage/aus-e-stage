@@ -92,10 +92,10 @@ public class DatabaseManager {
 		try {
 		
 			// check on required objects
-			if(dataSource == null || connection == null) {
+			if(dataSource == null || connection == null || connection.isValid(5) == false) {
 				
-				// get a connection
-				this.connect();
+				// report the error
+				throw new java.sql.SQLException("A valid database connection was not available");
 			}
 			
 			// build the statement
