@@ -46,13 +46,15 @@ public class RdfExport {
 		SimpleCommandLineParser parser = new SimpleCommandLineParser(args); // use a Google class to do manage command line params
 		
 		// get the parameters
-		String taskType = parser.getValue("task", "tasktype");
+		String taskType  = parser.getValue("task", "tasktype");
+		String propsPath = parser.getValue("properties");
 		
 		// check on the parameters
-		if(taskType == null) {
+		if(taskType == null || propsPath == null) {
 			// output usage instructions
 			System.err.println("ERROR: the following parameters are expected");
-			System.err.println("-tasktype  the type of task to undertake");
+			System.err.println("-tasktype   the type of task to undertake");
+			System.err.println("-properties the location of the properties file");
 			System.err.println("\nValid fix types are:");
 			System.err.println(java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
 			System.exit(-1);
@@ -72,6 +74,35 @@ public class RdfExport {
 			System.err.println("ERROR: the specified task type is invalid");
 			System.err.println("Valid fix types are:");
 			System.err.println(java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
+			System.exit(-1);
+		}
+		
+		// declare helper variables
+		boolean status;
+		
+		// try to instantiate the properties manager
+		PropertiesManager properties = new PropertiesManager();
+		
+		// try to load the properties file
+		status = properties.loadFile(propsPath);
+		
+		if(status == false) {
+			System.err.println("ERROR: A fatal error has occured, see previous error message for details");
+			System.exit(-1);
+		}
+		
+		// try to connect to the database
+		// instantiate the database classes
+		System.out.println("INFO: Connecting to the database...");
+		DatabaseManager database = new DatabaseManager(properties.getProperty("db-connection-string"));
+		
+		// connect to the database
+		status = database.connect();
+		
+		if(status == true) {
+			System.out.println("INFO: Connection established");
+		} else {
+			System.err.println("ERROR: A fatal error has occured, see previous error message for details");
 			System.exit(-1);
 		}
 		
