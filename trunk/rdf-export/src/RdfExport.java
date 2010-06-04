@@ -106,17 +106,31 @@ public class RdfExport {
 		
 		System.out.println("INFO: Connecting to the database...");		
 		// connect to the database
-		status = database.connect(connectionString);
-		
-		if(status == true) {
-			System.out.println("INFO: Connection established");
-		} else {
-			System.err.println("ERROR: A fatal error has occured, see previous error message for details");
-			System.exit(-1);
+//		status = database.connect(connectionString);
+//		
+//		if(status == true) {
+//			System.out.println("INFO: Connection established");
+//		} else {
+//			System.err.println("ERROR: A fatal error has occured, see previous error message for details");
+//			System.exit(-1);
+//		}
+
+		// execute the appropriate task
+		if(taskType.equals("build-network-data")) {
+			// do the build-network-data task
+			BuildNetworkData task = new BuildNetworkData(database, properties);
+			
+			status = task.doTask();
 		}
 		
-		//debug code
-		System.out.println("Everything OK So far");
+		// determine how to finish
+		if(status == false) {
+			System.err.println("ERROR: An error has occured, see previous messages for details");
+			System.exit(-1);
+		} else {
+			System.out.println("INFO: Task completed successfully");
+			System.exit(0);
+		}
 		
 	} // end main method
 	
