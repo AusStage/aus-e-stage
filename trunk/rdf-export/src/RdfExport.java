@@ -93,11 +93,20 @@ public class RdfExport {
 		
 		// try to connect to the database
 		// instantiate the database classes
-		System.out.println("INFO: Connecting to the database...");
-		DatabaseManager database = new DatabaseManager(properties.getProperty("db-connection-string"));
+		DatabaseManager database = new DatabaseManager();
 		
+		// get the connection string
+		String connectionString = properties.getProperty("db-connection-string");
+		
+		if(connectionString == null) {
+			System.err.println("ERROR: Unable to load the connection string property");
+			System.err.println("       Check the db-connection-string value in the properties file");
+			System.exit(-1);
+		}
+		
+		System.out.println("INFO: Connecting to the database...");		
 		// connect to the database
-		status = database.connect();
+		status = database.connect(connectionString);
 		
 		if(status == true) {
 			System.out.println("INFO: Connection established");
