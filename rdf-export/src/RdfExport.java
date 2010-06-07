@@ -120,6 +120,15 @@ public class RdfExport {
 			// do the build-network-data task
 			BuildNetworkData task = new BuildNetworkData(database, properties);
 			
+			// tidy up any existing TDB datastore infor
+			System.out.println("INFO: Deleting the existing TDB datastore...");
+			status = task.doReset();
+			
+			if(status == false) {
+				System.err.println("ERROR: A fatal error has occured, see prevopus error message for details");
+				System.exit(-1);
+			}
+			
 			status = task.doTask();
 		}
 		
