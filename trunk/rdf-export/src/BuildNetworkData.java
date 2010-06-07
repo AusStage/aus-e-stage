@@ -18,10 +18,15 @@
 
 // import additional packages
 import java.sql.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 
 // import the Jena related packages
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.*;
+import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.tdb.*;
 
 /**
  * A Class used to build an RDF based dataset of contributor information
@@ -31,8 +36,9 @@ import com.hp.hpl.jena.vocabulary.*;
 public class BuildNetworkData {
 
 	// declare private class level variables
-	private DatabaseManager        database; // access the AusStage database
-	private PropertiesManager      settings; // access the properties / settings 
+	private DatabaseManager        database;             // access the AusStage database
+	private PropertiesManager      settings;             // access the properties / settings
+	private String                 datastorePath = null; // directory for the tdb datastore
 	
 	/**
 	 * A constructor for this class
@@ -53,54 +59,176 @@ public class BuildNetworkData {
 	}
 	
 	/**
+	 * A method to reset the TDB datastore directory
+	 *
+	 * @return true if, and only if, the reset was sucessful
+	 *
+	 */
+	public boolean doReset() {
+	
+		// get the path to the datastore
+		datastorePath = settings.getProperty("tdb-datastore");
+		
+		// check the path
+		if(datastorePath == null) {
+			System.err.println("ERROR: Unable to load the tdb-datastore property");
+			return false;
+		}
+		
+		// instantiate a file object
+		File datastore = new File(datastorePath);
+		
+		// check on the datastore
+		if(datastore.exists() == false || datastore.canRead() == false || datastore.isDirectory() == false || datastore.canWrite() == false) {
+			System.err.println("ERROR: Unable to access the specified datastore directory");
+			System.err.println("       " + datastore.getAbsolutePath());
+			return false;
+		}
+		
+		// delete any files in the directory
+		File[] tdbFiles = datastore.listFiles(new FileListFilter());
+		
+		// loop through the list of files and delete them
+		for(File tdbFile : tdbFiles) {
+		
+			try {
+				boolean status = tdbFile.delete();
+				
+				if(status == false) {
+					System.err.println("ERROR: Unable to delete the following file:");
+					System.err.println("       " + tdbFile.getAbsolutePath());
+					return false;
+				}
+			} catch (SecurityException ex) {
+				System.err.println("ERROR: Unable to delete the following file:");
+				System.err.println("       " + tdbFile.getAbsolutePath());
+				return false;
+			}		
+		}
+		
+		// create the basic optimisation file the TDB engine
+		File opt = new File(datastorePath + "/fixed.opt");
+		
+		try {
+			opt.createNewFile();
+		} catch (IOException ex) {
+			System.err.println("WARN: Unable to create the TDB optimisation file:");
+			System.err.println("       " + opt.getAbsolutePath());
+		} catch (SecurityException ex) {
+			System.err.println("WARN: Unable to create the TDB optimisation file:");
+			System.err.println("       " + opt.getAbsolutePath());
+		}
+		
+		// if we get this far everything is ok
+		return true;
+		
+	} // end the doReset method
+	
+	/**
 	 * A method to undertake the task of building the dataset
 	 *
 	 * @return true if, and only if, the task completes successfully
 	 */
 	public boolean doTask() {
 	
-		/* TODO use a persistent model */
         // create an empty Model
-		Model model = ModelFactory.createDefaultModel();
+		//Model model = ModelFactory.createDefaultModel();
+
+		// set some of the TDB options
+		TDB.setExecutionLogging(com.hp.hpl.jena.tdb.solver.Explain.InfoLevel.NONE); // disable logging
+		
+		// create an empty persistent model
+		Model model = null;
+		
+		if(datastorePath == null) {
+			System.err.println("ERROR: the doReset() method must be run before building the network datastore");
+			return false;
+		} else {
+			model = TDBFactory.createModel(datastorePath) ;
+		}
 		
 		// set a namespace prefix
 		model.setNsPrefix("foaf", FoAF.NS);
+		model.setNsPrefix("AusStage", AusStage.NS);
 		
 		// create a contributor
 		Resource contributor = model.createResource("http://drthorweasel.com");
 		contributor.addProperty(RDF.type, FoAF.Person);
 		contributor.addProperty(FoAF.title, "Dr");
 		contributor.addProperty(FoAF.name, "ThorWeasel");
-				
-		// exploratory code
-		// list the statements in the Model
-//		StmtIterator iter = model.listStatements();
-//
-//		// print out the predicate, subject and object of each statement
-//		while (iter.hasNext()) {
-//			com.hp.hpl.jena.rdf.model.Statement stmt      = iter.nextStatement();  // get next statement
-//			Resource  subject   = stmt.getSubject();     // get the subject
-//			Property  predicate = stmt.getPredicate();   // get the predicate
-//			RDFNode   object    = stmt.getObject();      // get the object
-//
-//			System.out.print(subject.toString());
-//			System.out.print(" " + predicate.toString() + " ");
-//			if (object instanceof Resource) {
-//			   System.out.print(object.toString());
-//			} else {
-//				// object is a literal
-//				System.out.print(" \"" + object.toString() + "\"");
-//			}
-//
-//			System.out.println(" .");
-//		}
-
+		
+		// create an event
+		Resource event = model.createResource("http://www.ausstage.edu.au/e/1234");
+		event.addProperty(RDF.type, AusStage.Event);
+		event.addProperty(AusStage.name, "Test Event");
+		event.addProperty(AusStage.startDate, "2010-01-01");
+		event.addProperty(AusStage.endDate, "2010-02-02");
+		
+		// create another contributor
+		contributor = model.createResource("http://mi6.co.uk/people/jamesbond");
+		contributor.addProperty(RDF.type, FoAF.Person);
+		contributor.addProperty(FoAF.title, "Mr");
+		contributor.addProperty(FoAF.name, "James Bond");
+		contributor.addProperty(AusStage.contributedTo, "http://www.ausstage.edu.au/e/1234");		
+		
 		//model.write(System.out);
 		model.write(System.out, "RDF/XML-ABBREV");
+		
+		System.out.println("-----------------------------------------");
+		
+		// Create a new query
+		String queryString = 
+			"SELECT ?x " +
+			"WHERE { ?y <http://xmlns.com/foaf/0.1/name> ?x}";			
+
+		Query query = QueryFactory.create(queryString);
+
+		// Execute the query and obtain results
+		QueryExecution qe = QueryExecutionFactory.create(query, model);
+		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
+
+		// Output query results	
+		ResultSetFormatter.out(System.out, results, query);
+
+		// Important - free up resources used running the query
+		qe.close();
+
+
 
 	
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
+	
+	/**
+	 * A class used to filter the list of files
+	 * in the TDB directory
+	 */
+	class FileListFilter implements FilenameFilter {
+
+		/**
+		 * Method to test if the specified file matches the predetermined
+		 * name and extension requirements
+		 *
+		 * @param dir the directory in which the file was found.
+		 * @param filename the name of the file
+		 *
+		 * @return true if and only if the file should be included
+		 */
+		public boolean accept(File dir, String filename) {
+	
+			if(filename != null) {
+				if(filename.equals(".") == false && filename.equals("..") == false) {
+					return true;
+				} else {
+					return false;
+				}		
+			} else {
+				return false;
+			}
+		}
+	} // end FileListFilter class definition
 
 } // end class definition
+
+
