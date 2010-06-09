@@ -15,11 +15,18 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
- 
+
 // declare global variables
 var map = null;
-var points = [];
-var loaded = true;
+var mapData = null;
+var markerCluster = null;
+
+// define some constants
+var MAX_ZOOM_LEVEL = 10;
+var MIN_EVENT_COUNT_FOR_TIMELINE = 10;
+var INFO_WINDOW_WIDTH = 580;
+var INFO_WINDOW_HEIGHT = 400;
+var TIME_SLIDER_LABELS = 14;
 
 // load the initial map
 $(document).ready(function(){
@@ -37,88 +44,215 @@ $(document).ready(function(){
 	// setup the dialogs
 	$("#map_loading").dialog(options);
 
-	// declare helper variables
-	var markerUrl = "/mapping/browse?action=markers";
-	var markers = [];
+	// get the marker xml data
+	$.get("/mapping/browse?action=markers", null, function(data) {
 	
-	// create a new map and centre it on australia
+		// build the initial map
+		showMap(data);
+		
+		// build the time slider
+		buildTimeSlider(data)
+		
+		// store reference to the map data
+		mapData = data;
+		
+		// override the advanced display options form with our own function
+		$("#reload_map").click(advFormSubmit);
+		
+		// close the loading dialog
+		$("#map_loading").dialog("close");
+
+	}, "xml");
+});
+
+// function to show the map
+function showMap(data, focus, start, finish) {
+
+	// tidy up and remove any references to any existing map
+	GUnload();
+
+	// init the Google Maps library
 	map = new GMap2(document.getElementById("map"));
-	map.setCenter(new GLatLng(-25.947028, 133.209639), 4);
+	
+	switch(focus){
+		case '1':
+			//map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+			map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
+			break;
+		case '2':
+			map.setCenter(new GLatLng(-25.328055, 122.298333), 5); //WA
+			break;
+		case '3':
+			map.setCenter(new GLatLng(-32.163333, 147.016666), 6); //NSW
+			break;
+		case '4':
+			map.setCenter(new GLatLng(-22.486944, 144.431666), 5); //QLD
+			break;
+		case '5':
+			map.setCenter(new GLatLng(-42.021388, 146.593333), 7); //TAS
+			break;
+		case '6':
+			map.setCenter(new GLatLng(-36.854166, 144.281111), 6); //VIC
+			break;
+		case '7':
+			map.setCenter(new GLatLng(-35.49, 149.001388), 9); //ACT
+			break;
+		case '8':
+			map.setCenter(new GLatLng(-19.383333, 133.357777), 6); //NT
+			break;
+		case '9':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 2); //outside Aus
+			break;
+		case 'a':
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // Aus only
+			break;
+		default:
+			map.setCenter(new GLatLng(-25.947028, 133.209639), 4); // defult, AUS
+			break;
+	}
+	
+	// finish setting up the map
 	map.setUIToDefault();
 	
-	// get the marker data
-    GDownloadUrl(markerUrl, function(data) {
+	// extract the markers from the xml
+	var markers = data.documentElement.getElementsByTagName("marker");
+	
+	// object to hold marker locations
+	var locations = {};
+	
+	// object to hold built markers
+	var markersToMap = [];
+	
+	// build a group of markers
+	for (var i = 0; i < markers.length; i++) {
 		
-		// store list of coord hashes
-		var coords = [];
-    
-    	// get the xml data
-    	var xml = GXml.parse(data);
-    	
-    	// extract the markers from the xml
-    	points = xml.documentElement.getElementsByTagName("marker");
-    	
-    	// detect an error
-    	if(points.length == 0) {
-    		// close the loading dialog
-			$("#map_loading").dialog("close");
-			$("#map_loading").empty();
-			$("#map_loading").append("<p><strong>Error: </strong>An error has occured while loading markers. Please try again and if the problem persists please contact the system administrator</p>");
-			$("#map_loading").dialog("open");
-			loaded = false;
+		// filter markers
+		var okToAdd = false;
+	
+		// filter markers by date
+		if(start != null) {
+			// filter using date
+			var fDate = parseInt(markers[i].getAttribute("fyear"));
+			var lDate = parseInt(markers[i].getAttribute("lyear"));
+		
+			// check on the fdate
+			if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
+				// filter markers by state
+				if(focus != null && focus != "nolimit") {
+					// use the state to filter
+					var state = markers[i].getAttribute("state")
+		
+					if(focus == "a" && state != "9") {
+						okToAdd = true;
+					}else if(focus == "1" && state == "1") {
+						okToAdd = true;
+					}else if(focus == "2" && state == "2") {
+						okToAdd = true;
+					}else if(focus == "3" && state == "3") {
+						okToAdd = true;
+					}else if(focus == "4" && state == "4") {
+						okToAdd = true;
+					}else if(focus == "5" && state == "5") {
+						okToAdd = true;
+					}else if(focus == "6" && state == "6") {
+						okToAdd = true;
+					}else if(focus == "7" && state == "7") {
+						okToAdd = true;
+					}else if(focus == "8" && state == "8") {
+						okToAdd = true;
+					}else if(focus == "9" && state == "9") {
+						okToAdd = true;
+					}			
+				} else {
+					okToAdd = true;
+				}
+			}
+		
+		} else {
+			// filter markers by state
+			if(focus != null && focus != "nolimit") {
+				// use the state to filter
+				var state = markers[i].getAttribute("state")
+		
+				if(focus == "a" && state != "9") {
+					okToAdd = true;
+				}else if(focus == "1" && state == "1") {
+					okToAdd = true;
+				}else if(focus == "2" && state == "2") {
+					okToAdd = true;
+				}else if(focus == "3" && state == "3") {
+					okToAdd = true;
+				}else if(focus == "4" && state == "4") {
+					okToAdd = true;
+				}else if(focus == "5" && state == "5") {
+					okToAdd = true;
+				}else if(focus == "6" && state == "6") {
+					okToAdd = true;
+				}else if(focus == "7" && state == "7") {
+					okToAdd = true;
+				}else if(focus == "8" && state == "8") {
+					okToAdd = true;
+				}else if(focus == "9" && state == "9") {
+					okToAdd = true;
+				}			
+			} else {
+				okToAdd = true;
+			}
 		}
-    	
-    	// build a group of markers
-    	for (var i = 0; i < points.length; i++) {
-    	
-    		// get the coordinates
-    		var hash = points[i].getAttribute("lat") + points[i].getAttribute("lng");
-    		hash = hash.replace(".","").replace(",", "").replace("-","");
-    		
-    		// check to see if we've seen this hash before
-    		if(coords[hash] == null) {
-    			// get coordinate object
-	    		var latlng = new GLatLng(parseFloat(points[i].getAttribute("lat")), parseFloat(points[i].getAttribute("lng")));
-	    		
-	    		// store an indicator that we've seen this point before
-	    		coords[hash] = 1;
-	    	} else {
-	    		
-	    		// add some randomness to this point
-	    		var lat = parseFloat(points[i].getAttribute("lat")) + (Math.random() -.5) / 15000;
-	    		var lng = parseFloat(points[i].getAttribute("lng")) + (Math.random() -.5) / 15000;
-	    		
-	    		// get the coordinate object
-	    		var latlng = new GLatLng(lat.toFixed(6), lng.toFixed(6));
-	    	}
-    		
-    		// determine the appropriate colour of the icon
-    		var count = points[i].getAttribute("cnt");
-    		var iconColour;
-    		
-    		if(count == 1) {
-    			iconColour = "#CCBAD7";
-    		} else if(count > 1 && count < 6) {
-    			iconColour = "#9A7BAB";
-    		} else if(count > 5 && count < 16) {
-    			iconColour = "#7F649B";
-    		} else if(count > 15 && count < 31) {
-    			iconColour = "#69528E";
-    		} else {
-    			iconColour = "#4D3779";
-    		}
-    		
-    		// get an icon
-			var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: iconColour});
+		
+		if(okToAdd) {
+	
+			// build a hash of this location
+			var lat = parseFloat(markers[i].getAttribute("lat"));
+			var lng = parseFloat(markers[i].getAttribute("lng"));
+			var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
+			latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
+		
+			if(locations[latlngHash] == null) {
+				// not seen this location before
+				// add to hash
+				locations[latlngHash] = true;
+			} else {
+				// have seen this location before
+				// adjust the lat and lng
+				var randomNumber = Math.floor(Math.random()*3) + 1;
+				randomNumber = "0.000" + randomNumber;
+				randomNumber = parseFloat(randomNumber);
 			
+				lat = lat + randomNumber;
+				lng = lng + randomNumber;
+			}
+		
+			// build a latlng object for this marker
+			var latlng = new GLatLng(lat, lng);
+		
+			// get the colour of the icon
+			var eventCount = parseInt(markers[i].getAttribute("cnt"));
+			var colour;
+	
+			if(eventCount == 1) {
+				colour = "#CCBAD7";
+			}else if(eventCount < 6) {
+				colour = "#9A7BAB";
+			}else if(eventCount > 5 && eventCount < 16) {
+				colour = "#7F649B";
+			}else if(eventCount > 15 && eventCount < 31) {
+				colour = "#69528E";
+			} else {
+				colour = "#4D3779";
+			}
+		
+			// get the marker icon
+			var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: colour});
+		
 			// get the venue name
-			var venueName = points[i].getAttribute("name");
-			
+			var venueName = markers[i].getAttribute("name");
+		
 			// get the first and last years
-			var fyear = points[i].getAttribute("fyear");
-			var lyear = points[i].getAttribute("lyear");
+			var fyear = markers[i].getAttribute("fyear");
+			var lyear = markers[i].getAttribute("lyear");
 			var myear = null;
-			
+		
 			// add years to the tooltip including the venue name
 			// also determine the middle year
 			if(fyear != lyear) {
@@ -128,81 +262,40 @@ $(document).ready(function(){
 				venueName = venueName + " (" + fyear + ")";
 				myear = fyear
 			}
-    		
-    		// create the marker
-    		var marker = new GMarker(latlng, {icon: newIcon, title: venueName});
-    		
-    		// build the url for the info
-    		//var url = "/mapping/browse?action=lookup&id=" + points[i].getAttribute("id") +"&myear=" + myear;
-    		var url = "/mapping/browse?action=lookup&id=" + points[i].getAttribute("id") +"&lyear=" + lyear;
-    		
-    		// add an event listener to listen for the click on a marker
-    		if(count < 11) {
-    			// get a function to respond to the click
-	    		var fn = markerClickNoTabs(url, latlng);
-    			GEvent.addListener(marker, "click", fn);
-    			
-    		} else {
-    			// get a function to respond to the click
-	    		var fn = markerClickWithTabs(url, latlng);
-    			GEvent.addListener(marker, "click", fn);
-    		}
-    		   		
-    		// add the marker to the list
-    		map.addOverlay(marker);
-   		}
-   		
-   		if(loaded == true) {
-   		
-	   		// get the first date and last date of the slider
-	   		var element = xml.documentElement.getElementsByTagName("lastdate");
-	   		var lastDate = element[0].getAttribute("value");
-	   		lastDate = parseInt(lastDate)
-	   		
-	   		var element = xml.documentElement.getElementsByTagName("firstdate");
-	   		var firstDate = element[0].getAttribute("value");
-	   		firstDate = parseInt(firstDate);
-	   		
-	   		// calculate all of the years between the first and last date
-	   		// and build an array
-	   		lastDate = lastDate - firstDate;
-	   		
-	   		var dates = [];
-	   		var date = firstDate;
-	   		
-	   		for(var i = 0; i <= lastDate; i++) {
-	   			date++;
-	   			dates[date] = date;
-	   		}
-	   		
-	   		// add array of years to select boxes
-	   		// adding array faster than adding options one by one
-	   		$("#event_start").addOption(dates, false);
-	   		$("#event_finish").addOption(dates, false);
-			
-			// clear any current selected values
-			$("#event_start").selectOptions('clear');
-			$("#event_finish").selectOptions('clear');
-			
-			$("#event_start option:first").attr("selected", "selected");
-			$("#event_finish option:last").attr("selected", "selected");
-			
-			// remove any existing slider
-			$("#sliderComponent").remove();
-			
-			// create the slider
-			$(".slider").selectToUISlider({labels: 15}).hide();
-			$(".tohide").hide();
-			
-			// override the advanced display options form with our own function
-			$("#reload_map").click(advFormSubmit);
-			
-			// close the loading dialog
-			$("#map_loading").dialog("close");
-		}
 		
-   	});
-});
+			// make a new marker
+			var marker = new GMarker(latlng, {icon: newIcon, title: venueName});
+		
+			// build the url for more information
+			var url = "/mapping/browse?action=lookup&id=" + markers[i].getAttribute("id") +"&lyear=" + lyear;
+				
+			// add an event listener to listen for the click on a marker
+			if(eventCount < MIN_EVENT_COUNT_FOR_TIMELINE + 1) {
+				// get a function to respond to the click
+				var fn = markerClickNoTabs(url, latlng);
+				GEvent.addListener(marker, "click", fn);
+			
+			} else {
+				// get a function to respond to the click
+				var fn = markerClickWithTabs(url, latlng);
+				GEvent.addListener(marker, "click", fn);
+			}
+		
+			// add the marker to the list of markers
+			markersToMap.push(marker);
+		}		
+	}
+	
+	// define options for marker cluster library
+	var markerClusterOptions = {gridSize: 50, maxZoom: MAX_ZOOM_LEVEL};
+	
+	// build the map
+	markerCluster = new MarkerClusterer(map, markersToMap, markerClusterOptions);
+	
+	// scroll to the map
+	$.scrollTo("#map");
+	
+}
 
 // function to respond to the click on a marker
 function markerClickWithTabs(url, latlng) {
@@ -237,7 +330,7 @@ function markerClickWithTabs(url, latlng) {
 			content.push(new GInfoWindowTab("Timeline", timelineHtml));
 			
 			// open the window
-			map.openInfoWindowTabsHtml(latlng, content, {maxWidth:450, maxHeight:400, autoScroll:true });
+			map.openInfoWindowTabsHtml(latlng, content, {maxWidth: INFO_WINDOW_WIDTH, maxHeight: INFO_WINDOW_HEIGHT, autoScroll:true });
 		});			
 	}
 }
@@ -250,7 +343,7 @@ function markerClickNoTabs(url, latlng) {
 			// open an info window with the information
 			
 			// open the window
-			map.openInfoWindowHtml(latlng, html, {maxWidth:450, maxHeight:400, autoScroll:true });
+			map.openInfoWindowHtml(latlng, html, {maxWidth: INFO_WINDOW_WIDTH, maxHeight: INFO_WINDOW_HEIGHT, autoScroll:true });
 		});			
 	}
 }
@@ -393,232 +486,85 @@ function loadTimeline(id, lyear) {
 
 // function to start the process of reloading the map
 function advFormSubmit() {
-
-	// show the loading dialog
-	$("#map_loading").dialog("open");
 	
-	// delay the start of the reloadMap function to let the window redraw
-	setTimeout("reloadMap()",500);
+	// check to ensure map data is present
+	if(mapData == null) {
+		$("#map").empty();
+		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
+		return false;
+	}
 
+	// get the start date
+	var startDate  = $("#event_start").val();
+	var finishDate = $("#event_finish").val();
+	
+	// empty the marker cluster object
+	markerCluster.clearMarkers()
+	
+	// reload the map with trajectory information
+	showMap(mapData, $("#state").val(), startDate, finishDate);
 }
-// function to reload the map
-function reloadMap() {
 
-	// clear any existing overlays
-	map.clearOverlays();
+// function to build the time slider
+function buildTimeSlider(data) {
 
-	// declare helper variables
-	// store the created placemarks
-	var markers = [];
+	// build the time slider
+	// get the first date and last date of the slider
+	var element = data.getElementsByTagName("lastdate");
+	var lastDate = element[0].getAttribute("value");
+	lastDate = parseInt(lastDate)
 	
-	// store list of coord hashes
-	var coords = [];
-
-	// get the first date and last dates from the select boxes
-	var minDate = $("#event_start").val();
-	var maxDate  = $("#event_finish").val();
+	var element = data.getElementsByTagName("firstdate");
+	var firstDate = element[0].getAttribute("value");
+	firstDate = parseInt(firstDate);
 	
-	// get the limiter
-	var limit = $("#limit").val();
+	// calculate all of the years between the first and last date
+	// and build an array
+	lastDate = lastDate - firstDate;
 	
-	// build a list of points
-	for (var i = 0; i < points.length; i++) {
+	var dates = [];
+	var date = firstDate;
 	
-		// get the first and last years
-		var firstYear = points[i].getAttribute("fyear");
-		var lastYear  = points[i].getAttribute("lyear");
-		
-		// get the state
-		var state = points[i].getAttribute("state");
-		var include = true;
-		
-		if(limit != "nolimit") {
-			// set the include flag
-			include = false;
-			
-			// limiting by geographic region
-			// update the include flag accordingly
-			switch(limit) {
-				case '1':
-					if(state == '1') {
-						include = true;
-					}
-					break;
-				case '2':
-					if(state == '2') {
-						include = true;
-					}
-					break;
-				case '3':
-					if(state == '3') {
-						include = true;
-					}
-					break;
-				case '4':
-					if(state == '4') {
-						include = true;
-					}
-					break;
-				case '5':
-					if(state == '5') {
-						include = true;
-					}
-					break;
-				case '6':
-					if(state == '6') {
-						include = true;
-					}
-					break;
-				case '7':
-					if(state == '7') {
-						include = true;
-					}
-					break;
-				case '8':
-					if(state == '8') {
-						include = true;
-					}
-					break;
-				case '9':
-					if(state == '9') {
-						include = true;
-					}
-					break;
-				case 'a':
-					//all australia
-					if(state >= 1 && state <= 8) {
-						include = true;
-					}
-					break;
-				default:
-					include = false;
-					break;
-				}
-		}
-
-		if(((firstYear >= minDate && firstYear <= maxDate) || (lastYear >= minDate && lastYear <= maxDate)) && include == true) {
-		
-			// get the coordinates
-    		var hash = points[i].getAttribute("lat") + points[i].getAttribute("lng");
-    		hash = hash.replace(".","").replace(",", "").replace("-","");
-    		
-    		// check to see if we've seen this hash before
-    		if(coords[hash] == null) {
-    			// get coordinate object
-	    		var latlng = new GLatLng(parseFloat(points[i].getAttribute("lat")), parseFloat(points[i].getAttribute("lng")));
-	    		
-	    		// store an indicator that we've seen this point before
-	    		coords[hash] = 1;
-	    	} else {
-	    		
-	    		// add some randomness to this point
-	    		var lat = parseFloat(points[i].getAttribute("lat")) + (Math.random() -.5) / 15000;
-	    		var lng = parseFloat(points[i].getAttribute("lng")) + (Math.random() -.5) / 15000;
-	    		
-	    		// get the coordinate object
-	    		var latlng = new GLatLng(lat.toFixed(6), lng.toFixed(6));
-	    	}
-    		
-    		// determine the appropriate colour of the icon
-    		var count = points[i].getAttribute("cnt");
-    		var iconColour;
-    		
-    		if(count == 1) {
-    			iconColour = "#CCBAD7";
-    		} else if(count > 1 && count < 6) {
-    			iconColour = "#9A7BAB";
-    		} else if(count > 5 && count < 16) {
-    			iconColour = "#7F649B";
-    		} else if(count > 15 && count < 31) {
-    			iconColour = "#69528E";
-    		} else {
-    			iconColour = "#4D3779";
-    		}
-    		
-    		// get an icon
-			var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: iconColour});
-			
-			// get the venue name
-			var venueName = points[i].getAttribute("name");
-			
-			// get the first and last years
-			var fyear = points[i].getAttribute("fyear");
-			var lyear = points[i].getAttribute("lyear");
-			var myear = null;
-			
-			// add years to the tooltip including the venue name
-			// also determine the middle year
-			if(fyear != lyear) {
-				venueName = venueName + " (" + fyear + " - " + lyear + ")";
-				myear = Math.round((lyear - fyear) / 2) + parseInt(fyear);
-			} else {
-				venueName = venueName + " (" + fyear + ")";
-				myear = fyear
-			}
-    		
-    		// create the marker
-    		var marker = new GMarker(latlng, {icon: newIcon, title: venueName});
-    		
-    		// build the url for the info
-    		var url = "/mapping/browse?action=lookup&id=" + points[i].getAttribute("id") +"&lyear=" + lyear;
-    		
-    		// add an event listener to listen for the click on a marker
-    		if(count < 11) {
-    			// get a function to respond to the click
-	    		var fn = markerClickNoTabs(url, latlng);
-    			GEvent.addListener(marker, "click", fn);
-    			
-    		} else {
-    			// get a function to respond to the click
-	    		var fn = markerClickWithTabs(url, latlng);
-    			GEvent.addListener(marker, "click", fn);
-    		}
-    		   		
-    		// add the marker to the list    		
-    		map.addOverlay(marker);
-		}	
+	for(var i = 0; i <= lastDate; i++) {
+		date++;
+		dates[date] = date;
 	}
 	
-	//recentre the map
-	switch(limit){
-		case '1':
-			//map.setCenter(new GLatLng(-30.058333, 135.763333), 6);
-			map.setCenter(new GLatLng(-32, 135.763333), 6); //SA
-			break;
-		case '2':
-			map.setCenter(new GLatLng(-25.328055, 122.298333), 5);
-			break;
-		case '3':
-			map.setCenter(new GLatLng(-32.163333, 147.016666), 6);
-			break;
-		case '4':
-			map.setCenter(new GLatLng(-22.486944, 144.431666), 5);
-			break;
-		case '5':
-			map.setCenter(new GLatLng(-42.021388, 146.593333), 7);
-			break;
-		case '6':
-			map.setCenter(new GLatLng(-36.854166, 144.281111), 6);
-			break;
-		case '7':
-			map.setCenter(new GLatLng(-35.49, 149.001388), 9);
-			break;
-		case '8':
-			map.setCenter(new GLatLng(-19.383333, 133.357777), 6);
-			break;
-		case '9':
-			map.setCenter(new GLatLng(-25.947028, 133.209639), 2);
-			break;
-		case 'a':
-			map.setCenter(new GLatLng(-25.947028, 133.209639), 4);
-			break;
-		default:
-			map.setCenter(new GLatLng(-25.947028, 133.209639), 4);
-			break;
-	}
+	// clear the time slider
+	$("#event_start").removeOption(/./);
+	$("#event_finish").removeOption(/./);
 	
-	// close the loading dialog
-	$("#map_loading").dialog("close");
+	// add the new options
+	$("#event_start").addOption(dates, false);
+	$("#event_finish").addOption(dates, false);
+	
+	// clear any current selected values
+	$("#event_start").selectOptions('clear');
+	$("#event_finish").selectOptions('clear');
+	
+	// sort the options
+	$("#event_start").sortOptions();
+	$("#event_finish").sortOptions();
+	
+	// select the last and first options before building the time slider
+	$("#event_start option:first").attr("selected", "selected");
+	$("#event_finish option:last").attr("selected", "selected");
+	
+	// remove any existing slider
+	$("#sliderComponent").remove();
+	
+	// create the slider
+	$(".slider").selectToUISlider({labels: TIME_SLIDER_LABELS}).hide();
+	$(".tohide").hide();
+	
+	addSliderDescription();
+}
+
+// add a description to the slider
+function addSliderDescription() {
+	// add some descriptive text
+	//$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.<br/>Only venues where all events fall outside the selected date range will be removed.</p>');
+	//$("#sliderComponent").append('<p style="text-align: center;">Use the above time slider to select a date range.</p>');
 }
 
 // Make Google API Scripts clean up

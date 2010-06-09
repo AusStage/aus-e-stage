@@ -32,6 +32,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.bgiframe.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-min.js"></script>	
 	<script type="text/javascript" src="assets/javascript/browse.js"></script>
 	<%
 		ServletContext context = getServletContext();
@@ -39,7 +40,7 @@
 	%>
 	<script type="text/javascript" src="<%=mapsAPI%>"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/mapiconmaker-1.1.js"></script>
-	<!--<script type="text/javascript" src="assets/javascript/libraries/markerclusterer-1.0.js"></script>-->
+	<script type="text/javascript" src="assets/javascript/libraries/markerclusterer-1.0.js"></script>
 	<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
 </head>
 <body>
@@ -82,8 +83,8 @@
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="limit">Only show venues located in: </label> &nbsp;
-						<select size="1" id="limit" name="limit">
+						<label for="state">Only show venues located in: </label> &nbsp;
+						<select size="1" id="state" name="state">
 							<option value="nolimit" selected="selected">No Limit - All venues</option>
 							<option value="a">Australia</option>
 							<option value="7"> - Australian Capital Territory</option>
@@ -106,7 +107,7 @@
 			</table>
 			
 			</form>
-		</div>		
+		</div>
 		<div id="map_legend">
 			<table class="mapLegend">
 				<thead>
@@ -151,7 +152,7 @@
 			<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
 			<br/>Loading markers onto the map...
 		</p>
-		</div>
+	</div>
 	<!-- include the footer -->
 	<jsp:include page="footer.jsp"/>
 </div>
