@@ -300,17 +300,21 @@ function showMap(data, focus, start, finish) {
 // function to respond to the click on a marker
 function markerClickWithTabs(url, latlng) {
 	return function() {
-		// download the event information
-		GDownloadUrl(url, function(html) {
-			// open an info window with the information
-						
+	
+		// get the dates from the time slider
+		var startDate  = $("#event_start").val();
+		var finishDate = $("#event_finish").val();
+		
+		url = url + "&start=" + startDate + "&finish=" + finishDate;
+		
+		// open an info window and dynamically pull in the information
+		$.get(url, function(html) {
 			// define an array to hold the tabs
 			var content = [];
 			
 			// get the id
-			//var id = url.substr(33);
 			var id    = url.substr(url.indexOf("&id=") + 4, (url.indexOf("&lyear=") - url.indexOf("&id=")) - 4);
-			var lyear = url.substr(url.indexOf("&lyear=") + 7);
+			var lyear = url.substr(url.indexOf("&lyear=") + 7, (url.indexOf("&start=") - url.indexOf("&lyear=") - 7));
 			
 			// define a tab to hold the event list
 			content.push(new GInfoWindowTab("Event List", html));
@@ -318,12 +322,13 @@ function markerClickWithTabs(url, latlng) {
 			// get the address
 			var address = html.substr(0, (html.indexOf("</p>") + 4));
 			
-			var timelineHtml =  address + "<div id=\"timeline_" + id + "_container\">"
+			var timelineHtml =  address + "<div id=\"timeline_" + id + "_container\" style=\"height: 355px\">"
+			//var timelineHtml =  address + "<div id=\"timeline_" + id + "_container\">"
 			timelineHtml     += "<p>A timeline is a graphical representation of event data as a series of bars and points. Events are displayed in one of three formats:</p>";
 			timelineHtml     += "<ul><li>A point is used to display an event that occured on a single day</li>";
 			timelineHtml     += "<li>A pale blue bar indicates that the event occured at some time during the indicated time period</li>";
 			timelineHtml     += "<li>A solid blue bar indicates that the event occured over the indicated time period</li></ul>";
-			timelineHtml     += "<p>The timeline is automatically centred on the middle of the last year of events</p>";
+			timelineHtml     += "<p>The timeline is automatically centred on the middle of the last year of events and lists all events that have occured at the venue</p>";
 			timelineHtml     += "<p><a href=\"#\" onclick=\"loadTimeline('" + id + "','" + lyear + "'); return false;\">Load the Timeline by clicking this link.</a></p></div>";
 			
 			// define a tab to hold the timeline
@@ -331,7 +336,9 @@ function markerClickWithTabs(url, latlng) {
 			
 			// open the window
 			map.openInfoWindowTabsHtml(latlng, content, {maxWidth: INFO_WINDOW_WIDTH, maxHeight: INFO_WINDOW_HEIGHT, autoScroll:true });
-		});			
+			
+		});
+			
 	}
 }
 
