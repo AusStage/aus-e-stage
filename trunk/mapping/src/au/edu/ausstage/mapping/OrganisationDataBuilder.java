@@ -1068,5 +1068,55 @@ public class OrganisationDataBuilder extends DataBuilder {
 				throw new javax.servlet.ServletException("Unable to lookup organisation name", ex);
 		}
 	} // get the full name of an organisation
+	
+	/**
+	 * Function to get the name of the organisation
+	 *
+	 * @param queryParameter the parameter to determine which contributor to lookup
+	 * @param mappable        determine if an additional check needs to be undertaken to ensure this contributor has mappable events
+	 *
+	 * @return               a string containing the name of the organisation
+	 */
+	public String getNameByID(String queryParameter, boolean mappable) throws javax.servlet.ServletException {
+		
+		// define the sql string
+		String sql = null;
+	
+		if(mappable == true) {
+	
+			// build the sql
+			sql = "SELECT organisation.organisationid "
+				+ "FROM organisation, orgevlink, events, venue "
+				+ "WHERE organisation.organisationid = ? "
+				+ "AND organisation.organisationid = orgevlink.organisationid "
+				+ "AND orgevlink.eventid = events.eventid "
+				+ "AND events.venueid = venue.venueid "
+				+ "AND venue.latitude IS NOT NULL";
+				
+		} else {
+			
+			sql = "SELECT name FROM search_organisation WHERE organisationid = ?";
+		}
+		
+		// define the parameters
+		String[] parameters = new String[1];
+		parameters[0] = queryParameter;
+		
+		// try to connect to the database
+		this.dataManager.connect(); // dataManager defined in parent object
+		
+		// get the resultset
+		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+		
+		try {			
+			// move to the first record in the recordset
+			resultSet.next();
+			
+			// return the name
+			return resultSet.getString(1);
+		} catch(Exception ex) {
+				throw new javax.servlet.ServletException("Unable to lookup organisation name", ex);
+		}
+	} // get the full name of an organisation
 
 } // end class definition

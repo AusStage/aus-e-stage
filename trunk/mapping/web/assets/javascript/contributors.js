@@ -66,7 +66,7 @@ $(document).ready(function(){
 			jQuery(form).ajaxSubmit({
 				beforeSubmit: showLoader,
 				success:      loadNewPage,
-				error:        showErrorMessage
+				error:        showErrorMessage2
 			});
 		}
 	});	
@@ -176,8 +176,18 @@ function showErrorMessage() {
 
 	$("#search_results").hide();
 	$("#search_results").empty();
-	$("#search_results").append("<p><strong>Error:</strong> An error occured while processing your search.<br/>");
-	$("#search_results").append("Please check your search terms and try again. If the problem persists contact the site administrator.</p>");
+	$("#search_results").append("<table class=\"searchResults\"><tbody><tr class=\"odd\"><td><strong>Error:</strong> An error occured while processing your search.<br/>Please check your search terms and try again. If the problem persists contact the site administrator.</td></tr></tbody></table>");
+	$("#search_results").show();
+	
+	hideLoader();	
+}
+
+// function to show a generic error message
+function showErrorMessage2() {
+
+	$("#search_results").hide();
+	$("#search_results").empty();
+	$("#search_results").append("<table class=\"searchResults\"><tbody><tr class=\"odd\"><td><strong>Error:</strong> An error occured while processing your search.<br/>The ID appears to be invalid, or the contributor does not have any events that can be mapped<br/>Please check your search terms and try again. If the problem persists contact the site administrator.</td></tr></tbody></table>");
 	$("#search_results").show();
 	
 	hideLoader();	

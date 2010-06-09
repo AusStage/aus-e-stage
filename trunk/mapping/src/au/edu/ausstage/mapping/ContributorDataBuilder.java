@@ -1071,8 +1071,38 @@ public class ContributorDataBuilder extends DataBuilder {
 	 */
 	public String getNameByID(String queryParameter) throws javax.servlet.ServletException {
 	
-		// build the sql
-		String sql = "SELECT contrib_name FROM search_contributor WHERE contributorid = ?";
+		return getNameByID(queryParameter, false);
+		
+	} // get the full name of a contributor
+	
+	/**
+	 * Function to get the name of the contributor
+	 *
+	 * @param queryParameter the parameter to determine which contributor to lookup
+	 * @param mappable       determine if an additional check needs to be undertaken to ensure this contributor has mappable events
+	 *
+	 * @return               a string containing the name of the contributor
+	 */
+	public String getNameByID(String queryParameter, boolean mappable) throws javax.servlet.ServletException {
+	
+		// define the sql string
+		String sql = null;
+	
+		if(mappable == true) {
+	
+			// build the sql
+			sql = "SELECT contributor.contributorid "
+			    + "FROM contributor, conevlink, events, venue "
+			    + "WHERE contributor.contributorid = ? "
+			    + "AND contributor.contributorid = conevlink.contributorid "
+			    + "AND conevlink.eventid = events.eventid "
+			    + "AND events.venueid = venue.venueid "
+			    + "AND venue.latitude IS NOT NULL";	   
+		} else {
+		
+			// build the sql
+			sql = "SELECT contrib_name FROM search_contributor WHERE contributorid = ?";
+		}
 		
 		// define the parameters
 		String[] parameters = new String[1];
@@ -1090,8 +1120,9 @@ public class ContributorDataBuilder extends DataBuilder {
 			
 			// return the name
 			return resultSet.getString(1);
+			
 		} catch(Exception ex) {
-				throw new javax.servlet.ServletException("Unable to lookup contributor name", ex);
+				throw new javax.servlet.ServletException("Unable to lookup contributor name or contributor doesn't have any events that can be mapped", ex);
 		}
 	} // get the full name of a contributor
 
