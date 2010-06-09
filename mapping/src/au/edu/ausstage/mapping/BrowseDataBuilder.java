@@ -198,9 +198,9 @@ public class BrowseDataBuilder extends DataBuilder {
 			
 			// start to build the data
 			if (resultSet.getString(2) != null) {
-				data.append("<p><a href=\"" + url + "\" title=\"More information on Venue\" target=\"_blank\">" + resultSet.getString(2) + "</a>, " + resultSet.getString(3) + "</p><ul>");
+				data.append("<p><a href=\"" + url + "\" title=\"More information on Venue\" target=\"ausstage\">" + resultSet.getString(2) + "</a>, " + resultSet.getString(3) + "</p><ul>");
 			} else {
-				data.append("<p><a href=\"" + url + "\" title=\"More information on Venue\" target=\"_blank\">" + resultSet.getString(2) + "</a></p><ul>");
+				data.append("<p><a href=\"" + url + "\" title=\"More information on Venue\" target=\"ausstage\">" + resultSet.getString(2) + "</a></p><ul>");
 			}
 			
 			// get the event information
@@ -220,7 +220,7 @@ public class BrowseDataBuilder extends DataBuilder {
 				url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));
 				
 				// add event information
-				data.append("<li><a href=\"" + url + "\" title=\"More information on event\" target=\"_blank\">" + resultSet.getString(2) + "</a>, ");
+				data.append("<li><a href=\"" + url + "\" title=\"More information on event\" target=\"ausstage\">" + resultSet.getString(2) + "</a>, ");
 				if(resultSet.getString(6) != null) {
 					data.append(this.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - ");
 					data.append(this.buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)) + "</li>");
@@ -560,33 +560,17 @@ public class BrowseDataBuilder extends DataBuilder {
 	public String getMarkerXMLString(String queryParameter) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
 		throw new java.lang.NoSuchMethodException("Method not implemented");
 	}
+
 	
 	/**
-	 * A method declared in abstract class but not used in this class
-	 */
-	public String getMarkerXMLString(String queryParameter, String stateLimit) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
-		throw new java.lang.NoSuchMethodException("Method not implemented");
-	}
-	
-	/**
-	 * A abstract method used to get the String representation of the KML document
-	 * using the default options
-	 *
-	 * @param queryParameter the parameter to determine what is of interest
-	 *
-	 * @return               a string containing the KML XML
+	 * A method declared in the abstract class but not used in this class
 	 */
 	public String getKMLString(String queryParameter) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
 		throw new java.lang.NoSuchMethodException("Method not implemented");
 	}
 	
 	/**
-	 * A abstract method used to export data in the KML format
-	 *
-	 * @param queryParameter the parameter used to dertmine what is of interest
-	 * @param exportOptions  the options used to control this export
-	 *
-	 * @return               a string containing the KML XML
+	 * A method declared in the abstract class but not used in this class
 	 */
 	public String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
 		throw new java.lang.NoSuchMethodException("Method not implemented");
