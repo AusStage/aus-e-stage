@@ -38,6 +38,10 @@ $.extend({
 // declare global variables
 var mapData = null;
 
+//declare constants
+var CONTRIBUTOR_URL  = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
+var ORGANISATION_URL = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_org_id=";
+
 // load the appropriate map
 $(document).ready(function() {
 
@@ -54,7 +58,7 @@ $(document).ready(function() {
 			// this is an organisation map so get the organisation name
 			$.get("data?action=lookup&type=orgname&id=" + id, function(html) {
 				$("#map_name").empty();
-				$("#map_name").append("Map events of events for: " + html);
+				$("#map_name").append("Map events of events for: <a href=\"" + ORGANISATION_URL + id + "\" title=\"View record for " + html + " in AusStage\" target=\"ausstage\">" + html + "</a>");
 			});
 			
 			// get the marker xml data
@@ -85,7 +89,7 @@ $(document).ready(function() {
 				// get the contributors name
 				$.get("data?action=lookup&type=contribname&id=" + id, function(html) {
 					$("#map_name").empty();
-					$("#map_name").append("Map events of events for: " + html);
+					$("#map_name").append("Map events of events for: <a href=\"" + CONTRIBUTOR_URL + id + "\" title=\"View record for " + html + " in AusStage\" target=\"ausstage\">" + html + "</a>");
 				});
 			}
 			
