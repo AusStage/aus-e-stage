@@ -253,14 +253,31 @@ public class MappingServlet extends HttpServlet {
 				// get the organisation name
 				results = data.getNameByID(id);				
 			
-			} else if (type.equals("contribname")) {
+			} else if(type.equals("orgname2")) {
 				// need to lookup the name of an organisation
+				
+				// get an instance of the OrganisationDataBuilder class
+				OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
+				
+				// get the organisation name
+				results = data.getNameByID(id, true);
+			} else if (type.equals("contribname")) {
+				// need to lookup the name of a contributor
 				
 				// get an instance of the OrganisationDataBuilder class
 				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
 				
 				// get the organisation name
 				results = data.getNameByID(id);				
+			
+			} else if (type.equals("contribname2")) {
+				// need to lookup the name of a contributor
+				
+				// get an instance of the OrganisationDataBuilder class
+				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
+				
+				// get the organisation name
+				results = data.getNameByID(id, true);				
 			
 			} else {
 				throw new ServletException("Unknown type parameter value");
