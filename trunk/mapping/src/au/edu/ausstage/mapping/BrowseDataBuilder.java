@@ -166,6 +166,19 @@ public class BrowseDataBuilder extends DataBuilder {
 	 * @return               HTML encoded result set
 	 */	
 	public String doSearch(String queryParameter) throws javax.servlet.ServletException {
+		return doSearch(queryParameter, null, null);
+	}
+	
+	/**
+	 * Search the database for events at the specified venue
+	 *
+	 * @param queryParameter the venue id
+	 * @param startYear      the start year of the time period of interest
+	 * @param finishYear     the last year of the time period of interest
+	 *
+	 * @return               HTML encoded result set
+	 */	
+	public String doSearch(String queryParameter, String startYear, String finishYear) throws javax.servlet.ServletException {
 	
 		// declare helper variables
 		StringBuilder data = new StringBuilder();
@@ -203,15 +216,35 @@ public class BrowseDataBuilder extends DataBuilder {
 				data.append("<p><a href=\"" + url + "\" title=\"More information on Venue\" target=\"ausstage\">" + resultSet.getString(2) + "</a></p><ul>");
 			}
 			
-			// get the event information
-			sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, yyyylast_date, mmlast_date, ddlast_date "
-				+ "FROM events, venue "
-				+ "WHERE events.venueid = venue.venueid "
-				+ "AND venue.venueid = ? "
-				+ "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
-			
-			// get the resultset
-			resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+			if(startYear == null) {
+				// get the event information
+				sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, yyyylast_date, mmlast_date, ddlast_date "
+					+ "FROM events, venue "
+					+ "WHERE events.venueid = venue.venueid "
+					+ "AND venue.venueid = ? "
+					+ "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
+					
+				// get the resultset
+				resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+			} else {
+				// get the event information
+				sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, yyyylast_date, mmlast_date, ddlast_date "
+					+ "FROM events, venue "
+					+ "WHERE events.venueid = venue.venueid "
+					+ "AND venue.venueid = ? "
+					+ "AND events.yyyyfirst_date >= ? " 
+					+ "AND events.yyyyfirst_date <= ? "
+					+ "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
+					
+				// reset the parameters array
+				parameters = new String[3];
+				parameters[0] = queryParameter;
+				parameters[1] = startYear;
+				parameters[2] = finishYear;
+					
+				// get the resultset
+				resultSet = this.dataManager.executePreparedStatement(sql, parameters);
+			}			
 			
 			// build the documnet by adding individual events
 			while (resultSet.next()) {

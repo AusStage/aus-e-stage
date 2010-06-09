@@ -88,6 +88,10 @@ public class BrowseServlet extends HttpServlet {
 			// need to lookup data about the venue
 			String id = request.getParameter("id");
 			
+			// get the years
+			String startYear = request.getParameter("start");
+			String finishYear = request.getParameter("finish");
+			
 			// check the id parameter
 			if(id == null) {
 				throw new ServletException("Missing id parameter");
@@ -110,7 +114,13 @@ public class BrowseServlet extends HttpServlet {
 			BrowseDataBuilder data = new BrowseDataBuilder(dataManager);
 			
 			// get the event event info for this venue
-			String results = data.doSearch(id);
+			String results = null;
+			
+			if(startYear == null && finishYear == null) {
+				results = data.doSearch(id);
+			} else {
+				results = data.doSearch(id, startYear, finishYear);
+			}
 			
 			// ouput the XML
 			// set the appropriate content type
