@@ -17,8 +17,7 @@
 */
 
 // declare variables to determine what type of map to build
-var type = "contributor"; // valid values are contributor and organisation
-var id   = "774";          // id of the contributor / organisation to feature
+var CONTRIBUTOR_IDS = [639,110,2610,1517,227361,308,1796,3202,1026,3872,1357,2925,938,2450,1356,225399,799,1805,1804,54,432,1856,2,952,388,149,2977,6417,4921,466,542,455,1002,2365,1514,8375,891,1746,4774,403];
  
 /*
  * Do not edit below this line
@@ -26,52 +25,30 @@ var id   = "774";          // id of the contributor / organisation to feature
  * Very Bad things will happen 
  */
  
-var organisationLink = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=";
 var contributorLink  = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id="
 
 // load the appropriate map
 $(document).ready(function() {
+
+	// get the index
+	var index = Math.random() * CONTRIBUTOR_IDS.length;
+	index = Math.floor(index);
 	
-	// check on parameters
-	if(typeof(type) == "undefined" || typeof(id) == "undefined") {
-		showErrorMessage();
-	} else {
-		if(type == "organisation") {
-			// this is an organisation map
-			// this is an organisation map so get the organisation name
-			$.get("data?action=lookup&type=orgname&id=" + id, function(html) {
-				$("#map_name").empty();
-				$("#map_name").append("Featured map of events for: <a href=\"" + organisationLink + id + "\" title=\"View record for " + html + " in AusStage\">" + html + "</a>");
-			});
-			
-			// get the marker xml data
-			$.get("data?action=markers&type=organisation&id=" + id, function(data) {
-				
-				// show the map
-				showMap(data, null, null, null, null);
-			});
-			
-		} else if(type == "contributor") {
-			// this is a contributor map
-			
-			// get the contributors name
-			$.get("data?action=lookup&type=contribname&id=" + id, function(html) {
-				$("#map_name").empty();
-				$("#map_name").append("Featured map of events for: <a href=\"" + contributorLink + id + "\" title=\"View record for " + html + " in AusStage\">" + html + "</a>");
-			});
-			
-			// get the marker xml data
-			$.get("data?action=markers&type=contributor&id=" + id, function(data) {
-				
-				// show the map
-				showMap(data, null, null, null, null);
-			});
+	id = CONTRIBUTOR_IDS[index];
+
+	// get the contributors name
+	$.get("data?action=lookup&type=contribname&id=" + id, function(html) {
+		$("#map_name").empty();
+		$("#map_name").append("Featured map of events for: <a href=\"" + contributorLink + id + "\" title=\"View record for " + html + " in AusStage\" target=\"ausstage\">" + html + "</a>");
+	});
+	
+	// get the marker xml data
+	$.get("data?action=markers&type=contributor&id=" + id, function(data) {
 		
-		} else {
-			// this is an unknown type
-			showErrorMessage();
-		}
-	}
+		// show the map
+		showMap(data, null, null, null, null);
+	});
+	
 });
 
 // register ajax error handlers
