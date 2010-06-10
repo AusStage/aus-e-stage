@@ -280,6 +280,19 @@ public class BrowseDataBuilder extends DataBuilder {
 	 * @return               timeline data in the xml format
 	 */	
 	public String getTimelineXML(String queryParameter) throws javax.servlet.ServletException {
+		return getTimelineXML(queryParameter, null, null);
+	}
+	
+	/**
+	 * A method to get the data used to build a timeline in the XML format
+	 *
+	 * @param queryParameter the venue id
+	 * @param startYear      the start year of the time period of interest
+	 * @param finishYear     the last year of the time period of interest
+	 *
+	 * @return               timeline data in the xml format
+	 */	
+	public String getTimelineXML(String queryParameter, String startYear, String finishYear) throws javax.servlet.ServletException {
 	
 		// declare helper variables
 		String startDate  = null;
@@ -292,16 +305,39 @@ public class BrowseDataBuilder extends DataBuilder {
 		// try to connect to the database
 		this.dataManager.connect(); // dataManager defined in parent object
 		
-		// get info about the venue
-		String sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, yyyylast_date, mmlast_date, ddlast_date "
-				   + "FROM events, venue "
-				   + "WHERE events.venueid = venue.venueid "
-				   + "AND venue.venueid = ? "
-				   + "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
-					 
-		// define the paramaters
-		String[] parameters = new String[1];
-		parameters[0] = queryParameter;
+		String sql = null;
+		String[] parameters;
+		
+		if(startYear == null) {
+		
+			// get info about the venue
+			sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, yyyylast_date, mmlast_date, ddlast_date "
+			    + "FROM events, venue "
+			    + "WHERE events.venueid = venue.venueid "
+			    + "AND venue.venueid = ? "
+			    + "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
+						 
+			// define the paramaters
+			parameters = new String[1];
+			parameters[0] = queryParameter;
+		
+		} else {
+		
+			// get info about the venue
+			sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, yyyylast_date, mmlast_date, ddlast_date "
+			    + "FROM events, venue "
+			    + "WHERE events.venueid = venue.venueid "
+			    + "AND venue.venueid = ? "
+			    + "AND events.yyyyfirst_date >= ? " 
+			    + "AND events.yyyyfirst_date <= ? "
+			    + "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
+						 
+			// define the paramaters
+			parameters = new String[3];
+			parameters[0] = queryParameter;
+			parameters[1] = startYear;
+			parameters[2] = finishYear;
+		}
 		
 		// get the resultset
 		ResultSet resultSet = this.dataManager.executePreparedStatement(sql, parameters);
