@@ -58,6 +58,38 @@ function showMap(data, trajectory, focus, start, finish) {
 			case '8':
 				map.setCenter(new GLatLng(-19.383333, 133.357777), 6); //NT
 				break;
+			case '1a':
+				map.setCenter(new GLatLng(-34.93, 138.60), 14); // Adelaide
+				focus = 1;
+				break;
+			case '2a':
+				map.setCenter(new GLatLng(-31.95, 115.85), 14); // Perth
+				focus = 2;
+				break;
+			case '3a':
+				map.setCenter(new GLatLng(-33.87, 151.20), 14); // Sydney
+				focus = 3;
+				break;
+			case '4a':
+				map.setCenter(new GLatLng(-27.47, 153.02), 14); // Brisbane
+				focus = 4;
+				break;
+			case '5a':
+				map.setCenter(new GLatLng(-42.88, 147.32), 14); // Hobart
+				focus = 5;
+				break;
+			case '6a':
+				map.setCenter(new GLatLng(-37.82, 144.97), 14); // Melbourne
+				focus = 6;
+				break;
+			case '7a':
+				map.setCenter(new GLatLng(-35.30, 149.13), 14); // Canberra
+				focus = 7;
+				break;
+			case '8a':
+				map.setCenter(new GLatLng(-12.45, 130.83), 14); // Darwin
+				focus = 8;
+				break;
 			case '9':
 				map.setCenter(new GLatLng(-25.947028, 133.209639), 2); //outside Aus
 				break;
@@ -128,11 +160,19 @@ function showMap(data, trajectory, focus, start, finish) {
 		
 		// build a latlng object for this marker
 		var latlng = new GLatLng(lat, lng);
+		
+		// get the event info for this marker
 		var info   = markers[i].textContent;
 		
 		if(typeof(info) == "undefined") {
 			info = markers[i].text;
 		}
+		
+		// get the name, suburb and postcode
+		var venueName   = markers[i].getAttribute("name");
+		var venueSuburb = markers[i].getAttribute("suburb");
+		
+		venueName = venueName + ", " + venueSuburb
 		
 		// get the colour of the icon
 		var eventCount = parseInt(markers[i].getAttribute("events"));
@@ -229,10 +269,10 @@ function showMap(data, trajectory, focus, start, finish) {
 		
 			// add marker
 			if(okToAdd == true) {
-				map.addOverlay(createMarker(latlng, info, colour));
+				map.addOverlay(createMarker(latlng, info, colour, venueName));
 			}
 		} else {
-			map.addOverlay(createMarker(latlng, info, colour));
+			map.addOverlay(createMarker(latlng, info, colour, venueName));
 		}
 	}	
 	
@@ -296,17 +336,17 @@ function buildTrajectory(data, map) {
 } // end buildTrajectory function
 
 // build a single marker
-function createMarker(latlng, info, colour) {
+function createMarker(latlng, info, colour, venueName) {
 	
 	// make a new icon
 	var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: colour});
 	
 	// make a new marker
-	var marker = new GMarker(latlng, {icon: newIcon});
+	var marker = new GMarker(latlng, {icon: newIcon, title: venueName});
 	
 	// add an event listener to listen for a click and show the InfoWindow
 	GEvent.addListener(marker, 'click', function() {
-		marker.openInfoWindowHtml(info, {maxWidth:520, maxHeight:400,autoScroll:true});
+		marker.openInfoWindowHtml(info, {maxWidth:520, maxHeight:400, autoScroll:true});
 	});
 	
 	return marker;
