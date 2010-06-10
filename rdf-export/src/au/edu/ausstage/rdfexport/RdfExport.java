@@ -109,14 +109,14 @@ public class RdfExport {
 		
 		System.out.println("INFO: Connecting to the database...");		
 		// connect to the database
-//		status = database.connect(connectionString);
-//		
-//		if(status == true) {
-//			System.out.println("INFO: Connection established");
-//		} else {
-//			System.err.println("ERROR: A fatal error has occured, see previous error message for details");
-//			System.exit(-1);
-//		}
+		status = database.connect(connectionString);
+		
+		if(status == true) {
+			System.out.println("INFO: Connection established");
+		} else {
+			System.err.println("ERROR: Unable to connect to the database");
+			System.exit(-1);
+		}
 
 		// execute the appropriate task
 		if(taskType.equals("build-network-data")) {

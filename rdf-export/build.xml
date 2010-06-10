@@ -46,12 +46,13 @@
 	<target name="clean">
 		<delete dir="${build.dir}"/>
 		<delete dir="${jar.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${jar.dir}"/>
 	</target>
 	
 	<!-- compile target to compile the source code -->
 
 	<target name="compile">
-		<mkdir dir="${build.dir}"/>
 		<javac 
 			srcdir="${src.dir}" 
 			destdir="${build.dir}" 

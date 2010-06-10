@@ -78,6 +78,45 @@ public class DatabaseManager {
 	} // end connect Method
 	
 	/**
+	 * A method to execute an SQL statement and return a resultset
+	 * 
+	 * @param sqlQuery the SQL query to execute
+	 *
+	 * @return         the result set built from executing this query
+	 */
+	public java.sql.ResultSet executeStatement(String sqlQuery) {
+	
+		// declare instance variables
+		ResultSet resultSet;
+	
+		// enclose code in a try block
+		// throw a more general exception if required
+		try {
+		
+			// check on required objects
+			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+				
+				// report the error
+				throw new java.sql.SQLException("A valid database connection was not available");
+			}
+			
+			// build a statement
+			this.statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			// execute the statement and get the result set
+			resultSet = this.statement.executeQuery(sqlQuery);
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: Unable to execute an SQL Query");
+			System.err.println("       " + sqlEx.getMessage());
+			return null;
+		}
+	
+		return resultSet;
+	
+	} // end executeStatement method
+	
+	/**
 	 * A method to prepare and execute a prepared SQL statement and return a resultset
 	 *
 	 * @param sqlQuery   the SQL query to execute
