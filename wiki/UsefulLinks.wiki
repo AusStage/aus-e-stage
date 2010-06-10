@@ -27,7 +27,8 @@ The lists of links are categorised to provide a structure to this page.
   * [http://code.google.com/apis/maps/ Google Maps API]
   * [http://code.google.com/apis/kml/documentation/kmlreference.html Google KML Reference]
   * [http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd Official KML Schema]
-  * [http://code.google.com/p/gmaps-utility-library-dev/ Google Maps Utility Libraries]
+  * [http://code.google.com/p/gmaps-utility-library-dev/ Google Maps Utility Libraries v2]
+  * [http://code.google.com/p/google-maps-utility-library-v3/ Google Maps Utility Libraries v3]
   
 = Metadata =
   * [http://dublincore.org/documents/usageguide/elements.shtml Dublin Core Metadata Elements]
