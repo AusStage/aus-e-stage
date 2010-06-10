@@ -365,7 +365,6 @@ function markerClickWithTabs(url, latlng) {
 			timelineHtml     += "<ul><li>A point is used to display an event that occured on a single day</li>";
 			timelineHtml     += "<li>A pale blue bar indicates that the event occured at some time during the indicated time period</li>";
 			timelineHtml     += "<li>A solid blue bar indicates that the event occured over the indicated time period</li></ul>";
-			timelineHtml     += "<p>The timeline is automatically centred on the middle of the last year of events and lists all events that have occured at the venue</p>";
 			timelineHtml     += "<p><a href=\"#\" onclick=\"loadTimeline('" + id + "','" + lyear + "'); return false;\">Load the Timeline by clicking this link.</a></p></div>";
 			
 			// define a tab to hold the timeline
@@ -398,10 +397,22 @@ function loadTimeline(id, lyear) {
 	// build the timeline event data url
 	var eventUrl = "/mapping/browse?action=timeline&id=" + id;
 	
+	// get the dates from the time slider
+	var startDate  = $("#event_start").val();
+	var finishDate = $("#event_finish").val();
+	
+	// udpate the eventUrl with the dates from the time slider
+	eventUrl = eventUrl + "&start=" + startDate + "&finish=" + finishDate;
+	
+	// prepare the HTML to store the timeline		
 	$("#timeline_" + id + "_container").empty();
 	
 	$("#timeline_" + id + "_container").append("<div id=\"timeline_" + id + "\" class=\"timeline-default\" style=\"height: 325px; border: 1px solid #aaa\"></div>");
-	//$("#timeline_" + id + "_container").append("<p><strong>Please Note:</strong></p><ul><li>Timelines are automatically centered on a year between the first and last dates in the timline.</li><li>Those events shown with a pale blue bar occured at somepoint during the indicated time period.</li></ul>");
+	
+	// recalculate the lyear if required
+	if(lyear < startDate || lyear > finishDate) {
+		lyear = Math.round((parseInt(finishDate) - parseInt(startDate)) / 2) + parseInt(startDate);
+	}
 
 	// build the timeline			
 	var eventSource = new Timeline.DefaultEventSource();
