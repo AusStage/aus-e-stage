@@ -48,6 +48,6 @@ The lists of links are categorised to provide a structure to this page.
 == Ontologies ==
  * [http://www.foaf-project.org/ FOAF Ontology]
  * [http://xmlns.com/foaf/spec/ FOAF Specification]
- * [http://motools.sourceforge.net/event/event.html Event Ontology]
- * [http://motools.sourceforge.net/timeline/timeline.html Timeline Ontology]
+ * [http://motools.sourceforge.net/event/event.html Event Ontology Specification]
+ * [http://motools.sourceforge.net/timeline/timeline.html Timeline Ontology Specification]
  * [http://musicontology.com/ Music Ontology]
