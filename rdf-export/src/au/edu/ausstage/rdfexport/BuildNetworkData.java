@@ -16,6 +16,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
+// include the class in our package
+package au.edu.ausstage.rdfexport;
+
 // import additional packages
 import java.sql.*;
 import java.io.File;
@@ -27,6 +30,9 @@ import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.*;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.tdb.*;
+
+// import the vocabularies
+import au.edu.ausstage.vocabularies.*;
 
 /**
  * A Class used to build an RDF based dataset of contributor information
@@ -148,28 +154,19 @@ public class BuildNetworkData {
 		}
 		
 		// set a namespace prefix
-		model.setNsPrefix("foaf", FoAF.NS);
-		model.setNsPrefix("AusStage", AusStage.NS);
-		
+		model.setNsPrefix("FOAF", FOAF.NS);
+				
 		// create a contributor
 		Resource contributor = model.createResource("http://drthorweasel.com");
-		contributor.addProperty(RDF.type, FoAF.Person);
-		contributor.addProperty(FoAF.title, "Dr");
-		contributor.addProperty(FoAF.name, "ThorWeasel");
-		
-		// create an event
-		Resource event = model.createResource("http://www.ausstage.edu.au/e/1234");
-		event.addProperty(RDF.type, AusStage.Event);
-		event.addProperty(AusStage.name, "Test Event");
-		event.addProperty(AusStage.startDate, "2010-01-01");
-		event.addProperty(AusStage.endDate, "2010-02-02");
-		
+		contributor.addProperty(RDF.type, FOAF.Person);
+		contributor.addProperty(FOAF.title, "Dr");
+		contributor.addProperty(FOAF.name, "ThorWeasel");
+
 		// create another contributor
 		contributor = model.createResource("http://mi6.co.uk/people/jamesbond");
-		contributor.addProperty(RDF.type, FoAF.Person);
-		contributor.addProperty(FoAF.title, "Mr");
-		contributor.addProperty(FoAF.name, "James Bond");
-		contributor.addProperty(AusStage.contributedTo, "http://www.ausstage.edu.au/e/1234");		
+		contributor.addProperty(RDF.type, FOAF.Person);
+		contributor.addProperty(FOAF.title, "Mr");
+		contributor.addProperty(FOAF.name, "James Bond");
 		
 		//model.write(System.out);
 		model.write(System.out, "RDF/XML-ABBREV");
@@ -179,7 +176,7 @@ public class BuildNetworkData {
 		// Create a new query
 		String queryString = 
 			"SELECT ?x " +
-			"WHERE { ?y <http://xmlns.com/foaf/0.1/name> ?x}";			
+			"WHERE { ?y <http://xmlns.com/FOAF/0.1/name> ?x}";			
 
 		Query query = QueryFactory.create(queryString);
 

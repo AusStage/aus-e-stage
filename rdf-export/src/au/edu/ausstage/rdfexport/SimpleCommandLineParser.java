@@ -12,6 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
+// include the class in our package
+package au.edu.ausstage.rdfexport;
 
 
 import java.util.HashMap;

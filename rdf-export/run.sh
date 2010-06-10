@@ -3,6 +3,6 @@
 MYPATH=`pwd`
 #
 # change to the build directory
-cd $MYPATH/build
+cd $MYPATH/jar
 # execute the appropriate command
-/usr/bin/java -cp .:$MYPATH/lib/* RdfExport -tasktype build-network-data -properties $MYPATH/default.properties
+/usr/bin/java -jar AusStageRdfExport.jar -tasktype build-network-data -properties $MYPATH/default.properties

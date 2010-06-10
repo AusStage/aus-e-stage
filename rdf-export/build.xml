@@ -30,7 +30,7 @@
     
     <!-- custom paths such as the class path -->
     <path id="classpath">
-    	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+    	<fileset dir="${lib.dir}" includes="*.jar"/>
     </path>
 
 	<!-- main class in the jar file -->
@@ -61,20 +61,28 @@
 			optimize="${compile.optimize}"/>
 	</target>
 	
+	
+	
 	<!-- jar target to create the jar file -->
+	
+	<manifestclasspath property="lib.list" jarfile="${jar.dir}/${ant.project.name}.jar">
+		<classpath refid="classpath" />
+	</manifestclasspath>
+
 
 	<target name="jar" depends="compile">
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${build.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Class-Path" value="${lib.list}"/>
 			</manifest>
 		</jar>
 	</target>
 	
 	<!-- run target builds the source code and runs the jar file -->
 
-	<target name="run" depends="clean, compile">
+	<target name="run" depends="clean, jar">
 		<exec executable="./run.sh">
 		</exec>
 	</target>

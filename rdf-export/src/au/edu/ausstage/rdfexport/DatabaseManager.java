@@ -16,6 +16,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
+// include the class in our package
+package au.edu.ausstage.rdfexport;
+
 // import additional packages
 import java.sql.*;
 import oracle.jdbc.pool.OracleDataSource;
