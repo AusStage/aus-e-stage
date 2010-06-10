@@ -38,3 +38,16 @@ The lists of links are categorised to provide a structure to this page.
  * [http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1259.0.30.0022006 1259.0.30.002 - Statistical Geography - Australian Standard Geographical Classification (ASGC), Digital Boundaries, 2006]
  * [http://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/1259.0.30.001Main+Features1July%202009?OpenDocument 1259.0.30.001 - Australian Standard Geographical Classification (ASGC) Digital Boundaries (Intercensal), Australia, July 2009]
  * [http://www.ga.gov.au/ Geoscience Australia]
+
+= RDF & Semantic Web =
+
+== Java and API ==
+ * [http://www.openjena.org/ Jena Semantic Web Framework for Java]
+ * [http://openjena.org/wiki/TDB TDB - Jena RDF Storage and Query engine]
+
+== Ontologies ==
+ * [http://www.foaf-project.org/ FOAF Ontology]
+ * [http://xmlns.com/foaf/spec/ FOAF Specification]
+ * [http://motools.sourceforge.net/event/event.html Event Ontology]
+ * [http://motools.sourceforge.net/timeline/timeline.html Timeline Ontology]
+ * [http://musicontology.com/ Music Ontology]
