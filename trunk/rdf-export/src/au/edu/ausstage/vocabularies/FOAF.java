@@ -15,6 +15,10 @@
  * along with the AusStage RDF Export App.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
+
+package au.edu.ausstage.vocabularies;
+
+// import additoinal libraries
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.ontology.*;
  
