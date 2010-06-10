@@ -83,18 +83,26 @@
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="state">Only show venues located in: </label> &nbsp;
+						<label id="state_label" for="state" class="#cluetip_state" style="cursor: help;">Only show venues in: </label>
 						<select size="1" id="state" name="state">
 							<option value="nolimit" selected="selected">No Limit - All venues</option>
 							<option value="a">Australia</option>
-							<option value="7"> - Australian Capital Territory</option>
-							<option value="3"> - New South Wales</option>
-							<option value="8"> - Northern Territory</option>
-							<option value="4"> - Queensland</option>
-							<option value="1"> - South Australia</option>
-							<option value="5"> - Tasmania</option>
-							<option value="6"> - Victoria</option>
-							<option value="2"> - Western Australia</option>
+							<option value="7">&nbsp;- Australian Capital Territory</option>
+						   <option value="7a">&nbsp;&nbsp;&nbsp;- Canberra</option>							
+							<option value="3">&nbsp;- New South Wales</option>
+						   <option value="3a">&nbsp;&nbsp;&nbsp;- Sydney</option>
+							<option value="8">&nbsp;- Northern Territory</option>
+						   <option value="8a">&nbsp;&nbsp;&nbsp;- Darwin</option>
+							<option value="4">&nbsp;- Queensland</option>
+						   <option value="4a">&nbsp;&nbsp;&nbsp;- Brisbane</option>
+							<option value="1">&nbsp;- South Australia</option>
+						   <option value="1a">&nbsp;&nbsp;&nbsp;- Adelaide</option>
+							<option value="5">&nbsp;- Tasmania</option>
+						   <option value="5a">&nbsp;&nbsp;&nbsp;- Hobart</option>
+							<option value="6">&nbsp;- Victoria</option>
+						   <option value="6a">&nbsp;&nbsp;&nbsp;- Melbourne</option>
+							<option value="2">&nbsp;- Western Australia</option>
+						   <option value="2a">&nbsp;&nbsp;&nbsp;- Perth</option>
 							<option value="9">Outside Australia</option>
 						</select>
 					</td>

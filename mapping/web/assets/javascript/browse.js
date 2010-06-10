@@ -105,6 +105,38 @@ function showMap(data, focus, start, finish) {
 		case '8':
 			map.setCenter(new GLatLng(-19.383333, 133.357777), 6); //NT
 			break;
+		case '1a':
+			map.setCenter(new GLatLng(-34.93, 138.60), 14); // Adelaide
+			focus = 1;
+			break;
+		case '2a':
+			map.setCenter(new GLatLng(-31.95, 115.85), 14); // Perth
+			focus = 2;
+			break;
+		case '3a':
+			map.setCenter(new GLatLng(-33.87, 151.20), 14); // Sydney
+			focus = 3;
+			break;
+		case '4a':
+			map.setCenter(new GLatLng(-27.47, 153.02), 14); // Brisbane
+			focus = 4;
+			break;
+		case '5a':
+			map.setCenter(new GLatLng(-42.88, 147.32), 14); // Hobart
+			focus = 5;
+			break;
+		case '6a':
+			map.setCenter(new GLatLng(-37.82, 144.97), 14); // Melbourne
+			focus = 6;
+			break;
+		case '7a':
+			map.setCenter(new GLatLng(-35.30, 149.13), 14); // Canberra
+			focus = 7;
+			break;
+		case '8a':
+			map.setCenter(new GLatLng(-12.45, 130.83), 14); // Darwin
+			focus = 8;
+			break;
 		case '9':
 			map.setCenter(new GLatLng(-25.947028, 133.209639), 2); //outside Aus
 			break;
