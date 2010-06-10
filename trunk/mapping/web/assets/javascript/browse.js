@@ -22,11 +22,16 @@ var mapData = null;
 var markerCluster = null;
 
 // define some constants
+// infowindows
 var MAX_ZOOM_LEVEL = 10;
 var MIN_EVENT_COUNT_FOR_TIMELINE = 10;
 var INFO_WINDOW_WIDTH = 580;
 var INFO_WINDOW_HEIGHT = 400;
+// time slider
 var TIME_SLIDER_LABELS = 14;
+// time lines
+var TIMELINE_MONTH_BAND_WIDTH = 50;
+var TIMELINE_YEAR_BAND_WIDTH   = 70;
 
 // load the initial map
 $(document).ready(function(){
@@ -375,7 +380,7 @@ function loadTimeline(id, lyear) {
 			date:           "Jul 2 " + lyear + " 00:00:00 GMT",
 			width:          "85%", 
 			intervalUnit:   Timeline.DateTime.MONTH, 
-			intervalPixels: 70
+			intervalPixels: TIMELINE_MONTH_BAND_WIDTH
 		}),
 		Timeline.createBandInfo({
 			overview: true,	
@@ -383,7 +388,7 @@ function loadTimeline(id, lyear) {
 			date:           "Jul 2 " + lyear + " 00:00:00 GMT",
 			width:          "15%", 
 			intervalUnit:   Timeline.DateTime.YEAR, 
-			intervalPixels: 70
+			intervalPixels: TIMELINE_YEAR_BAND_WIDTH
 		})
 	];
 	
