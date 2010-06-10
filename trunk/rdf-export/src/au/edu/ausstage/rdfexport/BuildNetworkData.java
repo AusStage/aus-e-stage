@@ -137,11 +137,21 @@ public class BuildNetworkData {
 	 */
 	public boolean doTask() {
 	
+		// turn off the TDB logging
+		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("com.hp.hpl.jena.tdb.info");
+		logger.setLevel(org.apache.log4j.Level.OFF);
+	
+		// get some additional properties
+		String pLinkContributors    = settings.getProperty("plink-contributors");
+		String pLinkContributorsTag = settings.getProperty("plink-contributors-tag");
+		
+		if(pLinkContributors == null || pLinkContributorsTag == null) {
+			System.err.println("ERROR: Unable to load the contributors persistant link properties");
+			return false;
+		}
+	
         // create an empty Model
 		//Model model = ModelFactory.createDefaultModel();
-
-		// set some of the TDB options
-		TDB.setExecutionLogging(com.hp.hpl.jena.tdb.solver.Explain.InfoLevel.NONE); // disable logging
 		
 		// create an empty persistent model
 		Model model = null;
@@ -153,42 +163,72 @@ public class BuildNetworkData {
 			model = TDBFactory.createModel(datastorePath) ;
 		}
 		
-		// set a namespace prefix
+		// set a namespace prefixes
 		model.setNsPrefix("FOAF", FOAF.NS);
+				   
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Retrieving initial contributor details...");
+		
+			// get the data
+			String sql = "SELECT contributorid, last_name, first_name "
+					   + "FROM contributor ";
+				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// get the attributes
+				String firstName = resultSet.getString(2);
+				String lastName  = resultSet.getString(3);
 				
-		// create a contributor
-		Resource contributor = model.createResource("http://drthorweasel.com");
-		contributor.addProperty(RDF.type, FOAF.Person);
-		contributor.addProperty(FOAF.title, "Dr");
-		contributor.addProperty(FOAF.name, "ThorWeasel");
-
-		// create another contributor
-		contributor = model.createResource("http://mi6.co.uk/people/jamesbond");
-		contributor.addProperty(RDF.type, FOAF.Person);
-		contributor.addProperty(FOAF.title, "Mr");
-		contributor.addProperty(FOAF.name, "James Bond");
+				// double check the attributes
+				if(firstName == null) {
+					firstName = "";
+				} 
+				
+				if(lastName == null) {
+					lastName = "";
+				}
+	
+				// create a new contributor
+				Resource contributor = model.createResource(pLinkContributors.replace(pLinkContributorsTag, resultSet.getString(1)));
+				contributor.addProperty(RDF.type, FOAF.Person);
+				contributor.addProperty(FOAF.name, firstName + " " + lastName);
+				contributor.addProperty(FOAF.givenName, firstName);
+				contributor.addProperty(FOAF.familyName, lastName);
+			}
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
 		
 		//model.write(System.out);
-		model.write(System.out, "RDF/XML-ABBREV");
+		//model.write(System.out, "RDF/XML-ABBREV");
 		
-		System.out.println("-----------------------------------------");
+		//System.out.println("-----------------------------------------");
 		
-		// Create a new query
-		String queryString = 
-			"SELECT ?x " +
-			"WHERE { ?y <http://xmlns.com/FOAF/0.1/name> ?x}";			
+		System.out.println("INFO: Contributors successfully added to the datastore");
+		
+//		// Create a new query
+//		String queryString = 
+//			"SELECT ?x " +
+//			"WHERE { ?y <http://xmlns.com/FOAF/0.1/name> ?x}";			
 
-		Query query = QueryFactory.create(queryString);
+//		Query query = QueryFactory.create(queryString);
 
-		// Execute the query and obtain results
-		QueryExecution qe = QueryExecutionFactory.create(query, model);
-		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
+//		// Execute the query and obtain results
+//		QueryExecution qe = QueryExecutionFactory.create(query, model);
+//		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
 
-		// Output query results	
-		ResultSetFormatter.out(System.out, results, query);
+//		// Output query results	
+//		ResultSetFormatter.out(System.out, results, query);
 
-		// Important - free up resources used running the query
-		qe.close();
+//		// Important - free up resources used running the query
+//		qe.close();
 
 
 
