@@ -34,7 +34,7 @@ import au.edu.ausstage.vocabularies.*;
 /**
  * A Class used to export an RDF based dataset of contributor information
  */
-public class ExportNetworkData {
+public class RunQuery {
 
 	// declare private class level variables
 	private PropertiesManager      settings;             // access the properties / settings
@@ -45,7 +45,7 @@ public class ExportNetworkData {
 	 * @param dataManager the DatabaseManager class connected to the AusStage database
 	 * @param properties  the PropertiesManager providing access to properties and settings
 	 */
-	public ExportNetworkData(PropertiesManager properties) {
+	public RunQuery(PropertiesManager properties) {
 		
 		// double check the parameters
 		if(properties == null) {
@@ -59,22 +59,15 @@ public class ExportNetworkData {
 	/**
 	 * A method to undertake the task of building the dataset
 	 *
-	 * @param dataFormat the format used to export the data
-	 * @param outputFile the file used to write the data to
+	 * @param outputFile the file that contains the query to run
 	 *
 	 * @return true if, and only if, the task completes successfully
 	 */
-	public boolean doTask(String dataFormat, File outputFile) {
+	public boolean doTask(File queryFile) {
 	
 		// check on the parameters
-		if(dataFormat == null || outputFile == null) {
+		if(queryFile == null) {
 			throw new IllegalArgumentException("ERROR: The parameters to the doTask method cannot be null");
-		}
-		
-		dataFormat = dataFormat.trim();
-		
-		if(dataFormat.equals("")) {
-			throw new IllegalArgumentException("ERROR: The dataFormat parameter cannot be empty");
 		}		
 	
 		// turn off the TDB logging
@@ -117,34 +110,55 @@ public class ExportNetworkData {
 		// set a namespace prefixes
 		model.setNsPrefix("FOAF", FOAF.NS);
 		
-		// get an output stream
-		try {
+		// declare helper variables
+		String queryString = null;
 		
-			// keep the user informed
-			System.out.println("INFO: Exporting datastore into a file with format '" + dataFormat + "'");
+		// load the query into a file
+		try {
+			System.out.println("INFO: Executing query in file:");
+			System.out.println(queryFile.getCanonicalPath());
 			
-			// get a new output stream
-			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
+			// open the file
+			BufferedReader input =  new BufferedReader(new FileReader(queryFile));
+			StringBuilder queryBuilder = new StringBuilder();
+			String line = null;
 			
-			// stream the model to this output stream
-			model.write(outputStream, dataFormat);
+			// read in the contents of the file
+			while((line = input.readLine()) != null) {
+				queryBuilder.append(line + "\n");
+			}
 			
 			// close the file
-			outputStream.close();
+			input.close();
+			
+			// store the qyery as a string
+			queryString = queryBuilder.toString();
 			
 		} catch (java.io.FileNotFoundException ex) {
 			System.err.println("ERROR: Unable to write to output file");
-			System.err.println("       " + outputFile.getAbsolutePath());
+			System.err.println("       " + queryFile.getAbsolutePath());
 			return false;
 		} catch (java.io.IOException ex) {
 			System.err.println("ERROR: Unable to write to output file");
-			System.err.println("       " + outputFile.getAbsolutePath());
+			System.err.println("       " + queryFile.getAbsolutePath());
 			return false;
-		}		
+		}
+		
+		// get a query object
+		Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
+		
+		// Execute the query and obtain results
+		QueryExecution qe = QueryExecutionFactory.create(query, model);
+		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
+
+		// Output query results	
+		ResultSetFormatter.out(System.out, results, query);
+
+		// Important - free up resources used running the query
+		qe.close();
 		
 		// if we get this far, everything went ok
-		System.out.println("INFO: Export file successfully created");
-		System.out.println("      " + outputFile.getAbsolutePath());
+		System.out.println("INFO: Query Successfully executed");
 		return true;
 		
 	} // end the doTask method

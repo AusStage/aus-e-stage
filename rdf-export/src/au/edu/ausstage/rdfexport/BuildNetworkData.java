@@ -174,7 +174,7 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding contributor data to the datastore...");
 			
 			// define the sql
-			String sql = "SELECT contributorid, last_name, first_name FROM contributor";
+			String sql = "SELECT contributorid, first_name, last_name FROM contributor";
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
@@ -271,7 +271,8 @@ public class BuildNetworkData {
 					if(currentId.equals(resultSet.getString(2)) == false) {
 					
 						// add the relationship
-						contributor.addProperty(FOAF.knows, AusStageURI.getContributorURI(resultSet.getString(2)));
+						//contributor.addProperty(FOAF.knows, AusStageURI.getContributorURI(resultSet.getString(2)));
+						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
 				
 						// count the number of collaborations
 						collaborationCount++;
