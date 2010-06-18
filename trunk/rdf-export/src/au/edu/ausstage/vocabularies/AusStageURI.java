@@ -26,7 +26,7 @@ public class AusStageURI {
 	/*
 	 * class level constants for URI to URL translation
 	 */
-	private static final String BASE_CONTRIBUTOR_URL     = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=[contrib-id]";
+	private static final String BASE_CONTRIBUTOR_URL     = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=[contrib-id]";
 	private static final String BASE_CONTIRBUTOR_URL_TAG = "[contrib-id]";
 	
 	private static final String AUSSTAGE_URI_PREFIX      = "ausstage";

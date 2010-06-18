@@ -72,6 +72,9 @@ public class BuildNetworkData {
 	 */
 	public boolean doReset() {
 	
+		// keep the user informed
+		System.out.println("INFO: Deleting the existing TDB datastore...");
+	
 		// get the path to the datastore
 		datastorePath = settings.getProperty("tdb-datastore");
 		

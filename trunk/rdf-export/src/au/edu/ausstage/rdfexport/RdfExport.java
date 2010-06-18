@@ -29,11 +29,14 @@ public class RdfExport {
 
 	// Version information 
 	private static final String VERSION    = "1.0.0";
-	private static final String BUILD_DATE = "2010-06-01";
+	private static final String BUILD_DATE = "2010-06-18";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
-	private static final String[] TASK_TYPES = {"build-network-data"};
+	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data"};
+	
+	// Valid data formats
+	private static final String[] DATA_FORMATS = {"RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE", "TURTLE", "TTL", "N3"};
 	
 	/**
 	 * Main driving method for the AusStage ABS Data Fix App
@@ -49,8 +52,10 @@ public class RdfExport {
 		SimpleCommandLineParser parser = new SimpleCommandLineParser(args); // use a Google class to do manage command line params
 		
 		// get the parameters
-		String taskType  = parser.getValue("task", "tasktype");
-		String propsPath = parser.getValue("properties");
+		String taskType   = parser.getValue("task", "tasktype");
+		String propsPath  = parser.getValue("properties");
+		String dataFormat = parser.getValue("format");
+		String output     = parser.getValue("output");
 		
 		// check on the parameters
 		if(taskType == null || propsPath == null) {
@@ -58,27 +63,61 @@ public class RdfExport {
 			System.err.println("ERROR: the following parameters are expected");
 			System.err.println("-tasktype   the type of task to undertake");
 			System.err.println("-properties the location of the properties file");
+			System.err.println("-format     (optional) the data format used in an export task");
+			System.err.println("-output     (optional) the output file to create for an export task");
 			System.err.println("\nValid fix types are:");
 			System.err.println(java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
+			System.err.println("\nValid data formats are:");
+			System.err.println(java.util.Arrays.toString(DATA_FORMATS).replaceAll("[\\]\\[]", ""));
 			System.exit(-1);
 		}
 		
 		// check on the fix type
-		boolean validTaskType = false;
+		boolean isValid = false;
 		
 		for(int i = 0; i < TASK_TYPES.length; i++) {
 			if(TASK_TYPES[i].equals(taskType)) {
-				validTaskType = true;
+				isValid = true;
 			}
 		}
 		
-		if(validTaskType != true) {
+		if(isValid != true) {
 			// no valid task type was found
 			System.err.println("ERROR: the specified task type is invalid");
 			System.err.println("Valid fix types are:");
 			System.err.println(java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
 			System.exit(-1);
 		}
+		
+		// check on the data format parameter if reqiured
+		isValid = false;
+		
+		if(taskType.equals("export-network-data")) {
+		
+			if(dataFormat == null) {
+				// format is missing so use a default
+				System.out.println("INFO: No data format specified. Using 'RDF/XML-ABBREV' by default");
+				dataFormat = "RDF/XML-ABBREV";
+			} else { 
+				// format specified, ensure it is valid
+				for(int i = 0; i < DATA_FORMATS.length; i++) {
+					if(DATA_FORMATS[i].equals(taskType)) {
+						isValid = true;
+					}
+				}
+				
+				if(isValid == false) {
+					System.err.println("ERROR: the specified data format is invalid");
+					System.err.println("Valid data formats are:");
+					System.err.println(java.util.Arrays.toString(DATA_FORMATS).replaceAll("[\\]\\[]", ""));
+					System.exit(-1);
+				}
+			}
+		}
+				
+				
+		
+	
 		
 		// declare helper variables
 		boolean status;
@@ -94,28 +133,35 @@ public class RdfExport {
 			System.exit(-1);
 		}
 		
-		// try to connect to the database
-		// instantiate the database classes
-		DatabaseManager database = new DatabaseManager();
+		// declare database related variables
+		DatabaseManager database = null;
 		
-		// get the connection string
-		String connectionString = properties.getProperty("db-connection-string");
+		// try to connect to the database if required
+		if(taskType.equals("export-network-data") == false) {
+			// a database connection is required
+			
+			// instantiate the database classes
+			database = new DatabaseManager();
 		
-		if(connectionString == null) {
-			System.err.println("ERROR: Unable to load the connection string property");
-			System.err.println("       Check the db-connection-string value in the properties file");
-			System.exit(-1);
-		}
+			// get the connection string
+			String connectionString = properties.getProperty("db-connection-string");
 		
-		System.out.println("INFO: Connecting to the database...");		
-		// connect to the database
-		status = database.connect(connectionString);
+			if(connectionString == null) {
+				System.err.println("ERROR: Unable to load the connection string property");
+				System.err.println("       Check the db-connection-string value in the properties file");
+				System.exit(-1);
+			}
 		
-		if(status == true) {
-			System.out.println("INFO: Connection established");
-		} else {
-			System.err.println("ERROR: Unable to connect to the database");
-			System.exit(-1);
+			System.out.println("INFO: Connecting to the database...");		
+			// connect to the database
+			status = database.connect(connectionString);
+		
+			if(status == true) {
+				System.out.println("INFO: Connection established");
+			} else {
+				System.err.println("ERROR: Unable to connect to the database");
+				System.exit(-1);
+			}
 		}
 
 		// execute the appropriate task
@@ -124,15 +170,27 @@ public class RdfExport {
 			BuildNetworkData task = new BuildNetworkData(database, properties);
 			
 			// tidy up any existing TDB datastore infor
-			System.out.println("INFO: Deleting the existing TDB datastore...");
 			status = task.doReset();
 			
 			if(status == false) {
-				System.err.println("ERROR: A fatal error has occured, see prevopus error message for details");
+				System.err.println("ERROR: A fatal error has occured, see previous error message for details");
 				System.exit(-1);
 			}
 			
 			status = task.doTask();
+		} else if(taskType.equals("export-network-data")) {
+			// do the export-network-data task
+			ExportNetworkData task = new ExportNetworkData(properties);
+			
+			// check on the output file
+			File outputFile = checkOutputPath(output);
+			
+			if(outputFile != null) {
+				status = task.doTask(dataFormat, outputFile);
+			} else {
+				System.err.println("ERROR: A fatal error has occured, see previous error message for details");
+				System.exit(-1);
+			}
 		}
 		
 		// determine how to finish
@@ -145,5 +203,39 @@ public class RdfExport {
 		}
 		
 	} // end main method
+	
+	/**
+	 * A method to check the validity of the output parameter
+	 *
+	 * @param path the specified output path
+	 *
+	 * @return a valid File object on success, null on failure
+	 */
+	public static File checkOutputPath(String path) {
+	
+		// check the output file
+		File outputFile = new File(path);
+			
+		if(outputFile.isFile() == true) {
+			System.err.println("ERROR: Output file already exists, refusing to delete / overwrite");
+			return null;
+		} else {
+			// try to create the file
+			try {
+				boolean stat = outputFile.createNewFile();
+				if(stat == false) {
+					System.err.println("ERROR: Unable to create the output file");
+					return null;
+				}
+			} catch (java.io.IOException ex) {
+				System.err.println("ERROR: Unable to create the output file");
+				System.err.println("Exception details are: " + ex.toString());
+				return null;
+			}
+		}
+		
+		// if we get this far everything is OK
+		return outputFile;	
+	}
 	
 } // end the class definition
