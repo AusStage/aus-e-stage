@@ -20,7 +20,6 @@
 package au.edu.ausstage.rdfexport;
 
 // import additional packages
-import java.sql.*;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -107,7 +106,7 @@ public class ExportNetworkData {
 			return false;
 		}
 		
-		// delete any files in the directory
+		// check for files in this directory
 		File[] tdbFiles = datastore.listFiles(new FileListFilter());
 		
 		if(tdbFiles.length == 0) {
