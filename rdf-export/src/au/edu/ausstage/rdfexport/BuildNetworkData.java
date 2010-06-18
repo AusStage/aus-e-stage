@@ -126,6 +126,7 @@ public class BuildNetworkData {
 		}
 		
 		// if we get this far everything is ok
+		System.out.println("INFO: Existing TDB datastore deleted");
 		return true;
 		
 	} // end the doReset method
@@ -140,19 +141,13 @@ public class BuildNetworkData {
 		// turn off the TDB logging
 		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("com.hp.hpl.jena.tdb.info");
 		logger.setLevel(org.apache.log4j.Level.OFF);
-	
-		// get some additional properties
-		String pLinkContributors    = settings.getProperty("plink-contributors");
-		String pLinkContributorsTag = settings.getProperty("plink-contributors-tag");
 		
-		if(pLinkContributors == null || pLinkContributorsTag == null) {
-			System.err.println("ERROR: Unable to load the contributors persistant link properties");
-			return false;
-		}
-	
-        // create an empty Model
-		//Model model = ModelFactory.createDefaultModel();
+		// declare some helper variables
+		int contributorCount  = 0;
+		int collaborationCount = 0;
+		java.util.Map<String, Resource> contributors = new java.util.HashMap<String, Resource>();
 		
+	
 		// create an empty persistent model
 		Model model = null;
 		
@@ -165,16 +160,20 @@ public class BuildNetworkData {
 		
 		// set a namespace prefixes
 		model.setNsPrefix("FOAF", FOAF.NS);
-				   
+		
+		/*
+		 * add base contributor information
+		 */
+		 	   
 		try {
 		
 			// keep the user informed
-			System.out.println("INFO: Retrieving initial contributor details...");
-		
-			// get the data
-			String sql = "SELECT contributorid, last_name, first_name "
-					   + "FROM contributor ";
-				   
+			System.out.println("INFO: Adding contributor data to the datastore...");
+			
+			// define the sql
+			String sql = "SELECT contributorid, last_name, first_name FROM contributor";
+			
+			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
 	
 			// loop through the 
@@ -194,42 +193,105 @@ public class BuildNetworkData {
 				}
 	
 				// create a new contributor
-				Resource contributor = model.createResource(pLinkContributors.replace(pLinkContributorsTag, resultSet.getString(1)));
+				Resource contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
 				contributor.addProperty(RDF.type, FOAF.Person);
 				contributor.addProperty(FOAF.name, firstName + " " + lastName);
 				contributor.addProperty(FOAF.givenName, firstName);
 				contributor.addProperty(FOAF.familyName, lastName);
+				contributor.addProperty(FOAF.page, AusStageURI.getContributorURL(resultSet.getString(1)));
+				
+				// store a reference to this contributor
+				contributors.put(resultSet.getString(1), contributor);
+				
+				// increment the counter
+				contributorCount++;				
 			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + contributorCount +   " contributors successfully added to the datastore");
+			
 		} catch (java.sql.SQLException sqlEx) {
 			System.err.println("ERROR: An SQL related error has occured");
 			System.err.println("       " + sqlEx.getMessage());
 			return false;
 		}
 		
+		/*
+		 * add relationships
+		 */
+		 
+		/*
+		 * add base contributor information
+		 */
+		 	   
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Adding basic collaboration relationships...");
+			
+			// declare helper variables
+			String currentId = "";
+			Resource contributor = null;
+			
+			// define the sql
+			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
+					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
+					   + "WHERE conevlink.eventid = c1.eventid "
+					   + "AND contributorid IS NOT NULL "
+					   + "ORDER BY contributorid ";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// store a copy of the current id, so we don't have to go through the 
+				// collection of contributors too much
+				if(currentId.equals(resultSet.getString(1)) == false) {
+					// store this id
+					currentId = resultSet.getString(1);
+					
+					// lookup the contributor
+					contributor = contributors.get(resultSet.getString(1));
+				}
+				
+				// double check the contributor
+				if(contributor == null) {
+					// missing contributor
+					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+				} else {
+				
+					// don't add a relationship to itself
+					if(currentId.equals(resultSet.getString(2)) == false) {
+					
+						// add the relationship
+						contributor.addProperty(FOAF.knows, AusStageURI.getContributorURI(resultSet.getString(2)));
+				
+						// count the number of collaborations
+						collaborationCount++;
+					}
+				}				
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + collaborationCount +   " collaboration relationships successfully added to the datastore");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
+		
+		
 		//model.write(System.out);
 		//model.write(System.out, "RDF/XML-ABBREV");
 		
 		//System.out.println("-----------------------------------------");
-		
-		System.out.println("INFO: Contributors successfully added to the datastore");
-		
-//		// Create a new query
-//		String queryString = 
-//			"SELECT ?x " +
-//			"WHERE { ?y <http://xmlns.com/FOAF/0.1/name> ?x}";			
-
-//		Query query = QueryFactory.create(queryString);
-
-//		// Execute the query and obtain results
-//		QueryExecution qe = QueryExecutionFactory.create(query, model);
-//		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
-
-//		// Output query results	
-//		ResultSetFormatter.out(System.out, results, query);
-
-//		// Important - free up resources used running the query
-//		qe.close();
-
 
 
 	
