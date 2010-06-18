@@ -167,6 +167,50 @@ public class DatabaseManager {
 	} // end executePreparedStatement method
 	
 	/**
+	 * A method to prepare and return a statement
+	 *
+	 * @param sqlQuery   the SQL query to prepare
+	 *
+	 * @return           the prepared statement
+	 */
+	public PreparedStatement prepareStatement(String sqlQuery) {
+	
+		// enclose code in a try block
+		// throw a more general exception if required
+		try {
+		
+			// check on required objects
+			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+				
+				// report the error
+				throw new java.sql.SQLException("A valid database connection was not available");
+			}
+			
+			// build the statement
+			return connection.prepareStatement(sqlQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: Unable to execute an SQL Query");
+			System.err.println("       " + sqlEx.getMessage());
+			return null;
+		}
+	}
+		
+	
+	/**
+	 * A method to close the statement associated with this database connection
+	 */
+	public void closeStatement() {
+		try {
+			this.preparedStatement.close();
+		} catch(Exception e){}
+		
+		try {
+			this.statement.close();
+		} catch(Exception e){}
+	}
+	
+	/**
 	 * Finalize method to be run when the object is destroyed
 	 * plays nice and free up Oracle connection resources etc. 
 	 */

@@ -41,7 +41,7 @@ public class RdfExport {
 	public static void main(String args[]) {
 	
 		// output some basic information
-		System.out.println("AusStage RdfExport - Export AusStage data into a variety of data formats");
+		System.out.println("AusStage RdfExport - Export AusStage data into a variety of RDF related data formats");
 		System.out.println("Version: " + VERSION + " Build Date: " + BUILD_DATE);
 		System.out.println("More Info: " + INFO_URL + "\n");
 		

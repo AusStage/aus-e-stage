@@ -59,7 +59,10 @@
 			classpathref="classpath"
 			deprecation="${compile.deprecation}"
 			includeAntRuntime="false"
-			optimize="${compile.optimize}"/>
+			optimize="${compile.optimize}"
+			debug="${compile.debug}">
+			<compilerarg value="-Xlint:unchecked"/>
+		</javac>
 	</target>
 	
 	
