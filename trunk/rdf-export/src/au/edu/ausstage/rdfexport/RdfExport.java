@@ -33,7 +33,7 @@ public class RdfExport {
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
-	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data"};
+	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query"};
 	
 	// Valid data formats
 	private static final String[] DATA_FORMATS = {"RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE", "TURTLE", "TTL", "N3"};
@@ -56,6 +56,7 @@ public class RdfExport {
 		String propsPath  = parser.getValue("properties");
 		String dataFormat = parser.getValue("format");
 		String output     = parser.getValue("output");
+		String query      = parser.getValue("query");
 		
 		// check on the parameters
 		if(taskType == null || propsPath == null) {
@@ -65,6 +66,7 @@ public class RdfExport {
 			System.err.println("-properties the location of the properties file");
 			System.err.println("-format     (optional) the data format used in an export task");
 			System.err.println("-output     (optional) the output file to create for an export task");
+			System.err.println("-query      (optional) the location of the query file to run");
 			System.err.println("\nValid fix types are:");
 			System.err.println(java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
 			System.err.println("\nValid data formats are:");
@@ -114,10 +116,6 @@ public class RdfExport {
 				}
 			}
 		}
-				
-				
-		
-	
 		
 		// declare helper variables
 		boolean status;
@@ -137,7 +135,7 @@ public class RdfExport {
 		DatabaseManager database = null;
 		
 		// try to connect to the database if required
-		if(taskType.equals("export-network-data") == false) {
+		if(taskType.equals("build-network-data") == true) {
 			// a database connection is required
 			
 			// instantiate the database classes
@@ -191,6 +189,27 @@ public class RdfExport {
 				System.err.println("ERROR: A fatal error has occured, see previous error message for details");
 				System.exit(-1);
 			}
+		} else if(taskType.equals("run-query")) {
+		
+			// do the run-query task
+			RunQuery task = new RunQuery(properties);
+			
+			// check on the query parameter
+			if(query == null) {
+				System.err.println("ERROR: Location of query file not specified");
+				System.exit(-1);
+			}
+			
+			// check the query file
+			File queryFile = checkPath(query);
+			
+			if(queryFile != null) {
+				status = task.doTask(queryFile);
+			} else {
+				System.err.println("ERROR: A fatal error has occured, see previous error message for details");
+				System.exit(-1);
+			}
+		
 		}
 		
 		// determine how to finish
@@ -236,6 +255,27 @@ public class RdfExport {
 		
 		// if we get this far everything is OK
 		return outputFile;	
+	}
+	
+	/**
+	 * A method to check the validity of the output parameter
+	 *
+	 * @param path the specified output path
+	 *
+	 * @return a valid File object on success, null on failure
+	 */
+	public static File checkPath(String path) {
+	
+		// check the output file
+		File file = new File(path);
+			
+		if(file.isFile() == false || file.canRead() == false) {
+			System.err.println("ERROR: Unable to locate the specified file");
+			return null;
+		} else {
+			// if we get this far everything is OK
+			return file;			
+		}		
 	}
 	
 } // end the class definition
