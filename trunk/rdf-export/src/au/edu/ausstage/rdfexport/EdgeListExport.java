@@ -34,7 +34,7 @@ import au.edu.ausstage.vocabularies.*;
 /**
  * A Class used to export an RDF based dataset of contributor information
  */
-public class RunQuery {
+public class EdgeListExport {
 
 	// declare private class level variables
 	private PropertiesManager      settings;             // access the properties / settings
@@ -45,7 +45,7 @@ public class RunQuery {
 	 * @param dataManager the DatabaseManager class connected to the AusStage database
 	 * @param properties  the PropertiesManager providing access to properties and settings
 	 */
-	public RunQuery(PropertiesManager properties) {
+	public EdgeListExport(PropertiesManager properties) {
 		
 		// double check the parameters
 		if(properties == null) {
@@ -59,14 +59,14 @@ public class RunQuery {
 	/**
 	 * A method to undertake the task of building the dataset
 	 *
-	 * @param queryFile the file that contains the query to run
+	 * @param outputFile the file that contains the query to run
 	 *
 	 * @return true if, and only if, the task completes successfully
 	 */
-	public boolean doTask(File queryFile) {
+	public boolean doTask(File outputFile) {
 	
 		// check on the parameters
-		if(queryFile == null) {
+		if(outputFile == null) {
 			throw new IllegalArgumentException("ERROR: The parameters to the doTask method cannot be null");
 		}		
 	
@@ -110,39 +110,41 @@ public class RunQuery {
 		// set a namespace prefixes
 		model.setNsPrefix("FOAF", FOAF.NS);
 		
-		// declare helper variables
-		String queryString = null;
+		// declare a PrintWriter for output
+		PrintWriter output = null;
 		
 		// load the query into a file
 		try {
-			System.out.println("INFO: Executing query in file:");
-			System.out.println(queryFile.getCanonicalPath());
+			System.out.println("INFO: Exporting entire dataset as an Edge List file:");
 			
-			// open the file
-			BufferedReader input =  new BufferedReader(new FileReader(queryFile));
-			StringBuilder queryBuilder = new StringBuilder();
-			String line = null;
-			
-			// read in the contents of the file
-			while((line = input.readLine()) != null) {
-				queryBuilder.append(line + "\n");
-			}
-			
-			// close the file
-			input.close();
-			
-			// store the qyery as a string
-			queryString = queryBuilder.toString();
+			// open the output file
+			output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF8"));
 			
 		} catch (java.io.FileNotFoundException ex) {
 			System.err.println("ERROR: Unable to write to output file");
-			System.err.println("       " + queryFile.getAbsolutePath());
+			System.err.println("       " + outputFile.getAbsolutePath());
 			return false;
 		} catch (java.io.IOException ex) {
 			System.err.println("ERROR: Unable to write to output file");
-			System.err.println("       " + queryFile.getAbsolutePath());
+			System.err.println("       " + outputFile.getAbsolutePath());
 			return false;
 		}
+		
+		// define the query
+		String queryString = "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+						   + "PREFIX foaf: <http://xmlns.com/foaf/0.1/> "
+						   + " "
+						   + "SELECT * "
+						   + "WHERE {  "
+						   + "   ?x  foaf:givenName ?givenName1 ; "
+						   + "     foaf:familyName ?familyName1 ; "
+						   + "     foaf:knows ?knows . "
+						   + "  ?knows foaf:givenName ?givenName ; "
+						   + "     foaf:familyName ?familyName . "
+						   + "} ";
+						   
+		// keep track of the count of lines
+		int lineCount = 0;
 		
 		// get a query object
 		Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
@@ -152,13 +154,57 @@ public class RunQuery {
 		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
 
 		// Output query results	
-		ResultSetFormatter.out(System.out, results, query);
+		while(results.hasNext() == true) {
+			// get a result
+			com.hp.hpl.jena.query.QuerySolution result = results.next();
+			
+			// write the line
+			String tmp;
+			String[] tmps;
+			
+			// first id
+			tmp = result.get("x").toString().trim();
+			tmps = tmp.split(":");
+			
+			output.print(tmps[2]);
+			output.print("\t");
+			
+			// first givenName
+			output.print(result.get("givenName1").toString().trim());
+			output.print("\t");
+			
+			// first familyName
+			output.print(result.get("familyName1").toString().trim());
+			output.print("\t");
+			
+			// knows
+			tmp = result.get("knows").toString().trim();
+			tmps = tmp.split(":");
+			
+			output.print(tmps[2]);
+			output.print("\t");
+			
+			// second GivenName
+			output.print(result.get("givenName").toString().trim());
+			output.print("\t");
+			
+			// second FamilyName
+			output.print(result.get("familyName").toString().trim());
+			output.print("\n");	
+			
+			// increment the line count
+			lineCount++;		
+		}			
 
 		// Important - free up resources used running the query
 		qe.close();
 		
+		// close the output file
+		output.close();
+		
 		// if we get this far, everything went ok
-		System.out.println("INFO: Query Successfully executed");
+		System.out.println("INFO: Output file containing " + lineCount + " successfully created");
+		System.out.println("      " + outputFile.getAbsolutePath());
 		return true;
 		
 	} // end the doTask method
