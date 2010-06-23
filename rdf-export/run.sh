@@ -2,9 +2,9 @@
 # script to ease execution of the app
 # declare some variables
 MYPATH=`pwd`
-TASK_TYPE=run-query
-#OUTPUT_PATH=$MYPATH/output/rdf-network-export.xml
-DATA_FORMAT=
+TASK_TYPE=export-network-data
+OUTPUT_PATH=$MYPATH/output/rdf-network-export.ttl
+DATA_FORMAT="TURTLE"
 QUERY_FILE=$MYPATH/input/sample-query.sparql
 #
 # delete the output file if it already exists
@@ -26,7 +26,7 @@ if [ -z "$OUTPUT_PATH" ]; then
 		/usr/bin/java -Xmx2028m -XX:-UseGCOverheadLimit -jar AusStageRdfExport.jar -tasktype $TASK_TYPE -properties $MYPATH/default.properties -query $QUERY_FILE
   	fi
 else 
-    /usr/bin/java -Xmx2028m -XX:-UseGCOverheadLimit -jar AusStageRdfExport.jar -tasktype $TASK_TYPE -properties $MYPATH/default.properties -output $OUTPUT_PATH
+    /usr/bin/java -Xmx2028m -XX:-UseGCOverheadLimit -jar AusStageRdfExport.jar -tasktype $TASK_TYPE -properties $MYPATH/default.properties -output $OUTPUT_PATH -format $DATA_FORMAT
 fi
 #
 # print current date / time

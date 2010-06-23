@@ -33,10 +33,10 @@ public class RdfExport {
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
-	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query"};
+	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query", "edge-list-export"};
 	
 	// Valid data formats
-	private static final String[] DATA_FORMATS = {"RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE", "TURTLE", "TTL", "N3"};
+	private static final String[] DATA_FORMATS = {"RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE", "TURTLE", "N3"};
 	
 	/**
 	 * Main driving method for the AusStage ABS Data Fix App
@@ -103,7 +103,7 @@ public class RdfExport {
 			} else { 
 				// format specified, ensure it is valid
 				for(int i = 0; i < DATA_FORMATS.length; i++) {
-					if(DATA_FORMATS[i].equals(taskType)) {
+					if(DATA_FORMATS[i].equals(dataFormat)) {
 						isValid = true;
 					}
 				}
@@ -210,7 +210,21 @@ public class RdfExport {
 				System.exit(-1);
 			}
 		
-		}
+		} else if(taskType.equals("edge-list-export")) {
+		
+			// do the Edge List Export task
+			EdgeListExport task = new EdgeListExport(properties);
+			
+			// check on the output file
+			File outputFile = checkOutputPath(output);
+			
+			if(outputFile != null) {
+				status = task.doTask(outputFile);
+			} else {
+				System.err.println("ERROR: A fatal error has occured, see previous error message for details");
+				System.exit(-1);
+			}
+		}			
 		
 		// determine how to finish
 		if(status == false) {
