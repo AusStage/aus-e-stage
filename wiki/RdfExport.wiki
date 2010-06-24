@@ -34,10 +34,6 @@ To build the dataset follow these steps:
  # The application will take some time to complete and its output will look like this:
 
 <pre>
-AusStage RdfExport - Export AusStage data into a variety of RDF related data formats
-Version: 1.0.0 Build Date: 2010-06-24
-More Info: http://code.google.com/p/aus-e-stage/wiki/RdfExport
-
 INFO: Connecting to the database...
 INFO: Connection established
 INFO: Deleting the existing TDB datastore...
