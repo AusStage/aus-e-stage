@@ -1,0 +1,57 @@
+#summary Using the RdfExport App to Create the Navigating Networks Dataset
+
+<h1>Creating the Navigating Networks Dataset</h1>
+
+The creation of the dataset for use by the Navigating Networks service is achieved using the !RdfExport application. This application, written in Java, creates an RDF based datastore that contains all data necessary to create network diagrams. 
+
+More information about the application such as the tools and ontologies used, is available on the RdfExportMoreInfo page.
+
+The application undertakes the following tasks:
+
+<wiki:toc max_depth="2" />
+
+= Building the Dataset =
+
+The current dataset contains the following data elements:
+
+ * The contributor id, encoded using this scheme
+ * The contributor name
+ * The contributor given name
+ * The contributor family name
+ * A link to the contributor page in [http://www.ausstage.edu.au AusStage]
+ * Links between contributors that have worked on the same event
+
+To build the dataset follow these steps:
+
+ # Ensure the application is installed by following these directions
+ # Ensure the application is configured by following directions
+ # Change to the _jar_ directory created when the application was installed
+ # Run the application using the following command where 
+   # properties-file: is the location of the properties file created in step 2
+   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype build-network-data -properties properties-file}}}
+ # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
+ # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
+ # The application will take some time to complete and its output will look like this:
+
+<pre>
+AusStage RdfExport - Export AusStage data into a variety of RDF related data formats
+Version: 1.0.0 Build Date: 2010-06-24
+More Info: http://code.google.com/p/aus-e-stage/wiki/RdfExport
+
+INFO: Connecting to the database...
+INFO: Connection established
+INFO: Deleting the existing TDB datastore...
+INFO: Existing TDB datastore deleted
+INFO: Adding contributor data to the datastore...
+INFO: 81350 contributors successfully added to the datastore
+INFO: Adding basic collaboration relationships...
+INFO: 3268928 collaboration relationships successfully added to the datastore
+INFO: Task completed successfully
+</pre>
+
+
+= Exporting the Dataset =
+
+= Querying the Dataset = 
+
+= Exporting the Dataset as an Edge Node List = 
