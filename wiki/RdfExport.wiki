@@ -91,7 +91,7 @@ To query the dataset follow these steps:
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
-   # query-file: is the location of a plain text file that defines the query (including path information
+   # query-file: is the location of a plain text file that defines the query (including path information)
    {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype run-query -properties properties-file mat format-type -query query-file}}}
  # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
  # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
@@ -115,4 +115,29 @@ LIMIT 10
 
 This query returns the encoded unique identifier for the first 10 contributors that have contributed to an event that William Shakespeare has also made a contribution.
 
-= Exporting the Dataset as an Edge Node List = 
+= Exporting the Dataset as an Edge List File = 
+
+The Edge List File is contains data in the following plain text format where each line contains the following
+
+ * contributorid - the unique identifier of a contributor
+ * givenName - the given name of the contributor
+ * familyName - the family name of the contributor
+ * tab - the tab character
+
+{{{
+<contributorid><tab><givenName><tab><familyName><tab><contributorid><tab><givenName><tab><familyName>
+}}}
+
+This format can be used in a variety of graph based applications. 
+
+To export the dataset in this format use the following steps:
+
+ # Ensure the application is installed by following these directions
+ # Ensure the application is configured by following directions
+ # Change to the _jar_ directory created when the application was installed
+ # Run the application using the following command where 
+   # properties-file: is the location of the properties file created in step 2
+   # output-file: is the name of the output file to create (including path information)
+   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype edge-list-export -properties properties-file mat format-type -output output-file}}}
+ # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
+ # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
