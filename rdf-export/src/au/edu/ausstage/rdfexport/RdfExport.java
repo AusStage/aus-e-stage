@@ -29,14 +29,14 @@ public class RdfExport {
 
 	// Version information 
 	private static final String VERSION    = "1.0.0";
-	private static final String BUILD_DATE = "2010-06-18";
+	private static final String BUILD_DATE = "2010-06-24";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
-	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query", "edge-list-export"};
+	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query", "edge-list-export", "edge-list-export-no-dups"};
 	
 	// Valid data formats
-	private static final String[] DATA_FORMATS = {"RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE", "TURTLE", "N3"};
+	private static final String[] DATA_FORMATS = {"RDF/XML", "N-TRIPLE", "TURTLE", "N3"};
 	
 	/**
 	 * Main driving method for the AusStage ABS Data Fix App
@@ -98,8 +98,8 @@ public class RdfExport {
 		
 			if(dataFormat == null) {
 				// format is missing so use a default
-				System.out.println("INFO: No data format specified. Using 'RDF/XML-ABBREV' by default");
-				dataFormat = "RDF/XML-ABBREV";
+				System.out.println("INFO: No data format specified. Using 'RDF/XML' by default");
+				dataFormat = "RDF/XML";
 			} else { 
 				// format specified, ensure it is valid
 				for(int i = 0; i < DATA_FORMATS.length; i++) {
@@ -224,7 +224,21 @@ public class RdfExport {
 				System.err.println("ERROR: A fatal error has occured, see previous error message for details");
 				System.exit(-1);
 			}
-		}			
+		} else if(taskType.equals("edge-list-export-no-dups")) {
+		
+			// do the Edge List Export task
+			EdgeListExport task = new EdgeListExport(properties);
+			
+			// check on the output file
+			File outputFile = checkOutputPath(output);
+			
+			if(outputFile != null) {
+				status = task.doTask(outputFile, true);
+			} else {
+				System.err.println("ERROR: A fatal error has occured, see previous error message for details");
+				System.exit(-1);
+			}
+		}	
 		
 		// determine how to finish
 		if(status == false) {
