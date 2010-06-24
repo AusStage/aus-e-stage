@@ -130,6 +130,15 @@ The Edge List File is contains data in the following plain text format where eac
 <contributorid><tab><givenName><tab><familyName><tab><contributorid><tab><givenName><tab><familyName>
 }}}
 
+_Note 1:_ This export contains duplicate edges for example:
+
+{{{
+<01><tab><James><tab><Bond><tab><02><tab><Money><tab><Penny>
+<02><tab><Money><tab><Penny><tab><01><tab><James><tab><Bond>
+}}}
+
+To produce a an list of edges without duplicates substitute _edge-list-export_ with _edge-list-export-no-dups_ in step 5 below.
+
 This format can be used in a variety of graph based applications. 
 
 To export the dataset in this format use the following steps:
