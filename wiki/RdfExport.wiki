@@ -23,8 +23,8 @@ The current dataset contains the following data elements:
 
 To build the dataset follow these steps:
 
- # Ensure the application is installed by following these directions
- # Ensure the application is configured by following directions
+ # Ensure the application is installed by [RdfExportMoreInfo#Installing_the_Application following these directions]
+ # Ensure the application is configured by [RdfExportMoreInfo#Configuring_the_Application following these directions]
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
