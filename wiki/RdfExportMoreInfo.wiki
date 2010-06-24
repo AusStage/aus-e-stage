@@ -1,0 +1,42 @@
+#summary More info on the RdfExport application
+
+<h1>More information on the !RdfExport Application</h1>
+
+This page provides further detailed information on the RdfExport application. If you wish to know how to use the application please see the RdfExport page. 
+
+This page provides information on the following topics
+
+<wiki:toc max_depth="2" />
+
+= Third Party Libraries Used =
+
+The following third party libraries are used by the application and the JAR files must be in the _lib_ directory. They are not distributed with the application to keep the archive file size to a minimum:
+
+ * [http://openjena.org/ Jena] - Used to model RDF data
+ * [http://openjena.org/TDB/ TDB] - Used to provide a persistent datastore
+ * [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html Oracle JDBC Driver] - Used to access the !AusStage database 
+
+= RDF Ontologies Used = 
+
+The following are RDF ontologies used by the RdfExport application
+
+ * [http://www.foaf-project.org/ FOAF] - Used to represent contributor information including the representation of collaborations
+
+The following are RDF ontologies that are planned to be used in a future version
+
+ * [http://motools.sourceforge.net/event/event.html Event] - Used to represent events
+ * [http://www.w3.org/TR/owl-time/ OWL-Time] - Used in conjunction with the Event ontology to represent time periods associated with events
+
+= !AusStage Unique Id Encoding Scheme =
+
+To assist in the clarity of !AusStage unique identifiers in the dataset the following encoding scheme is used:
+
+ * A unique identifier is prefixed with _ausstage:_
+ * If the unique identifier is for a contributor _c:_ is then added
+ * If the unique identifier is for an event _e:_ is then added
+
+The [http://code.google.com/p/aus-e-stage/source/browse/trunk/rdf-export/src/au/edu/ausstage/vocabularies/AusStageURI.java AusStageURI class] in the au.edu.ausstage.vocabularies package provides convenience methods for encoding identifiers, and converting identifiers into the persistent URLs used by the !AusStage website
+
+= Installing the Application = 
+
+= Configuring the Application = 
