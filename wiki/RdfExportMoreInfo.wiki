@@ -39,4 +39,12 @@ The [http://code.google.com/p/aus-e-stage/source/browse/trunk/rdf-export/src/au/
 
 = Installing the Application = 
 
+To install the RdfExport application follow these steps:
+
+ # Ensure you have the latest version of Java installed
+ # Download the latest version of the RdfExport archive from the [http://code.google.com/p/aus-e-stage/downloads/list Downloads area]
+ # Extract the contents of the archive into a new directory
+ # Ensure the JAR files from the [RdfExportMoreInfo#Third_Party_Libraries_Used list of third party libraries] are copied to the lib directory
+ # Create a properties file by following the steps in the next section
+
 = Configuring the Application = 
