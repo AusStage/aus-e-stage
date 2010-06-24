@@ -57,14 +57,14 @@ The dataset can be exported into a variety of different serialised data formats 
 
 To export the entire dataset follow these steps:
 
-# Ensure the application is installed by following these directions
+ # Ensure the application is installed by following these directions
  # Ensure the application is configured by following directions
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
    # format-type: is one of the listed formats above
    # output-file: is the name of the output file to create (including path information)
-   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype export-network-data -properties properties-file}}} -format format-type -output output-file
+   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype export-network-data -properties properties-file -format format-type -output output-file}}}
  # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
  # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
  # If no format is specified the default format 'RDF/XML' will be used
@@ -78,7 +78,41 @@ INFO: Export file successfully created
 INFO: Task completed successfully
 </pre>
 
-
 = Querying the Dataset = 
+
+Querying the dataset is possible using the SPARQL query language with ARQ specific extensions. 
+
+_Note:_ This functionality is designed to assist in the development of queries for use in other applications / services and is not meant to provide an query and export workflow
+
+To query the dataset follow these steps:
+
+ # Ensure the application is installed by following these directions
+ # Ensure the application is configured by following directions
+ # Change to the _jar_ directory created when the application was installed
+ # Run the application using the following command where 
+   # properties-file: is the location of the properties file created in step 2
+   # query-file: is the location of a plain text file that defines the query (including path information
+   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype run-query -properties properties-file mat format-type -query query-file}}}
+ # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
+ # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
+
+An example query is as follows:
+
+{{{
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT DISTINCT ?knows
+WHERE { 
+   [
+     foaf:name "William Shakespeare";
+     foaf:knows ?knows
+     ]
+     
+}
+LIMIT 10
+}}}
+
+This query returns the encoded unique identifier for the first 10 contributors that have contributed to an event that William Shakespeare has also made a contribution.
 
 = Exporting the Dataset as an Edge Node List = 
