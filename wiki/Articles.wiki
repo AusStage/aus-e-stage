@@ -12,6 +12,7 @@ The articles are categorised to provide a structure to this page.
 
 = Aus-e-Stage Software Tools =
  * [AbsDataFix Building Overlays] using data sourced from the ABS
+ * [RdfExport  Export RDF Data] into a datastore and other serialised formats 
 
 = Processes =
  * [SourcingAbsData Sourcing data from the ABS] that can be used for overlays
