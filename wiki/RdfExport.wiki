@@ -57,8 +57,9 @@ The dataset can be exported into a variety of different serialised data formats 
 
 To export the entire dataset follow these steps:
 
- # Ensure the application is installed by following these directions
- # Ensure the application is configured by following directions
+ # Ensure the application is installed by [RdfExportMoreInfo#Installing_the_Application following these directions]
+ # Ensure the application is configured by [RdfExportMoreInfo#Configuring_the_Application following these directions]
+ # Ensure the dataset has been created by following the [RdfExport#Building_the_Dataset Building the Dataset] steps
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
@@ -86,8 +87,9 @@ _Note:_ This functionality is designed to assist in the development of queries f
 
 To query the dataset follow these steps:
 
- # Ensure the application is installed by following these directions
- # Ensure the application is configured by following directions
+ # Ensure the application is installed by [RdfExportMoreInfo#Installing_the_Application following these directions]
+ # Ensure the application is configured by [RdfExportMoreInfo#Configuring_the_Application following these directions]
+ # Ensure the dataset has been created by following the [RdfExport#Building_the_Dataset Building the Dataset] steps
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
@@ -132,8 +134,9 @@ This format can be used in a variety of graph based applications.
 
 To export the dataset in this format use the following steps:
 
- # Ensure the application is installed by following these directions
- # Ensure the application is configured by following directions
+ # Ensure the application is installed by [RdfExportMoreInfo#Installing_the_Application following these directions]
+ # Ensure the application is configured by [RdfExportMoreInfo#Configuring_the_Application following these directions]
+ # Ensure the dataset has been created by following the [RdfExport#Building_the_Dataset Building the Dataset] steps
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
