@@ -4,7 +4,7 @@
  * [Articles HowTo articles]
    * Aus-e-Stage Software Tools
      * [AbsDataFix Building ABS Overlays]
-     * [RdfExport Exporting Navigating Networks Data]
+     * [RdfExport Creating the Network Dataset]
    * Processes
      * [SourcingAbsData Sourcing data from the ABS]
      * [SubversionRepository Using our Subversion Repository]
