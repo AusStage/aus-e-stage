@@ -48,6 +48,37 @@ INFO: Task completed successfully
 
 = Exporting the Dataset =
 
+The dataset can be exported into a variety of different serialised data formats and they are:
+
+ * RDF/XML - http://en.wikipedia.org/wiki/RDF/XML
+ * N-TRIPLE - http://en.wikipedia.org/wiki/N-Triples
+ * TURTLE - http://en.wikipedia.org/wiki/Turtle_(syntax)
+ * N3 - http://en.wikipedia.org/wiki/Notation3
+
+To export the entire dataset follow these steps:
+
+# Ensure the application is installed by following these directions
+ # Ensure the application is configured by following directions
+ # Change to the _jar_ directory created when the application was installed
+ # Run the application using the following command where 
+   # properties-file: is the location of the properties file created in step 2
+   # format-type: is one of the listed formats above
+   # output-file: is the name of the output file to create (including path information)
+   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype export-network-data -properties properties-file}}} -format format-type -output output-file
+ # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
+ # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
+ # If no format is specified the default format 'RDF/XML' will be used
+ # The application will take a short time to complete and the output will look like this:
+
+<pre>
+INFO: No data format specified. Using 'RDF/XML' by default
+INFO: Exporting datastore into a file with format 'RDF/XML'
+INFO: Export file successfully created
+      /home/ausstage/exports/network-rdf-export.xml
+INFO: Task completed successfully
+</pre>
+
+
 = Querying the Dataset = 
 
 = Exporting the Dataset as an Edge Node List = 
