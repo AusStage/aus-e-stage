@@ -48,3 +48,22 @@ To install the RdfExport application follow these steps:
  # Create a properties file by following the steps in the next section
 
 = Configuring the Application = 
+
+The RdfExport application is configured using two mechanisms. The first is via a number of command line switches that are detailed on the RdfExport page. The second is via a properties file. 
+
+The properties file contains the following information
+
+|| *Property Key* || *Purpose* ||
+|| db-connection-string || The connection string to use to connect to the Oracle database ||
+|| tdb-datastore || The full path to the directory where the TDB datastore is located ||
+
+The properties file follows the standard [http://en.wikipedia.org/wiki/.properties .properties] file format used by Java.
+
+As an example the properties file may look like this:
+
+{{{
+# database related properties
+db-connection-string = jdbc:oracle:thin:my_schema/myuser@localhost:1521:shakespeare
+# full path to the TDB datastore
+tdb-datastore = /full/path/to/tdb/datastore
+}}}
