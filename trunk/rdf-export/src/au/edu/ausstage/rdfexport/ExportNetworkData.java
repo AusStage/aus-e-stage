@@ -115,7 +115,7 @@ public class ExportNetworkData {
 		Model model = TDBFactory.createModel(datastorePath);
 		
 		// set a namespace prefixes
-		model.setNsPrefix("FOAF", FOAF.NS);
+		//model.setNsPrefix("FOAF", FOAF.NS);
 		
 		// get an output stream
 		try {

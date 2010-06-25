@@ -223,71 +223,70 @@ public class BuildNetworkData {
 			return false;
 		}
 		
-		/*
-		 * add relationships
-		 */
-		 	   
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding collaboration relationships...");
-			
-			// declare helper variables
-			String currentId = "";
-			Resource contributor = null;
-			
-			// define the sql
-			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
-					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
-					   + "WHERE conevlink.eventid = c1.eventid "
-					   + "AND contributorid IS NOT NULL "
-					   + "ORDER BY contributorid ";
-			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// store a copy of the current id, so we don't have to go through the 
-				// collection of contributors too much
-				if(currentId.equals(resultSet.getString(1)) == false) {
-					// store this id
-					currentId = resultSet.getString(1);
-					
-					// lookup the contributor
-					contributor = contributors.get(resultSet.getString(1));
-				}
-				
-				// double check the contributor
-				if(contributor == null) {
-					// missing contributor
-					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-				} else {
-				
-					// don't add a relationship to itself
-					if(currentId.equals(resultSet.getString(2)) == false) {
-					
-						// add the relationship
-						//contributor.addProperty(FOAF.knows, AusStageURI.getContributorURI(resultSet.getString(2)));
-						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
-				
-						// count the number of collaborations
-						collaborationCount++;
-					}
-				}				
-			}
-			
-			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
-			System.out.println("INFO: " + collaborationCount +   " collaboration relationships successfully added to the datastore");
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
+//		/*
+//		 * add relationships
+//		 */
+//		 	   
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding collaboration relationships...");
+//			
+//			// declare helper variables
+//			String currentId = "";
+//			Resource contributor = null;
+//			
+//			// define the sql
+//			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
+//					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
+//					   + "WHERE conevlink.eventid = c1.eventid "
+//					   + "AND contributorid IS NOT NULL "
+//					   + "ORDER BY contributorid ";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// store a copy of the current id, so we don't have to go through the 
+//				// collection of contributors too much
+//				if(currentId.equals(resultSet.getString(1)) == false) {
+//					// store this id
+//					currentId = resultSet.getString(1);
+//					
+//					// lookup the contributor
+//					contributor = contributors.get(resultSet.getString(1));
+//				}
+//				
+//				// double check the contributor
+//				if(contributor == null) {
+//					// missing contributor
+//					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+//				} else {
+//				
+//					// don't add a relationship to itself
+//					if(currentId.equals(resultSet.getString(2)) == false) {
+//					
+//						// add the relationship
+//						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
+//				
+//						// count the number of collaborations
+//						collaborationCount++;
+//					}
+//				}				
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			System.out.println("INFO: " + collaborationCount +   " collaboration relationships successfully added to the datastore");
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
 		
 		/*
 		 * add events
@@ -299,12 +298,17 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding events...");
 			
 			// declare helper variables
-			String currentId = "";
+			String currentId     = "";
 			Resource contributor = null;
+			Resource event       = null;
 			
 			// define the sql
-			String sql = "SELECT eventid, event_name "
-					   + "FROM events";
+			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid "
+					   + "FROM events e, conevlink c "
+					   + "WHERE e.eventid = c.eventid "
+					   + "AND e.eventid IS NOT NULL "
+					   + "AND c.contributorid IS NOT NULL "
+					   + "ORDER BY e.eventid";
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
@@ -312,20 +316,57 @@ public class BuildNetworkData {
 			// loop through the 
 			while (resultSet.next()) {
 			
-				// create a new Event
-				Resource event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
-				event.addProperty(RDF.type, Event.Event);
-				
-				// process the title
-				String title = resultSet.getString(2);
-				title = title.replaceAll("\r", " ");
-				title = title.replaceAll("\n", " ");
-								
-				event.addProperty(DCTerms.title, title);
-				event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
+				// have we seen this event id before?
+				if(currentId.equals(resultSet.getString(1)) == true) {
+					// yes we have
+					// lookup the contributor
+					contributor = contributors.get(resultSet.getString(3));
+					
+					// double check the contributor
+					if(contributor == null) {
+						// missing contributor
+						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
+					} else {
 			
-				// increment the event count 
-				eventCount++;	
+						// add the relationships
+						contributor.addProperty(Event.isAgentIn, event);
+						event.addProperty(Event.agent, contributor);
+					}
+					
+				} else {
+					// no we haven't so create a new event
+					event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
+					event.addProperty(RDF.type, Event.Event);
+			
+					// process the title
+					String title = resultSet.getString(2);
+					title = title.replaceAll("\r", " ");
+					title = title.replaceAll("\n", " ");
+					
+					// add the title and Url
+					event.addProperty(DCTerms.title, title);
+					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
+					
+					// lookup the contributor
+					contributor = contributors.get(resultSet.getString(3));
+					
+					// double check the contributor
+					if(contributor == null) {
+						// missing contributor
+						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
+					} else {
+			
+						// add the relationships
+						contributor.addProperty(Event.isAgentIn, event);
+						event.addProperty(Event.agent, contributor);
+					}
+							
+					// increment the event count 
+					eventCount++;
+					
+					// store this id
+					currentId = resultSet.getString(1);
+				}	
 			}
 			
 			// play nice and tidy up
