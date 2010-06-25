@@ -21,10 +21,12 @@ The following third party libraries are used by the application and the JAR file
 The following are RDF ontologies used by the RdfExport application
 
  * [http://www.foaf-project.org/ FOAF] - Used to represent contributor information including the representation of collaborations
+ * [http://motools.sourceforge.net/event/event.html Event] - Used to represent events
+ * [http://dublincore.org/documents/dcmi-terms/ DCMI Metadata Terms] - Used to represent various data fields such as event title
 
 The following are RDF ontologies that are planned to be used in a future version
 
- * [http://motools.sourceforge.net/event/event.html Event] - Used to represent events
+
  * [http://www.w3.org/TR/owl-time/ OWL-Time] - Used in conjunction with the Event ontology to represent time periods associated with events
 
 = !AusStage Unique Id Encoding Scheme =
