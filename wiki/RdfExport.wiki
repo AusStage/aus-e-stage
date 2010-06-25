@@ -39,9 +39,11 @@ INFO: Connection established
 INFO: Deleting the existing TDB datastore...
 INFO: Existing TDB datastore deleted
 INFO: Adding contributor data to the datastore...
-INFO: 81350 contributors successfully added to the datastore
-INFO: Adding basic collaboration relationships...
-INFO: 3268928 collaboration relationships successfully added to the datastore
+INFO: 81378 contributors successfully added to the datastore
+INFO: Adding collaboration relationships...
+INFO: 3270460 collaboration relationships successfully added to the datastore
+INFO: Adding events...
+INFO: 48957 events successfully added to the datastore
 INFO: Task completed successfully
 </pre>
 
@@ -66,8 +68,6 @@ To export the entire dataset follow these steps:
    # format-type: is one of the listed formats above
    # output-file: is the name of the output file to create (including path information)
    {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype export-network-data -properties properties-file -format format-type -output output-file}}}
- # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
- # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
  # If no format is specified the default format 'RDF/XML' will be used
  # The application will take a short time to complete and the output will look like this:
 
@@ -95,8 +95,6 @@ To query the dataset follow these steps:
    # properties-file: is the location of the properties file created in step 2
    # query-file: is the location of a plain text file that defines the query (including path information)
    {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype run-query -properties properties-file mat format-type -query query-file}}}
- # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
- # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
 
 An example query is as follows:
 
@@ -151,5 +149,3 @@ To export the dataset in this format use the following steps:
    # properties-file: is the location of the properties file created in step 2
    # output-file: is the name of the output file to create (including path information)
    {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype edge-list-export -properties properties-file mat format-type -output output-file}}}
- # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
- # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
