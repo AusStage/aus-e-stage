@@ -12,6 +12,7 @@
    * [DataExchangeService Data Exchange Service]
    * [MappingService Mapping Service]
    * [MobileService  Mobile Service]
+   * [NetworkService Network Service]
    * [AusStageTerminator AusStage Terminator Service]
  * [UsefulLinks Useful Links]   
  * [http://www.ausstage.edu.au AusStage Homepage]
