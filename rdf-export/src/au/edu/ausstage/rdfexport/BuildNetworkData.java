@@ -27,7 +27,7 @@ import java.io.IOException;
 
 // import the Jena related packages
 import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.vocabulary.*;
+import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.tdb.*;
 
@@ -146,10 +146,10 @@ public class BuildNetworkData {
 		logger.setLevel(org.apache.log4j.Level.OFF);
 		
 		// declare some helper variables
-		int contributorCount  = 0;
+		int contributorCount   = 0;
 		int collaborationCount = 0;
-		java.util.Map<String, Resource> contributors = new java.util.HashMap<String, Resource>();
-		
+		int eventCount         = 0;
+		java.util.Map<String, Resource> contributors = new java.util.HashMap<String, Resource>();		
 	
 		// create an empty persistent model
 		Model model = null;
@@ -162,7 +162,9 @@ public class BuildNetworkData {
 		}
 		
 		// set a namespace prefixes
-		model.setNsPrefix("FOAF", FOAF.NS);
+		model.setNsPrefix("foaf"    , FOAF.NS);
+		model.setNsPrefix("event"   , Event.NS);
+		model.setNsPrefix("dcterms" , DCTerms.NS);
 		
 		/*
 		 * add base contributor information
@@ -224,15 +226,11 @@ public class BuildNetworkData {
 		/*
 		 * add relationships
 		 */
-		 
-		/*
-		 * add base contributor information
-		 */
 		 	   
 		try {
 		
 			// keep the user informed
-			System.out.println("INFO: Adding basic collaboration relationships...");
+			System.out.println("INFO: Adding collaboration relationships...");
 			
 			// declare helper variables
 			String currentId = "";
@@ -291,12 +289,59 @@ public class BuildNetworkData {
 			return false;
 		}
 		
+		/*
+		 * add events
+		 */
+	 
+		try {
 		
-		//model.write(System.out);
-		//model.write(System.out, "RDF/XML-ABBREV");
+			// keep the user informed
+			System.out.println("INFO: Adding events...");
+			
+			// declare helper variables
+			String currentId = "";
+			Resource contributor = null;
+			
+			// define the sql
+			String sql = "SELECT eventid, event_name "
+					   + "FROM events";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// create a new Event
+				Resource event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
+				event.addProperty(RDF.type, Event.Event);
+				
+				// process the title
+				String title = resultSet.getString(2);
+				title = title.replaceAll("\r", " ");
+				title = title.replaceAll("\n", " ");
+								
+				event.addProperty(DCTerms.title, title);
+				event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
+			
+				// increment the event count 
+				eventCount++;	
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + eventCount +   " events successfully added to the datastore");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
 		
-		//System.out.println("-----------------------------------------");
-
+		
+		
+		
 
 	
 		// if we get this far, everything went OK
