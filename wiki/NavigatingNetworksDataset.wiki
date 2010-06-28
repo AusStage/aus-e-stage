@@ -50,7 +50,8 @@ ORDER BY contributorid
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
 || events || eventid || rdf:about || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
 || events || event_name || dcterms:title || || [NavigatingNetworksGoals All] ||
-|| conevlink || contributorid || event:agent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
+|| events || eventid || dcterms:identifier || As a persistent link to the Event page in AusStage || [NavigatingNetworksGoals All] ||
+|| contributor || contributorid || event:agent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
 
 === SQL Code ===
 {{{
