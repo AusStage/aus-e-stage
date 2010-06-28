@@ -64,8 +64,6 @@ ORDER BY e.eventid
 }}}
 
 
-=== SQL Code ===
-
 = RDF Ontologies = 
 <wiki:comment> Keep this list in sync with the RdfExport page</wiki:comment>
 
