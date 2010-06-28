@@ -12,7 +12,7 @@ The RdfExport application undertakes the following steps to build the dataset
  # [NavigatingNetworksDataset#Contributor_Relationships An export of contributor relationships]
  # [NavigatingNetworksDataset#Events An export of events and contributor relationships to events]
 
-= Subjects Creates & Source Fields =
+= RDF Values & Source Fields =
 
 == Contributors ==
 
