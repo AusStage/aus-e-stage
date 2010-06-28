@@ -3,7 +3,7 @@
 = Navigating Networks Specification =
 <wiki:toc max_depth="3" />
 ==1. BACKGROUND RESEARCH AND DEVELOPMENT==
-In this section of the Navigating Networks Specification we will summarise the research and development that has led us to this point. 
+This section summarises the research and development that has led us to this point. 
 
 ===Background===
 
@@ -21,9 +21,7 @@ More generally, our research on visualising the networks recorded in the AusStag
 
 ===Experiments===
 
-Jonathan Bollen began experiments in visualising networks in the AusStage dataset in early 2008. He worked in an open-ended, exploratory manner, trialling various methods of data extraction, manipulation and visualisation, and sharing the process and results with colleagues. 
-
-This research was undertaken in collaboration with Julie Holledge, the lead Chief Investigator on the AusStage project, and with Glen McGillivray, an AusStage partner. It was also pursued through a 2008/2009 summer scholarship which eResearchSA awarded to Nathan Lambert, a student in the Drama program at Flinders University. 
+Jonathan Bollen began experiments in visualising networks in the AusStage dataset in early 2008. He worked in an open-ended, exploratory manner, trialling various methods of data extraction, manipulation and visualisation, and sharing the process and results with colleagues. This research was undertaken in collaboration with Julie Holledge, the lead Chief Investigator on the AusStage project, and with Glen McGillivray, an AusStage partner. It was also pursued through a 2008/2009 summer scholarship which eResearchSA awarded to Nathan Lambert, a student in the Drama program at Flinders University. 
 
 The research focused on small subsets of the AusStage dataset, generating visualisations of networks of artistic collaboration associated with:
 
@@ -36,7 +34,7 @@ Results were presented at the AusStage Symposium and the eResearch Australasia c
 
 Bollen and Holledge continued the research in 2009 as part of the Ibsen between Cultures Discovery Project. This work focused on visualising data related to Scandinavian productions of Ibsen plays and the integration of geographic mapping and network visualisation techniques. This research was presented at UCLA in 2009, and is currently being prepared for publication.
 
-In August 2010, Jonathan Bollen is returning to UCLA for a two-week institute on Networks and Network Analysis for the Humanities, where he’ll be exploring the following research: 
+In August 2010, Bollen is returning to UCLA for a two-week institute on [http://www.ipam.ucla.edu/programs/hum2010/ Networks and Network Analysis for the Humanities], where he’ll be exploring the following research questions: 
 
   * What is the network topology of artistic collaboration in the Australian performing arts? This question entails visualizing the entire set of relations between 70,000+ artists in the AusStage database and applying cluster analysis to identify core structures in the network.
   * How is aesthetic knowledge about performance transmitted between artists? This question entails visualizing the relations between 47,000+ events in the AusStage database as a directed network depicting the temporal flow of artists moving between events. Methods for modelling the accumulation and transmission of aesthetic knowledge will be explored.
