@@ -24,7 +24,6 @@ The RdfExport application undertakes the following steps to build the dataset
 || contributor || first_name || foaf:givenName ||  || [NavigatingNetworksGoals All] || 
 || contributor || last_name || foaf:familyName || ||  [NavigatingNetworksGoals All] ||
 || contributor || first_name + " " + last_name || foaf:name || ||  [NavigatingNetworksGoals All] ||
-|| events || eventid || event:isAgentIn || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] & added as part of step 3|| [NavigatingNetworksGoals All] ||
 
 === SQL Code ==
 
@@ -34,7 +33,7 @@ SELECT contributorid, first_name, last_name FROM contributor
 
 == Contributor Relationships == 
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
-|| subquery || c1.collaborator || foaf:knows || || [NavigatingNetworksGoals All] ||
+|| subquery || c1.collaborator || foaf:knows || || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
 
 === SQL Code ===
 {{{
@@ -51,7 +50,8 @@ ORDER BY contributorid
 || events || eventid || rdf:about || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
 || events || event_name || dcterms:title || || [NavigatingNetworksGoals All] ||
 || events || eventid || dcterms:identifier || As a persistent link to the Event page in AusStage || [NavigatingNetworksGoals All] ||
-|| contributor || contributorid || event:agent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
+|| contributor || contributorid || event:agent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] ||  [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] ||
+|| events || eventid || event:isAgentIn || Associated with a contributor not an event || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] ||
 
 === SQL Code ===
 {{{
