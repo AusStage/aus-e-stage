@@ -194,25 +194,16 @@ Work flow:
 ===1.3 Faceted browsing===
 _Priority Ranking 84%_
 
-Included in the Network Browsing interface will be a panel of criteria represented as checkboxes, select menus and open text boxes.
-
-Selecting one or multiple criteria will highlight nodes that match that criteria, whilst fading the nodes that don’t match.
+Included in the Network Browsing interface will be a panel of criteria represented as checkboxes, select menus and open text boxes. Criteria relate to the nodes (e.g. gender, nationality) or to information aggregated to nodes from event associations (e.g. role). Selecting one or multiple criteria will highlight nodes that match that criteria, whilst fading the nodes that don’t match. 
 
 Criteria to be listed
 
 || Label	|| Database Reference|| 	Type|| 	Facet Options|| 
 || Gender|| TABLE: CONTRIBUTOR - ROW: GENDER||	radio button 1 : Male radio button 2: Female|| Highlight matching nodes OR only display nodes with matching criteria HOW DO WE DEAL WITH UNKNOWN?|| 
-|| Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY|| Checkbox|| Displays all nodes, colour coded depending on nationality. || 
-|| Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY||Free Text|| Highlight nodes with matching nationality OR only display nodes with matching nationality|| 
-|| Age|| TABLE: CONTRIBUTOR - ROW: DD_DATE_OF_BIRTH, MM_DATE_OF_BIRTH, YYYY_DATE_OF_BIRTH|| Checkbox||Displays all nodes, colour coded depending on age-range - determined by date of birth || 
-|| Age	|| TABLE: CONTRIBUTOR - DD_DATE_OF_BIRTH, MM_DATE_OF_BIRTH, YYYY_DATE_OF_BIRTH|| Radio Buttons - age ranges|| Highlight nodes within the age range OR only display nodes within age range|| 
-|| Role/s|| TABLE: CONEVLINK|| Radio Buttons, multiple selections allowed, correspond to the functions listed in CONTFUNCT||Highlight matching nodes OR only display nodes with matching criteria|| 
-|| Role/s|| TABLE: CONEVLINK|| Checkbox|| 	Displays all nodes, colour coded depending on roles they have undertaken.|| 
-|| Suburb|| TABLE: VENUE - ROW: SUBURB|| Free Text||Highlight matching Nodes OR only display nodes with matching Suburb|| 
-|| State	|| TABLE: VENUE - ROW: STATE|| Drop Down|| Highlight matching Nodes OR only display nodes with matching State|| 
-|| Country|| TABLE: VENUE - ROW: COUNTRY|| Drop Down|| Highlight matching Nodes OR only display nodes with matching Country|| 
-|| Status|| TABLE: EVENTS|| Drop Down|| Highlight matching Nodes OR only display nodes with matching status|| 
-|| Genre|| TABLE: EVENTS - ROW: PRIMARY_GENRE	|| Drop Down|| Highlight matching Nodes OR only display nodes with matching genre|| 
+|| Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY|| Select menu, multiple selections allowed || Highlight nodes matching nationality/ies selected by user. || 
+|| Role/s|| TABLE: CONEVLINK|| Select menu, multiple selections allowed, correspond to the functions listed in CONTFUNCT||Highlight nodes matching role/s selected by user|| 
+
+Additional criteria derived from event and venue attributes (status, primary genre, secondary genre, suburb, state, country) may be considered after initial testing.
 
 Work flow:
 User selects a criteria
