@@ -76,6 +76,7 @@ We experimented with a range of network visualisation software, all open source,
 
   * BioLayout Express (http://www.biolayout.org/)
   * Cytoscape (http://www.cytoscape.org)
+  * Gephi (http://gephi.org/)
   * Network Workbench (http://nwb.slis.indiana.edu/)
   * SoNIA (http://www.stanford.edu/group/sonia/)
   * Visone (http://visone.info/)
@@ -105,13 +106,13 @@ We have also visualised other network attributes, specifically measures of node 
 
 ‘Degree of connection’ represents the extent to which artists have collaborated with others. ‘Betweenness’ is a complex measure of the extent to which an artist lies between other artists in the network: it identifies artists whose collaborations join areas of the network together; they are the anchor points, without which clusters of practitioners would float free (as, indeed, some do).
 
-_Time-slice_
-
-In another approach, we graphed the network of relations between contributors as a year-by-year series.6 Working with data from the performance space, we found that each year, the network grows as new contributors are drawn into productions. The network also consolidates as contributors who have previously worked at the venue work there again. Over time, the network displays a dynamic of reaching out to incorporate new contributors, and a drawing from within to consolidate the core.
-
-_Event-to-event_
+__Event-to-event_
 
 An alternative approach to visualising the network of artistic collaboration is through the mapping of event-to-event relations determined by the flow of artists. The direction of the arrows indicates the movement of artists from one event to another subsequent event. The time series reveals the pathways of collaborations flowing between events.7 This approach enables us to chart an artist’s journey through the events of their career. Overall, it visualises the flow of artists through a series of events. It suggests the possibility of tracing contact and connection, lines of influence and aesthetic transmission. 
+
+Time-slice_
+
+Returning to the person-to-person approach, we graphed the network of relations between contributors as a year-by-year series.6 Working with data from the performance space, we found that each year, the network grows as new contributors are drawn into productions. The network also consolidates as contributors who have previously worked at the venue work there again. Over time, the network displays a dynamic of reaching out to incorporate new contributors, and a drawing from within to consolidate the core.
 
 _Animation_
 
@@ -131,7 +132,7 @@ We continued our exploration of how networks change over time by graphically ani
 
 ===Research Needs===
 
-Derived from LIEF Proposal and Aus-e-Stage project plan
+This section summarises research needs for network analysis from the AusStage phase 4 LIEF Proposal and the Aus-e-Stage project plan.
 
 AusStage researchers are taking an entirely new approach to analysing performance data by asking the question, ‘Who works with whom?’. The National eResearch Architecture Taskforce is funding the technological development of an interface for navigating the network of artistic collaborations in the AusStage dataset. ARC LIEF is funding research to enhance the representation of artists in the AusStage user interface. These development activities are driven by the research needs of the Networks Cluster of AusStage Phase 4: Jonathan Bollen (Flinders), Kim Durban (Ballarat), Shona Erskine and Nanette Hassal (ECU), Glen McGillivray (Sydney/UWS) and Helen Trenos (Tasmania). 
 
@@ -143,13 +144,15 @@ The new interface will be used by AusStage researchers to undertake and substant
 
 ===Interface Ideas===
 
-The Networks Cluster developed a suite of ideas for the Network interface through a series of meetings to June 2010. The ideas were grouped according to functionality and ranked according to popularity across the cluster. 
+The Networks Cluster, a group of researchers involved in AusStage phase 4 -  Jonathan Bollen, Kim Durban, Shona Erskine, Nanette Hassall, Glen McGillivray and Helen Trenos - developed a set of ideas for the Network interface through a series of meetings to June 2010. These ideas were grouped according to functionality and ranked according to popularity across the cluster. 
+
+The interface will present network graphs as an interactive method for exploring the network of contributors and events in the AusStage dataset. Network graphs are composed of nodes and edges. The node represents an entity in the AusStage database, either a Contributor or an Event; an edge represents a relationship between nodes, derived from the ConEvLink table.
 
 1. NETWORK BROWSING - Person-To-Person  - Graphic Interface
 
 1.1 Graphic Interface - _Priority Ranking: 100%_
 
-The network browsing graphic interface allows the user to search the AusStage database for a contributor. Once a contributor is selected by the user, the network browsing window will display that particular contributors network first degree network. ie Only those contributors he has directly worked with. The default display will show the selected contributor, represented as a node, in the centre of the network, with all associated contributors represented as nodes radiating outwards. 
+The network interface allows the user to search the AusStage database for a contributor. Once a contributor is selected by the user, the interface will display that contributor's network first degree network, i.e. those contributors with whom he or she  has directly worked. The default display will show the selected contributor, represented as a node in the centre of the network, with all associated contributors represented as nodes radiating outwards; the edges between nodes will also be shown. 
 When a user selects a node by double clicking on the node, this node becomes the ‘central’ node. Their first degree network will be added to the graphic network display.
 
 Work flow:
@@ -169,11 +172,12 @@ No: redraw, or add to the network graphic this nodes first degree network.  
 
 _QUESTION: How many degrees of separation before outlying nodes drop off? 
 ie say you start with contributorA. You select contributor B. Now you have ContributorA and contributorB’s networks. Now you select contibutorC who has collaborated with ContributorB., and not contributorA. Should contributorA’s network dissappear if only relevant to contributorA?
+_ANSWER: As many degrees as possible. But the limit will be the number of nodes and links, not the number of degrees. Because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed, at which point, those which are furthest from the current focus, could be dropped from display.
 Remember to deal with contributor archaeology._
-Coding note: it is preferable that the back end stays one step ahead of the display. Ie display one degree network, but have the second degree network stored so it can be loaded quickly. Then get the next level...
+Coding note: it is preferable that the back end stays one step ahead of the display, i.e. display one degree network, but have the second degree network stored so it can be loaded quickly. Then get the next level...
 
 1.2 Time-slider - _Priority Ranking: 84%_
-The time-slider is a bar that depicts the start and end point of the contributors activity within AusStage. The behaviour and look of the time-slider should correspond to the time-slider user for the Visual Mapping interface.
+The time-slider is a bar that depicts the start and end point of the contributor's activity within AusStage. The behaviour and look of the time-slider should correspond to the time-slider user for the Visual Mapping interface.
 A user may manipulate both markers to determine a start and end date. The visual display of the network should then be refreshed to display only collaborations that occurred during this period. Ideally the nodes outside this date range would ‘fade’ from view. Collaborations are defined as contributors who are associated with the same event. So, if the event’s start date falls outside of the dates specified, the associated contributors are not displayed. 
 The start point is defined as the earliest start date of all the events that a contributor has been associated with. 
 The end point is defined as the latest start date of all the events that a contributor has been associated with.
@@ -181,7 +185,7 @@ The end point is defined as the latest start date of all the events that a contr
 Work flow:
   # User alters start and/or end date.
   # User submits changes
-  # Remove nodes from visibility that are outside of the dates specified.
+  # Remove nodes and links from visibility that are outside of the dates specified.
 
 1.3 Faceted browsing - _Priority Ranking 84%_
 Included in the Network Browsing interface will be a panel of criteria represented as checkboxes and open text boxes.
