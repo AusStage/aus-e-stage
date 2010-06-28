@@ -4,6 +4,8 @@
 
 The sections below detail information about the dataset that is constructed by the RdfExport application for use by the [NetworkService Navigating Networks Service] by periodically exporting data from the AusStage relational database. 
 
+<wiki:toc max_depth="2" />
+
 = Export Steps =
 
 The RdfExport application undertakes the following steps to build the dataset
