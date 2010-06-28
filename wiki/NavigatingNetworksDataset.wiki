@@ -93,3 +93,5 @@ To assist in the clarity of !AusStage unique identifiers in the dataset the foll
 The [http://code.google.com/p/aus-e-stage/source/browse/trunk/rdf-export/src/au/edu/ausstage/vocabularies/AusStageURI.java AusStageURI class] in the au.edu.ausstage.vocabularies package provides convenience methods for encoding identifiers, and converting identifiers into the persistent URLs used by the !AusStage website
 
 = Additional Information =
+
+ * http://en.wikipedia.org/wiki/Resource_Description_Framework
