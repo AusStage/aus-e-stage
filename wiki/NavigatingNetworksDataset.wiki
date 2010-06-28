@@ -2,7 +2,7 @@
 
 <h1>Navigating Networks Dataset</h1>
 
-The sections below detail information about the dataset that is constructed by the RdfExport application for use by the [NetworksService Navigating Networks Service] by periodically exporting data from the AusStage relational database. 
+The sections below detail information about the dataset that is constructed by the RdfExport application for use by the [NetworkService Navigating Networks Service] by periodically exporting data from the AusStage relational database. 
 
 = Fields Exported =
 
