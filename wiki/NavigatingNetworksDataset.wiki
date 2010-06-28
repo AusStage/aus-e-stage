@@ -4,10 +4,64 @@
 
 The sections below detail information about the dataset that is constructed by the RdfExport application for use by the [NetworkService Navigating Networks Service] by periodically exporting data from the AusStage relational database. 
 
-= Fields Exported =
+= Export Steps =
+
+The RdfExport application undertakes the following steps to build the dataset
+
+ # [NavigatingNetworksData#Contributors An export of all contributor records]
+ # [NavigatingNetworksData#Contributor_Relationships An export of contributor relationships]
+ # [NavigatingNetworksData#Events An export of events and contributor relationships to events]
+
+= Subjects Creates & Source Fields =
+
+== Contributors ==
 
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
+|| contributor || contributorid || rdf:about || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
+|| contributor || contirbutorid || foaf:page || As a persistent link to the Contributor page in AusStage || [NavigatingNetworksGoals All] ||
+|| contributor || first_name || foaf:givenName ||  || [NavigatingNetworksGoals All] || 
+|| contributor || last_name || foaf:familyName || ||  [NavigatingNetworksGoals All] ||
+|| contributor || first_name + " " + last_name || foaf:name || ||  [NavigatingNetworksGoals All] ||
+|| events || eventid || event:isAgentIn || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] & added as part of step 3|| [NavigatingNetworksGoals All] ||
 
+=== SQL Code ==
+
+{{{
+SELECT contributorid, first_name, last_name FROM contributor
+}}}
+
+== Contributor Relationships == 
+|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
+|| subquery || c1.collaborator || foaf:knows || || [NavigatingNetworksGoals All] ||
+
+=== SQL Code ===
+{{{
+SELECT DISTINCT contributorid, c1.collaborator 
+FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1 
+WHERE conevlink.eventid = c1.eventid 
+AND contributorid IS NOT NULL 
+ORDER BY contributorid
+}}}
+
+== Events == 
+
+|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
+|| events || eventid || rdf:about || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
+|| events || event_name || dcterms:title || || [NavigatingNetworksGoals All] ||
+|| conevlink || contributorid || event:agent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
+
+=== SQL Code ===
+{{{
+SELECT DISTINCT e.eventid, e.event_name, c.contributorid 
+FROM events e, conevlink c 
+WHERE e.eventid = c.eventid 
+AND e.eventid IS NOT NULL 
+AND c.contributorid IS NOT NULL 
+ORDER BY e.eventid
+}}}
+
+
+=== SQL Code ===
 
 = RDF Ontologies = 
 <wiki:comment> Keep this list in sync with the RdfExport page</wiki:comment>
