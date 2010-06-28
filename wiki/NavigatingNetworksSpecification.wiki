@@ -194,8 +194,7 @@ Criteria to be listed
 || Label	|| Database Reference|| 	Type|| 	Facet Options|| 
 || Gender|| TABLE: CONTRIBUTOR - ROW: GENDER||	radio button 1 : Male radio button 2: Female|| Highlight matching nodes OR only display nodes with matching criteria HOW DO WE DEAL WITH UNKNOWN?|| 
 || Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY|| Checkbox|| Displays all nodes, colour coded depending on nationality. || 
-|| Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY||Free Text||Highlight nodes with matching nationality OR 
-only display nodes with matching nationality|| 
+|| Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY||Free Text|| Highlight nodes with matching nationality OR only display nodes with matching nationality|| 
 || Age|| TABLE: CONTRIBUTOR - ROW: DD_DATE_OF_BIRTH, MM_DATE_OF_BIRTH, YYYY_DATE_OF_BIRTH|| Checkbox||Displays all nodes, colour coded depending on age-range - determined by date of birth || 
 || Age	|| TABLE: CONTRIBUTOR - DD_DATE_OF_BIRTH, MM_DATE_OF_BIRTH, YYYY_DATE_OF_BIRTH|| Radio Buttons - age ranges|| Highlight nodes within the age range OR only display nodes within age range|| 
 || Role/s|| TABLE: CONEVLINK|| Radio Buttons, multiple selections allowed, correspond to the functions listed in CONTFUNCT||Highlight matching nodes OR only display nodes with matching criteria|| 
