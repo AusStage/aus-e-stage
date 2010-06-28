@@ -209,27 +209,30 @@ Work flow:
 User selects a criteria
 The browsing graphic is updated to display the criteria - (More detail)
 
-===1.4 Pop-ups and information display===
+===1.4 Pop-ups===
 
 _Priority Ranking 76%_ 
 
-1.4.a: 	Each node should be generated with a label. This label will correspond to the contributors name as stored rdf export. <foaf:name>
+1.4.1: 	Each node should be generated with a label. This label will correspond to the contributors name as stored rdf export. It should be apparent on mouse-over. <foaf:name>
 
-1.4.b	The interface will contain a window that displays contributor information for the selected contributor. This information should correspond to the contributor detail page 	in AusStage, as well as include the following:
-		A list of events this contributor has been involved in. (Selecting an event will highlight the cast within this network?)
+1.4.2	Single clicking on a link or node within the network browsing graphic will trigger a popup window. This window will hold key information relating to that particular node or link. It will also select the node and its links; or the link and its two nodes.
 
-1.4.c	Single clicking on a link or node within the network browsing graphic will trigger a popup window. This window will hold key information relating to that particular node or link. 
-	Node information displayed: 	other names
-					gender
-					date of birth
-					nationality
-					company associations (where does this come from?)
-					training history(where does this come from?)
-					number of relationships (count of foaf:knows)
+Node information displayed: 	
+*Name as link to AusStage record
+*Other names
+*Gender
+*Date of birth
+*Nationality
+*Contributor ID
+*Roles
+*Number of relationships (count of foaf:knows)
 	
-	Link information displayed	number of collaborations between contributors
-					frequency? 
-					date range
+Link information displayed	number of collaborations between contributors
+*Contributor names as link to AusStage records
+*Number of events
+*Date range of events
+
+An alternative to pop-ups would be to display node and link information in separate panels.
 
 ==2. NETWORK BROWSING - Person-to-person - Text Interface==
 
