@@ -149,9 +149,9 @@ The interface will present network graphs as an interactive method for exploring
 ==1. NETWORK BROWSING - Person-To-Person  - Graphic Interface==
 
 ===1.1 Graphic Interface===
- _Priority Ranking: 100%_
+_Priority Ranking: 100%_
 
-The network interface allows the user to search the AusStage database for a contributor. Once a contributor is selected by the user, the interface will display that contributor's network first degree network, i.e. those contributors with whom he or she  has directly worked. The default display will show the selected contributor, represented as a node in the centre of the network, with all associated contributors represented as nodes radiating outwards; the edges between nodes will also be shown. 
+The network browsing interface allows the user to search the AusStage database for a contributor. Once a contributor is selected by the user, the interface will display that contributor's network first degree network, i.e. those contributors with whom he or she  has directly worked. The default display will show the selected contributor, represented as a node in the centre of the network, with all associated contributors represented as nodes radiating outwards; the edges between nodes will also be shown. 
 When a user selects a node by double clicking on the node, this node becomes the ‘central’ node. Their first degree network will be added to the graphic network display.
 
 Work flow:
@@ -170,16 +170,16 @@ Yes: do nothing
 No: redraw, or add to the network graphic this nodes first degree network.  
 
 _QUESTION: How many degrees of separation before outlying nodes drop off? 
-ie say you start with contributorA. You select contributor B. Now you have ContributorA and contributorB’s networks. Now you select contibutorC who has collaborated with ContributorB., and not contributorA. Should contributorA’s network dissappear if only relevant to contributorA?
+ie say you start with contributorA. You select contributor B. Now you have ContributorA and contributorB’s networks. Now you select contibutorC who has collaborated with ContributorB., and not contributorA. Should contributorA’s network dissappear if only relevant to contributorA?_
 
-_ANSWER: As many degrees as possible. But the limit will be the number of nodes and links, not the number of degrees. Because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed, at which point, those which are furthest from the current focus, could be dropped from display.
+_ANSWER: As many degrees as possible. But actually the limit will be the number of nodes and links, not the number of degrees - because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed, but this will be determined by how many nodes and links are added, not how many degrees from origin. At that point, those which are furthest from the current focus, could be dropped from display._
 
-Remember to deal with contributor archaeology._
+_Remember to deal with contributor archaeology._
 
 Coding note: it is preferable that the back end stays one step ahead of the display, i.e. display one degree network, but have the second degree network stored so it can be loaded quickly. Then get the next level...
 
 ===1.2 Time-slider===
- _Priority Ranking: 84%_
+_Priority Ranking: 84%_
 
 The time-slider is a bar that depicts the start and end point of the contributor's activity within AusStage. The behaviour and look of the time-slider should correspond to the time-slider user for the Visual Mapping interface.
 A user may manipulate both markers to determine a start and end date. The visual display of the network should then be refreshed to display only collaborations that occurred during this period. Ideally the nodes outside this date range would ‘fade’ from view. Collaborations are defined as contributors who are associated with the same event. So, if the event’s start date falls outside of the dates specified, the associated contributors are not displayed. 
@@ -194,7 +194,7 @@ Work flow:
 ===1.3 Faceted browsing===
 _Priority Ranking 84%_
 
-Included in the Network Browsing interface will be a panel of criteria represented as checkboxes and open text boxes.
+Included in the Network Browsing interface will be a panel of criteria represented as checkboxes, select menus and open text boxes.
 
 Selecting one or multiple criteria will highlight nodes that match that criteria, whilst fading the nodes that don’t match.
 
@@ -239,9 +239,6 @@ _Priority Ranking 76%_
 	Link information displayed	number of collaborations between contributors
 					frequency? 
 					date range
-
-
-
 
 ==2. NETWORK BROWSING - Person-to-person - Text Interface==
 
