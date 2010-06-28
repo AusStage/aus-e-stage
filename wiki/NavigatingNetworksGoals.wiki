@@ -32,7 +32,7 @@ As I'm browsing through a network, I can click on people to find out more inform
 
 *Desirability Rank:* 76%
 
-= NETWORK BROWSING - Person-to-person - Text Interface =
+= Network Browsing - Person-to-person - Text Interface =
 
 == Key collaborators ==
 
@@ -46,7 +46,7 @@ I'm looking at Rosalba Clemente again - and I can see a list of the organisation
 
 *Desirability Rank:* 72%
 
-= NETWORK SEARCH AND DISPLAY - Person-to-person =
+= Network Search and Display - Person-to-person =
 
 Search AusStage for contributors and events, and display the results graphically as a an interactive network. Search provides another way into exploring networks of collaboration between people. The interface for displaying results could also enable further navigating through the network, refining the display with time-slider, faceted browsing and so on.
 
@@ -74,7 +74,7 @@ I select a venue (or venues) and ask AusStage to display the network of all the 
 
 *Desirability Rank:* 56%
 
-= NETWORKS+TIMELINES =
+= Networks and Timelines =
 
 == Contributor Career as a line on a timeline ==
 
@@ -88,7 +88,7 @@ I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the c
 
 *Desirability Rank:* 60%
 
-= NETWORK BROWSING - Event-to-event = 
+= Network Browsing - Event-to-event = 
 
 Event-to-event networks provide an alternative way of exploring collaborations. In these graphics, the events are the spots and the lines connecting them are people.
 
@@ -110,7 +110,7 @@ Search and display by venue, organisations, event-criteria and connections could
 
 *Desirability Rank:* 56%
 
-= DYNAMIC NETWORKS =
+= Dynamic Networks =
 
 I'm looking at a network of collaborations in AusStage and I want to see how that network has changed over time, how it has evolved, where people joined and left, who stuck around, when the network grew, shrank, changed shape and so on. 
 
@@ -132,15 +132,14 @@ I'm looking at a network as a series of time-slices - arranged in three-dimensio
 
 *Desirability Rank:* 56%
 
-= NETWORKS+MAPS =
+= Networks and Maps =
 
 I'm looking at a contributor's career as a line on a map. The line links the venues at which the contributor has performed in chronological order. Following the line from beginning to end, I can see where the contributor has performed over time. If I start adding their collaborators to the map, I can see where those collaborators have worked together, how often, and at which points they head off on their own. This is similar to the timeline, with events displayed geographically on a map. 
 
 *Desirability Rank:* 60%
 
-= STATISTICAL ANALYSES and PATTERN MATCHING =
+= Statistical Analysis and Pattern Matching =
 
 I'm looking at a network of collaborations in AusStage and I want to explore its statistical properties - degree of connection, shortest path, clustering and so on. I might want to compare its statistical properties to other networks. I might want to search AusStage for other network areas with similar or matching properties. 
 
 *Desirability Rank:* 44% 
-
