@@ -1,7 +1,7 @@
 #summary The Navigating Networks Specification
 <wiki:toc max_depth="3" />
 
-=1. BACKGROUND RESEARCH AND DEVELOPMENT=
+=BACKGROUND RESEARCH AND DEVELOPMENT=
 
 This section summarises the research and development that has led us to this point. 
 
@@ -128,7 +128,7 @@ We continued our exploration of how networks change over time by graphically ani
 
   * The significance of time
 
-=2. RESEARCH NEEDS=
+=RESEARCH NEEDS=
 
 This section summarises research needs for network analysis from the AusStage phase 4 LIEF Proposal and the Aus-e-Stage project plan.
 
@@ -140,7 +140,7 @@ The NeAT-developed Network service will deliver an interactive interface for nav
 
 The new interface will be used by AusStage researchers to undertake and substantiate analyses which were previously difficult to deliver, including:  lines of artistic contact, influence and cross-fertilization; organisational cycles of growth, consolidation and release; patterns in career pathways and professional development; and emerging clusters of collaborative creativity suitable for strategic investment. Hassall is investigating creative collaborations amongst prominent West Australian dance artists; Bollen is tracking networks of mid-twentieth century Australian variety entertainers moving from tent shows and theatres to television studios and licensed clubs; Durban is documenting the unacknowledged influence of theatre director Ewa Czajor on generations of women directors; McGillivray is exploring concealed networks of collaboration in records of live performance that remain outside of authoritative archives; Trenos is documenting networks of performance production in Tasmania; and Holledge, Tompkins and Bollen are analysing the collaborative networks of Ibsen production in Australia in their ARC Discovery Project. AusStage will work with the Australia Council to apply these interface improvements in representing the work of artists, organisations and artistic collaborations within arts programming and arts funding policy. 
 
-=3. INTERFACE IDEAS=
+=INTERFACE IDEAS=
 
 The Networks Cluster, a group of researchers involved in AusStage phase 4 -  Jonathan Bollen, Kim Durban, Shona Erskine, Nanette Hassall, Glen McGillivray and Helen Trenos - developed a set of ideas for the Network interface through a series of meetings to June 2010. These ideas were grouped according to functionality and ranked according to popularity across the cluster. 
 
@@ -327,6 +327,33 @@ sketch for each interface idea BRAD WITH INPUT FROM JONATHAN
 
 technical requirements for each interface idea BRAD WITH INPUT FROM COREY/WEI
 
+=TOOLS AND TECHNOLOGIES - CANDIDATES FOR APPLICATION=
+
+BRAD TO WRITE UP WITH INPUT FROM COREY/WEI 
+
+Summarise Corey's current work
+-  network data formats: GraphML, FOAF, etc... 
+-  data processing technologies:  RDF, OWL, JENA 
+-  network visualisation libraries:  Protovis and JavaScript InfoVis Toolkit (JIT). 
+
+From Aus-e-Stage project plan - but now out of date
+
+Prefuse Visualization Toolkit (Java) and Prefuse Flare Toolkit (Flash) are likely candidates for developing interactive web-based visualizations of network data.  Vizster, a tool for visualizing online social networks developed by Assistant Professor Jeffrey Heer at Berkeley, provides a model for the AusStage network interface. No standard for encoding network data has emerged; a set of XML-based candidates, including GraphML, DyNetML and GML, are in current use.  The Prefuse Visualisation Toolkit uses GraphML.  The underlying relationships could also be encoded in RDF.
+
+APPENDIX A - definitions
+definitions relate to terms used within the specification paper. Particularly with regards to the interface descriptions.
+
+Node: 
+Collaboration:
+Collaborator:
+ 
+=DEVELOPMENT SCHEDULE=
+
+BRAD TO WRITE UP WITH INPUT FROM LIZ/COREY
+
+activities / outcomes / milestones / timelines etc
+ 
+=REFERENCES=
 
 
 
