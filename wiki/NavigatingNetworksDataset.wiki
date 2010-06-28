@@ -1,0 +1,39 @@
+#summary About the Navigating Networks Dataset
+
+<h1>Navigating Networks Dataset</h1>
+
+The sections below detail information about the dataset that is constructed by the RdfExport application for use by the [NetworksService Navigating Networks Service] by periodically exporting data from the AusStage relational database. 
+
+= Fields Exported =
+
+|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
+
+
+= RDF Ontologies = 
+<wiki:comment> Keep this list in sync with the RdfExport page</wiki:comment>
+
+== In Use == 
+
+|| *Ontology Name* || *Namespace* || *More Information* || 
+|| FOAF - Friend of a Friend|| foaf || http://www.foaf-project.org/ ||
+|| Event|| event || http://motools.sourceforge.net/event/event.html ||
+|| DCMI Metadata Terms|| dcterms || http://dublincore.org/documents/dcmi-terms/ ||
+
+
+== Planned for Use ==
+
+|| *Ontology Name* || *Namespace* || *More Information* || *Notes ||
+|| OWL-Time || time || http://www.w3.org/TR/owl-time/ || Used to represent dates associated with events ||
+
+= !AusStage URI Schema = 
+<wiki:comment> Keep this list in sync with the RdfExport page</wiki:comment>
+
+To assist in the clarity of !AusStage unique identifiers in the dataset the following encoding scheme is used:
+
+ * A unique identifier is prefixed with _ausstage:_
+ * If the unique identifier is for a contributor _c:_ is then added
+ * If the unique identifier is for an event _e:_ is then added
+
+The [http://code.google.com/p/aus-e-stage/source/browse/trunk/rdf-export/src/au/edu/ausstage/vocabularies/AusStageURI.java AusStageURI class] in the au.edu.ausstage.vocabularies package provides convenience methods for encoding identifiers, and converting identifiers into the persistent URLs used by the !AusStage website
+
+= Additional Information =
