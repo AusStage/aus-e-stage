@@ -1,4 +1,4 @@
-#summary One- The Navigating Networks Specification
+#summary The Navigating Networks Specification
 
 = Navigating Networks Specification =
 <wiki:toc max_depth="3" />
@@ -17,7 +17,7 @@ In Graphs, Maps and Trees, Moretti advocates a practice of ‘distant reading’
 
 Underlying our explorations in visualisation is the information architecture created for the AusStage database. This architecture organises information about the performing arts into five main categories – events, artists, venues, organisations and resources – and it provides a way to record meaningful relations between entries in each category. Thus an event is a temporal happening, defined by its title and date, but also by its location at a venue, by the organisations that produce it, and by the cast and crew of artists who contribute to it. Our knowledge of the event is derived from all the resources – the programs, photographs, advertising, reviews, commentaries, scripts, recordings and so on – that are left behind in its wake. (show AusStage relational database graphic)
 
-More generally, our research on visualising the networks recorded in the AusStage database drew on the emergence and popularisation of network science as reported in [cite references]. In particular, the research using IMDB was particularly influential, given the similarity in information architecture between IMDB and AusStage (needs reference). (JB to expand…)
+More generally, our research on visualising the networks recorded in the AusStage database drew on the emergence and popularisation of network science as reported in (cite references). In particular, the research using IMDB was particularly influential, given the similarity in information architecture between IMDB and AusStage (needs reference). (JB to expand…)
 
 ===Experiments===
 
@@ -76,7 +76,7 @@ data:
 
 We experimented with a range of network visualisation software, all open source, including:
 
-  * BioLayout Express ([http://www.biolayout.org/])
+  * BioLayout Express (http://www.biolayout.org/)
   * Cytoscape (http://www.cytoscape.org)
   * Network Workbench (http://nwb.slis.indiana.edu/)
   * SoNIA (http://www.stanford.edu/group/sonia/)
@@ -121,7 +121,7 @@ We continued our exploration of how networks change over time by graphically ani
 
 ===Emergent Principles===
 
-[JB to expand…]
+(JB to expand…)
 
   * A focus on artistic networks. The realism of person-to-person connections. 
 
