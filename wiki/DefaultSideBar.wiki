@@ -13,6 +13,7 @@
    * [MappingService Mapping Service]
    * [MobileService  Mobile Service]
    * [NetworkService Network Service]
+     * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksDataset Dataset]
      * [NavigatingNetworksGoals   Service Goals] 
    * [AusStageTerminator AusStage Terminator Service]
