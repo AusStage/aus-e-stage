@@ -1,8 +1,8 @@
 #summary The Navigating Networks Specification
-
-Navigating Networks Specification
 <wiki:toc max_depth="3" />
+
 =1. BACKGROUND RESEARCH AND DEVELOPMENT=
+
 This section summarises the research and development that has led us to this point. 
 
 ==Background==
