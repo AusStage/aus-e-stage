@@ -1,7 +1,7 @@
 #summary One- The Navigating Networks Specification
 
 = Navigating Networks Specification =
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="3" />
 ==1. BACKGROUND RESEARCH AND DEVELOPMENT==
 In this section of the Navigating Networks Specification we will summarise the research and development that has led us to this point. 
 
@@ -76,7 +76,7 @@ data:
 
 We experimented with a range of network visualisation software, all open source, including:
 
-  * BioLayout Express (http://www.biolayout.org/)
+  * BioLayout Express ([http://www.biolayout.org/])
   * Cytoscape (http://www.cytoscape.org)
   * Network Workbench (http://nwb.slis.indiana.edu/)
   * SoNIA (http://www.stanford.edu/group/sonia/)
