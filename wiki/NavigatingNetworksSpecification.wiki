@@ -17,7 +17,26 @@ In Graphs, Maps and Trees, Moretti advocates a practice of ‘distant reading’
 
 Underlying our explorations in visualisation is the information architecture created for the AusStage database. This architecture organises information about the performing arts into five main categories – events, artists, venues, organisations and resources – and it provides a way to record meaningful relations between entries in each category. Thus an event is a temporal happening, defined by its title and date, but also by its location at a venue, by the organisations that produce it, and by the cast and crew of artists who contribute to it. Our knowledge of the event is derived from all the resources – the programs, photographs, advertising, reviews, commentaries, scripts, recordings and so on – that are left behind in its wake. (show AusStage relational database graphic)
 
-More generally, our research on visualising the networks recorded in the AusStage database drew on the emergence and popularisation of network science as reported in (cite references). In particular, the research using IMDB was particularly influential, given the similarity in information architecture between IMDB and AusStage (needs reference). (JB to expand…)
+More broadly, our research on analysing and visualising the networks recorded in the AusStage database has developed in conjunction with the popular dissemination of scientific research on networks, complexity and emergence - in particular, works by Watts (1999, 2003), Barabasi (2003), and Newman, Barabasi and Watts (2006). Börner et al (2007) and Golden et al (2009) provide up-to-date surveys of this field.
+
+An initial source of inspiration was the popular 'Oracle of Bacon' (http://oracleofbacon.org/) which draws on relational data from the Internet Movie Database (http://imdb.com) to calculate shortest paths, network centrality and degrees of distance between actors working on movies. The relation between actors and movies in IMDb presented a direct correlate with contributors and events in the AusStage database.
+
+Our understanding of statistical concepts for social network analysis draws on John Scott's (2000) Social Network Analysis: A Handbook, and on the various algorithms embedded in the software packages we have used. From Scott, we have drawn understandings of the following key concepts:
+
+  * Degree - the total number of other points in the neighbourhood of a point, the total number of other points to which a point is directly linked. Neighbourhood - those points to which a particular point is adjacent. Adjacent - two points connected by a line are said to be adjacent. In directed graphs: Indegree of a point is the total number of other points that have lines directed towards it; Outdegree of a point is the total number of other points to which it directs lines. Multiplicity - the number of lines between two points, the separate contacts which make up the relationship
+  * Path - sequence of lines between two points; Length of a path - the number of lines connecting two points; Distance - the length of the shortest path between two points. A path in a directed graph is a sequence of lines in which all the arrows point in the same direction. The distance between two points in a directed graph is measured only along the paths flowing in the same direction. When agents are regarded as either 'sources' or 'sinks' for the 'flow' of resources or information through a network, it is important to take direction into account
+  * Density - The more points that are connected to one another, the more dense the graph will be. In a 'complete' graph, each point is connected to every other point. Inclusiveness - the number of points that are included within the various connected parts of the graph. Density - the number of lines in a graph, expressed as a proportion of the maximum possible number of lines. formula: l / (n(n-1)2) where l is the number of lines and n is the number of points. 
+  * Centrality - degree as a measure of local centrality - doesn't take into account indirect links, relative measure of local centrality = degree of a point / number of points. Global centrality is expressed as the distances among the various points (closeness). Sum distance = the sum of the distances from one point to all other points = the lower the sum, the closer the points. 
+  * Betweenness = the extent to which a particular point lies 'between' the various other points in the graph: a point of relatively low degree may play an important 'intermediary' role and so be very central to the network. The betweenness of a point measures the extent to which an agent can play the part of a 'broker' or 'gatekeeper' with a potential for control over others
+
+Additional online resources which have informed our understanding of social networks, their visualisation and analysis include:
+
+  * Visual Complexity http://www.visualcomplexity.com/vc/
+  * Information Aesthetics http://infosthetics.com/
+  * International Network for Social Network Analysis http://www.insna.org/
+  * Social Networks: An International Journal of Structural Analysis http://www.elsevier.com/wps/find/journaldescription.cws_home/505596/description
+  * Journal of Social Structure http://www.cmu.edu/joss/
+  * MelNet, University of Melbourne http://www.sna.unimelb.edu.au/
 
 ==Experiments==
 
@@ -345,6 +364,24 @@ BRAD TO WRITE UP WITH INPUT FROM LIZ/COREY
 activities / outcomes / milestones / timelines etc
  
 =REFERENCES=
+
+Barabasi, Albert-Laszlo. 2003. Linked: How Everything Is Connected to Everything Else and What It Means, Plume.
+
+Bollen, J., Harvey, N., Holledge, J., McGillivray, G. 2009. ‘AusStage: eResearch in the Performing Arts’, Australasian Drama Studies, 54.
+
+Börner, Katy, Sanyal, Soma and Vespignani, Alessandro. 2007. Network Science. In Blaise Cronin (Ed.), ARIST, Information Today, Inc./American Society for Information Science and Technology, Medford, NJ, Volume 41, Chapter 12, pp. 537-607. http://ivl.slis.indiana.edu/km/pub/2007-borner- arist.pdf
+
+Goldenberg, A., Zheng, A.X., Fienberg, S.E., & Airoldi E.M. 2009.   A survey of statistical network models.   Foundations and Trends in Machine Learning,   2, 129-233.
+
+Moreno, J.L. 1953. Who Shall Survive? Foundations of Sociometry, Group Psychotherapy and Sociodrama. Beacon, N. Y.: Beacon House.
+
+Moretti, Franco. 2005. Graphs, Maps, Trees: Abstract Models for a Literary History, London & New York: Verso.
+
+Newman, Mark, Albert-Laszlo Barabasi and Duncan J. Watts. 2006. The Structure and Dynamics of Networks, Princeton, NJ: Princeton University Press.
+
+Watts, Duncan J. 2004. Six Degrees. The Science of a Connected Age, Norton.
+
+Watts, Duncan J. 1999. Small Worlds: The Dynamics of Networks between Order and Randomness (Princeton Studies in Complexity), Princeton, NJ: Princeton University Press.
 
 
 
