@@ -401,7 +401,7 @@ Bollen, J., Harvey, N., Holledge, J., McGillivray, G. 2009. ‘AusStage: eResear
 
 Börner, Katy, Sanyal, Soma and Vespignani, Alessandro. 2007. Network Science. In Blaise Cronin (Ed.), ARIST, Information Today, Inc./American Society for Information Science and Technology, Medford, NJ, Volume 41, Chapter 12, pp. 537-607. http://ivl.slis.indiana.edu/km/pub/2007-borner-arist.pdf
 
-Goldenberg, A., Zheng, A.X., Fienberg, S.E., & Airoldi E.M. 2009.   A survey of statistical network models.   Foundations and Trends in Machine Learning,   2, 129-233.
+Goldenberg, A., Zheng, A.X., Fienberg, S.E., & Airoldi E.M. 2009.   A survey of statistical network models.   Foundations and Trends in Machine Learning,   2, 129-233. http://arxiv.org/abs/0912.5410/
 
 Heer, Jeffrey and danah boyd. 2005. Vizster: Visualizing Online Social Networks, Proc. IEEE Symposium on Information Visualization (InfoVis), pp. 32-39, Oct 2005. http://vis.berkeley.edu/papers/vizster/
 
