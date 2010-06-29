@@ -218,18 +218,18 @@ _Priority Ranking 76%_
 1.4.2	Single clicking on a link or node within the network browsing graphic will trigger a popup window. This window will hold key information relating to that particular node or link. It will also select the node and its links; or the link and its two nodes.
 
 Node information displayed: 	
-*Name as link to AusStage record
-*Other names
-*Gender
-*Date of birth
-*Nationality
-*Contributor ID
-*Roles
-*Number of relationships (count of foaf:knows)
+  *Name as link to AusStage record
+  *Other names
+  *Gender
+  *Date of birth
+  *Nationality
+  *Contributor ID
+  *Roles
+  *Number of relationships (count of foaf:knows)
 	
 Link information displayed	number of collaborations between contributors
-*Contributor names as link to AusStage records
-*Number of events
+  *Contributor names as link to AusStage records
+  *Number of events
 *Date range of events
 
 An alternative to pop-ups would be to display node and link information in separate panels.
