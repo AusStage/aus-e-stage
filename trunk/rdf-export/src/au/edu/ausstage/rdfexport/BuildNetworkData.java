@@ -178,7 +178,9 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding contributor data to the datastore...");
 			
 			// define the sql
-			String sql = "SELECT contributorid, first_name, last_name FROM contributor";
+			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender) "
+					   + "FROM contributor c, gendermenu g "
+					   + "WHERE c.gender = g.genderid(+)";
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
@@ -202,10 +204,21 @@ public class BuildNetworkData {
 				// create a new contributor
 				Resource contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
 				contributor.addProperty(RDF.type, FOAF.Person);
+				
+				// add the name properties
 				contributor.addProperty(FOAF.name, firstName + " " + lastName);
 				contributor.addProperty(FOAF.givenName, firstName);
 				contributor.addProperty(FOAF.familyName, lastName);
+				
+				// add the url to the contributor page
 				contributor.addProperty(FOAF.page, AusStageURI.getContributorURL(resultSet.getString(1)));
+				
+				// add the gender
+				if(resultSet.getString(4) != null) {
+					if(resultSet.getString(4).equals("male") == true || resultSet.getString(4).equals("female") == true) {
+						contributor.addProperty(FOAF.gender, resultSet.getString(4));
+					}
+				}
 				
 				// store a reference to this contributor
 				contributors.put(resultSet.getString(1), contributor);
