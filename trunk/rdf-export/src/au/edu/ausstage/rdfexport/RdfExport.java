@@ -36,7 +36,7 @@ public class RdfExport {
 	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query", "edge-list-export", "edge-list-export-no-dups"};
 	
 	// Valid data formats
-	private static final String[] DATA_FORMATS = {"RDF/XML", "N-TRIPLE", "TURTLE", "N3"};
+	private static final String[] DATA_FORMATS = {"RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE", "TURTLE", "N3"};
 	
 	/**
 	 * Main driving method for the AusStage ABS Data Fix App
