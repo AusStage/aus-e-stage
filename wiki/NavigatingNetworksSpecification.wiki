@@ -1,9 +1,9 @@
 #summary The Navigating Networks Specification
 <wiki:toc max_depth="3" />
 
-=BACKGROUND RESEARCH AND DEVELOPMENT=
+=EXPLORATORY RESEARCH=
 
-This section summarises the research and development that has led us to this point. 
+This section summarises the exploratory research we have undertaken on the visualisation and analysis of networks in the AusStage dataset.
 
 ==Background==
 
