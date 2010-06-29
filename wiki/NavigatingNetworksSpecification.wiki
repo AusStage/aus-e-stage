@@ -15,7 +15,7 @@ Moreno’s interest in aggregated social relations has parallels in the performi
 
 In Graphs, Maps and Trees, Moretti advocates a practice of ‘distant reading’, as distinct from the conventional ‘close reading’ of literary studies.4 He uses statistical graphs, geographical maps, and evolutionary trees to reveal shifting patterns of genre and form in the history of the novel. Moretti reminds us that quantitative research – of the collaborative kind undertaken through AusStage – provides data, not interpretation.5 Arranging such data in abstract models for graphic display invokes the analytical attitude, provoking interrogation and offering scope for new interpretations. 
 
-Underlying our explorations in visualisation is the information architecture created for the AusStage database. This architecture organises information about the performing arts into five main categories – events, artists, venues, organisations and resources – and it provides a way to record meaningful relations between entries in each category. Thus an event is a temporal happening, defined by its title and date, but also by its location at a venue, by the organisations that produce it, and by the cast and crew of artists who contribute to it. Our knowledge of the event is derived from all the resources – the programs, photographs, advertising, reviews, commentaries, scripts, recordings and so on – that are left behind in its wake. (show AusStage relational database graphic)
+Underlying our explorations in visualisation is the information architecture created for the AusStage database. This architecture organises information about the performing arts into five main categories – events, artists, venues, organisations and resources – and it provides a way to record meaningful relations between entries in each category. Thus an event is a temporal happening, defined by its title and date, but also by its location at a venue, by the organisations that produce it, and by the cast and crew of artists who contribute to it. Our knowledge of the event is derived from all the resources – the programs, photographs, advertising, reviews, commentaries, scripts, recordings and so on – that are left behind in its wake.
 
 Our research on analysing and visualising the networks recorded in the AusStage database has developed in conjunction with the dissemination of scientific research on networks, complexity and emergence. Works by Watts (1999, 2003), Barabasi (2003), and Newman, Barabasi and Watts (2006) provided useful introductions to the field. Börner et al (2007) and Golden et al (2009) provide up-to-date surveys. An initial source of inspiration was the popular 'Oracle of Bacon' (http://oracleofbacon.org/) which draws relational data from the Internet Movie Database (http://imdb.com) to calculate shortest paths, network centrality and degrees of distance between actors working on movies. This network of actors and movies in IMDb presented a direct correlate with the network of contributors and events in the AusStage database.
 
@@ -26,6 +26,8 @@ Our understanding of statistical concepts for social network analysis draws on J
   * Density - The more points that are connected to one another, the more dense the graph will be. In a 'complete' graph, each point is connected to every other point. Inclusiveness - the number of points that are included within the various connected parts of the graph. Density - the number of lines in a graph, expressed as a proportion of the maximum possible number of lines. formula: l / (n(n-1)2) where l is the number of lines and n is the number of points. 
   * Centrality - degree as a measure of local centrality - doesn't take into account indirect links, relative measure of local centrality = degree of a point / number of points. Global centrality is expressed as the distances among the various points (closeness). Sum distance = the sum of the distances from one point to all other points = the lower the sum, the closer the points. 
   * Betweenness = the extent to which a particular point lies 'between' the various other points in the graph: a point of relatively low degree may play an important 'intermediary' role and so be very central to the network. The betweenness of a point measures the extent to which an agent can play the part of a 'broker' or 'gatekeeper' with a potential for control over others
+
+The Vizster project (http://hci.stanford.edu/jheer/projects/vizster/) provides a valuable model of an interactive interface to network data. Vizster addresses issues of focus and context in visualising networks, and presents an interactive interface for exploring network structure. Its design was guided by ethnographic research of online communities and it is the only network interface which, to our knowledge, has been subject to user testing (Heer and Boyd 2005). 
 
 Additional online resources which have informed our understanding of social networks, their visualisation and analysis include:
 
@@ -38,7 +40,7 @@ Additional online resources which have informed our understanding of social netw
 
 ==Experiments==
 
-Jonathan Bollen began experiments in visualising networks in the AusStage dataset in early 2008. He worked in an open-ended, exploratory manner, trialling various methods of data extraction, manipulation and visualisation, and sharing the process and results with colleagues. This research was undertaken in collaboration with Julie Holledge, the lead Chief Investigator on the AusStage project, and with Glen McGillivray, an AusStage partner. It was also pursued through a 2008/2009 summer scholarship which eResearchSA awarded to Nathan Lambert, a student in the Drama program at Flinders University. 
+Jonathan Bollen began experiments in visualising networks in the AusStage dataset in early 2008. He worked in an open-ended, exploratory manner, trialling various methods of data extraction, manipulation and visualisation, and sharing the process and results with colleagues. This research was undertaken in collaboration with Julie Holledge, the lead Chief Investigator on the AusStage project, and with Glen McGillivray and Yana Taylor from UWS. It was also pursued through a 2008/2009 summer scholarship which eResearchSA awarded to Nathan Lambert, a student in the Drama program at Flinders University. 
 
 The research focused on small subsets of the AusStage dataset, generating visualisations of networks of artistic collaboration associated with:
 
@@ -383,9 +385,11 @@ Barabasi, Albert-Laszlo. 2003. Linked: How Everything Is Connected to Everything
 
 Bollen, J., Harvey, N., Holledge, J., McGillivray, G. 2009. ‘AusStage: eResearch in the Performing Arts’, Australasian Drama Studies, 54.
 
-Börner, Katy, Sanyal, Soma and Vespignani, Alessandro. 2007. Network Science. In Blaise Cronin (Ed.), ARIST, Information Today, Inc./American Society for Information Science and Technology, Medford, NJ, Volume 41, Chapter 12, pp. 537-607. http://ivl.slis.indiana.edu/km/pub/2007-borner- arist.pdf
+Börner, Katy, Sanyal, Soma and Vespignani, Alessandro. 2007. Network Science. In Blaise Cronin (Ed.), ARIST, Information Today, Inc./American Society for Information Science and Technology, Medford, NJ, Volume 41, Chapter 12, pp. 537-607. http://ivl.slis.indiana.edu/km/pub/2007-borner-arist.pdf
 
 Goldenberg, A., Zheng, A.X., Fienberg, S.E., & Airoldi E.M. 2009.   A survey of statistical network models.   Foundations and Trends in Machine Learning,   2, 129-233.
+
+Heer, Jeffrey and danah boyd. 2005. Vizster: Visualizing Online Social Networks, Proc. IEEE Symposium on Information Visualization (InfoVis), pp. 32-39, Oct 2005. http://vis.berkeley.edu/papers/vizster/
 
 Moreno, J.L. 1953. Who Shall Survive? Foundations of Sociometry, Group Psychotherapy and Sociodrama. Beacon, N. Y.: Beacon House.
 
@@ -396,6 +400,5 @@ Newman, Mark, Albert-Laszlo Barabasi and Duncan J. Watts. 2006. The Structure an
 Watts, Duncan J. 2004. Six Degrees. The Science of a Connected Age, Norton.
 
 Watts, Duncan J. 1999. Small Worlds: The Dynamics of Networks between Order and Randomness (Princeton Studies in Complexity), Princeton, NJ: Princeton University Press.
-
 
 
