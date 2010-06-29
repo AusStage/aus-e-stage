@@ -171,7 +171,7 @@ Through the course of exploratory research and the articulation of research need
 
 ===A focus on artistic networks===
 
-While it is possible to use network analysis to visualise various relationships between different entities (organisations, events, venues, genres and so on), our focus is on the artistic networks articulated through the relationships between contributors and events. This focus reflects the collaborative ethic of the performance arts and the obligations of co-presence in the rehearsal room. 
+While it is possible to use network analysis to visualise various relationships between different entities (organisations, events, venues, genres and so on), our focus is on the artistic networks articulated through the relationships between contributors and events. There is a realism to this focus reflects the collaborative ethic of the performance arts and the obligations of co-presence in the rehearsal room. 
 
 ===An awareness of complexity===
 
