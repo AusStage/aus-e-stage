@@ -24,11 +24,14 @@ The RdfExport application undertakes the following steps to build the dataset
 || contributor || first_name || foaf:givenName ||  || [NavigatingNetworksGoals All] || 
 || contributor || last_name || foaf:familyName || ||  [NavigatingNetworksGoals All] ||
 || contributor || first_name + " " + last_name || foaf:name || ||  [NavigatingNetworksGoals All] ||
+|| contributor || gender || foaf:gender|| || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
 
 === SQL Code ==
 
 {{{
-SELECT contributorid, first_name, last_name FROM contributor
+SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender)
+FROM contributor c, gendermenu g
+WHERE c.gender = g.genderid(+)
 }}}
 
 == Contributor Relationships == 
