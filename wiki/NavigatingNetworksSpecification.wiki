@@ -36,6 +36,7 @@ Additional online resources which have informed our understanding of social netw
   * Journal of Social Structure http://www.cmu.edu/joss/
   * MelNet, University of Melbourne http://www.sna.unimelb.edu.au/
   * Information Aesthetics http://infosthetics.com/
+  * Info-vis wiki http://www.infovis-wiki.net
   * Visual Complexity http://www.visualcomplexity.com/vc/
 
 ==Experiments==
@@ -166,14 +167,27 @@ The development of network interface to support visualisation and analysis will 
 
 ==Emergent Principles==
 
-(JB to expand…)
+Through the course of exploratory research and the articulation of research needs, a set of principles have emerged which will guide the development of the network interface.
 
-  * A focus on artistic networks. The realism of person-to-person connections. 
+===A focus on artistic networks===
 
-  * An awareness of complexity – even working on relatively small, constrained 
+While it is possible to use network analysis to visualise various relationships between different entities (organisations, events, venues, genres and so on), our focus is on the artistic networks articulated through the relationships between contributors and events. This focus reflects the collaborative ethic of the performance arts and the obligations of co-presence in the rehearsal room. 
 
-  * The significance of time
+===An awareness of complexity===
 
+The AusStage contribute network is large and complex. At the time of writing, it comprises 1,634,088 relationships between 76,488 contributors. Visualisation efforts have succeeded in working on relatively small sub-networks (<2,000 nodes, <20,000 edges) constrained by contributor (ego-centric networks), or by association with by particular events, venues, and organisations. 
+
+===The necessity of focus+context===
+
+Our experience in using network visualisation for analysis is characterised by zooming in and out - zooming in to observe focus in on particular artists and relationships, and zooming out to grasp their position within the network overall. This experience is addressed by the interface principle of focus plus context (http://www.infovis-wiki.net/index.php/Focus-plus-Context).
+
+===An interest in quality===
+
+Researchers are interested in articulating the significance and quality of artistic collaborations. While these measures imply qualitative research, the are three aspects of data available in AusStage which could assist researchers in identifying quality and significance of a relationship between two or more artists: the number of their collaborations, the frequency of their collaboration over time (and changes in the frequency), and their respective roles (and again, changes in roles over time).
+
+===The significance of time===
+
+The networks of artistic collaboration in the AusStage dataset are dynamic. They are time-coded by event and they change over time. Experiments in analysing network dynamics in the AusStage data suggest patterns of branching and consolidation, transitions in centrality, and sequences of growth, consolidation, release and reorganisation (Walker and Salt 2006). Yet approaches to analysing dynamic networks are at the leading edge of the field. Refining techniques for visualisation, including timelines, animation and 3D, will entail experimentation. 
 
 =INTERFACE IDEAS=
 
@@ -396,6 +410,8 @@ Moreno, J.L. 1953. Who Shall Survive? Foundations of Sociometry, Group Psychothe
 Moretti, Franco. 2005. Graphs, Maps, Trees: Abstract Models for a Literary History, London & New York: Verso.
 
 Newman, Mark, Albert-Laszlo Barabasi and Duncan J. Watts. 2006. The Structure and Dynamics of Networks, Princeton, NJ: Princeton University Press.
+
+Walker, B.H. & D. Salt. 2006. Resilience Thinking: Sustaining Ecosystems and People in a Changing World, Washington, D.C.: Island Press.
 
 Watts, Duncan J. 2004. Six Degrees. The Science of a Connected Age, Norton.
 
