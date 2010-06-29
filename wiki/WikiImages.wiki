@@ -71,6 +71,4 @@ Click on the name of the image that you wish to use that is listed on the right 
 
 Click the *View Raw File* link listed under the *File info* heading on the right hand side of the page
 
-Copy the URL in the address your of your browser and use it 
-
-
+Copy the URL in the address your of your browser and use it as you would for an image that was already online using the [http://code.google.com/p/support/wiki/WikiSyntax#Links_to_images Links to images Wiki Syntax] detailed on the [http://code.google.com/p/support/wiki/WikiSyntax WikiSyntax] page.
