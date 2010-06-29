@@ -172,7 +172,7 @@ No: redraw, or add to the network graphic this nodes first degree network.  
 _QUESTION: How many degrees of separation before outlying nodes drop off? 
 ie say you start with contributorA. You select contributor B. Now you have ContributorA and contributorB’s networks. Now you select contibutorC who has collaborated with ContributorB., and not contributorA. Should contributorA’s network dissappear if only relevant to contributorA?_
 
-_ANSWER: As many degrees as possible. But actually the limit will be the number of nodes and links, not the number of degrees - because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed, but this will be determined by how many nodes and links are added, not how many degrees from origin. At that point, those which are furthest from the current focus, could be dropped from display._
+_ANSWER: As many degrees as possible. But actually the limit will be the number of nodes and links, not the number of degrees - because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed. At that point, those which are furthest from the current focus, could be dropped from display._
 
 _Remember to deal with contributor archaeology._
 
