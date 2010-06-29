@@ -1,0 +1,11 @@
+#summary How-to Use Images in the Wiki
+
+<h1>Using Images in the Wiki</h1>
+
+There are two ways to use images in our Wiki here on the [http://code.google.com/projecthosting/ Google Project Hosting] website. They are detailed below:
+
+= Using an image already online = 
+
+To use an image that is already online use the [http://code.google.com/p/support/wiki/WikiSyntax#Links_to_images Wiki Syntax] detailed on the [http://code.google.com/p/support/wiki/WikiSyntax WikiSyntax] page.
+
+= Uploading an image for use in the Wiki =
