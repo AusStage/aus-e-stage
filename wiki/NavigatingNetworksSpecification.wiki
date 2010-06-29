@@ -135,6 +135,31 @@ _Animation_
 
 We continued our exploration of how networks change over time by graphically animating dynamic network data. Our preliminary animations focus on four theatre companies associated with Flinders University Drama Centre. These animations reveal a similar branching and consolidating dynamic. They reveal patterns of transition as the role of leading collaborators shifts over time. They also reveal patterns of growth, consolidation, release and reorganisation, reminiscent of the four-phase model of ecosystem dynamics.
 
+=RESEARCH NEEDS=
+
+This section summarises research needs for network analysis from the AusStage phase 4 LIEF Proposal and the Aus-e-Stage project plan.
+
+==AusStage Phase 4==
+
+AusStage researchers are taking an entirely new approach to analysing performance data by asking the question, ‘Who works with whom?’. The National eResearch Architecture Taskforce is funding the technological development of an interface for navigating the network of artistic collaborations in the AusStage dataset. ARC LIEF is funding research to enhance the representation of artists in the AusStage user interface. These development activities are driven by the research needs of the Networks Cluster of AusStage Phase 4: Jonathan Bollen (Flinders), Kim Durban (Ballarat), Shona Erskine and Nanette Hassal (ECU), Glen McGillivray (Sydney/UWS) and Helen Trenos (Tasmania). 
+
+AusStage researchers want to explore the network of artistic collaborations in the AusStage dataset. A network-based interface will humanize the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. Network visualisation and analysis will enable researchers to interrogate patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. The AusStage partnership has also identified a suite of related improvements for recording and displaying information about artists and their work, including: displaying artists’ associations with events by artistic role; recording details of funding and awards; improving the navigation between artistic collaborators; and using the upgraded interface to encourage artists and organisations to participate in data curation. To this end, a methodology based on social network analysis (Scott 2000) will be applied: artists identified as network ‘hubs’ in the dataset – those who have worked with many other artists – will be invited to review records and submit contributions.
+
+==Aus-e-Stage==
+
+The NeAT-developed Network service will deliver an interactive interface for navigating networks in AusStage. Node-link network graphs will depict artists and their collaborations, enabling users to search, display and explore patterns of contributors working together and how these patterns change over time. The network service will script the encoding of network data to enable live display of user-search results as interactive network graphs with embedded links to AusStage records. Development and testing will be undertaken to determine suitable capabilities for the network interface which make it easy for researchers to specify the visualization of search results, explore particular relationships, and apply relevant analytical techniques. Tools for quantitative analysis of the collaboration network graphs will also be provided, enabling researchers to visualise centrality, hubs, clustering and other quantitative measures of network topology. The project will also scope the visualisation of a broader range of relationships between artists, organisations, venues, genres and events and the differentiation of relationships by artistic function (director, designer, actor, technician etc).
+
+The new interface will be used by AusStage researchers to undertake and substantiate analyses which were previously difficult to deliver, including:  lines of artistic contact, influence and cross-fertilization; organisational cycles of growth, consolidation and release; patterns in career pathways and professional development; and emerging clusters of collaborative creativity suitable for strategic investment. AusStage will work with the Australia Council to apply these interface improvements in representing the work of artists, organisations and artistic collaborations within arts programming and arts funding policy. 
+
+==Research Projects==
+
+  * Hassall and Erskine investigating creative collaborations amongst prominent West Australian dance artists
+  * Bollen is tracking networks of mid-twentieth century Australian variety entertainers moving from tent shows and theatres to television studios and licensed clubs
+  * Durban is documenting the unacknowledged influence of theatre director Ewa Czajor on generations of women directors
+  * McGillivray is exploring concealed networks of collaboration in records of live performance that remain outside of authoritative archives
+  * Trenos is documenting networks of performance production in Tasmania; and 
+  * Holledge, Tompkins and Bollen are analysing the collaborative networks of Ibsen production in Australia in their ARC Discovery Project. 
+
 ==Emergent Principles==
 
 (JB to expand…)
@@ -145,17 +170,6 @@ We continued our exploration of how networks change over time by graphically ani
 
   * The significance of time
 
-=RESEARCH NEEDS=
-
-This section summarises research needs for network analysis from the AusStage phase 4 LIEF Proposal and the Aus-e-Stage project plan.
-
-AusStage researchers are taking an entirely new approach to analysing performance data by asking the question, ‘Who works with whom?’. The National eResearch Architecture Taskforce is funding the technological development of an interface for navigating the network of artistic collaborations in the AusStage dataset. ARC LIEF is funding research to enhance the representation of artists in the AusStage user interface. These development activities are driven by the research needs of the Networks Cluster of AusStage Phase 4: Jonathan Bollen (Flinders), Kim Durban (Ballarat), Shona Erskine and Nanette Hassal (ECU), Glen McGillivray (Sydney/UWS) and Helen Trenos (Tasmania). 
-
-AusStage researchers want to explore the network of artistic collaborations in the AusStage dataset. A network-based interface will humanize the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. Network visualisation and analysis will enable researchers to interrogate patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. The AusStage partnership has also identified a suite of related improvements for recording and displaying information about artists and their work, including: displaying artists’ associations with events by artistic role; recording details of funding and awards; improving the navigation between artistic collaborators; and using the upgraded interface to encourage artists and organisations to participate in data curation. To this end, a methodology based on social network analysis (Scott 2000) will be applied: artists identified as network ‘hubs’ in the dataset – those who have worked with many other artists – will be invited to review records and submit contributions.
-
-The NeAT-developed Network service will deliver an interactive interface for navigating networks in AusStage. Node-link network graphs will depict artists and their collaborations, enabling users to search, display and explore patterns of contributors working together and how these patterns change over time. The network service will script the encoding of network data to enable live display of user-search results as interactive network graphs with embedded links to AusStage records. Development and testing will be undertaken to determine suitable capabilities for the network interface which make it easy for researchers to specify the visualization of search results, explore particular relationships, and apply relevant analytical techniques. Tools for quantitative analysis of the collaboration network graphs will also be provided, enabling researchers to visualise centrality, hubs, clustering and other quantitative measures of network topology. The project will also scope the visualisation of a broader range of relationships between artists, organisations, venues, genres and events and the differentiation of relationships by artistic function (director, designer, actor, technician etc).
-
-The new interface will be used by AusStage researchers to undertake and substantiate analyses which were previously difficult to deliver, including:  lines of artistic contact, influence and cross-fertilization; organisational cycles of growth, consolidation and release; patterns in career pathways and professional development; and emerging clusters of collaborative creativity suitable for strategic investment. Hassall is investigating creative collaborations amongst prominent West Australian dance artists; Bollen is tracking networks of mid-twentieth century Australian variety entertainers moving from tent shows and theatres to television studios and licensed clubs; Durban is documenting the unacknowledged influence of theatre director Ewa Czajor on generations of women directors; McGillivray is exploring concealed networks of collaboration in records of live performance that remain outside of authoritative archives; Trenos is documenting networks of performance production in Tasmania; and Holledge, Tompkins and Bollen are analysing the collaborative networks of Ibsen production in Australia in their ARC Discovery Project. AusStage will work with the Australia Council to apply these interface improvements in representing the work of artists, organisations and artistic collaborations within arts programming and arts funding policy. 
 
 =INTERFACE IDEAS=
 
