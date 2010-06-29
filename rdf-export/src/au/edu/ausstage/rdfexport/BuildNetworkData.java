@@ -20,7 +20,7 @@
 package au.edu.ausstage.rdfexport;
 
 // import additional packages
-import java.sql.*;
+import java.sql.ResultSet;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -165,6 +165,8 @@ public class BuildNetworkData {
 		model.setNsPrefix("foaf"    , FOAF.NS);
 		model.setNsPrefix("event"   , Event.NS);
 		model.setNsPrefix("dcterms" , DCTerms.NS);
+		model.setNsPrefix("time"    , Time.NS);
+		model.setNsPrefix("tl"      , Timeline.NS);
 		
 		/*
 		 * add base contributor information
@@ -227,66 +229,66 @@ public class BuildNetworkData {
 		 * add relationships
 		 */
 		 	   
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding collaboration relationships...");
-			
-			// declare helper variables
-			String currentId = "";
-			Resource contributor = null;
-			
-			// define the sql
-			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
-					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
-					   + "WHERE conevlink.eventid = c1.eventid "
-					   + "AND contributorid IS NOT NULL "
-					   + "ORDER BY contributorid ";
-			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// store a copy of the current id, so we don't have to go through the 
-				// collection of contributors too much
-				if(currentId.equals(resultSet.getString(1)) == false) {
-					// store this id
-					currentId = resultSet.getString(1);
-					
-					// lookup the contributor
-					contributor = contributors.get(resultSet.getString(1));
-				}
-				
-				// double check the contributor
-				if(contributor == null) {
-					// missing contributor
-					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-				} else {
-				
-					// don't add a relationship to itself
-					if(currentId.equals(resultSet.getString(2)) == false) {
-					
-						// add the relationship
-						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
-				
-						// count the number of collaborations
-						collaborationCount++;
-					}
-				}				
-			}
-			
-			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
-			System.out.println("INFO: " + collaborationCount +   " collaboration relationships successfully added to the datastore");
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding collaboration relationships...");
+//			
+//			// declare helper variables
+//			String currentId = "";
+//			Resource contributor = null;
+//			
+//			// define the sql
+//			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
+//					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
+//					   + "WHERE conevlink.eventid = c1.eventid "
+//					   + "AND contributorid IS NOT NULL "
+//					   + "ORDER BY contributorid ";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// store a copy of the current id, so we don't have to go through the 
+//				// collection of contributors too much
+//				if(currentId.equals(resultSet.getString(1)) == false) {
+//					// store this id
+//					currentId = resultSet.getString(1);
+//					
+//					// lookup the contributor
+//					contributor = contributors.get(resultSet.getString(1));
+//				}
+//				
+//				// double check the contributor
+//				if(contributor == null) {
+//					// missing contributor
+//					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+//				} else {
+//				
+//					// don't add a relationship to itself
+//					if(currentId.equals(resultSet.getString(2)) == false) {
+//					
+//						// add the relationship
+//						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
+//				
+//						// count the number of collaborations
+//						collaborationCount++;
+//					}
+//				}				
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			System.out.println("INFO: " + collaborationCount +   " collaboration relationships successfully added to the datastore");
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
 		
 		/*
 		 * add events
@@ -303,8 +305,10 @@ public class BuildNetworkData {
 			Resource event       = null;
 			
 			// define the sql
-			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid "
-					   + "FROM events e, conevlink c "
+			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid, "
+					   + "                e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+					   + "                e.yyyylast_date, e.mmlast_date, e.ddlast_date "
+					   + "FROM events e, conevlink c " 
 					   + "WHERE e.eventid = c.eventid "
 					   + "AND e.eventid IS NOT NULL "
 					   + "AND c.contributorid IS NOT NULL "
@@ -347,6 +351,61 @@ public class BuildNetworkData {
 					event.addProperty(DCTerms.title, title);
 					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
 					
+					// construct the dates
+					String firstDate = null;
+					String lastDate  = null;
+					
+					// first date
+					if(resultSet.getString(4) != null) {
+						firstDate = buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+					}
+					
+					// last date
+					if(resultSet.getString(7) != null) {
+						lastDate = buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
+					}
+					
+					// check on the first date
+					if(firstDate == null) {
+						// inform user of error
+						System.out.println("INFO: A valid first date for event: " + resultSet.getString(1)  + " could not be determined");
+					} else {
+					
+						// adjust the last date if required
+						if(lastDate == null) {
+							lastDate = firstDate;
+						}
+						
+						/*
+						 * Add date information somehow
+						 */
+						 
+						 Resource timeInterval = model.createResource(Time.Interval);
+						 timeInterval.addProperty(Timeline.beginsAtDateTime, firstDate);
+						 timeInterval.addProperty(Timeline.endsAtDateTime, lastDate);
+						 
+						 event.addProperty(Event.time, timeInterval);
+/*						 
+						 
+						 
+						 event.addProperty(Event.time
+  model.createResource(Time.Interval)
+    .addProperty(Timeline.beginsAtDateTime, firstDate)
+    .addProperty(Timeline.endsAtDateTime,   lastDate));
+
+
+*/					 
+						 //johnSmith.addProperty(VCARD.FN, fullName);
+//     	
+//     	Property nameProperty = model.createProperty("mine", ":1234");
+//     	nameProperty.addProperty(VCARD.Given, givenName);
+//     	nameProperty.addProperty(VCARD.Family, familyName);
+//     	johnSmith.addProperty(VCARD.N, nameProperty);
+						
+						
+					
+					}
+					
 					// lookup the contributor
 					contributor = contributors.get(resultSet.getString(3));
 					
@@ -388,6 +447,31 @@ public class BuildNetworkData {
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
+	
+	/**
+	 * A method used to build a date for use Marker XML and KML data
+	 *
+	 * @param year  the year component of the date
+	 * @param month the month component of the date
+	 * @param day   the day component of the month
+	 *
+	 * @return      a string containing the finalised date
+	 */
+	private String buildDate(String year, String month, String day) {
+	
+		// check for at least a year
+		if(year != null) {
+		 
+			String date = year + "-" + month + "-" + day;
+		 	date = date.replace("-null","");
+			date = date.replace("null","");
+			
+			return date;
+		} else {
+			return "";
+		}
+	 
+	} // end buildDate method
 	
 	/**
 	 * A class used to filter the list of files
