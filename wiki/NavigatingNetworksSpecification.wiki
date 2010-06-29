@@ -175,7 +175,7 @@ While it is possible to use network analysis to visualise various relationships 
 
 ===An awareness of complexity===
 
-The AusStage contribute network is large and complex. At the time of writing, it comprises 1,634,088 relationships between 76,488 contributors. Visualisation efforts have succeeded in working on relatively small sub-networks (<2,000 nodes, <20,000 edges) constrained by contributor (ego-centric networks), or by association with by particular events, venues, and organisations. 
+The AusStage contribute network is large and complex. At June 2010, it comprises 1,634,088 relationships between 76,488 contributors. Visualisation efforts using dedicated software have succeeded in working on relatively small sub-networks (<20,000 edges, <2,000 nodes) constrained by contributor (ego-centric networks), or by association with particular venues, and organisations. Visualising networks for display in web browsers imposes additional constraints.
 
 ===The necessity of focus+context===
 
