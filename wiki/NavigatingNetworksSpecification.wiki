@@ -179,7 +179,7 @@ The AusStage contribute network is large and complex. At June 2010, it comprises
 
 ===The necessity of focus+context===
 
-Our experience in using network visualisation for analysis is characterised by zooming in and out - zooming in to observe focus in on particular artists and relationships, and zooming out to grasp their position within the network overall. This experience is addressed by the interface principle of focus plus context (http://www.infovis-wiki.net/index.php/Focus-plus-Context).
+Our experience in using network visualisation for analysis is characterised by zooming in and out - zooming in to focus on particular artists and relationships, and zooming out to grasp their position within the larger network. This experience is addressed by the interface principle of focus plus context (http://www.infovis-wiki.net/index.php/Focus-plus-Context).
 
 ===An interest in quality===
 
