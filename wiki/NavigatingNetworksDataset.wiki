@@ -42,11 +42,10 @@ WHERE c.gender = g.genderid(+)
 
 === SQL Code ===
 {{{
-SELECT c.contributorid, RTRIM(XMLAGG(XMLELEMENT (pt, cp.preferredterm || '|')).extract ('//text()'), '|') as functions
+SELECT c.contributorid, cp.preferredterm
 FROM contributor c, contributorfunctpreferred cp, contfunctlink cl
 WHERE c.contributorid = cl.contributorid
 AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid
-GROUP BY c.contributorid
 }}}
 
 == Contributor Relationships ==
