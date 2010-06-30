@@ -68,7 +68,6 @@ ORDER BY e.eventid
 
 
 = RDF Ontologies = 
-<wiki:comment> Keep this list in sync with the RdfExport page</wiki:comment>
 
 == In Use == 
 
@@ -79,6 +78,11 @@ ORDER BY e.eventid
 || Timeline || tl || http://motools.sourceforge.net/timeline/timeline.html ||
 || OWL-Time || time || http://www.w3.org/TR/owl-time/ || 
 
+== Aus-e-Stage Ontology ==
+
+To expedite the construction of the dataset an Aus-e-Stage ontology is used. It is important to note that this ontology does not pre-empt any work conducted under the AusStage phase 4 project. Once the flattening of the AusStage dataset has occurred and the ontologies constructed have been finalised, the ontology used for this dataset should be retired and replaced with the output of the AusStage phase 4 project.
+
+Details of the ontology are available on the AuseStageOntology page.
 
 == Planned for Use ==
 
