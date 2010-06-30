@@ -39,7 +39,14 @@ WHERE c.gender = g.genderid(+)
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
 || subquery || functions || ausestage:function ||  || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
 
-
+=== SQL Code ===
+{{{
+SELECT DISTINCT contributorid, c1.collaborator 
+FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1 
+WHERE conevlink.eventid = c1.eventid 
+AND contributorid IS NOT NULL 
+ORDER BY contributorid
+}}}
 
 == Contributor Functions ==
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
