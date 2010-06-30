@@ -76,12 +76,14 @@ ORDER BY e.eventid
 || FOAF - Friend of a Friend|| foaf || http://www.foaf-project.org/ ||
 || Event|| event || http://motools.sourceforge.net/event/event.html ||
 || DCMI Metadata Terms|| dcterms || http://dublincore.org/documents/dcmi-terms/ ||
+|| Timeline || tl || http://motools.sourceforge.net/timeline/timeline.html ||
+|| OWL-Time || time || http://www.w3.org/TR/owl-time/ || 
 
 
 == Planned for Use ==
 
 || *Ontology Name* || *Namespace* || *More Information* || *Notes ||
-|| OWL-Time || time || http://www.w3.org/TR/owl-time/ || Used to represent dates associated with events ||
+
 
 = !AusStage URI Schema = 
 <wiki:comment> Keep this list in sync with the RdfExport page</wiki:comment>
