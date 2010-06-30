@@ -20,3 +20,7 @@ The function that a contributor has had when they have been associated with an e
  * Playwright
  * Director
  * Composer
+
+== collaboratorCount ==
+
+The number of times a contributor has collaborated with another contributor
