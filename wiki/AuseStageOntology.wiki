@@ -23,4 +23,4 @@ The function that a contributor has had when they have been associated with an e
 
 == collaboratorCount ==
 
-The number of times a contributor has collaborated with another contributor
+The number of times a unique collaboration has occurred between contributors
