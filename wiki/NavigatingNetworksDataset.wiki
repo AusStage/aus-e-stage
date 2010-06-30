@@ -11,6 +11,7 @@ The sections below detail information about the dataset that is constructed by t
 The RdfExport application undertakes the following steps to build the dataset
 
  # [NavigatingNetworksDataset#Contributors An export of all contributor records]
+ # [NavigatingNetworksDataset#Contributor_Functions An export of contributor functions]
  # [NavigatingNetworksDataset#Contributor_Relationships An export of contributor relationships]
  # [NavigatingNetworksDataset#Events An export of events and contributor relationships to events]
 
