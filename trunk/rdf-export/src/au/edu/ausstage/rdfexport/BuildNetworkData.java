@@ -30,6 +30,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.tdb.*;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 
 // import the vocabularies
 import au.edu.ausstage.vocabularies.*;
@@ -167,6 +168,7 @@ public class BuildNetworkData {
 		model.setNsPrefix("dcterms" , DCTerms.NS);
 		model.setNsPrefix("time"    , Time.NS);
 		model.setNsPrefix("tl"      , Timeline.NS);
+		model.setNsPrefix("xsd"     , XSDDatatype.XSD);
 		
 		/*
 		 * add base contributor information
@@ -393,27 +395,17 @@ public class BuildNetworkData {
 						 * Add date information somehow
 						 */
 						 
-						 Resource timeInterval = model.createResource(Time.Interval);
-						 timeInterval.addProperty(Timeline.beginsAtDateTime, firstDate);
-						 timeInterval.addProperty(Timeline.endsAtDateTime, lastDate);
-						 
-						 event.addProperty(Event.time, timeInterval);
-/*						 
-						 
-						 
-						 event.addProperty(Event.time
-  model.createResource(Time.Interval)
-    .addProperty(Timeline.beginsAtDateTime, firstDate)
-    .addProperty(Timeline.endsAtDateTime,   lastDate));
+						// construct a new timeInterval resource
+						Resource timeInterval = model.createResource(Time.Interval);
 
+						// add the timeline properties
+						// add the typed literals
+						timeInterval.addProperty(Timeline.beginsAtDateTime, model.createTypedLiteral(firstDate, XSDDatatype.XSDdate));
+						timeInterval.addProperty(Timeline.endsAtDateTime, model.createTypedLiteral(lastDate, XSDDatatype.XSDdate));
 
-*/					 
-						 //johnSmith.addProperty(VCARD.FN, fullName);
-//     	
-//     	Property nameProperty = model.createProperty("mine", ":1234");
-//     	nameProperty.addProperty(VCARD.Given, givenName);
-//     	nameProperty.addProperty(VCARD.Family, familyName);
-//     	johnSmith.addProperty(VCARD.N, nameProperty);
+						// andd the timeInterval to the Event
+						event.addProperty(Event.time, timeInterval);
+
 						
 						
 					
