@@ -39,6 +39,12 @@ WHERE c.gender = g.genderid(+)
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
 || subquery || functions || ausestage:function ||  || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
 
+
+
+== Contributor Functions ==
+|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
+|| subquery || c1.collaborator || foaf:knows || Can't use field to determine collaboration count || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
+
 === SQL Code ===
 {{{
 SELECT c.contributorid, RTRIM(XMLAGG(XMLELEMENT (pt, cp.preferredterm || '|')).extract ('//text()'), '|') as functions
@@ -47,10 +53,6 @@ WHERE c.contributorid = cl.contributorid
 AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid
 GROUP BY c.contributorid
 }}}
-
-== Contributor Functions ==
-|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
-|| subquery || c1.collaborator || foaf:knows || Can't use field to determine collaboration count || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
 
 == Events == 
 
