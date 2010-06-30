@@ -43,5 +43,8 @@ public class AuseStage {
     
     /** Specify the functions that a contributor can undertake */
     public static final ObjectProperty function = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#function");
-   
+    
+    /** Specify the number of contributors the specified contributor has worked with */
+    public static final ObjectProperty collaboratorCount = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboratorCount");
+
 }
