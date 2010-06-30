@@ -149,6 +149,7 @@ public class BuildNetworkData {
 		// declare some helper variables
 		int contributorCount   = 0;
 		int collaborationCount = 0;
+		int functionCount      = 0;
 		int eventCount         = 0;
 		java.util.Map<String, Resource> contributors = new java.util.HashMap<String, Resource>();		
 	
@@ -163,12 +164,13 @@ public class BuildNetworkData {
 		}
 		
 		// set a namespace prefixes
-		model.setNsPrefix("foaf"    , FOAF.NS);
-		model.setNsPrefix("event"   , Event.NS);
-		model.setNsPrefix("dcterms" , DCTerms.NS);
-		model.setNsPrefix("time"    , Time.NS);
-		model.setNsPrefix("tl"      , Timeline.NS);
-		model.setNsPrefix("xsd"     , XSDDatatype.XSD);
+		model.setNsPrefix("foaf"     , FOAF.NS);
+		model.setNsPrefix("event"    , Event.NS);
+		model.setNsPrefix("dcterms"  , DCTerms.NS);
+		model.setNsPrefix("time"     , Time.NS);
+		model.setNsPrefix("tl"       , Timeline.NS);
+		model.setNsPrefix("xsd"      , XSDDatatype.XSD);
+		model.setNsPrefix("ausestage", AuseStage.NS);
 		
 		/*
 		 * add base contributor information
@@ -180,7 +182,7 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding contributor data to the datastore...");
 			
 			// define the sql
-			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender) "
+			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality "
 					   + "FROM contributor c, gendermenu g "
 					   + "WHERE c.gender = g.genderid(+)";
 			
@@ -222,6 +224,11 @@ public class BuildNetworkData {
 					}
 				}
 				
+				// add the nationality
+				if(resultSet.getString(5) != null) {
+					contributor.addProperty(AuseStage.nationality, resultSet.getString(5));
+				}
+				
 				// store a reference to this contributor
 				contributors.put(resultSet.getString(1), contributor);
 				
@@ -233,6 +240,67 @@ public class BuildNetworkData {
 			resultSet.close();
 			database.closeStatement();
 			System.out.println("INFO: " + contributorCount +   " contributors successfully added to the datastore");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
+		
+		/*
+		 * add functions
+		 */
+		 
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Adding contributor functions...");
+			
+			// declare helper variables
+			String currentId = "";
+			Resource contributor = null;
+			
+			// define the sql
+			String sql = "SELECT c.contributorid, cp.preferredterm "
+					   + "FROM contributor c, contributorfunctpreferred cp, contfunctlink cl "
+					   + "WHERE c.contributorid = cl.contributorid "
+					   + "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// store a copy of the current id, so we don't have to go through the 
+				// collection of contributors too much
+				if(currentId.equals(resultSet.getString(1)) == false) {
+					// store this id
+					currentId = resultSet.getString(1);
+					
+					// lookup the contributor
+					contributor = contributors.get(resultSet.getString(1));
+					
+				}
+				
+				// double check the contributor
+				if(contributor == null) {
+					// missing contributor
+					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+				} else {
+				
+					// add the function
+					contributor.addProperty(AuseStage.function, resultSet.getString(2));
+					
+					// increment the count
+					functionCount++;
+				}				
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + functionCount + " contributor functions successfully added.");
 			
 		} catch (java.sql.SQLException sqlEx) {
 			System.err.println("ERROR: An SQL related error has occured");
@@ -405,10 +473,6 @@ public class BuildNetworkData {
 
 						// andd the timeInterval to the Event
 						event.addProperty(Event.time, timeInterval);
-
-						
-						
-					
 					}
 					
 					// lookup the contributor
@@ -443,12 +507,6 @@ public class BuildNetworkData {
 			System.err.println("       " + sqlEx.getMessage());
 			return false;
 		}
-		
-		
-		
-		
-
-	
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
