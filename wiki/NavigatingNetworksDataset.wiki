@@ -51,6 +51,7 @@ AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid
 == Contributor Relationships ==
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
 || subquery || c1.collaborator || foaf:knows || Can't use field to determine collaboration count || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
+|| calculated field || || ausestage:collaboratorCount || Stores the number contributors a contributor has collaborated with || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
 
 === SQL Code ===
 {{{
