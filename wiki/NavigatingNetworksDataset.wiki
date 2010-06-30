@@ -25,12 +25,13 @@ The RdfExport application undertakes the following steps to build the dataset
 || contributor || last_name || foaf:familyName || ||  [NavigatingNetworksGoals All] ||
 || contributor || first_name + " " + last_name || foaf:name || ||  [NavigatingNetworksGoals All] ||
 || contributor || gender || foaf:gender|| Where the field is "unknown" or blank no gender node is added || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
+|| contributor || nationality || ausestage:nationality || Where the field is null, no nationality is added || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
 
 === SQL Code ==
 
 {{{
-SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender)
-FROM contributor c, gendermenu g
+SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality 
+FROM contributor c, gendermenu g 
 WHERE c.gender = g.genderid(+)
 }}}
 
@@ -77,6 +78,7 @@ ORDER BY e.eventid
 || DCMI Metadata Terms|| dcterms || http://dublincore.org/documents/dcmi-terms/ ||
 || Timeline || tl || http://motools.sourceforge.net/timeline/timeline.html ||
 || OWL-Time || time || http://www.w3.org/TR/owl-time/ || 
+|| Aus-e-Stage || ausestage || AuseStageOntology ||
 
 == Aus-e-Stage Ontology ==
 
