@@ -35,22 +35,9 @@ FROM contributor c, gendermenu g
 WHERE c.gender = g.genderid(+)
 }}}
 
-== Contributor Relationships == 
+== Contributor Functions == 
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
 || subquery || functions || ausestage:function ||  || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
-
-=== SQL Code ===
-{{{
-SELECT DISTINCT contributorid, c1.collaborator 
-FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1 
-WHERE conevlink.eventid = c1.eventid 
-AND contributorid IS NOT NULL 
-ORDER BY contributorid
-}}}
-
-== Contributor Functions ==
-|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
-|| subquery || c1.collaborator || foaf:knows || Can't use field to determine collaboration count || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
 
 === SQL Code ===
 {{{
@@ -59,6 +46,19 @@ FROM contributor c, contributorfunctpreferred cp, contfunctlink cl
 WHERE c.contributorid = cl.contributorid
 AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid
 GROUP BY c.contributorid
+}}}
+
+== Contributor Relationships ==
+|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
+|| subquery || c1.collaborator || foaf:knows || Can't use field to determine collaboration count || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
+
+=== SQL Code ===
+{{{
+SELECT DISTINCT contributorid, c1.collaborator 
+FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1 
+WHERE conevlink.eventid = c1.eventid 
+AND contributorid IS NOT NULL 
+ORDER BY contributorid
 }}}
 
 == Events == 
