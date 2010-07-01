@@ -85,9 +85,9 @@ ORDER BY e.eventid
 == Contributor Functions at Events ==
 
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
-|| events || eventid || AuseStage.onEvent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || ||
+|| events || eventid || ausestage:onEvent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || ||
 || contributor || contributorid || rdf:about || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] ||  ||
-|| contributorfunctpreferred || prefferedterm || AuseStage.functionAtEvent || The function the contributor had when they collaborated on this event || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1]||
+|| contributorfunctpreferred || prefferedterm || ausestage:functionAtEvent || The function the contributor had when they collaborated on this event || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1]||
 
 
 === SQL Code ===
