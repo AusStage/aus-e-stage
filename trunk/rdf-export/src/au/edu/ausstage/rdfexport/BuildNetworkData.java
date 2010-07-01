@@ -316,7 +316,7 @@ public class BuildNetworkData {
 		try {
 		
 			// keep the user informed
-			System.out.println("INFO: Adding foaf:knows elements and collaboration counts...");
+			System.out.println("INFO: Adding foaf:knows elements and collaborator counts...");
 			
 			// declare helper variables
 			String currentId = "";
@@ -524,7 +524,7 @@ public class BuildNetworkData {
 	} // end the doTask method
 	
 	/**
-	 * A method used to build a date for use Marker XML and KML data
+	 * A method used to build a date from the components in the AusStage database
 	 *
 	 * @param year  the year component of the date
 	 * @param month the month component of the date
