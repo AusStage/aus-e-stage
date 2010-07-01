@@ -46,5 +46,18 @@ public class AuseStage {
     
     /** Specify the number of contributors the specified contributor has worked with */
     public static final ObjectProperty collaboratorCount = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboratorCount");
+    
+    /** Specify that a contributor has collaborated on an event */
+    public static final ObjectProperty hasCollaborated = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaborated");
+    
+    /** Specify that a contributor collaborates on an event */
+    public static final ObjectProperty collaboration = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboration");
+    
+    /** Specify which event the contributor has collaborated on */
+    public static final ObjectProperty onEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#onEvent");
+    
+    /** Specify the type of function the contributor had when they collaborated on an event */
+    public static final ObjectProperty functionAtEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#functionAtEvent");
+    
 
 }
