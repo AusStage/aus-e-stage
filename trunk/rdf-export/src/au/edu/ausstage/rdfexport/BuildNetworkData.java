@@ -147,12 +147,15 @@ public class BuildNetworkData {
 		logger.setLevel(org.apache.log4j.Level.OFF);
 		
 		// declare some helper variables
-		int contributorCount   = 0;
-		int functionCount      = 0;
-		int collaboratorCount  = 0;
-		int collaborationCount = 0;
-		int eventCount         = 0;
-		java.util.Map<String, Resource> contributors = new java.util.HashMap<String, Resource>();		
+		int contributorCount       = 0;
+		int functionCount          = 0;
+		int collaboratorCount      = 0;
+		int collaborationCount     = 0;
+		int eventCount             = 0;
+		int functionsAtEventsCount = 0;
+		
+		// map of contributors
+		java.util.Map<String, Resource> contributors = new java.util.HashMap<String, Resource>();
 	
 		// create an empty persistent model
 		Model model = null;
@@ -313,77 +316,77 @@ public class BuildNetworkData {
 		 * add relationships
 		 */
 		 	   
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding foaf:knows elements and collaborator counts...");
-			
-			// declare helper variables
-			String currentId = "";
-			Resource contributor = null;
-			
-			// define the sql
-			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
-					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
-					   + "WHERE conevlink.eventid = c1.eventid "
-					   + "AND contributorid IS NOT NULL "
-					   + "ORDER BY contributorid ";
-			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// store a copy of the current id, so we don't have to go through the 
-				// collection of contributors too much
-				if(currentId.equals(resultSet.getString(1)) == false) {
-					// store this id
-					currentId = resultSet.getString(1);
-					
-					// add the collaborator count
-					if(contributor != null) {
-						contributor.addProperty(AuseStage.collaboratorCount, Integer.toString(collaboratorCount));
-						
-						// reset the collaborator count
-						collaboratorCount = 0;
-					}
-					
-					// lookup the contributor
-					contributor = contributors.get(resultSet.getString(1));
-				}
-				
-				// double check the contributor
-				if(contributor == null) {
-					// missing contributor
-					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-				} else {
-				
-					// don't add a relationship to itself
-					if(currentId.equals(resultSet.getString(2)) == false) {
-					
-						// add the relationship
-						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
-						
-						// increment the collaborator count
-						collaboratorCount++;
-				
-						// count the number of collaborations
-						collaborationCount++;
-					}
-				}				
-			}
-			
-			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
-			System.out.println("INFO: " + collaborationCount +   " foaf:knows elements successfully added to the datastore");
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding foaf:knows elements and collaborator counts...");
+//			
+//			// declare helper variables
+//			String currentId = "";
+//			Resource contributor = null;
+//			
+//			// define the sql
+//			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
+//					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
+//					   + "WHERE conevlink.eventid = c1.eventid "
+//					   + "AND contributorid IS NOT NULL "
+//					   + "ORDER BY contributorid ";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// store a copy of the current id, so we don't have to go through the 
+//				// collection of contributors too much
+//				if(currentId.equals(resultSet.getString(1)) == false) {
+//					// store this id
+//					currentId = resultSet.getString(1);
+//					
+//					// add the collaborator count
+//					if(contributor != null) {
+//						contributor.addProperty(AuseStage.collaboratorCount, Integer.toString(collaboratorCount));
+//						
+//						// reset the collaborator count
+//						collaboratorCount = 0;
+//					}
+//					
+//					// lookup the contributor
+//					contributor = contributors.get(resultSet.getString(1));
+//				}
+//				
+//				// double check the contributor
+//				if(contributor == null) {
+//					// missing contributor
+//					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+//				} else {
+//				
+//					// don't add a relationship to itself
+//					if(currentId.equals(resultSet.getString(2)) == false) {
+//					
+//						// add the relationship
+//						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
+//						
+//						// increment the collaborator count
+//						collaboratorCount++;
+//				
+//						// count the number of collaborations
+//						collaborationCount++;
+//					}
+//				}				
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			System.out.println("INFO: " + collaborationCount +   " foaf:knows elements successfully added to the datastore");
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
 		
 		/*
 		 * add events
@@ -471,9 +474,7 @@ public class BuildNetworkData {
 							lastDate = firstDate;
 						}
 						
-						/*
-						 * Add date information somehow
-						 */
+						// add date information
 						 
 						// construct a new timeInterval resource
 						Resource timeInterval = model.createResource(Time.Interval);
@@ -519,6 +520,82 @@ public class BuildNetworkData {
 			System.err.println("       " + sqlEx.getMessage());
 			return false;
 		}
+		
+		/*
+		 * Add functions at events
+		 */
+		 
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Adding contributor functions at events...");
+			
+			// declare helper variables
+			String currentId     = "";
+			Resource contributor = null;
+			
+			// define the sql
+			String sql = "SELECT cl.contributorid, cl.eventid, cfp.preferredterm "
+					   + "FROM conevlink cl, contributorfunctpreferred cfp "
+					   + "WHERE cl.eventid IS NOT NULL "
+					   + "AND cl.contributorid IS NOT NULL "
+					   + "AND cl.function = cfp.contributorfunctpreferredid "
+					   + "ORDER BY contributorid";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// have we seen this contributor before
+				if(currentId.equals(resultSet.getString(1)) != true) {
+					
+					// no we haven't so look them up
+					contributor = contributors.get(resultSet.getString(1));
+					
+					// store the id to reduce number of lookups
+					currentId = resultSet.getString(1);
+					
+					// double check the contributor
+					if(contributor == null) {
+						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+					}
+				} else {
+					// yes we have so use the found contributor if available
+					if(contributor != null) {
+					
+						// construct a new collaborates resource
+						Resource collaborated = model.createResource(AuseStage.collaboration);
+						
+						// add the on event property
+						collaborated.addProperty(AuseStage.onEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
+						collaborated.addProperty(AuseStage.functionAtEvent, resultSet.getString(3));
+						
+						// add the collaborates property to the contributor
+						contributor.addProperty(AuseStage.hasCollaborated, collaborated);
+						
+						functionsAtEventsCount++;
+					}
+				}				
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + functionsAtEventsCount +   " contributor function at events added");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
+		 
+		
+		
+		
+		
+		
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
