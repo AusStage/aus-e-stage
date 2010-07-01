@@ -316,77 +316,77 @@ public class BuildNetworkData {
 		 * add relationships
 		 */
 		 	   
-//		try {
-//		
-//			// keep the user informed
-//			System.out.println("INFO: Adding foaf:knows elements and collaborator counts...");
-//			
-//			// declare helper variables
-//			String currentId = "";
-//			Resource contributor = null;
-//			
-//			// define the sql
-//			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
-//					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
-//					   + "WHERE conevlink.eventid = c1.eventid "
-//					   + "AND contributorid IS NOT NULL "
-//					   + "ORDER BY contributorid ";
-//			
-//			// get the data from the database				   
-//			java.sql.ResultSet resultSet = database.executeStatement(sql);
-//	
-//			// loop through the 
-//			while (resultSet.next()) {
-//			
-//				// store a copy of the current id, so we don't have to go through the 
-//				// collection of contributors too much
-//				if(currentId.equals(resultSet.getString(1)) == false) {
-//					// store this id
-//					currentId = resultSet.getString(1);
-//					
-//					// add the collaborator count
-//					if(contributor != null) {
-//						contributor.addProperty(AuseStage.collaboratorCount, Integer.toString(collaboratorCount));
-//						
-//						// reset the collaborator count
-//						collaboratorCount = 0;
-//					}
-//					
-//					// lookup the contributor
-//					contributor = contributors.get(resultSet.getString(1));
-//				}
-//				
-//				// double check the contributor
-//				if(contributor == null) {
-//					// missing contributor
-//					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-//				} else {
-//				
-//					// don't add a relationship to itself
-//					if(currentId.equals(resultSet.getString(2)) == false) {
-//					
-//						// add the relationship
-//						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
-//						
-//						// increment the collaborator count
-//						collaboratorCount++;
-//				
-//						// count the number of collaborations
-//						collaborationCount++;
-//					}
-//				}				
-//			}
-//			
-//			// play nice and tidy up
-//			resultSet.close();
-//			database.closeStatement();
-//			System.out.println("INFO: " + collaborationCount +   " foaf:knows elements successfully added to the datastore");
-//			
-//		} catch (java.sql.SQLException sqlEx) {
-//			System.err.println("ERROR: An SQL related error has occured");
-//			System.err.println("       " + sqlEx.getMessage());
-//			return false;
-//		}
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Adding foaf:knows elements and collaborator counts...");
+			
+			// declare helper variables
+			String currentId = "";
+			Resource contributor = null;
+			
+			// define the sql
+			String sql = "SELECT DISTINCT contributorid, c1.collaborator "
+					   + "FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1  "
+					   + "WHERE conevlink.eventid = c1.eventid "
+					   + "AND contributorid IS NOT NULL "
+					   + "ORDER BY contributorid ";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// store a copy of the current id, so we don't have to go through the 
+				// collection of contributors too much
+				if(currentId.equals(resultSet.getString(1)) == false) {
+					// store this id
+					currentId = resultSet.getString(1);
+					
+					// add the collaborator count
+					if(contributor != null) {
+						contributor.addProperty(AuseStage.collaboratorCount, Integer.toString(collaboratorCount));
+						
+						// reset the collaborator count
+						collaboratorCount = 0;
+					}
+					
+					// lookup the contributor
+					contributor = contributors.get(resultSet.getString(1));
+				}
+				
+				// double check the contributor
+				if(contributor == null) {
+					// missing contributor
+					System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+				} else {
+				
+					// don't add a relationship to itself
+					if(currentId.equals(resultSet.getString(2)) == false) {
+					
+						// add the relationship
+						contributor.addProperty(FOAF.knows, contributors.get(resultSet.getString(2)));
+						
+						// increment the collaborator count
+						collaboratorCount++;
+				
+						// count the number of collaborations
+						collaborationCount++;
+					}
+				}				
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + collaborationCount +   " foaf:knows elements successfully added to the datastore");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
 		
 		/*
 		 * add events
