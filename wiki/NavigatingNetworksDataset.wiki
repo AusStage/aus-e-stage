@@ -14,6 +14,7 @@ The RdfExport application undertakes the following steps to build the dataset
  # [NavigatingNetworksDataset#Contributor_Functions An export of contributor functions]
  # [NavigatingNetworksDataset#Contributor_Relationships An export of contributor relationships]
  # [NavigatingNetworksDataset#Events An export of events and contributor relationships to events]
+ # [NavigatingNetworksDataset#Contributor_Functions_at_Events An Export of functions that contributors have had when they've contributed to an event]
 
 = RDF Values & Source Fields =
 
