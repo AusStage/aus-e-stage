@@ -71,11 +71,15 @@ ORDER BY contributorid
 || events || eventid || dcterms:identifier || As a persistent link to the Event page in AusStage || [NavigatingNetworksGoals All] ||
 || contributor || contributorid || event:agent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] ||  [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] ||
 || events || eventid || event:isAgentIn || Associated with a contributor not an event || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] ||
+|| events || start date fields || event:time/time:interval/tl.beginsAtDateTime || Encoded as a valid xsd:date value || [NavigatingNetworksGoals#1.2_Time-slider 1.2] ||
+|| events || last date fields || event:time/time:interval/tl.endsAtDateTime || Encoded as a valid xsd:date value || [NavigatingNetworksGoals#1.2_Time-slider 1.2] ||
 
 === SQL Code ===
 {{{
-SELECT DISTINCT e.eventid, e.event_name, c.contributorid 
-FROM events e, conevlink c 
+SELECT DISTINCT e.eventid, e.event_name, c.contributorid, 
+                e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, 
+                e.yyyylast_date, e.mmlast_date, e.ddlast_date 
+FROM events e, conevlink c  
 WHERE e.eventid = c.eventid 
 AND e.eventid IS NOT NULL 
 AND c.contributorid IS NOT NULL 
@@ -85,9 +89,8 @@ ORDER BY e.eventid
 == Contributor Functions at Events ==
 
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
-|| events || eventid || ausestage:onEvent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || ||
-|| contributor || contributorid || rdf:about || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] ||  ||
-|| contributorfunctpreferred || prefferedterm || ausestage:functionAtEvent || The function the contributor had when they collaborated on this event || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1]||
+|| events || eventid || ausestage:hasCollaborated/ausestage:collaboration/ausestage:onEvent || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals#2.1_Key_collaborators 2.1]||
+|| contributorfunctpreferred || prefferedterm || ausestage:hasCollaborated/ausestage:collaboration/ausestage:functionAtEvent || The function the contributor had when they collaborated on this event || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1]||
 
 
 === SQL Code ===
