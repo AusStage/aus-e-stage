@@ -25,6 +25,10 @@ The function that a contributor has had when they have been associated with an e
 
 The number of contributors that a contributor has collaborated with
 
+== collaborator ==
+
+Holds properties of a relationship between two contributors
+
 == hasCollaborated ==
 
 Indicates that a contributor has collaborated on an event 
