@@ -28,6 +28,7 @@ The RdfExport application undertakes the following steps to build the dataset
 ||  || first_name + " " + last_name || foaf:name || ||  [NavigatingNetworksGoals All] ||
 || contributor || gender || foaf:gender|| Where the field is "unknown" or blank no gender node is added || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
 || contributor || nationality || ausestage:nationality || Where the field is null, no nationality is added || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
+|| || || ausestage:hasCollaboration || used to link a contributor with a collaboration object || [NavigatingNetworksGoals#1.2_Time-slider 1.2] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] [NavigatingNetworksGoals#4.1_Contributor_Career_as_a_line_on_a_timeline 4.1] ||
 
 === SQL Code ==
 
@@ -50,16 +51,21 @@ AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid
 }}}
 
 == Contributor Relationships ==
+
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
-|| subquery || c1.collaborator || foaf:knows || Can't use field to determine collaboration count || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
-||  || calculated field || ausestage:collaboratorCount || Stores the number contributors a contributor has collaborated with || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
+||  ||  || ausestage:collaboratorCount || Stores the number contributors a contributor has collaborated with || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] ||
+|| || || ausestage:collaboration || represents a collaboration relationship between to contributors || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] [NavigatingNetworksGoals#1.2_Time-slider 1.2] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] ||
+|| || || ausestage:collaborator || stores the link to a contributor in this collaboration relationship || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] || 
+|| || || ausestage:collaborationCount || store the number of times these two collaborators have collaborated || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] || 
+|| || || ausestage:hasCollaboration || links a contributor to this collaboration || || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] || 
 
 === SQL Code ===
 {{{
-SELECT DISTINCT contributorid, c1.collaborator 
-FROM conevlink, (SELECT eventid, contributorid AS collaborator FROM conevlink WHERE contributorid IS NOT NULL) c1 
-WHERE conevlink.eventid = c1.eventid 
-AND contributorid IS NOT NULL 
+SELECT c.contributorid, c1.collaboratorid, COUNT(c.contributorid) as collaborations 
+FROM conevlink c, (SELECT eventid, contributorid AS collaboratorid FROM conevlink WHERE contributorid IS NOT NULL AND eventid IS NOT NULL) c1 
+WHERE c.eventid = c1.eventid 
+AND c.contributorid IS NOT NULL 
+GROUP BY c.contributorid, c1.collaboratorid 
 ORDER BY contributorid
 }}}
 
