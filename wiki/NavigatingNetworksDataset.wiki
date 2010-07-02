@@ -134,10 +134,8 @@ Details of the ontology are available on the AuseStageOntology page.
 || *Ontology Name* || *Namespace* || *More Information* || *Notes ||
 
 
-= !AusStage URI Scheme = 
-<wiki:comment> Keep this list in sync with the RdfExportMoreInfo page</wiki:comment>
-
 = !AusStage Unique Id Encoding Scheme =
+<wiki:comment> Keep this list in sync with the RdfExportMoreInfo page</wiki:comment>
 
 To assist in the clarity of !AusStage unique identifiers in the dataset the following encoding scheme is used:
 
