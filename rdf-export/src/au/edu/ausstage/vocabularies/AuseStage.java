@@ -38,6 +38,10 @@ public class AuseStage {
     /** <p>The namespace of the vocabulary as a resource</p> */
     public static final Resource NAMESPACE = m_model.createResource( NS );
     
+    /*
+     * contributors 
+     */
+    
     /** Specify the nationality of a contributor */
     public static final ObjectProperty nationality = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#nationality");
     
@@ -47,17 +51,41 @@ public class AuseStage {
     /** Specify the number of contributors the specified contributor has worked with */
     public static final ObjectProperty collaboratorCount = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboratorCount");
     
-    /** Specify that a contributor has collaborated on an event */
-    public static final ObjectProperty hasCollaborated = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaborated");
+    /*
+     * collaborations
+     */
     
-    /** Specify that a contributor collaborates on an event */
+    /** Specify the details of a collaboration relationships **/
     public static final ObjectProperty collaboration = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboration");
     
-    /** Specify which event the contributor has collaborated on */
-    public static final ObjectProperty onEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#onEvent");
+    /** Specify the contributor involved in a collaboration **/
+    public static final ObjectProperty collaborator = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborator");
     
-    /** Specify the type of function the contributor had when they collaborated on an event */
-    public static final ObjectProperty functionAtEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#functionAtEvent");
+    /** Specify the number of times two contributors have collaborated */
+    public static final ObjectProperty collaborationCount = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationCount");
+    
+    /** Specify the relationship between a contributor and a collaboration */
+    public static final ObjectProperty hasCollaboration = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaboration");
+    
+    /*
+     * events
+     */
+    
+    /*
+     * Need to redefine these better
+     */
+//    
+//    /** Specify that a contributor has collaborated on an event */
+//    public static final ObjectProperty hasCollaborated = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaborated");
+//    
+//    /** Specify that a contributor collaborates on an event */
+//    public static final ObjectProperty collaboration = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboration");
+//    
+//    /** Specify which event the contributor has collaborated on */
+//    public static final ObjectProperty onEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#onEvent");
+//    
+//    /** Specify the type of function the contributor had when they collaborated on an event */
+//    public static final ObjectProperty functionAtEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#functionAtEvent");
     
 
 }
