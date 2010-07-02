@@ -13,7 +13,7 @@ The Aus-e-Stage Ontology contains the following properties grouped by focus
 
 = Contributor =
 
-As defined by a foaf:Person object.
+As defined by a [http://xmlns.com/foaf/spec/#term_Person foaf:Person] object.
 
 == nationality ==
 
