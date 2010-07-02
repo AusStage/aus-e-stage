@@ -21,26 +21,24 @@ The function that a contributor has had when they have been associated with an e
  * Director
  * Composer
 
+There is the capability in RDF to turn this into a proper ontology and not store literals for function values. This is outside the scope of the Aus-e-Stage project. 
+
 == collaboratorCount ==
 
 The number of contributors that a contributor has collaborated with
 
-== collaborator ==
-
-Holds properties of a relationship between two contributors
-
-== hasCollaborated ==
-
-Indicates that a contributor has collaborated on an event 
-
 == collaboration ==
 
-Holds the properties of a collaboration
+Holds the details of a group of collaborations between two contributors
 
-== onEvent ==
+== collaborator ==
 
-The event that the contributor has collaborated on
+A property of [AuseStageOntology#collaboration collaboration] and stores the ID of the contributors involved in this collaboration
 
-== functionAtEvent ==
+== collaborationCount ==
 
-The function that the contributor had when they collaborated on an event
+A property of [AuseStageOntology#collaboration collaboration] and stores the number of times the contributors involved in this collaboration have collaborated
+
+== hasCollaboration ==
+
+Links a contributor to a [AuseStageOntology#collaboration collaboration]
