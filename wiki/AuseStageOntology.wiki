@@ -6,7 +6,7 @@ The Aus-e-Stage ontology is used by the RdfExport application to prepare the  Na
 
 Work will be undertaken as part of the AusStage Phase 4 project on flattening the AusStage dataset and constructing appropriate ontologies. Once this work is complete the RdfExport and NetworkService should be updated to use these ontologies.
 
-The Aus-e-Stage Ontology contains the following properties grouped by focus
+The Aus-e-Stage Ontology contains the following properties grouped by use
 
 <wiki:toc max_depth="2" />
 
