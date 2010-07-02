@@ -1,12 +1,19 @@
 #summary Summary of the Aus-e-Stage Ontology
 
-= Introduction =
+<h1> Summary of the Aus-e-Stage Ontology </h1>
 
 The Aus-e-Stage ontology is used by the RdfExport application to prepare the  NavigatingNetworksDataset. It is used to expedite the construction of the dataset for the NetworkService and should not be considered to be a definitive ontology. 
 
 Work will be undertaken as part of the AusStage Phase 4 project on flattening the AusStage dataset and constructing appropriate ontologies. Once this work is complete the RdfExport and NetworkService should be updated to use these ontologies.
 
-The Aus-e-Stage Ontology contains the following fields
+The Aus-e-Stage Ontology contains the following properties grouped by focus
+
+<wiki:toc max_depth="2" />
+
+
+= Contributor =
+
+As defined by a foaf:Person object.
 
 == nationality ==
 
@@ -23,6 +30,12 @@ The function that a contributor has had when they have been associated with an e
 
 There is the capability in RDF to turn this into a proper ontology and not store literals for function values. This is outside the scope of the Aus-e-Stage project. 
 
+== hasCollaboration ==
+
+Links a contributor to a [AuseStageOntology#collaboration collaboration]
+
+= Collaborations =
+
 == collaboratorCount ==
 
 The number of contributors that a contributor has collaborated with
@@ -38,7 +51,3 @@ A property of [AuseStageOntology#collaboration collaboration] and stores the ID 
 == collaborationCount ==
 
 A property of [AuseStageOntology#collaboration collaboration] and stores the number of times the contributors involved in this collaboration have collaborated
-
-== hasCollaboration ==
-
-Links a contributor to a [AuseStageOntology#collaboration collaboration]
