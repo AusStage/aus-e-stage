@@ -430,204 +430,205 @@ public class BuildNetworkData {
 		 * add events
 		 */
 	 
-//		try {
-//		
-//			// keep the user informed
-//			System.out.println("INFO: Adding events...");
-//			
-//			// declare helper variables
-//			String currentId     = "";
-//			Resource contributor = null;
-//			Resource event       = null;
-//			
-//			// define the sql
-//			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid, "
-//					   + "                e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-//					   + "                e.yyyylast_date, e.mmlast_date, e.ddlast_date "
-//					   + "FROM events e, conevlink c " 
-//					   + "WHERE e.eventid = c.eventid "
-//					   + "AND e.eventid IS NOT NULL "
-//					   + "AND c.contributorid IS NOT NULL "
-//					   + "ORDER BY e.eventid";
-//			
-//			// get the data from the database				   
-//			java.sql.ResultSet resultSet = database.executeStatement(sql);
-//	
-//			// loop through the 
-//			while (resultSet.next()) {
-//			
-//				// have we seen this event id before?
-//				if(currentId.equals(resultSet.getString(1)) == true) {
-//					// yes we have
-//					// lookup the contributor
-//					contributor = contributors.get(resultSet.getString(3));
-//					
-//					// double check the contributor
-//					if(contributor == null) {
-//						// missing contributor
-//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
-//					} else {
-//			
-//						// add the relationships
-//						contributor.addProperty(Event.isAgentIn, event);
-//						event.addProperty(Event.agent, contributor);
-//					}
-//					
-//				} else {
-//					// no we haven't so create a new event
-//					event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
-//					event.addProperty(RDF.type, Event.Event);
-//			
-//					// process the title
-//					String title = resultSet.getString(2);
-//					title = title.replaceAll("\r", " ");
-//					title = title.replaceAll("\n", " ");
-//					
-//					// add the title and Url
-//					event.addProperty(DCTerms.title, title);
-//					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
-//					
-//					// construct the dates
-//					String firstDate = null;
-//					String lastDate  = null;
-//					
-//					// first date
-//					if(resultSet.getString(4) != null) {
-//						firstDate = buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
-//					}
-//					
-//					// last date
-//					if(resultSet.getString(7) != null) {
-//						lastDate = buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
-//					}
-//					
-//					// check on the first date
-//					if(firstDate == null) {
-//						// inform user of error
-//						System.out.println("INFO: A valid first date for event: " + resultSet.getString(1)  + " could not be determined");
-//					} else {
-//					
-//						// adjust the last date if required
-//						if(lastDate == null) {
-//							lastDate = firstDate;
-//						}
-//						
-//						// add date information
-//						 
-//						// construct a new timeInterval resource
-//						Resource timeInterval = model.createResource(Time.Interval);
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Adding events...");
+			
+			// declare helper variables
+			String currentId     = "";
+			Resource contributor = null;
+			Resource event       = null;
+			
+			// define the sql
+			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid, "
+					   + "                e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+					   + "                e.yyyylast_date, e.mmlast_date, e.ddlast_date "
+					   + "FROM events e, conevlink c " 
+					   + "WHERE e.eventid = c.eventid "
+					   + "AND e.eventid IS NOT NULL "
+					   + "AND c.contributorid IS NOT NULL "
+					   + "ORDER BY e.eventid";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// have we seen this event id before?
+				if(currentId.equals(resultSet.getString(1)) == true) {
+					// yes we have
+					// lookup the contributor
+					contributor = contributors.get(resultSet.getString(3));
+					
+					// double check the contributor
+					if(contributor == null) {
+						// missing contributor
+						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
+					} else {
+			
+						// add the relationships
+						contributor.addProperty(Event.isAgentIn, event);
+						event.addProperty(Event.agent, contributor);
+					}
+					
+				} else {
+					// no we haven't so create a new event
+					event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
+					event.addProperty(RDF.type, Event.Event);
+			
+					// process the title
+					String title = resultSet.getString(2);
+					title = title.replaceAll("\r", " ");
+					title = title.replaceAll("\n", " ");
+					
+					// add the title and Url
+					event.addProperty(DCTerms.title, title);
+					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
+					
+					// construct the dates
+					String firstDate = null;
+					String lastDate  = null;
+					
+					// first date
+					if(resultSet.getString(4) != null) {
+						firstDate = buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+					}
+					
+					// last date
+					if(resultSet.getString(7) != null) {
+						lastDate = buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
+					}
+					
+					// check on the first date
+					if(firstDate == null) {
+						// inform user of error
+						System.out.println("INFO: A valid first date for event: " + resultSet.getString(1)  + " could not be determined");
+					} else {
+					
+						// adjust the last date if required
+						if(lastDate == null) {
+							lastDate = firstDate;
+						}
+						
+						// add date information
+						 
+						// construct a new timeInterval resource
+						Resource timeInterval = model.createResource(Time.Interval);
 
-//						// add the timeline properties
-//						// add the typed literals
-//						timeInterval.addProperty(Timeline.beginsAtDateTime, model.createTypedLiteral(firstDate, XSDDatatype.XSDdate));
-//						timeInterval.addProperty(Timeline.endsAtDateTime, model.createTypedLiteral(lastDate, XSDDatatype.XSDdate));
+						// add the timeline properties
+						// add the typed literals
+						timeInterval.addProperty(Timeline.beginsAtDateTime, model.createTypedLiteral(firstDate, XSDDatatype.XSDdate));
+						timeInterval.addProperty(Timeline.endsAtDateTime, model.createTypedLiteral(lastDate, XSDDatatype.XSDdate));
 
-//						// andd the timeInterval to the Event
-//						event.addProperty(Event.time, timeInterval);
-//					}
-//					
-//					// lookup the contributor
-//					contributor = contributors.get(resultSet.getString(3));
-//					
-//					// double check the contributor
-//					if(contributor == null) {
-//						// missing contributor
-//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
-//					} else {
-//			
-//						// add the relationships
-//						contributor.addProperty(Event.isAgentIn, event);
-//						event.addProperty(Event.agent, contributor);
-//					}
-//							
-//					// increment the event count 
-//					eventCount++;
-//					
-//					// store this id
-//					currentId = resultSet.getString(1);
-//				}	
-//			}
-//			
-//			// play nice and tidy up
-//			resultSet.close();
-//			database.closeStatement();
-//			System.out.println("INFO: " + eventCount +   " events successfully added to the datastore");
-//			
-//		} catch (java.sql.SQLException sqlEx) {
-//			System.err.println("ERROR: An SQL related error has occured");
-//			System.err.println("       " + sqlEx.getMessage());
-//			return false;
-//		}
+						// andd the timeInterval to the Event
+						event.addProperty(Event.time, timeInterval);
+					}
+					
+					// lookup the contributor
+					contributor = contributors.get(resultSet.getString(3));
+					
+					// double check the contributor
+					if(contributor == null) {
+						// missing contributor
+						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
+					} else {
+			
+						// add the relationships
+						contributor.addProperty(Event.isAgentIn, event);
+						event.addProperty(Event.agent, contributor);
+					}
+							
+					// increment the event count 
+					eventCount++;
+					
+					// store this id
+					currentId = resultSet.getString(1);
+				}	
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + eventCount +   " events successfully added to the datastore");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
 		
 		/*
 		 * Add functions at events
 		 */
 		 
-//		try {
-//		
-//			// keep the user informed
-//			System.out.println("INFO: Adding contributor functions at events...");
-//			
-//			// declare helper variables
-//			String currentId     = "";
-//			Resource contributor = null;
-//			
-//			// define the sql
-//			String sql = "SELECT cl.contributorid, cl.eventid, cfp.preferredterm "
-//					   + "FROM conevlink cl, contributorfunctpreferred cfp "
-//					   + "WHERE cl.eventid IS NOT NULL "
-//					   + "AND cl.contributorid IS NOT NULL "
-//					   + "AND cl.function = cfp.contributorfunctpreferredid "
-//					   + "ORDER BY contributorid";
-//			
-//			// get the data from the database				   
-//			java.sql.ResultSet resultSet = database.executeStatement(sql);
-//	
-//			// loop through the 
-//			while (resultSet.next()) {
-//			
-//				// have we seen this contributor before
-//				if(currentId.equals(resultSet.getString(1)) != true) {
-//					
-//					// no we haven't so look them up
-//					contributor = contributors.get(resultSet.getString(1));
-//					
-//					// store the id to reduce number of lookups
-//					currentId = resultSet.getString(1);
-//					
-//					// double check the contributor
-//					if(contributor == null) {
-//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-//					}
-//				} else {
-//					// yes we have so use the found contributor if available
-//					if(contributor != null) {
-//					
-//						// construct a new collaborates resource
-//						Resource collaborated = model.createResource(AuseStage.collaboration);
-//						
-//						// add the on event property
-//						collaborated.addProperty(AuseStage.onEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
-//						collaborated.addProperty(AuseStage.functionAtEvent, resultSet.getString(3));
-//						
-//						// add the collaborates property to the contributor
-//						contributor.addProperty(AuseStage.hasCollaborated, collaborated);
-//						
-//						functionsAtEventsCount++;
-//					}
-//				}				
-//			}
-//			
-//			// play nice and tidy up
-//			resultSet.close();
-//			database.closeStatement();
-//			System.out.println("INFO: " + functionsAtEventsCount +   " contributor function at events added");
-//			
-//		} catch (java.sql.SQLException sqlEx) {
-//			System.err.println("ERROR: An SQL related error has occured");
-//			System.err.println("       " + sqlEx.getMessage());
-//			return false;
-//		}
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Adding contributor functions to events...");
+			
+			// declare helper variables
+			String currentId     = "";
+			Resource contributor = null;
+			
+			// define the sql
+			String sql = "SELECT cl.contributorid, cl.eventid, cfp.preferredterm "
+					   + "FROM conevlink cl, contributorfunctpreferred cfp "
+					   + "WHERE cl.eventid IS NOT NULL "
+					   + "AND cl.contributorid IS NOT NULL "
+					   + "AND cl.function = cfp.contributorfunctpreferredid "
+					   + "ORDER BY contributorid";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+			
+				// have we seen this contributor before
+				if(currentId.equals(resultSet.getString(1)) != true) {
+					
+					// no we haven't so look them up
+					contributor = contributors.get(resultSet.getString(1));
+					
+					// store the id to reduce number of lookups
+					currentId = resultSet.getString(1);
+					
+					// double check the contributor
+					if(contributor == null) {
+						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+					}
+				} else {
+					// yes we have so use the found contributor if available
+					if(contributor != null) {
+					
+						// construct a new functionAtEvent
+						Resource functionAtEvent = model.createResource(AuseStage.functionAtEvent);
+						
+						// add the on event property
+						functionAtEvent.addProperty(AuseStage.atEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
+						functionAtEvent.addProperty(AuseStage.function, resultSet.getString(3));
+						
+						// add the collaborates property to the contributor
+						contributor.addProperty(AuseStage.undertookFunction, functionAtEvent);
+						
+						// increment the count
+						functionsAtEventsCount++;
+					}
+				}				
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + functionsAtEventsCount +   " contributor function at events added");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
 		 
 		
 		
