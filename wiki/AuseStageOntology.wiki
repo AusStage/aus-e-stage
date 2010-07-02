@@ -51,3 +51,7 @@ A property of [AuseStageOntology#collaboration collaboration] and stores the ID 
 == collaborationCount ==
 
 A property of [AuseStageOntology#collaboration collaboration] and stores the number of times the contributors involved in this collaboration have collaborated
+
+== hasCollaboration == 
+
+Links a contributor to a collaboration event.
