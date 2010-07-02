@@ -97,7 +97,7 @@ ORDER BY e.eventid
 || *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
 || || || ausestage:functionAtEvent || lists the function that a contributor had when contributing to an event || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3]||
 || eventid || conevlink || ausestage:atEvent || link the fuctionAtEvent object to the event || ||
-|| contributorfunctpreferred|| preferredterm || list the function that the contributor held || ||
+|| contributorfunctpreferred || preferredterm || ausestage:function || list the function that the contributor held || ||
 || conevlink || contributorid || ausestage:undertookFunction || link the contributor to this functionAtEvent object || ||
 
 
