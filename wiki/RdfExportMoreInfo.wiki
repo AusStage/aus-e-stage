@@ -30,6 +30,12 @@ To assist in the clarity of !AusStage unique identifiers in the dataset the foll
 
 The [http://code.google.com/p/aus-e-stage/source/browse/trunk/rdf-export/src/au/edu/ausstage/vocabularies/AusStageURI.java AusStageURI class] in the au.edu.ausstage.vocabularies package provides convenience methods for encoding identifiers, and converting identifiers into the persistent URLs used by the !AusStage website
 
+The class also provides functionality that encodes a unique identifier for the collaboration objects in the NavigatingNetworksDataset the identifier takes the form:
+
+ausstage:rel:id1-id2
+
+Where _id1_ and _id2_ are contributor ids. The URI is resolved to a URL in the Navigating Networks site that can provide additional information about the collaboration relationship. 
+
 = Installing the Application = 
 
 To install the RdfExport application follow these steps:
