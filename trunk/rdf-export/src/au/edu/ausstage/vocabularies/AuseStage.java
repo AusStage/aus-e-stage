@@ -67,6 +67,9 @@ public class AuseStage {
     /** Specify the relationship between a contributor and a collaboration */
     public static final ObjectProperty hasCollaboration = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaboration");
     
+    /** Specify the time period during which collaborations occured */
+    public static final ObjectProperty collaborationPeriod = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationPeriod");
+    
     /*
      * events
      */
