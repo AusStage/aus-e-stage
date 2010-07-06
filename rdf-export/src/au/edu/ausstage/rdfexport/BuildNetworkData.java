@@ -427,6 +427,130 @@ public class BuildNetworkData {
 		}
 		
 		/*
+		 * add dates to relationships
+		 */
+		 	   
+		try {
+		
+			// keep the user informed
+			System.out.println("INFO: Adding date information to relationships...");
+			
+			// reset the collaborations variable
+			collaborations.clear();
+			collaborationCount = 0;
+			
+			// declare helper variables
+			String currentId = "";
+			Resource contributor = null;
+			
+			// define the sql
+			String sql = "SELECT c.contributorid, c1.collaboratorid, "
+					   + "       MIN(CONCAT(e.yyyyfirst_date, CONCAT('-', CONCAT(e.mmfirst_date, CONCAT('-', e.ddfirst_date))))) as first_date, "
+					   + "       MAX(CONCAT(e.yyyylast_date, CONCAT('-', CONCAT(e.mmlast_date, CONCAT('-', e.ddlast_date))))) as last_date "
+					   + "FROM conevlink c, events e, "
+					   + "     (SELECT eventid, contributorid AS collaboratorid FROM conevlink WHERE contributorid IS NOT NULL AND eventid IS NOT NULL) c1 "
+					   + "WHERE c.contributorid IS NOT NULL "
+					   + "AND c.eventid = c1.eventid "
+					   + "AND c.eventid = e.eventid "
+					   + "GROUP BY c.contributorid, c1.collaboratorid ";
+			
+			// get the data from the database				   
+			java.sql.ResultSet resultSet = database.executeStatement(sql);
+	
+			// loop through the 
+			while (resultSet.next()) {
+											
+				// check to see if this collaboration has already been made
+				String firstId  = resultSet.getString(1);
+				String secondId = resultSet.getString(2);
+				
+				// make sure we don't try to update non existent relationships object
+				if(firstId.equals(secondId) == false) {
+			
+					if(collaborations.contains(firstId + secondId) == false && collaborations.contains(secondId + firstId) == false) {
+		
+						// check to ensure we've seen these IDs before
+						if(contributors.containsKey(firstId) != false && contributors.containsKey(secondId) != false) {
+			
+							// construct the dates
+							String firstDate = resultSet.getString(3);
+							String lastDate  = resultSet.getString(4);
+				
+							// double check the dates
+							if(firstDate == null) {
+								System.out.println("INFO: A valid time period for '" + firstId + "' & '" + secondId + "' could not be determined");
+							} else {
+								// check on the format of the date
+								if(firstDate.length() != 10) {
+					
+									// first date is shorter than expected
+									if(firstDate.length() == 6) {
+										// year only so get rid of the '--'
+										firstDate = firstDate.substring(0, 4);
+									} else if(firstDate.length() == 8) {
+										// year and month parameter
+										firstDate = firstDate.substring(0, 7);
+									}									
+								}
+					
+								// check on the last date
+								if(lastDate == null) {
+									lastDate = firstDate;
+								} else if (lastDate.equals("--")) {
+									lastDate = firstDate;
+								} else if(lastDate.length() != 10) {									
+									// last date is shorter than expected
+									if(lastDate.length() == 6) {
+										// year only so get rid of the '--'
+										lastDate = lastDate.substring(0, 4);
+									} else if(firstDate.length() == 8) {
+										// year and month parameter
+										lastDate = lastDate.substring(0, 7);
+									}									
+								}
+
+								// add date information
+								 
+								// construct a new timeInterval resource
+								Resource timeInterval = model.createResource(Time.Interval);
+
+								// add the timeline properties
+								// add the typed literals
+								timeInterval.addProperty(Timeline.beginsAtDateTime, model.createTypedLiteral(firstDate, XSDDatatype.XSDdate));
+								timeInterval.addProperty(Timeline.endsAtDateTime, model.createTypedLiteral(lastDate, XSDDatatype.XSDdate));
+					
+								// add the time interval to the collaboration
+								Resource collaboration = model.createResource(AusStageURI.getRelationshipURI(firstId + "-" + secondId));
+								collaboration.addProperty(AuseStage.collaborationPeriod, timeInterval);
+
+							}
+				
+							// add the to the collaborations set so we don't do this again
+							collaborations.add(firstId + secondId);
+							collaborations.add(secondId + firstId);
+				
+							// count the number of collaborations
+							collaborationCount++;
+				
+						} else {
+							System.out.println("WARN: Unable to update the collaboration between '" + firstId + "' & '" + secondId + "'");
+						}
+					}
+				}
+			}
+			
+			// play nice and tidy up
+			resultSet.close();
+			database.closeStatement();
+			System.out.println("INFO: " + collaborationCount +   " collaborations updated with date information");
+			
+		} catch (java.sql.SQLException sqlEx) {
+			System.err.println("ERROR: An SQL related error has occured");
+			System.err.println("       " + sqlEx.getMessage());
+			return false;
+		}
+		
+		/*
 		 * add events
 		 */
 	 
