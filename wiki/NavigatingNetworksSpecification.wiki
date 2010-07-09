@@ -315,21 +315,25 @@ _Contributor detail page with organisation network browsing expanded_￼￼
 The AusStage system should allow the user to search for contributors and events. The results of this search should be displayed graphically as in interactive network. The interface for displaying results should also allow user interaction to navigate further through the network. This interface should provide functionality such as the [NavigatingNetworksSpecification#1.2_Time-slider Time-slider] and [NavigatingNetworksSpecification#1.3_Faceted_browsing faceted browsing]  to further refine the network graphic results displayed.
 
 ===3.1 Search for connections between collaborators===
+
 _Priority Ranking: 88%_
+
 The search functionality should allow the user to select two or more collaborators.
 This should work in a similar fashion to the AusStage Mapping service whereby the user can search for a contributor, select them, and then search again for another contributor etc.
 Upon completion of the selection process the network browsing interface should display the network of contributors that connects them. _Question: is this a particular type of browsing? should ONLY the contributors that connect them, or that they have in common be displayed? How do we handle (if it arises) the possibility that there is NO path between the two contributors?_
 This is a way of exploring closeness, degrees of separation, lines of influence, artistic families, and so on. ? 
 
 Work flow:
- #User searches for a contributor.
- #Results displayed
- #User, if appropriate, selects to add a contributor from the results
- #This process is repeated until the user has selected all desired contributors
- #Once the user has selected all desired contributors to be mapped _(should there be a limit?)_ the network is displayed in the browsing interface.
+ # User searches for a contributor.
+ # Results displayed
+ # User, if appropriate, selects to add a contributor from the results
+ # This process is repeated until the user has selected all desired contributors
+ # Once the user has selected all desired contributors to be mapped _(should there be a limit?)_ the network is displayed in the browsing interface.
 
 ===3.2 Search for events matching criteria===
+
 _Priority Ranking: 68%_
+
 Search functionality should allow the user to select certain event criteria such as genre, status, content indicators, and/or keyword. _Question: should we include a date range to narrow down results?_ 
 The browsing interface should then then display the network of contributors who have worked on events that match this criteria. 
  MORE HERE - LIST CRITERIA, WORKFLOW ETC 
