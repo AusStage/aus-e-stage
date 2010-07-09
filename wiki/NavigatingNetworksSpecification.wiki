@@ -291,29 +291,48 @@ _Priority Ranking 84%._
 The contributor detail page within AusStage should display a collapsible list of collaborators, ordered by frequency of collaborations - most frequent, to least frequent. 
 The display will list the collaborators name, date range, and a list of their roles. The collaborators name should be a link to their contributor detail page.
 The layout should be as follows:
-<CONTRIBUTOR NAME>  <DATE RANGE>  <ROLES>
-￼
-_￼INSERT SCREEN SHOTS_
+
+_￼Contributor detail page with network browsing collapsed_
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/collapsedCollaborators.jpg]
+
+_Contributor detail page with network browsing expanded_
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/CollaboratorsExp.jpg]
 
 ===2.2 Key organisations===
 _Priority Ranking 72%_
 The contributor detail page within AusStage should display a collapsible list of organisations, ordered by frequency of collaborations - most frequent, to least frequent. 
 The display will list the organisations name, date range, and a list of their roles. The organisations name should be a link to their organisation detail page.
 The layout should be as follows:
-<ORGANISATION NAME>  <DATE RANGE>  <ROLES>
-￼￼
-_INSERT SCREEN SHOTS_
+
+_￼Contributor detail page with organisation network browsing collapsed_
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgCollapsed.jpg
+
+_Contributor detail page with organisation network browsing expanded_￼￼
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgsExpanded.jpg]
 
 
 ==3. NETWORK SEARCH AND DISPLAY - Person-to-person==
-
-Search AusStage for contributors and events, and display the results graphically as a an interactive network. Search provides another way into exploring networks of collaboration between people. The interface for displaying results could also enable further navigating through the network, refining the display with time-slider, faceted browsing and so on.
+The AusStage system should allow the user to search for contributors and events. The results of this search should be displayed graphically as in interactive network. The interface for displaying results should also allow user interaction to navigate further through the network. This interface should provide functionality such as the [NavigatingNetworksSpecification#1.2_Time-slider Time-slider] and [NavigatingNetworksSpecification#1.3_Faceted_browsing faceted browsing]  to further refine the network graphic results displayed.
 
 ===3.1 Search for connections between collaborators===
-I select two or more contributors - and display the network of contributors that connects them. This is a way of exploring closeness, degrees of separation, lines of influence, artistic families, and so on. For example, what's the connection between Jim Sharman and Benedict Andrews? I could see they're linked by Patrick White. Rank: 88%
+_Priority Ranking: 88%_
+The search functionality should allow the user to select two or more collaborators.
+This should work in a similar fashion to the AusStage Mapping service whereby the user can search for a contributor, select them, and then search again for another contributor etc.
+Upon completion of the selection process the network browsing interface should display the network of contributors that connects them. _Question: is this a particular type of browsing? should ONLY the contributors that connect them, or that they have in common be displayed? How do we handle (if it arises) the possibility that there is NO path between the two contributors?_
+This is a way of exploring closeness, degrees of separation, lines of influence, artistic families, and so on. ? 
+
+Work flow:
+ #User searches for a contributor.
+ #Results displayed
+ #User, if appropriate, selects to add a contributor from the results
+ #This process is repeated until the user has selected all desired contributors
+ #Once the user has selected all desired contributors to be mapped _(should there be a limit?)_ the network is displayed in the browsing interface.
 
 ===3.2 Search for events matching criteria===
- I provide some search criteria for genre, status, content indicators and/or keyword, etc - and I ask AusStage to display the network of all the people who worked on events matching those criteria. For example, show me the network of collaborators who've worked in burlesque. Rank: 68%
+_Priority Ranking: 68%_
+Search functionality should allow the user to select certain event criteria such as genre, status, content indicators, and/or keyword. _Question: should we include a date range to narrow down results?_ 
+The browsing interface should then then display the network of contributors who have worked on events that match this criteria. 
+ MORE HERE - LIST CRITERIA, WORKFLOW ETC 
 
 ===3.3 Search by organisation===
 I select an organisation (or organisations) and ask AusStage to display the network of all the people who worked at the organisation. For example, show me the network of collaborators who worked on events produced by HotHouse Theatre. Rank: 64%
