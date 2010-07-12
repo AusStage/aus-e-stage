@@ -6,20 +6,15 @@ The creation of the dataset for use by the Navigating Networks service is achiev
 
 More information about the application such as the tools and ontologies used, is available on the RdfExportMoreInfo page.
 
+_Note:_ It is strongly advised to only run this application on a 64bit operating system.
+
 The application undertakes the following tasks:
 
 <wiki:toc max_depth="2" />
 
 = Building the Dataset =
 
-The current dataset contains the following data elements:
-
- * The contributor id, encoded using this scheme
- * The contributor name
- * The contributor given name
- * The contributor family name
- * A link to the contributor page in [http://www.ausstage.edu.au AusStage]
- * Links between contributors that have worked on the same event
+The current dataset contains the elements listed on the NavigatingNetworksDataset page. 
 
 To build the dataset follow these steps:
 
@@ -28,9 +23,8 @@ To build the dataset follow these steps:
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
-   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype build-network-data -properties properties-file}}}
- # If the application errors with an out of memory error message increase the heap space available by including the following switch {{{-Xmx2028m}}}
- # If the application errors with a garbage collection related error use the following switch {{{-XX:-UseGCOverheadLimit}}}
+   {{{/usr/bin/java -Xmx2048m -Xms512m -jar AusStageRdfExport.jar -task build-network-data -properties properties-file}}}
+ # If the application errors with an out of memory error message increase the heap space by increasing the values to the _-Xmx_ and _-Xms_ parameters
  # The application will take some time to complete and its output will look like this:
 
 <pre>
@@ -39,15 +33,17 @@ INFO: Connection established
 INFO: Deleting the existing TDB datastore...
 INFO: Existing TDB datastore deleted
 INFO: Adding contributor data to the datastore...
-INFO: 81540 contributors successfully added to the datastore
+INFO: 81,680 contributors successfully added to the datastore
 INFO: Adding contributor functions...
-INFO: 101802 contributor functions successfully added.
-INFO: Adding foaf:knows elements and collaborator counts...
-INFO: 3276844 foaf:knows elements successfully added to the datastore
+INFO: 101,984 contributor functions successfully added
+INFO: Adding collaborator relationships...
+INFO: Each '#' below represents 10,000 collaborations
+##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|####
+INFO: 1,640,250 collaborations successfully added to the datastore
 INFO: Adding events...
-INFO: 43508 events successfully added to the datastore
-INFO: Adding contributor functions at events...
-INFO: 282875 contributor function at events added
+INFO: 43,706 events successfully added to the datastore
+INFO: Adding contributor functions to events...
+INFO: 283,617 contributor function at event records added
 INFO: Task completed successfully
 </pre>
 
@@ -100,25 +96,6 @@ To query the dataset follow these steps:
    # query-file: is the location of a plain text file that defines the query (including path information)
    {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype run-query -properties properties-file mat format-type -query query-file}}}
 
-An example query is as follows:
-
-{{{
-PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-
-SELECT DISTINCT ?knows
-WHERE { 
-   [
-     foaf:name "William Shakespeare";
-     foaf:knows ?knows
-     ]
-     
-}
-LIMIT 10
-}}}
-
-This query returns the encoded unique identifier for the first 10 contributors that have contributed to an event that William Shakespeare has also made a contribution.
-
 = Exporting the Dataset as an Edge List File = 
 
 The Edge List File is contains data in the following plain text format where each line contains the following
@@ -132,7 +109,7 @@ The Edge List File is contains data in the following plain text format where eac
 <contributorid><tab><givenName><tab><familyName><tab><contributorid><tab><givenName><tab><familyName>
 }}}
 
-_Note 1:_ This export contains duplicate edges for example:
+_Note:_ This export contains duplicate edges for example:
 
 {{{
 <01><tab><James><tab><Bond><tab><02><tab><Money><tab><Penny>
