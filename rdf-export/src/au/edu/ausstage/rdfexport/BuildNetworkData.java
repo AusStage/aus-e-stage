@@ -191,11 +191,12 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding contributor data to the datastore...");
 			
 			// define the sql
-			String sql = "SELECT DISTINCT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality "
-					   + "FROM contributor c, gendermenu g, conevlink cl, events e "
+			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality "
+					   + "FROM contributor c, gendermenu g, "
+					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
 					   + "WHERE c.gender = g.genderid(+) "
-					   + "AND c.contributorid = cl.contributorid "
-					   + "AND cl.eventid = e.eventid";
+					   + "AND c.contributorid = ce.contributorid "
+					   + "ORDER BY contributorid";
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
@@ -274,9 +275,12 @@ public class BuildNetworkData {
 			
 			// define the sql
 			String sql = "SELECT c.contributorid, cp.preferredterm "
-					   + "FROM contributor c, contributorfunctpreferred cp, contfunctlink cl "
+					   + "FROM contributor c, contributorfunctpreferred cp, contfunctlink cl, "
+					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
 					   + "WHERE c.contributorid = cl.contributorid "
-					   + "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid";
+					   + "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid "
+					   + "AND c.contributorid = ce.contributorid "
+					   + "ORDER BY contributorid";
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
