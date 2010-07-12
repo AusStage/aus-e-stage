@@ -191,9 +191,11 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding contributor data to the datastore...");
 			
 			// define the sql
-			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality "
-					   + "FROM contributor c, gendermenu g "
-					   + "WHERE c.gender = g.genderid(+)";
+			String sql = "SELECT DISTINCT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality "
+					   + "FROM contributor c, gendermenu g, conevlink cl, events e "
+					   + "WHERE c.gender = g.genderid(+) "
+					   + "AND c.contributorid = cl.contributorid "
+					   + "AND cl.eventid = e.eventid";
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
@@ -249,7 +251,6 @@ public class BuildNetworkData {
 			// play nice and tidy up
 			resultSet.close();
 			database.closeStatement();
-			//System.out.println("INFO: " + contributorCount +   " contributors successfully added to the datastore");
 			System.out.format("INFO: %,d contributors successfully added to the datastore%n", contributorCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -315,7 +316,6 @@ public class BuildNetworkData {
 			// play nice and tidy up
 			resultSet.close();
 			database.closeStatement();
-			//System.out.println("INFO: " + functionCount + " contributor functions successfully added.");
 			System.out.format("INFO: %,d contributor functions successfully added%n", functionCount);
 			
 			
@@ -333,7 +333,6 @@ public class BuildNetworkData {
 		
 			// keep the user informed
 			System.out.println("INFO: Adding collaborator relationships...");
-			//System.out.println("INFO: Each '#' below represents " + RECORD_NOTIFY_COUNT + " collaborations added to the datastore");
 			System.out.format("INFO: Each '#' below represents %,d collaborations%n", RECORD_NOTIFY_COUNT);
 			
 			// declare helper variables
@@ -481,7 +480,6 @@ public class BuildNetworkData {
 			resultSet.close();
 			database.closeStatement();
 			
-			//System.out.println("\nINFO: " + collaborationCount +   " collaborator relationships successfully added to the datastore");
 			System.out.format("%nINFO: %,d collaborations successfully added to the datastore%n", collaborationCount);
 			
 			
@@ -618,7 +616,6 @@ public class BuildNetworkData {
 			// play nice and tidy up
 			resultSet.close();
 			database.closeStatement();
-			//System.out.println("INFO: " + eventCount +   " events successfully added to the datastore");
 			System.out.format("INFO: %,d events successfully added to the datastore%n", eventCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -692,7 +689,6 @@ public class BuildNetworkData {
 			// play nice and tidy up
 			resultSet.close();
 			database.closeStatement();
-			//System.out.println("INFO: " + functionsAtEventsCount +   " contributor function at events added");
 			System.out.format("INFO: %,d contributor function at event records added%n", functionsAtEventsCount);
 			
 		} catch (java.sql.SQLException sqlEx) {

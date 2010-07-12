@@ -21,6 +21,9 @@ package au.edu.ausstage.rdfexport;
 
 // import additional packages
 import java.io.*;
+import java.util.Date;
+import java.text.DateFormat;
+import java.util.GregorianCalendar;
 
 /**
  * Main driving class for the AusStage ABS Data Fix App
@@ -29,7 +32,7 @@ public class RdfExport {
 
 	// Version information 
 	private static final String VERSION    = "1.0.0";
-	private static final String BUILD_DATE = "2010-06-25";
+	private static final String BUILD_DATE = "2010-07-12";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
@@ -47,6 +50,14 @@ public class RdfExport {
 		System.out.println("AusStage RdfExport - Export AusStage data into a variety of RDF related data formats");
 		System.out.println("Version: " + VERSION + " Build Date: " + BUILD_DATE);
 		System.out.println("More Info: " + INFO_URL + "\n");
+		
+		// get and store the current date
+		GregorianCalendar calendar = new GregorianCalendar();
+		Date startDate = calendar.getTime();
+	 	DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
+	 	
+	 	// output the date 	
+	 	System.out.println("INFO: Process Started: " + dateFormatter.format(startDate));
 		
 		// get the command line params
 		SimpleCommandLineParser parser = new SimpleCommandLineParser(args); // use a Google class to do manage command line params
@@ -246,6 +257,30 @@ public class RdfExport {
 			System.exit(-1);
 		} else {
 			System.out.println("INFO: Task completed successfully");
+			
+			// output the finish date
+			calendar = new GregorianCalendar();
+			Date finishDate = calendar.getTime();
+				 	
+		 	// output the date 	
+		 	System.out.println("INFO: Process Finished: " + dateFormatter.format(finishDate));
+		 	
+		 	// calculate the difference
+		 	long startTime  = startDate.getTime();
+		 	long finishTime = finishDate.getTime();
+		 	
+		 	// calculate the difference in minutes
+			float minuteConstant = 60000;
+		 	float timeDifference = finishTime - startTime;
+		 	timeDifference = timeDifference / minuteConstant;
+		 	
+		 	if(timeDifference > 1 ) {
+			 	System.out.format("INFO: Elapsed Time: %.2f minutes%n", timeDifference);
+			} else {
+				timeDifference = timeDifference * 60;
+				System.out.format("INFO: Elapsed Time: %.2f seconds%n", timeDifference);
+			}
+			
 			System.exit(0);
 		}
 		
