@@ -12,8 +12,8 @@ This page provides information on the following topics
 
 The following third party libraries are used by the application and the JAR files must be in the _lib_ directory. They are not distributed with the application to keep the archive file size to a minimum:
 
- * [http://openjena.org/ Jena] - Used to model RDF data
- * [http://openjena.org/TDB/ TDB] - Used to provide a persistent datastore
+ * [http://openjena.org/TDB/ TDB] - Used to provide a persistent RDF based datastore
+ * [http://trove4j.sourceforge.net/ GNU Trove] - Used for a more memory efficient collection of contributor IDs
  * [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html Oracle JDBC Driver] - Used to access the !AusStage database 
 
 = RDF Ontologies Used = 
