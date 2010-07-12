@@ -33,9 +33,12 @@ The RdfExport application undertakes the following steps to build the dataset
 === SQL Code ==
 
 {{{
-SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality 
-FROM contributor c, gendermenu g 
+SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality
+FROM contributor c, gendermenu g,
+     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce
 WHERE c.gender = g.genderid(+)
+AND c.contributorid = ce.contributorid
+ORDER BY contributorid
 }}}
 
 == Contributor Functions == 
@@ -45,9 +48,12 @@ WHERE c.gender = g.genderid(+)
 === SQL Code ===
 {{{
 SELECT c.contributorid, cp.preferredterm
-FROM contributor c, contributorfunctpreferred cp, contfunctlink cl
+FROM contributor c, contributorfunctpreferred cp, contfunctlink cl,
+     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce
 WHERE c.contributorid = cl.contributorid
 AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid
+AND c.contributorid = ce.contributorid
+ORDER BY contributorid
 }}}
 
 == Contributor Relationships ==
