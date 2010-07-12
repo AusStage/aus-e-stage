@@ -49,7 +49,6 @@ public class BuildNetworkData {
 	
 	// declare private class level constants
 	private final int RECORD_NOTIFY_COUNT = 10000;
-	private final int TDB_REOPEN_RECORD_LIMIT = RECORD_NOTIFY_COUNT * 50;
 	
 	/**
 	 * A constructor for this class
@@ -162,7 +161,7 @@ public class BuildNetworkData {
 		// map of contributors
 		//java.util.Map<String, Resource> contributors = new java.util.HashMap<String, Resource>();
 		gnu.trove.TIntHashSet contributors = new gnu.trove.TIntHashSet();
-	
+
 		// create an empty persistent model
 		Model model = null;
 		
@@ -335,14 +334,12 @@ public class BuildNetworkData {
 			// keep the user informed
 			System.out.println("INFO: Adding collaborator relationships...");
 			//System.out.println("INFO: Each '#' below represents " + RECORD_NOTIFY_COUNT + " collaborations added to the datastore");
-			System.out.format("INFO: Each '#' below represents %,d collaborations added to the datastore%n", RECORD_NOTIFY_COUNT);
+			System.out.format("INFO: Each '#' below represents %,d collaborations%n", RECORD_NOTIFY_COUNT);
 			
 			// declare helper variables
 			String currentId = "";
 			Resource contributor  = null;
 			Resource collaborator = null;
-			
-			gnu.trove.TLongHashSet collaborations = new gnu.trove.TLongHashSet();
 			
 			// define the sql
 			String sql = "SELECT c.contributorid, c1.collaboratorid, COUNT(c.contributorid) as collaborations, "
@@ -354,7 +351,7 @@ public class BuildNetworkData {
 					   + "WHERE c.eventid = c1.eventid "
 					   + "AND c.contributorid IS NOT NULL "
 					   + "AND c.eventid = e.eventid "
-					   + "AND c.contributorid <> c1.collaboratorid "
+					   + "AND c.contributorid < c1.collaboratorid "
 					   + "GROUP BY c.contributorid, c1.collaboratorid "
 					   + "ORDER BY contributorid ";
 			
@@ -391,102 +388,91 @@ public class BuildNetworkData {
 				// double check the contributor
 				if(contributor != null) {
 				
-					// check to see if this collaboration has been seen before
-					long firstCompare  = Long.parseLong(resultSet.getString(1) + resultSet.getString(2));
-					long secondCompare = Long.parseLong(resultSet.getString(2) + resultSet.getString(1));
+					// lookup the contributor
+					if(contributors.contains(Integer.parseInt(resultSet.getString(2))) == true) {
+						// get the collaborator
+						collaborator = model.createResource(AusStageURI.getContributorURI(resultSet.getString(2)));
+				
+						// increment the collaborator count
+						collaboratorCount++;
 					
-					if(collaborations.contains(firstCompare) == false && collaborations.contains(secondCompare) == false) {
-			
-						// lookup the contributor
-						if(contributors.contains(Integer.parseInt(resultSet.getString(2))) == true) {
-							// get the collaborator
-							collaborator = model.createResource(AusStageURI.getContributorURI(resultSet.getString(2)));
+						// create a new collaboration
+						Resource collaboration = model.createResource(AusStageURI.getRelationshipURI(resultSet.getString(1) + "-" + resultSet.getString(2)));
+						collaboration.addProperty(RDF.type, AuseStage.collaboration);
+				
+						// add the two collaborators
+						collaboration.addProperty(AuseStage.collaborator, contributor);
+						collaboration.addProperty(AuseStage.collaborator, collaborator);
+				
+						// add the count
+						collaboration.addProperty(AuseStage.collaborationCount, resultSet.getString(3));
 					
-							// increment the collaborator count
-							collaboratorCount++;
-						
-							// create a new collaboration
-							Resource collaboration = model.createResource(AusStageURI.getRelationshipURI(resultSet.getString(1) + "-" + resultSet.getString(2)));
-							collaboration.addProperty(RDF.type, AuseStage.collaboration);
+						// add the link to the contributors
+						contributor.addProperty(AuseStage.hasCollaboration, collaboration);
+						collaborator.addProperty(AuseStage.hasCollaboration, collaboration);
 					
-							// add the two collaborators
-							collaboration.addProperty(AuseStage.collaborator, contributor);
-							collaboration.addProperty(AuseStage.collaborator, collaborator);
-					
-							// add the count
-							collaboration.addProperty(AuseStage.collaborationCount, resultSet.getString(3));
-						
-							// add the link to the contributors
-							contributor.addProperty(AuseStage.hasCollaboration, collaboration);
-							collaborator.addProperty(AuseStage.hasCollaboration, collaboration);
-						
-							// add the dates of the collaboration
-							String firstDate = resultSet.getString(4);
-							String lastDate  = resultSet.getString(5);
-		
-							// double check the dates
-							if(firstDate == null) {
-								System.out.println("WARN: A valid time period for '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "' could not be determined");
-							} else {
-								// check on the format of the date
-								if(firstDate.length() != 10) {
-			
-									// first date is shorter than expected
-									if(firstDate.length() == 6) {
-										// year only so get rid of the '--'
-										firstDate = firstDate.substring(0, 4);
-									} else if(firstDate.length() == 8) {
-										// year and month parameter
-										firstDate = firstDate.substring(0, 7);
-									}									
-								}
-			
-								// check on the last date
-								if(lastDate == null) {
-									lastDate = firstDate;
-								} else if (lastDate.equals("--")) {
-									lastDate = firstDate;
-								} else if(lastDate.length() != 10) {									
-									// last date is shorter than expected
-									if(lastDate.length() == 6) {
-										// year only so get rid of the '--'
-										lastDate = lastDate.substring(0, 4);
-									} else if(firstDate.length() == 8) {
-										// year and month parameter
-										lastDate = lastDate.substring(0, 7);
-									}									
-								}
-											
-								// add the time interval to the collaboration
-								collaboration.addProperty(AuseStage.collaborationFirstDate, firstDate);
-								collaboration.addProperty(AuseStage.collaborationLastDate, lastDate);
-							}
-						
-							// count the number of collaborations
-							collaborationCount++;
-							
-							// add this to the list of collaborations
-							collaborations.add(firstCompare);
-							collaborations.add(secondCompare);
-						
-							// determine if we need to do a sync
-							if ((collaborationCount % RECORD_NOTIFY_COUNT) == 0)
-							{
-								// keep the user informed
-								System.out.print("#");
-							
-								// keep track of the number of syncs
-								recordNotifyDelimCount++;
-							
-								if(recordNotifyDelimCount == 10) {
-									System.out.print("|");
-									recordNotifyDelimCount = 0;
-								}
-							}							
-						
+						// add the dates of the collaboration
+						String firstDate = resultSet.getString(4);
+						String lastDate  = resultSet.getString(5);
+	
+						// double check the dates
+						if(firstDate == null) {
+							System.out.println("WARN: A valid time period for '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "' could not be determined");
 						} else {
-							System.out.println("WARN: Unable to add the collaboration between '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "'");					
+							// check on the format of the date
+							if(firstDate.length() != 10) {
+		
+								// first date is shorter than expected
+								if(firstDate.length() == 6) {
+									// year only so get rid of the '--'
+									firstDate = firstDate.substring(0, 4);
+								} else if(firstDate.length() == 8) {
+									// year and month parameter
+									firstDate = firstDate.substring(0, 7);
+								}									
+							}
+		
+							// check on the last date
+							if(lastDate == null) {
+								lastDate = firstDate;
+							} else if (lastDate.equals("--")) {
+								lastDate = firstDate;
+							} else if(lastDate.length() != 10) {									
+								// last date is shorter than expected
+								if(lastDate.length() == 6) {
+									// year only so get rid of the '--'
+									lastDate = lastDate.substring(0, 4);
+								} else if(firstDate.length() == 8) {
+									// year and month parameter
+									lastDate = lastDate.substring(0, 7);
+								}									
+							}
+										
+							// add the time interval to the collaboration
+							collaboration.addProperty(AuseStage.collaborationFirstDate, firstDate);
+							collaboration.addProperty(AuseStage.collaborationLastDate, lastDate);
 						}
+					
+						// count the number of collaborations
+						collaborationCount++;
+					
+						// determine if we need to do a sync
+						if ((collaborationCount % RECORD_NOTIFY_COUNT) == 0)
+						{
+							// keep the user informed
+							System.out.print("#");
+						
+							// keep track of the number of syncs
+							recordNotifyDelimCount++;
+						
+							if(recordNotifyDelimCount == 10) {
+								System.out.print("|");
+								recordNotifyDelimCount = 0;
+							}
+						}							
+					
+					} else {
+						System.out.println("WARN: Unable to add the collaboration between '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "'");					
 					}
 				}				
 			}
@@ -494,10 +480,9 @@ public class BuildNetworkData {
 			// play nice and tidy up
 			resultSet.close();
 			database.closeStatement();
-			collaborations.clear();
-			collaborations = null;
+			
 			//System.out.println("\nINFO: " + collaborationCount +   " collaborator relationships successfully added to the datastore");
-			System.out.format("%nINFO: %,d collaborator relationships successfully added to the datastore%n", collaborationCount);
+			System.out.format("%nINFO: %,d collaborations successfully added to the datastore%n", collaborationCount);
 			
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -708,7 +693,7 @@ public class BuildNetworkData {
 			resultSet.close();
 			database.closeStatement();
 			//System.out.println("INFO: " + functionsAtEventsCount +   " contributor function at events added");
-			System.out.format("INFO: %,d contributor function at event records added", functionsAtEventsCount);
+			System.out.format("INFO: %,d contributor function at event records added%n", functionsAtEventsCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
 			System.err.println("ERROR: An SQL related error has occured");
