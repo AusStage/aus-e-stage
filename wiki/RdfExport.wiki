@@ -76,16 +76,16 @@ The Edge List File is contains data in the following plain text format where eac
  * familyName - the family name of the contributor
  * tab - the tab character
 
-{{{
+<pre>
 <contributorid><tab><givenName><tab><familyName><tab><contributorid><tab><givenName><tab><familyName>
-}}}
+</pre>
 
 _Note:_ This export contains duplicate edges for example:
 
-{{{
+<pre>
 <01><tab><James><tab><Bond><tab><02><tab><Money><tab><Penny>
 <02><tab><Money><tab><Penny><tab><01><tab><James><tab><Bond>
-}}}
+</pre>
 
 To produce a an list of edges without duplicates substitute _edge-list-export_ with _edge-list-export-no-dups_ in step 5 below.
 
