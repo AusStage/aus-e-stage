@@ -23,30 +23,8 @@ To build the dataset follow these steps:
  # Change to the _jar_ directory created when the application was installed
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
-   {{{/usr/bin/java -Xmx2048m -Xms512m -jar AusStageRdfExport.jar -task build-network-data -properties properties-file}}}
- # If the application errors with an out of memory error message increase the heap space by increasing the values to the _-Xmx_ and _-Xms_ parameters
- # The application will take some time to complete and its output will look like this:
-
-<pre>
-INFO: Connecting to the database...
-INFO: Connection established
-INFO: Deleting the existing TDB datastore...
-INFO: Existing TDB datastore deleted
-INFO: Adding contributor data to the datastore...
-INFO: 81,680 contributors successfully added to the datastore
-INFO: Adding contributor functions...
-INFO: 101,984 contributor functions successfully added
-INFO: Adding collaborator relationships...
-INFO: Each '#' below represents 10,000 collaborations
-##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|##########|####
-INFO: 1,640,250 collaborations successfully added to the datastore
-INFO: Adding events...
-INFO: 43,706 events successfully added to the datastore
-INFO: Adding contributor functions to events...
-INFO: 283,617 contributor function at event records added
-INFO: Task completed successfully
-</pre>
-
+   {{{java -Xmx2048m -Xms512m -jar AusStageRdfExport.jar -task build-network-data -properties properties-file}}}
+ # The application will take some time to complete
 
 = Exporting the Dataset =
 
@@ -67,23 +45,15 @@ To export the entire dataset follow these steps:
    # properties-file: is the location of the properties file created in step 2
    # format-type: is one of the listed formats above
    # output-file: is the name of the output file to create (including path information)
-   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype export-network-data -properties properties-file -format format-type -output output-file}}}
+   {{{java -Xmx1024m -Xms512m -jar AusStageRdfExport.jar -tasktype export-network-data -properties properties-file -format format-type -output output-file}}}
  # If no format is specified the default format 'RDF/XML' will be used
  # The application will take a short time to complete and the output will look like this:
-
-<pre>
-INFO: No data format specified. Using 'RDF/XML' by default
-INFO: Exporting datastore into a file with format 'RDF/XML'
-INFO: Export file successfully created
-      /home/ausstage/exports/network-rdf-export.xml
-INFO: Task completed successfully
-</pre>
 
 = Querying the Dataset = 
 
 Querying the dataset is possible using the SPARQL query language with ARQ specific extensions. 
 
-_Note:_ This functionality is designed to assist in the development of queries for use in other applications / services and is not meant to provide an query and export workflow
+_Note:_ This functionality is designed to assist in the development of queries for use in other applications / services and is not meant to provide a query and export workflow
 
 To query the dataset follow these steps:
 
@@ -94,7 +64,8 @@ To query the dataset follow these steps:
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
    # query-file: is the location of a plain text file that defines the query (including path information)
-   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype run-query -properties properties-file mat format-type -query query-file}}}
+   {{{java -Xmx1024m -Xms512m -jar AusStageRdfExport.jar -tasktype run-query -properties properties-file -query query-file}}}
+ # The results of the query execution will be printed to the screen
 
 = Exporting the Dataset as an Edge List File = 
 
@@ -129,4 +100,4 @@ To export the dataset in this format use the following steps:
  # Run the application using the following command where 
    # properties-file: is the location of the properties file created in step 2
    # output-file: is the name of the output file to create (including path information)
-   {{{/usr/bin/java -jar AusStageRdfExport.jar -tasktype edge-list-export -properties properties-file mat format-type -output output-file}}}
+   {{{java -Xmx1024m -Xms512m -jar AusStageRdfExport.jar -tasktype edge-list-export -properties properties-file -output output-file}}}
