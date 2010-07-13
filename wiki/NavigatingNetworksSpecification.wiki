@@ -334,20 +334,67 @@ Work flow:
 
 _Priority Ranking: 68%_
 
-Search functionality should allow the user to select certain event criteria such as genre, status, content indicators, and/or keyword. _Question: should we include a date range to narrow down results?_ 
+Search functionality should allow the user to select certain event criteria such as genre, status, content indicators, and/or keyword.  
 The browsing interface should then then display the network of contributors who have worked on events that match this criteria. 
- MORE HERE - LIST CRITERIA, WORKFLOW ETC 
+
+Criteria to be listed in the search field
+
+||Label||database reference||Type||
+||Status||TABLE:EVENTS ROW:STATUS, TABLE:STATUSMENU|| Select menu. Multiple selections allowed.||
+||Primary Genre||TABLE:EVENTS ROW:PRIMARY_GENRE|| Select menu. Multiple selections allowed.||
+||Secondary Genre||TABLE:SECGENRECLASSLINK|| Select menu. Multiple selections allowed.||
+||Content Indicator||TABLE:EVENTS || Free Text.||
+
+Work flow: 
+ # User selects event criteria available.
+ # User approves the criteria selected.
+ # The system retrieves all contributors and their networks who have been involved with events matching the criteria.
+ # The contributors and their networks are then loaded graphically in the browsing interface.
 
 ===3.3 Search by organisation===
-I select an organisation (or organisations) and ask AusStage to display the network of all the people who worked at the organisation. For example, show me the network of collaborators who worked on events produced by HotHouse Theatre. Rank: 64%
+
+_Priority Ranking: 64%_
+
+Search functionality should allow a user to search for networks by association to an organisation. 
+The browsing interface should then display the network of contributors who have worked with the selected organisation.
+
+Work flow:
+ # User enters organisation search criteria - Organisation Name.
+ # Matching organisations are listed
+ # If the desired organisation is returned, the user selects this organisation. If not the user returns to the search field.
+ # If an organisation is selected the system will retrieve the network of contributors that have worked on events associated with this organisation.
+ # The contributors and their networks are then loaded graphically in the browsing interface.
 
 ===3.4 Search by venue===
-I select a venue (or venues) and ask AusStage to display the network of all the people who worked at the venue. For example, show me the network of collaborators who've worked at Belvoir Street in Sydney. Rank: 56%
+
+_Priority Ranking: 56%_
+
+Search functionality should allow a user to search for networks by association to a venue. 
+The browsing interface should then display the network of contributors who have worked on events performed within the specified venue.
+
+Work flow:
+ # User enters venue search criteria - Venue Name.
+ # Matching venues are listed
+ # If the desired venue is returned, the user selects this venue. If not the user returns to the search field.
+ # If a venue is selected the system will retrieve the network of contributors that have worked on events associated with this venue.
+ # The contributors and their networks are then loaded graphically in the browsing interface.
 
 ==4. NETWORKS+TIMELINES==
 
 ===4.1 Timeline===
-I'm looking at a contributor's career as a line on a timeline. Their collaborators are also lines on the timeline, running in parallel. When two or more contributors are working together on an event, their lines converge, running in tandem for the duration of the event, and then they spread out. Reading along the timeline, I can see the frequency of collaborations and their duration over time. I can also see which collaborators are converging, at which points in time and how often. Rank: 76%
+
+_Priority Ranking: 76%_
+
+In addition to the network browser interface, we also require the following timeline visualisation functionality.
+A user should be able to graph a particular contributors career as a line on a timeline.
+* The graph will show the contributor, as well as all of his collaborators as lines within this graph.
+* The lines will run horizontally, and parallel to each other, with space in between each of the different collaborators lines.
+* The lines should be colour coded (perhaps randomly selected colours)
+* There should be a legend, matching the colour of the lines to the particular contributors.
+* The left of the display shows the earliest date, extending to the latest date on the right.
+* When collaborators are recorded as working on the same event within the database, their lines should come together in the timeline graph in the corresponding date range. 
+* When they are no longer working together, their lines should return to their initial position. 
+This type of visualisation should show the frequency of collaborations and their duration over time. Also which collaborators are converging, at which points in time and how often.
 
 ===4.2 Shona's Idea===
 I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the career pathways of individual AD's of each company. In my mind the companies sit on one axis (say horizontal) and the individuals sit on another (say vertical). I then imagine where the lines cross. For example, Felicity Bott will cross STEPS and BUZZ. Alice Hollands will cross STEPS and STRUT. There will also be Phillipa Clarke crossing BUZZ and LINK, Chrissie Parrott and Michael Whaites for LINK. And many more too. The idea of incorporating a third dimension for time also sounds good. JB: I'm seeing companies as the horizontal lines, with artists as lines weaving across them and intersecting at events. If the events are spread along the company lines in chronological order, that would get the time element included. So to construct this kind of diagram - you'd select one or more companies and one or more artists - and then ask the system to build a timeline that weaves them together. Rank: 60%
