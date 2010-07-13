@@ -8,6 +8,8 @@
 
 SPARQL Query Language for RDF is a language that can be used to query RDF data sources. The [NetworkService Navigating Networks Service] uses an RDF based datastore that is created and populated by the RdfExport application. 
 
+These sample queries that can be used with the NavigatingNetworksSparqlEndpoint or executed using the [RdfExport#Querying_the_Dataset Querying the Dataset] capability of the RdfExport app.
+
 == Useful Links ==
 
 Useful SPARQL Links include:
@@ -25,8 +27,6 @@ It can be useful when developing queries, especially early in the development pr
 Where the number, in this case 10, specifies the number of records to return. 
 
 = Sample Queries = 
-
-Below are a list of sample queries that can be used with the NavigatingNetworksSparqlEndpoint.
 
 == List the Collaborators of a Contributor == 
 
