@@ -387,13 +387,13 @@ _Priority Ranking: 76%_
 
 In addition to the network browser interface, we also require the following timeline visualisation functionality.
 A user should be able to graph a particular contributors career as a line on a timeline.
-* The graph will show the contributor, as well as all of his collaborators as lines within this graph.
-* The lines will run horizontally, and parallel to each other, with space in between each of the different collaborators lines.
-* The lines should be colour coded (perhaps randomly selected colours)
-* There should be a legend, matching the colour of the lines to the particular contributors.
-* The left of the display shows the earliest date, extending to the latest date on the right.
-* When collaborators are recorded as working on the same event within the database, their lines should come together in the timeline graph in the corresponding date range. 
-* When they are no longer working together, their lines should return to their initial position. 
+  * The graph will show the contributor, as well as all of his collaborators as lines within this graph.
+  * The lines will run horizontally, and parallel to each other, with space in between each of the different collaborators lines.
+  * The lines should be colour coded (perhaps randomly selected colours)
+  * There should be a legend, matching the colour of the lines to the particular contributors.
+  * The left of the display shows the earliest date, extending to the latest date on the right.
+  * When collaborators are recorded as working on the same event within the database, their lines should come together in the timeline graph in the corresponding date range. 
+  * When they are no longer working together, their lines should return to their initial position. 
 This type of visualisation should show the frequency of collaborations and their duration over time. Also which collaborators are converging, at which points in time and how often.
 
 ===4.2 Shona's Idea===
