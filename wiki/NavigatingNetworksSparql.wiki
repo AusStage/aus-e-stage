@@ -1,0 +1,65 @@
+#summary Sample SPARQL Queries for use with the Navigating Networks Dataset
+
+<h1>SPARQL and the Navigating Networks Service</h1>
+
+<wiki:toc max_depth="2" />
+
+= About SPARQL =
+
+SPARQL Query Language for RDF is a language that can be used to query RDF data sources. The [NetworkService Navigating Networks Service] uses an RDF based datastore that is created and populated by the RdfExport application. 
+
+== Useful Links ==
+
+Useful SPARQL Links include:
+
+ * [http://www.w3.org/TR/rdf-sparql-query/ SPARQL Query Language for RDF Specification]
+ * [http://en.wikipedia.org/wiki/SPARQL Wikipedia page on SPARQL]
+ * [http://jena.sourceforge.net/ARQ/Tutorial/ Jena SPARQL Tutorial] - Jena is the library used to manage this datastore
+
+== Notes == 
+
+It can be useful when developing queries, especially early in the development process, to use the `LIMIT` clause to limit the number of records returned. This clause is placed after the last `}` of the `WHERE` clause and looks like this:
+
+{{{LIMIT 10}}}
+
+Where the number, in this case 10, specifies the number of records to return. 
+
+= Sample Queries = 
+
+Below are a list of sample queries that can be used with the NavigatingNetworksSparqlEndpoint.
+
+== List the Collaborators of a Contributor == 
+
+{{{
+PREFIX foaf:       <http://xmlns.com/foaf/0.1/>
+PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#>
+ 
+SELECT ?collaborator ?collabGivenName ?collabFamilyName
+WHERE {  
+       <REPLACE_ME>   a foaf:Person ; 
+                      ausestage:hasCollaboration ?collaboration. 
+       ?collaboration ausestage:collaborator ?collaborator.
+       ?collaborator  foaf:givenName ?collabGivenName;
+                      foaf:familyName ?collabFamilyName.
+       FILTER (?collaborator != <REPLACE_ME>) 
+}
+}}}
+
+_Note:_ Replace the `REPLACE_ME` with the unique identifier of a contributor encoded using the [http://code.google.com/p/aus-e-stage/wiki/RdfExportMoreInfo#AusStage_Unique_Id_Encoding_Scheme AusStage Unique Id Encoding Scheme]. 
+
+For example to find all of the collaborators for [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=774 Robyn Archer] the query looks like this:
+
+{{{
+PREFIX foaf:       <http://xmlns.com/foaf/0.1/>
+PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#>
+ 
+SELECT ?collaborator ?collabGivenName ?collabFamilyName
+WHERE {  
+       <ausstage:c:774> a foaf:Person ; 
+                      ausestage:hasCollaboration ?collaboration. 
+       ?collaboration ausestage:collaborator ?collaborator.
+       ?collaborator  foaf:givenName ?collabGivenName;
+                      foaf:familyName ?collabFamilyName.
+       FILTER (?collaborator != <ausstage:c:774>) 
+}
+}}}
