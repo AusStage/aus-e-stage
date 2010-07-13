@@ -107,9 +107,6 @@ public class EdgeListExport {
 		// gain access to the model
 		Model model = TDBFactory.createModel(datastorePath);
 		
-		// set a namespace prefixes
-		model.setNsPrefix("FOAF", FOAF.NS);
-		
 		// declare a PrintWriter for output
 		PrintWriter output = null;
 		
@@ -131,17 +128,19 @@ public class EdgeListExport {
 		}
 		
 		// define the query
-		String queryString = "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
-						   + "PREFIX foaf: <http://xmlns.com/foaf/0.1/> "
-						   + " "
-						   + "SELECT * "
+		String queryString = "PREFIX foaf:       <http://xmlns.com/foaf/0.1/> "
+						   + "PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> "
+						   + "  "
+						   + "SELECT ?contributor ?givenName ?familyName ?collaborator ?collabGivenName ?collabFamilyName "
 						   + "WHERE {  "
-						   + "   ?x  foaf:givenName ?givenName1 ; "
-						   + "     foaf:familyName ?familyName1 ; "
-						   + "     foaf:knows ?knows . "
-						   + "  ?knows foaf:givenName ?givenName ; "
-						   + "     foaf:familyName ?familyName . "
-						   + "} ";
+						   + "       ?contributor   foaf:givenName ?givenName ; "
+						   + "                      foaf:familyName ?familyName; "
+						   + "                      ausestage:hasCollaboration ?collaboration. "
+						   + "       ?collaboration ausestage:collaborator ?collaborator. "
+						   + "       ?collaborator  foaf:givenName ?collabGivenName; "
+						   + "                      foaf:familyName ?collabFamilyName. "
+						   + "       FILTER (?collaborator != ?contributor) "
+						   + "}";
 						   
 		// keep track of the count of lines
 		int lineCount = 0;
@@ -152,44 +151,44 @@ public class EdgeListExport {
 		// Execute the query and obtain results
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
 		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
+		
+		// declare helper variables
+		String   tmp  = null;
+		String[] tmps = null;
 
 		// Output query results	
 		while(results.hasNext() == true) {
 			// get a result
 			com.hp.hpl.jena.query.QuerySolution result = results.next();
 			
-			// write the line
-			String tmp;
-			String[] tmps;
-			
 			// first id
-			tmp = result.get("x").toString().trim();
+			tmp = result.get("contributor").toString().trim();
 			tmps = tmp.split(":");
 			
 			output.print(tmps[2]);
 			output.print("\t");
 			
 			// first givenName
-			output.print(result.get("givenName1").toString().trim());
+			output.print(result.get("givenName").toString().trim());
 			output.print("\t");
 			
 			// first familyName
-			output.print(result.get("familyName1").toString().trim());
+			output.print(result.get("familyName").toString().trim());
 			output.print("\t");
 			
 			// knows
-			tmp = result.get("knows").toString().trim();
+			tmp = result.get("collaborator").toString().trim();
 			tmps = tmp.split(":");
 			
 			output.print(tmps[2]);
 			output.print("\t");
 			
 			// second GivenName
-			output.print(result.get("givenName").toString().trim());
+			output.print(result.get("collabGivenName").toString().trim());
 			output.print("\t");
 			
 			// second FamilyName
-			output.print(result.get("familyName").toString().trim());
+			output.print(result.get("collabFamilyName").toString().trim());
 			output.print("\n");	
 			
 			// increment the line count
@@ -267,9 +266,6 @@ public class EdgeListExport {
 		// gain access to the model
 		Model model = TDBFactory.createModel(datastorePath);
 		
-		// set a namespace prefixes
-		model.setNsPrefix("FOAF", FOAF.NS);
-		
 		// declare a PrintWriter for output
 		PrintWriter output = null;
 		
@@ -290,20 +286,19 @@ public class EdgeListExport {
 			return false;
 		}
 		
-		// declare a HashSet to keep track of what we've seen already
-		java.util.HashSet<String> duplicates = new java.util.HashSet<String>();
-		
 		// define the query
-		String queryString = "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
-						   + "PREFIX foaf: <http://xmlns.com/foaf/0.1/> "
-						   + " "
-						   + "SELECT * "
+		String queryString = "PREFIX foaf:       <http://xmlns.com/foaf/0.1/> "
+						   + "PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> "
+						   + "  "
+						   + "SELECT ?contributor ?givenName ?familyName ?collaborator ?collabGivenName ?collabFamilyName "
 						   + "WHERE {  "
-						   + "   ?x  foaf:givenName ?givenName1 ; "
-						   + "     foaf:familyName ?familyName1 ; "
-						   + "     foaf:knows ?knows . "
-						   + "  ?knows foaf:givenName ?givenName ; "
-						   + "     foaf:familyName ?familyName . "
+						   + "       ?contributor   foaf:givenName ?givenName ; "
+						   + "                      foaf:familyName ?familyName; "
+						   + "                      ausestage:hasCollaboration ?collaboration. "
+						   + "       ?collaboration ausestage:collaborator ?collaborator. "
+						   + "       ?collaborator  foaf:givenName ?collabGivenName; "
+						   + "                      foaf:familyName ?collabFamilyName. "
+						   + "       FILTER (?collaborator != ?contributor) "
 						   + "}";
 						   
 		// keep track of the count of lines
@@ -315,81 +310,58 @@ public class EdgeListExport {
 		// Execute the query and obtain results
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
 		com.hp.hpl.jena.query.ResultSet results = qe.execSelect();
+		
+		// declare helper variables
+		String   tmp      = null;
+		String[] tmps     = null;
+		int      firstId  = 0;
+		int      secondId = 0;
 
 		// Output query results	
 		while(results.hasNext() == true) {
 			// get a result
 			com.hp.hpl.jena.query.QuerySolution result = results.next();
 			
-			// declare helper variables
-			String tmp;
-			String[] tmps;
-			String line = "";
-			String idOne = "";
-			String idTwo = "";
-			
 			// first id
-			tmp = result.get("x").toString().trim();
+			tmp  = result.get("contributor").toString().trim();
 			tmps = tmp.split(":");
 			
-			line = tmps[2] + "\t";
-			idOne = tmps[2];
-			idTwo = tmps[2];
+			firstId = Integer.parseInt(tmps[2]);
 			
-			// first givenName
-			tmp = result.get("givenName1").toString().trim();
-			if (tmp.equals("") == false) {
-				line +=  tmp + "\t";
-			} else {
-				line += " " + "\t";
-			}
-			
-			// first familyName
-			tmp = result.get("familyName1").toString().trim();
-			if (tmp.equals("") == false) {
-				line +=  tmp + "\t";
-			} else {
-				line += " " + "\t";
-			}
-			
-			// knows
-			tmp = result.get("knows").toString().trim();
+			// second id
+			tmp  = result.get("collaborator").toString().trim();
 			tmps = tmp.split(":");
 			
-			line += tmps[2] + "\t";
-			
-			// build the two id strings for duplicate checking
-			idOne += tmps[2];
-			idTwo = tmps[2] + idTwo;
-			
-			// second GivenName
-			tmp = result.get("givenName").toString().trim();
-			if (tmp.equals("") == false) {
-				line +=  tmp + "\t";
-			} else {
-				line += " " + "\t";
-			}
-			
-			// second FamilyName
-			tmp = result.get("familyName").toString().trim();
-			if (tmp.equals("") == false) {
-				line +=  tmp + "\t";
-			} else {
-				line += " ";
-			}
-						
-			// check to see if this relationship has been seen before
-			if(duplicates.contains(idOne) == false && duplicates.contains(idTwo) == false) {
-				// haven't seen this line before
-				output.println(line);
+			secondId = Integer.parseInt(tmps[2]); 
+
+			// determine if we need to add this line			
+			if(firstId < secondId) {
 				
-				// store this line
-				duplicates.add(idOne);
-				duplicates.add(idTwo);
-				
+				// output the data
+				output.print(firstId + "\t");
+			
+				// first givenName
+				output.print(result.get("givenName").toString().trim());
+				output.print("\t");
+		
+				// first familyName
+				output.print(result.get("familyName").toString().trim());
+				output.print("\t");
+		
+				// knows
+				output.print(secondId + "\t");
+		
+				// second GivenName
+				output.print(result.get("collabGivenName").toString().trim());
+				output.print("\t");
+		
+				// second FamilyName
+				output.print(result.get("collabFamilyName").toString().trim());
+				output.print("\n");	
+		
 				// increment the line count
 				lineCount++;
-			} 					
+			}	
 		}			
 
 		// Important - free up resources used running the query
