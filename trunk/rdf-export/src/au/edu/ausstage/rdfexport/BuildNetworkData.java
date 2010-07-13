@@ -200,13 +200,18 @@ public class BuildNetworkData {
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			
+			// declare helper variables
+			String   firstName   = null;
+			String   lastName    = null;
+			Resource contributor = null;
 	
 			// loop through the 
 			while (resultSet.next()) {
 			
 				// get the attributes
-				String firstName = resultSet.getString(2);
-				String lastName  = resultSet.getString(3);
+				firstName = resultSet.getString(2);
+				lastName  = resultSet.getString(3);
 				
 				// double check the attributes
 				if(firstName == null) {
@@ -218,7 +223,7 @@ public class BuildNetworkData {
 				}
 	
 				// create a new contributor
-				Resource contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
+				contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
 				contributor.addProperty(RDF.type, FOAF.Person);
 				
 				// add the name properties
@@ -340,9 +345,12 @@ public class BuildNetworkData {
 			System.out.format("INFO: Each '#' below represents %,d collaborations%n", RECORD_NOTIFY_COUNT);
 			
 			// declare helper variables
-			String currentId = "";
-			Resource contributor  = null;
-			Resource collaborator = null;
+			String   currentId     = "";
+			Resource contributor   = null;
+			Resource collaborator  = null;
+			Resource collaboration = null;			
+			String   firstDate     = null;
+			String   lastDate      = null;
 			
 			// define the sql
 			String sql = "SELECT c.contributorid, c1.collaboratorid, COUNT(c.contributorid) as collaborations, "
@@ -400,7 +408,7 @@ public class BuildNetworkData {
 						collaboratorCount++;
 					
 						// create a new collaboration
-						Resource collaboration = model.createResource(AusStageURI.getRelationshipURI(resultSet.getString(1) + "-" + resultSet.getString(2)));
+						collaboration = model.createResource(AusStageURI.getRelationshipURI(resultSet.getString(1) + "-" + resultSet.getString(2)));
 						collaboration.addProperty(RDF.type, AuseStage.collaboration);
 				
 						// add the two collaborators
@@ -415,8 +423,8 @@ public class BuildNetworkData {
 						collaborator.addProperty(AuseStage.hasCollaboration, collaboration);
 					
 						// add the dates of the collaboration
-						String firstDate = resultSet.getString(4);
-						String lastDate  = resultSet.getString(5);
+						firstDate = resultSet.getString(4);
+						lastDate  = resultSet.getString(5);
 	
 						// double check the dates
 						if(firstDate == null) {
@@ -503,9 +511,13 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding events...");
 			
 			// declare helper variables
-			String currentId     = "";
-			Resource contributor = null;
-			Resource event       = null;
+			String   currentId    = "";
+			Resource contributor  = null;
+			Resource event        = null;
+			Resource timeInterval = null;
+			String   title        = null;
+			String   firstDate    = null;
+			String   lastDate     = null;
 			
 			// define the sql
 			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid, "
@@ -546,7 +558,7 @@ public class BuildNetworkData {
 					event.addProperty(RDF.type, Event.Event);
 			
 					// process the title
-					String title = resultSet.getString(2);
+					title = resultSet.getString(2);
 					title = title.replaceAll("\r", " ");
 					title = title.replaceAll("\n", " ");
 					
@@ -554,9 +566,9 @@ public class BuildNetworkData {
 					event.addProperty(DCTerms.title, title);
 					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
 					
-					// construct the dates
-					String firstDate = null;
-					String lastDate  = null;
+					// reset the dates
+					firstDate = null;
+					lastDate  = null;
 					
 					// first date
 					if(resultSet.getString(4) != null) {
@@ -582,7 +594,7 @@ public class BuildNetworkData {
 						// add date information
 						 
 						// construct a new timeInterval resource
-						Resource timeInterval = model.createResource(Time.Interval);
+						timeInterval = model.createResource(Time.Interval);
 
 						// add the timeline properties
 						// add the typed literals
@@ -638,8 +650,9 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding contributor functions to events...");
 			
 			// declare helper variables
-			String currentId     = "";
-			Resource contributor = null;
+			String currentId         = "";
+			Resource contributor     = null;
+			Resource functionAtEvent = null;
 			
 			// define the sql
 			String sql = "SELECT cl.contributorid, cl.eventid, cfp.preferredterm "
@@ -675,7 +688,7 @@ public class BuildNetworkData {
 					if(contributor != null) {
 					
 						// construct a new functionAtEvent
-						Resource functionAtEvent = model.createResource(AuseStage.functionAtEvent);
+						functionAtEvent = model.createResource(AuseStage.functionAtEvent);
 						
 						// add the on event property
 						functionAtEvent.addProperty(AuseStage.atEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
