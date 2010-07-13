@@ -1,0 +1,5 @@
+#summary About the Navigating Networks SPARQL Endpoint
+
+= About the SPARQL Endpoint =
+
+Development work is being undertaken to provide a SPARQL Endpoint for the NetworkService dataset. When the Endpoint is available access details will be provided here. 
