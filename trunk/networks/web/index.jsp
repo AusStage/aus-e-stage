@@ -33,10 +33,31 @@
 	<!-- Include the sidebar -->
 	<jsp:include page="sidebar.jsp"/>
 	<div id="main">
-		<h2>Navigating Networks the network of artistic collaborations in AusStage</h2>
+		<h2>Navigating the network of artistic collaborations in AusStage</h2>
 		<p>
-			Content to go here
+			The Navigating Network Service will provide an interactive interface for navigating and analysing the network of artistic collaborations embedded in the <a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage</a> dataset. The service will present existing data in new ways and allow researchers to interrogate the collaborative methodologies underpinning creativity in the performing arts.  
 		</p>
+		<p>A network-based interface will humanise the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. The interface will transform research practice in the performing arts. The application of network visualisation and analysis will reveal patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. </p>
+		<p>
+			More information on the service is available in our Wiki including:
+		</p>
+		<ul>
+			<li>
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksSpecification" title="">Navigating Networks Specification</a> - Outline the service and provide context to the development
+			</li>
+			<li>
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksGoals" title="">Service Goals</a> - Extracted from the specification</a>
+			</li>
+			<li>
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksDataset" title="">Navigating Networks Dataset</a> - A subset of the full AusStage dataset especially constructed for use with the service
+			</li>
+			<li>
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksSparqlEndpoint" title="">Navigating Networks SPARQL endpioint</a> - Information about the SPARQL endpoint that can be used to access the dataset
+			</li>
+			<li>
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksSparql" title="">Sample SPARQL Queries</a> - For use with the SPARQL endpoint
+			</li>
+		</ul>
 	</div>
 	<!-- include the footer -->
 	<jsp:include page="footer.jsp"/>
