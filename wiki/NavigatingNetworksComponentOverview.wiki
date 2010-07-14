@@ -1,0 +1,12 @@
+#summary Overview of the Components of the Navigating Networks service
+
+<h1>Navigating Networks Service Component Overview</h1>
+
+The [NetworkService Navigating Networks Service] is made up of a number of different components that combined provide the functionality required by the [NavigatingNetworksSpecification Navigating Networks Specification]. 
+
+The purpose of this Wiki page is to provide an overview of the components and the functionality that they provide.
+
+= Component Overview Diagram =
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview.jpeg http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview-small.jpeg]
+
+(Click image for larger version)
