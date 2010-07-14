@@ -285,7 +285,7 @@ Link information displayed
 || *Information For Display* || *Source* ||
 || Name (as link to AusStage Record) || foaf:name / rdf:id ||
 || Number of events || Count of event:isAgentIn ||
-|| Date range of events || Calculated from tl:intervals
+|| Date range of events || Calculated from tl:intervals ||
 || Number of collaborations between contributors || AuseStageOntology#collaborationCount ||
 
 An alternative to pop-ups would be to display node and link information in separate panels.
