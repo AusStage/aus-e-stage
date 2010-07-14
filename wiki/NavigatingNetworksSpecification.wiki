@@ -227,6 +227,8 @@ _Remember to deal with contributor archaeology._
 
 Coding note: it is preferable that the back end stays one step ahead of the display, i.e. display one degree network, but have the second degree network stored so it can be loaded quickly. Then get the next level...
 
+_QUESTION: How is the 'back end' supposed to now which second degree network to store? The user could click on any of the nodes in the network which potentially means a large number of queries or little result. For example consider a network that has 20 nodes. That means, assuming I'm reading the spec correctly, that the 'back end' would need to prepare 20 additional datasets in the event that user selects one of them. That's 19 datasets that were created but were not needed. I think this needs further consideration._
+
 ===1.2 Time-slider===
 _Priority Ranking: 84%_
 
