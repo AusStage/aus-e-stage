@@ -415,7 +415,7 @@
 
     <!-- Copy Java libraries -->
     <copy todir="${build.home}/WEB-INF/lib">
-      <fileset dir="${basedir}/dependencies/">
+      <fileset dir="${lib.home}">
         <include name="*.jar"/>
       </fileset>
     </copy>
