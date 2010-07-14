@@ -386,7 +386,8 @@ Work flow:
 _Priority Ranking: 76%_
 
 In addition to the network browser interface, we also require the following timeline visualisation functionality.
-A user should be able to graph a particular contributors career as a line on a timeline.
+A user should be able to graph a particular contributors career as a line on a timeline. 
+The timeline should be interactive, see the Similie Project's interactive timeline widget [http://www.simile-widgets.org/timeline/ here ] as an example
   * The graph will show the contributor, as well as all of his collaborators as lines within this graph.
   * The lines will run horizontally, and parallel to each other, with space in between each of the different collaborators lines.
   * The lines should be colour coded (perhaps randomly selected colours)
@@ -404,9 +405,36 @@ I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the c
 Event-to-event networks provide an alternative way of exploring collaborations. In these graphics, the events are the spots and the lines connecting them are people.
 
 ===5.1 Event-to-event network graphic===
-I'm looking at an event in AusStage - and I can see a network graphic. The event I'm looking at is a spot at the centre of a network of related events. These related events are linked by the artists who have worked on them. If I click on a link, I find out who it is, and I can see their pathway through a series of events. If I click on an event on the edge, the display reveals the connections to further events. The event is the starting point for visual exploration of artists' pathways from event to event. Rank: 68%
+
+_Priority Ranking: 68%_
+
+The event-to-event network browsing interface allows the user to search the AusStage database for an event. Once an event is selected by the user, the interface will display that event as the central node within a network of events - it's first degree network. 
+Events are related by the contributors who have been involved with them. 
+Clicking on a link should reveal the contributor, and highlight any other links that refer to that particular contributor.
+If an event on the edge of the network is selected, the display should be refreshed to reveal its first degree network of events. 
+
+Work flow:
+  # Initial event-to-event Display
+  # User enters search criteria and selects search
+  # Database queried for events matching search criteria (NAME?) Results found? 
+YES: display results on page.
+NO: display ‘no records found’. Return to 1.
+  # User selects event from results.
+  # User submits the choice.
+  # Network Browsing interface loads network for the submitted event. 
+
+Node selected (double click):
+  # is this the current node?
+Yes: do nothing
+No: redraw, or add to the network graphic this nodes first degree network.  
+
+Link selected:
+  # Display link details.
+  # Refresh display, highlighting all links where the link name is equal to the selected link name.
+
 
 ===5.2 Advanced features===
+
 Advance features for refining the display of event-to-event networks could also include pop-ups, time-slider and faceted browsing. Rank: 56%
 
 ===5.3 Search and display===
