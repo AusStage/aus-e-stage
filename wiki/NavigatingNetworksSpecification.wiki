@@ -435,7 +435,28 @@ Link selected:
 
 ===5.2 Advanced features===
 
-Advance features for refining the display of event-to-event networks could also include pop-ups, time-slider and faceted browsing. Rank: 56%
+_Priority Ranking: 56%_
+
+Advance features for refining the display of event-to-event networks could also include pop-ups, time-slider and faceted browsing.
+Similar features are described in [NavigatingNetworksSpecification#1.2_Time-slider Time-slider], [NavigatingNetworksSpecification#1.3_Faceted_browsing faceted browsing] and [NavigatingNetworksSpecification#1.4_Pop-ups pop-ups].
+
+  * The Time-slider feature should work as described in 1.2 above since the time element relates to events.
+  * Faceted Browsing however, will operate differently. _DISCUSSION NEEDED_ Is the criteria to sort events/nodes and as a roll on effect the links? OR is it a way of highlighting links?
+  * Pop-ups will display data as listed below:
+
+Node information displayed: 	
+  * Event Name as link to AusStage record
+  * Event Status
+  * Primary Genre
+  * Secondary Genre
+  * Content Indicator
+  * Location
+  * Open and closing date of the event
+ 	
+Link information displayed
+  * Contributor name as link to AusStage records
+  * Other names
+  * Contributor Roles
 
 ===5.3 Search and display===
 Search and display by venue, organisations, event-criteria and connections could also be used as a way into exploring event-to-event networks. Rank: 56%
