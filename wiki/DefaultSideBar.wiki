@@ -19,6 +19,7 @@
      * [NavigatingNetworksDataset Dataset] 
      * [NavigatingNetworksSparqlEndpoint SPARQL End Point]
      * [NavigatingNetworksSparql  Sample SPARQL Queries]
+     * [NavigatingNetworksComponentOverview  ComponentOverview]
    * [AusStageTerminator AusStage Terminator Service]
  * [UsefulLinks Useful Links]   
  * [http://www.ausstage.edu.au AusStage Homepage]
