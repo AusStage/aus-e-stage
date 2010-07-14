@@ -8,6 +8,33 @@ The purpose of this Wiki page is to provide an overview of the components and th
 
 The structure of the NetworkService is loosely based on the [http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller MVC] approach to system design. When viewed from this perspective the Java Server Pages (in green) are the views, the various classes (in dark blue) are controllers, and the Java Servlets (in turquoise) are the controllers. 
 
+= Data used by the Network Service =
+
+Data that is used by the NetworkService is sourced from two locations. 
+
+The primary source of data is the RDF based datastore (in brown). This datastore is constructed by the RdfExport application and represents an export of data from the AusStage database. 
+
+The aim of the RDF based datastore is to represent all of the data that is required to build visualisations of collaboration networks. Where necessary small amounts of data may be sourced directly from the database. This has not proven necessary as yet, but the capability is available. 
+
+= Third Party Libraries =
+
+The NetworkService uses a number of third party libraries that can be divided into two main categories. Java based libraries are used by the Java Server Pages and Java Servlets, and !JavaScript libraries which provide functionality used in the display of data and interaction with the user in the web browser. 
+
+== Java Libraries ==
+
+=== Open Source Libraries ===
+
+ * [http://openjena.org Jena] - the basis for all RDF processing
+ * [http://openjena.org/wiki/TDB TDB] - persistent datastore of RDF data
+ * [http://jena.sourceforge.net/ARQ/ ARQ] - SPARQL query engine
+ * [http://www.joseki.org/ Joseki] - SPARQL Server 
+
+=== Proprietary Libraries ===
+
+ * [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html Oracle JDBC Drivers] - access the AusStage database
+
+== !JavaScript Libraries ==
+
 = Component Overview Diagram =
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview.jpeg http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview-small.jpeg]
 
