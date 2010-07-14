@@ -6,6 +6,8 @@ The [NetworkService Navigating Networks Service] is made up of a number of diffe
 
 The purpose of this Wiki page is to provide an overview of the components and the functionality that they provide.
 
+The structure of the NetworkService is loosely based on the [http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller MVC] approach to system design. When viewed from this perspective the Java Server Pages (in green) are the views, the various classes (in dark blue) are controllers, and the Java Servlets (in turquoise) are the controllers. 
+
 = Component Overview Diagram =
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview.jpeg http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview-small.jpeg]
 
