@@ -2,4 +2,18 @@
 
 = About the SPARQL Endpoint =
 
-Development work is being undertaken to provide a SPARQL Endpoint for the NetworkService dataset. When the Endpoint is available access details will be provided here. 
+The NetworkService uses an [http://en.wikipedia.org/wiki/Resource_Description_Framework RDF] based dataset that is a subset of the main AusStage dataset. This dataset is constructed using the RdfExport application. 
+
+To enhance access to the dataset a [http://en.wikipedia.org/wiki/SPARQL SPARQL] endpoint is currently undergoing development, testing and evaluation. 
+
+The endpoint is available at the following URL:
+
+http://beta.ausstage.edu.au/networks/sparql
+
+A simple web based form that can be used to send simple SPARQL queries to the endpoint is also available here:
+
+http://beta.ausstage.edu.au/networks/sparql.jsp
+
+_Note:_ This service is not intended as a way to export large amounts of data from the dataset. Export files updated periodically are [http://code.google.com/p/aus-e-stage/downloads/list available here].
+
+The SPARQL endpoint is powered by the [http://www.joseki.org/ Joseki SPARQL Server] that is accessing a [http://openjena.org/wiki/TDB TDB] based datastore. Both of these are components of the [http://openjena.org/ Jena Semantic Web Framework] for Java. 
