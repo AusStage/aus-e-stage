@@ -180,6 +180,7 @@ public class BuildNetworkData {
 		model.setNsPrefix("tl"       , Timeline.NS);
 		model.setNsPrefix("xsd"      , XSDDatatype.XSD);
 		model.setNsPrefix("ausestage", AuseStage.NS);
+		model.setNsPrefix("bio"      , Bio.NS);
 		
 		/*
 		 * add base contributor information
@@ -191,7 +192,8 @@ public class BuildNetworkData {
 			System.out.println("INFO: Adding contributor data to the datastore...");
 			
 			// define the sql
-			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality "
+			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality, "
+					   + "       c.yyyydate_of_birth, c.mmdate_of_birth, c.dddate_of_birth "
 					   + "FROM contributor c, gendermenu g, "
 					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
 					   + "WHERE c.gender = g.genderid(+) "
@@ -205,6 +207,7 @@ public class BuildNetworkData {
 			String   firstName   = null;
 			String   lastName    = null;
 			Resource contributor = null;
+			Resource bioBirth    = null;
 	
 			// loop through the 
 			while (resultSet.next()) {
@@ -246,8 +249,15 @@ public class BuildNetworkData {
 					contributor.addProperty(AuseStage.nationality, resultSet.getString(5));
 				}
 				
+				// add the date of birth
+				if(resultSet.getString(6) != null) {
+					
+					bioBirth = model.createResource(Bio.Birth);
+					bioBirth.addProperty(Bio.date, buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)));	
+					contributor.addProperty(Bio.event, bioBirth);
+				}					
+				
 				// store a reference to this contributor
-				//contributors.put(resultSet.getString(1), contributor);
 				contributors.add(Integer.parseInt(resultSet.getString(1)));
 				
 				// increment the counter
@@ -263,6 +273,11 @@ public class BuildNetworkData {
 			System.err.println("ERROR: An SQL related error has occured");
 			System.err.println("       " + sqlEx.getMessage());
 			return false;
+		}
+		
+		//debug code
+		if(true) {
+			return true;
 		}
 		
 		/*
