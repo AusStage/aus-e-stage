@@ -29,6 +29,7 @@ The RdfExport application undertakes the following steps to build the dataset
 || contributor || gender || foaf:gender|| Where the field is "unknown" or blank no gender node is added || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
 || contributor || nationality || ausestage:nationality || Where the field is null, no nationality is added || [NavigatingNetworksGoals#1.3_Faceted_browsing 1.3] ||
 || || || ausestage:hasCollaboration || used to link a contributor with a collaboration object || [NavigatingNetworksGoals#1.1_Graphic_Interface 1.1] [NavigatingNetworksGoals#1.2_Time-slider 1.2] [NavigatingNetworksGoals#2.1_Key_collaborators 2.1] [NavigatingNetworksGoals#4.1_Contributor_Career_as_a_line_on_a_timeline 4.1] ||
+|| contributor || yyyydate_of_birth, mmdate_of_birth, dddate_of_birth || bio:event/bio:Birth/bio:date || At a minimum a yyyydate_of_birth is required for this to be added || [NavigatingNetworksGoals#1.4_Pop-ups 1.4] ||
 
 === SQL Code ==
 
@@ -128,6 +129,7 @@ ORDER BY contributorid
 || Timeline || tl || http://motools.sourceforge.net/timeline/timeline.html ||
 || OWL-Time || time || http://www.w3.org/TR/owl-time/ || 
 || Aus-e-Stage || ausestage || AuseStageOntology ||
+|| BIO || bio || http://vocab.org/bio/0.1/.html ||
 
 == Aus-e-Stage Ontology ==
 
