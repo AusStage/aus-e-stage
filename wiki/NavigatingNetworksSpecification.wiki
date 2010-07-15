@@ -272,13 +272,13 @@ Node information displayed:
 
 || *Information For Display* || *Source* ||
 || Name (as link to AusStage Record) || foaf:name / rdf:id ||
-|| Other names || ausestage:otherNames ||
+|| Other names || [AuseStageOntology#otherNames ausestage:otherNames] ||
 || Gender || foaf:gender ||
 || Date of birth || bio:event/bio:Birth/bio:date ||
-|| Nationality || foaf:nationality ||
+|| Nationality || [AuseStageOntology#nationality ausestage:nationality] ||
 || Contributor ID || rdf:id ||
-|| Roles || AuseStageOntology#function ||
-|| Number of relationships || AuseStageOntology#collaboratorCount ||
+|| Roles || [AuseStageOntology#function ausestage:function] ||
+|| Number of relationships || [AuseStageOntology#collaboratorCount ausestag:collaboratorCount]||
 	
 Link information displayed
 
@@ -286,7 +286,7 @@ Link information displayed
 || Name (as link to AusStage Record) || foaf:name / rdf:id ||
 || Number of events || Count of event:isAgentIn ||
 || Date range of events || Calculated from tl:intervals ||
-|| Number of collaborations between contributors || AuseStageOntology#collaborationCount ||
+|| Number of collaborations between contributors || [AuseStageOntology#collaborationCount ausestage:collaborationCount] ||
 
 An alternative to pop-ups would be to display node and link information in separate panels.
 
