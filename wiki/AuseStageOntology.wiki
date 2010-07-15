@@ -38,6 +38,10 @@ The number of contributors that a contributor has collaborated with
 
 Links a contributor to a [AuseStageOntology#collaboration collaboration]
 
+== otherNames ==
+
+Lists other names from the contributors.other_names field
+
 = Collaborations =
 
 == collaboration ==
