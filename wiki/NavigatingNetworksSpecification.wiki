@@ -249,10 +249,10 @@ Included in the Network Browsing interface will be a panel of criteria represent
 
 Criteria to be listed
 
-|| Label	|| Database Reference|| 	Type|| 	Facet Options|| 
-|| Gender|| TABLE: CONTRIBUTOR - ROW: GENDER||	radio button 1 : Male radio button 2: Female|| Highlight matching nodes OR only display nodes with matching criteria HOW DO WE DEAL WITH UNKNOWN?|| 
-|| Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY|| Select menu, multiple selections allowed || Highlight nodes matching nationality/ies selected by user. || 
-|| Role/s|| TABLE: CONEVLINK|| Select menu, multiple selections allowed, correspond to the functions listed in CONTFUNCT||Highlight nodes matching role/s selected by user|| 
+|| Label	|| Database Reference|| 	Type|| 	Facet Options|| RDF Reference ||
+|| Gender|| TABLE: CONTRIBUTOR - ROW: GENDER||	radio button 1 : Male radio button 2: Female|| Highlight matching nodes OR only display nodes with matching criteria HOW DO WE DEAL WITH UNKNOWN?|| foaf:gender _Only added to dataset if not UNKNOWN or NULL ||
+|| Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY|| Select menu, multiple selections allowed || Highlight nodes matching nationality/ies selected by user. || [AuseStageOntology#nationality ausestage:nationality]||
+|| Role/s|| TABLE: CONEVLINK|| Select menu, multiple selections allowed, correspond to the functions listed in CONTFUNCT||Highlight nodes matching role/s selected by user|| [AuseStageOntology#function ausestage:function] ||
 
 Additional criteria derived from event and venue attributes (status, primary genre, secondary genre, suburb, state, country) may be considered after initial testing.
 
