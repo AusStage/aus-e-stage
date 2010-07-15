@@ -281,11 +281,6 @@ public class BuildNetworkData {
 			return false;
 		}
 		
-		//debug code
-		if(true) {
-			return true;
-		}
-		
 		/*
 		 * add functions
 		 */
