@@ -51,6 +51,9 @@ public class AuseStage {
     /** Specify the number of contributors the specified contributor has worked with */
     public static final ObjectProperty collaboratorCount = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboratorCount");
     
+    /** Specify any other names of a contributor known to AusStage */
+    public static final ObjectProperty otherNames = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#otherNames");
+    
     /*
      * collaborations
      */

@@ -193,7 +193,8 @@ public class BuildNetworkData {
 			
 			// define the sql
 			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality, "
-					   + "       c.yyyydate_of_birth, c.mmdate_of_birth, c.dddate_of_birth "
+					   + "       c.yyyydate_of_birth, c.mmdate_of_birth, c.dddate_of_birth, "
+					   + "       c.other_names "
 					   + "FROM contributor c, gendermenu g, "
 					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
 					   + "WHERE c.gender = g.genderid(+) "
@@ -255,7 +256,12 @@ public class BuildNetworkData {
 					bioBirth = model.createResource(Bio.Birth);
 					bioBirth.addProperty(Bio.date, buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)));	
 					contributor.addProperty(Bio.event, bioBirth);
-				}					
+				}		
+				
+				// add other names
+				if(resultSet.getString(9) != null) {
+					contributor.addProperty(AuseStage.otherNames, resultSet.getString(9));
+				}
 				
 				// store a reference to this contributor
 				contributors.add(Integer.parseInt(resultSet.getString(1)));
