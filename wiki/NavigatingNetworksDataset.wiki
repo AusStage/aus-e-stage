@@ -34,11 +34,12 @@ The RdfExport application undertakes the following steps to build the dataset
 === SQL Code ==
 
 {{{
-SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality
-FROM contributor c, gendermenu g,
-     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce
-WHERE c.gender = g.genderid(+)
-AND c.contributorid = ce.contributorid
+SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality, 
+       c.yyyydate_of_birth, c.mmdate_of_birth, c.dddate_of_birth 
+FROM contributor c, gendermenu g, 
+     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce 
+WHERE c.gender = g.genderid(+) 
+AND c.contributorid = ce.contributorid 
 ORDER BY contributorid
 }}}
 
