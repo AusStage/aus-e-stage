@@ -272,9 +272,9 @@ Node information displayed:
 
 || *Information For Display* || *Source* ||
 || Name (as link to AusStage Record) || foaf:name / rdf:id ||
-|| Other names || ||
+|| Other names || ausestage:otherNames ||
 || Gender || foaf:gender ||
-|| Date of birth || ||
+|| Date of birth || bio:event/bio:Birth/bio:date ||
 || Nationality || foaf:nationality ||
 || Contributor ID || rdf:id ||
 || Roles || AuseStageOntology#function ||
