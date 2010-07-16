@@ -156,6 +156,7 @@ public class BuildNetworkData {
 		int collaborationCount     = 0;
 		int eventCount             = 0;
 		int functionsAtEventsCount = 0;
+		int organisationCount      = 0;
 		int recordNotifyDelimCount = 0;
 		
 		// map of contributors
@@ -181,548 +182,610 @@ public class BuildNetworkData {
 		model.setNsPrefix("xsd"      , XSDDatatype.XSD);
 		model.setNsPrefix("ausestage", AuseStage.NS);
 		model.setNsPrefix("bio"      , Bio.NS);
+		model.setNsPrefix("org"      , Org.NS);
+		model.setNsPrefix("skos"     , SKOS.NS);
+		
+//		/*
+//		 * add base contributor information
+//		 */
+//		 	   
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding contributor data to the datastore...");
+//			
+//			// define the sql
+//			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality, "
+//					   + "       c.yyyydate_of_birth, c.mmdate_of_birth, c.dddate_of_birth, "
+//					   + "       c.other_names "
+//					   + "FROM contributor c, gendermenu g, "
+//					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
+//					   + "WHERE c.gender = g.genderid(+) "
+//					   + "AND c.contributorid = ce.contributorid "
+//					   + "ORDER BY contributorid";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//			
+//			// declare helper variables
+//			String   firstName   = null;
+//			String   lastName    = null;
+//			Resource contributor = null;
+//			Resource bioBirth    = null;
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// get the attributes
+//				firstName = resultSet.getString(2);
+//				lastName  = resultSet.getString(3);
+//				
+//				// double check the attributes
+//				if(firstName == null) {
+//					firstName = "";
+//				} 
+//				
+//				if(lastName == null) {
+//					lastName = "";
+//				}
+//	
+//				// create a new contributor
+//				contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
+//				contributor.addProperty(RDF.type, FOAF.Person);
+//				
+//				// add the name properties
+//				contributor.addProperty(FOAF.name, firstName + " " + lastName);
+//				contributor.addProperty(FOAF.givenName, firstName);
+//				contributor.addProperty(FOAF.familyName, lastName);
+//				
+//				// add the url to the contributor page
+//				contributor.addProperty(FOAF.page, AusStageURI.getContributorURL(resultSet.getString(1)));
+//				
+//				// add the gender
+//				if(resultSet.getString(4) != null) {
+//					if(resultSet.getString(4).equals("male") == true || resultSet.getString(4).equals("female") == true) {
+//						contributor.addProperty(FOAF.gender, resultSet.getString(4));
+//					}
+//				}
+//				
+//				// add the nationality
+//				if(resultSet.getString(5) != null) {
+//					contributor.addProperty(AuseStage.nationality, resultSet.getString(5));
+//				}
+//				
+//				// add the date of birth
+//				if(resultSet.getString(6) != null) {
+//					
+//					bioBirth = model.createResource(Bio.Birth);
+//					bioBirth.addProperty(Bio.date, buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)));	
+//					contributor.addProperty(Bio.event, bioBirth);
+//				}		
+//				
+//				// add other names
+//				if(resultSet.getString(9) != null) {
+//					contributor.addProperty(AuseStage.otherNames, resultSet.getString(9));
+//				}
+//				
+//				// store a reference to this contributor
+//				contributors.add(Integer.parseInt(resultSet.getString(1)));
+//				
+//				// increment the counter
+//				contributorCount++;				
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			System.out.format("INFO: %,d contributors successfully added to the datastore%n", contributorCount);
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
+//		
+//		/*
+//		 * add functions
+//		 */
+//		 
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding contributor functions...");
+//			
+//			// declare helper variables
+//			String currentId = "";
+//			Resource contributor = null;
+//			
+//			// define the sql
+//			String sql = "SELECT c.contributorid, cp.preferredterm "
+//					   + "FROM contributor c, contributorfunctpreferred cp, contfunctlink cl, "
+//					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
+//					   + "WHERE c.contributorid = cl.contributorid "
+//					   + "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid "
+//					   + "AND c.contributorid = ce.contributorid "
+//					   + "ORDER BY contributorid";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// store a copy of the current id, so we don't have to go through the 
+//				// collection of contributors too much
+//				if(currentId.equals(resultSet.getString(1)) == false) {
+//					// store this id
+//					currentId = resultSet.getString(1);
+//					
+//					// lookup the contributor
+//					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
+//						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
+//						
+//						// add the function
+//						contributor.addProperty(AuseStage.function, resultSet.getString(2));
+//					
+//						// increment the count
+//						functionCount++;
+//					} else {
+//						// missing contributor
+//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+//						contributor = null;
+//					}	
+//				} else {
+//					// add the function
+//					contributor.addProperty(AuseStage.function, resultSet.getString(2));
+//				
+//					// increment the count
+//					functionCount++;
+//				}						
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			System.out.format("INFO: %,d contributor functions successfully added%n", functionCount);
+//			
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
+//		
+//		/*
+//		 * add relationships
+//		 */
+//		 	   
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding collaborator relationships...");
+//			System.out.format("INFO: Each '#' below represents %,d collaborations%n", RECORD_NOTIFY_COUNT);
+//			
+//			// declare helper variables
+//			String   currentId     = "";
+//			Resource contributor   = null;
+//			Resource collaborator  = null;
+//			Resource collaboration = null;			
+//			String   firstDate     = null;
+//			String   lastDate      = null;
+//			
+//			// define the sql
+//			String sql = "SELECT c.contributorid, c1.collaboratorid, COUNT(c.contributorid) as collaborations, "
+//					   + "       MIN(CONCAT(e.yyyyfirst_date, CONCAT('-', CONCAT(e.mmfirst_date, CONCAT('-', e.ddfirst_date))))) as first_date, "
+//					   + "       MAX(CONCAT(e.yyyylast_date, CONCAT('-', CONCAT(e.mmlast_date, CONCAT('-', e.ddlast_date))))) as last_date "
+//					   + "FROM conevlink c, "
+//					   + "     (SELECT eventid, contributorid AS collaboratorid FROM conevlink WHERE contributorid IS NOT NULL AND eventid IS NOT NULL) c1, "
+//					   + "     events e "
+//					   + "WHERE c.eventid = c1.eventid "
+//					   + "AND c.contributorid IS NOT NULL "
+//					   + "AND c.eventid = e.eventid "
+//					   + "AND c.contributorid < c1.collaboratorid "
+//					   + "GROUP BY c.contributorid, c1.collaboratorid "
+//					   + "ORDER BY contributorid ";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// store a copy of the current id, so we don't have to go through the 
+//				// collection of contributors too much
+//				if(currentId.equals(resultSet.getString(1)) == false) {
+//					// store this id
+//					currentId = resultSet.getString(1);
+//					
+//					// add the collaborator count
+//					if(contributor != null) {
+//						contributor.addProperty(AuseStage.collaboratorCount, Integer.toString(collaboratorCount));
+
+//						// reset the collaborator count
+//						collaboratorCount = 0;
+//					}
+//										
+//					// lookup the contributor
+//					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
+//						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
+//					} else {
+//						// missing contributor
+//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+//						contributor = null;
+//					}
+//				}
+//				
+//				// double check the contributor
+//				if(contributor != null) {
+//				
+//					// lookup the contributor
+//					if(contributors.contains(Integer.parseInt(resultSet.getString(2))) == true) {
+//						// get the collaborator
+//						collaborator = model.createResource(AusStageURI.getContributorURI(resultSet.getString(2)));
+//				
+//						// increment the collaborator count
+//						collaboratorCount++;
+//					
+//						// create a new collaboration
+//						collaboration = model.createResource(AusStageURI.getRelationshipURI(resultSet.getString(1) + "-" + resultSet.getString(2)));
+//						collaboration.addProperty(RDF.type, AuseStage.collaboration);
+//				
+//						// add the two collaborators
+//						collaboration.addProperty(AuseStage.collaborator, contributor);
+//						collaboration.addProperty(AuseStage.collaborator, collaborator);
+//				
+//						// add the count
+//						collaboration.addProperty(AuseStage.collaborationCount, resultSet.getString(3));
+//					
+//						// add the link to the contributors
+//						contributor.addProperty(AuseStage.hasCollaboration, collaboration);
+//						collaborator.addProperty(AuseStage.hasCollaboration, collaboration);
+//					
+//						// add the dates of the collaboration
+//						firstDate = resultSet.getString(4);
+//						lastDate  = resultSet.getString(5);
+//	
+//						// double check the dates
+//						if(firstDate == null) {
+//							System.out.println("WARN: A valid time period for '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "' could not be determined");
+//						} else {
+//							// check on the format of the date
+//							if(firstDate.length() != 10) {
+//		
+//								// first date is shorter than expected
+//								if(firstDate.length() == 6) {
+//									// year only so get rid of the '--'
+//									firstDate = firstDate.substring(0, 4);
+//								} else if(firstDate.length() == 8) {
+//									// year and month parameter
+//									firstDate = firstDate.substring(0, 7);
+//								}									
+//							}
+//		
+//							// check on the last date
+//							if(lastDate == null) {
+//								lastDate = firstDate;
+//							} else if (lastDate.equals("--")) {
+//								lastDate = firstDate;
+//							} else if(lastDate.length() != 10) {									
+//								// last date is shorter than expected
+//								if(lastDate.length() == 6) {
+//									// year only so get rid of the '--'
+//									lastDate = lastDate.substring(0, 4);
+//								} else if(firstDate.length() == 8) {
+//									// year and month parameter
+//									lastDate = lastDate.substring(0, 7);
+//								}									
+//							}
+//										
+//							// add the time interval to the collaboration
+//							collaboration.addProperty(AuseStage.collaborationFirstDate, firstDate);
+//							collaboration.addProperty(AuseStage.collaborationLastDate, lastDate);
+//						}
+//					
+//						// count the number of collaborations
+//						collaborationCount++;
+//					
+//						// determine if we need to do a sync
+//						if ((collaborationCount % RECORD_NOTIFY_COUNT) == 0)
+//						{
+//							// keep the user informed
+//							System.out.print("#");
+//						
+//							// keep track of the number of syncs
+//							recordNotifyDelimCount++;
+//						
+//							if(recordNotifyDelimCount == 10) {
+//								System.out.print("|");
+//								recordNotifyDelimCount = 0;
+//							}
+//						}							
+//					
+//					} else {
+//						System.out.println("WARN: Unable to add the collaboration between '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "'");					
+//					}
+//				}				
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			
+//			System.out.format("%nINFO: %,d collaborations successfully added to the datastore%n", collaborationCount);
+//			
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
+//		
+//		/*
+//		 * add events
+//		 */
+//	 
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding events...");
+//			
+//			// declare helper variables
+//			String   currentId    = "";
+//			Resource contributor  = null;
+//			Resource event        = null;
+//			Resource timeInterval = null;
+//			String   title        = null;
+//			String   firstDate    = null;
+//			String   lastDate     = null;
+//			
+//			// define the sql
+//			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid, "
+//					   + "                e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+//					   + "                e.yyyylast_date, e.mmlast_date, e.ddlast_date "
+//					   + "FROM events e, conevlink c " 
+//					   + "WHERE e.eventid = c.eventid "
+//					   + "AND e.eventid IS NOT NULL "
+//					   + "AND c.contributorid IS NOT NULL "
+//					   + "ORDER BY e.eventid";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// have we seen this event id before?
+//				if(currentId.equals(resultSet.getString(1)) == true) {
+//					// yes we have
+//					// lookup the contributor
+//					if(contributors.contains(Integer.parseInt(resultSet.getString(3))) == true) {
+//						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(3)));
+//						
+//						// add the relationships
+//						contributor.addProperty(Event.isAgentIn, event);
+//						event.addProperty(Event.agent, contributor);
+//						
+//					} else {
+//						// missing contributor
+//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
+//						contributor = null;
+//					}
+//										
+//				} else {
+//					// no we haven't so create a new event
+//					event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
+//					event.addProperty(RDF.type, Event.Event);
+//			
+//					// process the title
+//					title = resultSet.getString(2);
+//					title = title.replaceAll("\r", " ");
+//					title = title.replaceAll("\n", " ");
+//					
+//					// add the title and Url
+//					event.addProperty(DCTerms.title, title);
+//					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
+//					
+//					// reset the dates
+//					firstDate = null;
+//					lastDate  = null;
+//					
+//					// first date
+//					if(resultSet.getString(4) != null) {
+//						firstDate = buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+//					}
+//					
+//					// last date
+//					if(resultSet.getString(7) != null) {
+//						lastDate = buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
+//					}
+//					
+//					// check on the first date
+//					if(firstDate == null) {
+//						// inform user of error
+//						System.out.println("INFO: A valid first date for event: " + resultSet.getString(1)  + " could not be determined");
+//					} else {
+//					
+//						// adjust the last date if required
+//						if(lastDate == null) {
+//							lastDate = firstDate;
+//						}
+//						
+//						// add date information
+//						 
+//						// construct a new timeInterval resource
+//						timeInterval = model.createResource(Time.Interval);
+
+//						// add the timeline properties
+//						// add the typed literals
+//						timeInterval.addProperty(Timeline.beginsAtDateTime, model.createTypedLiteral(firstDate, XSDDatatype.XSDdate));
+//						timeInterval.addProperty(Timeline.endsAtDateTime, model.createTypedLiteral(lastDate, XSDDatatype.XSDdate));
+
+//						// andd the timeInterval to the Event
+//						event.addProperty(Event.time, timeInterval);
+//					}
+//					
+//					// lookup the contributor
+//					if(contributors.contains(Integer.parseInt(resultSet.getString(3))) == true) {
+//					
+//						// get the contributor
+//						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(3)));
+//						
+//						// add the relationships
+//						contributor.addProperty(Event.isAgentIn, event);
+//						event.addProperty(Event.agent, contributor);
+//						
+//					} else {
+//						// missing contributor
+//						contributor = null;
+//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
+//					} 
+//							
+//					// increment the event count 
+//					eventCount++;
+//					
+//					// store this id
+//					currentId = resultSet.getString(1);
+//				}	
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			System.out.format("INFO: %,d events successfully added to the datastore%n", eventCount);
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
+//		
+//		/*
+//		 * Add functions at events
+//		 */
+//		 
+//		try {
+//		
+//			// keep the user informed
+//			System.out.println("INFO: Adding contributor functions to events...");
+//			
+//			// declare helper variables
+//			String currentId         = "";
+//			Resource contributor     = null;
+//			Resource functionAtEvent = null;
+//			
+//			// define the sql
+//			String sql = "SELECT cl.contributorid, cl.eventid, cfp.preferredterm "
+//					   + "FROM conevlink cl, contributorfunctpreferred cfp "
+//					   + "WHERE cl.eventid IS NOT NULL "
+//					   + "AND cl.contributorid IS NOT NULL "
+//					   + "AND cl.function = cfp.contributorfunctpreferredid "
+//					   + "ORDER BY contributorid";
+//			
+//			// get the data from the database				   
+//			java.sql.ResultSet resultSet = database.executeStatement(sql);
+//	
+//			// loop through the 
+//			while (resultSet.next()) {
+//			
+//				// have we seen this contributor before
+//				if(currentId.equals(resultSet.getString(1)) != true) {
+//					
+//					// lookup the contributor
+//					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
+
+//						// get the contributor
+//						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
+//						
+//						// store the id to reduce number of lookups
+//						currentId = resultSet.getString(1);
+//					} else {
+//						contributor = null;
+//						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
+//					}
+//				} else {
+//					// yes we have so use the found contributor if available
+//					if(contributor != null) {
+//					
+//						// construct a new functionAtEvent
+//						functionAtEvent = model.createResource(AuseStage.functionAtEvent);
+//						
+//						// add the on event property
+//						functionAtEvent.addProperty(AuseStage.atEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
+//						functionAtEvent.addProperty(AuseStage.function, resultSet.getString(3));
+//						
+//						// add the collaborates property to the contributor
+//						contributor.addProperty(AuseStage.undertookFunction, functionAtEvent);
+//						
+//						// increment the count
+//						functionsAtEventsCount++;
+//					}
+//				}				
+//			}
+//			
+//			// play nice and tidy up
+//			resultSet.close();
+//			database.closeStatement();
+//			System.out.format("INFO: %,d contributor function at event records added%n", functionsAtEventsCount);
+//			
+//		} catch (java.sql.SQLException sqlEx) {
+//			System.err.println("ERROR: An SQL related error has occured");
+//			System.err.println("       " + sqlEx.getMessage());
+//			return false;
+//		}
 		
 		/*
-		 * add base contributor information
+		 * add base organisation information
 		 */
 		 	   
 		try {
 		
 			// keep the user informed
-			System.out.println("INFO: Adding contributor data to the datastore...");
+			System.out.println("INFO: Adding organisation data to the datastore...");
 			
 			// define the sql
-			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality, "
-					   + "       c.yyyydate_of_birth, c.mmdate_of_birth, c.dddate_of_birth, "
-					   + "       c.other_names "
-					   + "FROM contributor c, gendermenu g, "
-					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
-					   + "WHERE c.gender = g.genderid(+) "
-					   + "AND c.contributorid = ce.contributorid "
-					   + "ORDER BY contributorid";
+			String sql = "SELECT organisationid, name, other_names1, other_names2, other_names3 "
+					   + "FROM organisation";
 			
 			// get the data from the database				   
 			java.sql.ResultSet resultSet = database.executeStatement(sql);
 			
 			// declare helper variables
-			String   firstName   = null;
-			String   lastName    = null;
-			Resource contributor = null;
-			Resource bioBirth    = null;
+			Resource organisation = null;
 	
 			// loop through the 
 			while (resultSet.next()) {
 			
-				// get the attributes
-				firstName = resultSet.getString(2);
-				lastName  = resultSet.getString(3);
+				// create a new organisation
+				organisation = model.createResource(AusStageURI.getOrganisationURI(resultSet.getString(1)));
+				organisation.addProperty(RDF.type, Org.Organization);
 				
-				// double check the attributes
-				if(firstName == null) {
-					firstName = "";
-				} 
+				// add the name
+				organisation.addProperty(SKOS.prefLabel, resultSet.getString(2));
 				
-				if(lastName == null) {
-					lastName = "";
+				// add the url
+				organisation.addProperty(FOAF.page, AusStageURI.getOrganisationURL(resultSet.getString(1)));
+				
+				// add any other names if present
+				if(resultSet.getString(3) != null) {
+					organisation.addProperty(SKOS.altLabel, resultSet.getString(3));
 				}
-	
-				// create a new contributor
-				contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-				contributor.addProperty(RDF.type, FOAF.Person);
 				
-				// add the name properties
-				contributor.addProperty(FOAF.name, firstName + " " + lastName);
-				contributor.addProperty(FOAF.givenName, firstName);
-				contributor.addProperty(FOAF.familyName, lastName);
-				
-				// add the url to the contributor page
-				contributor.addProperty(FOAF.page, AusStageURI.getContributorURL(resultSet.getString(1)));
-				
-				// add the gender
 				if(resultSet.getString(4) != null) {
-					if(resultSet.getString(4).equals("male") == true || resultSet.getString(4).equals("female") == true) {
-						contributor.addProperty(FOAF.gender, resultSet.getString(4));
-					}
+					organisation.addProperty(SKOS.altLabel, resultSet.getString(4));
 				}
 				
-				// add the nationality
 				if(resultSet.getString(5) != null) {
-					contributor.addProperty(AuseStage.nationality, resultSet.getString(5));
+					organisation.addProperty(SKOS.altLabel, resultSet.getString(5));
 				}
 				
-				// add the date of birth
-				if(resultSet.getString(6) != null) {
-					
-					bioBirth = model.createResource(Bio.Birth);
-					bioBirth.addProperty(Bio.date, buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)));	
-					contributor.addProperty(Bio.event, bioBirth);
-				}		
-				
-				// add other names
-				if(resultSet.getString(9) != null) {
-					contributor.addProperty(AuseStage.otherNames, resultSet.getString(9));
-				}
-				
-				// store a reference to this contributor
-				contributors.add(Integer.parseInt(resultSet.getString(1)));
-				
-				// increment the counter
-				contributorCount++;				
+				// increment the count
+				organisationCount++;				
 			}
 			
 			// play nice and tidy up
 			resultSet.close();
 			database.closeStatement();
-			System.out.format("INFO: %,d contributors successfully added to the datastore%n", contributorCount);
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * add functions
-		 */
-		 
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding contributor functions...");
-			
-			// declare helper variables
-			String currentId = "";
-			Resource contributor = null;
-			
-			// define the sql
-			String sql = "SELECT c.contributorid, cp.preferredterm "
-					   + "FROM contributor c, contributorfunctpreferred cp, contfunctlink cl, "
-					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
-					   + "WHERE c.contributorid = cl.contributorid "
-					   + "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid "
-					   + "AND c.contributorid = ce.contributorid "
-					   + "ORDER BY contributorid";
-			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// store a copy of the current id, so we don't have to go through the 
-				// collection of contributors too much
-				if(currentId.equals(resultSet.getString(1)) == false) {
-					// store this id
-					currentId = resultSet.getString(1);
-					
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-						
-						// add the function
-						contributor.addProperty(AuseStage.function, resultSet.getString(2));
-					
-						// increment the count
-						functionCount++;
-					} else {
-						// missing contributor
-						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-						contributor = null;
-					}	
-				} else {
-					// add the function
-					contributor.addProperty(AuseStage.function, resultSet.getString(2));
-				
-					// increment the count
-					functionCount++;
-				}						
-			}
-			
-			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
-			System.out.format("INFO: %,d contributor functions successfully added%n", functionCount);
-			
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * add relationships
-		 */
-		 	   
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding collaborator relationships...");
-			System.out.format("INFO: Each '#' below represents %,d collaborations%n", RECORD_NOTIFY_COUNT);
-			
-			// declare helper variables
-			String   currentId     = "";
-			Resource contributor   = null;
-			Resource collaborator  = null;
-			Resource collaboration = null;			
-			String   firstDate     = null;
-			String   lastDate      = null;
-			
-			// define the sql
-			String sql = "SELECT c.contributorid, c1.collaboratorid, COUNT(c.contributorid) as collaborations, "
-					   + "       MIN(CONCAT(e.yyyyfirst_date, CONCAT('-', CONCAT(e.mmfirst_date, CONCAT('-', e.ddfirst_date))))) as first_date, "
-					   + "       MAX(CONCAT(e.yyyylast_date, CONCAT('-', CONCAT(e.mmlast_date, CONCAT('-', e.ddlast_date))))) as last_date "
-					   + "FROM conevlink c, "
-					   + "     (SELECT eventid, contributorid AS collaboratorid FROM conevlink WHERE contributorid IS NOT NULL AND eventid IS NOT NULL) c1, "
-					   + "     events e "
-					   + "WHERE c.eventid = c1.eventid "
-					   + "AND c.contributorid IS NOT NULL "
-					   + "AND c.eventid = e.eventid "
-					   + "AND c.contributorid < c1.collaboratorid "
-					   + "GROUP BY c.contributorid, c1.collaboratorid "
-					   + "ORDER BY contributorid ";
-			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// store a copy of the current id, so we don't have to go through the 
-				// collection of contributors too much
-				if(currentId.equals(resultSet.getString(1)) == false) {
-					// store this id
-					currentId = resultSet.getString(1);
-					
-					// add the collaborator count
-					if(contributor != null) {
-						contributor.addProperty(AuseStage.collaboratorCount, Integer.toString(collaboratorCount));
-
-						// reset the collaborator count
-						collaboratorCount = 0;
-					}
-										
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-					} else {
-						// missing contributor
-						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-						contributor = null;
-					}
-				}
-				
-				// double check the contributor
-				if(contributor != null) {
-				
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(2))) == true) {
-						// get the collaborator
-						collaborator = model.createResource(AusStageURI.getContributorURI(resultSet.getString(2)));
-				
-						// increment the collaborator count
-						collaboratorCount++;
-					
-						// create a new collaboration
-						collaboration = model.createResource(AusStageURI.getRelationshipURI(resultSet.getString(1) + "-" + resultSet.getString(2)));
-						collaboration.addProperty(RDF.type, AuseStage.collaboration);
-				
-						// add the two collaborators
-						collaboration.addProperty(AuseStage.collaborator, contributor);
-						collaboration.addProperty(AuseStage.collaborator, collaborator);
-				
-						// add the count
-						collaboration.addProperty(AuseStage.collaborationCount, resultSet.getString(3));
-					
-						// add the link to the contributors
-						contributor.addProperty(AuseStage.hasCollaboration, collaboration);
-						collaborator.addProperty(AuseStage.hasCollaboration, collaboration);
-					
-						// add the dates of the collaboration
-						firstDate = resultSet.getString(4);
-						lastDate  = resultSet.getString(5);
-	
-						// double check the dates
-						if(firstDate == null) {
-							System.out.println("WARN: A valid time period for '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "' could not be determined");
-						} else {
-							// check on the format of the date
-							if(firstDate.length() != 10) {
-		
-								// first date is shorter than expected
-								if(firstDate.length() == 6) {
-									// year only so get rid of the '--'
-									firstDate = firstDate.substring(0, 4);
-								} else if(firstDate.length() == 8) {
-									// year and month parameter
-									firstDate = firstDate.substring(0, 7);
-								}									
-							}
-		
-							// check on the last date
-							if(lastDate == null) {
-								lastDate = firstDate;
-							} else if (lastDate.equals("--")) {
-								lastDate = firstDate;
-							} else if(lastDate.length() != 10) {									
-								// last date is shorter than expected
-								if(lastDate.length() == 6) {
-									// year only so get rid of the '--'
-									lastDate = lastDate.substring(0, 4);
-								} else if(firstDate.length() == 8) {
-									// year and month parameter
-									lastDate = lastDate.substring(0, 7);
-								}									
-							}
-										
-							// add the time interval to the collaboration
-							collaboration.addProperty(AuseStage.collaborationFirstDate, firstDate);
-							collaboration.addProperty(AuseStage.collaborationLastDate, lastDate);
-						}
-					
-						// count the number of collaborations
-						collaborationCount++;
-					
-						// determine if we need to do a sync
-						if ((collaborationCount % RECORD_NOTIFY_COUNT) == 0)
-						{
-							// keep the user informed
-							System.out.print("#");
-						
-							// keep track of the number of syncs
-							recordNotifyDelimCount++;
-						
-							if(recordNotifyDelimCount == 10) {
-								System.out.print("|");
-								recordNotifyDelimCount = 0;
-							}
-						}							
-					
-					} else {
-						System.out.println("WARN: Unable to add the collaboration between '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "'");					
-					}
-				}				
-			}
-			
-			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
-			
-			System.out.format("%nINFO: %,d collaborations successfully added to the datastore%n", collaborationCount);
-			
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * add events
-		 */
-	 
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding events...");
-			
-			// declare helper variables
-			String   currentId    = "";
-			Resource contributor  = null;
-			Resource event        = null;
-			Resource timeInterval = null;
-			String   title        = null;
-			String   firstDate    = null;
-			String   lastDate     = null;
-			
-			// define the sql
-			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid, "
-					   + "                e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-					   + "                e.yyyylast_date, e.mmlast_date, e.ddlast_date "
-					   + "FROM events e, conevlink c " 
-					   + "WHERE e.eventid = c.eventid "
-					   + "AND e.eventid IS NOT NULL "
-					   + "AND c.contributorid IS NOT NULL "
-					   + "ORDER BY e.eventid";
-			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// have we seen this event id before?
-				if(currentId.equals(resultSet.getString(1)) == true) {
-					// yes we have
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(3))) == true) {
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(3)));
-						
-						// add the relationships
-						contributor.addProperty(Event.isAgentIn, event);
-						event.addProperty(Event.agent, contributor);
-						
-					} else {
-						// missing contributor
-						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
-						contributor = null;
-					}
-										
-				} else {
-					// no we haven't so create a new event
-					event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
-					event.addProperty(RDF.type, Event.Event);
-			
-					// process the title
-					title = resultSet.getString(2);
-					title = title.replaceAll("\r", " ");
-					title = title.replaceAll("\n", " ");
-					
-					// add the title and Url
-					event.addProperty(DCTerms.title, title);
-					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
-					
-					// reset the dates
-					firstDate = null;
-					lastDate  = null;
-					
-					// first date
-					if(resultSet.getString(4) != null) {
-						firstDate = buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
-					}
-					
-					// last date
-					if(resultSet.getString(7) != null) {
-						lastDate = buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
-					}
-					
-					// check on the first date
-					if(firstDate == null) {
-						// inform user of error
-						System.out.println("INFO: A valid first date for event: " + resultSet.getString(1)  + " could not be determined");
-					} else {
-					
-						// adjust the last date if required
-						if(lastDate == null) {
-							lastDate = firstDate;
-						}
-						
-						// add date information
-						 
-						// construct a new timeInterval resource
-						timeInterval = model.createResource(Time.Interval);
-
-						// add the timeline properties
-						// add the typed literals
-						timeInterval.addProperty(Timeline.beginsAtDateTime, model.createTypedLiteral(firstDate, XSDDatatype.XSDdate));
-						timeInterval.addProperty(Timeline.endsAtDateTime, model.createTypedLiteral(lastDate, XSDDatatype.XSDdate));
-
-						// andd the timeInterval to the Event
-						event.addProperty(Event.time, timeInterval);
-					}
-					
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(3))) == true) {
-					
-						// get the contributor
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(3)));
-						
-						// add the relationships
-						contributor.addProperty(Event.isAgentIn, event);
-						event.addProperty(Event.agent, contributor);
-						
-					} else {
-						// missing contributor
-						contributor = null;
-						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
-					} 
-							
-					// increment the event count 
-					eventCount++;
-					
-					// store this id
-					currentId = resultSet.getString(1);
-				}	
-			}
-			
-			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
-			System.out.format("INFO: %,d events successfully added to the datastore%n", eventCount);
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * Add functions at events
-		 */
-		 
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding contributor functions to events...");
-			
-			// declare helper variables
-			String currentId         = "";
-			Resource contributor     = null;
-			Resource functionAtEvent = null;
-			
-			// define the sql
-			String sql = "SELECT cl.contributorid, cl.eventid, cfp.preferredterm "
-					   + "FROM conevlink cl, contributorfunctpreferred cfp "
-					   + "WHERE cl.eventid IS NOT NULL "
-					   + "AND cl.contributorid IS NOT NULL "
-					   + "AND cl.function = cfp.contributorfunctpreferredid "
-					   + "ORDER BY contributorid";
-			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// have we seen this contributor before
-				if(currentId.equals(resultSet.getString(1)) != true) {
-					
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
-
-						// get the contributor
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-						
-						// store the id to reduce number of lookups
-						currentId = resultSet.getString(1);
-					} else {
-						contributor = null;
-						System.out.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-					}
-				} else {
-					// yes we have so use the found contributor if available
-					if(contributor != null) {
-					
-						// construct a new functionAtEvent
-						functionAtEvent = model.createResource(AuseStage.functionAtEvent);
-						
-						// add the on event property
-						functionAtEvent.addProperty(AuseStage.atEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
-						functionAtEvent.addProperty(AuseStage.function, resultSet.getString(3));
-						
-						// add the collaborates property to the contributor
-						contributor.addProperty(AuseStage.undertookFunction, functionAtEvent);
-						
-						// increment the count
-						functionsAtEventsCount++;
-					}
-				}				
-			}
-			
-			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
-			System.out.format("INFO: %,d contributor function at event records added%n", functionsAtEventsCount);
+			System.out.format("INFO: %,d organisations successfully added to the datastore%n", organisationCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
 			System.err.println("ERROR: An SQL related error has occured");
