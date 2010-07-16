@@ -35,10 +35,14 @@ public class AusStageURI {
 	private static final String BASE_RELATIONSHIP_URL     = "http://beta.ausstage.edu.au/networks/lookup?type=rel&id=[rel-id]";
 	private static final String BASE_RELATIONSHIP_URL_TAG = "[rel-id]";
 	
+	private static final String BASE_ORGANISATION_URL     = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_org_id=[org-id]";
+	private static final String BASE_ORGANISATION_URL_TAG = "[org-id]";
+	
 	private static final String AUSSTAGE_URI_PREFIX      = "ausstage";
 	private static final String CONTRIBUTOR_URI          = "c";	
 	private static final String EVENT_URI                = "e";
 	private static final String RELATIONSHIP_URI         = "rel";
+	private static final String ORGANISATION_URI         = "o";
 	
 	/**
 	 * A method to take an AusStage URI and return an AusStage URL
@@ -66,15 +70,18 @@ public class AusStageURI {
 		// check on the second component of the URI
 		if(elements[1].equals(CONTRIBUTOR_URI) == true) {
 			// build the contributor URL
-			return BASE_CONTRIBUTOR_URL.replace(BASE_CONTIRBUTOR_URL_TAG, elements[3]);
+			return BASE_CONTRIBUTOR_URL.replace(BASE_CONTIRBUTOR_URL_TAG, elements[2]);
 		} else if (elements[1].equals(EVENT_URI) == true) {
 			// build the event URL
-			return BASE_EVENT_URL.replace(BASE_EVENT_URL_TAG, elements[3]);
+			return BASE_EVENT_URL.replace(BASE_EVENT_URL_TAG, elements[2]);
 		} else if(elements[1].equals(RELATIONSHIP_URI) == true) {
 			// build the relationships URL
-			return BASE_RELATIONSHIP_URL.replace(BASE_RELATIONSHIP_URL_TAG, elements[3]);
-		}else {
-			throw new IllegalArgumentException("Second component of URI '" + elements[2] + "' is not valid");
+			return BASE_RELATIONSHIP_URL.replace(BASE_RELATIONSHIP_URL_TAG, elements[2]);
+		} else if(elements[1].equals(ORGANISATION_URI) == true) {
+			// build the organisation URL
+			return BASE_ORGANISATION_URL.replace(BASE_ORGANISATION_URL_TAG, elements[2]);
+		} else {
+			throw new IllegalArgumentException("Second component of URI '" + elements[1] + "' is not valid");
 		}
 		
 	} // end getURL method
@@ -168,6 +175,36 @@ public class AusStageURI {
 		
 		// build the contributor URL
 		return BASE_RELATIONSHIP_URL.replace(BASE_RELATIONSHIP_URL_TAG, id);
+	}
+	
+	/**
+	 * A method to build an AusStage URI for a organisation
+	 *
+	 * @param id  the relationship id
+	 * @return    the AusStage URI
+	 */
+	public static String getOrganisationURI(String id) {
+	
+		// check on the parameter
+		id = checkParameter(id);
+		
+		// return the construted URI
+		return AUSSTAGE_URI_PREFIX + ":" + ORGANISATION_URI + ":" + id;
+	}
+	
+	/**
+	 * A method to build an AusStage URL for a event
+	 *
+	 * @param id the event id
+	 * @return   the AusStage URL
+	 */
+	public static String getOrganisationURL(String id) {
+	
+		// check on the parameter
+		id = checkParameter(id);
+		
+		// build the contributor URL
+		return  BASE_ORGANISATION_URL.replace(BASE_ORGANISATION_URL_TAG, id);
 	}
 	
 	/**
