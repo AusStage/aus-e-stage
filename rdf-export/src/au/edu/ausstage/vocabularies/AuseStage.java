@@ -19,14 +19,13 @@
 package au.edu.ausstage.vocabularies;
  
 import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.ontology.*;
  
 /**
  * Vocabulary definitions from http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology
  */
 public class AuseStage {
     /** <p>The ontology model that holds the vocabulary terms</p> */
-    private static OntModel m_model = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM, null );
+    private static OntModel m_model = ModelFactory.createDefaultModel();
     
     /** <p>The namespace of the vocabulary as a string</p> */
     public static final String NS = "http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#";
@@ -43,50 +42,60 @@ public class AuseStage {
      */
     
     /** Specify the nationality of a contributor */
-    public static final ObjectProperty nationality = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#nationality");
+    public static final ObjectProperty nationality = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#nationality");
     
     /** Specify the functions that a contributor can or has undertaken */
-    public static final ObjectProperty function = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#function");
+    public static final ObjectProperty function = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#function");
     
     /** Specify the number of contributors the specified contributor has worked with */
-    public static final ObjectProperty collaboratorCount = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboratorCount");
+    public static final ObjectProperty collaboratorCount = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboratorCount");
     
     /** Specify any other names of a contributor known to AusStage */
-    public static final ObjectProperty otherNames = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#otherNames");
+    public static final ObjectProperty otherNames = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#otherNames");    
     
     /*
      * collaborations
      */
     
     /** Specify the details of a collaboration relationships **/
-    public static final ObjectProperty collaboration = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboration");
+    public static final ObjectProperty collaboration = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboration");
     
     /** Specify the contributor involved in a collaboration **/
-    public static final ObjectProperty collaborator = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborator");
+    public static final ObjectProperty collaborator = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborator");
     
     /** Specify the number of times two contributors have collaborated */
-    public static final ObjectProperty collaborationCount = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationCount");
+    public static final ObjectProperty collaborationCount = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationCount");
     
     /** Specify the relationship between a contributor and a collaboration */
-    public static final ObjectProperty hasCollaboration = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaboration");
+    public static final ObjectProperty hasCollaboration = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaboration");
     
     /** Specify the first date of a collaboration */
-    public static final ObjectProperty collaborationFirstDate = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationFirstDate");
+    public static final ObjectProperty collaborationFirstDate = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationFirstDate");
     
     /** Specify the last date of a collaboration */
-    public static final ObjectProperty collaborationLastDate = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationLastDate");
+    public static final ObjectProperty collaborationLastDate = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationLastDate");
     
     /*
-     * events
+     * Events
      */
      
     /** Specify the function that a contributor has had at an event */
-    public static final ObjectProperty functionAtEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#functionAtEvent");
+    public static final ObjectProperty functionAtEvent = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#functionAtEvent");
     
     /** Specify the event at which this function occured */
-    public static final ObjectProperty atEvent = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#atEvent"); 
+    public static final ObjectProperty atEvent = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#atEvent"); 
     
     /** Link a contributor to the function that they've undertaken */
-    public static final ObjectProperty undertookFunction = m_model.createObjectProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#undertookFunction");   
+    public static final ObjectProperty undertookFunction = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#undertookFunction");   
+     
+     /** Specify the function that a contributor has had at an event */
+    public static final ObjectProperty roleAtEvent = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#roleAtEvent");
+    
+    /** Link a contributor to the function that they've undertaken */
+    public static final ObjectProperty undertookRole = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#undertookRole"); 
+     
+    
+    
+    
 
 }
