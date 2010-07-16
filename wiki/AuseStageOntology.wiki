@@ -42,17 +42,6 @@ Links a contributor to a [AuseStageOntology#collaboration collaboration]
 
 Lists other names from the contributors.other_names field
 
-== functionAtEvent ==
-
-The function a contributor took when participating in an event
-
-== atEvent ==
-
-Specify the event at which they undertook this function
-
-== undertookFunction ==
-
-Specify the type of function that the contributor undertook
 
 = Collaborations =
 
@@ -79,3 +68,25 @@ The last date that this collaboration occurred
 == hasCollaboration == 
 
 Links a contributor to a collaboration event.
+
+= Events = 
+
+== functionAtEvent ==
+
+The function a contributor took when participating in an event
+
+== atEvent ==
+
+Specify the event at which the role or function was undertaken
+
+== undertookFunction ==
+
+Specify the type of function that the contributor undertook
+
+== roleAtEvent ==
+
+The role an organisation had at an event
+
+== undertookRole ==
+
+The role that the organisation undertook
