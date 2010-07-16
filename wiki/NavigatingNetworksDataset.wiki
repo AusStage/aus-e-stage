@@ -119,6 +119,21 @@ AND cl.function = cfp.contributorfunctpreferredid
 ORDER BY contributorid
 }}}
 
+== Organisations ==
+|| *Database Table* || *Database Field* || *RDF Field* || *Notes* || *Supports Goal* ||
+|| organisation || organisationid || rdf:about || Encoded in the [NavigatingNetworksDataset#AusStage_URI_Schema AusStage URI Schema] || [NavigatingNetworksGoals All] ||
+|| organisation || name || skos:prefLabel || || [NavigatingNetworksGoals#2.2_Key_organisations 2.2] [NavigatingNetworksGoals#3.3_Search_by_organisation 3.3] ||
+|| organisation || other_names1 || skos:altLabel || || [NavigatingNetworksGoals#2.2_Key_organisations 2.2] [NavigatingNetworksGoals#3.3_Search_by_organisation 3.3] ||
+|| organisation || other_names2 || skos:altLabel || || [NavigatingNetworksGoals#2.2_Key_organisations 2.2] [NavigatingNetworksGoals#3.3_Search_by_organisation 3.3] ||
+|| organisation || other_names3 || skos:altLabel || || [NavigatingNetworksGoals#2.2_Key_organisations 2.2] [NavigatingNetworksGoals#3.3_Search_by_organisation 3.3] ||
+
+=== SQL Code ===
+{{{
+SELECT organisationid, name, other_names1, other_names2, other_names3
+FROM organisation
+}}}
+
+
 = RDF Ontologies = 
 
 == In Use == 
@@ -131,6 +146,8 @@ ORDER BY contributorid
 || OWL-Time || time || http://www.w3.org/TR/owl-time/ || 
 || Aus-e-Stage || ausestage || AuseStageOntology ||
 || BIO || bio || http://vocab.org/bio/0.1/.html ||
+|| Organization || org || http://www.epimorphics.com/public/vocabulary/org.html ||
+|| SKOS || skos || http://www.w3.org/TR/skos-reference/skos.html ||
 
 == Aus-e-Stage Ontology ==
 
