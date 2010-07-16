@@ -56,9 +56,13 @@ A property of [AuseStageOntology#collaboration collaboration] and stores the ID 
 
 A property of [AuseStageOntology#collaboration collaboration] and stores the number of times the contributors involved in this collaboration have collaborated
 
-== collaborationPeriod ==
+== collaborationFirstDate ==
 
-Defines the period over which collaborations have occured
+The first date that this collaboration occurred
+
+== collaborationLastDate ==
+
+The last date that this collaboration occurred
 
 == hasCollaboration == 
 
