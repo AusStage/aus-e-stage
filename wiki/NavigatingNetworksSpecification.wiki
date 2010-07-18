@@ -229,6 +229,12 @@ Coding note: it is preferable that the back end stays one step ahead of the disp
 
 _QUESTION: How is the 'back end' supposed to now which second degree network to store? The user could click on any of the nodes in the network which potentially means a large number of queries or little result. For example consider a network that has 20 nodes. That means, assuming I'm reading the spec correctly, that the 'back end' would need to prepare 20 additional datasets in the event that user selects one of them. That's 19 datasets that were created but were not needed. I think this needs further consideration._
 
+_Interface sketch ideas_
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/1-1InterfaceBasicSearch.tif]
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/1-1InterfaceSketch.tif]
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/1-1InterfaceSketch2.tif]
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/nodeVisualIdeas.tif]
+
 ===1.2 Time-slider===
 _Priority Ranking: 84%_
 
@@ -290,6 +296,11 @@ Link information displayed
 
 An alternative to pop-ups would be to display node and link information in separate panels.
 
+_Pop Up Sketch Ideas_
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/1-4PopUps.tif]
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/1-4PopUps2.tif]
+
+
 ==2. NETWORK BROWSING - Person-to-person - Text Interface==
 
 ===2.1 Key collaborators===
@@ -337,6 +348,9 @@ Work flow:
  # This process is repeated until the user has selected all desired contributors
  # Once the user has selected all desired contributors to be mapped _(should there be a limit?)_ the network is displayed in the browsing interface.
 
+_Search for connections between collaborators sketch ideas_
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/3-1P2PSearch.tif]
+
 ===3.2 Search for events matching criteria===
 
 _Priority Ranking: 68%_
@@ -358,6 +372,9 @@ Work flow:
  # The system retrieves all contributors and their networks who have been involved with events matching the criteria.
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
+_Search for contributors by event sketch ideas_
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/3-2NetworkEventCriteria.tif]
+
 ===3.3 Search by organisation===
 
 _Priority Ranking: 64%_
@@ -372,6 +389,9 @@ Work flow:
  # If an organisation is selected the system will retrieve the network of contributors that have worked on events associated with this organisation.
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
+_Search for networks by organisation sketch ideas_
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/3-3NetworkOrganisationAssociates.tif]
+
 ===3.4 Search by venue===
 
 _Priority Ranking: 56%_
@@ -385,6 +405,8 @@ Work flow:
  # If the desired venue is returned, the user selects this venue. If not the user returns to the search field.
  # If a venue is selected the system will retrieve the network of contributors that have worked on events associated with this venue.
  # The contributors and their networks are then loaded graphically in the browsing interface.
+
+_Search for networks by venue sketch ideas_
 
 ==4. NETWORKS+TIMELINES==
 
@@ -403,6 +425,9 @@ The timeline should be interactive, see the Similie Project's interactive timeli
   * When collaborators are recorded as working on the same event within the database, their lines should come together in the timeline graph in the corresponding date range. 
   * When they are no longer working together, their lines should return to their initial position. 
 This type of visualisation should show the frequency of collaborations and their duration over time. Also which collaborators are converging, at which points in time and how often.
+
+_Timeline sketch idea_
+[http://aus-e-stage.googlecode.com/svn-history/r464/trunk/wiki-assets/4-1Timeline.tif]
 
 ===4.2 Shona's Idea===
 I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the career pathways of individual AD's of each company. In my mind the companies sit on one axis (say horizontal) and the individuals sit on another (say vertical). I then imagine where the lines cross. For example, Felicity Bott will cross STEPS and BUZZ. Alice Hollands will cross STEPS and STRUT. There will also be Phillipa Clarke crossing BUZZ and LINK, Chrissie Parrott and Michael Whaites for LINK. And many more too. The idea of incorporating a third dimension for time also sounds good. JB: I'm seeing companies as the horizontal lines, with artists as lines weaving across them and intersecting at events. If the events are spread along the company lines in chronological order, that would get the time element included. So to construct this kind of diagram - you'd select one or more companies and one or more artists - and then ask the system to build a timeline that weaves them together. Rank: 60%
