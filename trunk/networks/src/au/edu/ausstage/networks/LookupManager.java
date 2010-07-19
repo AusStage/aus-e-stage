@@ -18,24 +18,21 @@
 
 package au.edu.ausstage.networks;
 
-// import additional libraries
-import javax.servlet.ServletConfig;
-
 /**
  * A class to manage the lookup of information
  */
 public class LookupManager {
 
 	// declare private class level variables
-	ServletConfig servletConfig = null;
+	DataManager database = null;
 
 	/**
 	 * Constructor for this class
 	 */
-	public LookupManager(ServletConfig config) {
+	public LookupManager(DataManager database) {
 	
-		// store a reference to this ServletConfig for later
-		servletConfig = config;
+		// store a reference to this DataManager for later
+		this.database = database;
 	} // end constructor
 	
 	

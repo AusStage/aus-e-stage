@@ -25,9 +25,16 @@
         This software visualises contributor relationships and exports data for external visualisation
     </description>
     <!-- AusStage -->
-    <!-- Servlets -->
+    <servlet>
+    	<servlet-name>LookupServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.networks.LookupServlet</servlet-class>
+    </servlet>
     
     <!-- Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>LookupServlet</servlet-name>
+        <url-pattern>/lookup/*</url-pattern>
+    </servlet-mapping>
     
     <!-- Joseki -->
     <!-- Servlets -->
@@ -118,8 +125,11 @@
         <!-- Include trailing slash -->
         <param-value>http://beta.ausstage.edu.au/networks/</param-value>
     </context-param> 
-    <!-- Joseki Options --> 
-    
+	<!-- Keep this in sync with path specified in joseki config file -->
+	<context-param>
+		<param-name>pathToTDB</param-name>
+		<param-value><param-value>
+	</context-param>    
     <!-- Add mime mapping for additional files -->
     <mime-mapping>
         <extension>vue</extension>

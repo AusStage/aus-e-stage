@@ -94,7 +94,15 @@ public class LookupServlet extends ServletBaseClass {
 		}
 		
 		// process the request
-		LookupManager lookup = new LookupManager(servletConfig);
+		DataManager database = new DataManager(servletConfig);
+		
+		// connect to the database
+		if(datatbase.connect() == false) {
+			throw new ServletException("Unable to connect to datastore. If problem persists contact the site administrator");
+		}
+		
+		LookupManager lookup = new LookupManager(database);
+		
 		String results = null;
 		
 		// determine the type of lookup to undertake
