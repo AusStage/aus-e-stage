@@ -87,6 +87,33 @@ public class AusStageURI {
 	} // end getURL method
 	
 	/**
+	 * A method to get the id number from a URI
+	 * 
+	 * @param uri the AusStage URI to resolve
+	 * @return    the AusStage id
+	 */
+	public static String getId(String uri) {	
+	
+		// check on the parameter
+		uri = checkParameter(uri);
+		
+		// turn the URI into the component parts
+		String[] elements = uri.split(":");
+		
+		if(elements.length != 3) {
+			throw new IllegalArgumentException("Expected 3 components to the URI, found: " + elements.length);
+		}
+		
+		// check on the first part of the URI
+		if(elements[0].equals(AUSSTAGE_URI_PREFIX) == false) {
+			throw new IllegalArgumentException("First component of URI expected to be '" + AUSSTAGE_URI_PREFIX + "' found: " + elements[0]);
+		}
+		
+		return elements[2];
+			
+	} // end the geId method
+	
+	/**
 	 * A method to build an AusStage URI for a contributor
 	 *
 	 * @param id  the contributor id
@@ -223,14 +250,21 @@ public class AusStageURI {
 			if(value == null) {
 				return value;
 			} else {
-				return value.trim();
+				// trim the value
+				value = value.trim();
+				value = value.replaceAll("<", "");
+				value = value.replaceAll(">", "");
+				return value;
 			}			
 		} else {
 			// no
 			if(value == null) {
 				throw new IllegalArgumentException("Parameter cannot be null");
 			} else {
+				// trim the value
 				value = value.trim();
+				value = value.replaceAll("<", "");
+				value = value.replaceAll(">", "");
 				
 				if(value.equals("")) {
 					throw new IllegalArgumentException("Parameter cannot be empty");
