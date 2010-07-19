@@ -26,10 +26,8 @@ package au.edu.ausstage.networks;
 import javax.servlet.ServletConfig;
 
 // Jena & TDB related packages
-import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.tdb.*;
 
 // import the AusStage vocabularies package
 import au.edu.ausstage.vocabularies.*;
@@ -40,11 +38,10 @@ import au.edu.ausstage.vocabularies.*;
 public class DataManager {
 
 	// declare private class variables
-	ServletConfig servletConfig = null; // store a reference to the servlet config
-	
-	// Jena and TDB related variables
-	String datastorePath = null;
-	Model model = null;
+	ServletConfig servletConfig             = null; // store a reference to the servlet config
+	String sparqlEndpoint                   = null; // store a reference to the SPARQL endpoint
+	QueryExecution execution                = null; // an object the executes a query
+	com.hp.hpl.jena.query.ResultSet results = null; // resultSet after executing a query
 
 	/** 
 	 * Constructor for this class
@@ -54,35 +51,61 @@ public class DataManager {
 		// store a reference to this ServletConfig for later
 		servletConfig = config;
 		
+		// get the URL to the sparql endpoint
+		sparqlEndpoint = config.getServletContext().getInitParameter("sparqlEndpoint");
+		
+		if(sparqlEndpoint == null) {
+			throw new RuntimeException("Unable to load sparqlEndpoint context-param");
+		}
+		
 	} // end constructor
 	
 	/**
-	 * Connect to the RDF datastore
+	 * A method to execute a SPARQL Query
 	 *
-	 * @param  return true if, and only if, the connection was successful
+	 * @param sparqlQuery the query to execute
+	 *
+	 * @return      the results of executing the query
 	 */
-	public boolean connect() {
+	public com.hp.hpl.jena.query.ResultSet executeSparqlQuery(String sparqlQuery) {
 	
-		// get the config parameter
-		datastorePath = servletConfig.getServletContext().getInitParameter("pathToTDB");
+		// get a query object
+		//Query query = QueryFactory.create(sparqlQuery, Syntax.syntaxARQ);
 		
-		if(datastorePath == null) {
-			return false;
+		// get a query execution object
+		execution = QueryExecutionFactory.sparqlService(sparqlEndpoint, sparqlQuery);
+		
+		// execute the query
+		results = execution.execSelect();
+		
+		// return the results of the execution
+		return results;
+	
+	} // end executeSparqlQuery method
+	
+	/**
+	 * A method to tidy up resources after finished with a query
+	 */
+	public void tidyUp() {
+	
+		if(results != null) {
+			results = null;
 		}
 		
-		// connect to the model		
-		model = TDBFactory.createModel(datastorePath);
-		
-		// check the model
-		if(model.isEmpty()) {
-			// the model should not be empty
-			return false;
+		if(execution != null) {
+			execution.close();
 		}
-		
-		// if we get this far assume everything is OK
-		return true;
-			
-	} // end connect method
-
-
+	
+	} // end tidyUp method
+	
+	/**
+	 * Finalize method to be run when the object is destroyed
+	 * plays nice and free up Oracle connection resources etc. 
+	 */
+	protected void finalize() throws Throwable {
+		if(execution != null) {
+			execution.close();
+		}
+	} // end finalize method
+	
 } // end class definition

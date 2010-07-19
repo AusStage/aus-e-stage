@@ -125,11 +125,12 @@
         <!-- Include trailing slash -->
         <param-value>http://beta.ausstage.edu.au/networks/</param-value>
     </context-param> 
-	<!-- Keep this in sync with path specified in joseki config file -->
+	 <!-- Point to the SPARQL endpoint provided by Joseki -->
+   <!-- Mean we could host parts on different machines -->
 	<context-param>
-		<param-name>pathToTDB</param-name>
-		<param-value><param-value>
-	</context-param>    
+		<param-name>sparqlEndpoint</param-name>
+		<param-value></param-value>
+	</context-param>      
     <!-- Add mime mapping for additional files -->
     <mime-mapping>
         <extension>vue</extension>
