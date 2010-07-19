@@ -38,4 +38,6 @@ The NetworkService uses a number of third party libraries that can be divided in
 = Component Overview Diagram =
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview.jpeg http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview-small.jpeg]
 
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/networks-service-component-overview.jpeg Click this link]
+
 (Click image for larger version)
