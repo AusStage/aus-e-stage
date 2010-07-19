@@ -230,10 +230,10 @@ Coding note: it is preferable that the back end stays one step ahead of the disp
 _QUESTION: How is the 'back end' supposed to now which second degree network to store? The user could click on any of the nodes in the network which potentially means a large number of queries or little result. For example consider a network that has 20 nodes. That means, assuming I'm reading the spec correctly, that the 'back end' would need to prepare 20 additional datasets in the event that user selects one of them. That's 19 datasets that were created but were not needed. I think this needs further consideration._
 
 _Interface sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceBasicSearch.png]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch.png]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch2.png]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/nodeVisualIdeas.png]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceBasicSearch.png Basic Search Interface]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch.png Network Interface Sketch 1]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch2.png Network Interface Sketch 2]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/nodeVisualIdeas.png Sketches of Node Visuals]
 
 ===1.2 Time-slider===
 _Priority Ranking: 84%_
@@ -297,8 +297,8 @@ Link information displayed
 An alternative to pop-ups would be to display node and link information in separate panels.
 
 _Pop Up Sketch Ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps.png]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps2.png]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps.png Pop Up Sketch 1]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps2.png Pop Up Sketch 2]
 
 ==2. NETWORK BROWSING - Person-to-person - Text Interface==
 
@@ -310,10 +310,10 @@ The display will list the collaborators name, date range, and a list of their ro
 The layout should be as follows:
 
 _￼Contributor detail page with network browsing collapsed_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/collapsedCollaborators.jpg]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/collapsedCollaborators.jpg Screen Shot]
 
 _Contributor detail page with network browsing expanded_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/CollaboratorsExp.jpg]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/CollaboratorsExp.jpg Screen Shot]
 
 ===2.2 Key organisations===
 _Priority Ranking 72%_
@@ -322,10 +322,10 @@ The display will list the organisations name, date range, and a list of their ro
 The layout should be as follows:
 
 _￼Contributor detail page with organisation network browsing collapsed_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgCollapsed.jpg
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgCollapsed.jpg Screen Shot]
 
 _Contributor detail page with organisation network browsing expanded_￼￼
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgsExpanded.jpg]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgsExpanded.jpg Screen Shot]
 
 
 ==3. NETWORK SEARCH AND DISPLAY - Person-to-person==
@@ -348,7 +348,7 @@ Work flow:
  # Once the user has selected all desired contributors to be mapped _(should there be a limit?)_ the network is displayed in the browsing interface.
 
 _Search for connections between collaborators sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-1P2PSearch.png]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-1P2PSearch.png Search for Connections Between Collaborators Sketch]
 
 ===3.2 Search for events matching criteria===
 
@@ -372,7 +372,7 @@ Work flow:
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
 _Search for contributors by event sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-2NetworkEventCriteria.png]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-2NetworkEventCriteria.png Search for Contributors by Event Sketch]
 
 ===3.3 Search by organisation===
 
@@ -389,7 +389,7 @@ Work flow:
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
 _Search for networks by organisation sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-3NetworkOrganisationAssociates.png]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-3NetworkOrganisationAssociates.png Search for Contributors by Organisation Sketch]
 
 ===3.4 Search by venue===
 
@@ -406,7 +406,7 @@ Work flow:
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
 _Search for networks by venue sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-4NetworkVenueAssociates.png]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-4NetworkVenueAssociates.png Search for Contributors by Venue Sketch]
 
 ==4. NETWORKS+TIMELINES==
 
@@ -427,7 +427,7 @@ The timeline should be interactive, see the Similie Project's interactive timeli
 This type of visualisation should show the frequency of collaborations and their duration over time. Also which collaborators are converging, at which points in time and how often.
 
 _Timeline sketch idea_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/4-1Timeline.png]
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/4-1Timeline.png Timeline Interface Sketch]
 
 ===4.2 Shona's Idea===
 I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the career pathways of individual AD's of each company. In my mind the companies sit on one axis (say horizontal) and the individuals sit on another (say vertical). I then imagine where the lines cross. For example, Felicity Bott will cross STEPS and BUZZ. Alice Hollands will cross STEPS and STRUT. There will also be Phillipa Clarke crossing BUZZ and LINK, Chrissie Parrott and Michael Whaites for LINK. And many more too. The idea of incorporating a third dimension for time also sounds good. JB: I'm seeing companies as the horizontal lines, with artists as lines weaving across them and intersecting at events. If the events are spread along the company lines in chronological order, that would get the time element included. So to construct this kind of diagram - you'd select one or more companies and one or more artists - and then ask the system to build a timeline that weaves them together. Rank: 60%
