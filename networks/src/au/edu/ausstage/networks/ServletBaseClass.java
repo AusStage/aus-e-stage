@@ -22,6 +22,7 @@ package au.edu.ausstage.networks;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import java.util.*;
 
 /**
  * A class to respond to requests to lookup data
@@ -95,8 +96,7 @@ public abstract class ServletBaseClass extends HttpServlet {
 		if(isValid(value) == false) {
 			return false;
 		}
-		
-		
+	
 		// can we parse the value as a int?
 		try {
 			Integer.parseInt(value);
@@ -110,20 +110,19 @@ public abstract class ServletBaseClass extends HttpServlet {
 	
 	} // end the isValid method
 	
-//	/**
-//	 * Method to respond to a get request
-//	 *
-//	 * @param request a HttpServletRequest object representing the current request
-//	 * @param response a HttpServletResponse object representing the current response
-//	 */
-//	public abstract void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
-//	
-//	/**
-//	 * Method to respond to a post request
-//	 *
-//	 * @param request a HttpServletRequest object representing the current request
-//	 * @param response a HttpServletResponse object representing the current response
-//	 */
-//	public abstract void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+	/**
+	 * A method to sort a map in reverse order
+	 * based on: http://forums.sun.com/thread.jspa?threadID=5152322
+	 *
+	 * @param inputMap the map to sort in reverse
+	 * @return         the map sorted in reverse order
+	 */
+	public Map<Integer, Object> reverseSortMapByKey (Map<Integer, Object> inputMap) {
+        Comparator < Integer > reverse = Collections.reverseOrder();
+        TreeMap<Integer, Object> result = new TreeMap<Integer, Object>(reverse);
+        result.putAll(inputMap);
+        return result;
+    } // end reverseSortMapByKey method
+	
 
 } // end class definition

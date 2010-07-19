@@ -30,6 +30,7 @@ public class LookupServlet extends ServletBaseClass {
 
 	// declare private variables
 	private ServletConfig servletConfig;
+	private DataManager database;
 	
 	// declare private constants
 	private static final String[] TASK_TYPES   = {"key-collaborators", "key-organisations"};
@@ -45,6 +46,9 @@ public class LookupServlet extends ServletBaseClass {
 		
 		// store configuration for later
 		servletConfig = conf;
+		
+		// instantiate a database manager object
+		database = new DataManager(conf);
 		
 	} // end init method
 	
@@ -70,7 +74,7 @@ public class LookupServlet extends ServletBaseClass {
 
 		// check on the id parameter
 		if(isValidInt(id) == false) {
-			throw new ServletException("Missing or invalud id parameter.");
+			throw new ServletException("Missing or invalid id parameter.");
 		}
 
 		// check the format parameter
@@ -93,14 +97,7 @@ public class LookupServlet extends ServletBaseClass {
 			}
 		}
 		
-		// process the request
-		DataManager database = new DataManager(servletConfig);
-		
-		// connect to the database
-		if(datatbase.connect() == false) {
-			throw new ServletException("Unable to connect to datastore. If problem persists contact the site administrator");
-		}
-		
+		// instantiate a lookup object
 		LookupManager lookup = new LookupManager(database);
 		
 		String results = null;
@@ -109,6 +106,25 @@ public class LookupServlet extends ServletBaseClass {
 		if(taskType.equals("key-collaborators") == true) {
 			results = lookup.getKeyCollaborators(id, formatType, sortType);
 		}
+		
+		// output the appropriate mime type
+		if(formatType == "html") {
+			// output html mime type
+			response.setContentType("text/html; charset=UTF-8");
+		} else if(formatType == "xml") {
+			// output xml mime type
+			response.setContentType("text/xml; charset=UTF-8");
+		} else if(formatType == "json") {
+			// output json mime type
+			response.setContentType("application/json; charset=UTF-8");
+		}
+		
+		//debug code
+		response.setContentType("text/plain; charset=UTF-8");
+		
+		// output the results of the lookup
+		PrintWriter out = response.getWriter();
+		out.print(results);
 	
 	} // end doGet method
 	
