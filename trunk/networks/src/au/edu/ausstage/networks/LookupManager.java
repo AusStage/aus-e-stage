@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 // import the AusStage vocabularies package
 import au.edu.ausstage.vocabularies.*;
+import au.edu.ausstage.utils.DateUtils;
 
 /**
  * A class to manage the lookup of information
@@ -168,7 +169,7 @@ public class LookupManager {
 		}
 		
 		//debug code
-		formatType = "html";
+		formatType = "xml";
 		
 		// define a variable to store the data
 		String dataString = null;
@@ -246,6 +247,9 @@ public class LookupManager {
 		// declare helper variables
 		StringBuilder htmlMarkup   = new StringBuilder("<table id=\"key-collaborators\">");
 		String[]      functions    = null;
+		String[]      tmp          = null;
+		String        firstDate    = null;
+		String        lastDate     = null;
 		Collaborator  collaborator = null;
 		
 		while(iterator.hasNext()) {
@@ -260,11 +264,18 @@ public class LookupManager {
 			htmlMarkup.append("<td><a href=\"" + StringEscapeUtils.escapeHtml(collaborator.url) + "\" title=\"View " + collaborator.name + " record in AusStage\">");
 			htmlMarkup.append(collaborator.name + "</a></td>");
 			
+			// build the dates
+			tmp = DateUtils.getExplodedDate(collaborator.firstDate, "-");
+			firstDate = DateUtils.buildDisplayDate(tmp[0], tmp[1], tmp[2]);
+			
+			tmp = DateUtils.getExplodedDate(collaborator.lastDate, "-");
+			lastDate = DateUtils.buildDisplayDate(tmp[0], tmp[1], tmp[2]);
+			
 			// add the cell with the collaboration period
-			htmlMarkup.append("<td>" + collaborator.firstDate + " - " + collaborator.lastDate + "</td>");
+			htmlMarkup.append("<td>" + firstDate + " - " + lastDate + "</td>");
 			
 			// add the functions
-			htmlMarkup.append("<td>" + collaborator.function.replaceAll("|", "<br/>") + "</td>");
+			htmlMarkup.append("<td>" + collaborator.function.replaceAll("\\|", "<br/>") + "</td>");
 			
 			// end the row
 			htmlMarkup.append("</tr>");			
@@ -278,13 +289,41 @@ public class LookupManager {
 	} // end the createHTMLOutput method
 	
 	/**
-	 * A method to take a group of collaborators and output HTML encoded text
+	 * A method to take a group of collaborators and output XML encoded text
 	 *
 	 * @param collaborators the list of collaborators
 	 * @return              the HTML encoded string
 	 */
 	private String createXMLOutput(TreeMap<Integer, Collaborator> collaborators) {
-		return "";
+		// assume that all sorting and ordering has already been carried out
+		// loop through the list of collaborators and add them to the new JSON objects
+		Collection values = collaborators.values();
+		Iterator   iterator = values.iterator();
+		
+		// declare helper variables
+		StringBuilder xmlMarkup    = new StringBuilder("<?xml version=\"1.0\"?><collaborators>");
+		Collaborator  collaborator = null;
+		
+		while(iterator.hasNext()) {
+		
+			// get the collaborator
+			collaborator = (Collaborator)iterator.next();
+			
+			xmlMarkup.append("<collaborator id=\"" + collaborator.id + "\">");
+			
+			xmlMarkup.append("<url>" + StringEscapeUtils.escapeXml(collaborator.url) + "</url>");
+			xmlMarkup.append("<name>" + collaborator.name + "</name>");
+			xmlMarkup.append("<function>" + collaborator.function + "</function>");
+			xmlMarkup.append("<firstDate>" + collaborator.firstDate + "</firstDate>");
+			xmlMarkup.append("<lastDate>" + collaborator.lastDate + "</lastDate>");
+			xmlMarkup.append("<collaborations>" + collaborator.collaborations + "</collaborations>");
+			xmlMarkup.append("</collaborator>");
+		}
+		
+		// end the table
+		xmlMarkup.append("</collaborators>");
+		
+		return xmlMarkup.toString();
 	
 	} // end createXMLOutput method
 	
