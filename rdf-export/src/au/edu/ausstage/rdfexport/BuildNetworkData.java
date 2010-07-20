@@ -24,6 +24,9 @@ import java.sql.ResultSet;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 // import the Jena related packages
 import com.hp.hpl.jena.rdf.model.*;
@@ -31,6 +34,11 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.tdb.*;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+
+//debug code
+import com.hp.hpl.jena.sparql.sse.Item;
+import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
+import com.hp.hpl.jena.tdb.store.GraphTDB;
 
 // import the vocabularies
 import au.edu.ausstage.vocabularies.*;
@@ -137,6 +145,7 @@ public class BuildNetworkData {
 		return true;
 		
 	} // end the doReset method
+
 	
 	/**
 	 * A method to undertake the task of building the dataset
@@ -887,10 +896,92 @@ public class BuildNetworkData {
 			return false;
 		}
 		
+		/*
+		 * generate the statistics files
+		 */
+		System.out.println("INFO: Writing BGP optimiser file...");
+		
+		// ensure that everything has been written
+		TDB.sync(model);
+		model.close();
+		model = null;
+		TDB.closedown();
+		
+		// pause for five seconds to allow writes to finish etc. 
+		try {
+			Thread.sleep(5000);
+		} catch (java.lang.InterruptedException ex) {}
+		
+		// reconnect to the TDB datastore and generate the statistics file
+		model = TDBFactory.createModel(datastorePath);
+		 
+		// get the graph from the model 
+		GraphTDB graph = (GraphTDB) model.getGraph(); // TDB Specific graph class (Graph is a lower level representation of the data)
+		 
+		// gather the statistics
+		Item item = StatsCollector.gatherTDB(graph);
+		
+		// delete the existing stats file
+		boolean status;
+		File opt = new File(datastorePath + "/fixed.opt");
+		
+		try {
+			status = opt.delete();
+			
+			if(status == false) {
+				System.err.println("WARN: Unable to delete the old query optimisation file:");
+				System.err.println("      " + opt.getAbsolutePath());
+			}
+		} catch (SecurityException ex) {
+			System.err.println("WARN: Unable to delete the old query optimisation file:");
+			System.err.println("      " + opt.getAbsolutePath());
+		}
+		
+		if(status = true) {
+			
+			// reset the opt variable to a new file
+			opt = null;
+			
+			opt = new File(datastorePath + "/stats.opt");
+			
+			try {
+				status = opt.createNewFile();
+				
+				if(status = true) {
+					// file was created successfully
+			
+					// instantiate a PrintWriter so we can write to the file
+					PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(opt), "UTF8"));
+					
+					// write the stats to the file
+					output.print(item.toString());
+					
+					// close the file
+					output.close();
+				}
+					
+			} catch (IOException ex) {
+				System.err.println("WARN: Unable to create the TDB optimisation file:");
+				System.err.println("       " + opt.getAbsolutePath());
+			} catch (SecurityException ex) {
+				System.err.println("WARN: Unable to create the TDB optimisation file:");
+				System.err.println("       " + opt.getAbsolutePath());
+			}
+		}
+		
+		// play nice and tidy up
+		TDB.sync(model);
+		model.close();
+		model = null;
+		TDB.closedown();
+		database = null;
+		
+		System.out.println("INFO: BGP optimiser file successfully written");
 		
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
+
 	
 	/**
 	 * A method used to build a date from the components in the AusStage database
