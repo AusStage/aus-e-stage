@@ -29,6 +29,13 @@ Our understanding of statistical concepts for social network analysis draws on J
 
 The Vizster project (http://hci.stanford.edu/jheer/projects/vizster/) provides a valuable model of an interactive interface to network data. Vizster addresses issues of focus and context in visualising networks, and presents an interactive interface for exploring network structure. Its design was guided by ethnographic research of online communities and it is the only network interface which, to our knowledge, has been subject to user testing (Heer and Boyd 2005). 
 
+Some other examples of interactive interfaces for exploring network data include:
+
+ * http://www.liveplasma.com/
+ * http://www.netvis.org/code.php
+ * http://apps.asterisq.com/mentionmap/
+ * http://rama.inescporto.pt/
+
 Additional online resources which have informed our understanding of social networks, their visualisation and analysis include:
 
   * International Network for Social Network Analysis http://www.insna.org/
