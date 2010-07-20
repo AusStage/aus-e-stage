@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the AusStage Mapping Service.  
+ * along with the AusStage Navigating Networks Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -21,7 +21,8 @@ package au.edu.ausstage.networks;
 // import additional libraries
 import com.hp.hpl.jena.query.*;
 import java.util.*;
-import com.google.gson.*;
+import org.json.simple.*;
+import org.apache.commons.lang.StringEscapeUtils;
 
 // import the AusStage vocabularies package
 import au.edu.ausstage.vocabularies.*;
@@ -167,10 +168,125 @@ public class LookupManager {
 		}
 		
 		//debug code
-		Gson gson = new Gson();
-		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(collaborators);
+		formatType = "html";
+		
+		// define a variable to store the data
+		String dataString = null;
+		
+		if(formatType.equals("html") == true) {
+			dataString = createHTMLOutput(collaborators);
+		} else if(formatType.equals("xml") == true) {
+			dataString = createXMLOutput(collaborators);
+		} else if(formatType.equals("json") == true) {
+			dataString = createJSONOutput(collaborators);
+		}
+		
+		// return the data
+		return dataString;
 	}
+	
+	/**
+	 * A method to take a group of collaborators and output JSON encoded text
+	 *
+	 * @param collaborators the list of collaborators
+	 * @return              the JSON encoded string
+	 */
+	@SuppressWarnings("unchecked")
+	private String createJSONOutput(TreeMap<Integer, Collaborator> collaborators) {
+	
+		// assume that all sorting and ordering has already been carried out
+		// loop through the list of collaborators and add them to the new JSON objects
+		Collection values = collaborators.values();
+		Iterator   iterator = values.iterator();
+		
+		// declare helper variables
+		JSONArray  list = new JSONArray();
+		JSONObject object = null;
+		Collaborator collaborator = null;
+		
+		while(iterator.hasNext()) {
+		
+			// get the collaborator
+			collaborator = (Collaborator)iterator.next();
+			
+			// start a new JSON object
+			object = new JSONObject();
+			
+			// build the object
+			object.put("id", collaborator.id);
+			object.put("url", collaborator.url);
+			object.put("name", collaborator.name);
+			object.put("function", collaborator.function);
+			object.put("firstDate", collaborator.firstDate);
+			object.put("lastDate", collaborator.lastDate);
+			object.put("collaborations", new Integer(collaborator.collaborations));
+			
+			// add the new object to the array
+			list.add(object);		
+		}
+		
+		// return the JSON encoded string
+		return list.toString();
+			
+	} // end the createJSONOutput method
+	
+	/**
+	 * A method to take a group of collaborators and output HTML encoded text
+	 *
+	 * @param collaborators the list of collaborators
+	 * @return              the HTML encoded string
+	 */
+	private String createHTMLOutput(TreeMap<Integer, Collaborator> collaborators) {
+	
+		// assume that all sorting and ordering has already been carried out
+		// loop through the list of collaborators and add them to the new JSON objects
+		Collection values = collaborators.values();
+		Iterator   iterator = values.iterator();
+		
+		// declare helper variables
+		StringBuilder htmlMarkup   = new StringBuilder("<table id=\"key-collaborators\">");
+		String[]      functions    = null;
+		Collaborator  collaborator = null;
+		
+		while(iterator.hasNext()) {
+		
+			// get the collaborator
+			collaborator = (Collaborator)iterator.next();
+			
+			// start the row
+			htmlMarkup.append("<tr id=\"key-collaborator-" + collaborator.id + "\">");
+			
+			// add the cell with the link and name
+			htmlMarkup.append("<td><a href=\"" + StringEscapeUtils.escapeHtml(collaborator.url) + "\" title=\"View " + collaborator.name + " record in AusStage\">");
+			htmlMarkup.append(collaborator.name + "</a></td>");
+			
+			// add the cell with the collaboration period
+			htmlMarkup.append("<td>" + collaborator.firstDate + " - " + collaborator.lastDate + "</td>");
+			
+			// add the functions
+			htmlMarkup.append("<td>" + collaborator.function.replaceAll("|", "<br/>") + "</td>");
+			
+			// end the row
+			htmlMarkup.append("</tr>");			
+		}
+		
+		// end the table
+		htmlMarkup.append("</table>");
+		
+		return htmlMarkup.toString();
+	
+	} // end the createHTMLOutput method
+	
+	/**
+	 * A method to take a group of collaborators and output HTML encoded text
+	 *
+	 * @param collaborators the list of collaborators
+	 * @return              the HTML encoded string
+	 */
+	private String createXMLOutput(TreeMap<Integer, Collaborator> collaborators) {
+		return "";
+	
+	} // end createXMLOutput method
 	
 	/**
 	 * A method to sort a map in reverse order
