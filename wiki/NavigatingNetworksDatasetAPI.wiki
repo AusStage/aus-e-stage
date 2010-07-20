@@ -1,10 +1,10 @@
 #summary How to access the Navigating Networks Data via the API
 
-= Introduction =
-
 There are two ways to gain access to data held within the [NavigatingNetworksDataset Navigating Networks Dataset]. For the more advanced user a [NavigatingNetworksSparqlEndpoint SPARQL Endpoint] is available. This can be particularly useful for creating ad-hoc queries. 
 
 The second way of retrieving data is by using the [http://en.wikipedia.org/wiki/Application_programming_interface API] as outlined on this page. 
+
+<wiki:toc max_depth="3" />
 
 = Lookup API =
 
