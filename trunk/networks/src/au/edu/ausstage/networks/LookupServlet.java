@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the AusStage Mapping Service.  
+ * along with the AusStage Navigating Networks Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -69,7 +69,7 @@ public class LookupServlet extends ServletBaseClass {
 		// check on the taskType parameter
 		if(isValid(taskType, TASK_TYPES) == false) {
 			// no valid task type was found
-			throw new ServletException("Missing task type parameter. Expected: " + java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
+			throw new ServletException("Missing task parameter. Expected one of: " + java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
 		}
 
 		// check on the id parameter
