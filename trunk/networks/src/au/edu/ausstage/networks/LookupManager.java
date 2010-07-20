@@ -69,7 +69,7 @@ public class LookupManager {
 						   + "PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> "
  						   + "SELECT ?collaborator ?collabGivenName ?collabFamilyName ?function ?firstDate ?lastDate ?collabCount "
 						   + "WHERE {  "
-						   + "       <ausstage:c:774> a foaf:Person ; "
+						   + "       @ a foaf:Person ; "
 						   + "                      ausestage:hasCollaboration ?collaboration. "
 						   + "       ?collaboration ausestage:collaborator ?collaborator; "
 						   + "                      ausestage:collaborationFirstDate ?firstDate; "
@@ -93,70 +93,67 @@ public class LookupManager {
 		sparqlQuery = sparqlQuery.replaceAll("@", "<" + id + ">");
 		
 		// execute the query
-		com.hp.hpl.jena.query.ResultSet results = database.executeSparqlQuery(sparqlQuery);	
+		com.hp.hpl.jena.query.ResultSet results = database.executeSparqlQuery(sparqlQuery);
 		
-		// process the results
-		if(sortType.equals("name") == false) {
-			// use a numeric sort order
-			while (results.hasNext()) {
-				// loop though the resulset
-				// get a new row of data
-				row = results.nextSolution();
-				
-				// check to see if we've seen this collaborator before
-				if(collaborators.containsKey(new Integer(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
-					// no we haven't
-				
-					// start a new collaborator
-					collaborator = new Collaborator();
-					
-					// get the name
-					collaborator.name = row.get("collabGivenName").toString() + " " + row.get("collabFamilyName").toString();	
-					
-					// get the dates
-					collaborator.firstDate = row.get("firstDate").toString();
-					collaborator.lastDate  = row.get("lastDate").toString();
+		// build the dataset
+		// use a numeric sort order
+		while (results.hasNext()) {
+			// loop though the resulset
+			// get a new row of data
+			row = results.nextSolution();
 			
-					// get the collaboration count
-					collaborator.collaborations = row.get("collabCount").toString();
+			// check to see if we've seen this collaborator before
+			if(collaborators.containsKey(new Integer(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
+				// no we haven't
+			
+				// start a new collaborator
+				collaborator = new Collaborator();
 				
-					// add the url
-					collaborator.url = AusStageURI.getURL(row.get("collaborator").toString());
+				// get the name
+				collaborator.givenName  = row.get("collabGivenName").toString();
+				collaborator.familyName = row.get("collabFamilyName").toString();
+				collaborator.name = collaborator.givenName + " " + collaborator.familyName;
+								
+				// get the dates
+				collaborator.firstDate = row.get("firstDate").toString();
+				collaborator.lastDate  = row.get("lastDate").toString();
+		
+				// get the collaboration count
+				collaborator.collaborations = row.get("collabCount").toString();
+			
+				// add the url
+				collaborator.url = AusStageURI.getURL(row.get("collaborator").toString());
+			
+				// add the id
+				collaborator.id = AusStageURI.getId(row.get("collaborator").toString());
+			
+				// add the function
+				collaborator.function = row.get("function").toString();
+			
+				// add this collaborator to the list
+				collaborators.put(new Integer(collaborator.id), collaborator);
+			} else {
+				// yes we have
+				// get the existing collaborator
+				collaborator = collaborators.get(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString())));
 				
-					// add the id
-					collaborator.id = AusStageURI.getId(row.get("collaborator").toString());
-				
-					// add the function
-					collaborator.function = row.get("function").toString();
-				
-					// add this collaborator to the list
-					collaborators.put(new Integer(collaborator.id), collaborator);
-				} else {
-					// yes we have
-					// get the existing collaborator
-					collaborator = collaborators.get(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString())));
-					
-					// update the function
-					collaborator.function = collaborator.function + " | " + row.get("function").toString();
-				}
+				// update the function
+				collaborator.function = collaborator.function + " | " + row.get("function").toString();
 			}
-			
-		} else {
-			// process using name sort order
 		}
 		
 		// play nice and tidy up
 		database.tidyUp();
 		
-		// do we need to sort into collaboration count order?
+		// do we need to sort the list of collaborators
 		if(sortType.equals("count") == true) {
-			// yes
+			// yes - in order of collaboration count
 			
 			// define a new collection of collaborators
 			java.util.TreeMap<Integer, Collaborator> collaboratorsToSort = new java.util.TreeMap<Integer, Collaborator>();
 			
 			// loop through the list of collaborators and add them to the new set
-			Collection values = collaborators.values();
+			Collection values   = collaborators.values();
 			Iterator   iterator = values.iterator();
 			
 			while(iterator.hasNext()) {
@@ -166,10 +163,48 @@ public class LookupManager {
 			
 			// sort them
 			collaborators = reverseSortMapByKey(collaboratorsToSort);
+			
+			collaboratorsToSort = null;
+			
+		} else if(sortType.equals("name") == true) {
+			// yes - by name			
+			java.util.TreeMap<String, Collaborator> collaboratorsToSort = new java.util.TreeMap<String, Collaborator>();
+			
+			// loop through the list of collaborators and add them to the new set
+			Collection values   = collaborators.values();
+			Iterator   iterator = values.iterator();
+			String     index    = null;
+			
+			while(iterator.hasNext()) {
+				collaborator = (Collaborator)iterator.next();
+				
+				// derive an index value from the name
+				index = collaborator.familyName;
+				index = index + collaborator.givenName;
+				index = index.toLowerCase();
+				index = index.replaceAll(" ", "");
+				
+				// use the index in the new collection
+				collaboratorsToSort.put(index, collaborator);				
+			}
+			
+			// rebuild the collaborators collection
+			values   = collaboratorsToSort.values();
+			iterator = values.iterator();
+			int newIndex = 0;
+			
+			collaborators.clear();
+			
+			while(iterator.hasNext()) {
+				collaborator = (Collaborator)iterator.next();
+				
+				collaborators.put(newIndex, collaborator);
+				
+				newIndex++;
+			}
+
+			collaboratorsToSort = null;
 		}
-		
-		//debug code
-		formatType = "xml";
 		
 		// define a variable to store the data
 		String dataString = null;
@@ -349,6 +384,8 @@ public class LookupManager {
 		// declare public variables
 		public String id;
 		public String url;
+		public String givenName;
+		public String familyName;
 		public String name;
 		public String function;
 		public String firstDate;
