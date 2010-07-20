@@ -17,6 +17,7 @@
      * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksGoals   Service Goals]
      * [NavigatingNetworksDataset Dataset]
+       * [NavigatingNetworksDatasetAPI DataSet API]
        * [AuseStageOntology Aus-e-Stage Ontology] 
        * [NavigatingNetworksSparqlEndpoint SPARQL End Point]
        * [NavigatingNetworksSparql  Sample SPARQL Queries]
