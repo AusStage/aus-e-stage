@@ -18,10 +18,14 @@
 
 package au.edu.ausstage.utils;
 
+// import additional libraries
+import java.util.GregorianCalendar;
+import java.text.DateFormat;
+
 /**
  * A class of methods useful when processing dates in AusStage Services
  */
-public static class DateUtils {
+public class DateUtils {
 
 /**
 	 * A method used to build a date for use Marker XML and KML data
@@ -61,7 +65,7 @@ public static class DateUtils {
 	
 		if(year != null) {
 		 
-		 	String date = day + " " + this.lookupMonth(month) + " " + year;
+		 	String date = day + " " + lookupMonth(month) + " " + year;
 		 	date = date.replace("null","");
 		 	date = date.trim();
 			return date;
@@ -207,6 +211,56 @@ public static class DateUtils {
 		}
 	
 		// return the exploded Date
+		return explodedDate;
+	
+	} // end getExplodedDate method
+	
+	/**
+	 * A method to explode a date in 8 digit format into the three components.
+	 * Where a date component can not be determined null is used
+	 *
+	 * Assumes the format yyyy-mm-dd where - is a delimiter
+	 *
+	 * Array elements are [0] - year, [1] - month, [2] - day
+	 *
+	 * @param date the date to explode
+	 * @param delim the delimiter in the date components
+	 *
+	 * @return     an array with three elements containing the date components
+	 */
+	public static String[] getExplodedDate(String date, String delim) {
+	
+		// declare helper variables
+		String[] explodedDate = new String[3];
+		String[] tmp          = new String[3];
+		
+		// set initial values
+		explodedDate[0] = null;
+		explodedDate[1] = null;
+		explodedDate[2] = null;
+		
+		if(date == null) {
+			return explodedDate;
+		}
+		
+		// trim the date
+		date = date.trim();
+		
+		if(date.equals("") == true) {
+			return null;
+		}
+		
+		tmp = date.split(delim);
+		
+		if(tmp.length == 3) {
+			return tmp;
+		} else if (tmp.length == 1) {
+			explodedDate[0] = tmp[0];
+		} else if(tmp.length == 2) {
+			explodedDate[0] = tmp[0];
+			explodedDate[1] = tmp[1];
+		}
+		
 		return explodedDate;
 	
 	} // end getExplodedDate method
