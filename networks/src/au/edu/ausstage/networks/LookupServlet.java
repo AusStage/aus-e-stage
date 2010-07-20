@@ -119,9 +119,6 @@ public class LookupServlet extends ServletBaseClass {
 			response.setContentType("application/json; charset=UTF-8");
 		}
 		
-		//debug code
-		response.setContentType("text/plain; charset=UTF-8");
-		
 		// output the results of the lookup
 		PrintWriter out = response.getWriter();
 		out.print(results);
