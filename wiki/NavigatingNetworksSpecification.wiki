@@ -192,7 +192,7 @@ Our experience in using network visualisation for analysis is characterised by z
 
 ===An interest in quality===
 
-Researchers are interested in articulating the significance and quality of artistic collaborations. While these measures imply qualitative research, the are three aspects of data available in AusStage which could assist researchers in identifying quality and significance of a relationship between two or more artists: the number of their collaborations, the frequency of their collaboration over time (and changes in the frequency), and their artistic functions(and again, changes in function over time).
+Researchers are interested in articulating the significance and quality of artistic collaborations. While these measures imply qualitative research, the are three aspects of data available in AusStage which could assist researchers in identifying quality and significance of a relationship between two or more artists: the number of their collaborations, the frequency of their collaboration over time (and changes in the frequency), their artistic functions(and again, changes in function over time), and their position (or 'betweeness') within an artistic network.
 
 ===The significance of time===
 
@@ -314,10 +314,11 @@ _Pop Up Sketch Ideas_
 _Priority Ranking 84%._
 
 The contributor detail page within AusStage should display a collapsible list of collaborators, ordered by frequency of collaborations - most frequent, to least frequent. 
-The display will list the collaborators name, date range, and a list of their artistic functions. The collaborators name should be a link to their contributor detail page.
-The layout should be as follows:
+The display will list the collaborator's name, collaboration count, year range, and a list of the collaborator's artistic functions. The collaborator's name is a link to their contributor detail page.
 
-_￼Contributor detail page with network browsing collapsed_
+The layout should be as follows: *images to be updated*
+
+_Contributor detail page with network browsing collapsed_
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/collapsedCollaborators.jpg Screen Shot]
 
 _Contributor detail page with network browsing expanded_
@@ -325,9 +326,11 @@ _Contributor detail page with network browsing expanded_
 
 ===2.2 Key organisations===
 _Priority Ranking 72%_
+
 The contributor detail page within AusStage should display a collapsible list of organisations, ordered by frequency of collaborations - most frequent, to least frequent. 
-The display will list the organisations name, date range, and a list of their artistic functions. The organisations name should be a link to their organisation detail page.
-The layout should be as follows:
+The display will list the organisation's name, collaboration count, year range, and a list of the contributor's artistic functions. The organisations name should be a link to their organisation detail page.
+
+The layout should be as follows: *images to be updated*
 
 _￼Contributor detail page with organisation network browsing collapsed_
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgCollapsed.jpg Screen Shot]
