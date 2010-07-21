@@ -71,7 +71,7 @@ In August 2010, Bollen is returning to UCLA for a two-week institute on [http://
 
 ==Workflow==
 
-To prepare the visualisations, queries in Structure Query Language (SQL) were constructed and used to export sets of data from the AusStage database. Data were extracted from the Event, Contributor and ConEvLink tables in AusStage. The key fields were EventID, Event Name, First Date, ContributorID, Contributor Name and Role fields. Other fields were used to narrow the selection by venue, company, etc. The AusStage project manager generated large exports using Oracle administrator software; the AusStage data entry interface provides an SQL facility which limits returns to 250 rows.
+To prepare the visualisations, queries in Structure Query Language (SQL) were constructed and used to export sets of data from the AusStage database. Data were extracted from the Event, Contributor and ConEvLink tables in AusStage. The key fields were EventID, Event Name, First Date, ContributorID, Contributor Name and Function fields. Other fields were used to narrow the selection by venue, company, etc. The AusStage project manager generated large exports using Oracle administrator software; the AusStage data entry interface provides an SQL facility which limits returns to 250 rows.
 
 AusStage records associations between events and contributors (cast and crew); it does not directly record associations between contributions. A manipulation to transform event-contributor relations into a series of contributor-contributor relations based on event associations was devised. This transformation was applied to the exported datasets. 
 
@@ -131,7 +131,7 @@ Artist-to-artist visualisations display connections between artists who have wor
 
 Practitioners who have worked on productions together exert a pull on each other and cluster closely together. This pull is strongest when practitioners have worked together on productions with many other contributors who have also worked together on other productions. 
 
-We have also visualised other network attributes, specifically measures of node centrality such as ‘degree of connection’ and ‘betweenness’ using colour and size; and we have distinguished contributor roles using node shape. 
+We have also visualised other network attributes, specifically measures of node centrality such as ‘degree of connection’ and ‘betweenness’ using colour and size; and we have distinguished contributor functions using node shape. 
 
 ‘Degree of connection’ represents the extent to which artists have collaborated with others. ‘Betweenness’ is a complex measure of the extent to which an artist lies between other artists in the network: it identifies artists whose collaborations join areas of the network together; they are the anchor points, without which clusters of practitioners would float free (as, indeed, some do).
 
@@ -145,7 +145,7 @@ Returning to the person-to-person approach, we graphed the network of relations 
 
 _Animation_
 
-We continued our exploration of how networks change over time by graphically animating dynamic network data. Our preliminary animations focus on four theatre companies associated with Flinders University Drama Centre. These animations reveal a similar branching and consolidating dynamic. They reveal patterns of transition as the role of leading collaborators shifts over time. They also reveal patterns of growth, consolidation, release and reorganisation, reminiscent of the four-phase model of ecosystem dynamics.
+We continued our exploration of how networks change over time by graphically animating dynamic network data. Our preliminary animations focus on four theatre companies associated with Flinders University Drama Centre. These animations reveal a similar branching and consolidating dynamic. They reveal patterns of transition as the function of leading collaborators shifts over time. They also reveal patterns of growth, consolidation, release and reorganisation, reminiscent of the four-phase model of ecosystem dynamics.
 
 =RESEARCH NEEDS=
 
@@ -155,7 +155,7 @@ This section summarises research needs for network analysis from the AusStage ph
 
 AusStage researchers are taking an entirely new approach to analysing performance data by asking the question, ‘Who works with whom?’. The National eResearch Architecture Taskforce is funding the technological development of an interface for navigating the network of artistic collaborations in the AusStage dataset. ARC LIEF is funding research to enhance the representation of artists in the AusStage user interface. These development activities are driven by the research needs of the Networks Cluster of AusStage Phase 4: Jonathan Bollen (Flinders), Kim Durban (Ballarat), Shona Erskine and Nanette Hassal (ECU), Glen McGillivray (Sydney/UWS) and Helen Trenos (Tasmania). 
 
-AusStage researchers want to explore the network of artistic collaborations in the AusStage dataset. A network-based interface will humanize the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. Network visualisation and analysis will enable researchers to interrogate patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. The AusStage partnership has also identified a suite of related improvements for recording and displaying information about artists and their work, including: displaying artists’ associations with events by artistic role; recording details of funding and awards; improving the navigation between artistic collaborators; and using the upgraded interface to encourage artists and organisations to participate in data curation. To this end, a methodology based on social network analysis (Scott 2000) will be applied: artists identified as network ‘hubs’ in the dataset – those who have worked with many other artists – will be invited to review records and submit contributions.
+AusStage researchers want to explore the network of artistic collaborations in the AusStage dataset. A network-based interface will humanize the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. Network visualisation and analysis will enable researchers to interrogate patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. The AusStage partnership has also identified a suite of related improvements for recording and displaying information about artists and their work, including: displaying artists’ associations with events by artistic function; recording details of funding and awards; improving the navigation between artistic collaborators; and using the upgraded interface to encourage artists and organisations to participate in data curation. To this end, a methodology based on social network analysis (Scott 2000) will be applied: artists identified as network ‘hubs’ in the dataset – those who have worked with many other artists – will be invited to review records and submit contributions.
 
 ==Aus-e-Stage==
 
@@ -192,7 +192,7 @@ Our experience in using network visualisation for analysis is characterised by z
 
 ===An interest in quality===
 
-Researchers are interested in articulating the significance and quality of artistic collaborations. While these measures imply qualitative research, the are three aspects of data available in AusStage which could assist researchers in identifying quality and significance of a relationship between two or more artists: the number of their collaborations, the frequency of their collaboration over time (and changes in the frequency), and their respective roles (and again, changes in roles over time).
+Researchers are interested in articulating the significance and quality of artistic collaborations. While these measures imply qualitative research, the are three aspects of data available in AusStage which could assist researchers in identifying quality and significance of a relationship between two or more artists: the number of their collaborations, the frequency of their collaboration over time (and changes in the frequency), and their artistic functions(and again, changes in function over time).
 
 ===The significance of time===
 
@@ -260,14 +260,14 @@ Work flow:
 ===1.3 Faceted browsing===
 _Priority Ranking 84%_
 
-Included in the Network Browsing interface will be a panel of criteria represented as checkboxes, select menus and open text boxes. Criteria relate to the nodes (e.g. gender, nationality) or to information aggregated to nodes from event associations (e.g. role). Selecting one or multiple criteria will highlight nodes that match that criteria, whilst fading the nodes that don’t match. 
+Included in the Network Browsing interface will be a panel of criteria represented as checkboxes, select menus and open text boxes. Criteria relate to the nodes (e.g. gender, nationality) or to information aggregated to nodes from event associations (e.g. artistic function). Selecting one or multiple criteria will highlight nodes that match that criteria, whilst fading the nodes that don’t match. 
 
 Criteria to be listed
 
 || Label	|| Database Reference|| 	Type|| 	Facet Options|| RDF Reference ||
 || Gender|| TABLE: CONTRIBUTOR - ROW: GENDER||	radio button 1 : Male radio button 2: Female|| Highlight matching nodes OR only display nodes with matching criteria HOW DO WE DEAL WITH UNKNOWN?|| foaf:gender _Only added to dataset if not UNKNOWN or NULL ||
 || Nationality|| TABLE: CONTRIBUTOR - ROW: NATIONALITY|| Select menu, multiple selections allowed || Highlight nodes matching nationality/ies selected by user. || [AuseStageOntology#nationality ausestage:nationality]||
-|| Role/s|| TABLE: CONEVLINK|| Select menu, multiple selections allowed, correspond to the functions listed in CONTFUNCT||Highlight nodes matching role/s selected by user|| [AuseStageOntology#function ausestage:function] ||
+|| Function/s|| TABLE: CONEVLINK|| Select menu, multiple selections allowed, correspond to the functions listed in CONTFUNCT||Highlight nodes matching function/s selected by user|| [AuseStageOntology#function ausestage:function] ||
 
 Additional criteria derived from event and venue attributes (status, primary genre, secondary genre, suburb, state, country) may be considered after initial testing.
 
@@ -289,10 +289,9 @@ Node information displayed:
 || Name (as link to AusStage Record) || foaf:name / rdf:id ||
 || Other names || [AuseStageOntology#otherNames ausestage:otherNames] ||
 || Gender || foaf:gender ||
-|| Date of birth || bio:event/bio:Birth/bio:date ||
 || Nationality || [AuseStageOntology#nationality ausestage:nationality] ||
 || Contributor ID || rdf:id ||
-|| Roles || [AuseStageOntology#function ausestage:function] ||
+|| Function|| [AuseStageOntology#function ausestage:function] ||
 || Number of relationships || [AuseStageOntology#collaboratorCount ausestag:collaboratorCount]||
 	
 Link information displayed
@@ -315,7 +314,7 @@ _Pop Up Sketch Ideas_
 _Priority Ranking 84%._
 
 The contributor detail page within AusStage should display a collapsible list of collaborators, ordered by frequency of collaborations - most frequent, to least frequent. 
-The display will list the collaborators name, date range, and a list of their roles. The collaborators name should be a link to their contributor detail page.
+The display will list the collaborators name, date range, and a list of their artistic functions. The collaborators name should be a link to their contributor detail page.
 The layout should be as follows:
 
 _￼Contributor detail page with network browsing collapsed_
@@ -327,7 +326,7 @@ _Contributor detail page with network browsing expanded_
 ===2.2 Key organisations===
 _Priority Ranking 72%_
 The contributor detail page within AusStage should display a collapsible list of organisations, ordered by frequency of collaborations - most frequent, to least frequent. 
-The display will list the organisations name, date range, and a list of their roles. The organisations name should be a link to their organisation detail page.
+The display will list the organisations name, date range, and a list of their artistic functions. The organisations name should be a link to their organisation detail page.
 The layout should be as follows:
 
 _￼Contributor detail page with organisation network browsing collapsed_
@@ -497,7 +496,7 @@ Node information displayed:
 Link information displayed
   * Contributor name as link to AusStage records
   * Other names
-  * Contributor Roles
+  * Artistic Functions
 
 ===5.3 Search and display===
 Search and display by venue, organisations, event-criteria and connections could also be used as a way into exploring event-to-event networks. Rank: 56%
