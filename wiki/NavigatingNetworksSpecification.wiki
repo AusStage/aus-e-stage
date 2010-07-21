@@ -227,22 +227,20 @@ Node selected (double click):
 Yes: do nothing
 No: redraw, or add to the network graphic this nodes first degree network.  
 
+*Some Questions*
+
 _QUESTION: How many degrees of separation before outlying nodes drop off? 
-ie say you start with contributorA. You select contributor B. Now you have ContributorA and contributorB’s networks. Now you select contibutorC who has collaborated with ContributorB., and not contributorA. Should contributorA’s network dissappear if only relevant to contributorA?_
+ie say you start with contributorA. You select contributor B. Now you have ContributorA and contributorB’s networks. Now you select contibutorC who has collaborated with ContributorB., and not contributorA. Should contributorA’s network dissappear if only relevant to contributorA?_ ANSWER: As many degrees as possible. But actually the limit will be the number of nodes and links, not the number of degrees - because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed. At that point, those which are furthest from the current focus, could be dropped from display.
 
-_ANSWER: As many degrees as possible. But actually the limit will be the number of nodes and links, not the number of degrees - because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed. At that point, those which are furthest from the current focus, could be dropped from display._
+_QUESTION: Can we retrieve data asynchronously and in anticipation of the user, to avoid the lag that's entailed in retrieving data between user clicks and display changes? To provide a seamless browsing experience, it would be preferable for more data to be downloaded to the client than is initially displayed. If the initial download includes the second degree network, but only displays the first degree, then the collaborators of contributors at the edge of the initial network will be available for display when required by the user. At some point, however, the user will reach the edge of the downloaded data, and the system will need to retrieve a new dataset. Ideally, this new dataset could be seemlessley appended to the existing display. If that is not possible, the new dataset, centered on the currently selected node, would replace the previous set on display._ ANSWER: In this case then we're probably going to need to look into using a technique called "Web Storage" or "DOM Storage".In this way we can store data on a client machine that most importantly persists page refreshes. The potential downside is that it is only supported on recent browsers. Which isn't such a factor for us as most of what I anticipate we'll be doing will only be supported by recent browsers. This technique would give us a way to persist and cache data that would have a positive effect on the speed of the website. We would still need to develop some sort of algorithm to ensure that nodes are data is cached in an intelligent way and that the server isn't overloaded by too aggressive caching. For example using AJAX type techniques and caching nodes closest to the centre of the network first, which are most likely to be of immediate interest.
 
-_Remember to deal with contributor archaeology._
-
-Coding note: it is preferable that the back end stays one step ahead of the display, i.e. display one degree network, but have the second degree network stored so it can be loaded quickly. Then get the next level...
-
-_QUESTION: How is the 'back end' supposed to now which second degree network to store? The user could click on any of the nodes in the network which potentially means a large number of queries or little result. For example consider a network that has 20 nodes. That means, assuming I'm reading the spec correctly, that the 'back end' would need to prepare 20 additional datasets in the event that user selects one of them. That's 19 datasets that were created but were not needed. I think this needs further consideration._
+_QUESTION: Contributor archaeology presents a problem, as contributors with different names will currently be represented as different nodes. How to handle this? And how to prepare for the proposed database changes to handle contributor archaeology?_
 
 _Interface sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceBasicSearch.png Basic Search Interface]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch.png Network Interface Sketch 1]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch2.png Network Interface Sketch 2]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/nodeVisualIdeas.png Sketches of Node Visuals]
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceBasicSearch.png Basic Search Interface]
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch.png Network Interface Sketch 1]
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch2.png Network Interface Sketch 2]
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/nodeVisualIdeas.png Sketches of Node Visuals]
 
 ===1.2 Time-slider===
 _Priority Ranking: 84%_
