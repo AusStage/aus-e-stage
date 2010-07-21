@@ -534,7 +534,7 @@ BRAD TO WRITE UP WITH INPUT FROM COREY/WEI
 Summarise Corey's current work
 -  network data formats: GraphML, FOAF, etc... 
 -  data processing technologies:  RDF, OWL, JENA 
--  network visualisation libraries:  Protovis and JavaScript InfoVis Toolkit (JIT). 
+-  network visualisation libraries:  Protovis, JavaScript InfoVis Toolkit (JIT), Processing.js. 
 
 From Aus-e-Stage project plan - but now out of date
 
