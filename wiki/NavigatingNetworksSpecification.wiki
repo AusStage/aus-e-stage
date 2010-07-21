@@ -227,7 +227,7 @@ Node selected (double click):
 Yes: do nothing
 No: redraw, or add to the network graphic this nodes first degree network.  
 
-*Some Questions*
+*Questions*
 
 _QUESTION: How many degrees of separation before outlying nodes drop off? 
 ie say you start with contributorA. You select contributor B. Now you have ContributorA and contributorB’s networks. Now you select contibutorC who has collaborated with ContributorB., and not contributorA. Should contributorA’s network dissappear if only relevant to contributorA?_ ANSWER: As many degrees as possible. But actually the limit will be the number of nodes and links, not the number of degrees - because the number of nodes and links added with each degree will vary widely. At a certain point, there will be too many nodes and links being displayed. At that point, those which are furthest from the current focus, could be dropped from display.
@@ -236,7 +236,7 @@ _QUESTION: Can we retrieve data asynchronously and in anticipation of the user, 
 
 _QUESTION: Contributor archaeology presents a problem, as contributors with different names will currently be represented as different nodes. How to handle this? And how to prepare for the proposed database changes to handle contributor archaeology?_
 
-_Interface sketch ideas_
+*Interface sketch ideas*
  * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceBasicSearch.png Basic Search Interface]
  * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch.png Network Interface Sketch 1]
  * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-1InterfaceSketch2.png Network Interface Sketch 2]
