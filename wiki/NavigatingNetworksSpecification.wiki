@@ -349,7 +349,7 @@ _Priority Ranking: 88%_
 The search functionality should allow the user to select two or more collaborators.
 This should work in a similar fashion to the AusStage Mapping service whereby the user can search for a contributor, select them, and then search again for another contributor etc.
 Upon completion of the selection process the network browsing interface should display the network of contributors that connects them. _Question: is this a particular type of browsing? should ONLY the contributors that connect them, or that they have in common be displayed? How do we handle (if it arises) the possibility that there is NO path between the two contributors?_
-This is a way of exploring closeness, degrees of separation, lines of influence, artistic families, and so on. ? 
+This is a way of exploring closeness, degrees of separation, lines of influence, artistic families, and so on. There is an issue with playwrights, composers and so on - who do provide 'links' between artists - but may need to be excluded to explore lines of influence in the rehearsal room.
 
 Work flow:
  # User searches for a contributor.
