@@ -65,8 +65,8 @@ public class LookupManager {
 		Collaborator  collaborator = null;
 	
 		// define the base sparql query
-		String sparqlQuery = "PREFIX foaf:       <http://xmlns.com/foaf/0.1/> "
-						   + "PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> "
+		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
+						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
  						   + "SELECT ?collaborator ?collabGivenName ?collabFamilyName ?function ?firstDate ?lastDate ?collabCount "
 						   + "WHERE {  "
 						   + "       @ a foaf:Person ; "
