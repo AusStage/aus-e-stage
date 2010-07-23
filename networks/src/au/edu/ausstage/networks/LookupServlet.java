@@ -23,10 +23,12 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import au.edu.ausstage.utils.InputUtils;
+
 /**
  * A class to respond to requests to lookup data
  */
-public class LookupServlet extends ServletBaseClass {
+public class LookupServlet extends HttpServlet {
 
 	// declare private variables
 	private ServletConfig servletConfig;
@@ -67,32 +69,32 @@ public class LookupServlet extends ServletBaseClass {
 		String sortType   = request.getParameter("sort");
 		
 		// check on the taskType parameter
-		if(isValid(taskType, TASK_TYPES) == false) {
+		if(InputUtils.isValid(taskType, TASK_TYPES) == false) {
 			// no valid task type was found
 			throw new ServletException("Missing task parameter. Expected one of: " + java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
 		}
 
 		// check on the id parameter
-		if(isValidInt(id) == false) {
+		if(InputUtils.isValidInt(id) == false) {
 			throw new ServletException("Missing or invalid id parameter.");
 		}
 
 		// check the format parameter
-		if(isValid(formatType) == false) {
+		if(InputUtils.isValid(formatType) == false) {
 			// use default value
 			formatType = "html";
 		} else {
-			if(isValid(formatType, FORMAT_TYPES) == false) {
+			if(InputUtils.isValid(formatType, FORMAT_TYPES) == false) {
 				throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
 			}
 		}
 
 		// check the sort parameter
-		if(isValid(sortType) == false) {
+		if(InputUtils.isValid(sortType) == false) {
 			// use default value
 			sortType = "count";
 		} else {
-			if(isValid(sortType, SORT_TYPES) == false) {
+			if(InputUtils.isValid(sortType, SORT_TYPES) == false) {
 				throw new ServletException("Missing sort type. Expected: " + java.util.Arrays.toString(SORT_TYPES).replaceAll("[\\]\\[]", ""));
 			}
 		}
