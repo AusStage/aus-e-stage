@@ -25,7 +25,7 @@ import au.edu.ausstage.utils.InputUtils;
 /**
  * A class to represent a Collaborator
  */
-public class Collaborator {
+public class Collaborator implements Comparable<Collaborator>{
 
 	// declare private class level variables
 	private String id = null;
@@ -297,7 +297,7 @@ public class Collaborator {
 	 * @return the requested value
 	 */
 	public String getCollaborations() {
-		return id;
+		return collaborations;
 	}
 	
 	/**
@@ -339,5 +339,61 @@ public class Collaborator {
 	public String[] getCollaboratorsAsArray() {
 		return collaborators.toArray(new String[0]);
 	}
+	
+	/*
+	 * methods required for ordering in collections
+	 * http://java.sun.com/docs/books/tutorial/collections/interfaces/order.html
+	 */
+
+	/**
+	 * A method to determine if one event is the same as another
+	 *
+	 * @param o the object to compare this one to
+	 *
+	 * @return  true if they are equal, false if they are not
+	 */
+	public boolean equals(Object o) {
+		// check to make sure the object is an event
+		if ((o instanceof Collaborator) == false) {
+			// o is not an event object
+		 	return false;
+		}
+		
+		// compare these two events
+		Collaborator c = (Collaborator)o;
+		
+		return id.equals(c.getId());
+		
+	} // end equals method
+	
+	/**
+	 * Overide the default hashcode method
+	 * 
+	 * @return a hashcode for this object
+	 */
+	public int hashCode() {
+		return 31*id.hashCode();
+	}
+    
+    /**
+     * The compareTo method compares the receiving object with the specified object and returns a 
+     * negative integer, 0, or a positive integer depending on whether the receiving object is 
+     * less than, equal to, or greater than the specified object.
+     *
+     * @param c the event to compare this one to
+     *
+     * @return  an integer indicating comparison result
+     */    
+	public int compareTo(Collaborator c) {
+		int myId   = Integer.getInteger(id);
+		int yourId = Integer.getInteger(c.getId());
+		
+		if(myId == yourId) {
+			return 0;
+		} else {
+			return myId - yourId;
+		}
+		
+	} // end compareTo method
 
 } // end class definition
