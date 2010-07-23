@@ -24,7 +24,7 @@ import java.util.*;
 import org.json.simple.*;
 import org.apache.commons.lang.StringEscapeUtils;
 
-// import the AusStage vocabularies package
+// import AusStage related packages
 import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.DateUtils;
 
