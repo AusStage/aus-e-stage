@@ -58,7 +58,7 @@ public class LookupManager {
 	public String getKeyCollaborators(String id, String formatType, String sortType) {
 	
 		// define a Tree Set to store the results
-		java.util.TreeMap<Integer, Collaborator> collaborators = new java.util.TreeMap<Integer, Collaborator>();
+		java.util.LinkedList<Collaborator> collaborators = new java.util.LinkedList<Collaborator>();
 		
 		// define other helper variables
 		QuerySolution row          = null;
@@ -82,7 +82,9 @@ public class LookupManager {
 						   + "}";
 						   
 		// do we need to sort by name?
-		if(sortType.equals("name") == true) {
+		if(sortType.equals("count") == true) {
+			sparqlQuery += " ORDER BY DESC(?collabCount)";
+		} else if(sortType.equals("name") == true) {
 			sparqlQuery += " ORDER BY ?collabFamilyName ?collabGivenName";
 		}
 						   
@@ -102,12 +104,19 @@ public class LookupManager {
 			// get a new row of data
 			row = results.nextSolution();
 			
-			// check to see if we've seen this collaborator before
-			if(collaborators.containsKey(new Integer(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
-				// no we haven't
+			// instantiate a collaborator object
+			collaborator = new Collaborator(AusStageURI.getId(row.get("collaborator").toString()));
 			
-				// start a new collaborator
-				collaborator = new Collaborator(AusStageURI.getId(row.get("collaborator").toString()));
+			// check to see if the list contains this collaborator
+			if(collaborators.indexOf(collaborator) != -1) {
+				// collaborator is already in the list
+				collaborator = collaborators.get(collaborators.indexOf(collaborator));
+				
+				// update the function
+				collaborator.setFunction(row.get("function").toString());
+				
+			} else {
+				// collaborator is not on the list
 				
 				// get the name
 				collaborator.setGivenName(row.get("collabGivenName").toString());
@@ -125,82 +134,40 @@ public class LookupManager {
 			
 				// add the function
 				collaborator.setFunction(row.get("function").toString());
-			
-				// add this collaborator to the list
-				collaborators.put(new Integer(collaborator.getId()), collaborator);
-			} else {
-				// yes we have
-				// get the existing collaborator
-				collaborator = collaborators.get(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString())));
 				
-				// update the function
-				collaborator.setFunction(row.get("function").toString());
+				collaborators.add(collaborator);
 			}
 		}
 		
 		// play nice and tidy up
 		database.tidyUp();
 		
-		// do we need to sort the list of collaborators
-		if(sortType.equals("count") == true) {
-			// yes - in order of collaboration count
+		// sort by the id
+		if(sortType.equals("id") == true) {
+			TreeMap<Integer, Collaborator> collaboratorsToSort = new TreeMap<Integer, Collaborator>();
 			
-			// define a new collection of collaborators
-			java.util.TreeMap<Integer, Collaborator> collaboratorsToSort = new java.util.TreeMap<Integer, Collaborator>();
-			
-			// loop through the list of collaborators and add them to the new set
-			Collection values   = collaborators.values();
-			Iterator   iterator = values.iterator();
-			
-			while(iterator.hasNext()) {
-				collaborator = (Collaborator)iterator.next();
-				collaboratorsToSort.put(new Integer(collaborator.getCollaborations()), collaborator);
+			for(int i = 0; i < collaborators.size(); i++) {
+				collaborator = collaborator = collaborators.get(i);
+				
+				collaboratorsToSort.put(Integer.parseInt(collaborator.getId()), collaborator);
 			}
 			
-			// sort them
-			collaborators = reverseSortMapByKey(collaboratorsToSort);
-			
-			collaboratorsToSort = null;
-			
-		} else if(sortType.equals("name") == true) {
-			// yes - by name			
-			java.util.TreeMap<String, Collaborator> collaboratorsToSort = new java.util.TreeMap<String, Collaborator>();
-			
-			// loop through the list of collaborators and add them to the new set
-			Collection values   = collaborators.values();
-			Iterator   iterator = values.iterator();
-			String     index    = null;
-			
-			while(iterator.hasNext()) {
-				collaborator = (Collaborator)iterator.next();
-				
-				// derive an index value from the name
-				index = collaborator.getFamilyName();
-				index = index + collaborator.getGivenName();
-				index = index.toLowerCase();
-				index = index.replaceAll(" ", "");
-				
-				// use the index in the new collection
-				collaboratorsToSort.put(index, collaborator);				
-			}
-			
-			// rebuild the collaborators collection
-			values   = collaboratorsToSort.values();
-			iterator = values.iterator();
-			int newIndex = 0;
-			
+			// empty the list
 			collaborators.clear();
 			
+			// add the collaborators back to the list
+			Collection values = collaboratorsToSort.values();
+			Iterator   iterator = values.iterator();
+			
 			while(iterator.hasNext()) {
+				// get the collaborator
 				collaborator = (Collaborator)iterator.next();
 				
-				collaborators.put(newIndex, collaborator);
-				
-				newIndex++;
+				collaborators.add(collaborator);
 			}
-
+			
 			collaboratorsToSort = null;
-		}
+		}			
 		
 		// define a variable to store the data
 		String dataString = null;
@@ -224,12 +191,11 @@ public class LookupManager {
 	 * @return              the JSON encoded string
 	 */
 	@SuppressWarnings("unchecked")
-	private String createJSONOutput(TreeMap<Integer, Collaborator> collaborators) {
+	private String createJSONOutput(LinkedList<Collaborator> collaborators) {
 	
 		// assume that all sorting and ordering has already been carried out
 		// loop through the list of collaborators and add them to the new JSON objects
-		Collection values = collaborators.values();
-		Iterator   iterator = values.iterator();
+		ListIterator iterator = collaborators.listIterator(0);
 		
 		// declare helper variables
 		JSONArray  list = new JSONArray();
@@ -270,12 +236,11 @@ public class LookupManager {
 	 * @param collaborators the list of collaborators
 	 * @return              the HTML encoded string
 	 */
-	private String createHTMLOutput(TreeMap<Integer, Collaborator> collaborators) {
+	private String createHTMLOutput(LinkedList<Collaborator> collaborators) {
 	
 		// assume that all sorting and ordering has already been carried out
-		// loop through the list of collaborators and add them to the new JSON objects
-		Collection values = collaborators.values();
-		Iterator   iterator = values.iterator();
+		// loop through the list of collaborators and build the HTML
+		ListIterator iterator = collaborators.listIterator(0);
 		
 		// declare helper variables
 		StringBuilder htmlMarkup   = new StringBuilder("<table id=\"key-collaborators\">");
@@ -335,11 +300,11 @@ public class LookupManager {
 	 * @param collaborators the list of collaborators
 	 * @return              the HTML encoded string
 	 */
-	private String createXMLOutput(TreeMap<Integer, Collaborator> collaborators) {
+	private String createXMLOutput(java.util.LinkedList<Collaborator> collaborators) {
+	
 		// assume that all sorting and ordering has already been carried out
-		// loop through the list of collaborators and add them to the new JSON objects
-		Collection values = collaborators.values();
-		Iterator   iterator = values.iterator();
+		// loop through the list of collaborators build the XML
+		ListIterator iterator = collaborators.listIterator(0);
 		
 		// declare helper variables
 		StringBuilder xmlMarkup    = new StringBuilder("<?xml version=\"1.0\"?><collaborators>");
@@ -369,19 +334,5 @@ public class LookupManager {
 		return xmlMarkup.toString();
 	
 	} // end createXMLOutput method
-	
-	/**
-	 * A method to sort a map in reverse order
-	 * based on: http://forums.sun.com/thread.jspa?threadID=5152322
-	 *
-	 * @param inputMap the map to sort in reverse
-	 * @return         the map sorted in reverse order
-	 */
-	private TreeMap<Integer, Collaborator> reverseSortMapByKey (TreeMap<Integer, Collaborator> inputMap) {
-        Comparator < Integer > reverse = Collections.reverseOrder();
-        TreeMap<Integer, Collaborator> result = new TreeMap<Integer, Collaborator>(reverse);
-        result.putAll(inputMap);
-        return result;
-    } // end reverseSortMapByKey method
 
 } // end class definition

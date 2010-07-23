@@ -123,6 +123,7 @@ public class ExportServlet extends HttpServlet {
 		if(formatType == "graphml") {
 			// output xml mime type
 			response.setContentType("text/xml; charset=UTF-8");
+			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + ".graphml");
 		}
 		
 		// output the results of the lookup
