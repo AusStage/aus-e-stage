@@ -20,6 +20,7 @@ package au.edu.ausstage.networks;
 
 // import additional libraries
 import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.tdb.TDBFactory;
 import java.util.*;
 import java.io.*;
 import org.w3c.dom.*;
@@ -98,8 +99,15 @@ public class ExportManager {
 		// build the query
 		queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
 		
+		//debug code to explore alternative access to the TDB datastore
+		Dataset dataset = TDBFactory.createDataset("/opt/local/persistent_data/tdb-data-store");
+		Query query = QueryFactory.create(queryToExecute);
+		QueryExecution qexec = QueryExecutionFactory.create(query, dataset);
+		ResultSet results = qexec.execSelect();
+
+		
 		// execute the query
-		ResultSet results = database.executeSparqlQuery(queryToExecute);
+		//ResultSet results = database.executeSparqlQuery(queryToExecute);
 		
 		// add the first degree contributors
 		while (results.hasNext()) {
@@ -115,7 +123,9 @@ public class ExportManager {
 		}
 		
 		// play nice and tidy up
-		database.tidyUp();
+		//database.tidyUp();
+		//debug code
+		qexec.close();
 		
 		//loop through the degrees to follow
 		while(degreesFollowed < degreesToFollow) {
@@ -138,7 +148,11 @@ public class ExportManager {
 					queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
 		
 					// execute the query
-					results = database.executeSparqlQuery(queryToExecute);
+					//results = database.executeSparqlQuery(queryToExecute);
+					//debug code
+					query = QueryFactory.create(queryToExecute);
+					qexec = QueryExecutionFactory.create(query, dataset);
+					results = qexec.execSelect();
 					
 					// add this degree contributors
 					while (results.hasNext()) {
@@ -154,7 +168,8 @@ public class ExportManager {
 					}
 					
 					// play nice and tidy up
-					database.tidyUp();
+					//debug code
+					qexec.close();
 				}
 			}
 			

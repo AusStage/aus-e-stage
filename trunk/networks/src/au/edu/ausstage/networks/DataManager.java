@@ -26,8 +26,8 @@ package au.edu.ausstage.networks;
 import javax.servlet.ServletConfig;
 
 // Jena & TDB related packages
-import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.tdb.TDBFactory;
 
 // import the AusStage vocabularies package
 import au.edu.ausstage.vocabularies.*;
@@ -38,10 +38,13 @@ import au.edu.ausstage.vocabularies.*;
 public class DataManager {
 
 	// declare private class variables
-	ServletConfig servletConfig             = null; // store a reference to the servlet config
-	String sparqlEndpoint                   = null; // store a reference to the SPARQL endpoint
-	QueryExecution execution                = null; // an object the executes a query
-	com.hp.hpl.jena.query.ResultSet results = null; // resultSet after executing a query
+	ServletConfig  servletConfig = null; // store a reference to the servlet config
+	String         datastorePath = null; // store a reference to the location of the tdb datastore
+	String         accessMethod  = null; // determine how to access the RDF data
+	Dataset        dataset       = null; // dataset object representing local data store
+	Query          query         = null; // query object to execute query locallly
+	QueryExecution execution     = null; // an object the executes a query
+	ResultSet      results       = null; // resultSet after executing a query
 
 	/** 
 	 * Constructor for this class
@@ -51,11 +54,31 @@ public class DataManager {
 		// store a reference to this ServletConfig for later
 		servletConfig = config;
 		
-		// get the URL to the sparql endpoint
-		sparqlEndpoint = config.getServletContext().getInitParameter("sparqlEndpoint");
+		// determine how to access the RDF data
+		accessMethod = config.getServletContext().getInitParameter("rdfAccessMethod");
 		
-		if(sparqlEndpoint == null) {
-			throw new RuntimeException("Unable to load sparqlEndpoint context-param");
+		if(accessMethod != null) {
+			// determine access method
+			if(accessMethod.equals("http") == true) {
+				// use the defined sparql endpoint
+				datastorePath = config.getServletContext().getInitParameter("sparqlEndpoint");
+				
+				if(datastorePath == null) {
+					throw new RuntimeException("Unable to load sparqlEndpoint context-param");
+				}
+			} else if(accessMethod.equals("local") == true) {
+				// use the defined TDB datastore locally
+				datastorePath = config.getServletContext().getInitParameter("localDataStore");
+				
+				if(datastorePath == null) {
+					throw new RuntimeException("Unable to load localDataStore context-param");
+				}
+			}
+			
+			// double check on the parameter
+			
+		} else {
+			throw new RuntimeException("Unable to load rdfAccessMethod context-param");
 		}
 		
 	} // end constructor
@@ -67,13 +90,37 @@ public class DataManager {
 	 *
 	 * @return      the results of executing the query
 	 */
-	public com.hp.hpl.jena.query.ResultSet executeSparqlQuery(String sparqlQuery) {
+	public ResultSet executeSparqlQuery(String sparqlQuery) {
 	
-		// get a query object
-		//Query query = QueryFactory.create(sparqlQuery, Syntax.syntaxARQ);
+		// determine how to execute the query
+		if(accessMethod.equals("http") == true) {
+			return executeViaEndpoint(sparqlQuery);
+		} else {
+			return executeViaLocal(sparqlQuery);
+		}
+	
+	} // end executeSparqlQuery method
+	
+	/**
+	 * A private method to execute a query locally
+	 *
+	 * @param sparqlQuery the query to execute
+	 *
+	 * @return      the results of executing the query
+	 */
+	private ResultSet executeViaLocal(String sparqlQuery) {
+	
+		// play nice and tidy up
+		tidyUp();
 		
-		// get a query execution object
-		execution = QueryExecutionFactory.sparqlService(sparqlEndpoint, sparqlQuery);
+		// connect to the dataset
+		if(dataset == null) {
+			dataset = TDBFactory.createDataset(datastorePath);
+		}
+		
+		// build the query and query execution objects
+		query = QueryFactory.create(sparqlQuery);
+		execution = QueryExecutionFactory.create(query, dataset);
 		
 		// execute the query
 		results = execution.execSelect();
@@ -81,7 +128,31 @@ public class DataManager {
 		// return the results of the execution
 		return results;
 	
-	} // end executeSparqlQuery method
+	} // end executeSparqlQuery method	 
+	 
+	
+	/**
+	 * A private method to execute a query via the SPARQL endpoint
+	 *
+	 * @param sparqlQuery the query to execute
+	 *
+	 * @return      the results of executing the query
+	 */
+	private ResultSet executeViaEndpoint(String sparqlQuery) {
+	
+		// play nice and tidy up
+		tidyUp();
+	
+		// get a query execution object		
+		execution = QueryExecutionFactory.sparqlService(datastorePath, sparqlQuery);
+		
+		// execute the query
+		results = execution.execSelect();
+		
+		// return the results of the execution
+		return results;
+	
+	} // end executeSparqlQuery method	 
 	
 	/**
 	 * A method to tidy up resources after finished with a query
@@ -116,9 +187,13 @@ public class DataManager {
 	 * plays nice and free up Oracle connection resources etc. 
 	 */
 	protected void finalize() throws Throwable {
-		if(execution != null) {
-			execution.close();
-		}
+		try {
+			tidyUp();
+			
+			if(accessMethod.equals("http") == false) {
+				dataset.close();
+			}
+		} catch (Exception ex) {}
 	} // end finalize method
 	
 } // end class definition
