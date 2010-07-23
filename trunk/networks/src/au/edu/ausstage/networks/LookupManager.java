@@ -287,6 +287,11 @@ public class LookupManager {
 		String        lastDate     = null;
 		Collaborator  collaborator = null;
 		
+		// add the header and footer
+		htmlMarkup.append("<thead><tr><th>Name</th><th>Period</th><th>Function(s)</th><th>Count</th></tr></thead>");
+		htmlMarkup.append("<tfoot><tr><td>Name</td><td>Period</td><td>Function(s)</td><td>Count</td></tr></tfoot>");
+		
+		
 		while(iterator.hasNext()) {
 		
 			// get the collaborator
@@ -296,8 +301,8 @@ public class LookupManager {
 			htmlMarkup.append("<tr id=\"key-collaborator-" + collaborator.id + "\">");
 			
 			// add the cell with the link and name
-			htmlMarkup.append("<td><a href=\"" + StringEscapeUtils.escapeHtml(collaborator.url) + "\" title=\"View " + collaborator.name + " record in AusStage\">");
-			htmlMarkup.append(collaborator.name + "</a></td>");
+			htmlMarkup.append("<th scop=\"row\"><a href=\"" + StringEscapeUtils.escapeHtml(collaborator.url) + "\" title=\"View " + collaborator.name + " record in AusStage\">");
+			htmlMarkup.append(collaborator.name + "</a></th>");
 			
 			// build the dates
 			tmp = DateUtils.getExplodedDate(collaborator.firstDate, "-");
@@ -311,6 +316,9 @@ public class LookupManager {
 			
 			// add the functions
 			htmlMarkup.append("<td>" + collaborator.function.replaceAll("\\|", "<br/>") + "</td>");
+			
+			// add the count
+			htmlMarkup.append("<td>" + collaborator.collaborations + "</td>");
 			
 			// end the row
 			htmlMarkup.append("</tr>");			
