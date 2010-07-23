@@ -99,6 +99,19 @@ public class DataManager {
 	} // end tidyUp method
 	
 	/**
+	 * A method used to get the value of a parameter from the ServletConfig object
+	 * of the current servlet
+	 *
+	 * @param name the name of the parameter
+	 *
+	 * @return     value of the parameter as a string
+	 */
+	public String getContextParam(String name) {
+	
+		return servletConfig.getServletContext().getInitParameter(name);
+	}
+	
+	/**
 	 * Finalize method to be run when the object is destroyed
 	 * plays nice and free up Oracle connection resources etc. 
 	 */
