@@ -107,38 +107,34 @@ public class LookupManager {
 				// no we haven't
 			
 				// start a new collaborator
-				collaborator = new Collaborator();
+				collaborator = new Collaborator(AusStageURI.getId(row.get("collaborator").toString()));
 				
 				// get the name
-				collaborator.givenName  = row.get("collabGivenName").toString();
-				collaborator.familyName = row.get("collabFamilyName").toString();
-				collaborator.name = collaborator.givenName + " " + collaborator.familyName;
+				collaborator.setGivenName(row.get("collabGivenName").toString());
+				collaborator.setFamilyName(row.get("collabFamilyName").toString(), true);
 								
 				// get the dates
-				collaborator.firstDate = row.get("firstDate").toString();
-				collaborator.lastDate  = row.get("lastDate").toString();
+				collaborator.setFirstDate(row.get("firstDate").toString());
+				collaborator.setLastDate(row.get("lastDate").toString());
 		
 				// get the collaboration count
-				collaborator.collaborations = row.get("collabCount").toString();
+				collaborator.setCollaborations(row.get("collabCount").toString());
 			
 				// add the url
-				collaborator.url = AusStageURI.getURL(row.get("collaborator").toString());
-			
-				// add the id
-				collaborator.id = AusStageURI.getId(row.get("collaborator").toString());
+				collaborator.setUrl(AusStageURI.getURL(row.get("collaborator").toString()));
 			
 				// add the function
-				collaborator.function = row.get("function").toString();
+				collaborator.setFunction(row.get("function").toString());
 			
 				// add this collaborator to the list
-				collaborators.put(new Integer(collaborator.id), collaborator);
+				collaborators.put(new Integer(collaborator.getId()), collaborator);
 			} else {
 				// yes we have
 				// get the existing collaborator
 				collaborator = collaborators.get(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString())));
 				
 				// update the function
-				collaborator.function = collaborator.function + " | " + row.get("function").toString();
+				collaborator.setFunction(row.get("function").toString());
 			}
 		}
 		
@@ -158,7 +154,7 @@ public class LookupManager {
 			
 			while(iterator.hasNext()) {
 				collaborator = (Collaborator)iterator.next();
-				collaboratorsToSort.put(new Integer(collaborator.collaborations), collaborator);
+				collaboratorsToSort.put(new Integer(collaborator.getCollaborations()), collaborator);
 			}
 			
 			// sort them
@@ -179,8 +175,8 @@ public class LookupManager {
 				collaborator = (Collaborator)iterator.next();
 				
 				// derive an index value from the name
-				index = collaborator.familyName;
-				index = index + collaborator.givenName;
+				index = collaborator.getFamilyName();
+				index = index + collaborator.getGivenName();
 				index = index.toLowerCase();
 				index = index.replaceAll(" ", "");
 				
@@ -249,13 +245,15 @@ public class LookupManager {
 			object = new JSONObject();
 			
 			// build the object
-			object.put("id", collaborator.id);
-			object.put("url", collaborator.url);
-			object.put("name", collaborator.name);
-			object.put("function", collaborator.function);
-			object.put("firstDate", collaborator.firstDate);
-			object.put("lastDate", collaborator.lastDate);
-			object.put("collaborations", new Integer(collaborator.collaborations));
+			object.put("id", collaborator.getId());
+			object.put("url", collaborator.getUrl());
+			object.put("givenName", collaborator.getGivenName());
+			object.put("familyName", collaborator.getFamilyName());
+			object.put("name", collaborator.getName());
+			object.put("function", collaborator.getFunction());
+			object.put("firstDate", collaborator.getFirstDate());
+			object.put("lastDate", collaborator.getLastDate());
+			object.put("collaborations", new Integer(collaborator.getCollaborations()));
 			
 			// add the new object to the array
 			list.add(object);		
@@ -298,27 +296,27 @@ public class LookupManager {
 			collaborator = (Collaborator)iterator.next();
 			
 			// start the row
-			htmlMarkup.append("<tr id=\"key-collaborator-" + collaborator.id + "\">");
+			htmlMarkup.append("<tr id=\"key-collaborator-" + collaborator.getId() + "\">");
 			
 			// add the cell with the link and name
-			htmlMarkup.append("<th scop=\"row\"><a href=\"" + StringEscapeUtils.escapeHtml(collaborator.url) + "\" title=\"View " + collaborator.name + " record in AusStage\">");
-			htmlMarkup.append(collaborator.name + "</a></th>");
+			htmlMarkup.append("<th scop=\"row\"><a href=\"" + StringEscapeUtils.escapeHtml(collaborator.getUrl()) + "\" title=\"View " + collaborator.getName() + " record in AusStage\">");
+			htmlMarkup.append(collaborator.getName() + "</a></th>");
 			
 			// build the dates
-			tmp = DateUtils.getExplodedDate(collaborator.firstDate, "-");
+			tmp = DateUtils.getExplodedDate(collaborator.getFirstDate(), "-");
 			firstDate = DateUtils.buildDisplayDate(tmp[0], tmp[1], tmp[2]);
 			
-			tmp = DateUtils.getExplodedDate(collaborator.lastDate, "-");
+			tmp = DateUtils.getExplodedDate(collaborator.getLastDate(), "-");
 			lastDate = DateUtils.buildDisplayDate(tmp[0], tmp[1], tmp[2]);
 			
 			// add the cell with the collaboration period
 			htmlMarkup.append("<td>" + firstDate + " - " + lastDate + "</td>");
 			
 			// add the functions
-			htmlMarkup.append("<td>" + collaborator.function.replaceAll("\\|", "<br/>") + "</td>");
+			htmlMarkup.append("<td>" + collaborator.getFunction().replaceAll("\\|", "<br/>") + "</td>");
 			
 			// add the count
-			htmlMarkup.append("<td>" + collaborator.collaborations + "</td>");
+			htmlMarkup.append("<td>" + collaborator.getCollaborations() + "</td>");
 			
 			// end the row
 			htmlMarkup.append("</tr>");			
@@ -352,14 +350,16 @@ public class LookupManager {
 			// get the collaborator
 			collaborator = (Collaborator)iterator.next();
 			
-			xmlMarkup.append("<collaborator id=\"" + collaborator.id + "\">");
+			xmlMarkup.append("<collaborator id=\"" + collaborator.getId() + "\">");
 			
-			xmlMarkup.append("<url>" + StringEscapeUtils.escapeXml(collaborator.url) + "</url>");
-			xmlMarkup.append("<name>" + collaborator.name + "</name>");
-			xmlMarkup.append("<function>" + collaborator.function + "</function>");
-			xmlMarkup.append("<firstDate>" + collaborator.firstDate + "</firstDate>");
-			xmlMarkup.append("<lastDate>" + collaborator.lastDate + "</lastDate>");
-			xmlMarkup.append("<collaborations>" + collaborator.collaborations + "</collaborations>");
+			xmlMarkup.append("<url>" + StringEscapeUtils.escapeXml(collaborator.getUrl()) + "</url>");
+			xmlMarkup.append("<givenName>" + collaborator.getGivenName() + "</givenName>");
+			xmlMarkup.append("<familyName>" + collaborator.getFamilyName() + "</familyName>");
+			xmlMarkup.append("<name>" + collaborator.getName() + "</name>");
+			xmlMarkup.append("<function>" + collaborator.getFunction() + "</function>");
+			xmlMarkup.append("<firstDate>" + collaborator.getFirstDate() + "</firstDate>");
+			xmlMarkup.append("<lastDate>" + collaborator.getLastDate() + "</lastDate>");
+			xmlMarkup.append("<collaborations>" + collaborator.getCollaborations() + "</collaborations>");
 			xmlMarkup.append("</collaborator>");
 		}
 		
@@ -383,22 +383,5 @@ public class LookupManager {
         result.putAll(inputMap);
         return result;
     } // end reverseSortMapByKey method
-	
-	/**
-	 * A simple conveniens class used to represent a collaborator
-	 */
-	private class Collaborator {
-	
-		// declare public variables
-		public String id;
-		public String url;
-		public String givenName;
-		public String familyName;
-		public String name;
-		public String function;
-		public String firstDate;
-		public String lastDate;
-		public String collaborations;	
-	}
 
 } // end class definition
