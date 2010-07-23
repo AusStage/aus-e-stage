@@ -19,11 +19,11 @@
 package au.edu.ausstage.networks;
 
 // import additional classes
-
+import java.util.TreeSet;
 import au.edu.ausstage.utils.InputUtils;
 
 /**
- * A class to represent a Contributor
+ * A class to represent a Collaborator
  */
 public class Collaborator {
 
@@ -37,6 +37,7 @@ public class Collaborator {
 	private String firstDate = null;
 	private String lastDate = null;
 	private String collaborations = null;
+	private TreeSet<String> collaborators = null;
 	
 	/**
 	 * Constructor for this class
@@ -64,7 +65,7 @@ public class Collaborator {
 		if(InputUtils.isValidInt(value)) {
 			this.id = value;
 		} else {
-			throw new IllegalArgumentException("The value value must be a valid integer");
+			throw new IllegalArgumentException("The value must be a valid integer");
 		}
 	}
 	
@@ -165,8 +166,7 @@ public class Collaborator {
 			// update the name
 			name = givenName + " " + familyName;
 		}
-	}
-		
+	}		
 	
 	/**
 	 * A method to get the familyName value
@@ -270,7 +270,7 @@ public class Collaborator {
 	}
 	
 	/**
-	 * A method to get the firstDate value
+	 * A method to get the lastDate value
 	 *
 	 * @return the requested value
 	 */
@@ -279,7 +279,7 @@ public class Collaborator {
 	}
 	
 	/**
-	 * A method to set a new ID value
+	 * A method to set the number of collaborations
 	 *
 	 * @param value the new value
 	 */
@@ -287,17 +287,57 @@ public class Collaborator {
 		if(InputUtils.isValidInt(value)) {
 			collaborations = value;
 		} else {
-			throw new IllegalArgumentException("The value value must be a valid integer");
+			throw new IllegalArgumentException("The value must be a valid integer");
 		}
 	}
 	
 	/**
-	 * A method to get an ID value
+	 * A method to get the number of collaborations
 	 *
 	 * @return the requested value
 	 */
 	public String getCollaborations() {
 		return id;
+	}
+	
+	/**
+	 * A method to add a collaboration to a list of collaborations
+	 *
+	 * @param value the new collaborations
+	 */
+	public void addCollaborator(String value) {
+		if(InputUtils.isValidInt(value)) {
+		
+			// instantiate a collaborations object if required
+			// we do this late to save on resources
+			if(collaborators == null) {
+				collaborators = new TreeSet<String>();
+			}
+			
+			// add to the list of collaborations			
+			collaborators.add(value);
+			
+		} else {
+			throw new IllegalArgumentException("The value must be a valid integer");
+		}
+	}
+	
+	/**
+	 * A method to get the list of collaborations
+	 *
+	 * @return the list of collaborations as TeeSet
+	 */
+	public TreeSet getCollaborators() {
+		return collaborators;
+	}
+	
+	/**
+	 * A method to get the list of collaborations
+	 *
+	 * @return an array of collaborations
+	 */
+	public String[] getCollaboratorsAsArray() {
+		return collaborators.toArray(new String[0]);
 	}
 
 } // end class definition

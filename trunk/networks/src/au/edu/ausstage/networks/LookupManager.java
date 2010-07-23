@@ -34,7 +34,7 @@ import au.edu.ausstage.utils.DateUtils;
 public class LookupManager {
 
 	// declare private class level variables
-	DataManager database = null;
+	private DataManager database = null;
 
 	/**
 	 * Constructor for this class
@@ -93,7 +93,7 @@ public class LookupManager {
 		sparqlQuery = sparqlQuery.replaceAll("@", "<" + id + ">");
 		
 		// execute the query
-		com.hp.hpl.jena.query.ResultSet results = database.executeSparqlQuery(sparqlQuery);
+		ResultSet results = database.executeSparqlQuery(sparqlQuery);
 		
 		// build the dataset
 		// use a numeric sort order

@@ -25,15 +25,25 @@
         This software visualises contributor relationships and exports data for external visualisation
     </description>
     <!-- AusStage -->
+    <!-- Servlets -->
     <servlet>
     	<servlet-name>LookupServlet</servlet-name>
     	<servlet-class>au.edu.ausstage.networks.LookupServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<servlet-name>ExportServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.networks.ExportServlet</servlet-class>
     </servlet>
     
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>LookupServlet</servlet-name>
         <url-pattern>/lookup/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ExportServlet</servlet-name>
+        <url-pattern>/export/*</url-pattern>
     </servlet-mapping>
     
     <!-- Joseki -->
