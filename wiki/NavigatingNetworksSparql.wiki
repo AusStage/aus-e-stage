@@ -63,3 +63,49 @@ WHERE {
        FILTER (?collaborator != <ausstage:c:774>) 
 }
 }}}
+
+== List the Key Collaborators of a Contributor == 
+
+{{{
+PREFIX foaf:       <http://xmlns.com/foaf/0.1/>
+PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#>
+
+SELECT ?collaborator ?collabGivenName ?collabFamilyName ?function ?firstDate ?lastDate ?collabCount 
+WHERE {  
+       <REPLACE_ME> a foaf:Person ; 
+                      ausestage:hasCollaboration ?collaboration. 
+       ?collaboration ausestage:collaborator ?collaborator; 
+                      ausestage:collaborationFirstDate ?firstDate; 
+                      ausestage:collaborationLastDate ?lastDate; 
+                      ausestage:collaborationCount ?collabCount. 
+       ?collaborator  foaf:givenName ?collabGivenName; 
+                      foaf:familyName ?collabFamilyName; 
+                      ausestage:function ?function. 
+       FILTER (?collaborator != <REPLACE_ME>) 
+}
+}}}
+
+_Note 1:_ Replace the `REPLACE_ME` with the unique identifier of a contributor encoded using the [http://code.google.com/p/aus-e-stage/wiki/RdfExportMoreInfo#AusStage_Unique_Id_Encoding_Scheme AusStage Unique Id Encoding Scheme]. 
+
+_Note 2:_ Due to current limitations in the dataset ordering results by collaboration count `?collabCount` must be done outside the SPARQL query
+
+For example to find all of the key collaborators for [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=774 Robyn Archer] the query looks like this:
+
+{{{
+PREFIX foaf:       <http://xmlns.com/foaf/0.1/>
+PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#>
+
+SELECT ?collaborator ?collabGivenName ?collabFamilyName ?function ?firstDate ?lastDate ?collabCount 
+WHERE {  
+       <ausstage:c:774> a foaf:Person ; 
+                      ausestage:hasCollaboration ?collaboration. 
+       ?collaboration ausestage:collaborator ?collaborator; 
+                      ausestage:collaborationFirstDate ?firstDate; 
+                      ausestage:collaborationLastDate ?lastDate; 
+                      ausestage:collaborationCount ?collabCount. 
+       ?collaborator  foaf:givenName ?collabGivenName; 
+                      foaf:familyName ?collabFamilyName; 
+                      ausestage:function ?function. 
+       FILTER (?collaborator != <ausstage:c:774>) 
+}
+}}}
