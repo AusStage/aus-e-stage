@@ -90,3 +90,13 @@ The role an organisation had at an event
 == undertookRole ==
 
 The role that the organisation undertook
+
+= RDF Dataset Metadata =
+
+== rdfMetadata ==
+
+An object to hold metadata elements about the RDF dataset
+
+== tdbCreateDateTime ==
+
+The Date and Time that the underlying TDB dataset was created
