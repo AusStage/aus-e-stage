@@ -93,9 +93,14 @@ public class AuseStage {
     
     /** Link a contributor to the function that they've undertaken */
     public static final Property undertookRole = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#undertookRole"); 
-     
     
+    /*
+     * RDF Metadata
+     */
+    /** Specify some metadata about the Rdf dataset */
+    public static final Property rdfMetadata = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#rdfMetadata"); 
     
-    
+    /** Specify when the TDB dataset was created */
+    public static final Property tdbCreateDateTime = m_model.createProperty("http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#tdbCreateDateTime");     
 
 }
