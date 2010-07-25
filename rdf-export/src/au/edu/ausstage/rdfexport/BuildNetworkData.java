@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.util.GregorianCalendar;
 
 // import the Jena related packages
 import com.hp.hpl.jena.rdf.model.*;
@@ -410,7 +412,8 @@ public class BuildNetworkData {
 					
 					// add the collaborator count
 					if(contributor != null) {
-						contributor.addProperty(AuseStage.collaboratorCount, Integer.toString(collaboratorCount));
+						//collaboration.addProperty(AuseStage.collaborationCount, model.createTypedLiteral(resultSet.getString(3), XSDDatatype.XSDinteger));
+						contributor.addProperty(AuseStage.collaboratorCount, model.createTypedLiteral(Integer.toString(collaboratorCount), XSDDatatype.XSDinteger));
 
 						// reset the collaborator count
 						collaboratorCount = 0;
@@ -446,7 +449,8 @@ public class BuildNetworkData {
 						collaboration.addProperty(AuseStage.collaborator, collaborator);
 				
 						// add the count
-						collaboration.addProperty(AuseStage.collaborationCount, resultSet.getString(3));
+						collaboration.addProperty(AuseStage.collaborationCount, model.createTypedLiteral(resultSet.getString(3), XSDDatatype.XSDinteger));
+						//collaboration.addProperty(AuseStage.collaborationCount, resultSet.getString(3));
 					
 						// add the link to the contributors
 						contributor.addProperty(AuseStage.hasCollaboration, collaboration);
@@ -895,6 +899,17 @@ public class BuildNetworkData {
 			System.err.println("       " + sqlEx.getMessage());
 			return false;
 		}
+		
+		/*
+		 * add dataset metadata
+		 */
+		// get the current date and time
+		GregorianCalendar calendar = new GregorianCalendar();
+	 	DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
+	 	
+		Resource metadata = model.createResource("ausstage:rdf:metadata");
+		metadata.addProperty(RDF.type, AuseStage.rdfMetadata);
+		metadata.addProperty(AuseStage.tdbCreateDateTime, dateFormatter.format(calendar.getTime()));
 		
 		/*
 		 * generate the statistics files
