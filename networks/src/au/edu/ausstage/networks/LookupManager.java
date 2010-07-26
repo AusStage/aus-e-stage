@@ -296,7 +296,7 @@ public class LookupManager {
 		htmlMarkup.append("</table>");
 		
 		// add a comment
-		htmlMarkup.append("<!-- Contributors listed: " + count + "-->");
+		htmlMarkup.append("<!-- Contributors listed: " + count + " -->");
 		
 		return htmlMarkup.toString();
 	
@@ -317,6 +317,7 @@ public class LookupManager {
 		// declare helper variables
 		StringBuilder xmlMarkup    = new StringBuilder("<?xml version=\"1.0\"?><collaborators>");
 		Collaborator  collaborator = null;
+		int           count        = 0;
 		
 		while(iterator.hasNext()) {
 		
@@ -334,7 +335,13 @@ public class LookupManager {
 			xmlMarkup.append("<lastDate>" + collaborator.getLastDate() + "</lastDate>");
 			xmlMarkup.append("<collaborations>" + collaborator.getCollaborations() + "</collaborations>");
 			xmlMarkup.append("</collaborator>");
+			
+			// increment the count
+			count++;
 		}
+		
+		// add a comment
+		xmlMarkup.append("<!-- Contributors listed: " + count + " -->");
 		
 		// end the table
 		xmlMarkup.append("</collaborators>");
@@ -342,5 +349,56 @@ public class LookupManager {
 		return xmlMarkup.toString();
 	
 	} // end createXMLOutput method
+	
+	/**
+	 * Lookup the date and time of creation of various parts of the system
+	 *
+	 * @param id         the id of the item to lookup
+	 * @param formatType the type of format of response
+	 */
+	public String getCreateDateTime(String id, String formatType) {
+	
+		// declare helper variables
+		String dataString = null;
+	
+		// determine what type of update date time we're looking for
+		if(id.equals("datastore-create-date") == true) {
+			
+			// define the base sparql query
+			String sparqlQuery = "PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> "
+							   + "SELECT ?updateDate "
+							   + "WHERE { "
+							   + "       <ausstage:rdf:metadata> a ausestage:rdfMetadata; "
+							   + "                               ausestage:tdbCreateDateTime ?updateDate. "
+							   + "}";
+							   
+			// execute the query
+			ResultSet results = database.executeSparqlQuery(sparqlQuery);
+			
+			// check on what was returned
+			if(results.hasNext()) {
+				// there is a result to process
+				QuerySolution row = results.nextSolution();
+				
+				String createDateTime = row.get("updateDate").toString();
+				
+				// format the response
+				if(formatType.equals("html") == true) {
+					dataString = "<p><strong>Dataset created:</strong> " + createDateTime + "</p>";
+				} else if(formatType.equals("xml") == true) {
+					dataString = "<?xml version=\"1.0\"?><createDateTime>" + createDateTime + "</createDateTime>";
+				} else if(formatType.equals("json") == true) {
+					dataString = "{ updateDateTime: \"" + createDateTime + "\"}";
+				}
+			} else {
+				// something bad has happened
+				return ":(";
+			}			
+		}
+		
+		// return the requested data
+		return dataString;
+	
+	} // end the getUpdateDateTime method
 
 } // end class definition
