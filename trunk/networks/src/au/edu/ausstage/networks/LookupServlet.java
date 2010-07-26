@@ -35,9 +35,10 @@ public class LookupServlet extends HttpServlet {
 	private DataManager database;
 	
 	// declare private constants
-	private static final String[] TASK_TYPES   = {"key-collaborators", "key-organisations"};
-	private static final String[] FORMAT_TYPES = {"html", "xml", "json"};
-	private static final String[] SORT_TYPES   = {"count", "id", "name"};
+	private final String[] TASK_TYPES        = {"key-collaborators", "system-property"};
+	private final String[] FORMAT_TYPES      = {"html", "xml", "json"};
+	private final String[] SORT_TYPES        = {"count", "id", "name"};
+	private final String[] PROPERTY_ID_TYPES = {"datastore-create-date"};
 
 	/*
 	 * initialise this instance
@@ -88,7 +89,7 @@ public class LookupServlet extends HttpServlet {
 				throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
 			}
 		}
-
+		
 		// check the sort parameter
 		if(InputUtils.isValid(sortType) == false) {
 			// use default value
@@ -99,14 +100,26 @@ public class LookupServlet extends HttpServlet {
 			}
 		}
 		
+		// check on the system property parameter
+		if(taskType.equals(TASK_TYPES[1]) == true) {
+			// this is a system property lookup
+			if(Integer.parseInt(id) > PROPERTY_ID_TYPES.length) {
+				throw new ServletException("Invalid System Property ID detected. Expected integer between 0 - " + PROPERTY_ID_TYPES.length);
+			}
+		}		
+		
 		// instantiate a lookup object
 		LookupManager lookup = new LookupManager(database);
 		
 		String results = null;
 		
 		// determine the type of lookup to undertake
-		if(taskType.equals("key-collaborators") == true) {
+		if(taskType.equals(TASK_TYPES[0]) == true) {
 			results = lookup.getKeyCollaborators(id, formatType, sortType);
+		} else if(taskType.equals(TASK_TYPES[1]) == true) {
+			if(id.equals("1") == true) {
+				results = lookup.getCreateDateTime(PROPERTY_ID_TYPES[Integer.parseInt(id) - 1], formatType);
+			}
 		}
 		
 		// output the appropriate mime type
