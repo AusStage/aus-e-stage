@@ -55,7 +55,9 @@ A property of [AuseStageOntology#collaboration collaboration] and stores the ID 
 
 == collaborationCount ==
 
-A property of [AuseStageOntology#collaboration collaboration] and stores the number of times the contributors involved in this collaboration have collaborated
+A property of [AuseStageOntology#collaboration collaboration] and stores the number of times the contributors involved in this collaboration have collaborated.
+
+_Note:_ Must be typed as an Integer Literal
 
 == collaborationFirstDate ==
 
