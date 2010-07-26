@@ -21,7 +21,7 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || key-contributors || No || ||
+|| task   || key-contributors, system-property || No || ||
 || id     || Unique contributor id || No || ||
 || format || html xml json || Yes || html ||
 || sort   || count id name || Yes || count || 
@@ -30,7 +30,12 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 The task parameter defines the type of lookup that is undertaken. For example key-contributors is a lookup that retrieves all of the contributors that a specified contributor has collaborated with
 
 === id ===
-The id parameter defines the unique identifier of the contributor that is of interest
+The id parameter defines the unique identifier of the contributor that is of interest.
+
+_Note:_ if the task is a `system-property` lookup the following are valid ids
+
+|| *id* || Lookup Value ||
+|| 1    || The date and time that the RDF data store was created ||
 
 === format ===
 The format parameter defines what format the resulting data with be presented in. 
