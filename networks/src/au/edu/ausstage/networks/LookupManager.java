@@ -127,7 +127,7 @@ public class LookupManager {
 				collaborator.setLastDate(row.get("lastDate").toString());
 		
 				// get the collaboration count
-				collaborator.setCollaborations(row.get("collabCount").toString());
+				collaborator.setCollaborations(Integer.toString(row.get("collabCount").asLiteral().getInt()));
 			
 				// add the url
 				collaborator.setUrl(AusStageURI.getURL(row.get("collaborator").toString()));
@@ -186,6 +186,7 @@ public class LookupManager {
 	
 	/**
 	 * A method to take a group of collaborators and output JSON encoded text
+	 * Unchecked warnings are suppressed due to internal issues with the org.json.simple package
 	 *
 	 * @param collaborators the list of collaborators
 	 * @return              the JSON encoded string
@@ -249,6 +250,7 @@ public class LookupManager {
 		String        firstDate    = null;
 		String        lastDate     = null;
 		Collaborator  collaborator = null;
+		int           count        = 0;
 		
 		// add the header and footer
 		htmlMarkup.append("<thead><tr><th>Name</th><th>Period</th><th>Function(s)</th><th>Count</th></tr></thead>");
@@ -284,11 +286,17 @@ public class LookupManager {
 			htmlMarkup.append("<td>" + collaborator.getCollaborations() + "</td>");
 			
 			// end the row
-			htmlMarkup.append("</tr>");			
+			htmlMarkup.append("</tr>");	
+			
+			// increment the count
+			count++;		
 		}
 		
 		// end the table
 		htmlMarkup.append("</table>");
+		
+		// add a comment
+		htmlMarkup.append("<!-- Contributors listed: " + count + "-->");
 		
 		return htmlMarkup.toString();
 	

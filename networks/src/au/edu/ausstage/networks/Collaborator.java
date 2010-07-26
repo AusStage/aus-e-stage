@@ -284,7 +284,8 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @param value the new value
 	 */
 	public void setCollaborations(String value) {
-		if(InputUtils.isValidInt(value)) {
+		//if(InputUtils.isValidInt(value)) {
+		if(InputUtils.isValid(value)) {
 			collaborations = value;
 		} else {
 			throw new IllegalArgumentException("The value must be a valid integer");
