@@ -92,6 +92,57 @@ public class InputUtils {
 		return true;
 	
 	} // end the isValid method
+	
+	/**
+	 * check to ensure a parameter value is valid
+	 *
+	 * @param value the parameter value
+	 *
+	 * @return      true if, and only if, the parameter is valid
+	 */
+	public static boolean isValidInt(int value) {
+	
+		// return true as only an int could get this far
+		return true	;
+	} // end the isValid method
+	
+	/**
+	 * check to ensure a parameter value is valid
+	 *
+	 * @param value   the parameter value
+	 * @param minimum the minimum allowed value
+	 *
+	 * @return      true if, and only if, the parameter is valid
+	 */
+	public static boolean isValidInt(int value, int minimum) {
+		
+		if(value >= minimum) {
+			return false;
+		} else {
+			return true;
+		}
+			
+	} // end the isValid method
+	
+	/**
+	 * check to ensure a parameter value is valid
+	 *
+	 * @param value    the parameter value
+	 * @param minimum  the minimum allowed value
+	 * @param maxmimum the maximum allowed value
+	 *
+	 * @return      true if, and only if, the parameter is valid
+	 */
+	public static boolean isValidInt(int value, int minimum, int maximum) {
+		
+		if(value >= minimum && value <= maximum) {
+			return false;
+		} else {
+			return true;
+		}			
+	} // end the isValid method
+	
+	
 
 
 } // end class definition
