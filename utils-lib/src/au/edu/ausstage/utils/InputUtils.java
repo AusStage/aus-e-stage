@@ -136,9 +136,9 @@ public class InputUtils {
 	public static boolean isValidInt(int value, int minimum, int maximum) {
 		
 		if(value >= minimum && value <= maximum) {
-			return false;
-		} else {
 			return true;
+		} else {
+			return false;
 		}			
 	} // end the isValid method
 	
