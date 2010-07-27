@@ -35,10 +35,10 @@ public class ExportServlet extends HttpServlet {
 	private DataManager database;
 	
 	// declare private constants
-	private static final String[] TASK_TYPES   = {"simple-network"};
-	private static final String[] FORMAT_TYPES = {"graphml"};
-	private static final String   MIN_DEGREES  = "1";
-	private static final int      MAX_DEGREES  = 5;
+	private final String[] TASK_TYPES   = {"simple-network"};
+	private final String[] FORMAT_TYPES = {"graphml"};
+	private final int      MIN_DEGREES  = 1;
+	private final int      MAX_DEGREES  = 5;
 
 	/*
 	 * initialise this instance
@@ -67,7 +67,12 @@ public class ExportServlet extends HttpServlet {
 		String taskType   = request.getParameter("task");
 		String id         = request.getParameter("id");
 		String formatType = request.getParameter("format");
-		String degrees    = request.getParameter("degrees");
+		int degrees;
+		try {
+			degrees = Integer.parseInt(request.getParameter("degrees"));
+		} catch (NumberFormatException ex) {
+			degrees = MIN_DEGREES;
+		}
 		
 		// check on the taskType parameter
 		if(InputUtils.isValid(taskType, TASK_TYPES) == false) {
@@ -95,13 +100,9 @@ public class ExportServlet extends HttpServlet {
 			// use default value
 			degrees = MIN_DEGREES;
 		} else {
-			try {
-				if(Integer.parseInt(degrees) > MAX_DEGREES) {
-					throw new ServletException("Degree parameter must be less than: " + MAX_DEGREES);
-				}
-			} catch (java.lang.NumberFormatException ex) {
-				degrees = MIN_DEGREES;
-			}
+			if(InputUtils.isValidInt(degrees, MIN_DEGREES, MAX_DEGREES) == false) {
+				throw new ServletException("Degree parameter must be less than: " + MAX_DEGREES);
+			}			
 		}
 		
 		// instantiate a lookup object
