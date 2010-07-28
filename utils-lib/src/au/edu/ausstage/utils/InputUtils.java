@@ -96,19 +96,6 @@ public class InputUtils {
 	/**
 	 * check to ensure a parameter value is valid
 	 *
-	 * @param value the parameter value
-	 *
-	 * @return      true if, and only if, the parameter is valid
-	 */
-	public static boolean isValidInt(int value) {
-	
-		// return true as only an int could get this far
-		return true	;
-	} // end the isValid method
-	
-	/**
-	 * check to ensure a parameter value is valid
-	 *
 	 * @param value   the parameter value
 	 * @param minimum the minimum allowed value
 	 *
