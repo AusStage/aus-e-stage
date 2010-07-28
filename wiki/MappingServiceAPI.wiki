@@ -1,0 +1,14 @@
+#summary Details of the Mapping Service API
+
+<h1>Mapping Service API</h1>
+
+The Mapping Service exposes an [http://en.wikipedia.org/wiki/Application_programming_interface API] for the retrieval of data related to building a map on a web page and the export of data in the [http://en.wikipedia.org/wiki/Keyhole_Markup_Language KML] format.
+
+Data exported in the KML format can be used with a wide variety of [http://en.wikipedia.org/wiki/Geographic_information_system GIS] based applications including the popular [http://earth.google.com/ Google Earth] application. 
+
+Details of the API are in the following pages:
+
+ * [MappingServiceAPIMapData Map Data including KML export]
+ * [MappingServiceAPIGeocoding Geocoding of addresses in AusStage]
+ * [MappingServiceAPIBrowseData Map Data specifically for the browse map]
+ * [MappingServiceAPIXMLData Retrieve data from various XML based datasets]
