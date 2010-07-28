@@ -27,6 +27,8 @@ Our understanding of statistical concepts for social network analysis draws on J
   * Centrality - degree as a measure of local centrality - doesn't take into account indirect links, relative measure of local centrality = degree of a point / number of points. Global centrality is expressed as the distances among the various points (closeness). Sum distance = the sum of the distances from one point to all other points = the lower the sum, the closer the points. 
   * Betweenness = the extent to which a particular point lies 'between' the various other points in the graph: a point of relatively low degree may play an important 'intermediary' role and so be very central to the network. The betweenness of a point measures the extent to which an agent can play the part of a 'broker' or 'gatekeeper' with a potential for control over others
 
+==Examples==
+
 The Vizster project (http://hci.stanford.edu/jheer/projects/vizster/) provides a valuable model of an interactive interface to network data. Vizster addresses issues of focus and context in visualising networks, and presents an interactive interface for exploring network structure. Its design was guided by ethnographic research of online communities and it is the only network interface which, to our knowledge, has been subject to user testing (Heer and Boyd 2005). 
 
 Some other examples of interactive interfaces for exploring network data include:
