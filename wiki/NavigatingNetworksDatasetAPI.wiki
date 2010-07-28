@@ -35,7 +35,7 @@ The id parameter defines the unique identifier of the contributor that is of int
 _Note:_ if the task is a `system-property` lookup the following are valid ids
 
 || *id* || *Lookup Value* ||
-|| 1    || The date and time that the RDF data store was created ||
+|| datastore-create-date || The date and time that the RDF data store was created ||
 
 === format ===
 The format parameter defines what format the resulting data with be presented in. 
