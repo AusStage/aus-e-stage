@@ -12,6 +12,7 @@
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
    * [MappingService Mapping Service]
+     * [MappingServiceAPI Mapping Service API]
    * [MobileService  Mobile Service]
    * [NetworkService Network Service]
      * [NavigatingNetworksSpecification Specification]
