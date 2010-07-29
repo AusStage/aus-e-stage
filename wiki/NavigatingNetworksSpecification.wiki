@@ -534,6 +534,8 @@ sketch for each interface idea BRAD WITH INPUT FROM JONATHAN
 technical requirements for each interface idea BRAD WITH INPUT FROM COREY/WEI
 
 =TOOLS AND TECHNOLOGIES - CANDIDATES FOR APPLICATION=
+ 
+== RDF Dataset ==
 
 To efficiently process data for the Navigating Networks service it is necessary to reformat the data stored in the !AusStage database. The process of reformatting the data needs to be undertaken to align the data with the requirements of the networks service by creating direct links between contributors that have collaborated on the same event. There were three possible approaches:
 
