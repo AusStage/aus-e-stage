@@ -14,7 +14,6 @@
    * [MappingService Mapping Service]
      * [MappingServiceAPI Mapping Service API]
        * [MappingServiceAPIMapData Map Data]
-       * [MappingServiceAPIGeocoding Geocoding]
        * [MappingServiceAPIBrowseData Browse Map]
        * [MappingServiceAPIXMLData XML Data]
    * [MobileService  Mobile Service]
