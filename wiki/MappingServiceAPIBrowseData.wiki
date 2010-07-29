@@ -5,3 +5,39 @@
 The following documentation provides an overview of the API exposed by the MappingService which can be used to retrieve data used in the construction of of the [http://beta.ausstage.edu.au/mapping/browse.jsp Browse Map].
 
 <wiki:toc max_depth="3" />
+
+= Retrieve Marker Data =
+
+Marker data is used to populate the browse map with venue markers
+
+== Base URL ==
+
+The base URL for the retrieval of marker data is as follows:
+
+http://beta.ausstage.edu.au/mapping/browse?action=markers
+
+== Request Type ==
+
+Get Request
+
+== Parameters ==
+
+None.
+
+== Sample Ouptut ==
+
+http://beta.ausstage.edu.au/mapping/data?action=markers&type=contributor&id=102
+
+{{{
+<markers>
+    <marker cnt="85" fyear="1986" id="77" lat="-27.466764" lng="153.023776" lyear="2004"
+        name="Suncorp Theatre" state="4"/>
+    <marker cnt="561" fyear="1965" id="555" lat="-35.281282" lng="149.130596" lyear="2010"
+        name="Canberra Theatre " state="7"/>
+    <marker cnt="2" fyear="2001" id="13" lat="-37.773417" lng="144.96087" lyear="2001"
+        name="Cornish Arms" state="6"/>
+    <marker cnt="185" fyear="1900" id="76" lat="-37.810916" lng="144.969755" lyear="2008"
+        name="Her Majesty's Theatre" state="6"/>
+    ...
+</markers>
+}}}
