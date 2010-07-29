@@ -9,6 +9,5 @@ Data exported in the KML format can be used with a wide variety of [http://en.wi
 Details of the API are in the following pages:
 
  * [MappingServiceAPIMapData Map Data including KML export]
- * [MappingServiceAPIGeocoding Geocoding of addresses in AusStage]
  * [MappingServiceAPIBrowseData Map Data specifically for the browse map]
  * [MappingServiceAPIXMLData Retrieve data from various XML based datasets]
