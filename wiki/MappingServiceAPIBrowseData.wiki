@@ -81,3 +81,82 @@ http://beta.ausstage.edu.au/mapping/browse?action=lookup&id=77
   ...
 </ul>
 }}}
+
+= Retrieve XML to build a Timeline =
+
+Retrieve the XML that used to build a timeline using the [http://www.simile-widgets.org/timeline/ SIMILE Timeline Widget]
+
+== Base URL ==
+
+The base URL for the lookup of additional information about a venue is
+
+http://beta.ausstage.edu.au/mapping/browse?action=timeline
+
+== Request Type ==
+
+Get Request
+
+== Parameters ==
+
+|| *Name * || *Allowed Values* || *Optional* || *Default* ||
+|| id      || Unique venue id  || No         ||           ||
+|| start   || The start of the period of interest || Yes || All events ||
+|| finish  || The end of the period of interest || Yes || All Events ||
+
+_Note:_ The start and finish parameters define a time period during which an event must have occurred at the specified venue for it to be returned in the dataset 
+
+== Sample Ouptut ==
+
+http://beta.ausstage.edu.au/mapping/browse?action=timeline&id=77
+
+{{{
+<data>
+    <event end="30 September 2004 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=60652"
+        start="28 September 2004 00:00:00 +0000" title="The Amazing Magician"/>
+    <event end="02 October 2004 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=60647"
+        start="24 September 2004 00:00:00 +0000" title="Cloudland"/>
+    <event end="18 September 2004 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=63497"
+        start="16 September 2004 00:00:00 +0000" title="Sandakan Threnody"/>
+    <event end="09 September 2004 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=63439"
+        start="03 September 2004 00:00:00 +0000" title="The Gigli Concert"/>
+    <event end="10 October 1998 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=25618"
+        start="02 October 1998 00:00:00 +0000" title="Madam Butterfly"/>
+    <event end="19 September 1998 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=25593"
+        start="15 September 1998 00:00:00 +0000" title="Streb"/>
+    <event end="05 September 1998 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=25305"
+        start="27 August 1998 00:00:00 +0000" title="Anna Karenina"/>
+    <event end="20 June 1998 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=60284"
+        start="04 June 1998 00:00:00 +0000" title="Honour"/>
+    <event end="08 April 1998 00:00:00 +0000" isDuration="true"
+        link="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=26258"
+        start="04 April 1998 00:00:00 +0000" title="Fish"/>
+    ...
+</data>
+}}}
+
+
+= Export KML Version =
+
+Export the KML version of the browse map
+
+== Base URL ==
+
+The base URL for the export of data in KML format is
+
+http://beta.ausstage.edu.au/mapping/browse?action=kml
+
+== Request Type ==
+
+Get Request
+
+== Parameters ==
+
+None
