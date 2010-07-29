@@ -535,6 +535,40 @@ technical requirements for each interface idea BRAD WITH INPUT FROM COREY/WEI
 
 =TOOLS AND TECHNOLOGIES - CANDIDATES FOR APPLICATION=
 
+To efficiently process data for the Navigating Networks service it is necessary to reformat the data stored in the !AusStage database. The process of reformatting the data needs to be undertaken to align the data with the requirements of the networks service by creating direct links between contributors that have collaborated on the same event. There were three possible approaches:
+
+ # Reformat the data "on the fly" using SQL queries in the !AusStage database
+ # Reformat the data into a new set of tables in the !AusStage database
+ # Export the data into a different format outside the !AusStage database
+
+The option of reformatting data "on the fly" was found not to be viable due to the very large size of the datasets that needed to be created. This left the two remaining options, both of which create a dataset that is static and that needs to be periodically refreshed. It was also determined that due to the large size of the dataset the way in which it was indexed would be critical to the performance of the overall system. An efficient indexing system would mean that data could be retrieved quickly and efficiently with a minimum of processing. 
+
+Concurrent to this work was an investigation into the types of data formats that could be used to share data with external systems and processes. Early in these investigations the [http://www.foaf-project.org/ FOAF project] was evaluated and found to meet the basic needs of constructing a network. FOAF is an acronym meaning "Friend Of A Friend" and is an ontology that describes at a basic level people and their associations via the [http://xmlns.com/foaf/spec/#term_knows foaf:knows] term. This term links two people together as it can be said that person A "knows" person B. Use of this ontology meant that that the data set would need to use [http://en.wikipedia.org/wiki/Resource_Description_Framework Resource Description Framework (RDF)] based technologies. 
+
+The decision was made to undertake periodic exports of data from the !AusStage database into an RDF based dataset. All of the development work undertaken as part of the Aus-e-Stage project has used the Java programming language. Therefore tools and libraries that used Java would need to be used to build the dataset. [http://openjena.org/ Jena], a Semantic Web Framework for Java was chosen as it has modular architecture which allowed development to be undertaken in stages. 
+
+The modules that have been used include:
+
+ * [http://openjena.org/ Jena] as the glue between all of the other components
+ * [http://openjena.org/wiki/TDB TDB] to provide the persistent storage of the RDF dataset
+ * [http://openjena.org/ARQ/documentation.html ARQ] for the processing of [http://en.wikipedia.org/wiki/SPARQL SPARQL] queries
+ * [http://www.joseki.org/ Joseki] to provide a SPARQL endpoint
+
+When constructing an RDF based dataset it is advisable to use existing standards or ontologies that are freely available. In this way the dataset that is made available to user becomes richer as it is a dataset that become self describing as the ontologies used provide context to the terms used to describe the data. A list of ontologies currently used by the dataset [NavigatingNetworksDataset#RDF_Ontologies is available] and contains terms to describe contributors, the relationships between contributors and events. Where an existing ontology could not be found an [AuseStageOntology Aus-e-Stage ontology] was created to fill these gaps. It is anticipated that the use of this ontology will be phased out as the plans for the periodic export of the entire AusStage dataset in RDF mature as part of a separate project. 
+
+As well as providing a platform for the creation of RDF data, that would make it easier to share data with other users and stakeholders, the data store was found to be provide efficient indexing and query times to return data were well below those provided by the relational database. 
+
+A planned [http://en.wikipedia.org/wiki/Application_programming_interface API] will make it easier for users to extract data from the data store, for example extract the data necessary to construct a network graph for a particular contributor. An API of this type is not well suited to ad-hoc querying of the data. For this reason the SPARQL endpoint is made available to our users. Using this endpoint any user can construct a SPARQL query and return data from the RDF data store. [http://en.wikipedia.org/wiki/SPARQL SPARQL] is a query language designed specifically for use with RDF based data. 
+
+In this way data that is required for the Navigating Networks Service is:
+
+ * Stored in a format that makes it easier to share with others
+ * The data uses the emerging [http://en.wikipedia.org/wiki/Semantic_Web semantic web] based technologies
+ * Data can be returned in an efficient manner supporting the many formats required for network visualisation
+ * Ad-hoc querying of the data is also supported for those cases where the API does not meet the users needs
+
+More information on the dataset can be found starting with the [NavigatingNetworksDataset Navigating Networks Dataset] page here on the Wiki.
+
 BRAD TO WRITE UP WITH INPUT FROM COREY/WEI 
 
 Summarise Corey's current work
