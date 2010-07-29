@@ -6,7 +6,7 @@ The following documentation provides an overview of the API exposed by the Mappi
 
 <wiki:toc max_depth="3" />
 
-= Retrieving Marker Data =
+= Retrieve Marker Data =
 
 Marker data is used to populate a map on a web page with markers representing venues where events have occurred that match the specified criteria.
 
@@ -25,7 +25,7 @@ Get Request
 == Parameters ==
 
 || *Name * || *Allowed Values* || *Optional* || *Default* ||
-|| type    || organisation, contribtor|| No || ||
+|| type    || [MappingServiceAPIMapData#Type:_organisation organisation], [MappingServiceAPIMapData#Type:_contributor contribtor]|| No || ||
 || id      || Unique contributor or organisation id ||	 No || ||
 
 = Exporting KML data =
@@ -120,5 +120,19 @@ Combining this URL with the parameters outlined below retrieves data from the Ma
 || operator       || and, or, exact ||	 No || ||
 || type || single, multi || Yes || single ||
 
+= Parameter Value Definitions =
+The values of the parameters influences the way in which the API works, for example defining which records to use in constructing a dataset. These values are outlined below
 
+== Type: organisation ==
+Defines a request for marker data using organisation records
 
+== Type:contributor ==
+Defines a request for marker data using contributor records
+
+== Type: orgname ==
+
+== Type: orgname2 ==
+
+== Type: contribname ==
+
+== Type: contribname2 ==
