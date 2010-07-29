@@ -28,6 +28,36 @@ Get Request
 || type    || [MappingServiceAPIMapData#Type:_organisation organisation], [MappingServiceAPIMapData#Type:_contributor contribtor]|| No || ||
 || id      || Unique contributor or organisation id ||	 No || ||
 
+== Sample Ouptut ==
+
+http://beta.ausstage.edu.au/mapping/data?action=markers&type=contributor&id=102
+
+{{{
+<mapdata>
+    <markers>
+        <marker events="1" fdate="19610224" fdatestr="1961-02-24" lat="-33.871828" ldate="19610224" ldatestr="1961-02-24" lng="151.207599" name="Palace Theatre" postcode="2000" state="3" suburb="Sydney">
+            &lt;p&gt;&lt;a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=1403"
+            target="ausstage"&gt;Palace Theatre&lt;/a&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=102"
+            target="ausstage"&gt;Walter Sullivan&lt;/a&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=14805"
+            target="ausstage"&gt;A Taste of Honey&lt;/a&gt;, 24 February
+            1961&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+        </marker>
+        <marker events="1" fdate="19660825" fdatestr="1966-08-25" lat="-37.810916" ldate="19660825" ldatestr="1966-08-25" lng="144.969755" name="Her Majesty's Theatre" postcode="3000" state="6" suburb="Melbourne">
+            &lt;p&gt;&lt;a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=76"
+            target="ausstage"&gt;Her Majesty's Theatre&lt;/a&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=102"
+            target="ausstage"&gt;Walter Sullivan&lt;/a&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=61979"
+            target="ausstage"&gt;Funny Girl&lt;/a&gt;, 25 August
+            1966&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+        </marker>
+        ...
+    </markers>       
+</mapdata>
+}}}
+
 = Exporting KML data =
 
 KML data is used to build a map in a GIS based application such as Google Earth.
@@ -94,7 +124,7 @@ Combining this URL with the parameters outlined below retrieves data from the Ma
 || action  || organisation_search || No || ||
 || organisation_name || part of, or complete, organisation name to find || No || ||
 || operator       || [MappingServiceAPIMapData#Operator:_and and], [MappingServiceAPIMapData#Operator:_or or], [MappingServiceAPIMapData#Operator:_exact exact] ||	 No || ||
-| type || [MappingServiceAPIMapData#Type:_single single], [MappingServiceAPIMapData#Type:_multi multi] || Yes || single ||
+|| type || [MappingServiceAPIMapData#Type:_single single], [MappingServiceAPIMapData#Type:_multi multi] || Yes || single ||
 
 = Contributor Search =
 
