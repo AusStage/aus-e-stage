@@ -1,0 +1,7 @@
+#summary Mapping Service API - Explaining the Browse Map Data API
+
+<h1>Mapping Service API - Browse Map Data</h1>
+
+The following documentation provides an overview of the API exposed by the MappingService which can be used to retrieve data used in the construction of of the [http://beta.ausstage.edu.au/mapping/browse.jsp Browse Map].
+
+<wiki:toc max_depth="3" />
