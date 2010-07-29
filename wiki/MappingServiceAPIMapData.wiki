@@ -47,7 +47,7 @@ Get Request
 == Parameters ==
 
 || *Name * || *Allowed Values* || *Optional* || *Default* ||
-|| type    || organisation, contribtor|| No || ||
+|| type    || [MappingServiceAPIMapData#Type:_organisation organisation], [MappingServiceAPIMapData#Type:_contributor contribtor]|| No || ||
 || id      || Unique contributor or organisation id ||	 No || ||
 
 = Lookup Data Elements =
@@ -69,7 +69,7 @@ Combining this URL with the parameters outlined below retrieves data from the Ma
 == Parameters ==
 
 || *Name * || *Allowed Values* || *Optional* || *Default* ||
-|| type    || orgname, orgname2, contribname, contribname2|| No || ||
+|| type    || [MappingServiceAPIMapData#Type:_orgname orgname], [MappingServiceAPIMapData#Type:_orgname2 orgname2], [MappingServiceAPIMapData#Type:_contribname contribname], [MappingServiceAPIMapData#Type:_contribname2 contribname2]|| No || ||
 || id      || Unique contributor or organisation id ||	 No || ||
 
 = Organisation Search =
@@ -93,8 +93,8 @@ Combining this URL with the parameters outlined below retrieves data from the Ma
 || *Name * || *Allowed Values* || *Optional* || *Default* ||
 || action  || organisation_search || No || ||
 || organisation_name || part of, or complete, organisation name to find || No || ||
-|| operator       || and, or, exact ||	 No || ||
-|| type || single, multi || Yes || single ||
+|| operator       || [MappingServiceAPIMapData#Operator:_and and], [MappingServiceAPIMapData#Operator:_or or], [MappingServiceAPIMapData#Operator:_exact exact] ||	 No || ||
+| type || [MappingServiceAPIMapData#Type:_single single], [MappingServiceAPIMapData#Type:_multi multi] || Yes || single ||
 
 = Contributor Search =
 
@@ -117,8 +117,8 @@ Combining this URL with the parameters outlined below retrieves data from the Ma
 || *Name * || *Allowed Values* || *Optional* || *Default* ||
 || action  || contributor_search || No || ||
 || contributor_name || part of, or complete, organisation name to find || No || ||
-|| operator       || and, or, exact ||	 No || ||
-|| type || single, multi || Yes || single ||
+|| operator       || [MappingServiceAPIMapData#Operator:_and and], [MappingServiceAPIMapData#Operator:_or or], [MappingServiceAPIMapData#Operator:_exact exact] ||	 No || ||
+|| type || [MappingServiceAPIMapData#Type:_single single], [MappingServiceAPIMapData#Type:_multi multi] || Yes || single ||
 
 = Parameter Value Definitions =
 The values of the parameters influences the way in which the API works, for example defining which records to use in constructing a dataset. These values are outlined below
@@ -131,8 +131,36 @@ Defines a request for marker data using contributor records
 
 == Type: orgname ==
 
+Lookup the name of an organisation
+
 == Type: orgname2 ==
+
+Lookup the name of an organisation and only return the name if it has events that can be mapped
 
 == Type: contribname ==
 
+Lookup the name of a contributor
+
 == Type: contribname2 ==
+
+Lookup the name of a contributor and only return the name if it has events that can be mapped
+
+== Operator: and ==
+
+Undertake a search using the "and" operator. Meaning that _all_ of the terms in the search must be found.
+
+== Operator: or ==
+
+Undertake a search using the "or" operator. Meaning that _some_ of the terms in the search must be found.
+
+== Operator: exact ==
+
+Undertake a search using the exact phrase. Meaning that the name must match exactly, or that additional advanced search operators have been used
+
+== Type: single ==
+
+Format the search results to include user interface elements for adding a single contributor / organisation onto the map
+
+== Type: multi ==
+
+Format the search results to include user interface elements for adding multiple contributors / organisations onto the map
