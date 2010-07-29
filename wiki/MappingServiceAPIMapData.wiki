@@ -2,7 +2,7 @@
 
 <h1>Mapping Service API - Map Data</h1>
 
-The following documentation provides an overview of the API exposed by the MappingService which can be used to retrieve data used in the construction of Maps on web pages and the export of data in the KML format.
+The following documentation provides an overview of the API exposed by the MappingService which can be used to retrieve data used in the construction of the maps by [http://beta.ausstage.edu.au/mapping/organisations.jsp organisation] and [http://beta.ausstage.edu.au/mapping/contributors.jsp contributor] as well as the export of data in the KML format.
 
 <wiki:toc max_depth="3" />
 
