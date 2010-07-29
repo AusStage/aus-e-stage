@@ -1,0 +1,124 @@
+#summary Mapping Service API - Explaining the Map Data API
+
+<h1>Mapping Service API - Map Data</h1>
+
+The following documentation provides an overview of the API exposed by the MappingService which can be used to retrieve data used in the construction of Maps on web pages and the export of data in the KML format.
+
+<wiki:toc max_depth="3" />
+
+= Retrieving Marker Data =
+
+Marker data is used to populate a map on a web page with markers representing venues where events have occurred that match the specified criteria.
+
+== Base URL ==
+
+The base URL for the retrieval of marker data is as follows:
+
+http://beta.ausstage.edu.au/mapping/data?action=markers&
+
+Combining this URL with the parameters outlined below retrieves data from the MappingService.
+
+== Request Type ==
+
+Get Request
+
+== Parameters ==
+
+|| *Name * || *Allowed Values* || *Optional* || *Default* ||
+|| type    || organisation, contribtor|| No || ||
+|| id      || Unique contributor or organisation id ||	 No || ||
+
+= Exporting KML data =
+
+KML data is used to build a map in a GIS based application such as Google Earth.
+
+== Base URL ==
+
+The base URL for the KML export functionality is as follows:
+
+http://beta.ausstage.edu.au/mapping/data?action=kml&
+
+Combining this URL with the parameters outlined below retrieves data from the MappingService.
+
+== Request Type ==
+
+Get Request
+
+== Parameters ==
+
+|| *Name * || *Allowed Values* || *Optional* || *Default* ||
+|| type    || organisation, contribtor|| No || ||
+|| id      || Unique contributor or organisation id ||	 No || ||
+
+= Lookup Data Elements =
+
+The Lookup API is used to lookup various pieces of information such an organisation name
+
+== Request Type ==
+
+Get Request
+
+== Base URL ==
+
+The base URL for the retrieval of marker data is as follows:
+
+http://beta.ausstage.edu.au/mapping/data?action=lookup&
+
+Combining this URL with the parameters outlined below retrieves data from the MappingService.
+
+== Parameters ==
+
+|| *Name * || *Allowed Values* || *Optional* || *Default* ||
+|| type    || orgname, orgname2, contribname, contribname2|| No || ||
+|| id      || Unique contributor or organisation id ||	 No || ||
+
+= Organisation Search =
+
+Search the database for a list of organisations
+
+== Request Type ==
+
+Post Request
+
+== Base URL ==
+
+The base URL for the retrieval of marker data is as follows:
+
+http://beta.ausstage.edu.au/mapping/data
+
+Combining this URL with the parameters outlined below retrieves data from the MappingService.
+
+== Parameters ==
+
+|| *Name * || *Allowed Values* || *Optional* || *Default* ||
+|| action  || organisation_search || No || ||
+|| organisation_name || part of, or complete, organisation name to find || No || ||
+|| operator       || and, or, exact ||	 No || ||
+|| type || single, multi || Yes || single ||
+
+= Contributor Search =
+
+Search the database for a list of contributors
+
+== Request Type ==
+
+Post Request
+
+== Base URL ==
+
+The base URL for the retrieval of marker data is as follows:
+
+http://beta.ausstage.edu.au/mapping/data
+
+Combining this URL with the parameters outlined below retrieves data from the MappingService.
+
+== Parameters ==
+
+|| *Name * || *Allowed Values* || *Optional* || *Default* ||
+|| action  || contributor_search || No || ||
+|| contributor_name || part of, or complete, organisation name to find || No || ||
+|| operator       || and, or, exact ||	 No || ||
+|| type || single, multi || Yes || single ||
+
+
+
