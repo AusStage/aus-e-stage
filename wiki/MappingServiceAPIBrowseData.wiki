@@ -26,7 +26,7 @@ None.
 
 == Sample Ouptut ==
 
-http://beta.ausstage.edu.au/mapping/data?action=markers&type=contributor&id=102
+http://beta.ausstage.edu.au/mapping/browse?action=marker
 
 {{{
 <markers>
@@ -40,4 +40,44 @@ http://beta.ausstage.edu.au/mapping/data?action=markers&type=contributor&id=102
         name="Her Majesty's Theatre" state="6"/>
     ...
 </markers>
+}}}
+
+= Lookup Additional Information =
+
+Lookup the event list for a venue for use in populating an infoWindow in the map
+
+== Base URL ==
+
+The base URL for the lookup of additional information about a venue is
+
+http://beta.ausstage.edu.au/mapping/browse?action=lookup
+
+== Request Type ==
+
+Get Request
+
+== Parameters ==
+
+|| *Name * || *Allowed Values* || *Optional* || *Default* ||
+|| id      || Unique venue id  || No         ||           ||
+|| start   || The start of the period of interest || Yes || All events ||
+|| finish  || The end of the period of interest || Yes || All Events ||
+
+_Note:_ The start and finish parameters define a time period during which an event must have occurred at the specified venue for it to be returned in the dataset 
+
+== Sample Ouptut ==
+
+http://beta.ausstage.edu.au/mapping/browse?action=lookup&id=77
+
+{{{
+<p>
+  <a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_venue_id=77" title="More information on Venue" target="_blank">Suncorp Theatre</a>, Brisbane
+</p>
+<ul>
+  <li><a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=60652" title="More information on event" target="_blank">The Amazing Magician</a>, 28 September 2004 - 30 September 2004</li>
+  <li><a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=60647" title="More information on event" target="_blank">Cloudland</a>, 24 September 2004 - 02 October 2004</li>
+  <li><a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=63497" title="More information on event" target="_blank">Sandakan Threnody</a>, 16 September 2004 - 18 September 2004</li>
+  <li><a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=63439" title="More information on event" target="_blank">The Gigli Concert</a>, 03 September 2004 - 09 September 2004</li
+  ...
+</ul>
 }}}
