@@ -137,6 +137,9 @@ Some other examples of interactive interfaces for exploring network data include
  * http://apps.asterisq.com/mentionmap/
  * http://asterisq.com/products/constellation/framework/implementations
  * http://rama.inescporto.pt/
+ * [http://www.mattryall.net/demo/atlassian-vis/contributors/ processing.js]
+ * [http://www.kylescholz.com/projects/speaking/tae2006/music.fm/#Big%20Shug JSVis]
+ * [http://www.viewru.com/ ViewRu, also using JSVis]
 
 
 Additional online resources which have informed our understanding of social networks, their visualisation and analysis include:
