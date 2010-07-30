@@ -35,10 +35,10 @@ public class ExportServlet extends HttpServlet {
 	private DataManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES   = {"simple-network"};
+	private final String[] TASK_TYPES   = {"simple-network-directed", "simple-network-undirected"};
 	private final String[] FORMAT_TYPES = {"graphml"};
 	private final int      MIN_DEGREES  = 1;
-	private final int      MAX_DEGREES  = 5;
+	private final int      MAX_DEGREES  = 3;
 
 	/*
 	 * initialise this instance
@@ -68,10 +68,22 @@ public class ExportServlet extends HttpServlet {
 		String id         = request.getParameter("id");
 		String formatType = request.getParameter("format");
 		int degrees;
-		try {
-			degrees = Integer.parseInt(request.getParameter("degrees"));
-		} catch (NumberFormatException ex) {
-			degrees = MIN_DEGREES;
+		
+		if(request.getParameter("degrees") != null) {
+			try {
+				// get the parameter and convert to an integer
+				degrees = Integer.parseInt(request.getParameter("degrees"));	
+			} catch (NumberFormatException ex) {
+				// degrees must be a number
+				throw new ServletException("Degrees parameter must be an integer");
+			}
+										
+			// double check the parameter
+			if(InputUtils.isValidInt(degrees, MIN_DEGREES, MAX_DEGREES) == false) {
+				throw new ServletException("Degree parameter must be less than: " + MAX_DEGREES);
+			}
+		} else {
+			degrees = 1;
 		}
 		
 		// check on the taskType parameter
@@ -93,17 +105,7 @@ public class ExportServlet extends HttpServlet {
 			if(InputUtils.isValid(formatType, FORMAT_TYPES) == false) {
 				throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
 			}
-		}
-		
-		// check the degrees parameter
-		if(InputUtils.isValidInt(degrees) == false) {
-			// use default value
-			degrees = MIN_DEGREES;
-		} else {
-			if(InputUtils.isValidInt(degrees, MIN_DEGREES, MAX_DEGREES) == false) {
-				throw new ServletException("Degree parameter must be less than: " + MAX_DEGREES);
-			}			
-		}
+		}		
 		
 		// instantiate a lookup object
 		ExportManager export = new ExportManager(database);
@@ -111,8 +113,10 @@ public class ExportServlet extends HttpServlet {
 		String results = null;
 		
 		// determine the type of lookup to undertake
-		if(taskType.equals("simple-network") == true) {
-			results = export.getSimpleNetwork(id, formatType, degrees);
+		if(taskType.equals("simple-network-directed")) {
+			results = export.getSimpleNetwork(id, formatType, degrees, "directed");
+		} else if(taskType.equals("simple-network-undirected")) {
+			results = export.getSimpleNetwork(id, formatType, degrees, "undirected");
 		}
 		
 		// check on what was returned

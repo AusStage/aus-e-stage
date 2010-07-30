@@ -306,7 +306,7 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @param value the new collaborations
 	 */
 	public void addCollaborator(String value) {
-		if(InputUtils.isValidInt(value)) {
+		if(InputUtils.isValid(value)) {
 		
 			// instantiate a collaborations object if required
 			// we do this late to save on resources
@@ -318,7 +318,7 @@ public class Collaborator implements Comparable<Collaborator>{
 			collaborators.add(value);
 			
 		} else {
-			throw new IllegalArgumentException("The value must be a valid integer");
+			throw new IllegalArgumentException("The value cannot be null");
 		}
 	}
 	
