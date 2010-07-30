@@ -76,8 +76,14 @@ public class LookupServlet extends HttpServlet {
 		}
 
 		// check on the id parameter
-		if(InputUtils.isValidInt(id) == false) {
-			throw new ServletException("Missing or invalid id parameter.");
+		if(taskType.equals("system-property") == false) {
+			if(InputUtils.isValidInt(id) == false) {
+				throw new ServletException("Missing or invalid id parameter.");
+			}
+		} else {
+			if(InputUtils.isValid(id, PROPERTY_ID_TYPES) == false) {
+				throw new ServletException("Missing id parameter. Expected one of: " + java.util.Arrays.toString(PROPERTY_ID_TYPES).replaceAll("[\\]\\[]", ""));
+			}
 		}
 
 		// check the format parameter
@@ -98,15 +104,7 @@ public class LookupServlet extends HttpServlet {
 			if(InputUtils.isValid(sortType, SORT_TYPES) == false) {
 				throw new ServletException("Missing sort type. Expected: " + java.util.Arrays.toString(SORT_TYPES).replaceAll("[\\]\\[]", ""));
 			}
-		}
-		
-		// check on the system property parameter
-		if(taskType.equals(TASK_TYPES[1]) == true) {
-			// this is a system property lookup
-			if(Integer.parseInt(id) > PROPERTY_ID_TYPES.length) {
-				throw new ServletException("Invalid System Property ID detected. Expected integer between 0 - " + PROPERTY_ID_TYPES.length);
-			}
-		}		
+		}	
 		
 		// instantiate a lookup object
 		LookupManager lookup = new LookupManager(database);
@@ -114,11 +112,14 @@ public class LookupServlet extends HttpServlet {
 		String results = null;
 		
 		// determine the type of lookup to undertake
-		if(taskType.equals(TASK_TYPES[0]) == true) {
+		if(taskType.equals("key-collaborators") == true) {
+			// undertake the key-collaborators lookup
 			results = lookup.getKeyCollaborators(id, formatType, sortType);
-		} else if(taskType.equals(TASK_TYPES[1]) == true) {
-			if(id.equals("1") == true) {
-				results = lookup.getCreateDateTime(PROPERTY_ID_TYPES[Integer.parseInt(id) - 1], formatType);
+		} else if (taskType.equals("system-property") == true) {
+			// undertake a system proptery lookup
+			if(id.equals("datastore-create-date") == true) {
+				// lookup the date the datastore was created
+				results = lookup.getCreateDateTime("datastore-create-date", formatType);
 			}
 		}
 		

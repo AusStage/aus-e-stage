@@ -62,14 +62,18 @@ public class ExportManager {
 	 * @param id         the unique id of the contributor
 	 * @param formatType the required format of the data
 	 * @param degrees    the required number of degrees of separation
+	 * @param graphType  the type of graph to created, must be one of directed / undirected
 	 *
 	 * @return           the results of the lookup
 	 */
-	public String getSimpleNetwork(String id, String formatType, int degrees) {
+	public String getSimpleNetwork(String id, String formatType, int degrees, String graphType) {
 	
 		// define helper variables
 		// collection of collaborators
 		java.util.TreeMap<Integer, Collaborator> collaborators = new java.util.TreeMap<Integer, Collaborator>();
+		
+		// set of collaborators that we've already processed
+		java.util.TreeSet<Integer> foundCollaborators = new java.util.TreeSet<Integer>();
 		
 		// define other helper variables
 		QuerySolution row             = null;
@@ -79,6 +83,7 @@ public class ExportManager {
 		String        queryToExecute  = null;
 		Collection    values          = null;
 		Iterator      iterator        = null;
+		String[]      toProcess       = null;
 	
 		// define the base sparql query
 		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
@@ -96,6 +101,7 @@ public class ExportManager {
 		// go and get the intial batch of data
 		collaborator = new Collaborator(id);
 		collaborators.put(Integer.parseInt(id), collaborator);
+		foundCollaborators.add(Integer.parseInt(id));
 		
 		// build the query
 		queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
@@ -116,11 +122,98 @@ public class ExportManager {
 		// play nice and tidy up
 		database.tidyUp();
 		
+		// treat the one degree network as a special case
+		if(degreesToFollow == 1) {
+		
+			// get the list of contributors attached to this contributor
+			values   = collaborator.getCollaborators();
+			iterator = values.iterator();
+			
+			// loop through the list of collaborators
+			while(iterator.hasNext()) {
+			
+				// loop through the list of collaborators
+				id = (String)iterator.next();
+				
+				// add a new collaborator
+				collaborator = new Collaborator(id);
+				collaborators.put(Integer.parseInt(id), collaborator);
+				
+				// build the query
+				queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+				
+				// get the data
+				results = database.executeSparqlQuery(queryToExecute);
+			
+				// loop though the resulset
+				while (results.hasNext()) {
+					
+					// get a new row of data
+					row = results.nextSolution();
+					
+					if(values.contains(AusStageURI.getId(row.get("collaborator").toString())) == true) {
+						collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+					}
+				}
+			}		
+		
+		} else {
+		
+			// get the rest of the degrees
+			while(degreesFollowed < degreesToFollow) {
+		
+				// get all of the known collaborators
+				values = collaborators.values();
+				iterator = values.iterator();
+			
+				// loop through the list of collaborators
+				while(iterator.hasNext()) {
+					// get the collaborator
+					collaborator = (Collaborator)iterator.next();
+				
+					// get the list of contributors to process
+					toProcess = collaborator.getCollaboratorsAsArray();
+				
+					// go through them one by one
+					for(int i = 0; i < toProcess.length; i++) {
+						// have we done this collaborator already
+						if(foundCollaborators.contains(Integer.parseInt(toProcess[i])) == false) {
+							// we haven't so process them
+							collaborator = new Collaborator(toProcess[i]);
+							collaborators.put(Integer.parseInt(toProcess[i]), collaborator);
+							foundCollaborators.add(Integer.parseInt(toProcess[i]));
+						
+							// build the query
+							queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
+						
+							// get the data
+							results = database.executeSparqlQuery(queryToExecute);
+							
+							// loop though the resulset
+							while (results.hasNext()) {
+								// get a new row of data
+								row = results.nextSolution();
+			
+								// add the collaboration
+								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+							}
+						
+							// play nice and tidy up
+							database.tidyUp();
+						}
+					}
+				}
+			
+				// increment the degrees followed count
+				degreesFollowed++;
+			}
+		}
+		
 		// dataset is built so time to do something with it
 		String dataString = null;
 		
 		if(formatType.equals("graphml") == true) {
-			dataString = buildGraphml(collaborators);
+			dataString = buildGraphml(collaborators, graphType);
 		}
 		
 		// return the graph data
@@ -129,13 +222,41 @@ public class ExportManager {
 	
 	} // end getSimpleNetwork method
 	
+//	//debug code
+//	private String buildGraphml(java.util.TreeMap<Integer, Collaborator> collaborators, String graphType) {
+//	
+//		StringBuilder dataToReturn = new StringBuilder();
+//		
+//		// loop through the list of contributors
+//		Collection values   = collaborators.values();
+//		Iterator   iterator = values.iterator();
+//		
+//		while(iterator.hasNext()) {
+//		
+//			// get the collaborator
+//			Collaborator collaborator = (Collaborator)iterator.next();
+//			
+//			dataToReturn.append(collaborator.getId() + " - ");
+//			
+//			dataToReturn.append(java.util.Arrays.toString(collaborator.getCollaboratorsAsArray()).replaceAll("[\\]\\[]", "") + " - ");
+//			dataToReturn.append(collaborator.getCollaboratorsAsArray().length + "\n");
+//		}
+//		
+//		return dataToReturn.toString();
+//	}
+	
+	
+	
+	
 	/**
 	 * A method to output the export in the graphml format
 	 *
 	 * @param collaborators the list of collaborators
+	 * @param graphType  the type of graph to created, must be one of directed / undirected
+	 *
 	 * @return              the XML string representing the graphml
 	 */
-	private String buildGraphml(java.util.TreeMap<Integer, Collaborator> collaborators) {
+	private String buildGraphml(java.util.TreeMap<Integer, Collaborator> collaborators, String graphType) {
 		
 		// declare helper variables
 		/* xml related */
@@ -194,7 +315,7 @@ public class ExportManager {
 		// add the graph element
 		graph = xmlDoc.createElement("graph");
 		graph.setAttribute("id", "ausstage-graph");
-		graph.setAttribute("edgedefault", "directed");
+		graph.setAttribute("edgedefault", graphType);
 		rootElement.appendChild(graph);
 		
 		// reset the edge and node variables
@@ -240,18 +361,22 @@ public class ExportManager {
 					nodes.add(edgesToMake[i]);
 				}
 				
-				// check to see if an edge already exists
-				if(edges.contains(collaborator.getId() + edgesToMake[i]) == false && edges.contains(edgesToMake[i] + collaborator.getId()) == false) {
-					// add this edge
-					edge = xmlDoc.createElement("edge");
-					edge.setAttribute("source", collaborator.getId());
-					edge.setAttribute("target", edgesToMake[i]);
-					
-					graph.appendChild(edge);
+				// do not add self referential edges
+				if(collaborator.getId().equals(edgesToMake[i]) == false) {
 				
-					// store a reference for this edge
-					edges.add(collaborator.getId() + edgesToMake[i]);
-					edges.add(edgesToMake[i] + collaborator.getId());
+					// check to see if an edge already exists
+					if(edges.contains(collaborator.getId() + edgesToMake[i]) == false && edges.contains(edgesToMake[i] + collaborator.getId()) == false) {
+						// add this edge
+						edge = xmlDoc.createElement("edge");
+						edge.setAttribute("source", collaborator.getId());
+						edge.setAttribute("target", edgesToMake[i]);
+					
+						graph.appendChild(edge);
+				
+						// store a reference for this edge
+						edges.add(collaborator.getId() + edgesToMake[i]);
+						edges.add(edgesToMake[i] + collaborator.getId());
+					}
 				}
 			}			
 		}
