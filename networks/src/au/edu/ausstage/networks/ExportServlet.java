@@ -110,20 +110,6 @@ public class ExportServlet extends HttpServlet {
 		// instantiate a lookup object
 		ExportManager export = new ExportManager(database);
 		
-		String results = null;
-		
-		// determine the type of lookup to undertake
-		if(taskType.equals("simple-network-directed")) {
-			results = export.getSimpleNetwork(id, formatType, degrees, "directed");
-		} else if(taskType.equals("simple-network-undirected")) {
-			results = export.getSimpleNetwork(id, formatType, degrees, "undirected");
-		}
-		
-		// check on what was returned
-		if(results == null) {
-			throw new ServletException("An error occured whilst processing this request. If it persists contact the site administrator");
-		}
-		
 		// output the appropriate mime type
 		if(formatType.equals("graphml")) {
 			// output xml mime type
@@ -135,9 +121,12 @@ public class ExportServlet extends HttpServlet {
 			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + "-debug.txt");
 		}
 		
-		// output the results of the lookup
-		PrintWriter out = response.getWriter();
-		out.print(results);
+		// determine the type of lookup to undertake
+		if(taskType.equals("simple-network-directed")) {
+			export.getSimpleNetwork(id, formatType, degrees, "directed", response.getWriter());
+		} else if(taskType.equals("simple-network-undirected")) {
+			export.getSimpleNetwork(id, formatType, degrees, "undirected", response.getWriter());
+		}
 	
 	} // end doGet method
 	
