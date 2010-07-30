@@ -450,5 +450,187 @@ public class ExportManager {
 			throw new RuntimeException("Unable to create the graphml");
 		}
 	} // end the buildGraphml method
+	
+	/**
+	 * A method to build and return a full edge list
+	 *
+	 * @param taskType the exact type of edge list to output
+	 * @param printWirter the output stream to use to stream the output to the client
+	 */
+	public void getFullEdgeList(String taskType, PrintWriter printWriter) {
+	
+		// define helper variables
+		String        queryString = null;
+		QuerySolution row         = null;
+		String        tmp         = null;
+		String[]      tmps        = null;
+		Integer       firstId     = 0;
+		Integer       secondId    = 0;
+	
+		// determine what type fo query is required
+		if(taskType.equals("full-edge-list-with-dups") == true || taskType.equals("full-edge-list-no-dups") == true) {
+		
+			queryString = "PREFIX foaf:       <http://xmlns.com/foaf/0.1/> "
+						+ "PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> "
+						+ "  "
+						+ "SELECT ?contributor ?givenName ?familyName ?collaborator ?collabGivenName ?collabFamilyName "
+						+ "WHERE {  "
+						+ "       ?contributor   foaf:givenName ?givenName ; "
+						+ "                      foaf:familyName ?familyName; "
+						+ "                      ausestage:hasCollaboration ?collaboration. "
+						+ "       ?collaboration ausestage:collaborator ?collaborator. "
+						+ "       ?collaborator  foaf:givenName ?collabGivenName; "
+						+ "                      foaf:familyName ?collabFamilyName. "
+						+ "       FILTER (?collaborator != ?contributor) "
+						+ "}";
+		} else {
+		
+			queryString = "PREFIX foaf:       <http://xmlns.com/foaf/0.1/> "
+						+ "PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> "
+						+ "  "
+						+ "SELECT ?contributor ?collaborator "
+						+ "WHERE {  "
+						+ "       ?contributor   ausestage:hasCollaboration ?collaboration. "
+						+ "       ?collaboration ausestage:collaborator ?collaborator. "
+						+ "       FILTER (?collaborator != ?contributor) "
+						+ "}";
+		}
+		
+		// get the data
+		// execute the query
+		ResultSet results = database.executeSparqlQuery(queryString);
+		
+		// output some additional information
+		// add some additional information
+		printWriter.print("# Data exported on: " + DateUtils.getCurrentDateAndTime() + "\n");
+		printWriter.print("# Data exported by: " + database.getContextParam("systemName") + " Version: " + database.getContextParam("systemVersion") + " Build: " + database.getContextParam("buildVersion") + "\n");
+		
+		// output the data in the format required
+		if(taskType.equals("full-edge-list-with-dups") == true) {
+		
+			// loop through the resultSet
+			while (results.hasNext()) {
+				// get a new row of data
+				row = results.nextSolution();
+				
+				// first id
+				tmp = row.get("contributor").toString().trim();
+				tmps = tmp.split(":");
+			
+				printWriter.print(tmps[2] + "\t");
+			
+				// first givenName
+				printWriter.print(row.get("givenName").toString().trim() + "\t");
+			
+				// first familyName
+				printWriter.print(row.get("familyName").toString().trim() + "\t");
+			
+				// knows
+				tmp = row.get("collaborator").toString().trim();
+				tmps = tmp.split(":");
+			
+				printWriter.print(tmps[2] + "\t");
+			
+				// second GivenName
+				printWriter.print(row.get("collabGivenName").toString().trim() + "\t");
+			
+				// second FamilyName
+				printWriter.print(row.get("collabFamilyName").toString().trim() + "\n");
+			}
+			
+		} else if(taskType.equals("full-edge-list-no-dups") == true) {
+		
+			// loop through the resultSet
+			while (results.hasNext()) {
+				// get a new row of data
+				row = results.nextSolution();
+				
+				// first id
+				tmp  = row.get("contributor").toString().trim();
+				tmps = tmp.split(":");
+			
+				firstId = Integer.parseInt(tmps[2]);
+			
+				// second id
+				tmp  = row.get("collaborator").toString().trim();
+				tmps = tmp.split(":");
+			
+				secondId = Integer.parseInt(tmps[2]); 
 
+				// determine if we need to add this line			
+				if(firstId < secondId) {
+				
+					// output the data
+					printWriter.print(firstId + "\t");
+			
+					// first givenName
+					printWriter.print(row.get("givenName").toString().trim() + "\t");
+		
+					// first familyName
+					printWriter.print(row.get("familyName").toString().trim() + "\t");
+		
+					// knows
+					printWriter.print(secondId + "\t");
+		
+					// second GivenName
+					printWriter.print(row.get("collabGivenName").toString().trim() + "\t");
+		
+					// second FamilyName
+					printWriter.print(row.get("collabFamilyName").toString().trim() + "\n");
+				}
+			}			
+		} else if(taskType.equals("full-edge-list-with-dups-id-only") == true) {
+		
+			// loop through the resultSet
+			while (results.hasNext()) {
+				// get a new row of data
+				row = results.nextSolution();
+				
+				// first id
+				tmp = row.get("contributor").toString().trim();
+				tmps = tmp.split(":");
+			
+				printWriter.print(tmps[2] + "\t");
+			
+				// knows
+				tmp = row.get("collaborator").toString().trim();
+				tmps = tmp.split(":");
+			
+				printWriter.print(tmps[2] + "\n");
+			}
+			
+		} else if(taskType.equals("full-edge-list-no-dups-id-only") == true) {
+		
+			// loop through the resultSet
+			while (results.hasNext()) {
+				// get a new row of data
+				row = results.nextSolution();
+				
+				// first id
+				tmp  = row.get("contributor").toString().trim();
+				tmps = tmp.split(":");
+			
+				firstId = Integer.parseInt(tmps[2]);
+			
+				// second id
+				tmp  = row.get("collaborator").toString().trim();
+				tmps = tmp.split(":");
+			
+				secondId = Integer.parseInt(tmps[2]); 
+
+				// determine if we need to add this line			
+				if(firstId < secondId) {
+				
+					// output the data
+					printWriter.print(firstId + "\t");
+			
+					// knows
+					printWriter.print(secondId + "\n");
+				}
+			}
+		}
+		
+		// play nice and tidy up
+		database.tidyUp();	
+	}
 }
