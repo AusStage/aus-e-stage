@@ -337,7 +337,11 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @return an array of collaborations
 	 */
 	public String[] getCollaboratorsAsArray() {
-		return collaborators.toArray(new String[0]);
+		if(collaborators != null) {
+			return collaborators.toArray(new String[0]);
+		} else {
+			return new String[0];
+		}
 	}
 	
 	/*

@@ -207,6 +207,55 @@ public class ExportManager {
 				// increment the degrees followed count
 				degreesFollowed++;
 			}
+			
+			// finalise the graph
+			// get all of the known collaborators and use a copy of the current list of collaborators
+			java.util.TreeMap clone = (java.util.TreeMap)collaborators.clone();
+			values = clone.values();
+			iterator = values.iterator();
+		
+			// loop through the list of collaborators
+			while(iterator.hasNext()) {
+				// get the collaborator
+				collaborator = (Collaborator)iterator.next();
+			
+				// get the list of contributors to process
+				toProcess = collaborator.getCollaboratorsAsArray();
+			
+				// go through them one by one
+				for(int i = 0; i < toProcess.length; i++) {
+					// have we done this collaborator already
+					if(foundCollaborators.contains(Integer.parseInt(toProcess[i])) == false) {
+						// we haven't so process them
+						collaborator = new Collaborator(toProcess[i]);
+						collaborators.put(Integer.parseInt(toProcess[i]), collaborator);
+						foundCollaborators.add(Integer.parseInt(toProcess[i]));
+					
+						// build the query
+						queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
+					
+						// get the data
+						results = database.executeSparqlQuery(queryToExecute);
+						
+						// loop though the resulset
+						while (results.hasNext()) {
+							// get a new row of data
+							row = results.nextSolution();
+							
+							// limit to only those collaborators we've seen before
+							if(foundCollaborators.contains(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString()))) == true) {
+		
+								// add the collaboration
+								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+							}
+						}
+					
+						// play nice and tidy up
+						database.tidyUp();
+					}
+				}
+			}
+			
 		}
 		
 		// dataset is built so time to do something with it
