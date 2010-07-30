@@ -35,7 +35,8 @@ public class ExportServlet extends HttpServlet {
 	private DataManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES   = {"simple-network-directed", "simple-network-undirected"};
+	private final String[] TASK_TYPES   = {"simple-network-directed", "simple-network-undirected", 
+	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only"};
 	private final String[] FORMAT_TYPES = {"graphml", "debug"};
 	private final int      MIN_DEGREES  = 1;
 	private final int      MAX_DEGREES  = 3;
@@ -67,45 +68,53 @@ public class ExportServlet extends HttpServlet {
 		String taskType   = request.getParameter("task");
 		String id         = request.getParameter("id");
 		String formatType = request.getParameter("format");
-		int degrees;
-		
-		if(request.getParameter("degrees") != null) {
-			try {
-				// get the parameter and convert to an integer
-				degrees = Integer.parseInt(request.getParameter("degrees"));	
-			} catch (NumberFormatException ex) {
-				// degrees must be a number
-				throw new ServletException("Degrees parameter must be an integer");
-			}
-										
-			// double check the parameter
-			if(InputUtils.isValidInt(degrees, MIN_DEGREES, MAX_DEGREES) == false) {
-				throw new ServletException("Degree parameter must be less than: " + MAX_DEGREES);
-			}
-		} else {
-			degrees = 1;
-		}
+		int degrees = 0;
 		
 		// check on the taskType parameter
 		if(InputUtils.isValid(taskType, TASK_TYPES) == false) {
 			// no valid task type was found
 			throw new ServletException("Missing task parameter. Expected one of: " + java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
 		}
-
-		// check on the id parameter
-		if(InputUtils.isValidInt(id) == false) {
-			throw new ServletException("Missing or invalid id parameter.");
-		}
-
-		// check the format parameter
-		if(InputUtils.isValid(formatType) == false) {
-			// use default value
-			formatType = "graphml";
-		} else {
-			if(InputUtils.isValid(formatType, FORMAT_TYPES) == false) {
-				throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
+		
+		// check the other parameters dependant on the task type
+		if(taskType.equals("simple-network-directed") == true || taskType.equals("simple-network-undirected") == true) {
+			// check the other parameters as they are required
+		
+			if(request.getParameter("degrees") != null) {
+				try {
+					// get the parameter and convert to an integer
+					degrees = Integer.parseInt(request.getParameter("degrees"));	
+				} catch (NumberFormatException ex) {
+					// degrees must be a number
+					throw new ServletException("Degrees parameter must be an integer");
+				}
+										
+				// double check the parameter
+				if(InputUtils.isValidInt(degrees, MIN_DEGREES, MAX_DEGREES) == false) {
+					throw new ServletException("Degree parameter must be less than: " + MAX_DEGREES);
+				}
+			} else {
+				degrees = 1;
 			}
-		}		
+
+			// check on the id parameter
+			if(InputUtils.isValidInt(id) == false) {
+				throw new ServletException("Missing or invalid id parameter.");
+			}
+
+			// check the format parameter
+			if(InputUtils.isValid(formatType) == false) {
+				// use default value
+				formatType = "graphml";
+			} else {
+				if(InputUtils.isValid(formatType, FORMAT_TYPES) == false) {
+					throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
+				}
+			}
+		} else {
+			// set some logical default parameters
+			formatType = "edge-list";
+		}	
 		
 		// instantiate a lookup object
 		ExportManager export = new ExportManager(database);
@@ -119,6 +128,9 @@ public class ExportServlet extends HttpServlet {
 			// output plain text mime type
 			response.setContentType("text/plain; charset=UTF-8");
 			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + "-debug.txt");
+		} else if(formatType.equals("edge-list")) {
+			response.setContentType("text/plain; charset=UTF-8");
+			response.setHeader("Content-Disposition", "attachment;filename=" + taskType + ".txt");
 		}
 		
 		// determine the type of lookup to undertake
@@ -126,6 +138,8 @@ public class ExportServlet extends HttpServlet {
 			export.getSimpleNetwork(id, formatType, degrees, "directed", response.getWriter());
 		} else if(taskType.equals("simple-network-undirected")) {
 			export.getSimpleNetwork(id, formatType, degrees, "undirected", response.getWriter());
+		} else if(taskType.startsWith("full-edge-list")) {
+			export.getFullEdgeList(taskType, response.getWriter());
 		}
 	
 	} // end doGet method
