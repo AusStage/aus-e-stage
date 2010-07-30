@@ -36,7 +36,7 @@ public class ExportServlet extends HttpServlet {
 	
 	// declare private constants
 	private final String[] TASK_TYPES   = {"simple-network-directed", "simple-network-undirected"};
-	private final String[] FORMAT_TYPES = {"graphml"};
+	private final String[] FORMAT_TYPES = {"graphml", "debug"};
 	private final int      MIN_DEGREES  = 1;
 	private final int      MAX_DEGREES  = 3;
 
@@ -125,10 +125,14 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		// output the appropriate mime type
-		if(formatType == "graphml") {
+		if(formatType.equals("graphml")) {
 			// output xml mime type
 			response.setContentType("text/xml; charset=UTF-8");
 			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + ".graphml");
+		} else if(formatType.equals("debug")){
+			// output plain text mime type
+			response.setContentType("text/plain; charset=UTF-8");
+			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + "-debug.txt");
 		}
 		
 		// output the results of the lookup
