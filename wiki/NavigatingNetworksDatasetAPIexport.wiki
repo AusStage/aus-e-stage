@@ -25,10 +25,10 @@ Get Request
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task    || simple-network-directed, simple-network-undirected|| No || ||
+|| task    || [NavigatingNetworksDatasetAPIexport#Task:_simple-network-directed simple-network-directed], [NavigatingNetworksDatasetAPIexport#Task:_simple-network-undirected simple-network-undirected]|| No || ||
 || id      || unique identifier of a contributor || No || ||
-|| format  || graphml, debug || Yes || graphml ||
-|| degrees || Integer between 1 and 3 || Yes || 1 ||
+|| format  || [NavigatingNetworksDatasetAPIexport#Format:_graphml graphml], [[NavigatingNetworksDatasetAPIexport#Format:_debug debug] || Yes || graphml ||
+|| [NavigatingNetworksDatasetAPIexport#Degrees degrees] || Integer between 1 and 3 || Yes || 1 ||
 
 = Parameter Definitions =
 
