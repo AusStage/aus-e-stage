@@ -213,7 +213,7 @@ The interface will present network graphs as an interactive method for exploring
 ==1. NETWORK BROWSING - Person-To-Person  - Graphic Interface==
 
 ===1.1 Graphic Interface===
-_Priority Ranking: 100%_
+_Priority Ranking: 94%_
 
 The network browsing interface allows the user to search the AusStage database for a contributor. Once a contributor is selected by the user, the interface will display that contributor's network first degree network, i.e. those contributors with whom he or she  has directly worked. The default display will show the selected contributor, represented as a node in the centre of the network, with all associated contributors represented as nodes radiating outwards; the edges between nodes will also be shown. 
 When a user selects a node by double clicking on the node, this node becomes the ‘central’ node. Their first degree network will be added to the graphic network display.
@@ -249,7 +249,7 @@ _QUESTION: Contributor archaeology presents a problem, as contributors with diff
  * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/nodeVisualIdeas.png Sketches of Node Visuals]
 
 ===1.2 Time-slider===
-_Priority Ranking: 84%_
+_Priority Ranking: 89%_
 
 The time-slider is a bar that depicts the start and end point of the contributor's activity within AusStage. The behaviour and look of the time-slider should correspond to the time-slider user for the Visual Mapping interface.
 A user may manipulate both markers to determine a start and end date. The visual display of the network should then be refreshed to display only collaborations that occurred during this period. Ideally the nodes outside this date range would ‘fade’ from view. Collaborations are defined as contributors who are associated with the same event. So, if the event’s start date falls outside of the dates specified, the associated contributors are not displayed. 
@@ -262,7 +262,7 @@ Work flow:
   # Remove nodes and links from visibility that are outside of the dates specified.
 
 ===1.3 Faceted browsing===
-_Priority Ranking 84%_
+_Priority Ranking 89%_
 
 Included in the Network Browsing interface will be a panel of criteria represented as checkboxes, select menus and open text boxes. Criteria relate to the nodes (e.g. gender, nationality) or to information aggregated to nodes from event associations (e.g. artistic function). Selecting one or multiple criteria will highlight nodes that match that criteria, whilst fading the nodes that don’t match. 
 
@@ -281,7 +281,7 @@ The browsing graphic is updated to display the criteria - (More detail)
 
 ===1.4 Pop-ups===
 
-_Priority Ranking 76%_ 
+_Priority Ranking 83%_ 
 
 1.4.1: 	Each node should be generated with a label. This label will correspond to the contributors name as stored rdf export. It should be apparent on mouse-over. <foaf:name>
 
@@ -315,7 +315,7 @@ _Pop Up Sketch Ideas_
 ==2. NETWORK BROWSING - Person-to-person - Text Interface==
 
 ===2.1 Key collaborators===
-_Priority Ranking 84%._
+_Priority Ranking 83%._
 
 The contributor detail page within AusStage should display a collapsible list of collaborators, ordered by frequency of collaborations - most frequent, to least frequent. 
 The display will list the collaborator's name, collaboration count, year range, and a list of the collaborator's artistic functions. The collaborator's name is a link to their contributor detail page.
@@ -329,7 +329,7 @@ _Contributor detail page with network browsing expanded_
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/CollaboratorsExp.jpg Screen Shot]
 
 ===2.2 Key organisations===
-_Priority Ranking 72%_
+_Priority Ranking 74%_
 
 The contributor detail page within AusStage should display a collapsible list of organisations, ordered by frequency of collaborations - most frequent, to least frequent. 
 The display will list the organisation's name, collaboration count, year range, and a list of the contributor's artistic functions. The organisations name should be a link to their organisation detail page.
@@ -348,7 +348,7 @@ The AusStage system should allow the user to search for contributors and events.
 
 ===3.1 Search for connections between collaborators===
 
-_Priority Ranking: 88%_
+_Priority Ranking: 86%_
 
 The search functionality should allow the user to select two or more collaborators.
 This should work in a similar fashion to the AusStage Mapping service whereby the user can search for a contributor, select them, and then search again for another contributor etc.
@@ -367,7 +367,7 @@ _Search for connections between collaborators sketch ideas_
 
 ===3.2 Search for events matching criteria===
 
-_Priority Ranking: 68%_
+_Priority Ranking: 74%_
 
 Search functionality should allow the user to select certain event criteria such as genre, status, content indicators, and/or keyword.  
 The browsing interface should then then display the network of contributors who have worked on events that match this criteria. 
@@ -391,7 +391,7 @@ _Search for contributors by event sketch ideas_
 
 ===3.3 Search by organisation===
 
-_Priority Ranking: 64%_
+_Priority Ranking: 71%_
 
 Search functionality should allow a user to search for networks by association to an organisation. 
 The browsing interface should then display the network of contributors who have worked with the selected organisation.
@@ -408,7 +408,7 @@ _Search for networks by organisation sketch ideas_
 
 ===3.4 Search by venue===
 
-_Priority Ranking: 56%_
+_Priority Ranking: 63%_
 
 Search functionality should allow a user to search for networks by association to a venue. 
 The browsing interface should then display the network of contributors who have worked on events performed within the specified venue.
@@ -427,7 +427,7 @@ _Search for networks by venue sketch ideas_
 
 ===4.1 Timeline===
 
-_Priority Ranking: 76%_
+_Priority Ranking: 74%_
 
 In addition to the network browser interface, we also require the following timeline visualisation functionality.
 A user should be able to graph a particular contributors career as a line on a timeline. 
@@ -445,7 +445,7 @@ _Timeline sketch idea_
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/4-1Timeline.png Timeline Interface Sketch]
 
 ===4.2 Shona's Idea===
-I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the career pathways of individual AD's of each company. In my mind the companies sit on one axis (say horizontal) and the individuals sit on another (say vertical). I then imagine where the lines cross. For example, Felicity Bott will cross STEPS and BUZZ. Alice Hollands will cross STEPS and STRUT. There will also be Phillipa Clarke crossing BUZZ and LINK, Chrissie Parrott and Michael Whaites for LINK. And many more too. The idea of incorporating a third dimension for time also sounds good. JB: I'm seeing companies as the horizontal lines, with artists as lines weaving across them and intersecting at events. If the events are spread along the company lines in chronological order, that would get the time element included. So to construct this kind of diagram - you'd select one or more companies and one or more artists - and then ask the system to build a timeline that weaves them together. Rank: 60%
+I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the career pathways of individual AD's of each company. In my mind the companies sit on one axis (say horizontal) and the individuals sit on another (say vertical). I then imagine where the lines cross. For example, Felicity Bott will cross STEPS and BUZZ. Alice Hollands will cross STEPS and STRUT. There will also be Phillipa Clarke crossing BUZZ and LINK, Chrissie Parrott and Michael Whaites for LINK. And many more too. The idea of incorporating a third dimension for time also sounds good. JB: I'm seeing companies as the horizontal lines, with artists as lines weaving across them and intersecting at events. If the events are spread along the company lines in chronological order, that would get the time element included. So to construct this kind of diagram - you'd select one or more companies and one or more artists - and then ask the system to build a timeline that weaves them together. Rank: 63%
 
 ==5. NETWORK BROWSING - Event-to-event==
 
@@ -453,7 +453,7 @@ Event-to-event networks provide an alternative way of exploring collaborations. 
 
 ===5.1 Event-to-event network graphic===
 
-_Priority Ranking: 68%_
+_Priority Ranking: 77%_
 
 The event-to-event network browsing interface allows the user to search the AusStage database for an event. Once an event is selected by the user, the interface will display that event as the central node within a network of events - it's first degree network. 
 Events are related by the contributors who have been involved with them. 
@@ -482,7 +482,7 @@ Link selected:
 
 ===5.2 Advanced features===
 
-_Priority Ranking: 56%_
+_Priority Ranking: 69%_
 
 Advance features for refining the display of event-to-event networks could also include pop-ups, time-slider and faceted browsing.
 Similar features are described in [NavigatingNetworksSpecification#1.2_Time-slider Time-slider], [NavigatingNetworksSpecification#1.3_Faceted_browsing faceted browsing] and [NavigatingNetworksSpecification#1.4_Pop-ups pop-ups].
@@ -506,28 +506,28 @@ Link information displayed
   * Artistic Functions
 
 ===5.3 Search and display===
-Search and display by venue, organisations, event-criteria and connections could also be used as a way into exploring event-to-event networks. Rank: 56%
+Search and display by venue, organisations, event-criteria and connections could also be used as a way into exploring event-to-event networks. Rank: 66%
 
 ==6. DYNAMIC NETWORKS==
 
 I'm looking at a network of collaborations in AusStage and I want to see how that network has changed over time, how it has evolved, where people joined and left, who stuck around, when the network grew, shrank, changed shape and so on. 
 
 ===6.1 Animation===
- I'm looking at a network at a particular point in time. I hit play and the network animates through a series of changes - as new people are added, others leave with each collaboration, the network shifts and changes shape. I can hit pause at any point and see the time. I can also use a time-mark to scrub through the animation. Rank: 64%
+ I'm looking at a network at a particular point in time. I hit play and the network animates through a series of changes - as new people are added, others leave with each collaboration, the network shifts and changes shape. I can hit pause at any point and see the time. I can also use a time-mark to scrub through the animation. Rank: 74%
 
 ===6.2 Time-slices===
- I'm looking at a network as a series of time-slices- each representing the network at successive points in time. The time-slices are arranged in three-dimensional space, with time as the third dimension. By manipulating the view, and looking at the time-slices from different angles, I can explore change over time. Rank: 60%
+ I'm looking at a network as a series of time-slices- each representing the network at successive points in time. The time-slices are arranged in three-dimensional space, with time as the third dimension. By manipulating the view, and looking at the time-slices from different angles, I can explore change over time. Rank: 71%
 
 ===6.3 Fly-throughs===
- I'm looking at a network as a series of time-slices - arranged in three-dimensional space. But this time, instead of rotating the object, I can fly through it - moving forwards and backwards in time, I can see the state of the network at any point in time. Rank: 56%
+ I'm looking at a network as a series of time-slices - arranged in three-dimensional space. But this time, instead of rotating the object, I can fly through it - moving forwards and backwards in time, I can see the state of the network at any point in time. Rank: 69%
 
 ==7. NETWORKS+MAPS==
 
-I'm looking at a contributor's career as a line on a map. The line links the venues at which the contributor has performed in chronological order. Following the line from beginning to end, I can see where the contributor has performed over time. If I start adding their collaborators to the map, I can see where those collaborators have worked together, how often, and at which points they head off on their own. This is similar to the timeline, with events displayed geographically on a map. Rank: 60%
+I'm looking at a contributor's career as a line on a map. The line links the venues at which the contributor has performed in chronological order. Following the line from beginning to end, I can see where the contributor has performed over time. If I start adding their collaborators to the map, I can see where those collaborators have worked together, how often, and at which points they head off on their own. This is similar to the timeline, with events displayed geographically on a map. Rank: 66%
 
 ==8 STATISTICAL ANALYSES and PATTERN MATCHING==
 
-I'm looking at a network of collaborations in AusStage and I want to explore its statistical properties - degree of connection, shortest path, clustering and so on. I might want to compare its statistical properties to other networks. I might want to search AusStage for other network areas with similar or matching properties. Rank: 44% 
+I'm looking at a network of collaborations in AusStage and I want to explore its statistical properties - degree of connection, shortest path, clustering and so on. I might want to compare its statistical properties to other networks. I might want to search AusStage for other network areas with similar or matching properties. Rank: 60% 
 
 sketch for each interface idea BRAD WITH INPUT FROM JONATHAN
 
