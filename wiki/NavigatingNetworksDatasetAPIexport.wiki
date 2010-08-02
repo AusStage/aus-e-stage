@@ -52,7 +52,7 @@ id - list of collaborators - number of collaborators in the list
 
 For example:
 
-111 - 101, 102, 1324, 56789 - 4
+`111 - 101, 102, 1324, 56789 - 4`
 
 == Degrees ==
 
