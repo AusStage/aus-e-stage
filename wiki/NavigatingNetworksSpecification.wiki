@@ -132,15 +132,14 @@ The Vizster project (http://hci.stanford.edu/jheer/projects/vizster/) provides a
 
 Some other examples of interactive interfaces for exploring network data include:
 
- * http://www.liveplasma.com/
- * http://www.netvis.org/code.php
- * http://apps.asterisq.com/mentionmap/
- * http://asterisq.com/products/constellation/framework/implementations
- * http://rama.inescporto.pt/
- * [http://www.mattryall.net/demo/atlassian-vis/contributors/ processing.js]
- * [http://www.kylescholz.com/projects/speaking/tae2006/music.fm/#Big%20Shug JSVis]
- * [http://www.viewru.com/ ViewRu, also using JSVis]
-
+ * Live Plasma http://www.liveplasma.com/ (Flash)
+ * NetVis Module - Dynamic Visualization of Social Networks http://www.netvis.org/index.php (Java)
+ * RAMA - Relational Artists Maps http://rama.inescporto.pt/ (Java)
+ * MentionMap - A Twitter Visualization http://apps.asterisq.com/mentionmap/ (Constellation Framework)
+ * Optimice - Optimizing Busines Reltationships http://www.optimice.com.au/friends_join.php (Constellation Framework)
+ * Music Recommendations with JSViz http://www.kylescholz.com/projects/speaking/tae2006/music.fm/ (JSVis)
+ * ViewRu - Music Network http://www.viewru.com/ (JSVis)
+ * Processing.js demo http://www.mattryall.net/demo/atlassian-vis/contributors/ (processing.js)
 
 Additional online resources which have informed our understanding of social networks, their visualisation and analysis include:
 
