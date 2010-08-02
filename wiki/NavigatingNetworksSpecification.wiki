@@ -206,7 +206,7 @@ The networks of artistic collaboration in the AusStage dataset are dynamic. They
 
 =INTERFACE IDEAS=
 
-The Networks Cluster, a group of researchers involved in AusStage phase 4 -  Jonathan Bollen, Kim Durban, Shona Erskine, Nanette Hassall, Glen McGillivray and Helen Trenos - developed a set of ideas for the Network interface through a series of meetings to June 2010. These ideas were grouped according to functionality and ranked according to popularity across the cluster. 
+The Networks Cluster, a group of researchers involved in AusStage phase 4 -  Jonathan Bollen, Kim Durban, Shona Erskine, Nanette Hassall, Glen McGillivray and Helen Trenos - developed a set of ideas for the Network interface through a series of meetings to June 2010. These ideas were grouped according to functionality and ranked according to popularity across the cluster; rankings from Julie Holledge and Neal Harvey were also included.
 
 The interface will present network graphs as an interactive method for exploring the network of contributors and events in the AusStage dataset. Network graphs are composed of nodes and edges. The node represents an entity in the AusStage database, either a Contributor or an Event; an edge represents a relationship between nodes, derived from the ConEvLink table.
 
@@ -309,8 +309,8 @@ Link information displayed
 An alternative to pop-ups would be to display node and link information in separate panels.
 
 _Pop Up Sketch Ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps.png Pop Up Sketch 1]
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps2.png Pop Up Sketch 2]
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps.png Pop Up Sketch 1]
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/1-4PopUps2.png Pop Up Sketch 2]
 
 ==2. NETWORK BROWSING - Person-to-person - Text Interface==
 
@@ -320,12 +320,12 @@ _Priority Ranking 83%._
 The contributor detail page within AusStage should display a collapsible list of collaborators, ordered by frequency of collaborations - most frequent, to least frequent. 
 The display will list the collaborator's name, collaboration count, year range, and a list of the collaborator's artistic functions. The collaborator's name is a link to their contributor detail page.
 
-The layout should be as follows: *images to be updated*
+The layout should be as follows:
 
-_Contributor detail page with network browsing collapsed_
+ * _Contributor detail page with network browsing collapsed_
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/collapsedCollaborators.jpg Screen Shot]
 
-_Contributor detail page with network browsing expanded_
+ * _Contributor detail page with network browsing expanded_
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/CollaboratorsExp.jpg Screen Shot]
 
 ===2.2 Key organisations===
@@ -334,12 +334,12 @@ _Priority Ranking 74%_
 The contributor detail page within AusStage should display a collapsible list of organisations, ordered by frequency of collaborations - most frequent, to least frequent. 
 The display will list the organisation's name, collaboration count, year range, and a list of the contributor's artistic functions. The organisations name should be a link to their organisation detail page.
 
-The layout should be as follows: *images to be updated*
+The layout should be as follows:
 
-_￼Contributor detail page with organisation network browsing collapsed_
+ * _￼Contributor detail page with organisation network browsing collapsed_
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgCollapsed.jpg Screen Shot]
 
-_Contributor detail page with organisation network browsing expanded_￼￼
+ * _Contributor detail page with organisation network browsing expanded_￼￼
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/orgsExpanded.jpg Screen Shot]
 
 
@@ -363,7 +363,8 @@ Work flow:
  # Once the user has selected all desired contributors to be mapped _(should there be a limit?)_ the network is displayed in the browsing interface.
 
 _Search for connections between collaborators sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-1P2PSearch.png Search for Connections Between Collaborators Sketch]
+
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-1P2PSearch.png Search for Connections Between Collaborators Sketch]
 
 ===3.2 Search for events matching criteria===
 
@@ -387,7 +388,8 @@ Work flow:
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
 _Search for contributors by event sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-2NetworkEventCriteria.png Search for Contributors by Event Sketch]
+
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-2NetworkEventCriteria.png Search for Contributors by Event Sketch]
 
 ===3.3 Search by organisation===
 
@@ -404,7 +406,8 @@ Work flow:
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
 _Search for networks by organisation sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-3NetworkOrganisationAssociates.png Search for Contributors by Organisation Sketch]
+
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-3NetworkOrganisationAssociates.png Search for Contributors by Organisation Sketch]
 
 ===3.4 Search by venue===
 
@@ -421,7 +424,8 @@ Work flow:
  # The contributors and their networks are then loaded graphically in the browsing interface.
 
 _Search for networks by venue sketch ideas_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-4NetworkVenueAssociates.png Search for Contributors by Venue Sketch]
+
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/3-4NetworkVenueAssociates.png Search for Contributors by Venue Sketch]
 
 ==4. NETWORKS+TIMELINES==
 
@@ -442,7 +446,8 @@ The timeline should be interactive, see the Similie Project's interactive timeli
 This type of visualisation should show the frequency of collaborations and their duration over time. Also which collaborators are converging, at which points in time and how often.
 
 _Timeline sketch idea_
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/4-1Timeline.png Timeline Interface Sketch]
+
+ * [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/4-1Timeline.png Timeline Interface Sketch]
 
 ===4.2 Shona's Idea===
 I want to map the works on BUZZ, STRUT, STEPS and LINK while also catching the career pathways of individual AD's of each company. In my mind the companies sit on one axis (say horizontal) and the individuals sit on another (say vertical). I then imagine where the lines cross. For example, Felicity Bott will cross STEPS and BUZZ. Alice Hollands will cross STEPS and STRUT. There will also be Phillipa Clarke crossing BUZZ and LINK, Chrissie Parrott and Michael Whaites for LINK. And many more too. The idea of incorporating a third dimension for time also sounds good. JB: I'm seeing companies as the horizontal lines, with artists as lines weaving across them and intersecting at events. If the events are spread along the company lines in chronological order, that would get the time element included. So to construct this kind of diagram - you'd select one or more companies and one or more artists - and then ask the system to build a timeline that weaves them together. Rank: 63%
@@ -529,10 +534,6 @@ I'm looking at a contributor's career as a line on a map. The line links the ven
 
 I'm looking at a network of collaborations in AusStage and I want to explore its statistical properties - degree of connection, shortest path, clustering and so on. I might want to compare its statistical properties to other networks. I might want to search AusStage for other network areas with similar or matching properties. Rank: 60% 
 
-sketch for each interface idea BRAD WITH INPUT FROM JONATHAN
-
-technical requirements for each interface idea BRAD WITH INPUT FROM COREY/WEI
-
 =TOOLS AND TECHNOLOGIES - CANDIDATES FOR APPLICATION=
  
 == RDF Dataset ==
@@ -600,17 +601,6 @@ This is an example of one contributors first degree network. The interaction had
 ==JSVis==
 Another javascript visualisation library with physics and layout support for force directed layouts. This library also supports the dynamic generation of graphs using XML. 
 Testing is underway.
-
-BRAD TO WRITE UP WITH INPUT FROM COREY/WEI 
-
-Summarise Corey's current work
--  network data formats: GraphML, FOAF, etc... 
--  data processing technologies:  RDF, OWL, JENA 
--  network visualisation libraries:  Protovis, JavaScript InfoVis Toolkit (JIT), Processing.js. 
-
-From Aus-e-Stage project plan - but now out of date
-
-Prefuse Visualization Toolkit (Java) and Prefuse Flare Toolkit (Flash) are likely candidates for developing interactive web-based visualizations of network data.  Vizster, a tool for visualizing online social networks developed by Assistant Professor Jeffrey Heer at Berkeley, provides a model for the AusStage network interface. No standard for encoding network data has emerged; a set of XML-based candidates, including GraphML, DyNetML and GML, are in current use.  The Prefuse Visualisation Toolkit uses GraphML.  The underlying relationships could also be encoded in RDF.
 
 APPENDIX A - definitions
 definitions relate to terms used within the specification paper. Particularly with regards to the interface descriptions.
