@@ -130,7 +130,7 @@ public class ExportServlet extends HttpServlet {
 			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + "-debug.txt");
 		} else if(formatType.equals("edge-list")) {
 			response.setContentType("text/plain; charset=UTF-8");
-			response.setHeader("Content-Disposition", "attachment;filename=" + taskType + ".txt");
+			response.setHeader("Content-Disposition", "attachment;filename=" + taskType + ".edge");
 		}
 		
 		// determine the type of lookup to undertake
