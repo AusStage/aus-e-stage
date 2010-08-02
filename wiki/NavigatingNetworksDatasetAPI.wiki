@@ -5,4 +5,5 @@ There are two ways to gain access to data held within the [NavigatingNetworksDat
 The second way of retrieving data is by using the [http://en.wikipedia.org/wiki/Application_programming_interface API] as outlined on the following pages. 
 
  * [NavigatingNetworksDatasetAPIlookup Lookup API] - used to look specific data elements or datasets
- * [NavigatingNetworksDatasetAPIexport Export API] - used to export large datasets and graphs
+ * [NavigatingNetworksDatasetAPIexportGraph Graph Export API] - used to export graphs
+ * [NavigatingNetworksDatasetAPIexportEdges Edge List Export API] - used to export edge list files
