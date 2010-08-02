@@ -571,6 +571,36 @@ In this way data that is required for the Navigating Networks Service is:
 
 More information on the dataset can be found starting with the [NavigatingNetworksDataset Navigating Networks Dataset] page here on the Wiki.
 
+==Processing.js==
+[http://processingjs.org/ Processing.js] is a port of the Java based programming language - Processing. 
+It uses javascript to create interactive visualisations in a web based context, and appears on the surface to be entirely appropriate for our purposes. 
+It creates interactive images through iteration, within the HTML, the processing.js script makes a call to a draw method, the contents of which are defined by the programmer. 
+This draw method iterates indefinately, until either the exit method is called or the HTML page is closed.
+It is only through the constant iteration of the draw method that interaction is made possible. 
+The language its self is relatively simple and easy to pick up. It is however difficult to find particular objects within a visualisation. 
+As a simple example, in the case of user interaction, if the mouse where to be used to select a 'node', in the underlying code the program would have to cross reference the mouse's x and y position with the x and y positions of every node and line displayed to work out which object had been selected, if any.
+
+It is also worth noting that the processing.js library currently lacks support for force directed layouts. With this in mind, if we took this approach, we would need not only to write event handlers and further object definitions, but also we would need to somehow implement a force directed layout algorithm.
+
+In summary, processing.js provides us with a language, and the ability to visualise and animate simple objects, it would be up to us to extend the provided libraries to implement both the physics elements and the extra levels of interactivity needed.
+
+==Protovis==
+[http://vis.stanford.edu/protovis/ Protovis] is another language that implements javascript and SVG to create web visualisations of custom data. 
+Its libraries provide layouts and support for force directed graphs, enabling us to only extend rather than invent the code required. 
+There is more testing to be done regarding Protovis, however initial findings have been that there are issues loading a highly connected network with more than 50 nodes.
+MORE TESTING AND RESULTS TO COME
+
+==JIT==
+[http://thejit.org/ JIT] or the JavaScript InfoVis Toolkit is a javascript based library that provides tools for creating interactive web visualisations. 
+At the time of writing, this particular library had provided me with the best results. 
+Essentially, the HTML page reads in a javascript file. Included in this file is an array that contains information on every node and its edges. 
+Basic testing revealed that it could display 120 nodes and 2863 edges with a loading time of 30seconds. 
+This is an example of one contributors first degree network. The interaction had a very slow response time. However has thus far been able to visualise the largest network. 
+
+==JSVis==
+Another javascript visualisation library with physics and layout support for force directed layouts. This library also supports the dynamic generation of graphs using XML. 
+Testing is underway.
+
 BRAD TO WRITE UP WITH INPUT FROM COREY/WEI 
 
 Summarise Corey's current work
