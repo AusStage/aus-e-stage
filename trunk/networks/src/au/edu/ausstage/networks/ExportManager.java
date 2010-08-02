@@ -62,7 +62,7 @@ public class ExportManager {
 	 * @param formatType  the required format of the data
 	 * @param degrees     the required number of degrees of separation
 	 * @param graphType   the type of graph to created, must be one of directed / undirected
-	 * @param printWirter the output stream to use to stream the output to the client
+	 * @param printWriter the output stream to use to stream the output to the client
 	 */
 	public void getSimpleNetwork(String id, String formatType, int degrees, String graphType, PrintWriter printWriter) {
 	
@@ -455,7 +455,7 @@ public class ExportManager {
 	 * A method to build and return a full edge list
 	 *
 	 * @param taskType the exact type of edge list to output
-	 * @param printWirter the output stream to use to stream the output to the client
+	 * @param printWriter the output stream to use to stream the output to the client
 	 */
 	public void getFullEdgeList(String taskType, PrintWriter printWriter) {
 	
