@@ -27,7 +27,7 @@ Get Request
 || *Name* || *Possible Values* || *Optional* || *Default* ||
 || task    || [NavigatingNetworksDatasetAPIexport#Task:_simple-network-directed simple-network-directed], [NavigatingNetworksDatasetAPIexport#Task:_simple-network-undirected simple-network-undirected]|| No || ||
 || id      || unique identifier of a contributor || No || ||
-|| format  || [NavigatingNetworksDatasetAPIexport#Format:_graphml graphml], [[NavigatingNetworksDatasetAPIexport#Format:_debug debug] || Yes || graphml ||
+|| format  || [NavigatingNetworksDatasetAPIexport#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexport#Format:_debug debug] || Yes || graphml ||
 || [NavigatingNetworksDatasetAPIexport#Degrees degrees] || Integer between 1 and 3 || Yes || 1 ||
 
 = Parameter Definitions =
