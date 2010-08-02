@@ -1,6 +1,8 @@
 #summary The Navigating Networks Specification
 <wiki:toc max_depth="3" />
 
+This document specifies the development requirements for implementing the Navigating Networks service. It summarises the exploratory research we have undertaken on the visualisation and analysis of networks in the AusStage dataset, outlines the research needs for network analysis, describes the technical requirements for implementing the network interface, evaluates the tools and technologies underlying the service, and outlines a development schedule.
+
 =EXPLORATORY RESEARCH=
 
 This section summarises the exploratory research we have undertaken on the visualisation and analysis of networks in the AusStage dataset.
