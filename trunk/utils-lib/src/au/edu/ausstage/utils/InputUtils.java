@@ -116,7 +116,7 @@ public class InputUtils {
 	 *
 	 * @param value    the parameter value
 	 * @param minimum  the minimum allowed value
-	 * @param maxmimum the maximum allowed value
+	 * @param maximum the maximum allowed value
 	 *
 	 * @return      true if, and only if, the parameter is valid
 	 */
