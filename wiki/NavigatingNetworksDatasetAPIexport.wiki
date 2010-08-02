@@ -79,20 +79,20 @@ Get Request
 || *Name* || *Possible Values* || *Optional* || *Default* ||
 || task    || full-edge-list-with-dups, full-edge-list-no-dups, full-edge-list-with-dups-id-only, full-edge-list-no-dups-id-only|| No || ||
 
-= Parameter Definitions =
+== Parameter Definitions ==
 
-== Task: full-edge-list-with-dups ==
+=== Task: full-edge-list-with-dups ===
 
 A full export of the dataset in the edge list format containing duplicate relationships.
 
-== Task: full-edge-list-no-dups ==
+=== Task: full-edge-list-no-dups ===
 
 A full export of the dataset in the edge list format that does not contain duplicate relationships.
 
-== Task: full-edge-list-with-dups-id-only ==
+=== Task: full-edge-list-with-dups-id-only ===
 
 A full export of the dataset in the edge list format that contains ids only.
 
-== Task: full-edge-list-no-dups-id-only ==
+=== Task: full-edge-list-no-dups-id-only ===
 
 A full export of the dataset in the edge list format that does not contain duplicate relationships and that contains ids only.
