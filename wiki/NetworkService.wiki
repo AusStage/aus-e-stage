@@ -19,4 +19,4 @@ The NavigatingNetworksGoals page details the goals and ideas that will be incorp
 
 == Navigating Networks Specification ==
 
-This NavigatingNetworksSpecification specifies the development requirements for implementing the Navigating Networks service. It summarises the exploratory research we have undertaken on the visualisation and analysis of networks in the AusStage dataset, outlines the research needs for network analysis, describes the technical requirements for implementing the network interface, evaluates the tools and technologies underlying the service, and outlines a development schedule.
+The NavigatingNetworksSpecification specifies the development requirements for implementing the Navigating Networks service. It summarises the exploratory research we have undertaken on the visualisation and analysis of networks in the AusStage dataset, outlines the research needs for network analysis, describes the technical requirements for implementing the ideas for network interface, evaluates the tools and technologies underlying the service, and outlines a development schedule.
