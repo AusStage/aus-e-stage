@@ -30,21 +30,21 @@ Get Request
 || format  || [NavigatingNetworksDatasetAPIexport#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexport#Format:_debug debug] || Yes || graphml ||
 || [NavigatingNetworksDatasetAPIexport#Degrees degrees] || Integer between 1 and 3 || Yes || 1 ||
 
-= Parameter Definitions =
+== Parameter Definitions ==
 
-== Task: simple-network-directed ==
+=== Task: simple-network-directed ===
 
 A basic directed ego-centric network starting with the contributor with the supplied id. 
 
-== Task: simple-network-undirected ==
+=== Task: simple-network-undirected ===
 
 A basic un-directed ego-centric network starting with the contributor with the supplied id. 
 
-== Format: graphml ==
+=== Format: graphml ===
 
 This export format uses the [http://graphml.graphdrawing.org/primer/graphml-primer.html GraphML] data format and includes edges and nodes.
 
-== Format: debug ==
+=== Format: debug ===
 
 This export format provides a text based representation of the internal data structures used by the service while compiling the graph. The format is as follows:
 
@@ -54,6 +54,45 @@ For example:
 
 `111 - 101, 102, 1324, 56789 - 4`
 
-== Degrees ==
+=== Degrees ===
 
 The degrees of separation to follow from the central node as defined by the supplied id parameter.
+
+= Edge List Export =
+
+Note, that this export format exports the entire list of relationships in the dataset. This results in a large file that may take some time to process and download. It is highly recommended that this API be used sparingly and be used on a fast broadband connection. 
+
+Alternative static snapshots of this data may be downloaded from the [http://code.google.com/p/aus-e-stage/downloads/list downloads] section of this website. These static snapshots are only updated on request. 
+
+== Base URL ==
+
+The base URL for the Lookup API is as follows:
+
+http://beta.ausstage.edu.au/networks/export?
+
+== Request Type ==
+
+Get Request
+
+== Available Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| task    || full-edge-list-with-dups, full-edge-list-no-dups, full-edge-list-with-dups-id-only, full-edge-list-no-dups-id-only|| No || ||
+
+= Parameter Definitions =
+
+== Task: full-edge-list-with-dups ==
+
+A full export of the dataset in the edge list format containing duplicate relationships.
+
+== Task: full-edge-list-no-dups ==
+
+A full export of the dataset in the edge list format that does not contain duplicate relationships.
+
+== Task: full-edge-list-with-dups-id-only ==
+
+A full export of the dataset in the edge list format that contains ids only.
+
+== Task: full-edge-list-no-dups-id-only ==
+
+A full export of the dataset in the edge list format that does not contain duplicate relationships and that contains ids only.
