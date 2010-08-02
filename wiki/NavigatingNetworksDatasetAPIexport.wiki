@@ -1,0 +1,59 @@
+#summary How to use the Navigating Networks Export API
+
+<wiki:toc max_depth="3" />
+
+<h1> Export API </h1>
+
+The export API provides the functionality to export data out of the [NavigatingNetworksDataset Navigating Networks Dataset] in a variety of different formats.
+
+The details of the API are as follows:
+
+= Graph Export =
+
+== Base URL ==
+
+The base URL for the Lookup API is as follows:
+
+http://beta.ausstage.edu.au/networks/export?
+
+Combining this URL with the parameters outlines below retrieves data from the [NavigatingNetworksDataset Navigating Networks Dataset].
+
+== Request Type ==
+
+Get Request
+
+== Available Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| task    || simple-network-directed, simple-network-undirected|| No || ||
+|| id      || unique identifier of a contributor || No || ||
+|| format  || graphml, debug || Yes || graphml ||
+|| degrees || Integer between 1 and 3 || Yes || 1 ||
+
+= Parameter Definitions =
+
+== Task: simple-network-directed ==
+
+A basic directed ego-centric network starting with the contributor with the supplied id. 
+
+== Task: simple-network-undirected ==
+
+A basic un-directed ego-centric network starting with the contributor with the supplied id. 
+
+== Format: graphml ==
+
+This export format uses the [http://graphml.graphdrawing.org/primer/graphml-primer.html GraphML] data format and includes edges and nodes.
+
+== Format: debug ==
+
+This export format provides a text based representation of the internal data structures used by the service while compiling the graph. The format is as follows:
+
+id - list of collaborators - number of collaborators in the list
+
+For example:
+
+111 - 101, 102, 1324, 56789 - 4
+
+== Degrees ==
+
+The degrees of separation to follow from the central node as defined by the supplied id parameter.
