@@ -51,10 +51,18 @@ public class DbUtils {
 	
 	/**
 	 * A method to connect to the database
+	 *
+	 * @param reConnect restablish a connection if required
 	 * 
 	 * @return true if, and only if, the connection was successful
 	 */
-	public boolean connect() {
+	public boolean connect(boolean reConnect) {
+		
+		// is this a reconnection
+		if(reConnect == true) {
+			dataSource = null;
+			connection = null;
+		}
 		
 		// enclose code in a try block
 		// return false if this doesn't work
@@ -86,6 +94,15 @@ public class DbUtils {
 		// if we get here the connect worked
 		return true;
 	} // end connect Method
+	
+	/**
+	 * A method to connect to the database
+	 * 
+	 * @return true if, and only if, the connection was successful
+	 */
+	public boolean connect() {
+		return connect(false);
+	}
 	
 	/**
 	 * A method to execute an SQL statement and return a resultset
