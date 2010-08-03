@@ -5,6 +5,7 @@
    * Aus-e-Stage Software Tools
      * [AbsDataFix Building ABS Overlays]
      * [RdfExport Creating the Network Dataset]
+     * [TwitterGatherer Gather Twitter Messages]
    * Processes
      * [SourcingAbsData Sourcing data from the ABS]
      * [SubversionRepository Using our Subversion Repository]
