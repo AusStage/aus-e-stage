@@ -36,8 +36,14 @@ public class InputUtils {
 		if(value == null) {
 			return false;
 		} else {
-			return true;
+			value = value.trim();
+			if(value.equals("") == true) {
+				return false;
+			} 
 		}
+		
+		// passed validation
+		return true;
 	} // end the isValid method
 	
 	/**
