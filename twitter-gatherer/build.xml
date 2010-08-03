@@ -1,0 +1,101 @@
+<!--
+ * This file is part of the AusStage RDF Export App
+ *
+ * The AusStage RDF Export App is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The AusStage Mapping Service is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the RDF Export App.  
+ * If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="AusStageRdfExport" default="main" basedir=".">
+
+	<!-- Property definitions that are user specific are stored in a build.properties file -->
+	<property file="build.properties"/>
+	<property file="build.properties"/>
+	
+	<!-- Directories -->
+	<property name="src.dir"     value=""/>
+    <property name="build.dir"   value=""/>
+    <property name="jar.dir"     value=""/>
+    <property name="lib.dir"     value=""/>
+    
+    <!-- custom paths such as the class path -->
+    <path id="classpath">
+    	<fileset dir="${lib.dir}" includes="*.jar"/>
+    </path>
+
+	<!-- main class in the jar file -->
+	<property name="main-class"  value="RdfExport"/>
+	
+	<!-- compilation properties -->
+	<property name="compile.debug"       value="true"/>
+	<property name="compile.deprecation" value="true"/>
+	<property name="compile.optimize"    value="false"/>
+
+	<!-- clean target to tidy up from previous builds -->
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${jar.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${jar.dir}"/>
+	</target>
+	
+	<!-- compile target to compile the source code -->
+
+	<target name="compile">
+		<javac 
+			srcdir="${src.dir}" 
+			destdir="${build.dir}" 
+			classpathref="classpath"
+			deprecation="${compile.deprecation}"
+			includeAntRuntime="false"
+			optimize="${compile.optimize}"
+			debug="${compile.debug}">
+			<compilerarg value="-Xlint:unchecked"/>
+		</javac>
+	</target>
+	
+	
+	
+	<!-- jar target to create the jar file -->
+	
+	<manifestclasspath property="lib.list" jarfile="${jar.dir}/${ant.project.name}.jar">
+		<classpath refid="classpath" />
+	</manifestclasspath>
+
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${jar.dir}"/>
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${build.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Class-Path" value="${lib.list}"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<!-- run target builds the source code and runs the jar file -->
+
+	<target name="run" depends="clean, jar">
+		<exec executable="./run.sh">
+		</exec>
+	</target>
+	
+	<!-- clean-build target cleans and then builds -->
+	<target name="clean-build" depends="clean,jar"/>
+	
+	<!-- main target cleans and then runs the app -->
+	<target name="main" depends="clean,run"/>
+
+</project>
+
