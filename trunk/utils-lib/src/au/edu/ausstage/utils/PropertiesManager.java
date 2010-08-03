@@ -75,7 +75,29 @@ public class PropertiesManager {
 		// return null to indicate failure
 		return null;
 	
-	} // end getParameter method
+	} // end getProperty method
+	
+	/**
+	 * A method to get the value of a parameter
+	 * A method to get the value of a parameter
+	 *
+	 * @param key the key for this parameter
+	 *
+	 * @return    the value of this parameter
+	 */
+	public String getValue(String key) {
+	
+		if(InputUtils.isValid(key) == true) {
+		
+			// get the property value
+			return props.getProperty(key);
+		}
+		
+		// return null to indicate failure
+		return null;
+	
+	} // end getValue method
+	 
 	 
 	
 } // end class definition
