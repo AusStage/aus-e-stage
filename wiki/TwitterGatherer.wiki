@@ -1,0 +1,12 @@
+#summary Documentation about the TwitterGatherer Application
+
+<h1>Twitter Gatherer</h1>
+
+The !AusStage Twitter Gatherer is a Java based application used to gather messages from [http://twitter.com Twitter] uses the [http://dev.twitter.com/pages/streaming_api Twitter Streaming API].
+
+The application is currently undergoing development and more information will be added here as development progresses.
+
+
+== Libraries Used in Development ==
+ * [http://github.com/seejohnrun/tweetStream4J tweetStream4J]
+   * Information [http://techxplorer.com/2010/08/02/exploring-tweetstream4j/ on compiling] the tweetStream4J package
