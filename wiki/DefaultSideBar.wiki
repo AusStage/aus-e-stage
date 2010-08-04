@@ -18,6 +18,7 @@
        * [MappingServiceAPIMapData Map Data]
        * [MappingServiceAPIBrowseData Browse Map]
        * [MappingServiceAPIXMLData XML Data]
+     * [MappingServiceFeedback Mapping Service Feedback]
    * [MobileService  Mobile Service]
      * [MobileServiceSpecification Specification]
    * [NetworkService Network Service]
