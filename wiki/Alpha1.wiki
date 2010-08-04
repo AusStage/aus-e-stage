@@ -6,11 +6,6 @@ Mapping Alpha 1 testing was undertaken from March - April 2010.
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
-
 =AUS-e-STAGE MAPPING SERVICE=
 
 =REPORT ON THE ALPHA 1 TESTING PHASE=
@@ -36,21 +31,21 @@ Bill Dunstone 	Neal Harvey 	Julie Holledge
 March/April 2010
 
 ===Summary of feedback requested===
-Please go to http://beta.ausstage.edu.au/mapping/ to view the trial version of the Aus-e-Stage Mapping service.
-•	When you have ten or fifteen minutes could you please have a play with the site.
-•	When you have explored its current possibilities we would like you to answer the following questions:
-o	Can you use this mapping function in AusStage to further your research?
-o	What additional functions would you like to see incorporated in the maps to further your research needs?
-o	How user friendly are these maps?
+Please go to http://beta.ausstage.edu.au/mapping/ to view the trial version of the Aus-e-Stage Mapping service. When you have ten or fifteen minutes could you please have a play with the site.
+
+When you have explored its current possibilities we would like you to answer the following questions:
+  *	Can you use this mapping function in AusStage to further your research?
+  *	What additional functions would you like to see incorporated in the maps to further your research needs?
+  *	How user friendly are these maps?
 
 To assist with this feedback, a few more specific questions are listed below that cover the interactive elements of the prototype:
-•	Have you been able to easily and accurately search for an organisation?
-•	Did you find the organisation search related time slider useful and easy to use?
-•	Was organisation search trajectory information accurately shown and of use?
-•	Have you been able to successfully browse the available AusStage venues?
-•	Was interpretation of the browse venue map easy to navigate and zoom functionality adequate?
-•	Did you find the marker linked venue information and time lines function useful?
-•	Did you experience any difficulties in downloading and using the KML code or persistent map links?
+  *	Have you been able to easily and accurately search for an organisation?
+  *	Did you find the organisation search related time slider useful and easy to use?
+  *	Was organisation search trajectory information accurately shown and of use?
+  *	Have you been able to successfully browse the available AusStage venues?
+  *	Was interpretation of the browse venue map easy to navigate and zoom functionality adequate?
+  *	Did you find the marker linked venue information and time lines function useful?
+  *	Did you experience any difficulties in downloading and using the KML code or persistent map links?
 
 
 ==Feedback on the Map Events by Organisation function==
