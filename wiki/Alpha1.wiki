@@ -1,14 +1,8 @@
 #summary Mapphing Alpha 1 phase feedback
 
-= INTRODUCTION =
-
-Mapping Alpha 1 testing was undertaken from March - April 2010.
-
-
-
 =AUS-e-STAGE MAPPING SERVICE=
 
-=REPORT ON THE ALPHA 1 TESTING PHASE=
+==REPORT ON THE ALPHA 1 TESTING PHASE==
 
 ===Testing group invitees===
 
