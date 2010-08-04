@@ -89,10 +89,11 @@ TARGETTED FOR USE BY ADVANCED USERS
 ==SECTION 5  USER DOCUMENTATION==
 
 Summary of suggested items to create for this:  
-FAQ’S 	
-“Tool tips” and online help 	
-User Manual	
-Definitions and terms
+
+#FAQ’S 	
+#“Tool tips” and online help 	
+#User Manual	
+#Definitions and terms
 
   *	Why do I not see stuff on my map?
   *	Display options vs KML download options
@@ -122,7 +123,7 @@ Common:  XML, subversion, ANT
 
 1.	Google Maps V2 vs V3	(All)
 
-SECTION 1  DESIGN AND CARTOGRAPHY ATTRIBUTES
+====SECTION 1  DESIGN AND CARTOGRAPHY ATTRIBUTES====
 
 2.	External experts	(Liz)
   *	Graphic design
