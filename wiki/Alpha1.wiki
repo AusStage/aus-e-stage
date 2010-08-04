@@ -72,7 +72,7 @@ The desire to map multiple organisations and contributors (single and multiple) 
 
 A full summary of feedback requests is included on the following pages of this document and can also be viewed at the Aus-e-Stage Google Code site at http://code.google.com/p/aus-e-stage/issues/list.
 
----
+___
 ==FEEDBACK SUMMARY==
 As tabled on the Aus-e-Stage Google Code site
 http://code.google.com/p/aus-e-stage/issues/list
