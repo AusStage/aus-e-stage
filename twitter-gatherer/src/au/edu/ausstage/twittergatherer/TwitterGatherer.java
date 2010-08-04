@@ -100,6 +100,7 @@ public class TwitterGatherer {
 	 	System.out.println("INFO: Connecting to the database");
 	 	
 	 	DbManager database = new DbManager(properties.getValue("db-connection-string"));
+	 	
 	 	if(database.connect() == false) {
 	 		// connection to the database failed
 	 		System.err.println("ERROR: a connection to the database could not be made");
