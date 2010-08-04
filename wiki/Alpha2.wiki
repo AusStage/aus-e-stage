@@ -1,7 +1,7 @@
 #summary Mapping Alpha 2 Testing Feedback
 
  
-=ALPHA 2 TESTING FEEDBACK - 26 & 27 JULY 2010 WHITEBOARD SESSIONS=
+=SUMMARY:  ALPHA 2 TESTING FEEDBACK - 26 & 27 JULY 2010 WHITEBOARD SESSIONS=
 Summary of Alpha 2 feedback gathered April - July 2010.
 
   *	Migrating service to Google Maps API v3
