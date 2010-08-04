@@ -90,10 +90,10 @@ TARGETTED FOR USE BY ADVANCED USERS
 
 Summary of suggested items to create for this:  
 
-#FAQ’S 	
-#“Tool tips” and online help 	
-#User Manual	
-#Definitions and terms
+  # FAQ’S 	
+  # “Tool tips” and online help 	
+  # User Manual	
+  # Definitions and terms
 
   *	Why do I not see stuff on my map?
   *	Display options vs KML download options
@@ -133,7 +133,7 @@ Common:  XML, subversion, ANT
 
 4.	Implement standard template inc core attributes	(Wei/Corey)
 
-===SECTION 2  AUSSTAGE INTEGRATION===
+====SECTION 2  AUSSTAGE INTEGRATION====
 
 5.	Map data API	(Corey/Wei)
   *	Organisations
@@ -145,7 +145,7 @@ Common:  XML, subversion, ANT
 
 6.	Javascript API for dynamically adding maps to pages	(Wei)
 
-===SECTION 3  MAPPING WEB APPLICATION===
+====SECTION 3  MAPPING WEB APPLICATION====
 
 7.	Browse map cluster icons to resolve loading times of browse map	(Brad/Wei)
 
@@ -176,7 +176,7 @@ Common:  XML, subversion, ANT
 
 17.	Search by ID returns table not directly linked to map	(Wei)
 
-===SECTION 4  GOOGLE EARTH ASPECTS=== 
+====SECTION 4  GOOGLE EARTH ASPECTS==== 
 
 18.	Trajectories	(Corey)
   *	Remove from webapp
@@ -201,7 +201,7 @@ Common:  XML, subversion, ANT
 
 22.	Persistent clink maps should provide KML download link	(Corey/Wei)
 
-===SECTION 5  USER DOCUMENTATION===
+====SECTION 5  USER DOCUMENTATION====
 
 23.	User documentation	(All/Liz)
   *	FAQ
