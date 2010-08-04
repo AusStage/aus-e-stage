@@ -117,7 +117,7 @@ Frontend:  java script, HTML, Tomcat – Server pages, Maps API, AJAX, JQuery
 Backend:  java, KML, Tomcat->Servlets, Oracle SQL
 Common:  XML, subversion, ANT
 
------------------------------------------------------------------------------------------ 
+-------
 ==SERVICE REVISIONS ARISING FROM ALPHA 2 FEEDBACK==
 
 1.	Google Maps V2 vs V3	(All)
@@ -171,9 +171,9 @@ SECTION 1  DESIGN AND CARTOGRAPHY ATTRIBUTES
 
 15.	Default tiles on maps - Terrain/satellite etc	(Wei)
 
-16.	More detailed error messages	(Corey
+16.	More detailed error messages	(Corey)
 
-17.	Search by ID returns table not directly linked to map	(Wei
+17.	Search by ID returns table not directly linked to map	(Wei)
 
 ===SECTION 4  GOOGLE EARTH ASPECTS=== 
 
