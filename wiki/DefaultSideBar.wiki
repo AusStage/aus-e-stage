@@ -6,6 +6,7 @@
      * [AbsDataFix Building ABS Overlays]
      * [RdfExport Creating the Network Dataset]
      * [TwitterGatherer Gather Twitter Messages]
+     * [UtilsPackage AusStage Utilities Package]
    * Processes
      * [SourcingAbsData Sourcing data from the ABS]
      * [SubversionRepository Using our Subversion Repository]
