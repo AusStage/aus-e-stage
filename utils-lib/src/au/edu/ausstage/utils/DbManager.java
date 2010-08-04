@@ -40,7 +40,7 @@ public class DbManager {
 	 *
 	 * @param connectionString the string used to connect to the database
 	 */
-	public DbUtils(String connectionString) {
+	public DbManager(String connectionString) {
 		// validate this parameter
 		if(InputUtils.isValid(connectionString) == false) {
 			throw new IllegalArgumentException("The connection string cannot be null or empty");

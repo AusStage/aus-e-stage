@@ -47,7 +47,7 @@ public class DbObjects {
 	/**
 	 * A constructor this class
 	 *
-	 * @param preparedStatement the PreparedStatement related to this ResultSet
+	 * @param statement the PreparedStatement related to this ResultSet
 	 * @param resultSet         the resultSet related to the query
 	 */
 	public DbObjects(PreparedStatement statement, ResultSet resultSet) {
