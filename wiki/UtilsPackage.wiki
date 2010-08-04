@@ -1,6 +1,6 @@
 #summary All about the AusStage Utilities Package
 
-<h1>!AusStage Utilities Package</h1>
+=!AusStage Utilities Package=
 
 The !AusStage Utilities Package contains classes that are useful in undertaking repetitive tasks and provides a number of utility based functions. 
 
@@ -8,36 +8,36 @@ _Note: Some applications / servlets may use their own independent implementation
 
 Details of the classes are below. Check the actual source files for methods and functionality available. 
 
-<wiki:toc max_depth="3" />
+<wiki:toc max_depth=="3" />
 
-= !CommandLineParser =
+== !CommandLineParser ==
 
 Used to manage command line arguments that are passed to a Java Application
 
-= !DateUtils =
+== !DateUtils ==
 
 Used to manage dates including formatting / constructing dates from the !AusStage database
 
-= !DbManager =
+== !DbManager ==
 
 Used to connect to, and manage interaction with, the database
 
-= !DbObjects =
+== !DbObjects ==
 
 Used to manage the objects returned from the !DbManager class
 
-= !FileUtils =
+== !FileUtils ==
 
 Used to provide functionality such as confirming a file or directory exists
 
-= !InputUtils =
+== !InputUtils ==
 
 Used to validate input into other methods and classes. For example ensuring a String is not null or empty, or that a string represents an integer
 
-= !PropertiesManager = 
+== !PropertiesManager == 
 
 Used to retrieve items from a standard properties file
 
-= Dependencies =
+== Dependencies ==
 
  * [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html Oracle JDBC Library]
