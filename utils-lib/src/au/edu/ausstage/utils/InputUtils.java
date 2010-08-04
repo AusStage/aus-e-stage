@@ -23,7 +23,7 @@ package au.edu.ausstage.utils;
  */
 public class InputUtils {
 
-		/**
+	/**
 	 * check to ensure a parameter value is valid
 	 *
 	 * @param value the parameter value
