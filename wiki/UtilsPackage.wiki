@@ -6,7 +6,7 @@ The !AusStage Utilities Package contains classes that are useful in undertaking 
 
 _Note: Some applications / servlets may use their own independent implementations of these methods / classes as they were developed *before* the utils class. Where this is the case work should be undertaken to bring replace the independent functionality with that available in this package._
 
-Details of the classes are below. Check the actual source files for methods and functionality available. 
+Details of the classes are below. Check the [http://code.google.com/p/aus-e-stage/source/browse/#svn/trunk/utils-lib/src/au/edu/ausstage/utils source files] for methods and functionality available. 
 
 <wiki:toc max_depth=="3" />
 
