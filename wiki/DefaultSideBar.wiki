@@ -19,6 +19,7 @@
        * [MappingServiceAPIBrowseData Browse Map]
        * [MappingServiceAPIXMLData XML Data]
    * [MobileService  Mobile Service]
+     * [MobileServiceSpecification Specification]
    * [NetworkService Network Service]
      * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksGoals   Service Goals]
