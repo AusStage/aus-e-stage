@@ -11,16 +11,12 @@ Mapping Alpha 1 testing was undertaken from March - April 2010.
 =REPORT ON THE ALPHA 1 TESTING PHASE=
 
 ===Testing group invitees===
-LIEF Grant stakeholders: 
-  ||Gillian Arrighi || Kathryn Gilbey||Joon Kwok ||Paul Makeham||
-  ||Peter Stephenson|| Helen Trenos  ||David Watt||
+LIEF Grant stakeholders: Gillian Arrighi, Kathryn Gilbey, Joon Kwok, Paul Makeham, 
+Peter Stephenson, Helen Trenos, David Watt
 	
-Aus-e-Stage Project Committee:	
-  Jonathan Bollen     Paul Coddington     Neil Dickson     Jenny Fewster     Chris Marlin
-  Ian Maxwell     Liz Milford     Corey Wallis
+Aus-e-Stage Project Committee: Jonathan Bollen, Paul Coddington, Neil Dickson, Jenny Fewster, Chris Marlin, Ian Maxwell, Liz Milford, Corey Wallis
 
-Selected additional researchers: 
-  Bill Dunstone     Neal Harvey     Julie Holledge
+Selected additional researchers: Bill Dunstone, Neal Harvey, Julie Holledge
 
 ===Number of respondents===
 14
