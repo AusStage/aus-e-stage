@@ -20,7 +20,7 @@
        * [MappingServiceAPIXMLData XML Data]
      * [MappingServiceFeedback Mapping Service Feedback]
    * [MobileService  Mobile Service]
-     * [MobileServiceSpecification Specification]
+     * [MobileServiceSpecification Researching Audiences Specification]
    * [NetworkService Network Service]
      * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksGoals   Service Goals]
