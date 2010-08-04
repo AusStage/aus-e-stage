@@ -1,11 +1,8 @@
 #summary Mapping Alpha 2 Testing Feedback
 
-= INTRODUCTION =
-
-Summary of Alpha 2 feedback gathered April - July 2010. 
-
-=ALPHA 2 TESTING FEEDBACK - TRANSCRIPTION OF 26 & 27 JULY 2010 WHITEBOARD SESSIONS=
-
+ 
+=ALPHA 2 TESTING FEEDBACK - 26 & 27 JULY 2010 WHITEBOARD SESSIONS=
+Summary of Alpha 2 feedback gathered April - July 2010.
 
   *	Migrating service to Google Maps API v3
 
@@ -123,23 +120,21 @@ Common:  XML, subversion, ANT
 ----------------------------------------------------------------------------------------- 
 ==SERVICE REVISIONS ARISING FROM ALPHA 2 FEEDBACK==
 
-ITEM	ALLOCATION (prelim)
-
-1.	Google Maps V2 vs V3	All
+1.	Google Maps V2 vs V3	(All)
 
 SECTION 1  DESIGN AND CARTOGRAPHY ATTRIBUTES
 
-2.	External experts	Liz
+2.	External experts	(Liz)
   *	Graphic design
   *	cartographer
 
-3.	Decide on standardised content for tool tips/info window in web maps and KML	All
+3.	Decide on standardised content for tool tips/info window in web maps and KML	(All)
 
-4.	Implement standard template inc core attributes	Wei/Corey
+4.	Implement standard template inc core attributes	(Wei/Corey)
 
-SECTION 2  AUSSTAGE INTEGRATION
+===SECTION 2  AUSSTAGE INTEGRATION===
 
-5.	Map data API	Corey/Wei
+5.	Map data API	(Corey/Wei)
   *	Organisations
   *	Contributors
   *	Map markers
@@ -147,42 +142,42 @@ SECTION 2  AUSSTAGE INTEGRATION
   *	Events
   *	Works
 
-6.	Javascript API for dynamically adding maps to pages	Wei
+6.	Javascript API for dynamically adding maps to pages	(Wei)
 
-SECTION 3  MAPPING WEB APPLICATION
+===SECTION 3  MAPPING WEB APPLICATION===
 
-7.	Browse map cluster icons to resolve loading times of browse map	Brad/Wei
+7.	Browse map cluster icons to resolve loading times of browse map	(Brad/Wei)
 
-8.	Timeline advanced functionality	Wei
+8.	Timeline advanced functionality	(Wei)
   *	Zoom
 
-9.	Marker coloured by contributor/organisation etc	Corey/Wei
+9.	Marker coloured by contributor/organisation etc	(Corey/Wei)
   *	One colour for each group
   *	One colour for multiples at same venue
 
-10.	Map zoom via drop down	Wei
+10.	Map zoom via drop down	(Wei)
   *	State 
   *	Capital city
   *	Major regional centre
 
-11.	Explore options for double click to zoom on web maps	Wei
+11.	Explore options for double click to zoom on web maps	(Wei)
 
-12.	Text based list of venues on map	Wei
+12.	Text based list of venues on map	(Wei)
 
 
-13.	Start again button on multi maps	Wei
+13.	Start again button on multi maps	(Wei)
 
-14.	Decide on provision of maps by genre	All
+14.	Decide on provision of maps by genre	(All)
 
-15.	Default tiles on maps - Terrain/satellite etc	Wei
+15.	Default tiles on maps - Terrain/satellite etc	(Wei)
 
-16.	More detailed error messages	Corey
+16.	More detailed error messages	(Corey
 
-17.	Search by ID returns table not directly linked to map	Wei
+17.	Search by ID returns table not directly linked to map	(Wei
 
-SECTION 4  GOOGLE EARTH ASPECTS 
+===SECTION 4  GOOGLE EARTH ASPECTS=== 
 
-18.	Trajectories	Corey
+18.	Trajectories	(Corey)
   *	Remove from webapp
   *	Only in KML
   *	Include start/stop
@@ -192,7 +187,7 @@ SECTION 4  GOOGLE EARTH ASPECTS
   *	Production/tour
   *	Colour key for lines
 
-19.	ABS overlay	All/Corey/Wei
+19.	ABS overlay	(All/Corey/Wei)
   *	Simplify display of data – one overlay per state with info window display of data
   *	Use list of agreed data sets
   *	Collection districts/SLA’s/LGA’s
@@ -200,14 +195,14 @@ SECTION 4  GOOGLE EARTH ASPECTS
 
 20.	Gathering of promised overlays – historical, transport, heatmap/hotspot	All
 
-21.	KML download is all options, no more “advanced option”	Corey/Wei
+21.	KML download is all options, no more “advanced option”	(Corey/Wei)
   *	Integrate what is displayed on map in webpage with what is downloaded via KML
 
-22.	Persistent clink maps should provide KML download link	Corey/Wei
+22.	Persistent clink maps should provide KML download link	(Corey/Wei)
 
-SECTION 5  USER DOCUMENTATION
+===SECTION 5  USER DOCUMENTATION===
 
-23.	User documentation	All/Liz
+23.	User documentation	(All/Liz)
   *	FAQ
   *	Online help
   *	User manual
