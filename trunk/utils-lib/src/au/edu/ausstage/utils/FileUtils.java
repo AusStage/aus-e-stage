@@ -26,6 +26,9 @@ import java.io.*;
  */
 public class FileUtils {
 
+	// declare private class level variables
+	private static final String ENCODING = "UTF8";
+
 	/**
 	 * A method to determine if a directory is valid
 	 *
@@ -184,5 +187,54 @@ public class FileUtils {
 		return null;
 	} // end getAbsolutePath method
 	
+	/**
+	 * A method to write a file given the path and contents
+	 *
+	 * @param path     the path to the file to create
+	 * @param contents the contents of the file
+	 *
+	 * @return         true, if an only if, the file is written successfully
+	 */
+	public static boolean writeNewFile(String path, String contents) {
+	
+		// check to ensure the path is valid
+		if(doesFileExist(path) == true) {
+			return false;
+		}
+		
+		// get the canonical path
+		path = getCanonicalPath(path);
+		
+		// double check the path
+		if(path == null) {
+			return false;
+		}
+		
+		// write the data to the file
+		try {
+		
+			// instantiate a new printWriter object
+			PrintWriter output = new PrintWriter(path, ENCODING);
+			
+			// write the contents of the file
+			output.write(contents);
+			
+			// check on the status of the write
+			if(output.checkError() == true) {
+				return false;
+			} 
+			
+			// close the output stream
+			output.close();
+						
+		} catch (java.io.FileNotFoundException ex) {
+			return false;
+		} catch (java.io.IOException ex) {
+			return false;
+		}
+		
+		// if we get this far everything is OK
+		return true;
+	}	
 	
 } // end class definition
