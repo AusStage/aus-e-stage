@@ -1,0 +1,5 @@
+#summary Download of the Mobile Service Specification
+
+The AusStage Researching Audiences Mobile Service - Technical Specification is available as an Adobe PDF file below. 
+
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/mobile-tech-spec-aug-2010-final.pdf Download the Document]
