@@ -28,7 +28,11 @@ Used to manage the objects returned from the !DbManager class
 
 == !FileUtils ==
 
-Used to provide functionality such as confirming a file or directory exists
+Provides convenience methods for interacting with the file system
+
+== !HashUtils ==
+
+Provides convenience methods for hashing values and comparing hashed values
 
 == !InputUtils ==
 
@@ -41,3 +45,4 @@ Used to retrieve items from a standard properties file
 == Dependencies ==
 
  * [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html Oracle JDBC Library]
+ * [http://commons.apache.org/codec/ Apache Commons Codec]
