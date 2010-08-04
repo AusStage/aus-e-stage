@@ -28,7 +28,7 @@ import oracle.jdbc.pool.OracleDataSource;
 /**
  * A class of methods useful when interacting with a Database
  */
-public class DbUtils {
+public class DbManager {
 
 	// declare private variables
 	private String            connectionString;
