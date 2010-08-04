@@ -27,6 +27,10 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class HashUtils {
 
+	// declare private class level variables
+	private static final int HASH_LENGTH = 64;
+	private static final String HASH_REGEX = "[0-9a-f]{64,64}";
+
 	/**
 	 * A method to hash a string
 	 * 
@@ -44,7 +48,56 @@ public class HashUtils {
 		return DigestUtils.sha256Hex(data);
 		
 	} // end hashValue method
-
-
+	
+	/**
+	 * A method to check if the input looks like a hash
+	 *
+	 * @param hash the hash to check
+	 *
+	 * @return     true if, and only if, the hash passes the tests
+	 */
+	public static boolean isValid(String hash) {
+	
+		// check the input
+		if(InputUtils.isValid(hash) == false) {
+			return false;
+		}
+		
+		// check the length of the string
+		if(hash.length() == HASH_LENGTH) {
+			// double check with the regex
+			if(hash.matches(HASH_REGEX) == false) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	
+		// if we get this far, validation has passed
+		return true;
+	} // end isValid method
+	
+	/**
+	 * A method to check if two hashes are the same
+	 *
+	 * @param first  the first hash to compare
+	 * @param second the second hash to compare
+	 *
+	 * @return       true, if an only if, the hashes match
+	 */
+	public static boolean compare(String first, String second) {
+	
+		// check to see if the hashes are valid
+		if(isValid(first) == false) {
+			throw new IllegalArgumentException("The first hash to compare is invalid");
+		}
+		
+		if(isValid(second) == false) {
+			throw new IllegalArgumentException("The second hash to compare is invalid");
+		}
+		
+		return first.equals(second);
+		
+	} // end compare method
 
 } // end class definition
