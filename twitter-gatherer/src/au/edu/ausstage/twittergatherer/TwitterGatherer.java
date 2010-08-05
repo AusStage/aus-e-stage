@@ -21,11 +21,18 @@ package au.edu.ausstage.twittergatherer;
 // import additional ausstage packages
 import au.edu.ausstage.utils.*;
 
+// import additional tweetStream4J packages
+import com.crepezzi.tweetstream4j.*;
+import com.crepezzi.tweetstream4j.types.*;
+
 // import additional java packages
 import java.io.*;
 import java.util.Date;
 import java.text.DateFormat;
 import java.util.GregorianCalendar;
+import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Main driving class for the TwitterGatherer application
@@ -96,21 +103,65 @@ public class TwitterGatherer {
 	 		System.exit(-1);
 	 	}
 	 	
-	 	// get a connection to the database
-	 	System.out.println("INFO: Connecting to the database");
-	 	
-	 	DbManager database = new DbManager(properties.getValue("db-connection-string"));
-	 	
-	 	if(database.connect() == false) {
-	 		// connection to the database failed
-	 		System.err.println("ERROR: a connection to the database could not be made");
-	 		System.exit(-1);
-	 	}
-	 	
-	 	System.out.println("INFO: Connection established");
+//	 	// get a connection to the database
+//	 	System.out.println("INFO: Connecting to the database");
+//	 	
+//	 	DbManager database = new DbManager(properties.getValue("db-connection-string"));
+//	 	
+//	 	if(database.connect() == false) {
+//	 		// connection to the database failed
+//	 		System.err.println("ERROR: a connection to the database could not be made");
+//	 		System.exit(-1);
+//	 	}
+//	 	
+//	 	System.out.println("INFO: Connection established");
+
+		// experimental code
 		
+		// create the queue to store the tweets
+		LinkedBlockingQueue<STweet> tweetQueue = new LinkedBlockingQueue<STweet>();
+		
+		// Create a thread pool with two threads
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+		
+		// debug code
+//		System.out.println("#" + properties.getValue("twitter-user") + "#");
+//		System.out.println("#" + properties.getValue("twitter-password") + "#");
+//		System.exit(0);
+		
+		// configure the username / password to use to access the twitter service
+		TwitterStreamConfiguration twitterStreamConfig = new TwitterStreamConfiguration(properties.getValue("twitter-user"), properties.getValue("twitter-password"));
+		
+		// define our handler to handling the incoming tweets
+		IncomingMessageHandler handler = new IncomingMessageHandler(tweetQueue);
+		
+		// define our processor to process the incoming tweets
+		MessageProcessor processor = new MessageProcessor(tweetQueue);
+		
+		// define a collection of words to track
+		Collection<String> tracks = new ArrayList<String>();
+		tracks.add("#ausvotes");
+		
+		// instantiate the other supporting classes
+		TwitterStream twitterStream = TweetRiver.filter(twitterStreamConfig, handler, null, tracks);
+		
+		// run our two threads
+		executor.execute(twitterStream);
+		executor.execute(processor);
+		
+		// sleep for 30 seconds
+		try {
+			Thread.sleep(30000);
+		}catch (InterruptedException ex) {
+			// inform user of error
+			System.err.println("ERROR: Unable to sleep");
+		}
+		
+		// shutdown the threads
+		executor.shutdown();
+		
+		// exit from the main app
+		System.exit(0);
+
 	} // end the main driving method
-
-
-
 }

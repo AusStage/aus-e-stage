@@ -18,17 +18,40 @@
 
 package au.edu.ausstage.twittergatherer;
 
-// import additional packages
+// import from the standard java libraries
+import java.util.concurrent.LinkedBlockingQueue;
+
+// import additional tweetStream4J packages
 import com.crepezzi.tweetstream4j.*;
 import com.crepezzi.tweetstream4j.types.*;
 
 // import additional ausstage packages
 import au.edu.ausstage.utils.*;
 
+/*
+ * Official Twitter Docs 
+ *
+ * http://dev.twitter.com/pages/streaming_api_methods
+ */
+
 /**
  * Custom TwitterStreamHandler for handling Twitter Messages
  */
-public class MessageHandler implements TwitterStreamHandler {
+public class IncomingMessageHandler implements TwitterStreamHandler {
+
+	// declare class level private variables
+	LinkedBlockingQueue<STweet> newTweets;
+	
+	/**
+	 * A constructor for this class
+	 *
+	 * @param tweets a blocking queue used to store new messages
+	 */
+	public IncomingMessageHandler(LinkedBlockingQueue<STweet> tweets) {
+		
+		// assign parrameters to local variables
+		newTweets = tweets;
+	}
 
 	/**
 	 * A method to process a new tweet message from the stream
@@ -36,6 +59,16 @@ public class MessageHandler implements TwitterStreamHandler {
 	 * @param tweet the new Tweet
 	 */
 	public void addTweet(STweet tweet) {
+	
+		// try to add this tweet to the queue for processing
+		try {
+			// add this tweet to the queue
+			newTweets.put(tweet);
+		} catch (InterruptedException ex) {
+			// inform user of error
+			System.err.println("ERROR: An error occured while attempting to add a tweet to the queue");
+			System.err.println("       " + tweet.toString());
+		}
 	
 	} // end addTweet Method
 
@@ -46,16 +79,23 @@ public class MessageHandler implements TwitterStreamHandler {
 	 */
 	public void addDeletion(SDeletion deletion) {
 	
+		// deletion request received
+		System.out.println("New Deletion Request: " + deletion.toString());
 	
 	} // end the addDeletion Method
 	
 
 	/**
 	 * A method to process a new limit message from the stream
+	 *
+	 * From the docs: http://dev.twitter.com/pages/streaming_api_concepts
+	 * Track streams may also contain limitation notices, where the integer track is an enumeration of statuses that, since the start of the connection, matched the track predicate but were rate limited.
 	 * @param limit Incoming limit message
 	 */
 	public void addLimit(SLimit limit) {
 	
+		// limit notice received
+		System.out.println("New Limit Notice: " + limit.toString());	
 	
 	}
 
@@ -63,6 +103,9 @@ public class MessageHandler implements TwitterStreamHandler {
 	 * What to do when this handler has been request to stop
 	 */
 	public void stop() {
+	
+		// output a message
+		System.out.println("INFO: Twitter Message Handler Stopped.");
 
 	}
 	
