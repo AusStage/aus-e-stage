@@ -21,22 +21,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" lang="en">
 <head>
-	<title>AusStage Mapping Service (Beta)</title>
+	<title>AusStage Mapping Service Google Maps v3 Migration</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/featuredmap.js"></script>
-	<script type="text/javascript" src="assets/javascript/map.functions.js"></script>
-	<%
-		ServletContext context = getServletContext();
-		String mapsAPI   = (String)context.getInitParameter("googleMapsAPIUrl");
-	%>
-	<script type="text/javascript" src="<%=mapsAPI%>"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/mapiconmaker-1.1.js"></script>
 </head>
 <body>
 <div id="wrap">
-	<div id="header"><h1>AusStage Mapping Service (Beta)</h1></div>
+	<div id="header"><h1>AusStage Mapping Service Google Maps v3 Migration</h1></div>
 	<div id="nav">
 	</div>
 	<!-- Include the sidebar -->
@@ -49,11 +40,11 @@
 			There are five kinds of maps under development:
 		</p>
 		<ol>
-			<li><a href="/mapping/browse.jsp" title="Browse a Map of Venues in the AusStage database">Browse Map of Venues</a> (Testing)</li>
-			<li><a href="/mapping/organisations.jsp" title="Search for Organisations and create a map of their events">Maps By Organisation</a> (Testing)</li>
-			<li><a href="/mapping/contributors.jsp" title="Search for Contributors and create a map of their events">Maps By Contributor</a> (Testing)</li>
+			<li><a href="/mapping2/browse.jsp" title="Browse a Map of Venues in the AusStage database">Browse Map of Venues</a> (Testing)</li>
+			<li><a href="/mapping2/organisations.jsp" title="Search for Organisations and create a map of their events">Maps By Organisation</a> (Testing)</li>
+			<li><a href="/mapping2/contributors.jsp" title="Search for Contributors and create a map of their events">Maps By Contributor</a> (Testing)</li>
 			<li>Maps by Event Name (In Technical Development)</li>
-			<li><a href="/mapping/absdatasets.jsp" title="Add ABS Data Overlays to Maps in Google Earth">ABS Data Overlays</a> (Sample available)</li>
+			<!--<li><a href="/mapping/absdatasets.jsp" title="Add ABS Data Overlays to Maps in Google Earth">ABS Data Overlays</a> (Sample available)</li>-->
 		</ol>
 		<p>
 			The AusStage Mapping Service is one element of the <a href="/" title="Aus-e-Stage project homepage">Aus-e-Stage</a> project.
@@ -62,10 +53,6 @@
 
 			Please help us to develop the AusStage mapping service by exploring its
 			functionality. If you have any feedback, questions, or queries please <a href="/" title="Aus-e-Stage project homepage">Contact Us</a>.
-		</p>
-		<p>
-			The Alpha 1 Testing phase of this mapping service was conducted during March and
-			April 2010. The report on this process is <a href="/mapping/docs/mapping-service-alpha-1-testing-report.pdf" title="Mapping Service Alpha 1 Testing Report">now available</a>.
 		</p>
 		<div id="map_header" class="featured_map_header_footer map_header_footer">
 			<h3 id="map_name"></h3>
