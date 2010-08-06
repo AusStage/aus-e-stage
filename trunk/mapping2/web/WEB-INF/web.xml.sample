@@ -24,20 +24,20 @@
     <description>
         This software updates the Mapping Service to use Google Maps API v3
     </description>
-    <!-- Servlets -->
+     <!-- Servlets -->
     <servlet>
-        <servlet-name>MappingServlet</servlet-name>
-        <servlet-class>au.edu.ausstage.mapping.MappingServlet</servlet-class>
+        <servlet-name>MarkerServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mapping.MarkerServlet</servlet-class>
     </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
-        <servlet-name>MappingServlet</servlet-name>
-        <url-pattern>/data/*</url-pattern>
+        <servlet-name>MarkerServlet</servlet-name>
+        <url-pattern>/markers/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
         <param-name>databaseConnectionString</param-name>
-        <param-value>jdbc:oracle:thin:ausstage_schema/ausstage@www.ausstage.edu.au:1521:drama11</param-value>
+        <param-value></param-value>
     </context-param>
     <context-param>
         <param-name>systemName</param-name>
