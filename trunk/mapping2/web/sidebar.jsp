@@ -21,12 +21,9 @@
 <div id="sidebar">
 	<ul>
 		<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
-		<li><a href="/mapping/" title="Mapping Service Homepage">Service Homepage</a></li>
-		<li><a href="/mapping/browse.jsp" title="Browse a map of venues and list events">Browse Map of Venues</a></li>
-		<li><a href="/mapping/organisations.jsp" title="Search for Organisations and create a map of their events">Maps By Organisation</a></li>
-		<li><a href="/mapping/contributors.jsp" title="Search for Contributors and create a map of their events">Maps By Contributor</a></li>
-		<li><a href="/mapping/absdatasets.jsp"  title="Details of the Map Overlays created using ABS Data">ABS Data Overlays</a></li>
-		<li><a href="docs.jsp" title="System Overview Diagrams etc.">System Documents</a></li>
-		<li><a href="/mapping/geocode.jsp" title="Lookup geographic coordinates to add to AusStage">Geocode Lookup</a></li>
+		<li><a href="/mapping2/" title="Mapping Service Homepage">Mapping Home</a></li>
+		<li><a href="/mapping2/browse.jsp" title="Browse a map of venues and list events">Browse Map of Venues</a></li>
+		<li><a href="/mapping2/organisations.jsp" title="Search for Organisations and create a map of their events">Maps By Organisation</a></li>
+		<li><a href="/mapping2/contributors.jsp" title="Search for Contributors and create a map of their events">Maps By Contributor</a></li>
 	</ul>
 </div>

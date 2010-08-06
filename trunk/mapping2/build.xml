@@ -426,12 +426,6 @@
     <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
 -->
 
-    <!-- Copy VUE files -->
-    <!--<mkdir dir="${build.home}/diagrams"/>-->
-    <copy todir="${web.home}/docs">
-      <fileset dir="${basedir}/diagrams"/>
-    </copy>
-
   </target>
 
 
