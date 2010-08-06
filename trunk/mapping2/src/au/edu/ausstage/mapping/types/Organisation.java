@@ -309,7 +309,7 @@ public class Organisation implements Comparable<Organisation>{
 		 	return false;
 		}
 		
-		// compare these two events
+		// compare these two organisations
 		Organisation org = (Organisation)o;
 		
 		return id.equals(org.getId());
@@ -335,8 +335,9 @@ public class Organisation implements Comparable<Organisation>{
      * @return  an integer indicating comparison result
      */    
 	public int compareTo(Organisation o) {
-		int myId   = Integer.getInteger(id);
-		int yourId = Integer.getInteger(o.getId());
+	
+		int myId   = Integer.parseInt(id);
+		int yourId = Integer.parseInt(o.getId());
 		
 		if(myId == yourId) {
 			return 0;

@@ -81,7 +81,7 @@ public class Venue implements Comparable<Venue>{
 		
 		// initialise the two collections		
 		contributors = new HashSet<Contributor>();
-		organisations = new HashSet<Organisation>();
+		organisations = new TreeSet<Organisation>();
 	} // end constructor
 	
 	/**
@@ -312,6 +312,7 @@ public class Venue implements Comparable<Venue>{
 	 * @return       true if this venue has this organisation
 	 */
 	public boolean hasOrganisation(Organisation organisation) {
+	
 		// check on the parameter
 		if(organisation != null) {
 			return organisations.contains(organisation);
@@ -545,8 +546,8 @@ public class Venue implements Comparable<Venue>{
      * @return a integer indicating comparison result
      */    
 	public int compareTo(Venue v) {
-		int myId   = Integer.getInteger(id);
-		int yourId = Integer.getInteger(v.getId());
+		int myId   = Integer.parseInt(id);
+		int yourId = Integer.parseInt(v.getId());
 		
 		if(myId == yourId) {
 			return 0;

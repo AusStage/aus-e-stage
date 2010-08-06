@@ -337,8 +337,8 @@ public class Contributor implements Comparable<Contributor>{
      * @return  an integer indicating comparison result
      */    
 	public int compareTo(Contributor c) {
-		int myId   = Integer.getInteger(id);
-		int yourId = Integer.getInteger(c.getId());
+		int myId   = Integer.parseInt(id);
+		int yourId = Integer.parseInt(c.getId());
 		
 		if(myId == yourId) {
 			return 0;

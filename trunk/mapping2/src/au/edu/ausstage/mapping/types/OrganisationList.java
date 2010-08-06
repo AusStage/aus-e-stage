@@ -29,6 +29,19 @@ import java.util.*;
  */
 public class OrganisationList {
 
+	
+	// declare public constants
+	
+	/**
+	 * Sort organisations by id
+	 */
+	public final static int ORGANISATION_ID_SORT = 0;
+	
+	/**
+	 * sort organisations by name
+	 */
+	public final static int ORGANISATION_NAME_SORT = 1;
+
 	// declare private variables
 	private Set<Organisation> organisations;
 	
@@ -136,5 +149,48 @@ public class OrganisationList {
 	public Organisation[] getOrganisationArray() {
 		return organisations.toArray(new Organisation[0]);
 	} // end getOrganisationArray
+	
+	/**
+	 * A method to get the sorted list of organisations for this venue
+	 *
+	 * @param sortType the type of sort to use on the list of organisations
+	 *
+	 * @return the sorted list of events
+	 */
+	public Set<Organisation> getSortedOrganisations(int sortType) {
+	
+		// declare helper variables
+		Set<Organisation> sortedOrganisations;
+	
+		// determine what type of sort to do
+		if(sortType == ORGANISATION_ID_SORT) {
+			sortedOrganisations = new TreeSet<Organisation>(organisations);
+		} else if (sortType == ORGANISATION_NAME_SORT) {
+			sortedOrganisations = new TreeSet<Organisation>(new OrganisationNameComparator());
+			sortedOrganisations.addAll(organisations);
+		} else {
+			throw new IllegalArgumentException("Unknown sort type specified");
+		}
+		
+		return sortedOrganisations;
+	
+	}
+	
+	/**
+	 * A method to get the sorted list of contributors for this venue as an array
+	 *
+	 * @param sortType the type of sort to use on the list of contributors
+	 *
+	 * @return the sorted list of events
+	 */
+	public Organisation[] getSortedOrganisationsArray(int sortType) {
+	
+		// get the sorted events
+		Set<Organisation> sortedOrganisations = getSortedOrganisations(sortType);
+		
+		// convert to an array
+		return sortedOrganisations.toArray(new Organisation[0]);
+	
+	}
 
 }
