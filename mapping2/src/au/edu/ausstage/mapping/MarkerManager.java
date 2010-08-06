@@ -59,40 +59,87 @@ public class MarkerManager {
 	 * @return   the compiled marker data
 	 */
 	public String getOrganisationMarkers(String id) {
+		
+		// declare helper variables
+		String[] ids = null;	
 	
 		// check on the parameter
-		if(InputUtils.isValidInt(id) == false) {
-			throw new IllegalArgumentException("The id parameter must be a valid integer");
-		}
-		
-		// TODO - manage multiple IDs in the id variable
+		if(id.indexOf(',') == -1) {
+			// a single id
+			if(InputUtils.isValidInt(id) == false) {
+				throw new IllegalArgumentException("The id parameter must be a valid integer");
+			}
+		} else {
+			// multiple ids
+			ids = id.split(",");
+			
+			if(InputUtils.isValidArrayInt(ids) == false) {
+				throw new IllegalArgumentException("The id parameter must contain a list of valid integers seperated by commas only");
+			}
+		}		
 		
 		// declare helper variables
 		String   sql;
 		String[] sqlParameters;
 		
 		// venue organisation and event objects
-		VenueList        venues       = new VenueList();
-		Venue            venue        = null;
-		Organisation     organisation = null;
-		Event            event        = null;
+		VenueList        venues        = new VenueList();
+		OrganisationList orgList       = new OrganisationList();
+		Venue            venue         = null;
+		Organisation     organisation  = null;
+		Event            event         = null;
 		
-		// define the sql
-		sql = "SELECT DISTINCT e.eventid, e.event_name, "
-		    + "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-			+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
-			+ "       v.venueid, v.venue_name, v.suburb, v.state, v.postcode, "
-			+ "       v.latitude, v.longitude, o.organisationid, o.name "
-			+ "FROM organisation o, events e, venue v, orgevlink ol "
-			+ "WHERE o.organisationid = ? "
-			+ "AND o.organisationid = ol.organisationid "
-		    + "AND ol.eventid = e.eventid "
-		    + "AND e.venueid = v.venueid "
-		    + "AND v.longitude IS NOT NULL ";
-							 
-		// define the paramaters
-		sqlParameters = new String[1];
-		sqlParameters[0] = id;
+		// determine what type of SQL to build
+		if(ids == null) {
+			// only one id to use in the query
+		
+			// define the sql
+			sql = "SELECT DISTINCT e.eventid, e.event_name, "
+				+ "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venueid, v.venue_name, v.suburb, v.state, v.postcode, "
+				+ "       v.latitude, v.longitude, o.organisationid, o.name "
+				+ "FROM organisation o, events e, venue v, orgevlink ol "
+				+ "WHERE o.organisationid = ? "
+				+ "AND o.organisationid = ol.organisationid "
+				+ "AND ol.eventid = e.eventid "
+				+ "AND e.venueid = v.venueid "
+				+ "AND v.longitude IS NOT NULL ";
+								 
+			// define the paramaters
+			sqlParameters = new String[1];
+			sqlParameters[0] = id;
+			
+		} else {
+			// multiple ids to use in the query
+			
+			// define the sql
+			sql = "SELECT DISTINCT e.eventid, e.event_name, "
+			    + "       e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venueid, v.venue_name, v.suburb, v.state, v.postcode, "
+				+ "       v.latitude, v.longitude, o.organisationid, o.name "
+				+ "FROM organisation o, events e, venue v, orgevlink ol "
+				+ "WHERE o.organisationid = ANY (";
+					   
+			// add sufficient place holders for all of the ids
+			for(int i = 0; i < ids.length; i++) {
+				sql += "?,";
+			}
+		
+			// tidy up the sql
+			sql = sql.substring(0, sql.length() -1);
+				   
+				   
+			// finish the sql					
+			sql += ") AND o.organisationid = ol.organisationid "
+			    + "AND ol.eventid = e.eventid "
+			    + "AND e.venueid = v.venueid "
+			    + "AND v.longitude IS NOT NULL ";
+		
+			// define the paramaters
+			sqlParameters = ids;
+		}
 		
 		// get the data
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
@@ -130,9 +177,22 @@ public class MarkerManager {
 					venue = venues.getVenue(resultSet.getString(9));
 				}
 				
+				// keep a list of organisations
+				if(orgList.hasOrganisation(resultSet.getString(16)) == false) {
+					// add a new organisation
+					// make a new organisation
+					organisation = new Organisation(resultSet.getString(16));
+					organisation.setName(resultSet.getString(17));
+					organisation.setUrl(LinksManager.getOrganisationLink(resultSet.getString(16)));
+				
+					// add the contrbutor to this venue
+					orgList.addOrganisation(organisation);
+				}
+				
 				// get this organisation for this venue or create a new one
 				if(venue.hasOrganisation(resultSet.getString(16)) == false) {
-					// make a new contributor
+
+					// make a new organisation
 					organisation = new Organisation(resultSet.getString(16));
 					organisation.setName(resultSet.getString(17));
 					organisation.setUrl(LinksManager.getOrganisationLink(resultSet.getString(16)));
@@ -165,46 +225,12 @@ public class MarkerManager {
 			return null;
 		}
 		
-		//debug code
-		return buildOrganisationMarkerXml(venues);
-	
-	} // end the getOrganisationMarkers method
-	
-	/**
-	 * A method to return the marker data for an organisation
-	 *
-	 * @param id the unique identifier for the organisation
-	 *
-	 * @return   the compiled marker data
-	 */
-	public String getContributorMarkers(String id) {
-		return "";
-	} // end the getContributorsMarkers method
-	
-	/**
-	 * A private method that takes a venue list and builds the marker XML
-	 *
-	 * @param venues   the list of venues to process
-	 * @param listType the type of list that is being processed 
-	 *
-	 * @return the XML string representing the markers
-	 */
-	private String buildOrganisationMarkerXml(VenueList venues) {
-	
-		// check on the parameters
-		if(venues == null) {
-			throw new IllegalArgumentException("A list of venues to process must be specified");
-		}
-		
-		// declare AusStage Type variables
-		Organisation organisation = null;
-		Venue        venue        = null;
-		Event        event        = null;
-		
-		// declare other helper variables
+		// declare remaining helper variables
 		int eventCount = 0;
 		int firstDate  = 0;
 		int lastDate   = 0;
+		Set<Organisation> organisations = null;
+		Iterator organisationIterator   = null;
 		
 		String firstDateAsString = null;
 		String lastDateAsString  = null;		
@@ -223,6 +249,10 @@ public class MarkerManager {
 			// add the element for the markers
 			Element markers = xmlDoc.createElement("markers");
 			rootElement.appendChild(markers);
+			
+			// add the element for the names
+			Element entities = xmlDoc.createElement("entities");
+			rootElement.appendChild(entities);
 			
 			// get the list of venues
 			Set<Venue> venueList = venues.getVenues();
@@ -254,15 +284,15 @@ public class MarkerManager {
 				description.append("<p><a href=\"" + venue.getUrl() + "\" title= \"View the " + venue.getName()+ " record in AusStage\" target=\"ausstage\">" + venue.getName() + "</a></p><ul>");
 				
 				// get a list of organisations
-				Set<Organisation> organisations = venue.getSortedOrganisations(Venue.ORGANISATION_NAME_SORT);
+				organisations = venue.getSortedOrganisations(Venue.ORGANISATION_NAME_SORT);
 				
 				// get the iterator for the list of organisations
-				Iterator organisationIterator = organisations.iterator();
+				organisationIterator = organisations.iterator();
 				
 				// iterate over the organisations
 				while(organisationIterator.hasNext()) {
 					// get the current organisation
-					organisation = (Organisation)organisationIterator.next();
+					organisation = (Organisation)organisationIterator.next();					
 					
 					// start the description for this organisation
 					description.append("<li><a href=\"" + organisation.getUrl() + "\" title=\"View the " + organisation.getName() + " record in AusStage\" target=\"ausstage\">" + organisation.getName() + "</a><ul>");
@@ -320,6 +350,25 @@ public class MarkerManager {
 				markers.appendChild(marker);
 			}
 			
+			// add the list of organisations
+			organisations = orgList.getSortedOrganisations(OrganisationList.ORGANISATION_NAME_SORT);
+			
+			organisationIterator = organisations.iterator();
+				
+			// iterate over the organisations
+			while(organisationIterator.hasNext()) {
+			
+				// get the current organisation
+				organisation = (Organisation)organisationIterator.next();
+			
+				Element entity = xmlDoc.createElement("entity");
+				entity.setAttribute("id",   organisation.getId());
+				entity.setAttribute("name", organisation.getName());
+				entity.setAttribute("url",  organisation.getUrl());
+				
+				entities.appendChild(entity);
+			}			
+			
 			// create a transformer 
 			TransformerFactory transFactory = TransformerFactory.newInstance();
 			Transformer        transformer  = transFactory.newTransformer();
@@ -343,6 +392,17 @@ public class MarkerManager {
 			return null;
 		}
 	
-	} // end buildMarkerXml method
-
+	} // end the getOrganisationMarkers method
+	
+	/**
+	 * A method to return the marker data for an organisation
+	 *
+	 * @param id the unique identifier for the organisation
+	 *
+	 * @return   the compiled marker data
+	 */
+	public String getContributorMarkers(String id) {
+		return "";
+	} // end the getContributorsMarkers method
+	
 } // end class definition

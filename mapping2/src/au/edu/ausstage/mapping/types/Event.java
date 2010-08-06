@@ -191,8 +191,8 @@ public class Event implements Comparable<Event> {
      * @return a integer indicating comparison result
      */    
 	public int compareTo(Event e) {
-		int myId   = Integer.getInteger(id);
-		int yourId = Integer.getInteger(e.getId());
+		int myId   = Integer.parseInt(id);
+		int yourId = Integer.parseInt(e.getId());
 		
 		if(myId == yourId) {
 			return 0;

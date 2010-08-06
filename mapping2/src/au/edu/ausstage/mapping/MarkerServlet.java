@@ -65,9 +65,22 @@ public class MarkerServlet extends HttpServlet {
 		}
 		
 		// check on the id
-		if(InputUtils.isValidInt(id) == false) {
-			// no valid marker type was found
-			throw new ServletException("Missing id parameter. Parameter must be a valid integer");
+		if(InputUtils.isValid(id) == true) {
+			if(id.indexOf(',') == -1) {
+				// a single id
+				if(InputUtils.isValidInt(id) == false) {
+					throw new ServletException("The id parameter must be a valid integer");
+				}
+			} else {
+				// multiple ids
+				String[] ids = id.split(",");
+			
+				if(InputUtils.isValidArrayInt(ids) == false) {
+					throw new ServletException("The id parameter must contain a list of valid integers seperated by commas only");
+				}
+			}
+		} else {
+			throw new ServletException("Missing id parameter.");
 		}
 		
 		// instantiate a connection to the database
