@@ -24,6 +24,7 @@ import au.edu.ausstage.utils.InputUtils;
 // import additional libraries
 import java.util.Set;
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Iterator;
 
 
@@ -31,6 +32,17 @@ import java.util.Iterator;
  * A class to represent a list of venues
  */
 public class ContributorList {
+
+	// declare public constants
+	/**
+	 * Sort contributors by id
+	 */
+	public final static int CONTRIBUTOR_ID_SORT = 0;
+	
+	/**
+	 * sort contributors by name
+	 */
+	public final static int CONTRIBUTOR_NAME_SORT = 1;
 
 	// declare private variables
 	private Set<Contributor> contributors;
@@ -51,7 +63,7 @@ public class ContributorList {
 	 *
 	 * @param contributor the new contributor object
 	 */
-	public void addNewContributor(Contributor contributor) {
+	public void addContributor(Contributor contributor) {
 		// check on the parameter
 		if(contributor != null) {
 			contributors.add(contributor);
@@ -143,5 +155,47 @@ public class ContributorList {
 	public Contributor[] getContributorArray() {
 		return contributors.toArray(new Contributor[0]);
 	} // end getEvents method
+	
+	/**
+	 * A method to get the sorted list of contributors for this venue
+	 *
+	 * @param sortType the type of sort to use on the list of contributors
+	 *
+	 * @return the sorted list of events
+	 */
+	public Set<Contributor> getSortedContributors(int sortType) {
+	
+		// declare helper variables
+		Set<Contributor> sortedContributors;
+	
+		// determine what type of sort to do
+		if(sortType == CONTRIBUTOR_ID_SORT) {
+			sortedContributors = new TreeSet<Contributor>(contributors);
+		} else if (sortType == CONTRIBUTOR_NAME_SORT) {
+			sortedContributors = new TreeSet<Contributor>(new ContributorNameComparator());
+			sortedContributors.addAll(contributors);
+		} else {
+			throw new IllegalArgumentException("Unknown sort type specified");
+		}
+		
+		return sortedContributors;
+	}
+	
+	/**
+	 * A method to get the sorted list of contributors for this venue as an array
+	 *
+	 * @param sortType the type of sort to use on the list of contributors
+	 *
+	 * @return the sorted list of events
+	 */
+	public Contributor[] getSortedContributorsArray(int sortType) {
+	
+		// get the sorted events
+		Set<Contributor> sortedContributors = getSortedContributors(sortType);
+		
+		// convert to an array
+		return sortedContributors.toArray(new Contributor[0]);
+	
+	} // end getSortedEvents method
 
 }
