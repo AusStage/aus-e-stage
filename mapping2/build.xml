@@ -95,16 +95,20 @@
 
 -->
 
-  <property name="app.name"      value="myapp"/>
-  <property name="app.path"      value="/${app.name}"/>
-  <property name="app.version"   value="0.1-dev"/>
+  
   <property name="build.home"    value="${basedir}/build"/>
-  <property name="catalina.home" value="/usr/share/tomcat6"/> <!-- UPDATE THIS! -->
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/dist/docs"/>
-  <property name="manager.url"   value="http://localhost:8181/manager"/>
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
+  <property name="lib.home"      value="${basedir}/lib"/>
+  
+  <!-- Update these via a build.properties file -->
+  <property name="app.name"      value=""/>
+  <property name="app.path"      value=""/>
+  <property name="app.version"   value=""/>
+  <property name="catalina.home" value=""/>
+  <property name="manager.url"   value=""/>
 
 
 <!-- ==================== External Dependencies =========================== -->
@@ -146,12 +150,10 @@
 -->
 
   <path id="compile.classpath">
-
-    <!-- Include all JAR files that will be included in /WEB-INF/lib -->
-    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-<!--
-    <pathelement location="${foo.jar}"/>
--->
+  	
+  	<fileset dir="${lib.home}">
+		<include name="*.jar"/>
+	</fileset>
 
     <!-- Include all elements that Tomcat exposes to applications -->
     <fileset dir="${catalina.home}/bin">
