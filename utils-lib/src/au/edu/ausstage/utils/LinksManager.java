@@ -52,7 +52,7 @@ public class LinksManager {
 		if(InputUtils.isValidInt(id) == false) {
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		} else {
-			return EVENT_TEMPLATE.replaceAll(EVENT_TOKEN, id);
+			return EVENT_TEMPLATE.replace(EVENT_TOKEN, id);
 		}
 	} // end the method
 	
@@ -67,7 +67,7 @@ public class LinksManager {
 		if(InputUtils.isValidInt(id) == false) {
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		} else {
-			return VENUE_TEMPLATE.replaceAll(VENUE_TOKEN, id);
+			return VENUE_TEMPLATE.replace(VENUE_TOKEN, id);
 		}
 	} // end the method
 	
@@ -82,7 +82,7 @@ public class LinksManager {
 		if(InputUtils.isValidInt(id) == false) {
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		} else {
-			return CONTRIBUTOR_TEMPLATE.replaceAll(CONTRIBUTOR_TOKEN, id);
+			return CONTRIBUTOR_TEMPLATE.replace(CONTRIBUTOR_TOKEN, id);
 		}
 	} // end the method
 	
@@ -97,7 +97,7 @@ public class LinksManager {
 		if(InputUtils.isValidInt(id) == false) {
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		} else {
-			return ORGANISATION_TEMPLATE.replaceAll(ORGANISATION_TOKEN, id);
+			return ORGANISATION_TEMPLATE.replace(ORGANISATION_TOKEN, id);
 		}
 	} // end the method
 	

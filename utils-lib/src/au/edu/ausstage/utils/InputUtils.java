@@ -135,7 +135,17 @@ public class InputUtils {
 		}			
 	} // end the isValid method
 	
+	/**
+	 * A method to take an array of values and return them in a comma delimited list
+	 * 
+	 * @param values the array of values to process
+	 *
+	 * @return       the string representation of the list
+	 */
+	public static String arrayToString(String[] values) {
 	
-
-
+		return java.util.Arrays.toString(values).replaceAll("[\\]\\[]", "");
+	
+	} // end the arrayToString method
+	
 } // end class definition
