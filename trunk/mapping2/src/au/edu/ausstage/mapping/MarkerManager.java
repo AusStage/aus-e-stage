@@ -111,9 +111,6 @@ public class MarkerManager {
 			while (resultSet.next()) {
 				// build a list of venues, contributors and events
 				
-				//debug code
-				System.out.println("##" + resultSet.getString(9) + "##");
-				
 				// get the current venue, or make a new one
 				if(venues.hasVenue(resultSet.getString(9)) == false) {
 					// make a new venue
@@ -238,6 +235,9 @@ public class MarkerManager {
 				// get the current venue
 				venue = (Venue)venueIterator.next();
 				
+				// reset the event count variable
+				eventCount = 0;
+				
 				// add a marker to the xml
 				Element marker = xmlDoc.createElement("marker");
 				
@@ -265,7 +265,7 @@ public class MarkerManager {
 					organisation = (Organisation)organisationIterator.next();
 					
 					// start the description for this organisation
-					description.append("<li><a href=\"" + organisation.getUrl() + "\" target=\"ausstage\">" + organisation.getName() + "</a><ul>");
+					description.append("<li><a href=\"" + organisation.getUrl() + "\" title=\"View the " + organisation.getName() + " record in AusStage\" target=\"ausstage\">" + organisation.getName() + "</a><ul>");
 					
 					// get all of the events for this organisation
 					Set<Event> events = organisation.getSortedEvents(Organisation.EVENT_FIRST_DATE_SORT);
@@ -282,7 +282,7 @@ public class MarkerManager {
 						event = (Event)eventIterator.next();
 						
 						// add this event
-						description.append("<li><a href=\"" + event.getUrl() + "\" target=\"ausstage\">" + event.getName() + "</a>, " + event.getFirstDisplayDate() + "</li>");
+						description.append("<li><a href=\"" + event.getUrl() + "\" title=\"View the " +  event.getName() + " record in AusStage\" target=\"ausstage\">" + event.getName() + "</a>, " + event.getFirstDisplayDate() + "</li>");
 						
 						// update the date variables
 						if(firstDate > event.getFirstDateAsInt()) {
