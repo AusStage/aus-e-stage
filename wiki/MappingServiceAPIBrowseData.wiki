@@ -2,6 +2,10 @@
 
 <h1>Mapping Service API - Browse Map Data</h1>
 
+_Note 1: The Mapping Service is currently undergoing extensive revisions including the rewrite of much of the underlying code. Therefore functionality may not be available or behave differently dependant progress of the revision work._
+
+_Note 2: Where an API has been successfully updated it will be noted in the documentation below._
+
 The following documentation provides an overview of the API exposed by the MappingService which can be used to retrieve data used in the construction of of the [http://beta.ausstage.edu.au/mapping/browse.jsp Browse Map].
 
 <wiki:toc max_depth="3" />
