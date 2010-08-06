@@ -107,7 +107,7 @@ public class Contributor implements Comparable<Contributor>{
 	 *
 	 * @param event the new event
 	 */
-	public void addNewEvent(Event event) {
+	public void addEvent(Event event) {
 		// check on the parameter
 		if(event != null) {
 			events.add(event);
