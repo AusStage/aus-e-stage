@@ -148,4 +148,32 @@ public class InputUtils {
 	
 	} // end the arrayToString method
 	
+	/**
+	 * A method to ensure an array of strings represent an array of integers
+	 *
+	 * @param values the array of strings
+	 *
+	 * @return       true if, and only if, all of the values pass inspection
+	 */
+	public static boolean isValidArrayInt(String[] values) {
+	
+		// declare helper variables
+		boolean status = true;
+		
+		// loop through all of the elements in the array
+		for(int i = 0; i < values.length; i++) {
+			if(isValidInt(values[i]) == false) {
+				// this value isn't valid
+				status = false;
+				
+				// exit the loop early
+				i = values.length;
+			}
+		}
+		
+		// return the status
+		return status;	
+	
+	} // end isValidArrayInt method
+	
 } // end class definition
