@@ -37,9 +37,9 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
 The output is an XML document that contains markers for venues that can be mapped including various data fields. Those fields are:
 
 || *Element Name* || *Attribute Name* || *Purpose* || 
-|| mapdata || XML Root Element ||
-|| markers || Root Element of the markers data ||
-|| marker  || An individual marker representing a venue <br/>The text content of this element is the content used to build the infoWindow ||
+|| mapdata || || XML Root Element ||
+|| markers || || Root Element of the markers data ||
+|| marker  || || An individual marker representing a venue <br/>The text content of this element is the content used to build the infoWindow ||
 || || events  || the number of events  at this venue ||
 || || fdate   || the first date of an event at this venue (as an integer) ||
 || || fdatestr ||the first date of an event at this venue (as a date string) ||
@@ -51,13 +51,11 @@ The output is an XML document that contains markers for venues that can be mappe
 || || postcode || the postcode of the suburb where the venue is located || 
 || || state || the identifier for the state where the venue is located ||
 || || suburb || the name of the the suburb where the venue is located || 
-|| entities || Root element of the entity data ||
-|| entity || Details of an entity displayed on the map ||
+|| entities || || Root element of the entity data ||
+|| entity || || Details of an entity displayed on the map ||
 || || id || the unique identifier of the entity (organisation / contributor ||
 || || name || the name of the entity ||
 || || url || the persistent URL for the record in AusStage for this entity ||
-
-
 
 
 
