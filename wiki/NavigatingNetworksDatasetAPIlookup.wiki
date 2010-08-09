@@ -17,7 +17,7 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || key-contributors, system-property || No || ||
+|| task   || key-collaborators, system-property || No || ||
 || id     || Unique contributor id || No || ||
 || format || html xml json || Yes || html ||
 || sort   || count id name || Yes || count || 
