@@ -57,5 +57,41 @@ The output is an XML document that contains markers for venues that can be mappe
 || || name || the name of the entity ||
 || || url || the persistent URL for the record in AusStage for this entity ||
 
+Below is an XML snippet representing output from this API
 
+{{{
+<mapdata>
+    <markers>
+        <marker events="1" fdate="20071209" fdatestr="2007-12-0" lat="46.189347" ldate="20081209"
+            ldatestr="2008-12-09" lng="6.235511" name="Relais Culturel Chateau Rouge" postcode=""
+            state="9" suburb="Annemasse">&lt;p&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_venue_id=13371"
+            title= "View the Relais Culturel Chateau Rouge record in AusStage"
+            target="ausstage"&gt;Relais Culturel Chateau
+            Rouge&lt;/a&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_org_id=102"
+            title="View the Australian Dance Theatre record in AusStage"
+            target="ausstage"&gt;Australian Dance Theatre&lt;/a&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_event_id=82985"
+            title="View the G record in AusStage" target="ausstage"&gt;G&lt;/a&gt;, 09 December
+            2008&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</marker>
+        <marker events="1" fdate="20071209" fdatestr="2007-12-09" lat="50.864588" ldate="20081209"
+            ldatestr="2008-12-09" lng="-0.089885" name="Gardner Arts Centre" postcode="" state="9"
+            suburb="Brighton">&lt;p&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_venue_id=10940"
+            title= "View the Gardner Arts Centre record in AusStage" target="ausstage"&gt;Gardner
+            Arts Centre&lt;/a&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_org_id=102"
+            title="View the Australian Dance Theatre record in AusStage"
+            target="ausstage"&gt;Australian Dance Theatre&lt;/a&gt;&lt;ul&gt;&lt;li&gt;&lt;a
+            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_event_id=67614"
+            title="View the Birdbrain record in AusStage" target="ausstage"&gt;Birdbrain&lt;/a&gt;,
+            10 March 2005&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</marker>
+    </markers>
+    <entities>
+        <entity id="102" name="Australian Dance Theatre"
+            url="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_org_id=102"/>
+    </entities>
+</mapdata>
 
+}}}
