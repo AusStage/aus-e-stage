@@ -6,8 +6,8 @@ The Mapping Service exposes an [http://en.wikipedia.org/wiki/Application_program
 
 Data exported in the KML format can be used with a wide variety of [http://en.wikipedia.org/wiki/Geographic_information_system GIS] based applications including the popular [http://earth.google.com/ Google Earth] application. 
 
+_Note: The Mapping Service is undergoing extensive revisions and as such only the updated API will be listed here as it is completed._
+
 Details of the API are in the following pages:
 
- * [MappingServiceAPIMapData Map Data including KML export]
- * [MappingServiceAPIBrowseData Map Data specifically for the browse map]
- * [MappingServiceAPIXMLData Retrieve data from various XML based datasets]
+ * [MappingServiceAPIMarkers Marker Data]
