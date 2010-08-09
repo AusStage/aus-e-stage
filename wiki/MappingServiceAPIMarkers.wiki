@@ -1,0 +1,63 @@
+#summary Mapping Service API - Marker Data
+
+<h1>Marker Data</h1>
+
+Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
+
+The Marker Data API exposes methods and data elements that can be used to construct a map on a web page. 
+
+_Note: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete.
+
+<wiki:toc max_depth="3" />
+
+== Base URL ==
+
+http://beta.ausstage.edu.au/mapping2/markers?
+
+Combining the base URL with the parameters outlined below constructs a call to the API.
+
+== Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| type   || organisation, contributor || No || ||
+|| id     || Unique contributor or organisation id || No || ||
+
+=== type ===
+
+The type parameter specifies whether the call to the API is for data on an organisation or a contributor.
+
+=== id ===
+
+The id parameter is a comma separated list of unique identifiers.
+
+_Note: It is not possible to mix types of ids in a single call to the API. Therefore if the type is set to organisation only organisation ids must be specified, conversely if the type is set to contributor only contributor ids must be specified._
+
+== Sample Output == 
+
+The output is an XML document that contains markers for venues that can be mapped including various data fields. Those fields are:
+
+|| *Element Name* || *Attribute Name* || *Purpose* || 
+|| mapdata || XML Root Element ||
+|| markers || Root Element of the markers data ||
+|| marker  || An individual marker representing a venue <br/>The text content of this element is the content used to build the infoWindow ||
+|| || events  || the number of events  at this venue ||
+|| || fdate   || the first date of an event at this venue (as an integer) ||
+|| || fdatestr ||the first date of an event at this venue (as a date string) ||
+|| || lat || the latitude coordinate for the venue ||
+|| || ldate || the last date of an event at this venue (as an integer) ||
+|| || ldatestr || the last date of an event at this venye (as a date string) ||
+|| || lng || the longitude coordinate for the venue ||
+|| || name || the name of the venue ||
+|| || postcode || the postcode of the suburb where the venue is located || 
+|| || state || the identifier for the state where the venue is located ||
+|| || suburb || the name of the the suburb where the venue is located || 
+|| entities || Root element of the entity data ||
+|| entity || Details of an entity displayed on the map ||
+|| || id || the unique identifier of the entity (organisation / contributor ||
+|| || name || the name of the entity ||
+|| || url || the persistent URL for the record in AusStage for this entity ||
+
+
+
+
+
