@@ -227,8 +227,8 @@ public class MarkerManager {
 		
 		// declare remaining helper variables
 		int eventCount = 0;
-		int firstDate  = 0;
-		int lastDate   = 0;
+		int firstDate  = Integer.MAX_VALUE;
+		int lastDate   = Integer.MIN_VALUE;
 		Set<Organisation> organisations = null;
 		Iterator organisationIterator   = null;
 		
