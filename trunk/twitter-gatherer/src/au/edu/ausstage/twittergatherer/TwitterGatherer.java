@@ -123,12 +123,7 @@ public class TwitterGatherer {
 		
 		// Create a thread pool with two threads
 		ExecutorService executor = Executors.newFixedThreadPool(2);
-		
-		// debug code
-//		System.out.println("#" + properties.getValue("twitter-user") + "#");
-//		System.out.println("#" + properties.getValue("twitter-password") + "#");
-//		System.exit(0);
-		
+
 		// configure the username / password to use to access the twitter service
 		TwitterStreamConfiguration twitterStreamConfig = new TwitterStreamConfiguration(properties.getValue("twitter-user"), properties.getValue("twitter-password"));
 		
@@ -136,11 +131,14 @@ public class TwitterGatherer {
 		IncomingMessageHandler handler = new IncomingMessageHandler(tweetQueue);
 		
 		// define our processor to process the incoming tweets
-		MessageProcessor processor = new MessageProcessor(tweetQueue);
+		MessageProcessor processor = new MessageProcessor(tweetQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")));
+		
+		// TODO: need to get list of keywords from the database
 		
 		// define a collection of words to track
 		Collection<String> tracks = new ArrayList<String>();
 		tracks.add("#ausvotes");
+		tracks.add("#thatcamp");
 		
 		// instantiate the other supporting classes
 		TwitterStream twitterStream = TweetRiver.filter(twitterStreamConfig, handler, null, tracks);
