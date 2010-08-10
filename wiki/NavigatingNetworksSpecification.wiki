@@ -588,9 +588,13 @@ In summary, processing.js provides us with a language, and the ability to visual
 
 ==Protovis==
 [http://vis.stanford.edu/protovis/ Protovis] is another language that implements javascript and SVG to create web visualisations of custom data. 
-Its libraries provide layouts and support for force directed graphs, enabling us to only extend rather than invent the code required. 
-There is more testing to be done regarding Protovis, however initial findings have been that there are issues loading a highly connected network with more than 50 nodes.
-MORE TESTING AND RESULTS TO COME
+Its library provides extensive support for force-directed network graphs, and on the surface, Protovis provides a very elegant solution to visualizing our network data. 
+Within the existing force-directed library is support for altering the physics behind the layout, from node repulsion and attraction, drag (friction), to spring dampening.
+I have had some success altering the physics behind the visualization in order to get a reasonable view of the data being represented. 
+
+The one draw back with Protovis is that it seems unable to cope with largely connected networks. 
+I was able to render a network of 50 highly connected nodes, but when I tried to render the entire first degree network of contributor 2285, (120 Nodes and 2863 edges) it was unable to render the visualization. 
+At this stage I have no concrete understanding of why this is the case and am investigating further the reasons behind this.
 
 ==JIT==
 [http://thejit.org/ JIT] or the JavaScript InfoVis Toolkit is a javascript based library that provides tools for creating interactive web visualisations. 
@@ -601,14 +605,8 @@ This is an example of one contributors first degree network. The interaction had
 
 ==JSVis==
 Another javascript visualisation library with physics and layout support for force directed layouts. This library also supports the dynamic generation of graphs using XML. 
-Testing is underway.
+At this point I have abandoned testing of JSVis. Although existing examples of networks using this library are promising, I have had trouble creating a working example. Investigation in a few forums (Apologies, I did not keep the links and hence cannot reference them!) suggests that JSVis is also not geared towards larger networks.  
 
-APPENDIX A - definitions
-definitions relate to terms used within the specification paper. Particularly with regards to the interface descriptions.
-
-Node: 
-Collaboration:
-Collaborator:
  
 =DEVELOPMENT SCHEDULE=
 
