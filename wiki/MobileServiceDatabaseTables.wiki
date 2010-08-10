@@ -35,7 +35,27 @@ Details of the individual performances that have sought feedback using the Mobil
 
  # For simplicity during initial development each performance can only have on question associated with it. This can be expanded to multiple questions using an intermediary table that linked a performance to multiple questions
  # The `events` table already exists in the AusStage database
- # Date and time fields are entered and stored using [http://en.wikipedia.org/wiki/Adelaide Adelaide Local Time].
+ # Date and time fields are entered and stored using [http://en.wikipedia.org/wiki/Adelaide Adelaide Local Time]
+
+= Organisations =
+
+This table stores information about organisations using the MobileService
+
+== Table Name ==
+
+`mob_organisations`
+
+== Columns ==
+
+|| *Name* || *Description* || *Datatype* || *Key / Indexed* ||
+|| organisation_id || Unique identifier of the organisation in AusStage || number || FK (organisionid in the organisation table) ||
+|| twitter_hash_tag || Specify the organisation specific hash tag || varchar(64) || ||
+|| mobile_phone_hash || Specify hashes of phones of organisation employees for filtering || varchar(64) || ||
+
+== Notes ==
+
+ # Organisation specific hashtags are used to identify twitter messages that are of interest
+ # Mobile phone hashes are stored in order to filter out feedback that is sent from people associated with the organisation, for example employees testing the service
 
 = Questions =
 
@@ -93,25 +113,5 @@ This table stores information about the various source types that are supported 
 || source_type || Unique identifier for the various sources || number || Primary ||
 || source_name || The name of the source || varchar(255) || ||
 || source_description || The description of the source || varchar(512) || ||
-
-= Organisations =
-
-This table stores information about organisations using the MobileService
-
-== Table Name ==
-
-`mob_organisations`
-
-== Columns ==
-
-|| *Name* || *Description* || *Datatype* || *Key / Indexed* ||
-|| organisation_id || Unique identifier of the organisation in AusStage || number || FK (organisionid in the organisation table) ||
-|| twitter_hash_tag || Specify the organisation specific hash tag || varchar(64) || ||
-|| mobile_phone_hash || Specify hashes of phones of organisation employees for filtering || varchar(64) || ||
-
-== Notes ==
-
- # Organisation specific hashtags are used to identify twitter messages that are of interest
- # Mobile phone hashes are stored in order to filter out feedback that is sent from people associated with the organisation, for example employees testing the service
 
  
