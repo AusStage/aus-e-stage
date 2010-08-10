@@ -30,7 +30,10 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selecttouislider-2.0.js"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"/>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"/></script>
+	<!-- Load AusStage JavaScript -->
+	<script type="text/javascript" src="assets/javascript/maplinks.js"></script>
+	<script type="text/javascript" src="assets/javascript/map.functions.js"></script>
 </head>
 <body>
 <div id="wrap">
@@ -40,9 +43,9 @@
 	<!-- Include the sidebar -->
 	<jsp:include page="sidebar.jsp"/>
 	<div id="main">
-		<h2>Map of events for: </h2>
+		<h2 id="map_name">Map of events for: </h2>
 		<div id="map_header" class="featured_map_header_footer map_header_footer">
-			<h3 id="map_name"></h3>
+			<!-- link to download KML should appear here -->
 		</div>
 		<div id="map">
 		</div>

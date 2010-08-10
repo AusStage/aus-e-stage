@@ -35,3 +35,52 @@ $.extend({
 	}
 });
 
+/*
+ * Use the $(document).ready() function to ensure that our code only executes once the page has completed
+ * loading and is ready to manipulate
+ *
+ * When the document has completed loading the ready() function will execute our anonymous function
+ */
+$(document).ready(function() {
+
+	/* 
+	 * get the parameters to this page using the function that is outlined at the beginning 
+	 * of this file
+	 */
+	var type = $.getUrlVar("type");
+	var id   = $.getUrlVar("id");
+	
+	/*
+	 * check on the value of the parameters. If they're "undefined" the URL didn't include what we require to continue
+	 */
+	if(typeof(type) == "undefined" || typeof(id) == "undefined") {
+		// execute a function to show an error message
+		showMissingParameterMessage();
+	} else { 
+		// use the getMapData function in the map.functions.js file to load the map data
+		getMapData(type, id, true);
+	}
+});
+
+/* 
+ * A function to show an error message
+ */
+// function to show an error message
+function showMissingParameterMessage() {
+
+	/*
+	 * Use jQuery functions to hide various elements and populate the #map element with an
+	 * informative error message
+	 */
+
+	// hide certain elements
+	$("#map_name").hide();
+	$("#map_header").hide();
+	$("#map_legend").hide();
+	
+	// empty the contents of this tag
+	$("#map").empty();
+	
+	// add the error message to the page
+	$("#map").append('<p style="text-align: center"><strong>Error: </strong>The URL is missing required parameters, please ensure the URL is correct and try again.<br/>If the problem persists please contact the site administrator.</p>'); 
+}
