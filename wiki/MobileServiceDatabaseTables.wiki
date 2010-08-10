@@ -114,6 +114,18 @@ This table stores information about the various source types that are supported 
 || source_name || The name of the source || varchar(255) || ||
 || source_description || The description of the source || varchar(512) || ||
 
+= Other Database Objects =
+
+== Sequences ==
+
+A sequence is an object in Oracle that is used to generate a number sequence. The following sequences are used to create a unique number to act as a primary key.
+
+|| *Table* || *Column* || *Sequence* ||
+|| mob_performances || performance_id || mob_performance_id_seq ||
+|| mob_questions || question_id || mob_question_id_seq ||
+|| mob_feedback || feedback_id || mob_feedback_id_seq ||
+|| mob_source_types || type_id || mob_source_type_id_seq ||
+
 = Database Diagram =
 
 A copy of the database diagram is [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/mobile-impl-database-diagram.jpeg available for download].
