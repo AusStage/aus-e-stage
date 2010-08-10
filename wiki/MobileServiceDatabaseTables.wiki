@@ -14,6 +14,42 @@ _Please Note:_
 
 <wiki:toc max_depth="2" />
 
+= Performances =
+
+Details of the individual performances that have sought feedback using the MobileService
+
+== Table Name ==
+
+`mob_performances`
+
+== Columns ==
+
+|| *Name* || *Description* || *Datatype* || *Key / Indexed* ||
+|| performance_id || Used as a primary key for the table || number || Primary ||
+|| event_id || link this performance to the existing AusStage event table || number || FK (events) ||
+|| start_date_time || the start of the period during which valid feedback can be received || date || ||
+|| end_date_time || the end of the period during which valid feedback can be received || date || ||
+|| question_id || the id of the question asked at this performance used to solicit feedback || number || FK (mob_questions) ||
+
+== Notes == 
+
+ # For simplicity during initial development each performance can only have on question associated with it. This can be expanded to multiple questions using an intermediary table that linked a performance to multiple questions
+
+= Questions =
+
+This table stores details of the questions that have been used to solicit feedback
+
+== Table Name ==
+
+`mob_questions`
+
+== Columns ==
+
+|| *Name* || *Description* || *Datatype* || *Key / Indexed* ||
+|| question_id || Unique identifier for questions || number || Primary ||
+|| question || Text of the question || varchar(512) || ||
+|| question_notes || Notes about the question used internally by AusStage || varchar(4000) || ||
+
 = Feedback =
 
 This is a table used to store feedback sourced from Twitter, using the TwitterGatherer application as well as SMS messages. The table is designed to be extensible to support additional columns / content types as required. 
