@@ -49,7 +49,7 @@ This table stores information about organisations using the MobileService
 
 || *Name* || *Description* || *Datatype* || *Key / Indexed* ||
 || organisation_id || Unique identifier of the organisation in AusStage || number || FK (organisionid in the organisation table) ||
-|| twitter_hash_tag || Specify the organisation specific hash tag || varchar(64) || ||
+|| twitter_hash_tag || Specify the organisation specific hash tag || varchar(64) || Yes (No duplicates) ||
 || mobile_phone_hash || Specify hashes of phones of organisation employees for filtering || varchar(64) || ||
 
 == Notes ==
