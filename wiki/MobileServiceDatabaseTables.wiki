@@ -34,6 +34,7 @@ Details of the individual performances that have sought feedback using the Mobil
 == Notes == 
 
  # For simplicity during initial development each performance can only have on question associated with it. This can be expanded to multiple questions using an intermediary table that linked a performance to multiple questions
+ # The `events` table already exists in the AusStage database
 
 = Questions =
 
