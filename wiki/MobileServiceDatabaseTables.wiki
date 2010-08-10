@@ -114,4 +114,8 @@ This table stores information about the various source types that are supported 
 || source_name || The name of the source || varchar(255) || ||
 || source_description || The description of the source || varchar(512) || ||
 
+= Database Diagram =
+
+A copy of the database diagram is [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/mobile-impl-database-diagram.jpeg available for download].
+
  
