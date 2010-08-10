@@ -12,6 +12,8 @@ _Please Note:_
  # Importantly _no datatype_ is Oracle specific
  # All new tables that are created specifically for the MobileService have the prefix `mob_`
 
+<wiki:toc max_depth="2" />
+
 = Feedback =
 
 This is a table used to store feedback sourced from Twitter, using the TwitterGatherer application as well as SMS messages. The table is designed to be extensible to support additional columns / content types as required. 
@@ -37,4 +39,19 @@ This is a table used to store feedback sourced from Twitter, using the TwitterGa
 == Notes == 
 
  # The [http://en.wikipedia.org/wiki/Sha256 SHA-2 algorithm], specifically sha256, is used to compute cryptographic hashes 
+
+= Source Types =
+
+This table stores information about the various source types that are supported by the MobileService
+
+== Table Name ==
+
+`mob_source_types`
+
+== Columns ==
+
+|| *Name* || *Description* || *Datatype* || *Key / Indexed* ||
+|| source_type || Unique identifier for the various sources || number || Primary ||
+|| source_name || The name of the source || varchar(255) || ||
+|| source_description || The description of the source || varchar(512) || ||
  
