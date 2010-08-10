@@ -1,0 +1,40 @@
+#summary Details of the database tables used by the MobileService
+
+<h1>Mobile Service Database Tables</h1>
+
+The following is a list of tables added to the AusStage relational database to support the MobileService.
+
+_Please Note:_
+
+ # Tables will be listed here only *after* they have been added to the relational database
+ # The table specification may differ from that found in the MobileServiceSpecification in response to issues discovered during implementation
+ # The name of the datatypes match those [http://download.oracle.com/docs/cd/B19306_01/server.102/b14220/datatype.htm implemented by Oracle] which may differ from other database platforms. Importantly _no datatype_ is Oracle specific
+ # All new tables that are created specifically for the MobileService have the prefix *mob_* 
+
+= Feedback =
+
+This is a table used to store feedback sourced from Twitter, using the TwitterGatherer application as well as SMS messages. The table is designed to be extensible to support additional columns / content types as required. 
+
+== Table Name ==
+
+mob_feedback
+
+== Columns ==
+
+|| *Name* || *Description* || *Datatype* || *Key / Indexed* ||
+|| feedback_id || Used as a primary key for the table || number || Primary ||
+|| performance_id || Link this feedback to a performance || number || FK (mob_performance table) ||
+|| question_id || Link this feedback to a specific question || number || FK (mob_questions) ||
+|| source_type || Identify the source of feedback || number || FK (mob_source_types) ||
+|| received_date_time || The date and time that the feedback was sent || date || ||
+|| received_from || A cryptographic hash of the unique identifier of the user as defined by the source type || varchar(64) || yes ||
+|| source_id || A cryptographic hash of the unique identifer for the piece of feedback in the source system || varchar(64) || yes ||
+|| short_content || The content of the feedback || varchar(4000) || ||
+|| long_content  || The content of the feedback when longer than 4000 characters || clob || ||
+|| content_uri   || A URI for content stored outside the system || varchar(4000) || ||
+
+== Notes == 
+
+ # The [http://en.wikipedia.org/wiki/Sha256 SHA-2 algorithm], specifically sha256, is used to compute cryptographic hashes 
+ 
+
