@@ -8,8 +8,9 @@ _Please Note:_
 
  # Tables will be listed here only *after* they have been added to the relational database
  # The table specification may differ from that found in the MobileServiceSpecification in response to issues discovered during implementation
- # The name of the datatypes match those [http://download.oracle.com/docs/cd/B19306_01/server.102/b14220/datatype.htm implemented by Oracle] which may differ from other database platforms. Importantly _no datatype_ is Oracle specific
- # All new tables that are created specifically for the MobileService have the prefix *mob_* 
+ # The name of the datatypes match those [http://download.oracle.com/docs/cd/B19306_01/server.102/b14220/datatype.htm implemented by Oracle] which may differ from other database platforms. 
+ # Importantly _no datatype_ is Oracle specific
+ # All new tables that are created specifically for the MobileService have the prefix `mob_`
 
 = Feedback =
 
@@ -17,7 +18,7 @@ This is a table used to store feedback sourced from Twitter, using the TwitterGa
 
 == Table Name ==
 
-mob_feedback
+`mob_feedback`
 
 == Columns ==
 
@@ -37,4 +38,3 @@ mob_feedback
 
  # The [http://en.wikipedia.org/wiki/Sha256 SHA-2 algorithm], specifically sha256, is used to compute cryptographic hashes 
  
-
