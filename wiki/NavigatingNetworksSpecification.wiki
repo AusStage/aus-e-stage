@@ -592,9 +592,7 @@ Its library provides extensive support for force-directed network graphs, and on
 Within the existing force-directed library is support for altering the physics behind the layout, from node repulsion and attraction, drag (friction), to spring dampening.
 I have had some success altering the physics behind the visualization in order to get a reasonable view of the data being represented. 
 
-The one draw back with Protovis is that it seems unable to cope with largely connected networks. 
-I was able to render a network of 50 highly connected nodes, but when I tried to render the entire first degree network of contributor 2285, (120 Nodes and 2863 edges) it was unable to render the visualization. 
-At this stage I have no concrete understanding of why this is the case and am investigating further the reasons behind this.
+Protovis is able to render a largely connected network. However my experiments have shown that the physics behind the rendering need to be adjusted. Given the high number of edges in my example network (contributor 2285, 120 nodes and 2863 edges)  the repulsive forces act so strongly that the entire graph gets pushed into the far corners of the screen. I am at present looking into these adjustments.
 
 ==JIT==
 [http://thejit.org/ JIT] or the JavaScript InfoVis Toolkit is a javascript based library that provides tools for creating interactive web visualisations. 
