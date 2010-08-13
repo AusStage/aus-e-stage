@@ -96,12 +96,15 @@ public class DbObjects {
 		try {
 	
 			// get the metadata for this results
-			ResetSetMetadata metadata = resultSet.getMetaData();
+			ResultSetMetaData metadata = resultSet.getMetaData();
 		
 			// double check the index
 			if(InputUtils.isValidInt(index, 1, metadata.getColumnCount()) == false) {
 				return null;
 			} else {
+			
+				// define a list to store the column
+				ArrayList<String> list = new ArrayList<String>();
 			
 				// loop through the 
 				while (resultSet.next()) {
