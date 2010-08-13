@@ -190,6 +190,53 @@ public class DbManager {
 	} // end executePreparedStatement method
 	
 	/**
+	 * A method to prepare and execute a prepared SQL statement to insert data
+	 *
+	 * @param sqlQuery   the SQL query to execute
+	 * @param parameters an array of parameters, as strings, to pass into the parameter
+	 *
+	 * @return           true, if and only if, the insert worked
+	 */
+	public boolean executePreparedInsertStatement(String sqlQuery, String[] parameters) {
+	
+		// declare instance variables
+		PreparedStatement statement;
+	
+		// enclose code in a try block
+		// throw a more general exception if required
+		try {
+		
+			// check on required objects
+			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+				return false;
+			}
+			
+			// build the statement
+			statement = connection.prepareStatement(sqlQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			// add the parameters
+			for(int i = 0; i < parameters.length; i++) {
+			
+				// statements are indexed starting with 1
+				// arrays are indexed starting with 0
+				statement.setString(i + 1, parameters[i]);
+
+			}
+			
+			// execute the statement and get the result set
+			statement.executeUpdate();
+			statement.close();
+			
+		} catch (java.sql.SQLException sqlEx) {
+			return false;
+		}
+	
+		// if we get this far everything is ok
+		return true;
+	
+	} // end executePreparedStatement method
+	
+	/**
 	 * A method to prepare and return a statement
 	 *
 	 * @param sqlQuery   the SQL query to prepare
