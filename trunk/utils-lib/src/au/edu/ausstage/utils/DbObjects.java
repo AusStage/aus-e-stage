@@ -116,12 +116,17 @@ public class DbObjects {
 				// reset the cursor on the resultSet
 				resultSet.first();
 				
-				return list;
+				// check on the array list
+				if(list.isEmpty() == true) {
+					return null;
+				} else {
+					return list;
+				}
 			}
 			
 		} catch (java.sql.SQLException sqlEx) {
 			return null;
-		}	
+		}
 	} // end the getColumn method
 	
 	/**
