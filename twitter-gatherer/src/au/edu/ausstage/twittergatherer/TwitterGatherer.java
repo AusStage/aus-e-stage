@@ -103,18 +103,39 @@ public class TwitterGatherer {
 	 		System.exit(-1);
 	 	}
 	 	
-//	 	// get a connection to the database
-//	 	System.out.println("INFO: Connecting to the database");
-//	 	
-//	 	DbManager database = new DbManager(properties.getValue("db-connection-string"));
-//	 	
-//	 	if(database.connect() == false) {
-//	 		// connection to the database failed
-//	 		System.err.println("ERROR: a connection to the database could not be made");
-//	 		System.exit(-1);
-//	 	}
-//	 	
-//	 	System.out.println("INFO: Connection established");
+	 	// get a connection to the database
+	 	System.out.println("INFO: Connecting to the database");
+	 	
+	 	DbManager database = new DbManager(properties.getValue("db-connection-string"));
+	 	
+	 	if(database.connect() == false) {
+	 		// connection to the database failed
+	 		System.err.println("ERROR: a connection to the database could not be made");
+	 		System.exit(-1);
+	 	}
+	 	
+	 	System.out.println("INFO: Connection established");
+	 	
+	 	// get the list of hashtags that are of interest
+	 	String sql = "SELECT twitter_hash_tag FROM mob_organisations";	 	
+	 	DbObjects hashTags = database.executeStatement(sql);
+	 	
+	 	if(hashTags == null) {
+	 		System.err.println("ERROR: unable to lookup the list hash tags from the database");
+	 		System.exit(-1);
+	 	}
+	 	
+	 	// store the list of hashtags for processing later
+	 	ArrayList<String> tracks = hashTags.getColumn(1);
+	 	
+	 	if(tracks == null) {
+	 		System.err.println("ERROR: no hash tags found in the database");
+	 		System.exit(-1);
+	 	}
+	 	
+	 	// play nice and tidy up
+	 	hashTags.tidyUp();
+	 	hashTags = null;
 
 		// experimental code
 		
@@ -131,14 +152,7 @@ public class TwitterGatherer {
 		IncomingMessageHandler handler = new IncomingMessageHandler(tweetQueue);
 		
 		// define our processor to process the incoming tweets
-		MessageProcessor processor = new MessageProcessor(tweetQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")));
-		
-		// TODO: need to get list of keywords from the database
-		
-		// define a collection of words to track
-		Collection<String> tracks = new ArrayList<String>();
-		tracks.add("#ausvotes");
-		tracks.add("#thatcamp");
+		MessageProcessor processor = new MessageProcessor(tweetQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database);
 		
 		// instantiate the other supporting classes
 		TwitterStream twitterStream = TweetRiver.filter(twitterStreamConfig, handler, null, tracks);
