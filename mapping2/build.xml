@@ -424,9 +424,12 @@
     <!-- Copy external dependencies as required -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
     <mkdir  dir="${build.home}/WEB-INF/lib"/>
-<!--
-    <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
--->
+
+	<copy todir="${build.home}/WEB-INF/lib">
+    	<fileset dir="${lib.home}">
+			<include name="*.jar"/>
+		</fileset>
+	</copy>
 
   </target>
 
