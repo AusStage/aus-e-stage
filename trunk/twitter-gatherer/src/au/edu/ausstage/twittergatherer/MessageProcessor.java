@@ -29,6 +29,12 @@ import com.crepezzi.tweetstream4j.types.*;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONNull;
 
+// import the Joda Time object
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 // import additional ausstage packages
 import au.edu.ausstage.utils.*;
 
@@ -41,20 +47,31 @@ public class MessageProcessor implements Runnable {
 	// declare class level private variables
 	LinkedBlockingQueue<STweet> newTweets;
 	String logFiles;
+	DbManager database;
+	DateTimeFormatter dateTimeFormat;
+	DateTimeFormatter inputDateTimeFormat;
 	
 	// declare class level constants
 	private final int JSON_INDENT_LEVEL = 4;
-
+	
+	private final String SOURCE_ID = "1";
+	
 	private final String[] SANITISED_FIELDS = {"url", "profile_image_url", "screen_name", "profile_background_image_url", "name", "description"};
+	
+	private final String DB_DATE_TIME_FORMAT         = "DD-MON-YYYY HH24:MI:SS";
+	private final String JODA_DATE_TIME_FORMAT       = "dd-MMM-YYYY HH:mm:ss";
+	//Fri Aug 13 05:37:05 +0000 2010
+	private final String JODA_INPUT_DATE_TIME_FORMAT = "E MMM dd hh:mm:ss Z YYYY";
 	
 	/**
 	 * A constructor for this class
 	 *
-	 * @param tweets a blocking queue used to store new messages
-	 * @param logDir the directory to log files to
+	 * @param tweets   a blocking queue used to store new messages
+	 * @param logDir   the directory to log files to
+	 * @param manager  a valid DbManager object
 	 *
 	 */
-	public MessageProcessor(LinkedBlockingQueue<STweet> tweets, String logDir) {
+	public MessageProcessor(LinkedBlockingQueue<STweet> tweets, String logDir, DbManager manager) {
 	
 		// check on the parameters
 		if(tweets == null) {
@@ -69,9 +86,18 @@ public class MessageProcessor implements Runnable {
 			throw new IllegalArgumentException("The specified log directory is not valid");
 		}
 		
+		if(manager == null) {
+			throw new IllegalArgumentException("The database parameter cannot be null");
+		}
+		
 		// assign parrameters to local variables
 		newTweets = tweets;
 		logFiles = logDir;
+		database = manager;
+		
+		// build the dateTimeFormat object
+		dateTimeFormat      = DateTimeFormat.forPattern(JODA_DATE_TIME_FORMAT);
+		inputDateTimeFormat = DateTimeFormat.forPattern(JODA_INPUT_DATE_TIME_FORMAT);
 	}
 	
 	/**
@@ -169,15 +195,74 @@ public class MessageProcessor implements Runnable {
 				jsonTweetObject = jsonTweetObject.discard("user");
 				jsonTweetObject = jsonTweetObject.element("user", jsonUserObject);				
 				
-				// write the file
+				
+				/*
+				 * Write the file
+				 */
+				
 				if(FileUtils.writeNewFile(logFiles + "/" + tweetIdHash, jsonTweetObject.toString(JSON_INDENT_LEVEL)) == false) {
 					System.err.println("ERROR: Unable to write file to the specified log file");
 					System.err.println("       twitter message with id '" + tweetId + "' is now lost");
+				} else {
+					System.out.println("INFO: New Message written to the log directory:");
+					System.out.println("      " + tweetIdHash);
 				}
+				
+				/*
+				 * TODO: determine which performance this message is about
+				 */
+				 
+				/*
+				 * get the date & time that the messages was received
+				 */
+				DateTime messageCreated = inputDateTimeFormat.parseDateTime(jsonTweetObject.getString("created_at"));
+				LocalDateTime localMessageCreated = messageCreated.toLocalDateTime();
+				 
+				/*
+				 * write the message to the database
+				 */
+				 
+				// define the sql
+				String insertSql = "INSERT INTO mob_feedback "
+								 + "(performance_id, question_id, source_type, received_date_time, received_from, source_id, short_content) "
+								 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
+								 
+				// define the parameter array
+				String[] sqlParameters = new String[7];
+				
+				// build the parameters
+				// TODO: determine valid performance and question ids
+
+				//debug code
+				sqlParameters[0] = "1";
+				sqlParameters[1] = "1";
+				
+				// use the sourvce id from the constant
+				sqlParameters[2] = SOURCE_ID;
+				
+				// add the date and time
+				sqlParameters[3] = dateTimeFormat.print(messageCreated);
+				
+				// add the user id
+				sqlParameters[4] = jsonUserObject.getString("id");
+				
+				// add the source id
+				sqlParameters[5] = jsonTweetObject.getString("id");
+				
+				// add the message
+				sqlParameters[6] = jsonTweetObject.getString("text");
+				
+				// insert the data
+				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
+					System.err.println("ERROR: Unable to add the message to the database");
+				} else {
+					System.out.println("INFO: Successfully added the message to the database");
+				}						
 			}
 		} catch (InterruptedException ex) {
 			// thread has been interrupted
 			System.out.println("INFO: The Message processing thread has stopped");
 		}
-	}
+	} // end the run method
+
 }
