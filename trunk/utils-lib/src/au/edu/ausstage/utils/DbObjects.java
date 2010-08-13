@@ -22,6 +22,8 @@ package au.edu.ausstage.utils;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
 
 /**
  * A class of methods to manage the database objects
@@ -81,6 +83,43 @@ public class DbObjects {
 	public ResultSet getResultSet() {
 		return resultSet;
 	}
+	
+	/**
+	 * A method to get a column as an array list
+	 *
+	 * @param index the column index to use to populate the ArrayList
+	 *
+	 * @return      an array list containing all of the items in the column
+	 */
+	public ArrayList<String> getColumn(int index) {
+	
+		try {
+	
+			// get the metadata for this results
+			ResetSetMetadata metadata = resultSet.getMetaData();
+		
+			// double check the index
+			if(InputUtils.isValidInt(index, 1, metadata.getColumnCount()) == false) {
+				return null;
+			} else {
+			
+				// loop through the 
+				while (resultSet.next()) {
+					
+					// add the value from the column to the list
+					list.add(resultSet.getString(index));
+				}
+				
+				// reset the cursor on the resultSet
+				resultSet.first();
+				
+				return list;
+			}
+			
+		} catch (java.sql.SQLException sqlEx) {
+			return null;
+		}	
+	} // end the getColumn method
 	
 	/**
 	 * A convenience method to play nice and tidy up any used resources
