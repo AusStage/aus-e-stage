@@ -20,6 +20,9 @@ package au.edu.ausstage.twittergatherer;
 
 // import from the standard java libraries
 import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.ResultSet;
 
 // import additional tweetStream4J packages
 import com.crepezzi.tweetstream4j.*;
@@ -34,6 +37,9 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+// import the twitter-text-java library
+import com.twitter.Extractor;
 
 // import additional ausstage packages
 import au.edu.ausstage.utils.*;
@@ -50,17 +56,18 @@ public class MessageProcessor implements Runnable {
 	DbManager database;
 	DateTimeFormatter dateTimeFormat;
 	DateTimeFormatter inputDateTimeFormat;
+	Extractor         extractHashTags;
 	
 	// declare class level constants
 	private final int JSON_INDENT_LEVEL = 4;
 	
-	private final String SOURCE_ID = "1";
+	public final String SOURCE_ID = "1";
 	
 	private final String[] SANITISED_FIELDS = {"url", "profile_image_url", "screen_name", "profile_background_image_url", "name", "description"};
 	
 	private final String DB_DATE_TIME_FORMAT         = "DD-MON-YYYY HH24:MI:SS";
 	private final String JODA_DATE_TIME_FORMAT       = "dd-MMM-YYYY HH:mm:ss";
-	//Fri Aug 13 05:37:05 +0000 2010
+
 	private final String JODA_INPUT_DATE_TIME_FORMAT = "E MMM dd hh:mm:ss Z YYYY";
 	
 	/**
@@ -98,6 +105,9 @@ public class MessageProcessor implements Runnable {
 		// build the dateTimeFormat object
 		dateTimeFormat      = DateTimeFormat.forPattern(JODA_DATE_TIME_FORMAT);
 		inputDateTimeFormat = DateTimeFormat.forPattern(JODA_INPUT_DATE_TIME_FORMAT);
+		
+		// build the Extractor object
+		extractHashTags = new Extractor();
 	}
 	
 	/**
@@ -209,55 +219,114 @@ public class MessageProcessor implements Runnable {
 				}
 				
 				/*
-				 * TODO: determine which performance this message is about
+				 * get the hash tags from this message
 				 */
+				
+				// get the list of hash tags from the tweet
+				List<String> hashtags = extractHashTags.extractHashtags(jsonTweetObject.getString("text"));
 				 
 				/*
 				 * get the date & time that the messages was received
 				 */
 				DateTime messageCreated = inputDateTimeFormat.parseDateTime(jsonTweetObject.getString("created_at"));
 				LocalDateTime localMessageCreated = messageCreated.toLocalDateTime();
-				 
+				
 				/*
-				 * write the message to the database
+				 * get the performance and question id
 				 */
-				 
-				// define the sql
-				String insertSql = "INSERT INTO mob_feedback "
-								 + "(performance_id, question_id, source_type, received_date_time, received_from, source_id, short_content) "
-								 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
-								 
-				// define the parameter array
-				String[] sqlParameters = new String[7];
+				String performanceId = null;
+				String questionId    = null;
 				
-				// build the parameters
-				// TODO: determine valid performance and question ids
-
-				//debug code
-				sqlParameters[0] = "1";
-				sqlParameters[1] = "1";
+				// define the sql				
+				String selectSql = "SELECT performance_id, question_id, SUBSTR(twitter_hash_tag, 2) "
+								 + "FROM mob_performances, mob_organisations, orgevlink "
+								 + "WHERE mob_performances.event_id = orgevlink.eventid "
+								 + "AND mob_organisations.organisation_id = orgevlink.organisationid "
+								 + "AND start_date_time < TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') "
+								 + "AND end_date_time + 1/12 > TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') ";
 				
-				// use the sourvce id from the constant
-				sqlParameters[2] = SOURCE_ID;
+				// define the parameters array
+				String[] sqlParameters = new String[2];
+				sqlParameters[0] = dateTimeFormat.print(messageCreated);
+				sqlParameters[1] = dateTimeFormat.print(messageCreated);
 				
-				// add the date and time
-				sqlParameters[3] = dateTimeFormat.print(messageCreated);
+				// get the data
+				DbObjects results = database.executePreparedStatement(selectSql, sqlParameters);
 				
-				// add the user id
-				sqlParameters[4] = jsonUserObject.getString("id");
-				
-				// add the source id
-				sqlParameters[5] = jsonTweetObject.getString("id");
-				
-				// add the message
-				sqlParameters[6] = jsonTweetObject.getString("text");
-				
-				// insert the data
-				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
-					System.err.println("ERROR: Unable to add the message to the database");
+				// double check the results
+				if(results == null) {
+					System.err.println("ERROR: Unable to find a matching performance for this message");
+					// TODO send exception report
 				} else {
-					System.out.println("INFO: Successfully added the message to the database");
-				}						
+				
+					// look for performances matching the hash tag from the message
+					ResultSet resultSet = results.getResultSet();
+					
+					// loop through the resultset
+					boolean found = false; // exit the loop early
+					sqlParameters = new String[7]; // store the parameters
+					
+					try {
+					
+						while (resultSet.next() && found == false) {
+					
+							// see if the hashtags in the message match one in the DB
+							if(hashtags.contains(resultSet.getString(3)) == true) {
+								// yep
+								sqlParameters[0] = resultSet.getString(1);
+								sqlParameters[1] = resultSet.getString(2);
+								found = true;
+							}
+						}
+					}catch (java.sql.SQLException ex) {
+						found = false;
+					}
+					
+					if(found == true) {
+						
+						/*
+						 * write the message to the database
+						 */
+						 
+						// define the sql
+						String insertSql = "INSERT INTO mob_feedback "
+										 + "(performance_id, question_id, source_type, received_date_time, received_from, source_id, short_content) "
+										 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
+										 
+						// define the parameter array
+						sqlParameters = new String[7];
+			
+						// build the parameters				
+						//debug code
+						sqlParameters[0] = "1";
+						sqlParameters[1] = "1";
+			
+						// use the source id from the constant
+						sqlParameters[2] = SOURCE_ID;
+			
+						// add the date and time
+						sqlParameters[3] = dateTimeFormat.print(messageCreated);
+			
+						// add the user id
+						sqlParameters[4] = jsonUserObject.getString("id");
+			
+						// add the source id
+						sqlParameters[5] = jsonTweetObject.getString("id");
+			
+						// add the message
+						sqlParameters[6] = jsonTweetObject.getString("text");
+			
+						// insert the data
+						if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
+							System.err.println("ERROR: Unable to add the message to the database");
+						} else {
+							System.out.println("INFO: Successfully added the message to the database");
+						}	
+					} else {
+						System.err.println("ERROR: Unable to find a matching performance for this message");
+						// TODO send exception report
+					}
+				} // end performance check				
 			}
 		} catch (InterruptedException ex) {
 			// thread has been interrupted
