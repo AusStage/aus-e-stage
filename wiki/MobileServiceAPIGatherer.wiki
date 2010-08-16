@@ -1,0 +1,32 @@
+#summary Details of the Input Gatherer API for the Mobile Service
+
+<h1>Input Gatherer</h1>
+
+The intention of the Input Gatherer is to provide a standardised way that feedback can be added to the mobile service. This API is supplemented with specific applications such as the TwitterGatherer as required. 
+
+= Adding an SMS message =
+
+An SMS message can be submitted for processing using the following API
+
+== Base URL ==
+
+http://beta.ausstage.edu.au/mobile/gatherer
+
+Combining the base URL with the parameters outlined below constructs a call to the API.
+
+== Request Type ==
+
+Both get and post requests are supported
+
+== Parameters ==
+
+|| *Name* || *Required Value* || *Optional* || *Default* ||
+|| type   || sms              || No         || ||
+|| caller || the mobile device number || No || ||
+|| time   || the time that the message was sent || No || ||
+|| date   || the date that the message was sent || No || ||
+|| message|| the text of the feedback message || No || ||
+
+== Additional Information ==
+
+Only hosts that are from a list of predetermine IP addresses are allowed to add an SMS message
