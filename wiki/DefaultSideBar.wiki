@@ -23,6 +23,8 @@
    * [MobileService  Mobile Service]
      * [MobileServiceSpecification Specification]
      * [MobileServiceDatabaseTables Database Tables]
+     * [MobileServiceAPI Mobile Service API]
+       * [MobileServiceAPIGatherer Input Gatherer]
    * [NetworkService Network Service]
      * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksGoals   Service Goals]
