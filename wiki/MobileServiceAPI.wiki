@@ -1,0 +1,9 @@
+#summary Details of the Mobile Service API
+
+<h1>Mobile Service API</h1>
+
+The mobile service exposes an API to make it easier to put data into, and retrieve data out of, the underlying [MobileServiceDatabaseTables Database Tables]. The mobile service is undergoing extensive development and changes / updates to the API will be listed here as they are made available.
+
+Details of the API are in the following pages
+
+ * [MobileServiceAPIGatherer Input Gatherer]
