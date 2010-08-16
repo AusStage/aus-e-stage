@@ -10,11 +10,11 @@ The [http://beta.ausstage.edu.au/ Aus-e-Stage] project is a [https://www.pfc.org
 
 = Services =
 
-The services currently under development are:
+The three main services currently under development are:
 
- * [http://beta.ausstage.edu.au/mapping/ Mapping Events]
- * Navigating Networks
- * Researching Audiences
+ * [MappingService Mapping Service] - Mapping Events and Venues
+ * [MobileService  Mobile Service] - Researching Audience Participation
+ * [NetworkService Network Service] - Navigating Artistic Networks
 
 = Purpose of this Wiki =
 
