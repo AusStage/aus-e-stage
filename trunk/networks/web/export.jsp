@@ -1,0 +1,110 @@
+<%@page language="java" contentType="text/html;charset=UTF-8"%>
+<%
+/*
+ * This file is part of the AusStage Navigating Networks Service
+ *
+ * The AusStage Navigating Networks Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The AusStage Navigating Networks Service is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+*/
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<title>AusStage Navigating Networks Service (Beta)</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/export.js"></script>
+</head>
+<body>
+<div id="wrap">
+	<div id="header"><h1>AusStage Navigating Networks Service (Beta)</h1></div>
+	<div id="nav">
+	</div>
+	<!-- Include the sidebar -->
+	<jsp:include page="sidebar.jsp"/>
+	<div id="main">
+		<h2>Export Graph Data in a Variety of Formats</h2>
+		<p>
+			Use the form below to export graph data in a variety of different formats for use in network visualisation software.
+		</p>
+		<p>
+			More information on how to use this page, as well as guidance on loading the data into a small number of sample programs is <a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksExportGraphs" target="ausstage" title="Information and Guidance on how to use this page">available in our Wiki</a>.
+		</p>
+		<form action="/networks/export" method="get" id="export_data" name="export_data">
+			<table class="formTable">
+				<tbody>
+				<tr>
+					<th scope="row">
+						<label id="id_label" for="id">Contributor ID: </label>
+					</th>
+					<td>
+						<input type="text" size="40" id="id" name="id"/>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label id="name_label" for="name">Contributor Name: </label>
+					</th>
+					<td>
+						<input type="text" readonly="readonly" size="40" id="name" name="name"/>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label id="task_label" for="task">Graph Type: </label>
+					</th>
+					<td>
+						<select size="1" id="task" name="task">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label id="format_label" for="format">Data Format: </label>
+					</th>
+					<td>
+						<select size="1" id="format" name="format">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label id="radius_label" for="radius">Radius: </label>
+					</th>
+					<td>
+						<select size="1" id="radius" name="radius">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" disabled="disabled" name="submit" id="export_btn" value="Export"/><br/>
+						<span style="font-size: 90%"><strong>Note:</strong> Hover your mouse over the label next to the input box for more information</span>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<!-- include the footer -->
+	<jsp:include page="footer.jsp"/>
+</div>
+<!-- include the Google Analytics code -->
+<jsp:include page="analytics.jsp"/>
+</body>
+</html>

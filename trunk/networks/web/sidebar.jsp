@@ -19,10 +19,15 @@
 */
 %>
 <div id="sidebar">
+	<h3>Main Menu</h3>
 	<ul>
 		<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
-		<li><a href="/networks/" title="Networks Service Homepage">Service Homepage</a></li>
+		<li><a href="/networks/" title="Networks Service Homepage">Networks Homepage</a></li>
+		<li><a href="/networks/export.jsp" title="Export Data in a Variety of Formats">Export Graph Data</a></li>
+	</ul>
+	<h3>Advanced Users</h3>
+	<ul>
 		<li><a href="http://code.google.com/p/aus-e-stage/wiki/NetworkService" title="Technical and Development Documentation">Technical Info.</a></li>
-		<li><a href="sparql.jsp" title="SPARQL Query Form">SPARQL Queries</a></li>
+		<li><a href="sparql.jsp" title="SPARQL Query Form">Use SPARQL Queries</a></li>
 	</ul>
 </div>

@@ -15,20 +15,30 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
-body html {
+html, body {
 	margin:0;
 	padding:0;
-	color:#000;
-	background:#fff;
+	color:#333333;
+	background: #fff;
+	font-family:Helvetica,Arial;
 }
+
+a {
+	color: #4433cc;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 #wrap {
-	width:1000px;
+	width:1200px;
 	margin:0 auto;
-	background:#7eba5e;
+	background:#aaaaaa;
 }
 #header {
-	padding:5px 10px;
-	height: 99px;
+	height: 64px;
 	padding:0px;
 	background: #333333;
 	background-image: url('images/ausstagehomebrand.gif');
@@ -36,20 +46,23 @@ body html {
 	background-position: top left;
 }
 #header h1 {
-	color: #fff;
+	color: #eeeeee;
 	text-align: right;
-	font-size: 150%;
-	padding-top: 40px;
+	font-size: 110%;
+	font-weight: normal;
+	padding-top: 24px;
 	padding-right: 10px;
 }
 
 h1 {
     margin:0;
 }
+
 #nav {
 	padding:5px 10px;
-	background:#999999;
+	background:#333333;
 	font-size: 90%;
+
 }
 #nav ul {
 	margin:0;
@@ -69,20 +82,29 @@ h1 {
 
 #main {
 	float:right;
-	width:786px;
+	width:986px;
 	padding:10px;
-	background:#a0ca76;
+	background:#ffffff;
 	font-size: 90%;
+	font-family:Helvetica,Arial;
+    color:#333333;
 }
 h2 {
 	margin:0 0 1em;
-	font-size: 125%;
+	font-size: 110%;
+	
 }
+
+blockquote
+	{background-color:#eeeeee;
+}
+
 #sidebar {
 	float:left;
 	width:174px;
-	padding:10px;
-	background-color: #7eba5e;
+	padding-right:10px;
+	padding-left: 10px;
+	background-color: #aaaaaa;
 }
 
 #sidebar ul {
@@ -101,16 +123,34 @@ h2 {
 	text-decoration: underline;
 }
 
+#sidebar h3 {
+	color: #fff;
+	font-size: 90%;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
 
 #footer {
 	clear:both;
 	padding:5px 10px;
-	background:#999999;
+	background:#aaaaaa;
+	color:#fff;
 }
 #footer p {
 	margin:0;
 	font-size: 75%;
+    text-align: center;
 }
+
+#footer a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#footer a:hover {
+	text-decoration: underline;
+}
+
 * html #footer {
 	height:1px;
 	font-size: 90%;
@@ -157,116 +197,28 @@ label.error {
 table.searchResults {
 	background-color: #fff;
 	text-align: left;
-	border: 1px solid #333333;
+	border: 1px solid #aaaaaa;
 	border-collapse: collapse;
-	width: 98%;
+	width: 100%;
 }
 
 table.searchResults th {
-	border: 1px solid #333333;
+	border: 1px solid #aaaaaa;
 	padding: 2px;
+	text-align: left;
+	color: #fff;
 }
 
 table.searchResults td {
 	padding: 2px;
 }
 
-table.searchResults tfoot {
-	border: 1px solid #333333;
-	font-size: 90%;
-}
-
-table.toMapList {
-	background-color: #fff;
-	text-align: left;
-	border: 1px solid #333333;
-	border-collapse: collapse;
-	width: 98%;
-}
-
-table.toMapList th {
-	border: 1px solid #333333;
-	padding: 2px;
-}
-
-table.toMapList td {
-	padding: 2px;
-}
-
-table.toMapList tfoot {
-	border: 1px solid #333333;
-	font-size: 90%;
-}
-
 tr.odd {
-	background-color: #e3e3e3;
+	background-color: #eeeeee;
 }
 
-#results_form th {
-	text-align: center;
-}
-
-/* Styles for Maps */
-#map {
-	width: 780px;
-	height: 585px;
-	margin-top: 15px;
-}
-
-#map_legend {
-	margin-top: 25px;
-}
-
-table.mapLegend {
-	background-color: #fff;
-	text-align: left;
-	border: 1px solid #333333;
-	border-collapse: collapse;
-	width: 98%;
-}
-
-table.mapLegend th {
-	border: 1px solid #333333;
-	padding: 2px;
-	text-align: center;
-}
-
-table.mapLegend td {
-	padding: 2px;
-}
-
-table.mapLegend tfoot {
-	border: 1px solid #333333;
-	font-size: 90%;
-}
-
-.map_header_footer {
-	background: #fff;
-}
-
-.featured_map_header_footer {
-	margin-bottom: -10px;
-}
-
-.map_header_footer h3 {
-	text-align: center;
-}
-
-.map_links li {
-	display: inline;
-	list-style-type: none;
-	padding-right: 10px;
-}
-
-.map_links {
-	/*text-align: center;*/
-	font-size: 90%;
-	margin-top: -10px;
-}
-
-#map_content_list {
-	border: 1px solid #333333;
-	padding: 2px;
+table.searchResults tfoot {
+	border: 1px solid #aaaaaa;
 	font-size: 90%;
 }
 
@@ -279,7 +231,3 @@ table.mapLegend tfoot {
 	color: purple!important;
 }
 
-/* Slider style */
-#time_slider_header {
-	height: 20px;
-}
