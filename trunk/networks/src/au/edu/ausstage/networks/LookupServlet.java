@@ -35,7 +35,7 @@ public class LookupServlet extends HttpServlet {
 	private DataManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES        = {"key-collaborators", "system-property"};
+	private final String[] TASK_TYPES        = {"key-collaborators", "system-property", "collaborator"};
 	private final String[] FORMAT_TYPES      = {"html", "xml", "json"};
 	private final String[] SORT_TYPES        = {"count", "id", "name"};
 	private final String[] PROPERTY_ID_TYPES = {"datastore-create-date", "export-options"};
@@ -124,6 +124,10 @@ public class LookupServlet extends HttpServlet {
 				results = lookup.getExportOptions();
 				formatType = "json";
 			}
+		} else if(taskType.equals("collaborator") == true) {
+			// lookup the details of this collaborator
+			formatType = "json"; //TODO Support other output formats if it is seen as necessary
+			results = lookup.getCollaborator(id, formatType);
 		}
 		
 		// output the appropriate mime type

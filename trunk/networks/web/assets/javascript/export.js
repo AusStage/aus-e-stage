@@ -16,7 +16,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-// complete the form
+// populate the select boxes in the form
 $(document).ready(function() {
 
 	// define helper variables
@@ -43,13 +43,60 @@ $(document).ready(function() {
 			$("#radius").addOption(list[i], list[i]);
 		}
 		
-		
-		// sort the options
-		//$("#myselect2").selectOptions("Value 1");, o
+		// sort the options & select appropriate defaults
 		$("#task").selectOptions("simple-network-undirected");
 		$("#format").selectOptions("graphml");
 		$("#radius").sortOptions();
 		$("#radius").selectOptions("1");
 	
 	});
+	
+	// disable the export button
+	$("#export_btn").attr('disabled', 'disabled');
+	
+	// associate the tipsy library with the form elements
+	$('#export_data [title]').tipsy({trigger: 'focus', gravity: 'w'});
+
+	// attach the validation plugin to the id search form
+	$("#export_data").validate({
+		rules: { // validation rules
+			id: {
+				required: true,
+				digits: true
+			}
+		}
+	});
+	
+	// define the lookup function
+	$("#lookup_btn").click(function () {
+	
+		// define helper variables
+		var url = "/networks/lookup?task=collaborator&id=";
+
+		// get the id from the text box
+		var id = $("#id").val();
+	
+		if(id.length > 0) {
+	
+			// complete the url
+			url += id;
+		
+			// lookup the id
+			$.get(url, function(data, textStatus, XMLHttpRequest) {
+			
+				// check on what was returned
+				if(data.name == "No Collaborator Found") {
+					$("#name").val("Contributor with that id was not found");
+				} else {
+			
+					// use the name to fill in the text box
+					$("#name").val(data.name);
+			
+					// enable the button
+					$("#export_btn").removeAttr('disabled');
+				}
+			});
+		}	
+	});	
+
 });

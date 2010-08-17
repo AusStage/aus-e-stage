@@ -3,6 +3,7 @@ The libraries that need to be in this directory (if not already in the class pat
  - Joseki (3.4.1 or above) http://www.joseki.org/
  - JSON Simple (1.1) or above http://code.google.com/p/json-simple/
  - Apache Commons Lang (2.5) or above http://commons.apache.org/lang/
+ - Apache Commons Codec (1.4 or above) http://commons.apache.org/codec/
  
 NOTE: Only add the Joseki specific libraries to the list of jar files 
        sourced from the TDB distribution.

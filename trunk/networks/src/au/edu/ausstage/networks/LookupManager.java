@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 // import AusStage related packages
 import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.DateUtils;
+import au.edu.ausstage.utils.InputUtils;
 
 /**
  * A class to manage the lookup of information
@@ -56,6 +57,11 @@ public class LookupManager {
 	 * @return           the results of the lookup
 	 */
 	public String getKeyCollaborators(String id, String formatType, String sortType) {
+	
+		// check on the parameters
+		if(InputUtils.isValidInt(id) == false || InputUtils.isValid(formatType) == false || InputUtils.isValid(sortType) == false) {
+			return null;
+		}
 	
 		// define a Tree Set to store the results
 		java.util.LinkedList<Collaborator> collaborators = new java.util.LinkedList<Collaborator>();
@@ -440,5 +446,109 @@ public class LookupManager {
 		return object.toString();	
 	
 	} //end getExportOptions method
+	
+	/**
+	 * A method to lookup a collaborator
+	 *
+	 * @param id         the unique identifier for the contributor
+	 * @param formatType the data format to use to encode the return value
+	 *
+	 * @param            information about the collaborator
+	 */
+	@SuppressWarnings("unchecked")
+	public String getCollaborator(String id, String formatType) {
+	
+		// check on the parameters
+		if(InputUtils.isValidInt(id) == false || InputUtils.isValid(formatType) == false) {
+			throw new IllegalArgumentException("Both parameters are required");
+		}
+		
+		// define other helper variables
+		QuerySolution row          = null;
+		Collaborator  collaborator = null;
+	
+		// define the base sparql query
+		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + "> "
+						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
+ 						   + "SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaboratorCount "
+						   + "WHERE { "
+						   + "       @                a                     foaf:Person;               "
+						   + "                        foaf:givenName        ?givenName;                "
+						   + "                        foaf:familyName       ?familyName;               "
+						   + "                        foaf:gender           ?gender;                   "
+						   + "                        ausestage:nationality ?nationality;              "
+						   + "                        ausestage:collaboratorCount ?collaboratorCount;  "
+						   + "                        ausestage:function    ?function.                 "
+						   + "} ";
+						   
+		// build a URI from the id
+		id = AusStageURI.getContributorURI(id);
+		
+		// add the contributor URI to the query
+		sparqlQuery = sparqlQuery.replaceAll("@", "<" + id + ">");
+		
+		// execute the query
+		ResultSet results = database.executeSparqlQuery(sparqlQuery);
+		
+		// build the dataset
+		// use a numeric sort order
+		while (results.hasNext()) {
+			// loop though the resulset
+			// get a new row of data
+			row = results.nextSolution();
+			
+			if(collaborator == null) {			
+				// instantiate a collaborator object
+				collaborator = new Collaborator(AusStageURI.getId(id));
+				
+				// get the name
+				collaborator.setGivenName(row.get("givenName").toString());
+				collaborator.setFamilyName(row.get("familyName").toString(), true);
+				
+				// get the gender nationality, and collaborator count
+				collaborator.setGender(row.get("gender").toString());
+				collaborator.setNationality(row.get("nationality").toString());
+				
+				// get the collaboration count
+				collaborator.setCollaborations(Integer.toString(row.get("collaboratorCount").asLiteral().getInt()));
+				
+				// add a function
+				collaborator.setFunction(row.get("function").toString());		
+
+			} else {
+			
+				// add the function
+				collaborator.setFunction(row.get("function").toString());
+				
+			}
+		}
+		
+		// play nice and tidy up
+		database.tidyUp();
+		
+		// check on what to do
+		if(collaborator == null) {
+			// no collaborator found
+			JSONObject object = new JSONObject();
+			object.put("name", "No Collaborator Found");
+			return object.toString();
+		}	
+		
+		// define a variable to store the data
+		String dataString = null;
+		
+		if(formatType.equals("html") == true) {
+			dataString = "html not available";
+		} else if(formatType.equals("xml") == true) {
+			dataString = "xml not available";
+		} else if(formatType.equals("json") == true) {
+			dataString = collaborator.toJson();
+		}
+		
+		// return the data
+		return dataString;
+	
+	
+	} // end getCollaborator method
 
 } // end class definition
