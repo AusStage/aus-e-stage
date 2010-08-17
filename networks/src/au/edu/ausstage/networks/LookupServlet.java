@@ -38,7 +38,7 @@ public class LookupServlet extends HttpServlet {
 	private final String[] TASK_TYPES        = {"key-collaborators", "system-property"};
 	private final String[] FORMAT_TYPES      = {"html", "xml", "json"};
 	private final String[] SORT_TYPES        = {"count", "id", "name"};
-	private final String[] PROPERTY_ID_TYPES = {"datastore-create-date"};
+	private final String[] PROPERTY_ID_TYPES = {"datastore-create-date", "export-options"};
 
 	/*
 	 * initialise this instance
@@ -120,17 +120,20 @@ public class LookupServlet extends HttpServlet {
 			if(id.equals("datastore-create-date") == true) {
 				// lookup the date the datastore was created
 				results = lookup.getCreateDateTime("datastore-create-date", formatType);
+			} else if (id.equals("export-options") == true) {
+				results = lookup.getExportOptions();
+				formatType = "json";
 			}
 		}
 		
 		// output the appropriate mime type
-		if(formatType == "html") {
+		if(formatType.equals("html") == true) {
 			// output html mime type
 			response.setContentType("text/html; charset=UTF-8");
-		} else if(formatType == "xml") {
+		} else if(formatType.equals("xml") == true) {
 			// output xml mime type
 			response.setContentType("text/xml; charset=UTF-8");
-		} else if(formatType == "json") {
+		} else if(formatType.equals("json") == true) {
 			// output json mime type
 			response.setContentType("application/json; charset=UTF-8");
 		}

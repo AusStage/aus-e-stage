@@ -34,12 +34,14 @@ public class ExportServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	private DataManager database;
 	
-	// declare private constants
+	// declare constants
 	private final String[] TASK_TYPES   = {"simple-network-directed", "simple-network-undirected", 
 	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only"};
-	private final String[] FORMAT_TYPES = {"graphml", "debug"};
-	private final int      MIN_DEGREES  = 1;
-	private final int      MAX_DEGREES  = 3;
+	                                       
+	public final static String[] FORMAT_TYPES = {"graphml", "debug"};
+	public final static int      MIN_DEGREES  = 1;
+	public final static int      MAX_DEGREES  = 3;
+	public final static String[] EXPORT_TYPES_UI = {"simple-network-directed", "simple-network-undirected"}; // valid export options via the UI
 
 	/*
 	 * initialise this instance
