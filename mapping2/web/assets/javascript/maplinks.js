@@ -35,6 +35,11 @@ $.extend({
 	}
 });
 
+//declare global variables
+var mapData = null;
+var type = null;
+var id = null;
+
 /*
  * Use the $(document).ready() function to ensure that our code only executes once the page has completed
  * loading and is ready to manipulate
@@ -47,8 +52,8 @@ $(document).ready(function() {
 	 * get the parameters to this page using the function that is outlined at the beginning 
 	 * of this file
 	 */
-	var type = $.getUrlVar("type");
-	var id   = $.getUrlVar("id");
+	type = $.getUrlVar("type");
+	id   = $.getUrlVar("id");
 	
 	/*
 	 * check on the value of the parameters. If they're "undefined" the URL didn't include what we require to continue
@@ -58,8 +63,12 @@ $(document).ready(function() {
 		showMissingParameterMessage();
 	} else { 
 		// use the getMapData function in the map.functions.js file to load the map data
-		getMapData(type, id, true);
+		mapData = getMapData(type, id, 'a', null, null, true);
 	}
+	
+	// override the default form action
+	//$("#reload_map").click(reloadMap());
+	
 });
 
 /* 
@@ -83,4 +92,23 @@ function showMissingParameterMessage() {
 	
 	// add the error message to the page
 	$("#map").append('<p style="text-align: center"><strong>Error: </strong>The URL is missing required parameters, please ensure the URL is correct and try again.<br/>If the problem persists please contact the site administrator.</p>'); 
+}
+
+//function to reload a map
+function reloadMap() {
+	
+	// check to ensure map data is present
+	if(mapData == null) {
+		$("#map").empty();
+		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
+		return false;
+	}
+
+	// get the start date
+/*	var startDate  = $("#event_start").val();
+	var finishDate = $("#event_finish").val();
+	
+	getMapData(mapData, true, $("#state").val(), startDate, finishDate);*/
+	
+	mapData = getMapData(type, id, $("#state").val(), null, null, true);
 }

@@ -21,7 +21,7 @@
  * all caps should be considered constants
  */
 var MARKER_BASE_URL = "http://localhost:8080/mapping2/markers?";
-
+var infowindow = new google.maps.InfoWindow({}); 
 /*
  * A function to retrieve XML using AJAX and prepare the data
  * for use with v3 of the Google Maps API
@@ -32,10 +32,11 @@ var MARKER_BASE_URL = "http://localhost:8080/mapping2/markers?";
  * @param id   the id number(s) of the organisation / contributor
  * @param updateHeader a flag to indicate that the header of the page shold be updated
  */
-function getMapData(type, id, updateHeader) {
+function getMapData(type, id, focus, start, finish, updateHeader) {
 
 	// declare helper variables
 	var url;
+	var mapData = null;
 	
 	// determine what type of API call to make
 	if(type == "organisation") {
@@ -80,17 +81,18 @@ function getMapData(type, id, updateHeader) {
 			$("#map_name").empty(); // empty the contents of this tag
 			$("#map_name").append(header); // append the contents header variable into the tag
 			
-			// create a new map and centre it on australia
-			var latlng = new google.maps.LatLng(-25.947028, 133.209639);
+			// create a new map and centre it on the focus
 		    var myOptions = {
-		      zoom: 4,
-		      center: latlng,
+		      zoom: getZoom(focus),
+		      center: getLatLng(focus),
 		      mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 
 			var map = new google.maps.Map(document.getElementById("map"), myOptions);
-			$("#map").empty();
-			$("#map").append(map);
+					
+			google.maps.event.addListener(map, 'click', function() {
+			    infowindow.close();
+			    });
 			
 			// extract the markers from the xml
 			var markers = data.documentElement.getElementsByTagName("marker");
@@ -136,28 +138,15 @@ function getMapData(type, id, updateHeader) {
 				var venueName   = markers[i].getAttribute("name");
 				var venueSuburb = markers[i].getAttribute("suburb");
 				
-				venueName = venueName + ", " + venueSuburb
+				venueName = venueName + ", " + venueSuburb;
 				
 				// get the colour of the icon
 				var eventCount = parseInt(markers[i].getAttribute("events"));
-				var colour;
-			
-				if(eventCount == 1) {
-					colour = "#CCBAD7";
-				}else if(eventCount < 6) {
-					colour = "#9A7BAB";
-				}else if(eventCount > 5 && eventCount < 16) {
-					colour = "#7F649B";
-				}else if(eventCount > 15 && eventCount < 31) {
-					colour = "#69528E";
-				} else {
-					colour = "#4D3779";
-				}
 				
-				var okToAdd = true;
+				var okToAdd = false;
 				
-/*				// filter markers if required
-			
+				// filter markers if required
+/*			
 					// filter markers
 					var okToAdd = false;
 				
@@ -201,6 +190,7 @@ function getMapData(type, id, updateHeader) {
 						}
 					
 					} else {
+*/					
 						// filter markers by state
 						if(focus != null && focus != "nolimit") {
 							// use the state to filter
@@ -230,36 +220,129 @@ function getMapData(type, id, updateHeader) {
 						} else {
 							okToAdd = true;
 						}
-					}
-*/				
+//					}
+				
 					// add marker
 					if(okToAdd == true) {
-						var marker = new google.maps.Marker({  
-							   position: latlng,  
-							   map: map,
-							   title: venueName
-							 });
+						
+						createMarker(map, latlng, info, venueName);
 					}
 
 				}//end of for (group of markers)
+			$("#map").empty();
+			$("#map").append(map);
 			
+			mapData = data;
 		}// end of if(updateHeader == true)
+		
 	});	//end of $.get()
+	return mapData;
+}
+
+//get the zoom number according to the focus
+function getZoom(focus){
+	switch(focus){
+	case '1':
+		//map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+		return 6; //SA		
+	case '2':
+		return 5; //WA		
+	case '3':
+		 return 6; //NSW
+	case '4':
+		return 5; //QLD
+	case '5':
+		return 7; //TAS
+	case '6':
+		return 6; //VIC
+	case '7':
+		return 9; //ACT
+	case '8':
+		return 6; //NT
+	case '1a':
+		return 14; // Adelaide
+	case '2a':
+		return 14; // Perth
+	case '3a':
+		return 14; // Sydney
+	case '4a':
+		return 14; // Brisbane
+	case '5a':
+		return 14; // Hobart
+	case '6a':
+		return 14; // Melbourne
+	case '7a':
+		return 14; // Canberra
+	case '8a':
+		return 14; // Darwin
+	case '9':
+		return 2; //outside Aus
+	case 'a':
+		return 4; // Aus only		
+	default:
+		return 4; // default, AUS
+	}
+}
+
+//create Latlng to set the ma center according to the focus	
+function getLatLng(focus) {
+	
+	switch(focus){
+	case '1':
+		//map.setCenter(new GLatLng(-30.058333, 135.763333), 6); //SA
+		return new google.maps.LatLng(-32, 135.763333); //SA
+	case '2':
+		return new google.maps.LatLng(-25.328055, 122.298333); //WA	
+	case '3':
+		return new google.maps.LatLng(-32.163333, 147.016666); //NSW
+	case '4':
+		return new google.maps.LatLng(-22.486944, 144.431666); //QLD		
+	case '5':
+		return new google.maps.LatLng(-42.021388, 146.593333); //TAS
+	case '6':
+		return new google.maps.LatLng(-36.854166, 144.281111); //VIC
+	case '7':
+		return new google.maps.LatLng(-35.49, 149.001388); //ACT
+	case '8':
+		return new google.maps.LatLng(-19.383333, 133.357777); //NT
+	case '1a':
+		return new google.maps.LatLng(-34.93, 138.60); // Adelaide		
+	case '2a':
+		return new google.maps.LatLng(-31.95, 115.85); // Perth
+	case '3a':
+		return new google.maps.LatLng(-33.87, 151.20); // Sydney
+	case '4a':
+		return new google.maps.LatLng(-27.47, 153.02); // Brisbane
+	case '5a':
+		return new google.maps.LatLng(-42.88, 147.32); // Hobart		
+	case '6a':
+		return new google.maps.LatLng(-37.82, 144.97); // Melbourne
+	case '7a':
+		return new google.maps.LatLng(-35.30, 149.13); // Canberra		
+	case '8a':
+		return new google.maps.LatLng(-12.45, 130.83); // Darwin		
+	case '9':
+		return new google.maps.LatLng(-25.947028, 133.209639); //outside Aus	
+	case 'a':
+		return new google.maps.LatLng(-25.947028, 133.209639); // Aus only		
+	default:
+		return new google.maps.LatLng(-25.947028, 133.209639); // default, AUS		
+	}
 }
 
 //build a single marker
-function createMarker(latlng, info, colour, venueName, map) {
+function createMarker(map, latlng, info, venueName) {
 	
-	// make a new icon
-	var newIcon = MapIconMaker.createMarkerIcon({width: 32, height: 32, primaryColor: colour});
+	var marker = new google.maps.Marker({  
+		   position: latlng,  
+		   map: map,
+		   title: venueName
+		 });
 	
-	// make a new marker
-	var marker = new GMarker(latlng, {icon: newIcon, title: venueName});
-	
-	// add an event listener to listen for a click and show the InfoWindow
-	GEvent.addListener(marker, 'click', function() {
-		marker.openInfoWindowHtml(info, {maxWidth:520, maxHeight:400, autoScroll:true});
-	});
+	google.maps.event.addListener(marker, 'click', function() {  
+		   infowindow.setContent(info);
+		   infowindow.open(map, marker);  
+		 });  
 	
 	return marker;
 }
