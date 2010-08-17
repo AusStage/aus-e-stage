@@ -400,5 +400,45 @@ public class LookupManager {
 		return dataString;
 	
 	} // end the getUpdateDateTime method
+	
+	/**
+	 * A method to lookup the export options
+	 *
+	 * @return a JSON encoded object listing the options
+	 */
+	@SuppressWarnings("unchecked")
+	public String getExportOptions() {
+	
+		// define helper variables
+		JSONObject object = new JSONObject();
+		JSONArray  list   = new JSONArray();
+		
+		for(int i = 0; i < ExportServlet.EXPORT_TYPES_UI.length; i++) {
+			list.add(ExportServlet.EXPORT_TYPES_UI[i]);
+		}
+		
+		object.put("tasks", list);
+		
+		list = new JSONArray();
+		
+		for(int i = 0; i < ExportServlet.FORMAT_TYPES.length; i++) {
+			list.add(ExportServlet.FORMAT_TYPES[i]);
+		}	
+		
+		object.put("formats", list);
+		
+		list = new JSONArray();
+
+		String[] radius = new String[ExportServlet.MAX_DEGREES];
+		
+		for (int i = 0; i < ExportServlet.MAX_DEGREES; i++) {
+			list.add(Integer.toString(i + 1));
+		}
+		
+		object.put("radius", list);
+		
+		return object.toString();	
+	
+	} //end getExportOptions method
 
 } // end class definition
