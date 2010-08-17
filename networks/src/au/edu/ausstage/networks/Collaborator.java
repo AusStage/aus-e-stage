@@ -20,7 +20,10 @@ package au.edu.ausstage.networks;
 
 // import additional classes
 import java.util.TreeSet;
+import org.json.simple.*;
+
 import au.edu.ausstage.utils.InputUtils;
+import au.edu.ausstage.vocabularies.AusStageURI;
 
 /**
  * A class to represent a Collaborator
@@ -34,6 +37,8 @@ public class Collaborator implements Comparable<Collaborator>{
 	private String familyName = null;
 	private String name = null;
 	private String function = null;
+	private String gender = null;
+	private String nationality = null;
 	private String firstDate = null;
 	private String lastDate = null;
 	private String collaborations = null;
@@ -47,6 +52,7 @@ public class Collaborator implements Comparable<Collaborator>{
 	public Collaborator(String id) {
 		if(InputUtils.isValidInt(id)) {
 			this.id = id;
+			url = AusStageURI.getContributorURL(id);
 		} else {
 			throw new IllegalArgumentException("The id value must be a valid integer");
 		}
@@ -279,6 +285,50 @@ public class Collaborator implements Comparable<Collaborator>{
 	}
 	
 	/**
+	 * A method to set a new nationality
+	 *
+	 * @param value the new value
+	 */	
+	public void setNationality(String value) {
+		if(InputUtils.isValid(value)) {
+			nationality = value;
+		} else {
+			throw new IllegalArgumentException("Value cannot be null or an empty string");
+		}
+	}
+	
+	/**
+	 * A method to get the lastDate value
+	 *
+	 * @return the requested value
+	 */
+	public String getNationality() {
+		return nationality;
+	}
+	
+	/**
+	 * A method to set a new nationality
+	 *
+	 * @param value the new value
+	 */	
+	public void setGender(String value) {
+		if(InputUtils.isValid(value)) {
+			gender = value;
+		} else {
+			throw new IllegalArgumentException("Value cannot be null or an empty string");
+		}
+	}
+	
+	/**
+	 * A method to get the lastDate value
+	 *
+	 * @return the requested value
+	 */
+	public String getGender() {
+		return gender;
+	}
+	
+	/**
 	 * A method to set the number of collaborations
 	 *
 	 * @param value the new value
@@ -342,6 +392,38 @@ public class Collaborator implements Comparable<Collaborator>{
 		} else {
 			return new String[0];
 		}
+	}
+	
+	/**
+	 * A method to build a JSON representation of this collaborators data
+	 *
+	 * @return the JSON string for this collaborator
+	 */
+	@SuppressWarnings("unchecked")
+	public String toJson() {
+	
+		// declare helper variables
+		JSONArray  list = new JSONArray();
+		JSONObject object = new JSONObject();
+			
+		
+		// build the object
+		object.put("id", Integer.parseInt(id));
+		object.put("url", url);
+		object.put("givenName", givenName);
+		object.put("familyName", familyName);
+		object.put("name", getName());
+		object.put("collaborations", Integer.parseInt(getCollaborations()));
+		
+		String[] functions = getFunctionAsArray();
+		
+		for(int i = 0; i < functions.length; i++) {
+			list.add(functions[i].trim());
+		}
+		
+		object.put("functions", list);
+		
+		return object.toString();
 	}
 	
 	/*

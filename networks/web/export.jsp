@@ -28,6 +28,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
 	<script type="text/javascript" src="assets/javascript/export.js"></script>
 </head>
 <body>
@@ -43,7 +44,10 @@
 			Use the form below to export graph data in a variety of different formats for use in network visualisation software.
 		</p>
 		<p>
-			More information on how to use this page, as well as guidance on loading the data into a small number of sample programs is <a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksExportGraphs" target="ausstage" title="Information and Guidance on how to use this page">available in our Wiki</a>.
+			More information on how to use this page, including guidance on loading the data into a small number of sample programs, is <a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksExportGraphs" target="ausstage" title="Information and Guidance on how to use this page">available in our Wiki</a>.
+		</p>
+		<p>
+			If you do not know the contributor id, leave this field blank and click the lookup button to use the contributor search form.
 		</p>
 		<form action="/networks/export" method="get" id="export_data" name="export_data">
 			<table class="formTable">
@@ -53,7 +57,7 @@
 						<label id="id_label" for="id">Contributor ID: </label>
 					</th>
 					<td>
-						<input type="text" size="40" id="id" name="id"/>
+						<input type="text" size="40" id="id" name="id" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/>
 					</td>
 				</tr>
 				<tr>
@@ -61,7 +65,7 @@
 						<label id="name_label" for="name">Contributor Name: </label>
 					</th>
 					<td>
-						<input type="text" readonly="readonly" size="40" id="name" name="name"/>
+						<input type="text" readonly="readonly" size="40" id="name" name="name"/> <input type="button" name="lookup" id="lookup_btn" value="Lookup"/>
 					</td>
 				</tr>
 				<tr>
@@ -69,7 +73,7 @@
 						<label id="task_label" for="task">Graph Type: </label>
 					</th>
 					<td>
-						<select size="1" id="task" name="task">
+						<select size="1" id="task" name="task" title="Select the desired type of graph. Note: a simple undirected network is the most common">
 						</select>
 					</td>
 				</tr>
@@ -78,7 +82,7 @@
 						<label id="format_label" for="format">Data Format: </label>
 					</th>
 					<td>
-						<select size="1" id="format" name="format">
+						<select size="1" id="format" name="format" title="Select the desired data format. Note: graphml is the most common">
 						</select>
 					</td>
 				</tr>
@@ -87,14 +91,14 @@
 						<label id="radius_label" for="radius">Radius: </label>
 					</th>
 					<td>
-						<select size="1" id="radius" name="radius">
+						<select size="1" id="radius" name="radius" title="Select the desired number of edges between the central node and the peripheral nodes of the network">
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						<input type="submit" disabled="disabled" name="submit" id="export_btn" value="Export"/><br/>
-						<span style="font-size: 90%"><strong>Note:</strong> Hover your mouse over the label next to the input box for more information</span>
+						<input type="submit" name="submit" id="export_btn" value="Export"/><br/>
+						Use the lookup button to confirm the contributor id is valid before clicking on the export button
 					</td>
 				</tr>
 				</tbody>

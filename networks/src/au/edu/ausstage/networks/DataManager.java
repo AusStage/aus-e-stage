@@ -165,6 +165,16 @@ public class DataManager {
 		
 		if(execution != null) {
 			execution.close();
+			execution = null;
+		}
+		
+		if(query != null) {
+			query = null;
+		}
+		
+		if(dataset != null) {
+			dataset.close();
+			dataset = null;
 		}
 	
 	} // end tidyUp method
