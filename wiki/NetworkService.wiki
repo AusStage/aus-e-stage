@@ -8,6 +8,10 @@ A network-based interface will humanise the representation of artists in !AusSta
 
 Below is an evolving list of documents here our wiki about the service
 
+== Navigating Networks Export Graphs ==
+
+The Navigating Networks service provides an easy to use form to export data from the system that can be used with a variety of network visualisation applications. Assistance in using this page is available on the [NavigatingNetworksExportGraphs Export Graphs] page.
+
 
 == Navigating Networks Dataset == 
 
