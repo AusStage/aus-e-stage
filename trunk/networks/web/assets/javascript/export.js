@@ -71,7 +71,7 @@ $(document).ready(function() {
 	$("#lookup_btn").click(function () {
 	
 		// define helper variables
-		var url = "/networks/lookup?task=collaborator&id=";
+		var url = "/networks/lookup?task=collaborator&format=json&id=";
 
 		// get the id from the text box
 		var id = $("#id").val();

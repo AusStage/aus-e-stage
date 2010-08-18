@@ -52,7 +52,7 @@
 				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksDataset" title="">Navigating Networks Dataset</a> - A subset of the full AusStage dataset especially constructed for use with the service
 			</li>
 			<li>
-				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksSparqlEndpoint" title="">Navigating Networks SPARQL endpioint</a> - Information about the SPARQL endpoint that can be used to access the dataset
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksSparqlEndpoint" title="">Navigating Networks SPARQL endpoint</a> - Information about the SPARQL endpoint that can be used to access the dataset
 			</li>
 			<li>
 				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksSparql" title="">Sample SPARQL Queries</a> - For use with the SPARQL endpoint
