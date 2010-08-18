@@ -66,8 +66,8 @@ $(document).ready(function() {
 		mapData = getMapData(type, id, 'a', null, null, true);
 	}
 	
-	// override the default form action
-	//$("#reload_map").click(reloadMap());
+	//override the default form action
+	$("#reload_map").click(reloadMap());
 	
 });
 
@@ -98,17 +98,17 @@ function showMissingParameterMessage() {
 function reloadMap() {
 	
 	// check to ensure map data is present
-	if(mapData == null) {
+/*	if(mapData == null) {
 		$("#map").empty();
 		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
 		return false;
 	}
-
+*/
 	// get the start date
 /*	var startDate  = $("#event_start").val();
 	var finishDate = $("#event_finish").val();
 	
 	getMapData(mapData, true, $("#state").val(), startDate, finishDate);*/
-	
-	mapData = getMapData(type, id, $("#state").val(), null, null, true);
+	var focus = $("#state").val();
+	mapData = getMapData(type, id, focus, null, null, true);
 }
