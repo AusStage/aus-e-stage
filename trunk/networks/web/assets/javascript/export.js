@@ -87,7 +87,7 @@ $(document).ready(function() {
 		},
 		submitHandler: function(form) {
 			jQuery(form).ajaxSubmit({
-				beforeSubmit: function() {$("#search_waiting").show(); $("#search_results").hide();},
+				beforeSubmit: function() {$("#search_waiting").show(); $("#search_results").hide(); $("#error_message").hide();},
 				success:      showSearchResults,
 				error:        showErrorMessage
 			});
@@ -153,6 +153,7 @@ $(document).ready(function() {
 			// tidy up the form on opening
 			$("#search_results_body").empty();
 			$("#search_results").hide();
+			$("#error_message").hide();
 			showLoader("hide");
 		},
 		close: function() {
@@ -231,18 +232,30 @@ function showSearchResults(responseText, statusText)  {
 		html += '</tr>';
 	}
 	
-	// add the search results to the table
-	$("#search_results_body").append(html);
+	// check to see on what was built
+	if(html != "") {
 	
-	// hide the loader
-	showLoader("hide");
+		// add the search results to the table
+		$("#search_results_body").append(html);
 	
-	// style the new buttons
-	$("button, input:submit").button();
+		// hide the loader
+		showLoader("hide");
 	
-	// show the search results
-	$("#search_results").show();
+		// style the new buttons
+		$("button, input:submit").button();
 	
+		// show the search results
+		$("#search_results").show();
+		
+	} else {
+		
+		// hide the loader
+		showLoader("hide");
+	
+		$("#error_message").empty();
+		$("#error_message").append('<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Warning:</strong> No contributors matched your search criteria. Please try again</p></div>');	
+		$("#error_message").show();
+	}
 }
 
 // function to show a generic error message
@@ -256,4 +269,7 @@ function showErrorMessage() {
 	showLoader("hide");
 	
 	// show an error message
+	$("#error_message").empty();
+	$("#error_message").append('<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong>Error:</strong> An error occured while processing this request. Please try again. <br/>If the problem persists please contact the site administrator.</p>');
+	$("#error_message").show();
 }
