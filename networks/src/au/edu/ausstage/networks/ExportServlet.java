@@ -82,18 +82,18 @@ public class ExportServlet extends HttpServlet {
 		if(taskType.equals("simple-network-directed") == true || taskType.equals("simple-network-undirected") == true) {
 			// check the other parameters as they are required
 		
-			if(request.getParameter("degrees") != null) {
+			if(request.getParameter("radius") != null) {
 				try {
 					// get the parameter and convert to an integer
-					degrees = Integer.parseInt(request.getParameter("degrees"));	
+					degrees = Integer.parseInt(request.getParameter("radius"));	
 				} catch (NumberFormatException ex) {
 					// degrees must be a number
-					throw new ServletException("Degrees parameter must be an integer");
+					throw new ServletException("Radius parameter must be an integer");
 				}
 										
 				// double check the parameter
 				if(InputUtils.isValidInt(degrees, MIN_DEGREES, MAX_DEGREES) == false) {
-					throw new ServletException("Degree parameter must be less than: " + MAX_DEGREES);
+					throw new ServletException("Radius parameter must be less than: " + MAX_DEGREES);
 				}
 			} else {
 				degrees = 1;
