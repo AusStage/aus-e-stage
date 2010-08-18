@@ -20,7 +20,7 @@ html, body {
 	padding:0;
 	color:#333333;
 	background: #fff;
-	font-family:Helvetica,Arial;
+	font-family:Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -171,19 +171,7 @@ table.formTable th {
 table.formTable th label {
 	text-align: left;
 
-}
-
-/* extends jquery ui button style */
-input.button {
-	/*float: right; */
-	margin: .5em .4em .5em 0; 
-	cursor: pointer; 
-	padding: .2em .6em .3em .6em; 
-	line-height: 1.4em; 
-	width:auto; 
-	overflow:visible; 
-}
-	
+}	
 
 /* Styles for Validation Errors */
 label.error { 
@@ -206,7 +194,7 @@ table.searchResults th {
 	border: 1px solid #aaaaaa;
 	padding: 2px;
 	text-align: left;
-	color: #fff;
+	color: #000;
 }
 
 table.searchResults td {

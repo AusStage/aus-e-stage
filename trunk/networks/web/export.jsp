@@ -24,7 +24,9 @@
 	<title>AusStage Navigating Networks Service (Beta)</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
@@ -65,7 +67,8 @@
 						<label id="name_label" for="name">Contributor Name: </label>
 					</th>
 					<td>
-						<input type="text" readonly="readonly" size="40" id="name" name="name"/> <input type="button" name="lookup" id="lookup_btn" value="Lookup"/>
+						<input type="text" readonly="readonly" size="40" id="name" name="name"/> <button name="lookup" id="lookup_btn">Lookup</button>
+						<!--<input type="button" name="lookup" id="lookup_btn" value="Lookup"/>-->
 					</td>
 				</tr>
 				<tr>
@@ -104,6 +107,37 @@
 				</tbody>
 			</table>
 		</form>
+	</div>
+	<!-- Search form div -->
+	<div id="search_div" title="Contributor Search">
+		<p>Enter a contributor name, or part of their name, and click the search button</p>
+		<form action="/networks/search" method="get" id="search_form" name="search_form">
+			<input type="hidden" name="type" id="type" value="collaborator"/>
+			<input type="hidden" name="limit" id="limit" value="5"/>
+			<table class="formTable">
+				<tbody>
+				<tr>
+					<th scope="row">
+						<label id="name_label" for="name">Contributor Name: </label>
+					</th>
+					<td>
+						<input type="text" size="40" id="id" name="id" title="Enter the contributor name, or part of their name, and click the search button"/>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+		<table id="search_results" class="searchResults">
+			<thead>
+				<tr>
+					<th>Contributor Name</th>
+					<th>Functions</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body">
+			</tbody>
+		</table>
 	</div>
 	<!-- include the footer -->
 	<jsp:include page="footer.jsp"/>
