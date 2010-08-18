@@ -28,7 +28,7 @@ Get Request
 || task    || [NavigatingNetworksDatasetAPIexport#Task:_simple-network-directed simple-network-directed], [NavigatingNetworksDatasetAPIexport#Task:_simple-network-undirected simple-network-undirected]|| No || ||
 || id      || unique identifier of a contributor || No || ||
 || format  || [NavigatingNetworksDatasetAPIexport#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexport#Format:_debug debug] || Yes || graphml ||
-|| [NavigatingNetworksDatasetAPIexport#Degrees degrees] || Integer between 1 and 3 || Yes || 1 ||
+|| [NavigatingNetworksDatasetAPIexport#Radius radius] || Integer between 1 and 3 || Yes || 1 ||
 
 == Parameter Definitions ==
 
@@ -54,9 +54,9 @@ For example:
 
 `111 - 101, 102, 1324, 56789 - 4`
 
-=== Degrees ===
+=== Radius ===
 
-The degrees of separation to follow from the central node as defined by the supplied id parameter.
+The desired number of edges between the central node and the peripheral nodes of the network
 
 == Sample Output ==
 
