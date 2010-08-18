@@ -237,6 +237,9 @@ function showSearchResults(responseText, statusText)  {
 	// hide the loader
 	showLoader("hide");
 	
+	// style the new buttons
+	$("button, input:submit").button();
+	
 	// show the search results
 	$("#search_results").show();
 	
