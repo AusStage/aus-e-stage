@@ -21,6 +21,7 @@ package au.edu.ausstage.networks;
 // import additional classes
 import java.util.TreeSet;
 import org.json.simple.*;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.vocabularies.AusStageURI;
@@ -425,6 +426,62 @@ public class Collaborator implements Comparable<Collaborator>{
 		
 		return object.toString();
 	}
+	
+	/**
+	 * A method to build an XML representation of this collaborator
+	 *
+	 * @return the XML string for this collaborator
+	 */
+	public String toXml() {
+	
+		StringBuilder xmlMarkup    = new StringBuilder("<?xml version=\"1.0\"?><collaborators>");
+		
+		xmlMarkup.append("<collaborator id=\"" + getId() + "\">");
+		
+		xmlMarkup.append("<url>" + StringEscapeUtils.escapeXml(getUrl()) + "</url>");
+		xmlMarkup.append("<givenName>" + getGivenName() + "</givenName>");
+		xmlMarkup.append("<familyName>" + getFamilyName() + "</familyName>");
+		xmlMarkup.append("<name>" + getName() + "</name>");
+		xmlMarkup.append("<functions>");
+		
+		String[] functions = getFunctionAsArray();
+		
+		for(int i = 0; i < functions.length; i++) {
+			xmlMarkup.append("<function>" + functions[i].trim() + "</function>");
+		}
+		
+		
+		xmlMarkup.append("</functions>");
+		xmlMarkup.append("<collaborations>" + getCollaborations() + "</collaborations>");
+		xmlMarkup.append("</collaborator>");
+		
+		return xmlMarkup.toString();
+	}
+	
+	/**
+	 * A method to build an HTML representation of this collaborator
+	 *
+	 * @return the HTML string from this collaborator
+	 */
+	public String toHtml() {
+	
+		StringBuilder htmlMarkup    = new StringBuilder("<p>");
+		
+		htmlMarkup.append("<a href=\"" + StringEscapeUtils.escapeXml(getUrl()) + "\" title=\"View the record for " + getName() + " in AusStage\" target=\"ausstage\">" + getName() + "</a><br/>Functions: </p>");
+		
+		htmlMarkup.append("<ul>");
+		
+		String[] functions = getFunctionAsArray();
+		
+		for(int i = 0; i < functions.length; i++) {
+			htmlMarkup.append("<li>" + functions[i].trim() + "</li>");
+		}
+		
+		htmlMarkup.append("</ul><p>Collaborations: " + getCollaborations() + "</p>");
+		
+		return htmlMarkup.toString();
+	}
+	
 	
 	/*
 	 * methods required for ordering in collections

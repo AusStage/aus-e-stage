@@ -126,7 +126,6 @@ public class LookupServlet extends HttpServlet {
 			}
 		} else if(taskType.equals("collaborator") == true) {
 			// lookup the details of this collaborator
-			formatType = "json"; //TODO Support other output formats if it is seen as necessary
 			results = lookup.getCollaborator(id, formatType);
 		}
 		
