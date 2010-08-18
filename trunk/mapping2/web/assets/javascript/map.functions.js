@@ -22,7 +22,13 @@
  */
 var MARKER_BASE_URL = "http://localhost:8080/mapping2/markers?";
 var infowindow = new google.maps.InfoWindow({}); 
+var mapData = null;
+var markers = null;
 var map = null;
+var mapID = null;
+// object to hold marker locations
+var locations = {};
+
 /*
  * A function to retrieve XML using AJAX and prepare the data
  * for use with v3 of the Google Maps API
@@ -37,29 +43,30 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 
 	// declare helper variables
 	var url;
-	var mapData = null;
 	
-	// determine what type of API call to make
-	if(type == "organisation") {
-		// this is a request for organisation data
-		url = MARKER_BASE_URL + "type=organisation&id=" + id;
-	} else if(type == "contributor") {
-		// this is a request for contributor data
-		url = MARKER_BASE_URL + "type=contributor&id=" + id;
-	} else {
-		// unknown type
-		return null;
-	}
+	if (updateHeader == true) {
 	
-	/*
-	 * $ is a short hand way to refer to the jQuery object
-	 * use the 'get' method to retrieve data using AJAX and pass it to an callback function for processing
-	 * more information on 'get' here: http://api.jquery.com/jQuery.get/
-	 */
-	$.get(url, function(data, textStatus, XMLHttpRequest) {
+		// determine what type of API call to make
+		if(type == "organisation") {
+			// this is a request for organisation data
+			url = MARKER_BASE_URL + "type=organisation&id=" + id;
+		} else if(type == "contributor") {
+			// this is a request for contributor data
+			url = MARKER_BASE_URL + "type=contributor&id=" + id;
+		} else {
+			// unknown type
+			return null;
+		}
 	
+		/*
+		 * $ is a short hand way to refer to the jQuery object
+		 * use the 'get' method to retrieve data using AJAX and pass it to an callback function for processing
+		 * more information on 'get' here: http://api.jquery.com/jQuery.get/
+		 */
+		$.get(url, function(data, textStatus, XMLHttpRequest) {
+			mapData = data;	
 		// determine if we should update the header
-		if(updateHeader == true) {
+		//if(updateHeader == true) {
 			console.log("Updating the header");
 
 			// extract the entity elements from the XML
@@ -82,162 +89,64 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			$("#map_name").empty(); // empty the contents of this tag
 			$("#map_name").append(header); // append the contents header variable into the tag
 			
+			mapID = document.getElementById("map");
+			
 			// create a new map and centre it on the focus
-		    var myOptions = {
+			map = createMap(mapID, focus);			
+				
+		});	//end of $.get()
+	}else if (updateHeader == false){
+		if (mapID != null) {
+			map = createMap(mapID, focus);
+		}
+	};//end of if (updateHeader == true)	
+	
+	$("#map").empty();
+	$("#map").append(map);
+}
+
+//create map
+function createMap(mapID, focus){
+    var myOptions = {
 		      zoom: getZoom(focus),
 		      center: getLatLng(focus),
 		      mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 
-			map = new google.maps.Map(document.getElementById("map"), myOptions);
-					
-			google.maps.event.addListener(map, 'click', function() {
-			    infowindow.close();
-			    });
-			
-			// extract the markers from the xml
-			var markers = data.documentElement.getElementsByTagName("marker");
-			// object to hold marker locations
-			var locations = {};
-			
-			// build a group of markers
-			for (var i = 0; i < markers.length; i++) {
-			
-				// build a hash of this location
-				var lat = parseFloat(markers[i].getAttribute("lat"));
-				var lng = parseFloat(markers[i].getAttribute("lng"));
-				var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
-				latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
-				
-				if(locations[latlngHash] == null) {
-					// not seen this location before
-					// add to hash
-					locations[latlngHash] = true;
-				} else {
-					// have seen this location before
-					// adjust the lat and lng
-					var randomNumber = Math.floor(Math.random()*3) + 1;
-					randomNumber = "0.000" + randomNumber;
-					randomNumber = parseFloat(randomNumber);
-					
-					lat = lat + randomNumber;
-					lng = lng + randomNumber;
-				}
-				
-				// build a latlng object for this marker
-				var latlng = new google.maps.LatLng(lat, lng);
-				
-				// get the event info for this marker
-				var info   = markers[i].textContent;
-				
-				if(typeof(info) == "undefined") {
-					info = markers[i].text;
-				}
-				
-				// get the name, suburb and postcode
-				var venueName   = markers[i].getAttribute("name");
-				var venueSuburb = markers[i].getAttribute("suburb");
-				
-				venueName = venueName + ", " + venueSuburb;
-				
-				// get the colour of the icon
-				var eventCount = parseInt(markers[i].getAttribute("events"));
-				
-				var okToAdd = false;
-				
-				// filter markers if required
-		/*			
-					// filter markers
-					var okToAdd = false;
-				
-					// filter markers by date
-					if(start != null) {
-						// filter using date
-						var fDate = parseInt(markers[i].getAttribute("fdate"));
-						var lDate = parseInt(markers[i].getAttribute("ldate"));
-					
-						// check on the fdate
-						if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
-							// filter markers by state
-							if(focus != null && focus != "nolimit") {
-								// use the state to filter
-								var state = markers[i].getAttribute("state")
-					
-								if(focus == "a" && state != "9") {
-									okToAdd = true;
-								}else if(focus == "1" && state == "1") {
-									okToAdd = true;
-								}else if(focus == "2" && state == "2") {
-									okToAdd = true;
-								}else if(focus == "3" && state == "3") {
-									okToAdd = true;
-								}else if(focus == "4" && state == "4") {
-									okToAdd = true;
-								}else if(focus == "5" && state == "5") {
-									okToAdd = true;
-								}else if(focus == "6" && state == "6") {
-									okToAdd = true;
-								}else if(focus == "7" && state == "7") {
-									okToAdd = true;
-								}else if(focus == "8" && state == "8") {
-									okToAdd = true;
-								}else if(focus == "9" && state == "9") {
-									okToAdd = true;
-								}			
-							} else {
-								okToAdd = true;
-							}
-						}
-					
-					} else {
-		*/					
-						// filter markers by state
-						if(focus != null && focus != "nolimit") {
-							// use the state to filter
-							var state = markers[i].getAttribute("state")
-					
-							if(focus == "a" && state != "9") {
-								okToAdd = true;
-							}else if(focus == "1" && state == "1") {
-								okToAdd = true;
-							}else if(focus == "2" && state == "2") {
-								okToAdd = true;
-							}else if(focus == "3" && state == "3") {
-								okToAdd = true;
-							}else if(focus == "4" && state == "4") {
-								okToAdd = true;
-							}else if(focus == "5" && state == "5") {
-								okToAdd = true;
-							}else if(focus == "6" && state == "6") {
-								okToAdd = true;
-							}else if(focus == "7" && state == "7") {
-								okToAdd = true;
-							}else if(focus == "8" && state == "8") {
-								okToAdd = true;
-							}else if(focus == "9" && state == "9") {
-								okToAdd = true;
-							}			
-						} else {
-							okToAdd = true;
-						}
-//					}
-				
-					// add marker
-					if(okToAdd == true) {
-						
-						createMarker(latlng, info, venueName);
-					}
+    map = new google.maps.Map(mapID, myOptions);
 
-				}//end of for (build group of markers)
-			
-			$("#map").empty();
-			$("#map").append(map);
-			
-			mapData = data;
-		}// end of if(updateHeader == true)
-		
-	});	//end of $.get()
-	return mapData;
+    google.maps.event.addListener(map, 'click', function() {
+    	infowindow.close();
+    });
+
+    // extract the markers from the xml
+    markers = mapData.documentElement.getElementsByTagName("marker");
+
+    // build a group of markers on the map
+    for (var i = 0; i < markers.length; i++) {
+
+    	// get the colour of the icon
+    	//var eventCount = parseInt(markers[i].getAttribute("events"));
+
+    	// filter markers if required and add the marker on the map
+    	if(checkMarkers(focus, i) == true) {			
+    		// build a latlng object for this marker
+    		var latlng = getMarkerLatLng(i);
+
+    		// get the event info for this marker
+    		var info   = markers[i].textContent;					
+    		if(typeof(info) == "undefined") {
+    			info = markers[i].text;
+    		}
+
+    		// get the name, suburb and postcode
+    		var venueName   = markers[i].getAttribute("name");
+    		var venueSuburb = markers[i].getAttribute("suburb");
+    		venueName = venueName + ", " + venueSuburb;
+
+    		createMarker(map, latlng, info, venueName);
+    	}
+    }//end of for (build group of markers)	
 }
 
 //get the zoom number according to the focus
@@ -331,8 +240,69 @@ function getLatLng(focus) {
 	}
 }
 
+function getMarkerLatLng(i){
+	// build a hash of this location
+	var lat = parseFloat(markers[i].getAttribute("lat"));
+	var lng = parseFloat(markers[i].getAttribute("lng"));
+	var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
+	latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
+	
+	if(locations[latlngHash] == null) {
+		// not seen this location before
+		// add to hash
+		locations[latlngHash] = true;
+	} else {
+		// have seen this location before
+		// adjust the lat and lng
+		var randomNumber = Math.floor(Math.random()*3) + 1;
+		randomNumber = "0.000" + randomNumber;
+		randomNumber = parseFloat(randomNumber);
+		
+		lat = lat + randomNumber;
+		lng = lng + randomNumber;
+	}
+	return new google.maps.LatLng(lat, lng);
+}
+
+//Filter markers by state & time
+//true: not filtered and will create it on the map
+//false: filtered and will not display on the map
+function checkMarkers(focus, i){
+				
+	// filter markers by state
+	if(focus != null && focus != "nolimit") {
+		// use the state to filter
+		var state = markers[i].getAttribute("state");
+
+		if(focus == "a" && state != "9") {
+			return true;
+		}else if(focus == "1" && state == "1") {
+			return true;
+		}else if(focus == "2" && state == "2") {
+			return true;
+		}else if(focus == "3" && state == "3") {
+			return true;
+		}else if(focus == "4" && state == "4") {
+			return true;
+		}else if(focus == "5" && state == "5") {
+			return true;
+		}else if(focus == "6" && state == "6") {
+			return true;
+		}else if(focus == "7" && state == "7") {
+			return true;
+		}else if(focus == "8" && state == "8") {
+			return true;
+		}else if(focus == "9" && state == "9") {
+			return true;
+		}			
+	} else {
+		return true;
+	}
+	return false;
+}
+
 //build a single marker
-function createMarker(latlng, info, venueName) {
+function createMarker(map, latlng, info, venueName) {
 	
 	var marker = new google.maps.Marker({  
 		   position: latlng,  
