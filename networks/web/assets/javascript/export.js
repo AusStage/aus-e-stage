@@ -68,13 +68,29 @@ $(document).ready(function() {
 	// associate the tipsy library with the form elements
 	$('#export_data [title]').tipsy({trigger: 'focus', gravity: 'w'});
 
-	// attach the validation plugin to the id search form
+	// attach the validation plugin to the export form
 	$("#export_data").validate({
 		rules: { // validation rules
 			id: {
 				required: true,
 				digits: true
 			}
+		}
+	});
+	
+	// attach the validation plugin to the name search form
+	$("#search_form").validate({
+		rules: { // validation rules
+			name: {
+				required: true
+			}
+		},
+		submitHandler: function(form) {
+			jQuery(form).ajaxSubmit({
+				beforeSubmit: function() {$("#search_waiting").show(); $("#search_results").hide();},
+				success:      showSearchResults,
+				error:        showErrorMessage
+			});
 		}
 	});
 	
@@ -121,28 +137,120 @@ $(document).ready(function() {
 	// setup the dialog box
 	$("#search_div").dialog({ 
 		autoOpen: false,
-		height: 400,
-		width: 550,
+		height: 500,
+		width: 650,
 		modal: true,
 		buttons: {
 			'Search': function() {
-				// TODO replace with a real search function
-				alert("Search Button Clicked");
+				// submit the form
+				$('#search_form').submit();
 			},
 			Cancel: function() {
 				$(this).dialog('close');
 			}
 		},
 		open: function() {
-			// clean up the search results table
+			// tidy up the form on opening
 			$("#search_results_body").empty();
-			//$("#search_results").hide();
+			$("#search_results").hide();
+			showLoader("hide");
 		},
 		close: function() {
-			//TODO tidy up the form
+			// tidy up the form on close
 			$("#search_results_body").empty();
-			//$("#search_results").hide();
+			$("#search_results").hide();
 		}
 	});
 
 });
+
+/** form processing functions **/
+// function to show the moving bar
+// functions for showing and hiding the loading message
+function showLoader(type) {
+
+	if(type == "show" || typeof(type) == "undefined") {
+		// tidy up the search results
+		$("#search_results_body").empty();
+		$("#search_results").hide();
+	
+		//show the loading message
+		$("#search_waiting").hide();
+	} else {
+		// hide the loading message
+		$("#search_waiting").hide();
+	}
+	
+}
+
+// function to show the search results
+function showSearchResults(responseText, statusText)  {
+	
+	//define helper constants
+	var MAX_FUNCTIONS = 3;
+
+	// tidy up the search results
+	$("#search_results_body").empty();
+	$("#search_results").hide();
+	
+	var html = "";
+	var contributor;
+	var functions;
+	
+	// loop through the search results
+	for(i = 0; i < responseText.length; i++){
+		
+		contributor = responseText[i];
+		
+		// add the name and link
+		html += '<tr><td><a href="' + contributor.url + '" target="ausstage" title="View the record for ' + contributor.name + ' in AusStage">' + contributor.name + '</a></td>';
+		
+		// add the list of functions
+		html += '<td><ul>';
+		
+		functions = contributor.functions;
+		
+		for(x = 0; x < functions.length; x++) {
+			if(x < MAX_FUNCTIONS) {
+				html += '<li>' + functions[x] + '</li>';
+			} else {
+				html += '<li>...</li>';
+				x = functions.length + 1;
+			}
+		}
+		
+		html += '</ul></td>';
+		
+		// add the contributor count
+		html += '<td>' + contributor.collaborations + '</td>';
+		
+		// add the button
+		html += '<td><button>Choose</button></td>';
+		
+		// finish the row
+		html += '</tr>';
+	}
+	
+	// add the search results to the table
+	$("#search_results_body").append(html);
+	
+	// hide the loader
+	showLoader("hide");
+	
+	// show the search results
+	$("#search_results").show();
+	
+}
+
+// function to show a generic error message
+function showErrorMessage() {
+
+	// tidy up the search results
+	$("#search_results_body").empty();
+	$("#search_results").hide();
+	
+	// hide the loader
+	showLoader("hide");
+	
+	// show an error message
+}

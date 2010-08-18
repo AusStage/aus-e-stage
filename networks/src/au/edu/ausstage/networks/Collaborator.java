@@ -348,7 +348,11 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @return the requested value
 	 */
 	public String getCollaborations() {
-		return collaborations;
+		if(collaborations != null) {
+			return collaborations;
+		} else {
+			return "0";
+		}
 	}
 	
 	/**
@@ -400,13 +404,23 @@ public class Collaborator implements Comparable<Collaborator>{
 	 *
 	 * @return the JSON string for this collaborator
 	 */
-	@SuppressWarnings("unchecked")
+
 	public String toJson() {
+	
+		return toJsonObject().toString();
+	}
+	
+	/**
+	 * A method to build the JSON representation of this collaborator
+	 *
+	 * @return the JSON object for this collaborator
+	 */
+	@SuppressWarnings("unchecked")
+	public org.json.simple.JSONObject toJsonObject() {
 	
 		// declare helper variables
 		JSONArray  list = new JSONArray();
-		JSONObject object = new JSONObject();
-			
+		JSONObject object = new JSONObject();			
 		
 		// build the object
 		object.put("id", Integer.parseInt(id));
@@ -424,7 +438,7 @@ public class Collaborator implements Comparable<Collaborator>{
 		
 		object.put("functions", list);
 		
-		return object.toString();
+		return object;	
 	}
 	
 	/**

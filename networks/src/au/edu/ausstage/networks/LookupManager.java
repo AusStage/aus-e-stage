@@ -60,7 +60,7 @@ public class LookupManager {
 	
 		// check on the parameters
 		if(InputUtils.isValidInt(id) == false || InputUtils.isValid(formatType) == false || InputUtils.isValid(sortType) == false) {
-			return null;
+			throw new IllegalArgumentException("All parameters to this method are required");
 		}
 	
 		// define a Tree Set to store the results

@@ -68,7 +68,6 @@
 					</th>
 					<td>
 						<input type="text" readonly="readonly" size="40" id="name" name="name"/> <button name="lookup" id="lookup_btn">Lookup</button>
-						<!--<input type="button" name="lookup" id="lookup_btn" value="Lookup"/>-->
 					</td>
 				</tr>
 				<tr>
@@ -112,8 +111,9 @@
 	<div id="search_div" title="Contributor Search">
 		<p>Enter a contributor name, or part of their name, and click the search button</p>
 		<form action="/networks/search" method="get" id="search_form" name="search_form">
-			<input type="hidden" name="type" id="type" value="collaborator"/>
+			<input type="hidden" name="task" id="task" value="collaborator"/>
 			<input type="hidden" name="limit" id="limit" value="5"/>
+			<input type="hidden" name="sort" id="sort" value="name"/>
 			<table class="formTable">
 				<tbody>
 				<tr>
@@ -121,7 +121,7 @@
 						<label id="name_label" for="name">Contributor Name: </label>
 					</th>
 					<td>
-						<input type="text" size="40" id="id" name="id" title="Enter the contributor name, or part of their name, and click the search button"/>
+						<input type="text" size="40" id="query" name="query" title="Enter the contributor name, or part of their name, and click the search button"/>
 					</td>
 				</tr>
 				</tbody>
@@ -132,12 +132,24 @@
 				<tr>
 					<th>Contributor Name</th>
 					<th>Functions</th>
+					<th>Collaborations</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody id="search_results_body">
 			</tbody>
 		</table>
+		<div id="search_waiting">
+			<p style="text-align: center;">
+				<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+				<br/>Loading Search Results...
+			</p>
+		</div>
+		<div id="error_message">
+		</div>
+		<p>
+		 <strong>Note: </strong>Search results are limited to 5 records. If you do not see the contributor that you expected, please refine your search. Alternatively the contributor may not be part of the Navigating Networks Dataset at this time.
+		</p>
 	</div>
 	<!-- include the footer -->
 	<jsp:include page="footer.jsp"/>
