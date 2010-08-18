@@ -16,6 +16,13 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
+// common theme actions
+$(document).ready(function() {
+	// style the buttons
+	$("button, input:submit").button();
+});
+
+
 // populate the select boxes in the form
 $(document).ready(function() {
 
@@ -52,7 +59,11 @@ $(document).ready(function() {
 	});
 	
 	// disable the export button
-	$("#export_btn").attr('disabled', 'disabled');
+	$("#export_btn").button("disable");
+	
+	// empty the text boxes
+	$("#name").val("");
+	$("#id").val("");
 	
 	// associate the tipsy library with the form elements
 	$('#export_data [title]').tipsy({trigger: 'focus', gravity: 'w'});
@@ -69,6 +80,9 @@ $(document).ready(function() {
 	
 	// define the lookup function
 	$("#lookup_btn").click(function () {
+	
+		// disable the export button
+		$("#export_btn").button("disable");
 	
 		// define helper variables
 		var url = "/networks/lookup?task=collaborator&format=json&id=";
@@ -93,10 +107,42 @@ $(document).ready(function() {
 					$("#name").val(data.name);
 			
 					// enable the button
-					$("#export_btn").removeAttr('disabled');
+					$("#export_btn").button("enable");
 				}
 			});
-		}	
-	});	
+		} else {
+			// show the search form
+			$("#search_div").dialog('open');
+		}
+		
+		return false;
+	});
+	
+	// setup the dialog box
+	$("#search_div").dialog({ 
+		autoOpen: false,
+		height: 400,
+		width: 550,
+		modal: true,
+		buttons: {
+			'Search': function() {
+				// TODO replace with a real search function
+				alert("Search Button Clicked");
+			},
+			Cancel: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			// clean up the search results table
+			$("#search_results_body").empty();
+			//$("#search_results").hide();
+		},
+		close: function() {
+			//TODO tidy up the form
+			$("#search_results_body").empty();
+			//$("#search_results").hide();
+		}
+	});
 
 });
