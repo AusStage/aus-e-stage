@@ -47,7 +47,7 @@
 			<p>
 				<!-- text area for the query -->
 				Enter the query in the text area below. <br/>
-				<textarea name="query" cols="70" rows="20"></textarea> <br/>
+				<textarea name="query" cols="120" rows="20"></textarea> <br/>
 				Output XML: <input type="radio" name="output" value="xml" checked/>
 				with XSLT style sheet (leave blank for none): 
 				<input name="stylesheet" size="25" value="/networks/assets/xml-to-html.xsl" /> <br/>
