@@ -453,7 +453,7 @@ public class LookupManager {
 	 * @param id         the unique identifier for the contributor
 	 * @param formatType the data format to use to encode the return value
 	 *
-	 * @param            information about the collaborator
+	 * @return           information about the collaborator
 	 */
 	@SuppressWarnings("unchecked")
 	public String getCollaborator(String id, String formatType) {
@@ -538,9 +538,9 @@ public class LookupManager {
 		String dataString = null;
 		
 		if(formatType.equals("html") == true) {
-			dataString = "html not available";
+			dataString = collaborator.toHtml();
 		} else if(formatType.equals("xml") == true) {
-			dataString = "xml not available";
+			dataString = collaborator.toXml();
 		} else if(formatType.equals("json") == true) {
 			dataString = collaborator.toJson();
 		}
