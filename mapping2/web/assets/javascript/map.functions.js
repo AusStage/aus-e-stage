@@ -22,6 +22,7 @@
  */
 var MARKER_BASE_URL = "http://localhost:8080/mapping2/markers?";
 var infowindow = new google.maps.InfoWindow({}); 
+var map = null;
 /*
  * A function to retrieve XML using AJAX and prepare the data
  * for use with v3 of the Google Maps API
@@ -88,7 +89,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 		      mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 
-			var map = new google.maps.Map(document.getElementById("map"), myOptions);
+			map = new google.maps.Map(document.getElementById("map"), myOptions);
 					
 			google.maps.event.addListener(map, 'click', function() {
 			    infowindow.close();
@@ -96,7 +97,6 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			
 			// extract the markers from the xml
 			var markers = data.documentElement.getElementsByTagName("marker");
-			
 			// object to hold marker locations
 			var locations = {};
 			
@@ -146,7 +146,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 				var okToAdd = false;
 				
 				// filter markers if required
-/*			
+		/*			
 					// filter markers
 					var okToAdd = false;
 				
@@ -190,7 +190,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 						}
 					
 					} else {
-*/					
+		*/					
 						// filter markers by state
 						if(focus != null && focus != "nolimit") {
 							// use the state to filter
@@ -225,10 +225,11 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 					// add marker
 					if(okToAdd == true) {
 						
-						createMarker(map, latlng, info, venueName);
+						createMarker(latlng, info, venueName);
 					}
 
-				}//end of for (group of markers)
+				}//end of for (build group of markers)
+			
 			$("#map").empty();
 			$("#map").append(map);
 			
@@ -259,7 +260,7 @@ function getZoom(focus){
 		return 9; //ACT
 	case '8':
 		return 6; //NT
-	case '1a':
+/*	case '1a':
 		return 14; // Adelaide
 	case '2a':
 		return 14; // Perth
@@ -275,7 +276,7 @@ function getZoom(focus){
 		return 14; // Canberra
 	case '8a':
 		return 14; // Darwin
-	case '9':
+*/	case '9':
 		return 2; //outside Aus
 	case 'a':
 		return 4; // Aus only		
@@ -305,7 +306,7 @@ function getLatLng(focus) {
 		return new google.maps.LatLng(-35.49, 149.001388); //ACT
 	case '8':
 		return new google.maps.LatLng(-19.383333, 133.357777); //NT
-	case '1a':
+/*	case '1a':
 		return new google.maps.LatLng(-34.93, 138.60); // Adelaide		
 	case '2a':
 		return new google.maps.LatLng(-31.95, 115.85); // Perth
@@ -321,7 +322,7 @@ function getLatLng(focus) {
 		return new google.maps.LatLng(-35.30, 149.13); // Canberra		
 	case '8a':
 		return new google.maps.LatLng(-12.45, 130.83); // Darwin		
-	case '9':
+*/	case '9':
 		return new google.maps.LatLng(-25.947028, 133.209639); //outside Aus	
 	case 'a':
 		return new google.maps.LatLng(-25.947028, 133.209639); // Aus only		
@@ -331,7 +332,7 @@ function getLatLng(focus) {
 }
 
 //build a single marker
-function createMarker(map, latlng, info, venueName) {
+function createMarker(latlng, info, venueName) {
 	
 	var marker = new google.maps.Marker({  
 		   position: latlng,  
