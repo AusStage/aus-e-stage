@@ -20,7 +20,7 @@
  * JavaScript doesn't provide true constants so any variabls in
  * all caps should be considered constants
  */
-var MARKER_BASE_URL = "http://localhost:8080/mapping2/markers?";
+var MARKER_BASE_URL = "/mapping2/markers?";
 var infowindow = new google.maps.InfoWindow({}); 
 var mapData = null;
 var markers = new Array();
@@ -67,7 +67,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			mapData = data;	
 		// determine if we should update the header
 		//if(updateHeader == true) {
-			console.log("Updating the header");
+//			console.log("Updating the header");
 
 			// extract the entity elements from the XML
 			var entities = data.documentElement.getElementsByTagName("entity");
@@ -93,13 +93,13 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			
 			// create a new map and centre it on the focus
 			map = createMap(mapID, focus);			
-			$("#map").empty();
-			$("#map").append(map);	
+//			$("#map").empty();
+//			$("#map").append(map);	
 		});	//end of $.get()
 	}else if (updateHeader == false){
 		if (mapID != null) {
 			map = createMap(mapID, focus);
-			mapID.innerHTML = map;
+//			mapID.innerHTML = map;
 		}
 	};//end of if (updateHeader == true)	
 	
