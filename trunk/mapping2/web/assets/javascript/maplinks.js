@@ -63,7 +63,7 @@ $(document).ready(function() {
 		showMissingParameterMessage();
 	} else { 
 		// use the getMapData function in the map.functions.js file to load the map data
-		getMapData(type, id, '1', null, null, true);
+		getMapData(type, id, 'a', null, null, true);
 	}
 	
 	//override the default form action
@@ -112,6 +112,6 @@ function reloadMap() {
 	
 	getMapData(mapData, true, $("#state").val(), startDate, finishDate);*/
 	var focus = $("#state").val();
-	getMapData(type, id, '6', null, null, false);
+	getMapData(type, id, focus, null, null, false);
 
 }
