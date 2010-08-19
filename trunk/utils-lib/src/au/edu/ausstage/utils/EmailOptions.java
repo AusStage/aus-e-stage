@@ -157,12 +157,21 @@ public class EmailOptions {
 	}
 	
 	/**
-	 * A method to get the host parameter
+	 * A method to get the port parameter
 	 *
 	 * @return the value requested
 	 */
 	public String getPort() {
 		return port;
+	}
+	
+	/**
+	 * A method to get the port parameter as an int
+	 *
+	 * @return the value requested
+	 */
+	public int getPortAsInt() {
+		return Integer.parseInt(port);
 	}
 	
 	/**
@@ -209,6 +218,72 @@ public class EmailOptions {
 	 */
 	public String getToAddress() {
 		return toAddress;
+	}
+	
+	/**
+	 * A method to get the email related options via a PropertiesManager
+	 *
+	 * @param properties a valid PropertiesManager object
+	 *
+	 * @return true, if and only if, the retrieval of options from the properties succeeds
+	 */
+	public boolean getFromProperties(PropertiesManager properties) {
+	
+		if(properties == null) {
+			throw new IllegalArgumentException("The properties parameter must be a valid object");
+		}
+		
+		// get the properties and store them for use
+		try {
+		
+			// host name
+			setHost(properties.getValue("mail-host"));
+			
+			// username and password
+			if(InputUtils.isValid(properties.getValue("mail-user"))) {
+				setUser(properties.getValue("mail-user"));
+				setPassword(properties.getValue("mail-password"));
+			}
+			
+			// security options
+			if(InputUtils.isValid(properties.getValue("mail-ssl"))) {
+				if(properties.getValue("mail-ssl").equals("yes") || properties.getValue("mail-ssl").equals("true")) {
+					setSSL(true);
+				}
+			}
+			
+			if(InputUtils.isValid(properties.getValue("mail-tls"))) {
+				if(properties.getValue("mail-tls").equals("yes") || properties.getValue("mail-tls").equals("true")) {
+					setTLS(true);
+				}
+			}
+			
+			// port
+			if(InputUtils.isValidInt(properties.getValue("mail-port"))) {
+				setPort(properties.getValue("mail-port"));
+			}
+			
+			// mail from address
+			if(InputUtils.isValid(properties.getValue("mail-from-address"))) {
+				setFromAddress(properties.getValue("mail-from-address"));
+			} else {
+				return false;
+			}
+			
+			// mail to address
+			if(InputUtils.isValid(properties.getValue("mail-to-address"))) {
+				setToAddress(properties.getValue("mail-to-address"));
+			} else {
+				return false;
+			}			
+		
+		} catch(IllegalArgumentException ex) {
+			return false;
+		}
+		
+		// if we get this far everything is ok
+		return true;
+	
 	}
 	
 } // end class definition
