@@ -100,7 +100,8 @@
 				<tr>
 					<td colspan="2">
 						<input type="submit" name="submit" id="export_btn" value="Export"/><br/>
-						Use the lookup button to confirm the contributor id is valid before clicking on the export button
+						Use the lookup button to confirm the contributor id is valid before clicking on the export button.<br/>
+						Compiling the data for an export may take some time, please click the export button once only.
 					</td>
 				</tr>
 				</tbody>
