@@ -2,6 +2,7 @@
 /* slider widget */
 .ui-slider  {
 	text-decoration: none !important;
+	margin: 15px;
 }
 .ui-slider .ui-slider-handle  {
 	overflow: visible !important;
