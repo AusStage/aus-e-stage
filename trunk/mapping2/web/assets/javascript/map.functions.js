@@ -23,7 +23,7 @@
 var MARKER_BASE_URL = "/mapping2/markers?";
 var infowindow = new google.maps.InfoWindow({}); 
 var mapData = null;
-var markers = new Array();
+var markers = null;
 var mapID = null;
 // object to hold marker locations
 var locations = {};
@@ -92,22 +92,23 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			mapID = document.getElementById("map");
 			
 			// create a new map and centre it on the focus
-			map = createMap(mapID, focus);			
-//			$("#map").empty();
-//			$("#map").append(map);	
+			map = createMap(mapID, focus, start, finish);			
+			
+			// build the time slider
+			buildTimeSlider(data);
+			
 		});	//end of $.get()
 	}else if (updateHeader == false){
 		if (mapID != null) {
-			map = createMap(mapID, focus);
-//			mapID.innerHTML = map;
+			map = createMap(mapID, focus, start, finish);
+
 		}
 	};//end of if (updateHeader == true)	
 	
-
 }
 
 //create map
-function createMap(mapID, focus){
+function createMap(mapID, focus, start, finish){
     var myOptions = {
 		      zoom: getZoom(focus),
 		      center: getLatLng(focus),
@@ -119,7 +120,7 @@ function createMap(mapID, focus){
     google.maps.event.addListener(map, 'click', function() {
     	infowindow.close();
     });
-/*
+
     // extract the markers from the xml
     if (markers == null){
     	markers = mapData.documentElement.getElementsByTagName("marker");
@@ -133,7 +134,7 @@ function createMap(mapID, focus){
     	//var eventCount = parseInt(markers[i].getAttribute("events"));
 
     	// filter markers if required and add the marker on the map
-    	if(checkMarkers(focus, i) == true) {			
+    	if(checkMarkers(i, focus, start, finish) == true) {			
     		// build a latlng object for this marker
     		var latlng = getMarkerLatLng(i);
 
@@ -152,7 +153,7 @@ function createMap(mapID, focus){
     	    j = j+1;
     	}
     }//end of for (build group of markers)	
-*/
+    console.log("Num of makers created: " + j);
     return map;
 }
 
@@ -275,12 +276,34 @@ function getMarkerLatLng(i){
 	return new google.maps.LatLng(lat, lng);
 }
 
-//Filter markers by state & time
+//Filter markers by date & state 
 //true: not filtered and will create it on the map
 //false: filtered and will not display on the map
-function checkMarkers(focus, i){
-				
-	// filter markers by state
+
+function checkMarkers(i, focus, start, finish){
+	
+	var okToAdd = false;
+	
+	if(start != null) {
+		// filter using date
+		var fDate = parseInt(markers[i].getAttribute("fdate"));
+		var lDate = parseInt(markers[i].getAttribute("ldate"));
+	
+		// check on the fdate
+		if((fDate >= start && fDate <= finish) || (lDate >= start && lDate <= finish)) {
+			// filter markers by state
+			okToAdd = checkMarkersByState(i, focus);			
+		}	
+	}else {
+		okToAdd = checkMarkersByState(i, focus);	
+	}
+	
+	return okToAdd;
+}
+
+// filter markers by state
+function checkMarkersByState(i, focus){		
+
 	if(focus != null && focus != "nolimit") {
 		// use the state to filter
 		var state = markers[i].getAttribute("state");
@@ -327,6 +350,58 @@ function createMarker(map, latlng, info, venueName) {
 		 });  
 	
 	return marker;
+}
+
+//function to build the time slider
+function buildTimeSlider(data) {
+
+	// define an array to store the dates
+	var dates = {};
+	
+	// build a group of dates
+	for (var i = 0; i < markers.length; i++) {
+		
+		//get the date	
+		var first = markers[i].getAttribute("fdatestr");
+		var last  = markers[i].getAttribute("ldatestr");
+		
+		// add the date to the hash if required
+		if(dates[first] == null) {
+			dates[first] = first;
+		}
+		
+		if(dates[last] == null) {
+			dates[last] = last;
+		}		
+	}
+	
+	// clear the time slider
+	$("#event_start").removeOption(/./);
+	$("#event_finish").removeOption(/./);
+	
+	// add the new options
+	$("#event_start").addOption(dates, false);
+	$("#event_finish").addOption(dates, false);
+	
+	// clear any current selected values
+	$("#event_start").selectOptions('clear');
+	$("#event_finish").selectOptions('clear');
+	
+	// sort the options
+	$("#event_start").sortOptions();
+	$("#event_finish").sortOptions();
+	
+	// select the last and first options before building the time slider
+	$("#event_start option:first").attr("selected", "selected");
+	$("#event_finish option:last").attr("selected", "selected");
+	
+	// remove any existing slider
+	$("#sliderComponent").remove();
+	
+	// create the slider
+	$(".slider").selectToUISlider({labels: 5}).hide();
+	$(".tohide").hide();
+	
 }
 
 /* 
