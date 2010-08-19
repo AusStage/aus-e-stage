@@ -58,6 +58,26 @@ $(document).ready(function() {
 	
 	});
 	
+	// bind a focusout event to the id text field
+	$("#id").focusout(function() {
+
+		// get the content of the id text box	
+		var val = $("#id").val();
+		
+		// trim the value
+		val = val.replace(/^\s*/, "").replace(/\s*$/, "");
+
+		// see if the value is an empty string
+		if(val == "") {
+			// if it is tidy the form
+			$("#name").val("");
+			$("#id").val("");
+			
+			// disable the export button
+			$("#export_btn").button("disable");
+		}
+	});
+	
 	// disable the export button
 	$("#export_btn").button("disable");
 	
@@ -226,7 +246,7 @@ function showSearchResults(responseText, statusText)  {
 		html += '<td>' + contributor.collaborations + '</td>';
 		
 		// add the button
-		html += '<td><button>Choose</button></td>';
+		html += '<td><button id="choose_' + contributor.id + '" class="choose_button">Choose</button></td>';
 		
 		// finish the row
 		html += '</tr>';
@@ -243,6 +263,26 @@ function showSearchResults(responseText, statusText)  {
 	
 		// style the new buttons
 		$("button, input:submit").button();
+		
+		// add a function to each of the choose buttons
+		$(".choose_button").click(function(eventObject) {
+			// determine which button was clicked
+			target = eventObject.target;
+			
+			// get the id of this button
+			var id = target.id;
+			
+			var tags = id.split("_");
+			
+			// add the id to the text file
+			$("#id").val(tags[1]);
+			
+			// close the dialog box
+			$("#search_div").dialog("close");
+			
+			// execute the lookup function
+			$("#lookup_btn").trigger('click');
+		});
 	
 		// show the search results
 		$("#search_results").show();
