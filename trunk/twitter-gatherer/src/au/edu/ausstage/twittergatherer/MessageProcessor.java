@@ -252,7 +252,7 @@ public class MessageProcessor implements Runnable {
 								 + "AND mob_organisations.organisation_id = orgevlink.organisationid "
 								 + "AND start_date_time < TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') "
 								 + "AND end_date_time + 1/12 > TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') ";
-				
+
 				// define the parameters array
 				String[] sqlParameters = new String[2];
 				sqlParameters[0] = dateTimeFormat.print(messageCreated);
@@ -263,7 +263,7 @@ public class MessageProcessor implements Runnable {
 				
 				// double check the results
 				if(results == null) {
-					System.err.println("ERROR: Unable to find a matching performance for this message");
+					System.err.println("ERROR: Unable to execute the SQL to lookup performances");
 					
 					// send an exception report
 					if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
