@@ -136,6 +136,18 @@ public class TwitterGatherer {
 	 	// play nice and tidy up
 	 	hashTags.tidyUp();
 	 	hashTags = null;
+	 	
+	 	// instantiate the email related classes
+	 	EmailOptions emailOptions = new EmailOptions();
+	 	
+	 	// retrieve the options
+	 	if(emailOptions.getFromProperties(properties) == false) {
+	 		System.err.println("ERROR: unable to configure the email class. Check the properties file and try again");
+	 		System.exit(-1);
+	 	}
+	 	
+	 	// instantiate an EmailManager object
+	 	EmailManager emailManager = new EmailManager(emailOptions);
 
 		// experimental code
 		
@@ -152,7 +164,7 @@ public class TwitterGatherer {
 		IncomingMessageHandler handler = new IncomingMessageHandler(tweetQueue);
 		
 		// define our processor to process the incoming tweets
-		MessageProcessor processor = new MessageProcessor(tweetQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database);
+		MessageProcessor processor = new MessageProcessor(tweetQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database, emailManager);
 		
 		// instantiate the other supporting classes
 		TwitterStream twitterStream = TweetRiver.filter(twitterStreamConfig, handler, null, tracks);

@@ -20,7 +20,6 @@ package au.edu.ausstage.twittergatherer;
 
 // import from the standard java libraries
 import java.util.concurrent.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
 
@@ -51,12 +50,13 @@ import au.edu.ausstage.utils.*;
 public class MessageProcessor implements Runnable {
 
 	// declare class level private variables
-	LinkedBlockingQueue<STweet> newTweets;
-	String logFiles;
-	DbManager database;
-	DateTimeFormatter dateTimeFormat;
-	DateTimeFormatter inputDateTimeFormat;
-	Extractor         extractHashTags;
+	private LinkedBlockingQueue<STweet> newTweets;
+	private String logFiles;
+	private DbManager database;
+	private DateTimeFormatter dateTimeFormat;
+	private DateTimeFormatter inputDateTimeFormat;
+	private Extractor         extractHashTags;
+	private EmailManager      emailManager;
 	
 	// declare class level constants
 	private final int JSON_INDENT_LEVEL = 4;
@@ -70,6 +70,9 @@ public class MessageProcessor implements Runnable {
 
 	private final String JODA_INPUT_DATE_TIME_FORMAT = "E MMM dd hh:mm:ss Z YYYY";
 	
+	private final String EMAIL_SUBJECT = "[AusStage Twitter Gatherer] Message Processing Error";
+	private final String EMAIL_MESSAGE = "Exception Report: The Twitter Gatherer was unable to locate a valid performance for this attached Twitter Message";
+	
 	/**
 	 * A constructor for this class
 	 *
@@ -78,7 +81,7 @@ public class MessageProcessor implements Runnable {
 	 * @param manager  a valid DbManager object
 	 *
 	 */
-	public MessageProcessor(LinkedBlockingQueue<STweet> tweets, String logDir, DbManager manager) {
+	public MessageProcessor(LinkedBlockingQueue<STweet> tweets, String logDir, DbManager manager, EmailManager emailManager) {
 	
 		// check on the parameters
 		if(tweets == null) {
@@ -97,10 +100,15 @@ public class MessageProcessor implements Runnable {
 			throw new IllegalArgumentException("The database parameter cannot be null");
 		}
 		
+		if(emailManager == null) {
+			throw new IllegalArgumentException("The EmailManager parameter cannot be null");
+		}
+		
 		// assign parrameters to local variables
 		newTweets = tweets;
 		logFiles = logDir;
 		database = manager;
+		this.emailManager = emailManager;
 		
 		// build the dateTimeFormat object
 		dateTimeFormat      = DateTimeFormat.forPattern(JODA_DATE_TIME_FORMAT);
@@ -256,7 +264,12 @@ public class MessageProcessor implements Runnable {
 				// double check the results
 				if(results == null) {
 					System.err.println("ERROR: Unable to find a matching performance for this message");
-					// TODO send exception report
+					
+					// send an exception report
+					if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
+						System.err.println("ERROR: Unable to send the exception report");
+					}
+
 				} else {
 				
 					// look for performances matching the hash tag from the message
@@ -324,7 +337,11 @@ public class MessageProcessor implements Runnable {
 						}	
 					} else {
 						System.err.println("ERROR: Unable to find a matching performance for this message");
-						// TODO send exception report
+						
+						// send an exception report
+						if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
+							System.err.println("ERROR: Unable to send the exception report");
+						}
 					}
 				} // end performance check				
 			}

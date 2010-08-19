@@ -7,4 +7,6 @@ Ensure that the following libraries are available in this directory:
 - Joda-Time (1.6.1 or above) http://joda-time.sourceforge.net/
 - twitter-text-java
   - instructions for building this library are available here: http://techxplorer.com/2010/08/16/exploring-twitter-text-java/
+- Apache Commons - Email (1.2 or above) http://commons.apache.org/email/
+- Java Mail Library (1.4.3 or above) http://www.oracle.com/technetwork/java/index-jsp-139225.html
 
