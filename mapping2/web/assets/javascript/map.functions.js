@@ -23,8 +23,7 @@
 var MARKER_BASE_URL = "http://localhost:8080/mapping2/markers?";
 var infowindow = new google.maps.InfoWindow({}); 
 var mapData = null;
-var markers = null;
-var map = null;
+var markers = new Array();
 var mapID = null;
 // object to hold marker locations
 var locations = {};
@@ -43,6 +42,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 
 	// declare helper variables
 	var url;
+	var map = null;
 	
 	if (updateHeader == true) {
 	
@@ -93,16 +93,17 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			
 			// create a new map and centre it on the focus
 			map = createMap(mapID, focus);			
-				
+			$("#map").empty();
+			$("#map").append(map);	
 		});	//end of $.get()
 	}else if (updateHeader == false){
 		if (mapID != null) {
 			map = createMap(mapID, focus);
+			mapID.innerHTML = map;
 		}
 	};//end of if (updateHeader == true)	
 	
-	$("#map").empty();
-	$("#map").append(map);
+
 }
 
 //create map
@@ -113,15 +114,18 @@ function createMap(mapID, focus){
 		      mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 
-    map = new google.maps.Map(mapID, myOptions);
+    var map = new google.maps.Map(mapID, myOptions);
 
     google.maps.event.addListener(map, 'click', function() {
     	infowindow.close();
     });
-
+/*
     // extract the markers from the xml
-    markers = mapData.documentElement.getElementsByTagName("marker");
-
+    if (markers == null){
+    	markers = mapData.documentElement.getElementsByTagName("marker");
+    }
+    var j = 0;
+    var markerArray = new Array();
     // build a group of markers on the map
     for (var i = 0; i < markers.length; i++) {
 
@@ -144,9 +148,12 @@ function createMap(mapID, focus){
     		var venueSuburb = markers[i].getAttribute("suburb");
     		venueName = venueName + ", " + venueSuburb;
 
-    		createMarker(map, latlng, info, venueName);
+    		markerArray[j] = createMarker(map, latlng, info, venueName);
+    	    j = j+1;
     	}
     }//end of for (build group of markers)	
+*/
+    return map;
 }
 
 //get the zoom number according to the focus
@@ -187,8 +194,10 @@ function getZoom(focus){
 		return 14; // Darwin
 */	case '9':
 		return 2; //outside Aus
+	case 'nolimit':
+		return 2; //all venues
 	case 'a':
-		return 4; // Aus only		
+		return 4; // Aus only			
 	default:
 		return 4; // default, AUS
 	}
@@ -233,6 +242,8 @@ function getLatLng(focus) {
 		return new google.maps.LatLng(-12.45, 130.83); // Darwin		
 */	case '9':
 		return new google.maps.LatLng(-25.947028, 133.209639); //outside Aus	
+	case 'nolimit':
+		return new google.maps.LatLng(-25.947028, 133.209639); //all venues
 	case 'a':
 		return new google.maps.LatLng(-25.947028, 133.209639); // Aus only		
 	default:
