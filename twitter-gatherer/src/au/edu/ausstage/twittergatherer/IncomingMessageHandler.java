@@ -40,17 +40,20 @@ import au.edu.ausstage.utils.*;
 public class IncomingMessageHandler implements TwitterStreamHandler {
 
 	// declare class level private variables
-	LinkedBlockingQueue<STweet> newTweets;
+	private LinkedBlockingQueue<STweet> newTweets;
+	private LinkedBlockingQueue<SDeletion> newDeletes;
 	
 	/**
 	 * A constructor for this class
 	 *
-	 * @param tweets a blocking queue used to store new messages
+	 * @param tweets  a blocking queue used to store new messages
+	 * @param deletes a blocking queue used to store new deletion requests
 	 */
-	public IncomingMessageHandler(LinkedBlockingQueue<STweet> tweets) {
+	public IncomingMessageHandler(LinkedBlockingQueue<STweet> tweets, LinkedBlockingQueue<SDeletion> deletes) {
 		
 		// assign parrameters to local variables
-		newTweets = tweets;
+		newTweets  = tweets;
+		newDeletes = deletes;
 	}
 
 	/**
@@ -79,8 +82,18 @@ public class IncomingMessageHandler implements TwitterStreamHandler {
 	 */
 	public void addDeletion(SDeletion deletion) {
 	
-		// deletion request received
-		System.out.println("New Deletion Request: " + deletion.toString());
+		//debug code
+		System.out.println("### New Deletion Request Arrived ###");
+	
+		// try to add this tweet to the queue for processing
+		try {
+			// add this tweet to the queue
+			newDeletes.put(deletion);
+		} catch (InterruptedException ex) {
+			// inform user of error
+			System.err.println("ERROR: An error occured while attempting to add a deletion request to the queue");
+			System.err.println("       " + deletion.toString());
+		}
 	
 	} // end the addDeletion Method
 	
