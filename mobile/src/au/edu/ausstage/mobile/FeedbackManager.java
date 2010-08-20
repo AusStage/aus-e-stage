@@ -28,7 +28,7 @@ import au.edu.ausstage.utils.*;
  * A class used to compile the marker data which is used to build
  * maps on web pages
  */
-public class GathererManager {
+public class FeedbackManager {
 
 	// declare private class variables
 	DbManager database;
@@ -38,35 +38,13 @@ public class GathererManager {
 	 *
 	 * @param database a valid DbManager object
 	 */
-	public GathererManager(DbManager database) {
+	public FeedbackManager(DbManager database) {
 	
 		// double check the parameter
 		if(database == null) {
 			throw new IllegalArgumentException("The database parameter cannot be null");
 		}
 		this.database = database;
-	}
-	
-	/**
-	 * A method to process an SMS message
-	 *
-	 * @param callerId the id of the caller, typically the mobile device / mobile phone number
-	 * @param time     the time that the message was sent
-	 * @param date     the date that the message was sent
-	 * @param message  the content of the message 
-	 *
-	 * @return         the message in response to the input
-	 */
-	public String processSMS(String callerId, String time, String date, String message) {
-	
-		// TODO Have proper processing code
-		StringBuilder builder = new StringBuilder("Caller ID: " + callerId + "\n");
-		builder.append("Caller ID Hash: " + HashUtils.hashValue(callerId) + "\n");
-		builder.append("Time: " + time + "\n");
-		builder.append("Date: " + date + "\n");
-		builder.append("Message: " + message + "\n");
-		
-		return builder.toString();	
 	}
 
 }
