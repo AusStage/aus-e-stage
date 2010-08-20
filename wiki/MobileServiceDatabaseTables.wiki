@@ -93,11 +93,13 @@ This is a table used to store feedback sourced from Twitter, using the TwitterGa
 || short_content || The content of the feedback || varchar(4000) || ||
 || long_content  || The content of the feedback when longer than 4000 characters || clob || ||
 || content_uri   || A URI for content stored outside the system || varchar(4000) || ||
+|| public_display || Indicates if the feedback should be publicly displayed || char(1) || yes ||
 
 == Notes == 
 
  # The [http://en.wikipedia.org/wiki/Sha256 SHA-2 algorithm], specifically sha256, is used to compute cryptographic hashes 
  # Date and time fields are entered and stored using [http://en.wikipedia.org/wiki/Adelaide Adelaide Local Time].
+ # The `public_display` field by default is set to 'Y'
 
 = Source Types =
 
