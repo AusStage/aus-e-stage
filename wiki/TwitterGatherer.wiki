@@ -2,11 +2,54 @@
 
 <h1>Twitter Gatherer</h1>
 
-The !AusStage Twitter Gatherer is a Java based application used to gather messages from [http://twitter.com Twitter] uses the [http://dev.twitter.com/pages/streaming_api Twitter Streaming API].
+The !AusStage Twitter Gatherer is a Java based application that collects messages from [http://twitter.com Twitter] using the [http://dev.twitter.com/pages/streaming_api Twitter Streaming API]. 
 
-The application is currently undergoing development and more information will be added here as development progresses.
+These messages are sent by audience members at when attending events held by our partner organisations that are participating in the trial. 
 
+<wiki:toc max_depth="2" />
 
-== Libraries Used in Development ==
+= Identifying Messages = 
+
+The !AusStage Twitter Gatherer identifies messages intended as feedback on a performance by:
+
+ * Determining the date and time that the message was sent
+ * Identifying performances that are occurring at that time or events that ended within two hours of the message being sent
+ * Identifying the company mentioned in the message using a [http://en.wikipedia.org/wiki/Hash_tag#Hash_tags hash tag]
+ * Matching the company specific hash tag to that listed with a performance
+
+If a performance can not be identified the message is stored and an exception report is generated. This report is sent via email to !AusStage personnel for manual action. 
+
+= De-Identifying Information = 
+
+It is a requirement of the project that all messages be de-identified. In this way it is possible to identify messages that have been sent by the same Twitter user, however it is not possible to identify specific individuals. 
+
+In order to de-identify messages the following fields in a Twitter Message are removed:
+
+|| *Field Name*      || *Description* ||
+|| url               || the URL associated with the twitter users account, for example their website ||
+|| profile_image_url || the URL to the twitter users profile image ||
+|| screen_name       || the twitter users user name ||
+|| profile_background_image_url || the url to the image used in the background of the users profile page ||
+|| name              || the users name ||
+|| description       || the description associated with the user ||
+
+The following fields are obfuscated by means of a [http://en.wikipedia.org/wiki/SHA-2 cryptographic hash]
+
+|| *Field Name* || *Description* ||
+|| id           || the unique identifier for the message ||
+|| user_id      || the unique identifier for the user || 
+|| in_reply_to_user_id || if this message is in reply to another user that users id is stored in this field ||
+|| in_reply_to_status_id || if the message is in reply to another message the id of the original message is stored in this field || 
+|| retweeted_status || if the message is a retweet the id of the original message is stored in this field || 
+
+In this way relationships between messages, and the grouping of messages by user can be achieved without identifying any individual
+
+= Libraries Used in Development =
  * [http://github.com/seejohnrun/tweetStream4J tweetStream4J]
+   * Used to connect to the Twitter Stream API
    * Information [http://techxplorer.com/2010/08/02/exploring-tweetstream4j/ on compiling] the tweetStream4J package
+ * [http://joda-time.sourceforge.net/ Joda-Time]
+   * Used for parsing, comparing and formatting date and time values
+ * [http://github.com/mzsanford/twitter-text-java twitter-text-java]
+   * Used to extract the hash tags from the twitter messages
+   * Information [http://techxplorer.com/2010/08/16/exploring-twitter-text-java/ on compiling] the twitter-text-java package
