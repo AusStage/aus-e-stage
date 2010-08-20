@@ -343,7 +343,7 @@ public class MessageProcessor implements Runnable {
 							System.err.println("ERROR: Unable to send the exception report");
 						}
 					}
-				} // end performance check				
+				} // end performance check	
 			}
 		} catch (InterruptedException ex) {
 			// thread has been interrupted

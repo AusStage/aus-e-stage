@@ -154,17 +154,23 @@ public class TwitterGatherer {
 		// create the queue to store the tweets
 		LinkedBlockingQueue<STweet> tweetQueue = new LinkedBlockingQueue<STweet>();
 		
+		// create the queue to store the deletions
+		LinkedBlockingQueue<SDeletion> deleteQueue = new LinkedBlockingQueue<SDeletion>();
+		
 		// Create a thread pool with two threads
-		ExecutorService executor = Executors.newFixedThreadPool(2);
+		ExecutorService executor = Executors.newFixedThreadPool(3);
 
 		// configure the username / password to use to access the twitter service
 		TwitterStreamConfiguration twitterStreamConfig = new TwitterStreamConfiguration(properties.getValue("twitter-user"), properties.getValue("twitter-password"));
 		
 		// define our handler to handling the incoming tweets
-		IncomingMessageHandler handler = new IncomingMessageHandler(tweetQueue);
+		IncomingMessageHandler handler = new IncomingMessageHandler(tweetQueue, deleteQueue);
 		
 		// define our processor to process the incoming tweets
 		MessageProcessor processor = new MessageProcessor(tweetQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database, emailManager);
+		
+		// define our processor to process the incoming deletions
+		DeletionProcessor deletions = new DeletionProcessor(deleteQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database, emailManager);
 		
 		// instantiate the other supporting classes
 		TwitterStream twitterStream = TweetRiver.filter(twitterStreamConfig, handler, null, tracks);
@@ -172,10 +178,16 @@ public class TwitterGatherer {
 		// run our two threads
 		executor.execute(twitterStream);
 		executor.execute(processor);
+		executor.execute(deletions);
 		
 		// sleep for 30 seconds
+		/* 
+		 * There must be a better way of doing this
+		 */
 		try {
-			Thread.sleep(30000);
+			while(true) {
+				Thread.sleep(30000);
+			}
 		}catch (InterruptedException ex) {
 			// inform user of error
 			System.err.println("ERROR: Unable to sleep");
