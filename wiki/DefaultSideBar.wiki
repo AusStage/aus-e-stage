@@ -24,7 +24,7 @@
      * [MobileServiceDatabaseTables Database Tables]
      * [MobileServiceAPI Mobile Service API]
        * [MobileServiceAPIGatherer Input Gatherer]
-     * [TwitterGatherer Gather Twitter Messages]
+     * [TwitterGatherer Twitter Gatherer]
    * [NetworkService Network Service]
      * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksGoals   Service Goals]
