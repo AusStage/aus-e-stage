@@ -30,6 +30,10 @@ public class FeedbackServlet extends HttpServlet {
 
 	// declare private class variables
 	private ServletConfig servletConfig;
+	private DbManager database;
+	
+	// declare private class constants
+	private final String[] TASK_TYPES = {"initial", "update"};
 
 	/*
 	 * initialise this instance
@@ -51,6 +55,60 @@ public class FeedbackServlet extends HttpServlet {
 	 */
 	public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
+		// get the request parameters
+		String performance = request.getParameter("performance");
+		String task        = request.getParameter("task");
+		String lastId      = request.getParameter("lastid");
+		
+		// double check the parameters
+		if(InputUtils.isValidInt(performance) == false) {
+			// no valid performance id
+			throw new ServletException("Missing performance parameter. Expected a valid integer");
+		}
+		
+		if(InputUtils.isValid(task, TASK_TYPES) == false) {
+			// no valid task type was found
+			throw new ServletException("Missing task parameter. Expected one of: " + InputUtils.arrayToString(TASK_TYPES));
+		}
+		
+		if(task.equals("update") == true) {
+			if(InputUtils.isValidInt(lastId) == false) {
+				throw new ServletException("Missing lastid parameter. Expected a valid integer");
+			}
+		}
+		
+		// instantiate a connection to the database
+		DbManager database;
+		
+		try {
+			database = new DbManager(servletConfig.getServletContext().getInitParameter("databaseConnectionString"));
+		} catch (IllegalArgumentException ex) {
+			throw new ServletException("Unable to read the connection string parameter from the web.xml file");
+		}
+		
+		if(database.connect() == false) {
+			throw new ServletException("Unable to connect to the database");
+		}
+		
+		// instantiate the manager class
+		FeedbackManager feedback = new FeedbackManager(database);
+		
+		// define other helper variables
+		String results = null;
+		
+		// determine the task to undertake
+		if(task.equals("initial") == true) {
+			results = feedback.getInitialFeedback(performance);
+		} else if(task.equals("update") == true) {
+			results = feedback.getUpdatedFeedback(performance, lastId);
+		}
+		
+		// output json mime type
+		response.setContentType("application/json; charset=UTF-8");
+		
+		// output the results of the lookup
+		PrintWriter out = response.getWriter();
+		out.print(results);	
 		
 	} // end doGet method
 	

@@ -57,9 +57,9 @@ public class GathererServlet extends HttpServlet {
 		// get the request parameters
 		String type = request.getParameter("type");
 		
-		// check on the marker types
+		// check on the input types
 		if(InputUtils.isValid(type, INPUT_TYPES) == false) {
-			// no valid marker type was found
+			// no valid input type was found
 			throw new ServletException("Missing type parameter. Expected one of: " + InputUtils.arrayToString(INPUT_TYPES));
 		}
 		
