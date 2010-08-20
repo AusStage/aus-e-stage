@@ -128,7 +128,7 @@ public class FileUtils {
 	} // end isValidFile method
 	
 	/**
-	 * A convenience method to determine if a directory exists
+	 * A convenience method to determine if a file exists
 	 * 
 	 * @param path the path to be validated
 	 * @return             true if, and only if, the path is valid
@@ -235,6 +235,36 @@ public class FileUtils {
 		
 		// if we get this far everything is OK
 		return true;
+	}
+	
+	/**
+	 * A method to rename a file given the old and new names
+	 *
+	 * @param oldName the old name of the file
+	 * @param newName the new name of the file
+	 *
+	 * @return true if, and only if, the file is renamed successfully
+	 */
+	public static boolean renameFile(String oldName, String newName) {
+	
+		// check to ensure the path is valid
+		if(doesFileExist(oldName) == false) {
+			return false;
+		}
+		
+		// check the new Name doesn't exist
+		if(isValidFile(newName, true) == true) {
+			return false;
+		}
+		
+		File oldFile = new File(oldName);
+		File newFile = new File(newName);
+		
+		if(oldFile.renameTo(newFile) == true) {
+			return true;
+		} else {
+			return false;
+		}
 	}	
 	
 } // end class definition
