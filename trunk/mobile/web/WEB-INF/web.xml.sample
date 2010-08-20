@@ -24,15 +24,23 @@
     <description>
         This software provides services for the collection, manipulation, analysis and reporting of audience participation data 
     </description>
-        <!-- Servlets -->
+     <!-- Servlets -->
     <servlet>
         <servlet-name>GathererServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mobile.GathererServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mobile.FeedbackServlet</servlet-class>
     </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>GathererServlet</servlet-name>
         <url-pattern>/gatherer/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <url-pattern>/feedback/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
