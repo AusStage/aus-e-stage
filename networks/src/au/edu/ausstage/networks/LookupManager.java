@@ -470,15 +470,15 @@ public class LookupManager {
 		// define the base sparql query
 		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + "> "
 						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
- 						   + "SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaboratorCount "
+						   + "SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaboratorCount "
 						   + "WHERE { "
-						   + "       @                a                     foaf:Person;               "
-						   + "                        foaf:givenName        ?givenName;                "
-						   + "                        foaf:familyName       ?familyName;               "
-						   + "                        foaf:gender           ?gender;                   "
-						   + "                        ausestage:nationality ?nationality;              "
-						   + "                        ausestage:collaboratorCount ?collaboratorCount;  "
-						   + "                        ausestage:function    ?function.                 "
+						   + "	@ a 							foaf:Person; "
+						   + "						foaf:givenName        		?givenName; "
+						   + "						foaf:familyName       		?familyName; "
+						   + "						ausestage:collaboratorCount ?collaboratorCount; "
+						   + "						ausestage:function    		?function. "
+						   + "	OPTIONAL {@			foaf:gender           		?gender} "
+						   + "	OPTIONAL {@			ausestage:nationality 		?nationality} "
 						   + "} ";
 						   
 		// build a URI from the id
@@ -486,6 +486,9 @@ public class LookupManager {
 		
 		// add the contributor URI to the query
 		sparqlQuery = sparqlQuery.replaceAll("@", "<" + id + ">");
+		
+		//debug code
+		System.out.println("!!!\n" + sparqlQuery + "\n!!!\n");
 		
 		// execute the query
 		ResultSet results = database.executeSparqlQuery(sparqlQuery);
@@ -506,8 +509,13 @@ public class LookupManager {
 				collaborator.setFamilyName(row.get("familyName").toString(), true);
 				
 				// get the gender nationality, and collaborator count
-				collaborator.setGender(row.get("gender").toString());
-				collaborator.setNationality(row.get("nationality").toString());
+				if(row.get("gender") != null) {
+					collaborator.setGender(row.get("gender").toString());
+				}
+				
+				if(row.get("nationality") != null) {
+					collaborator.setNationality(row.get("nationality").toString());
+				}
 				
 				// get the collaboration count
 				collaborator.setCollaborations(Integer.toString(row.get("collaboratorCount").asLiteral().getInt()));
