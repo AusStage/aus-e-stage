@@ -39,3 +39,34 @@ Using the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data
 Mac Users please note: If you are using Chrome or Safari on a Mac computer to download the Network Data you will need to remove the .xml extension that is automatically added to the file by the browser. The best way to do this is to right-click on the file, and select _Get Info_ from the popup menu. In the info window, scroll down to Name & Extension. Remove the .xml extension from the file name. 
 
 == Using the Graph Data ==
+===Gephi===
+The following guide assumes you have completed the following:
+  # Downloaded and Installed [http://gephi.org/users/download/ Gephi]
+  # Used the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page] to download a set of network data in *.graphml* format.
+  # If you are not already familiar with Gephi, it is advised you work through some of the tutorials available [http://gephi.org/users/ here] in order to get the most out of visualizing your network data.
+
+The following steps will guide you through loading your network data into Gephi. 
+  # Locate and run Gephi on you computer.
+  # A dialogue box will appear offering you the following options 
+    * Open Recent
+    * New Project
+    * Samples
+  # Select _Open Graph File_ under the _New Project_ heading
+  # Another dialogue box will appear titled _Open_. Change the File Format to _GraphML Files ('*'.graphml).
+  # Using the _Open_ dialogue box, locate and select the .graphml file you wish to visualize. Then click the _Open_ button.
+  # Another dialogue box will appear titled _Import report_. Click the _OK_ button
+  # Your network data should now be displayed within Gephi as a visualisation.
+
+*Adding two networks to the same visualisation*
+Once you have imported one set of data into the visualisation you may wish to add another data set to the visualisation. 
+This can be done very simply using the following steps.
+  # With your current project in Gephi displayed, go to the File Menu and select _Open_
+  # Local the other .graphml file you wish to model.
+  # Click _Open_.
+  # The _Import report_ dialogue box will appear.
+  # In the bottom right hand corner of this box will be two options
+    * Add full graph 
+    * Append graph
+  # Ensure _Append graph_ is selected.
+  # Click _OK_
+  # The additional data should now be displayed in the visualisation.
