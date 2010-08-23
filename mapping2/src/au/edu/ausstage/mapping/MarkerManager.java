@@ -268,6 +268,12 @@ public class MarkerManager {
 				// reset the event count variable
 				eventCount = 0;
 				
+				// reset the first and last date variables
+				firstDate = Integer.MAX_VALUE;
+				lastDate  = Integer.MIN_VALUE;
+				firstDateAsString = "";
+				lastDateAsString  = "";
+				
 				// add a marker to the xml
 				Element marker = xmlDoc.createElement("marker");
 				
@@ -614,6 +620,12 @@ public class MarkerManager {
 				
 				// reset the event count variable
 				eventCount = 0;
+				
+				// reset the first and last date variables
+				firstDate = Integer.MAX_VALUE;
+				lastDate  = Integer.MIN_VALUE;
+				firstDateAsString = "";
+				lastDateAsString  = "";
 				
 				// add a marker to the xml
 				Element marker = xmlDoc.createElement("marker");
