@@ -3,3 +3,36 @@
 = Introduction =
 
 Below is a series of instructions and guidance on using the [http://beta.ausstage.edu.au/networks/export.jsp Export Graph Data] page to export data in  a variety of different formats for use with network visualisation software. 
+
+== Getting Started ==
+
+Before you can view any of the exported data, you will need to download and install one of the following graph visualisation programs. 
+
+.........
+
+== Exporting the Graph Data == 
+
+Using the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page]  is relatively simple. 
+
+*If you know the contributor id*
+
+  * If you know the id of the contributor whos network you wish to graph, enter the id in the _Contributor Id_ field. 
+  * Then, click the _Lookup_ button situated to the right of the _Contributor Name_ field, this checks that the contributor id relates to a contributor and you should see the contributors name appear in the _Contributor Name_ field.
+
+*If you don't know the contributor id*
+  
+  * If you don't know the id of the contributor who's network you would like to graph, click on the _Lookup_ button situated to the right of the _Contributor Name_ field.
+  * A popup window should appear with a single field for Contributor Name.
+  * Enter the name of the contributor you wish to graph and click the _Search_ button.
+  * After a few moments the window will show matching results. 
+  * If the contributor you wish to graph is returned, click the _Choose_ button relating to that contributor.
+  * The popup window will disappear, and both the _Contributor Id_ and _Contributor Name_ fields will be populated.
+  
+*After selecting your contributor*
+
+  * You then need to choose whether you would like a directed, or undirected graph. The default, recommended graph type is undirected.
+  * Next, select the desired data format from the drop down list.  The data format you choose should depend on the software you are using to visualize the graph. MORE ON THIS LATER.
+  * Finally, you need to choose the desired radius of your graph. This relates to how many edges are between the central node (_the contributor_) and the outer lying nodes of the network. For instance, a radius of 2 will give you a network of all the people your selected contributor has worked with, and all the people they have worked with. 
+  * Then click the _Export_ button and in a few moments the file will be downloaded to your computer.
+
+== Using the Graph Data ==
