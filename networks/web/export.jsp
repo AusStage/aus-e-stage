@@ -52,7 +52,7 @@
 		<p>
 			If you do not know the contributor id, leave this field blank and click the lookup button to use the contributor search form.
 		</p>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;" id="mac_warning">
+		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;" id="mac_warning" style="visibility: hidden;">
 			<p>
 				<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Warning:</strong> It has been detected that you are using a Mac. <br/>
 				When you download graphml export files from this site using a Mac the export file name may have an additional .xml extension added to it.<br/>
@@ -117,7 +117,7 @@
 		</form>
 	</div>
 	<!-- Search form div -->
-	<div id="search_div" title="Contributor Search">
+	<div id="search_div" title="Contributor Search" style="visibility: hidden;">
 		<p>Enter a contributor name, or part of their name, and click the search button</p>
 		<form action="/networks/search" method="get" id="search_form" name="search_form">
 			<input type="hidden" name="task" id="task" value="collaborator"/>
