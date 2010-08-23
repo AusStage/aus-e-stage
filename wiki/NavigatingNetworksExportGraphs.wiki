@@ -42,7 +42,7 @@ Mac Users please note: If you are using Chrome or Safari on a Mac computer to do
 ===Gephi===
 The following guide assumes you have completed the following:
   # Downloaded and Installed [http://gephi.org/users/download/ Gephi]
-  # Used the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page] to download a set of network data in *.graphml* format.
+  # Used the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page] to download a set of network data in .graphml format.
   # If you are not already familiar with Gephi, it is advised you work through some of the tutorials available [http://gephi.org/users/ here] in order to get the most out of visualizing your network data.
 
 The following steps will guide you through loading your network data into Gephi. 
