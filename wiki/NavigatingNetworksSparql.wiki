@@ -109,3 +109,39 @@ WHERE {
        FILTER (?collaborator != <ausstage:c:774>) 
 }
 }}}
+
+== List Information About A Contributor == 
+
+{{{
+PREFIX foaf:       <http://xmlns.com/foaf/0.1/> 
+PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> 
+SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaboratorCount
+WHERE {
+	REPLACE_ME a 							foaf:Person;
+						foaf:givenName        		?givenName;
+						foaf:familyName       		?familyName;
+						ausestage:collaboratorCount ?collaboratorCount;
+						ausestage:function    		?function.
+	OPTIONAL {REPLACE_ME			foaf:gender           		?gender}                                           
+	OPTIONAL {REPLACE_ME			ausestage:nationality 		?nationality} 
+}
+}}}
+
+_Note 1:_ Replace the `REPLACE_ME` with the unique identifier of a contributor encoded using the [http://code.google.com/p/aus-e-stage/wiki/RdfExportMoreInfo#AusStage_Unique_Id_Encoding_Scheme AusStage Unique Id Encoding Scheme]. 
+
+For example to find all of the key collaborators for [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=774 Robyn Archer] the query looks like this:
+
+{{{
+PREFIX foaf:       <http://xmlns.com/foaf/0.1/> 
+PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> 
+SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaboratorCount
+WHERE {
+	<ausstage:c:774> a 							foaf:Person;
+						foaf:givenName        		?givenName;
+						foaf:familyName       		?familyName;
+						ausestage:collaboratorCount ?collaboratorCount;
+						ausestage:function    		?function.
+	OPTIONAL {<ausstage:c:774>			foaf:gender           		?gender}                                           
+	OPTIONAL {<ausstage:c:774>			ausestage:nationality 		?nationality} 
+}
+}}}
