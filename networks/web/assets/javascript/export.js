@@ -266,11 +266,9 @@ function showSearchResults(responseText, statusText)  {
 		
 		// add a function to each of the choose buttons
 		$(".choose_button").click(function(eventObject) {
-			// determine which button was clicked
-			target = eventObject.target;
-			
+
 			// get the id of this button
-			var id = target.id;
+			var id = this.id;
 			
 			var tags = id.split("_");
 			
@@ -310,6 +308,6 @@ function showErrorMessage() {
 	
 	// show an error message
 	$("#error_message").empty();
-	$("#error_message").append('<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong>Error:</strong> An error occured while processing this request. Please try again. <br/>If the problem persists please contact the site administrator.</p>');
+	$("#error_message").append('<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong>Error:</strong> An error occured while processing this request. Please try again. <br/>If the problem persists please contact the site administrator.</p></div>');
 	$("#error_message").show();
 }
