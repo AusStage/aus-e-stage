@@ -8,7 +8,7 @@ Below is a series of instructions and guidance on using the [http://beta.ausstag
 
 Before you can view any of the exported data, you will need to download and install one of the following graph visualisation programs. 
 
-.........
+  * [http://gephi.org/ Gephi]: Open-source network visualization software. Download [http://gephi.org/users/download/ here]
 
 == Exporting the Graph Data == 
 
@@ -31,8 +31,11 @@ Using the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data
 *After selecting your contributor*
 
   * You then need to choose whether you would like a directed, or undirected graph. The default, recommended graph type is undirected.
-  * Next, select the desired data format from the drop down list.  The data format you choose should depend on the software you are using to visualize the graph. MORE ON THIS LATER.
+  * Next, select the desired data format from the drop down list.  The data format you choose should depend on the software you are using to visualize the graph. At present, the only output available is a graphml file that can be viewed using [http://gephi.org/ Gephi].
   * Finally, you need to choose the desired radius of your graph. This relates to how many edges are between the central node (_the contributor_) and the outer lying nodes of the network. For instance, a radius of 2 will give you a network of all the people your selected contributor has worked with, and all the people they have worked with. 
-  * Then click the _Export_ button and in a few moments the file will be downloaded to your computer.
+  * Then click the _Export_ button and in a few moments the file will be downloaded to your computer. 
+  * The file should appear as *ausstage-graph-_contributorId_-degrees-_numOfDegrees_.graphml* where _contributorId_ is the contributor id you selected and _numOfDegrees_ is the radius you selected.
+
+Mac Users please note: If you are using Chrome or Safari on a Mac computer to download the Network Data you will need to remove the .xml extension that is automatically added to the file by the browser. The best way to do this is to right-click on the file, and select _Get Info_ from the popup menu. In the info window, scroll down to Name & Extension. Remove the .xml extension from the file name. 
 
 == Using the Graph Data ==
