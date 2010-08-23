@@ -58,6 +58,7 @@ The following steps will guide you through loading your network data into Gephi.
   # Your network data should now be displayed within Gephi as a visualisation.
 
 *Adding two networks to the same visualisation*
+
 Once you have imported one set of data into the visualisation you may wish to add another data set to the visualisation. 
 This can be done very simply using the following steps.
   # With your current project in Gephi displayed, go to the File Menu and select _Open_
