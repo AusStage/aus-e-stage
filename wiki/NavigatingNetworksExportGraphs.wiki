@@ -52,7 +52,7 @@ The following steps will guide you through loading your network data into Gephi.
     * New Project
     * Samples
   # Select _Open Graph File_ under the _New Project_ heading
-  # Another dialogue box will appear titled _Open_. Change the File Format to _GraphML Files (`*`.graphml).
+  # Another dialogue box will appear titled _Open_. Change the File Format to _GraphML Files (`*`.graphml)_.
   # Using the _Open_ dialogue box, locate and select the .graphml file you wish to visualize. Then click the _Open_ button.
   # Another dialogue box will appear titled _Import report_. Click the _OK_ button
   # Your network data should now be displayed within Gephi as a visualisation.
