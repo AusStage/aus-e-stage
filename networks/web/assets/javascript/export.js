@@ -22,6 +22,33 @@ $(document).ready(function() {
 	$("button, input:submit").button();
 });
 
+// determine if we need to show the OS specific warning
+$(document).ready(function() {
+	// do our best to determine the OS type
+	if(BrowserDetect.OS == "Mac") {
+		// show the Apple Mac specific warning if required
+		if($("#format").val() == "graphml") {
+			$("#mac_warning").show();
+		}
+	} else {
+		// hide the Apple Mac warning
+		$("#mac_warning").hide();
+	}
+	
+	// add a change event handler to the format select box
+	$("#format").change(function() {
+		if(BrowserDetect.OS == "Mac") {
+			// show the Apple Mac specific warning if required
+			if($("#format").val() == "graphml") {
+				$("#mac_warning").show();
+			} else {
+				// hide the Apple Mac warning
+				$("#mac_warning").hide();
+			}
+		}
+	});
+});
+
 
 // populate the select boxes in the form
 $(document).ready(function() {

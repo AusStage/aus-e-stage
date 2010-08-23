@@ -31,6 +31,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/browser-detect.js"></script>
 	<script type="text/javascript" src="assets/javascript/export.js"></script>
 </head>
 <body>
@@ -51,6 +52,13 @@
 		<p>
 			If you do not know the contributor id, leave this field blank and click the lookup button to use the contributor search form.
 		</p>
+		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;" id="mac_warning">
+			<p>
+				<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Warning:</strong> It has been detected that you are using a Mac. <br/>
+				When you download graphml export files from this site using a Mac the export file name may have an additional .xml extension added to it.<br/>
+				Please rename the file to remove this additional extension before opening the file in your visualisation software.<br/>
+			</p>
+		</div>
 		<form action="/networks/export" method="get" id="export_data" name="export_data">
 			<table class="formTable">
 				<tbody>
