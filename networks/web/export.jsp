@@ -117,7 +117,7 @@
 		</form>
 	</div>
 	<!-- Search form div -->
-	<div id="search_div" title="Contributor Search" style="visibility: hidden;">
+	<div id="search_div" title="Contributor Search">
 		<p>Enter a contributor name, or part of their name, and click the search button</p>
 		<form action="/networks/search" method="get" id="search_form" name="search_form">
 			<input type="hidden" name="task" id="task" value="collaborator"/>
