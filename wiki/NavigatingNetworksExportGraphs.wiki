@@ -6,14 +6,14 @@
 
 Below is a series of instructions and guidance on using the [http://beta.ausstage.edu.au/networks/export.jsp Export Graph Data] page to export data in  a variety of different formats for use with network visualisation software. 
 
-== Getting Started ==
+= Getting Started =
 
 Before you can view any of the exported data, you will need to download and install one of the following graph visualisation programs. 
 
   * [http://gephi.org/ Gephi]: Open-source network visualization software. Download [http://gephi.org/users/download/ here]
   * [http://visone.info/doku.php?id=index Visone]: Java based network visualization software. Download the Visone web starter [http://visone.info/jaws/visone.jnlp here]. The Visone web starter is the recommended way to run Visone. Each time you run the web starter, it will check for updates and install them before running Visone.
 
-== Exporting the Graph Data == 
+= Exporting the Graph Data =
 
 Using the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page]  is relatively simple. 
 
@@ -41,8 +41,8 @@ Using the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data
 
 Mac Users please note: If you are using Chrome or Safari on a Mac computer to download the Network Data you will need to remove the .xml extension that is automatically added to the file by the browser. The best way to do this is to right-click on the file, and select _Get Info_ from the popup menu. In the info window, scroll down to Name & Extension. Remove the .xml extension from the file name. 
 
-== Using the Graph Data ==
-===Gephi===
+= Using the Graph Data =
+==Gephi==
 The following guide assumes you have completed the following:
   # Downloaded and Installed [http://gephi.org/users/download/ Gephi]
   # Used the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page] to download a set of network data in .graphml format.
@@ -75,7 +75,7 @@ This can be done very simply using the following steps.
   # Click _OK_
   # The additional data should now be displayed in the visualisation.
 
-=== Visone ===
+== Visone ==
 The following guide assumes you have completed the following:
   # Downloaded and run the [http://visone.info/jaws/visone.jnlp Visone Java Web Starter]
   # Used the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page] to download a set of network data in .graphml format.
