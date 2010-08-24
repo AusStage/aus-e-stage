@@ -4,7 +4,7 @@
 MYPATH=`pwd`
 TASK_TYPE=export-network-data
 OUTPUT_PATH=$MYPATH/output/rdf-network-export.ttl
-DATA_FORMAT="TURTLE"
+DATA_FORMAT=
 QUERY_FILE=$MYPATH/input/sample-query.sparql
 #
 # delete the output file if it already exists
