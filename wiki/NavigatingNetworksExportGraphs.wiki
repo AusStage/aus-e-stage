@@ -1,5 +1,7 @@
 #summary Information on how to export graph data using the Navigating Networks Service
 
+<wiki:toc max_depth="2" />
+
 = Introduction =
 
 Below is a series of instructions and guidance on using the [http://beta.ausstage.edu.au/networks/export.jsp Export Graph Data] page to export data in  a variety of different formats for use with network visualisation software. 
