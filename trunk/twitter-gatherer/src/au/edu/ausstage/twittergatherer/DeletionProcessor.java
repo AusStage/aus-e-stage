@@ -69,9 +69,10 @@ public class DeletionProcessor implements Runnable {
 	/**
 	 * A constructor for this class
 	 *
-	 * @param tweets   a blocking queue used to store new messages
-	 * @param logDir   the directory to log files to
-	 * @param manager  a valid DbManager object
+	 * @param deletes      a blocking queue used to store new messages
+	 * @param logDir       the directory to log files to
+	 * @param manager      a valid DbManager object
+	 * @param emailManager a valid EmailManager object
 	 *
 	 */
 	public DeletionProcessor(LinkedBlockingQueue<SDeletion> deletes, String logDir, DbManager manager, EmailManager emailManager) {

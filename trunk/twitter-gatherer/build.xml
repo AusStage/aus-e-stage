@@ -17,25 +17,20 @@
 -->
 
 <project name="TwitterGatherer" default="main" basedir=".">
-
-	<!-- Property definitions that are user specific are stored in a build.properties file -->
-	<property file="build.properties"/>
-	<property file="build.properties"/>
 	
 	<!-- Directories -->
-	<property name="src.dir"     value=""/>
-    <property name="build.dir"   value=""/>
-    <property name="jar.dir"     value=""/>
-    <property name="lib.dir"     value=""/>
+	<property name="src.dir"     value="${basedir}/src"/>
+    <property name="build.dir"   value="${basedir}/build"/>
+    <property name="jar.dir"     value="${basedir}/jar"/>
+    <property name="lib.dir"     value="${basedir}/lib"/>
+    <property name="docs.dir"    value="${basedir}/docs/api"/>
+    <property name="main-class"  value="au.edu.ausstage.twittergatherer.TwitterGatherer"/> 
     
     <!-- custom paths such as the class path -->
     <path id="classpath">
     	<fileset dir="${lib.dir}" includes="*.jar"/>
     </path>
 
-	<!-- main class in the jar file -->
-	<property name="main-class"  value=""/>
-	
 	<!-- compilation properties -->
 	<property name="compile.debug"       value="true"/>
 	<property name="compile.deprecation" value="true"/>
@@ -84,18 +79,24 @@
 		</jar>
 	</target>
 	
-	<!-- run target builds the source code and runs the jar file -->
+	<!-- javadoc target to create the java doc files -->
+	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
 
-	<target name="run" depends="clean, jar">
-		<exec executable="./run.sh">
-		</exec>
+		<mkdir dir="${docs.dir}"/>
+			<javadoc sourcepath="${src.dir}" destdir="${docs.dir}" packagenames="au.edu.ausstage.twittergatherer">
+			<classpath refid="classpath"/>
+		</javadoc>
+
 	</target>
 	
 	<!-- clean-build target cleans and then builds -->
 	<target name="clean-build" depends="clean,jar"/>
 	
-	<!-- main target cleans and then runs the app -->
-	<target name="main" depends="clean,run"/>
+	<!-- main target cleans and then compiles the app -->
+	<target name="main" depends="clean,compile"/>
+	
+	<!-- dist target cleans, compiles packages and generates the documentation -->
+	<target name="dist" depends="main,jar,javadoc"/>
 
 </project>
 
