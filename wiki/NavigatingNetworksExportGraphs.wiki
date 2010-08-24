@@ -17,25 +17,27 @@ Using the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data
 
 *If you know the contributor id*
 
-  * If you know the id of the contributor whos network you wish to graph, enter the id in the _Contributor Id_ field. 
-  * Then, click the _Lookup_ button situated to the right of the _Contributor Name_ field, this checks that the contributor id relates to a contributor and you should see the contributors name appear in the _Contributor Name_ field.
+  # If you know the id of the contributor whos network you wish to graph, enter the id in the _Contributor Id_ field. 
+  # Then, click the _Lookup_ button situated to the right of the _Contributor Name_ field, this checks that the contributor id relates to a contributor and you should see the contributors name appear in the _Contributor Name_ field.
 
 *If you don't know the contributor id*
   
-  * If you don't know the id of the contributor who's network you would like to graph, click on the _Lookup_ button situated to the right of the _Contributor Name_ field.
-  * A popup window should appear with a single field for Contributor Name.
-  * Enter the name of the contributor you wish to graph and click the _Search_ button.
-  * After a few moments the window will show matching results. 
-  * If the contributor you wish to graph is returned, click the _Choose_ button relating to that contributor.
-  * The popup window will disappear, and both the _Contributor Id_ and _Contributor Name_ fields will be populated.
+  # If you don't know the id of the contributor who's network you would like to graph, click on the _Lookup_ button situated to the right of the _Contributor Name_ field.
+  # A popup window should appear with a single field for Contributor Name.
+  # Enter the name of the contributor you wish to graph and click the _Search_ button.
+  # After a few moments the window will show matching results. 
+  # If the contributor you wish to graph is returned, click the _Choose_ button relating to that contributor.
+  # The popup window will disappear, and both the _Contributor Id_ and _Contributor Name_ fields will be populated.
   
 *After selecting your contributor*
 
-  * You then need to choose whether you would like a directed, or undirected graph. The default, recommended graph type is undirected.
-  * Next, select the desired data format from the drop down list.  The data format you choose should depend on the software you are using to visualize the graph. At present, the only output available is a graphml file that can be viewed using [http://gephi.org/ Gephi].
-  * Finally, you need to choose the desired radius of your graph. This relates to how many edges are between the central node (_the contributor_) and the outer lying nodes of the network. For instance, a radius of 2 will give you a network of all the people your selected contributor has worked with, and all the people they have worked with. 
-  * Then click the _Export_ button and in a few moments the file will be downloaded to your computer. 
-  * The file should appear as *ausstage-graph-_contributorId_-degrees-_numOfDegrees_.graphml* where _contributorId_ is the contributor id you selected and _numOfDegrees_ is the radius you selected.
+  # You then need to choose whether you would like a directed, or undirected graph. The default, recommended graph type is undirected.
+  # Next, select the desired data format from the drop down list.  The data format you choose should depend on the software you are using to visualize the graph. The following table shows which formats are compatible with which visualization tools || Program || Format ||
+|| Gephi || graphml ||
+|| Visone || graphml ||
+  # Finally, you need to choose the desired radius of your graph. This relates to how many edges are between the central node (_the contributor_) and the outer lying nodes of the network. For instance, a radius of 2 will give you a network of all the people your selected contributor has worked with, and all the people they have worked with. 
+  # Then click the _Export_ button and in a few moments the file will be downloaded to your computer. 
+  # The file should appear as *ausstage-graph-_contributorId_-degrees-_numOfDegrees_.graphml* where _contributorId_ is the contributor id you selected and _numOfDegrees_ is the radius you selected.
 
 Mac Users please note: If you are using Chrome or Safari on a Mac computer to download the Network Data you will need to remove the .xml extension that is automatically added to the file by the browser. The best way to do this is to right-click on the file, and select _Get Info_ from the popup menu. In the info window, scroll down to Name & Extension. Remove the .xml extension from the file name. 
 
