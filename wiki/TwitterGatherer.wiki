@@ -53,3 +53,7 @@ In this way relationships between messages, and the grouping of messages by user
  * [http://github.com/mzsanford/twitter-text-java twitter-text-java]
    * Used to extract the hash tags from the twitter messages
    * Information [http://techxplorer.com/2010/08/16/exploring-twitter-text-java/ on compiling] the twitter-text-java package
+
+= Documentation =
+
+Details of the classes and methods available is contained in the standard Javadoc files available via the [http://aus-e-stage.googlecode.com/svn/trunk/twitter-gatherer/docs/api/index.html source repository].
