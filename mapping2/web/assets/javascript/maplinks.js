@@ -63,7 +63,7 @@ $(document).ready(function() {
 		showMissingParameterMessage();
 	} else { 
 		// use the getMapData function in the map.functions.js file to load the map data
-		getMapData(type, id, 'a', null, null, true);
+		mapData = getMapData(type, id, 'a', null, null, true);
 	}
 	
 	//override the default form action
@@ -100,18 +100,18 @@ function showMissingParameterMessage() {
 function reloadMap() {
 	
 	// check to ensure map data is present
-/*	if(mapData == null) {
+	if(mapData == null) {
 		$("#map").empty();
 		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
 		return false;
 	}
-*/
+
 	// get the start date
-/*	var startDate  = $("#event_start").val();
+	var startDate  = $("#event_start").val();
 	var finishDate = $("#event_finish").val();
 	
-	getMapData(mapData, true, $("#state").val(), startDate, finishDate);*/
+	//getMapData(mapData, true, $("#state").val(), startDate, finishDate);
 	var focus = $("#state").val();
-	getMapData(type, id, focus, null, null, false);
+	getMapData(type, id, focus, startDate, finishDate, false);
 
 }

@@ -44,6 +44,27 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 	var url;
 	var map = null;
 	
+	// adjust the dates if necessary
+	if(start != null && finish != null) {
+		start = start.replace("-", "");
+		start = start.replace("-", "");
+		if(start.length == 4) {
+			start += "0101";
+		} else if(start.length == 6) {
+			start += "01";
+		}
+		start = parseInt(start);
+		
+		finish = finish.replace("-", "");
+		finish = finish.replace("-", "");
+		if(finish.length == 4) {
+			finish += "1231";
+		} else if(finish.length == 6) {
+			finish += "31";
+		}		
+		finish = parseInt(finish);
+	}
+	
 	if (updateHeader == true) {
 	
 		// determine what type of API call to make
@@ -64,6 +85,16 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 		 * more information on 'get' here: http://api.jquery.com/jQuery.get/
 		 */
 		$.get(url, function(data, textStatus, XMLHttpRequest) {
+		    // extract the markers from the xml
+		    if (markers == null){
+		    	markers = data.documentElement.getElementsByTagName("marker");
+		    	
+		    	for (var k = 0; k < markers.length; k++) {		    	
+		    		var first = markers[k].getAttribute("fdatestr");
+		    		var last  = markers[k].getAttribute("ldatestr");
+		    		//console.log(k, " --first: ", first, "  --last: ", last);
+		    	}
+		    }
 			mapData = data;	
 		// determine if we should update the header
 		//if(updateHeader == true) {
@@ -95,7 +126,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			map = createMap(mapID, focus, start, finish);			
 			
 			// build the time slider
-			buildTimeSlider(data);
+			buildTimeSlider();
 			
 		});	//end of $.get()
 	}else if (updateHeader == false){
@@ -111,7 +142,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 function createMap(mapID, focus, start, finish){
     var myOptions = {
 		      zoom: getZoom(focus),
-		      center: getLatLng(focus),
+		      center: getMapFocusLatLng(focus),
 		      mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 
@@ -121,10 +152,6 @@ function createMap(mapID, focus, start, finish){
     	infowindow.close();
     });
 
-    // extract the markers from the xml
-    if (markers == null){
-    	markers = mapData.documentElement.getElementsByTagName("marker");
-    }
     var j = 0;
     var markerArray = new Array();
     // build a group of markers on the map
@@ -153,7 +180,7 @@ function createMap(mapID, focus, start, finish){
     	    j = j+1;
     	}
     }//end of for (build group of markers)	
-    console.log("Num of makers created: " + j);
+    //console.log("Num of makers created: " + j);
     return map;
 }
 
@@ -204,8 +231,8 @@ function getZoom(focus){
 	}
 }
 
-//create Latlng to set the ma center according to the focus	
-function getLatLng(focus) {
+//create Latlng to set the map center according to the focus	
+function getMapFocusLatLng(focus) {
 	
 	switch(focus){
 	case '1':
@@ -353,7 +380,7 @@ function createMarker(map, latlng, info, venueName) {
 }
 
 //function to build the time slider
-function buildTimeSlider(data) {
+function buildTimeSlider() {
 
 	// define an array to store the dates
 	var dates = {};
@@ -372,7 +399,9 @@ function buildTimeSlider(data) {
 		
 		if(dates[last] == null) {
 			dates[last] = last;
-		}		
+		}
+		/*console.log("====1==== dates[ ", first, " ] :", dates[first]);
+		console.log("====2==== dates[ ", last, " ] :", dates[last]);*/
 	}
 	
 	// clear the time slider
