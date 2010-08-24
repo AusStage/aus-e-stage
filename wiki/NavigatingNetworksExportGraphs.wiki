@@ -9,6 +9,7 @@ Below is a series of instructions and guidance on using the [http://beta.ausstag
 Before you can view any of the exported data, you will need to download and install one of the following graph visualisation programs. 
 
   * [http://gephi.org/ Gephi]: Open-source network visualization software. Download [http://gephi.org/users/download/ here]
+  * [http://visone.info/doku.php?id=index Visone]: Java based network visualization software. Download the Visone web starter [http://visone.info/jaws/visone.jnlp here]. The Visone web starter is the recommended way to run Visone. Each time you run the web starter, it will check for updates and install them before running Visone.
 
 == Exporting the Graph Data == 
 
@@ -71,3 +72,21 @@ This can be done very simply using the following steps.
   # Ensure _Append graph_ is selected.
   # Click _OK_
   # The additional data should now be displayed in the visualisation.
+
+=== Visone ===
+The following guide assumes you have completed the following:
+  # Downloaded and run the [http://visone.info/jaws/visone.jnlp Visone Java Web Starter]
+  # Used the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data page] to download a set of network data in .graphml format.
+  # If you are not already familiar with Visone, it is advised you read through the documentation available [http://visone.info/doku.php?id=docs:firststeps:index here] in order to get the most out of visualizing your network data.
+
+The following steps will guide you through loading your network data into Visone
+  # Locate and run visone.jnlp on your computer.
+    * Depending on your operating system, you may get a message similar to the following
+*The application "Visone" from "visone.info" is requesting access to your computer. 
+  The digital signature could not be verified.*  
+If this occurs, check the box that will allow this in future and click the _Allow_ button
+  # Once Visone has loaded, go to the _File_ menu and select _Open_.
+  # The _Open_ dialogue box will appear. Use this to locate and select the .graphml file you wish to visualize. 
+  # Click the _OK_ button in the _Open_ dialogue box.
+  # Your network data will then be loaded into Visone as a visualisation.
+Please Note: Visone initially loads this data very simply, so you may on first load see just one coloured box. Using the  visualization and layout parameters within Visone will alter the visualisation.
