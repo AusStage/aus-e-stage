@@ -81,6 +81,14 @@
 							<option value="5"> - Tasmania</option>
 							<option value="6"> - Victoria</option>
 							<option value="2"> - Western Australia</option>
+							<option value="1a"> - Adelaide</option>
+							<option value="2a"> - Perth</option>
+							<option value="3a"> - Sydney</option>
+							<option value="4a"> - Brisbane</option>
+							<option value="5a"> - Hobart</option>
+							<option value="6a"> - Melbourne</option>
+							<option value="7a"> - Canberra</option>
+							<option value="8a"> - Darwin</option>
 							<option value="9">Outside Australia</option>
 						</select>
 					</th>
