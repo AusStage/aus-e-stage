@@ -32,7 +32,7 @@ public class RdfExport {
 
 	// Version information 
 	private static final String VERSION    = "1.0.0";
-	private static final String BUILD_DATE = "2010-07-12";
+	private static final String BUILD_DATE = "2010-08-24";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks

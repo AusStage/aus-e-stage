@@ -29,6 +29,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.util.GregorianCalendar;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 // import the Jena related packages
 import com.hp.hpl.jena.rdf.model.*;
@@ -36,6 +38,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.tdb.*;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+
 
 //debug code
 import com.hp.hpl.jena.sparql.sse.Item;
@@ -59,6 +62,10 @@ public class BuildNetworkData {
 	
 	// declare private class level constants
 	private final int RECORD_NOTIFY_COUNT = 10000;
+	
+	// declare other private variables
+	// pattern derived from the com.hp.hpl.jena.rdf.model.impl.Util class
+	private final Pattern invalidContentPattern = Pattern.compile( "<|>|&|[\0-\37&&[^\n\t]]|\uFFFF|\uFFFE" );
 	
 	/**
 	 * A constructor for this class
@@ -223,6 +230,8 @@ public class BuildNetworkData {
 			// declare helper variables
 			String   firstName   = null;
 			String   lastName    = null;
+			String   otherName   = null;
+			String   nationality = null;
 			Resource contributor = null;
 			Resource bioBirth    = null;
 	
@@ -240,6 +249,37 @@ public class BuildNetworkData {
 				
 				if(lastName == null) {
 					lastName = "";
+				}
+				
+				// double check the name variables
+				try {
+					// use this method that encodes entities to check the content of the title
+					// if it throws an exception the title will not make it into the XML serialised content
+					com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(firstName);
+				
+				} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+					// the title will not make it into the XML serialised content
+					System.err.println("ERROR: A contributor first name contains invalid content that must be manually fixed.");
+					System.err.println("       The contributor id is: " + resultSet.getString(1));
+					System.err.println("       The contributor first name is: " + firstName);
+				
+					Matcher invalidContentMatch = invalidContentPattern.matcher(firstName);
+					firstName = invalidContentMatch.replaceAll("");
+				}
+				
+				try {
+					// use this method that encodes entities to check the content of the title
+					// if it throws an exception the title will not make it into the XML serialised content
+					com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(lastName);
+				
+				} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+					// the title will not make it into the XML serialised content
+					System.err.println("ERROR: A contributor last name contains invalid content that must be manually fixed.");
+					System.err.println("       The contributor id is: " + resultSet.getString(1));
+					System.err.println("       The contributor last name is: " + lastName);
+				
+					Matcher invalidContentMatch = invalidContentPattern.matcher(lastName);
+					lastName = invalidContentMatch.replaceAll("");
 				}
 	
 				// create a new contributor
@@ -263,7 +303,24 @@ public class BuildNetworkData {
 				
 				// add the nationality
 				if(resultSet.getString(5) != null) {
-					contributor.addProperty(AuseStage.nationality, resultSet.getString(5));
+				
+					nationality = resultSet.getString(5);
+				
+					try {
+						// use this method that encodes entities to check the content of the title
+						// if it throws an exception the title will not make it into the XML serialised content
+						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(nationality);
+				
+					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+						// the title will not make it into the XML serialised content
+						System.err.println("ERROR: A contributor nationality contains invalid content that must be manually fixed.");
+						System.err.println("       The contributor id is: " + resultSet.getString(1));
+						System.err.println("       The contributor nationality is: " + nationality);
+				
+						Matcher invalidContentMatch = invalidContentPattern.matcher(nationality);
+						nationality = invalidContentMatch.replaceAll("");
+					}
+					contributor.addProperty(AuseStage.nationality, nationality);
 				}
 				
 				// add the date of birth
@@ -276,7 +333,24 @@ public class BuildNetworkData {
 				
 				// add other names
 				if(resultSet.getString(9) != null) {
-					contributor.addProperty(AuseStage.otherNames, resultSet.getString(9));
+				
+					otherName = resultSet.getString(9);
+				
+					try {
+						// use this method that encodes entities to check the content of the title
+						// if it throws an exception the title will not make it into the XML serialised content
+						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(otherName);
+				
+					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+						// the title will not make it into the XML serialised content
+						System.err.println("ERROR: A contributor other name contains invalid content that must be manually fixed.");
+						System.err.println("       The contributor id is: " + resultSet.getString(1));
+						System.err.println("       The contributor other name is: " + otherName);
+				
+						Matcher invalidContentMatch = invalidContentPattern.matcher(otherName);
+						otherName = invalidContentMatch.replaceAll("");
+					}
+					contributor.addProperty(AuseStage.otherNames, otherName);
 				}
 				
 				// store a reference to this contributor
@@ -590,11 +664,23 @@ public class BuildNetworkData {
 					// no we haven't so create a new event
 					event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
 					event.addProperty(RDF.type, Event.Event);
-			
-					// process the title
-					title = resultSet.getString(2);
-					title = title.replaceAll("\r", " ");
-					title = title.replaceAll("\n", " ");
+					
+					// check the event title
+					try {
+						// use this method that encodes entities to check the content of the title
+						// if it throws an exception the title will not make it into the XML serialised content
+						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(2));
+						title = resultSet.getString(2);
+						
+					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+						// the title will not make it into the XML serialised content
+						System.err.println("ERROR: An event name contains invalid content that must be manually fixed.");
+						System.err.println("       The event id for this event is: " + resultSet.getString(1));
+						System.err.println("       The name for this event is: " + resultSet.getString(2));
+						
+						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(2));
+						title = invalidContentMatch.replaceAll("");
+					}
 					
 					// add the title and Url
 					event.addProperty(DCTerms.title, title);
@@ -775,6 +861,7 @@ public class BuildNetworkData {
 			
 			// declare helper variables
 			Resource organisation = null;
+			String name = null;
 	
 			// loop through the 
 			while (resultSet.next()) {
@@ -784,22 +871,84 @@ public class BuildNetworkData {
 				organisation.addProperty(RDF.type, Org.Organization);
 				
 				// add the name
-				organisation.addProperty(SKOS.prefLabel, resultSet.getString(2));
+				// check the name
+				try {
+					// use this method that encodes entities to check the content of the title
+					// if it throws an exception the title will not make it into the XML serialised content
+					com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(2));
+					name = resultSet.getString(2);
+					
+				} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+					// the title will not make it into the XML serialised content
+					System.err.println("ERROR: An organisation name contains invalid content that must be manually fixed.");
+					System.err.println("       The organisation id is: " + resultSet.getString(1));
+					System.err.println("       The organisation name is: " + resultSet.getString(2));
+					
+					Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(2));
+					name = invalidContentMatch.replaceAll("");
+				}
+				// add the name
+				organisation.addProperty(SKOS.prefLabel, name);
 				
 				// add the url
 				organisation.addProperty(FOAF.page, AusStageURI.getOrganisationURL(resultSet.getString(1)));
 				
 				// add any other names if present
 				if(resultSet.getString(3) != null) {
-					organisation.addProperty(SKOS.altLabel, resultSet.getString(3));
+					try {
+						// use this method that encodes entities to check the content of the title
+						// if it throws an exception the title will not make it into the XML serialised content
+						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(3));
+						name = resultSet.getString(3);
+					
+					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+						// the title will not make it into the XML serialised content
+						System.err.println("ERROR: An organisation other name contains invalid content that must be manually fixed.");
+						System.err.println("       The organisation id is: " + resultSet.getString(1));
+						System.err.println("       The organisation name is: " + resultSet.getString(3));
+					
+						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(3));
+						name = invalidContentMatch.replaceAll("");
+					}
+					organisation.addProperty(SKOS.altLabel, name);
 				}
 				
 				if(resultSet.getString(4) != null) {
-					organisation.addProperty(SKOS.altLabel, resultSet.getString(4));
+					try {
+						// use this method that encodes entities to check the content of the title
+						// if it throws an exception the title will not make it into the XML serialised content
+						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(4));
+						name = resultSet.getString(4);
+					
+					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+						// the title will not make it into the XML serialised content
+						System.err.println("ERROR: An organisation other name contains invalid content that must be manually fixed.");
+						System.err.println("       The organisation id is: " + resultSet.getString(1));
+						System.err.println("       The organisation name is: " + resultSet.getString(4));
+					
+						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(4));
+						name = invalidContentMatch.replaceAll("");
+					}
+					organisation.addProperty(SKOS.altLabel, name);
 				}
 				
 				if(resultSet.getString(5) != null) {
-					organisation.addProperty(SKOS.altLabel, resultSet.getString(5));
+					try {
+						// use this method that encodes entities to check the content of the title
+						// if it throws an exception the title will not make it into the XML serialised content
+						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(5));
+						name = resultSet.getString(5);
+					
+					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+						// the title will not make it into the XML serialised content
+						System.err.println("ERROR: An organisation other name contains invalid content that must be manually fixed.");
+						System.err.println("       The organisation id is: " + resultSet.getString(1));
+						System.err.println("       The organisation name is: " + resultSet.getString(5));
+					
+						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(5));
+						name = invalidContentMatch.replaceAll("");
+					}
+					organisation.addProperty(SKOS.altLabel, name);
 				}
 				
 				// store a reference to this organisation
@@ -996,7 +1145,6 @@ public class BuildNetworkData {
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
-
 	
 	/**
 	 * A method used to build a date from the components in the AusStage database
