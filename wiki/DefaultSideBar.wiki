@@ -37,6 +37,7 @@
    * [AusStageTerminator AusStage Terminator Service]
  * Other Software Under Development
    * [UtilsPackage AusStage Utilities Package]
+   * [VocabPackage AusStage Vocabularies Package]
  * [UsefulLinks Useful Links]   
  * [http://www.ausstage.edu.au AusStage Homepage]
  * [http://beta.ausstage.edu.au Aus-e-Stage Project Homepage]
