@@ -155,10 +155,7 @@ function createMap(mapID, focus, start, finish){
     var j = 0;
     var markerArray = new Array();
     // build a group of markers on the map
-    for (var i = 0; i < markers.length; i++) {
-
-    	// get the colour of the icon
-    	//var eventCount = parseInt(markers[i].getAttribute("events"));
+    for (var i = 0; i < markers.length; i++) {    	
 
     	// filter markers if required and add the marker on the map
     	if(checkMarkers(i, focus, start, finish) == true) {			
@@ -170,13 +167,27 @@ function createMap(mapID, focus, start, finish){
     		if(typeof(info) == "undefined") {
     			info = markers[i].text;
     		}
-
+        	
     		// get the name, suburb and postcode
     		var venueName   = markers[i].getAttribute("name");
     		var venueSuburb = markers[i].getAttribute("suburb");
     		venueName = venueName + ", " + venueSuburb;
 
-    		markerArray[j] = createMarker(map, latlng, info, venueName);
+    		// get the colour of the icon
+        	var eventCount = parseInt(markers[i].getAttribute("events"));
+        	var iconURL = null;
+        	if(eventCount == 1) {
+        		iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|CCBAD7|000000";
+    		}else if(eventCount >=2 && eventCount <=5) {
+    			iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|9A7BAB|000000";
+    		}else if(eventCount >= 6 && eventCount <= 15) {
+    			iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|7F649B|000000";
+    		}else if(eventCount >= 16 && eventCount <= 30) {
+    			iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|69528E|000000";
+    		} else {
+    			iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|4D3779|000000";
+    		}
+    		markerArray[j] = createMarker(map, latlng, info, venueName, iconURL);
     	    j = j+1;
     	}
     }//end of for (build group of markers)	
@@ -204,7 +215,7 @@ function getZoom(focus){
 		return 9; //ACT
 	case '8':
 		return 6; //NT
-/*	case '1a':
+	case '1a':
 		return 14; // Adelaide
 	case '2a':
 		return 14; // Perth
@@ -220,7 +231,7 @@ function getZoom(focus){
 		return 14; // Canberra
 	case '8a':
 		return 14; // Darwin
-*/	case '9':
+	case '9':
 		return 2; //outside Aus
 	case 'nolimit':
 		return 2; //all venues
@@ -252,7 +263,7 @@ function getMapFocusLatLng(focus) {
 		return new google.maps.LatLng(-35.49, 149.001388); //ACT
 	case '8':
 		return new google.maps.LatLng(-19.383333, 133.357777); //NT
-/*	case '1a':
+	case '1a':
 		return new google.maps.LatLng(-34.93, 138.60); // Adelaide		
 	case '2a':
 		return new google.maps.LatLng(-31.95, 115.85); // Perth
@@ -268,7 +279,7 @@ function getMapFocusLatLng(focus) {
 		return new google.maps.LatLng(-35.30, 149.13); // Canberra		
 	case '8a':
 		return new google.maps.LatLng(-12.45, 130.83); // Darwin		
-*/	case '9':
+	case '9':
 		return new google.maps.LatLng(-25.947028, 133.209639); //outside Aus	
 	case 'nolimit':
 		return new google.maps.LatLng(-25.947028, 133.209639); //all venues
@@ -355,6 +366,22 @@ function checkMarkersByState(i, focus){
 			return true;
 		}else if(focus == "9" && state == "9") {
 			return true;
+		}else if(focus == "1a" && state == "1") {
+			return true;
+		}else if(focus == "2a" && state == "2") {
+			return true;
+		}else if(focus == "3a" && state == "3") {
+			return true;
+		}else if(focus == "4a" && state == "4") {
+			return true;
+		}else if(focus == "5a" && state == "5") {
+			return true;
+		}else if(focus == "6a" && state == "6") {
+			return true;
+		}else if(focus == "7a" && state == "7") {
+			return true;
+		}else if(focus == "8a" && state == "8") {
+			return true;
 		}			
 	} else {
 		return true;
@@ -363,12 +390,13 @@ function checkMarkersByState(i, focus){
 }
 
 //build a single marker
-function createMarker(map, latlng, info, venueName) {
+function createMarker(map, latlng, info, venueName, iconURL) {
 	
 	var marker = new google.maps.Marker({  
 		   position: latlng,  
 		   map: map,
-		   title: venueName
+		   title: venueName,
+		   icon: iconURL
 		 });
 	
 	google.maps.event.addListener(marker, 'click', function() {  
