@@ -1,6 +1,6 @@
 #summary Information on how to export graph data using the Navigating Networks Service
 
-<wiki:toc max_depth="2" />
+<wiki:toc max_depth="3" />
 
 = Introduction =
 
