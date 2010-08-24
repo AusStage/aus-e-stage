@@ -1,8 +1,7 @@
 #summary Default Sidebar for all Wiki pages
 
  * [StartPage Wiki Start Page]
- * [Articles HowTo articles]
-   * Aus-e-Stage Software Tools
+ * HowTo articles
      * [AbsDataFix Building ABS Overlays]
    * Processes
      * [SourcingAbsData Sourcing data from the ABS]
@@ -35,6 +34,7 @@
    * [AusStageTerminator AusStage Terminator Service]
  * Other Software Under Development
    * Applications 
+     * [AbsDataFix ABS Data Fix App]
      * [RdfExport RDF Export App]
      * [TwitterGatherer Twitter Gatherer App]
    * Libraries
