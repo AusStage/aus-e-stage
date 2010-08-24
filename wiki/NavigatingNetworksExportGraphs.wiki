@@ -82,11 +82,9 @@ The following guide assumes you have completed the following:
 The following steps will guide you through loading your network data into Visone
   # Locate and run visone.jnlp on your computer.
     * Depending on your operating system, you may get a message similar to the following
-
-      _The application "Visone" from "visone.info" is requesting access to your computer. 
-      The digital signature could not be verified._ 
-
-If this occurs, check the box that will allow this in future and click the _Allow_ button
+          _The application "Visone" from "visone.info" is requesting access to your computer. 
+          The digital signature could not be verified._ 
+    If this occurs, check the box that will allow this in future and click the _Allow_ button
   # Once Visone has loaded, go to the _File_ menu and select _Open_.
   # The _Open_ dialogue box will appear. Use this to locate and select the .graphml file you wish to visualize. 
   # Click the _OK_ button in the _Open_ dialogue box.
