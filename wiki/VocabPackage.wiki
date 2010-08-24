@@ -1,0 +1,19 @@
+#summary Information about the AusStage Vocabularies Package
+
+=!AusStage Vocabularies Package=
+
+The !AusStage Vocabularies Package contains classes that are useful when working with the RDF based data store that powers the [NetworkService Navigating Networks Service]. Of particular note is the [http://aus-e-stage.googlecode.com/svn/trunk/vocabularies/docs/api/au/edu/ausstage/vocabularies/AusStageURI.html AusStageURI] class which provide convenience methods for constructing and evaluating the URIs for !AusStage recorded encoded using the [RdfExportMoreInfo#AusStage_Unique_Id_Encoding_Scheme AusStage Unique Id Encoding Scheme].
+
+== Documentation ==
+
+Details of the classes and methods available is contained in the standard Javadoc files available via the [http://aus-e-stage.googlecode.com/svn/trunk/vocabularies/docs/api/index.html source repository].
+
+== Dependencies ==
+
+The classes rely on the following libraries being available in the classpath.
+
+ * [http://sourceforge.net/projects/jena/files/Jena/ Jena Semantic Web Framework]
+
+== Ontologies ==
+
+The ontologies represented by these classes are listed on the [NavigatingNetworksDataset#RDF_Ontologies Navigating Networks Dataset] page.
