@@ -4,7 +4,6 @@
  * [Articles HowTo articles]
    * Aus-e-Stage Software Tools
      * [AbsDataFix Building ABS Overlays]
-     * [RdfExport Creating the Network Dataset]
    * Processes
      * [SourcingAbsData Sourcing data from the ABS]
      * [SubversionRepository Using our Subversion Repository]
@@ -37,7 +36,8 @@
  * Other Software Under Development
    * [UtilsPackage AusStage Utilities Package]
    * [VocabPackage AusStage Vocabularies Package]
-   * [TwitterGatherer Twitter Gatherer]
+   * [RdfExport AusStage RDF Export App]
+   * [TwitterGatherer AusStage Twitter Gatherer App]
  * [UsefulLinks Useful Links]   
  * [http://www.ausstage.edu.au AusStage Homepage]
  * [http://beta.ausstage.edu.au Aus-e-Stage Project Homepage]
