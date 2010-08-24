@@ -4,45 +4,18 @@
 
 The !AusStage Utilities Package contains classes that are useful in undertaking repetitive tasks and provides a number of utility based functions. 
 
-_Note: Some applications / servlets may use their own independent implementations of these methods / classes as they were developed *before* the utils class. Where this is the case work should be undertaken to bring replace the independent functionality with that available in this package._
+_Note: Some applications / servlets may use their own independent implementations of these methods / classes as they were developed *before* the utilities package. Where this is the case work should be undertaken to replace the independent functionality with that available in this package._
 
-Details of the classes are below. Check the [http://code.google.com/p/aus-e-stage/source/browse/#svn/trunk/utils-lib/src/au/edu/ausstage/utils source files] for methods and functionality available. 
+== Documentation ==
 
-<wiki:toc max_depth=="3" />
-
-== !CommandLineParser ==
-
-Used to manage command line arguments that are passed to a Java Application
-
-== !DateUtils ==
-
-Used to manage dates including formatting / constructing dates from the !AusStage database
-
-== !DbManager ==
-
-Used to connect to, and manage interaction with, the database
-
-== !DbObjects ==
-
-Used to manage the objects returned from the !DbManager class
-
-== !FileUtils ==
-
-Provides convenience methods for interacting with the file system
-
-== !HashUtils ==
-
-Provides convenience methods for hashing values and comparing hashed values
-
-== !InputUtils ==
-
-Used to validate input into other methods and classes. For example ensuring a String is not null or empty, or that a string represents an integer
-
-== !PropertiesManager == 
-
-Used to retrieve items from a standard properties file
+Details of the classes and methods available is contained in the standard Javadoc files available via the [http://aus-e-stage.googlecode.com/svn/trunk/utils-lib/docs/api/index.html source repository].
 
 == Dependencies ==
 
- * [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html Oracle JDBC Library]
+The classes rely on the following libraries being available in the classpath.
+
  * [http://commons.apache.org/codec/ Apache Commons Codec]
+ * [http://commons.apache.org/lang/ Apache Commons Lang]
+ * [http://commons.apache.org/email/ Apache Commons Email]
+ * [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html Oracle JDBC Library]
+ * [http://www.oracle.com/technetwork/java/index-jsp-139225.html Java Mail Library]
