@@ -22,7 +22,7 @@ package au.edu.ausstage.utils;
 import java.util.HashMap;
 
 /**
- * A class of methods useful when reading data from a properties file
+ * A class of methods useful when reading arguments from the command line
  */
 public class CommandLineParser {
 
