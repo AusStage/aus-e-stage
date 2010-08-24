@@ -2,10 +2,9 @@
 
  * [StartPage Wiki Start Page]
  * !HowTo articles
-     * [AbsDataFix Building ABS Overlays]
-   * Processes
-     * [SourcingAbsData Sourcing data from the ABS]
-     * [SubversionRepository Using our Subversion Repository]
+   * [AbsDataFix Building ABS Overlays]
+   * [SourcingAbsData Sourcing data from the ABS]
+   * [SubversionRepository Using our Subversion Repository]
    * [WikiImages Using Images in the Wiki]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
