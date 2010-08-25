@@ -28,8 +28,9 @@ import com.hp.hpl.jena.vocabulary.*;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.tdb.*;
 
-// import the vocabularies
+// import the AusStage classes
 import au.edu.ausstage.vocabularies.*;
+import au.edu.ausstage.utils.*;
 
 /**
  * A Class used to export an RDF based dataset of contributor information
@@ -67,15 +68,9 @@ public class ExportNetworkData {
 	public boolean doTask(String dataFormat, File outputFile) {
 	
 		// check on the parameters
-		if(dataFormat == null || outputFile == null) {
+		if(InputUtils.isValid(dataFormat) == false || outputFile == null) {
 			throw new IllegalArgumentException("ERROR: The parameters to the doTask method cannot be null");
 		}
-		
-		dataFormat = dataFormat.trim();
-		
-		if(dataFormat.equals("")) {
-			throw new IllegalArgumentException("ERROR: The dataFormat parameter cannot be empty");
-		}		
 	
 		// turn off the TDB logging
 		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("com.hp.hpl.jena.tdb.info");
@@ -88,7 +83,7 @@ public class ExportNetworkData {
 		datastorePath = settings.getProperty("tdb-datastore");
 		
 		// check the path
-		if(datastorePath == null) {
+		if(InputUtils.isValid(datastorePath) == false) {
 			System.err.println("ERROR: Unable to load the tdb-datastore property");
 			return false;
 		}
@@ -96,10 +91,10 @@ public class ExportNetworkData {
 		// instantiate a file object
 		File datastore = new File(datastorePath);
 		
-		// check on the datastore
-		if(datastore.exists() == false || datastore.canRead() == false || datastore.isDirectory() == false || datastore.canWrite() == false) {
+		// check on the datastore directory
+		if(FileUtils.doesDirExist(datastorePath) == false) {
 			System.err.println("ERROR: Unable to access the specified datastore directory");
-			System.err.println("       " + datastore.getAbsolutePath());
+			System.err.println("       " + datastorePath);
 			return false;
 		}
 		
@@ -113,9 +108,6 @@ public class ExportNetworkData {
 	
 		// gain access to the model
 		Model model = TDBFactory.createModel(datastorePath);
-		
-		// set a namespace prefixes
-		//model.setNsPrefix("FOAF", FOAF.NS);
 		
 		// get an output stream
 		try {
