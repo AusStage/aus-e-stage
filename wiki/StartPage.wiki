@@ -18,4 +18,4 @@ The three main services currently under development are:
 
 = Purpose of this Wiki =
 
-The purpose of this Wiki is to manage documentation specifically related to the development activities that are building the above services. For example a list of [Articles How To Articles] on how to use the various tools developed as part of the project and to maintain a list of UsefulLinks for the developers working on the project. 
+The purpose of this Wiki is to manage documentation specifically related to the development activities that are building the above services.
