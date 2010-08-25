@@ -19,6 +19,7 @@
 // define global variables
 var FEEDBACK_BASE_URL = "/mobile/feedback?";
 var feedback_count = 1;
+var item;
 
 // function to get parameters from url
 // taken from: http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
@@ -79,7 +80,8 @@ $(document).ready(function() {
 				
 				// add the list of feedback
 				for(var i = 0; i < data.feedback.length; i++) {
-					$("#table_anchor").after("<tr><td>" + feedback_count + "</td><td>" + data.feedback[i] + "</td></tr>");
+					item = data.feedback[i];					
+					$("#table_anchor").after('<tr><td class="feedback_messages_left">' + feedback_count + '</td><td class="feedback_messages_middle">' + item.message + '</td><td class="feedback_messages_right">' + item.type + '</td></tr>');
 					feedback_count++;
 				}
 			}		
