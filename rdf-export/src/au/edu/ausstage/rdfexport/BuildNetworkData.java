@@ -45,8 +45,9 @@ import com.hp.hpl.jena.sparql.sse.Item;
 import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
 import com.hp.hpl.jena.tdb.store.GraphTDB;
 
-// import the vocabularies
+// import the AusStage classes
 import au.edu.ausstage.vocabularies.*;
+import au.edu.ausstage.utils.*;
 
 /**
  * A Class used to build an RDF based dataset of contributor information
@@ -56,7 +57,7 @@ import au.edu.ausstage.vocabularies.*;
 public class BuildNetworkData {
 
 	// declare private class level variables
-	private DatabaseManager        database;             // access the AusStage database
+	private DbManager              database;             // access the AusStage database
 	private PropertiesManager      settings;             // access the properties / settings
 	private String                 datastorePath = null; // directory for the tdb datastore
 	
@@ -73,7 +74,7 @@ public class BuildNetworkData {
 	 * @param dataManager the DatabaseManager class connected to the AusStage database
 	 * @param properties  the PropertiesManager providing access to properties and settings
 	 */
-	public BuildNetworkData(DatabaseManager dataManager, PropertiesManager properties) {
+	public BuildNetworkData(DbManager dataManager, PropertiesManager properties) {
 		
 		// double check the parameters
 		if(dataManager == null || properties == null) {
@@ -100,22 +101,20 @@ public class BuildNetworkData {
 		datastorePath = settings.getProperty("tdb-datastore");
 		
 		// check the path
-		if(datastorePath == null) {
+		if(InputUtils.isValid(datastorePath) == false) {
 			System.err.println("ERROR: Unable to load the tdb-datastore property");
 			return false;
 		}
 		
-		// instantiate a file object
-		File datastore = new File(datastorePath);
-		
-		// check on the datastore
-		if(datastore.exists() == false || datastore.canRead() == false || datastore.isDirectory() == false || datastore.canWrite() == false) {
+		// check on the datastore directory
+		if(FileUtils.doesDirExist(datastorePath) == false) {
 			System.err.println("ERROR: Unable to access the specified datastore directory");
-			System.err.println("       " + datastore.getAbsolutePath());
+			System.err.println("       " + datastorePath);
 			return false;
 		}
 		
 		// delete any files in the directory
+		File datastore = new File(datastorePath);
 		File[] tdbFiles = datastore.listFiles(new FileListFilter());
 		
 		// loop through the list of files and delete them
@@ -126,12 +125,13 @@ public class BuildNetworkData {
 				
 				if(status == false) {
 					System.err.println("ERROR: Unable to delete the following file:");
-					System.err.println("       " + tdbFile.getAbsolutePath());
+					System.err.println("       " + tdbFile.getCanonicalPath());
 					return false;
 				}
+			} catch (IOException ex) {
+				System.err.println("ERROR: Unable to delete one of the files in the datastore directory.");
 			} catch (SecurityException ex) {
-				System.err.println("ERROR: Unable to delete the following file:");
-				System.err.println("       " + tdbFile.getAbsolutePath());
+				System.err.println("ERROR: Unable to delete one of the files in the datastore directory.");
 				return false;
 			}		
 		}
@@ -154,7 +154,6 @@ public class BuildNetworkData {
 		return true;
 		
 	} // end the doReset method
-
 	
 	/**
 	 * A method to undertake the task of building the dataset
@@ -186,7 +185,7 @@ public class BuildNetworkData {
 		// create an empty persistent model
 		Model model = null;
 		
-		if(datastorePath == null) {
+		if(InputUtils.isValid(datastorePath) == false) {
 			System.err.println("ERROR: the doReset() method must be run before building the network datastore");
 			return false;
 		} else {
@@ -224,8 +223,9 @@ public class BuildNetworkData {
 					   + "AND c.contributorid = ce.contributorid "
 					   + "ORDER BY contributorid";
 			
-			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			// get the data from the database
+			DbObjects dbObject = database.executeStatement(sql);				   
+			java.sql.ResultSet resultSet = dbObject.getResultSet();
 			
 			// declare helper variables
 			String   firstName   = null;
@@ -327,7 +327,7 @@ public class BuildNetworkData {
 				if(resultSet.getString(6) != null) {
 					
 					bioBirth = model.createResource(Bio.Birth);
-					bioBirth.addProperty(Bio.date, buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)));	
+					bioBirth.addProperty(Bio.date, DateUtils.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)));	
 					contributor.addProperty(Bio.event, bioBirth);
 				}		
 				
@@ -361,8 +361,8 @@ public class BuildNetworkData {
 			}
 			
 			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
+			dbObject.tidyUp();
+			dbObject = null;
 			System.out.format("INFO: %,d contributors successfully added to the datastore%n", contributorCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -394,7 +394,8 @@ public class BuildNetworkData {
 					   + "ORDER BY contributorid";
 			
 			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			DbObjects dbObject = database.executeStatement(sql);				   
+			java.sql.ResultSet resultSet = dbObject.getResultSet();
 	
 			// loop through the 
 			while (resultSet.next()) {
@@ -429,8 +430,8 @@ public class BuildNetworkData {
 			}
 			
 			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
+			dbObject.tidyUp();
+			dbObject = null;
 			System.out.format("INFO: %,d contributor functions successfully added%n", functionCount);
 			
 			
@@ -473,7 +474,8 @@ public class BuildNetworkData {
 					   + "ORDER BY contributorid ";
 			
 			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			DbObjects dbObject = database.executeStatement(sql);				   
+			java.sql.ResultSet resultSet = dbObject.getResultSet();
 	
 			// loop through the 
 			while (resultSet.next()) {
@@ -597,8 +599,8 @@ public class BuildNetworkData {
 			}
 			
 			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
+			dbObject.tidyUp();
+			dbObject = null;
 			
 			System.out.format("%nINFO: %,d collaborations successfully added to the datastore%n", collaborationCount);
 			
@@ -638,7 +640,8 @@ public class BuildNetworkData {
 					   + "ORDER BY e.eventid";
 			
 			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			DbObjects dbObject = database.executeStatement(sql);				   
+			java.sql.ResultSet resultSet = dbObject.getResultSet();
 	
 			// loop through the 
 			while (resultSet.next()) {
@@ -692,12 +695,12 @@ public class BuildNetworkData {
 					
 					// first date
 					if(resultSet.getString(4) != null) {
-						firstDate = buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+						firstDate = DateUtils.buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
 					}
 					
 					// last date
 					if(resultSet.getString(7) != null) {
-						lastDate = buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
+						lastDate = DateUtils.buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
 					}
 					
 					// check on the first date
@@ -753,8 +756,8 @@ public class BuildNetworkData {
 			}
 			
 			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
+			dbObject.tidyUp();
+			dbObject = null;
 			System.out.format("INFO: %,d events successfully added to the datastore%n", eventCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -786,7 +789,8 @@ public class BuildNetworkData {
 					   + "ORDER BY contributorid";
 			
 			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			DbObjects dbObject = database.executeStatement(sql);				   
+			java.sql.ResultSet resultSet = dbObject.getResultSet();
 	
 			// loop through the 
 			while (resultSet.next()) {
@@ -833,8 +837,8 @@ public class BuildNetworkData {
 			}
 			
 			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
+			dbObject.tidyUp();
+			dbObject = null;
 			System.out.format("INFO: %,d contributor function at event records added%n", functionsAtEventsCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -857,7 +861,8 @@ public class BuildNetworkData {
 					   + "FROM organisation";
 			
 			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			DbObjects dbObject = database.executeStatement(sql);				   
+			java.sql.ResultSet resultSet = dbObject.getResultSet();
 			
 			// declare helper variables
 			Resource organisation = null;
@@ -959,8 +964,8 @@ public class BuildNetworkData {
 			}
 			
 			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
+			dbObject.tidyUp();
+			dbObject = null;
 			System.out.format("INFO: %,d organisations successfully added to the datastore%n", organisationCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -992,7 +997,8 @@ public class BuildNetworkData {
 					   + "ORDER BY ol.organisationid";
 			
 			// get the data from the database				   
-			java.sql.ResultSet resultSet = database.executeStatement(sql);
+			DbObjects dbObject = database.executeStatement(sql);				   
+			java.sql.ResultSet resultSet = dbObject.getResultSet();
 	
 			// loop through the 
 			while (resultSet.next()) {
@@ -1039,8 +1045,8 @@ public class BuildNetworkData {
 			}
 			
 			// play nice and tidy up
-			resultSet.close();
-			database.closeStatement();
+			dbObject.tidyUp();
+			dbObject = null;
 			System.out.format("INFO: %,d organisation roles at event records added%n", rolesAtEventsCount);
 			
 		} catch (java.sql.SQLException sqlEx) {
@@ -1053,12 +1059,9 @@ public class BuildNetworkData {
 		 * add dataset metadata
 		 */
 		// get the current date and time
-		GregorianCalendar calendar = new GregorianCalendar();
-	 	DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
-	 	
 		Resource metadata = model.createResource("ausstage:rdf:metadata");
 		metadata.addProperty(RDF.type, AuseStage.rdfMetadata);
-		metadata.addProperty(AuseStage.tdbCreateDateTime, dateFormatter.format(calendar.getTime()));
+		metadata.addProperty(AuseStage.tdbCreateDateTime, DateUtils.getCurrentDateAndTime());
 		
 		/*
 		 * generate the statistics files
@@ -1106,30 +1109,10 @@ public class BuildNetworkData {
 			// reset the opt variable to a new file
 			opt = null;
 			
-			opt = new File(datastorePath + "/stats.opt");
-			
-			try {
-				status = opt.createNewFile();
-				
-				if(status = true) {
-					// file was created successfully
-			
-					// instantiate a PrintWriter so we can write to the file
-					PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(opt), "UTF8"));
-					
-					// write the stats to the file
-					output.print(item.toString());
-					
-					// close the file
-					output.close();
-				}
-					
-			} catch (IOException ex) {
+			if(FileUtils.writeNewFile(datastorePath + "/stats.opt", item.toString()) == false) {
 				System.err.println("WARN: Unable to create the TDB optimisation file:");
-				System.err.println("       " + opt.getAbsolutePath());
-			} catch (SecurityException ex) {
-				System.err.println("WARN: Unable to create the TDB optimisation file:");
-				System.err.println("       " + opt.getAbsolutePath());
+			} else {
+				System.out.println("INFO: BGP optimiser file successfully written");
 			}
 		}
 		
@@ -1140,36 +1123,9 @@ public class BuildNetworkData {
 		TDB.closedown();
 		database = null;
 		
-		System.out.println("INFO: BGP optimiser file successfully written");
-		
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
-	
-	/**
-	 * A method used to build a date from the components in the AusStage database
-	 *
-	 * @param year  the year component of the date
-	 * @param month the month component of the date
-	 * @param day   the day component of the month
-	 *
-	 * @return      a string containing the finalised date
-	 */
-	private String buildDate(String year, String month, String day) {
-	
-		// check for at least a year
-		if(year != null) {
-		 
-			String date = year + "-" + month + "-" + day;
-		 	date = date.replace("-null","");
-			date = date.replace("null","");
-			
-			return date;
-		} else {
-			return "";
-		}
-	 
-	} // end buildDate method
 	
 	/**
 	 * A class used to filter the list of files
