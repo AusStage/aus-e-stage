@@ -90,8 +90,8 @@ public class RdfExport {
 				dataFormat = "RDF/XML";
 			} else { 
 				// check to make sure it is one of the supported options
-				if(InputUtils.isValid(dataFormat, DATA_FORMATS)) {
-					System.err.println("ERROR: the specified data format is invalid");
+				if(InputUtils.isValid(dataFormat, DATA_FORMATS) == false) {
+					System.err.println("ERROR: the specified data format '" + dataFormat + "' is invalid");
 					System.err.println("Valid data formats are:");
 					System.err.println(InputUtils.arrayToString(DATA_FORMATS));
 					System.exit(-1);
@@ -140,65 +140,20 @@ public class RdfExport {
 			status = task.doTask();
 	 		
 		} 
-//		else if(taskType.equals("export-network-data")) {
-//			// do the export-network-data task
-//			ExportNetworkData task = new ExportNetworkData(properties);
-//			
-//			// check to ensure the file doesn't exist yet
-//			if(FileUtils.doesFileExist(output) == true) {
-//						
-//				File outputFile = new File(output)
-//				status = task.doTask(dataFormat, outputFile);
-//			} else {
-//				System.err.println("ERROR: Output file already exists, refusing to delete / overwrite");
-//				System.exit(-1);
-//			}
-//		} else if(taskType.equals("run-query")) {
-//		
-//			// do the run-query task
-//			RunQuery task = new RunQuery(properties);
-//			
-//			// check on the query parameter
-//			if(InputUtils.isValid(query) == false) {
-//				System.err.println("ERROR: Location of query file not specified");
-//				System.exit(-1);
-//			}
-//			
-//			// check the query file
-//			if(FileUtils.doesFileExist(output) == false) {
-//				status = task.doTask(queryFile);
-//			} else {
-//				System.err.println("ERROR: Unable to open the query file");
-//				System.exit(-1);
-//			}
-//		
-//		} else if(taskType.equals("edge-list-export")) {
-//		
-//			// do the Edge List Export task
-//			EdgeListExport task = new EdgeListExport(properties);
-//			
-//			if(FileUtils.doesFileExist(output) == true) {
-//			
-//				File outputFile = new File(output)
-//				status = task.doTask(outputFile);
-//			} else {
-//				System.err.println("ERROR: Output file already exists, refusing to delete / overwrite");
-//				System.exit(-1);
-//			}
-//		} else if(taskType.equals("edge-list-export-no-dups")) {
-//		
-//			// do the Edge List Export task
-//			EdgeListExport task = new EdgeListExport(properties);
-//			
-//			if(FileUtils.doesFileExist(output) == true) {
-//			
-//				File outputFile = new File(output)
-//				status = task.doTask(outputFile);
-//			} else {
-//				System.err.println("ERROR: Output file already exists, refusing to delete / overwrite");
-//				System.exit(-1);
-//			}
-//		}	
+		else if(taskType.equals("export-network-data")) {
+			// do the export-network-data task
+			ExportNetworkData task = new ExportNetworkData(properties);
+			
+			// check to ensure the file doesn't exist yet
+			if(FileUtils.doesFileExist(output) == false) {
+						
+				File outputFile = new File(output);
+				status = task.doTask(dataFormat, outputFile);
+			} else {
+				System.err.println("ERROR: Output file already exists, refusing to delete / overwrite");
+				System.exit(-1);
+			}
+		}
 		
 		// determine how to finish
 		if(status == false) {
