@@ -34,7 +34,7 @@
 	<div id="header"><h1>AusStage Researching Audiences Service (Beta)</h1></div>
 	<div id="nav">
 	</div>
-	<div id="main"style="width: 1086px;">
+	<div id="main" style="width: 1086px;">
 		<div id="company_logo">
 			<img src="assets/images/bkgd-adt_logo.gif"/>
 		</div>
@@ -46,6 +46,7 @@
 			<tr id="table_anchor" style="visibility: hidden">
 				<td>&nsbsp;</td>
 				<td>&nsbsp;</td>
+				<td>&nbpsp;</td>
 			</tr>
 		</table>
 		

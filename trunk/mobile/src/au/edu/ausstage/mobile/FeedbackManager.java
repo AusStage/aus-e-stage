@@ -70,6 +70,7 @@ public class FeedbackManager {
 		
 		//JSONArray list = new JSONArray();
 		JSONObject object = new JSONObject();
+		JSONObject item   = new JSONObject();
 		JSONArray  list   = new JSONArray();
 		
 		// define the sql
@@ -129,10 +130,11 @@ public class FeedbackManager {
 		results.tidyUp();		
 		
 		//get any feedback
-		sql = "SELECT mf.short_content "
-			+ "FROM mob_feedback mf, mob_performances mp "
+		sql = "SELECT mf.feedback_id, mf.short_content, mst.source_name "
+			+ "FROM mob_feedback mf, mob_performances mp, mob_source_types mst "
 			+ "WHERE mp.performance_id = ? "
 			+ "AND mf.performance_id = mp.performance_id "
+			+ "AND mf.source_type = mst.source_type "
 			+ "ORDER BY mf.received_date_time DESC ";
 			
 		// get the data
@@ -142,9 +144,15 @@ public class FeedbackManager {
 		try {
 		
 			while (resultSet.next()) {
+			
+				// build a new feedback item object
+				item = new JSONObject();
+				item.put("id", resultSet.getString(1));
+				item.put("message", resultSet.getString(2));
+				item.put("type", resultSet.getString(3));
 		
 				// add the feedback to the list
-				list.add(resultSet.getString(1));
+				list.add(item);
 			}
 		}catch (java.sql.SQLException ex) {}
 		

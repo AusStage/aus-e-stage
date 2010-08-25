@@ -231,13 +231,34 @@ table.searchResults tfoot {
 	width: 100%;
 }
 
+
 #feedback_messages td {
-	border: 2px solid #aaaaaa;
-	padding-right: 10px;
 	padding-top: 5px;
 }
 
-#table_anchor td {
+
+td.feedback_messages_left {
+	border-left: 2px solid #aaaaaa;
+	border-bottom: 2px solid #aaaaaa;
+	border-top: 2px solid #aaaaaa;
+	padding-right: 15px;
+}
+
+td.feedback_messages_right {
+	border-right: 2px solid #aaaaaa;
+	border-bottom: 2px solid #aaaaaa;
+	border-top: 2px solid #aaaaaa;
+	padding-left: 15px;
+}
+
+td.feedback_messages_middle {
+	border-bottom: 2px solid #aaaaaa;
+	border-top: 2px solid #aaaaaa;
+}
+
+
+
+#table_anchor {
 	display: none;
 }
 
