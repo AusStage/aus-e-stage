@@ -73,14 +73,15 @@ public class FeedbackManager {
 		JSONArray  list   = new JSONArray();
 		
 		// define the sql
-		sql = "SELECT e.event_name, mq.question, o.name "
-			+ "FROM mob_performances mp, events e, mob_questions mq, orgevlink oe, organisation o, mob_organisations mo "
+		sql = "SELECT e.event_name, mq.question, o.name, v.venue_name, TO_CHAR(mp.start_date_time, 'FMDay DD Month, YYYY') as performance_date "
+			+ "FROM mob_performances mp, events e, mob_questions mq, orgevlink oe, organisation o, mob_organisations mo, venue v "
 			+ "WHERE mp.performance_id = ? "
 			+ "AND mp.event_id = e.eventid "
 			+ "AND mp.question_id = mq.question_id "
 			+ "AND e.eventid = oe.eventid "
 			+ "AND o.organisationid = oe.organisationid "
-			+ "AND mo.organisation_id = o.organisationid ";
+			+ "AND mo.organisation_id = o.organisationid "
+			+ "AND e.venueid = v.venueid ";
 			
 		// define the parameters
 		sqlParameters = new String[1];
@@ -108,6 +109,8 @@ public class FeedbackManager {
 				object.put("name"    , resultSet.getString(1));
 				object.put("question", resultSet.getString(2));
 				object.put("organisation", resultSet.getString(3));
+				object.put("venue", resultSet.getString(4));
+				object.put("date", resultSet.getString(5));
 			} else {
 				// add the data
 				object.put("name", "");
@@ -130,7 +133,7 @@ public class FeedbackManager {
 			+ "FROM mob_feedback mf, mob_performances mp "
 			+ "WHERE mp.performance_id = ? "
 			+ "AND mf.performance_id = mp.performance_id "
-			+ "ORDER BY mf.received_date_time ASC ";
+			+ "ORDER BY mf.received_date_time DESC ";
 			
 		// get the data
 		results = database.executePreparedStatement(sql, sqlParameters);

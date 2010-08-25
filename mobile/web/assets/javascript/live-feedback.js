@@ -18,6 +18,7 @@
 
 // define global variables
 var FEEDBACK_BASE_URL = "/mobile/feedback?";
+var feedback_count = 1;
 
 // function to get parameters from url
 // taken from: http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
@@ -68,21 +69,22 @@ $(document).ready(function() {
 			} else {
 				// add the performance details
 				$("#performance_name").empty();
-				$("#performance_name").append("Live Feedback for: " + data.name)
+				$("#performance_name").append("Live Feedback for: " + data.name + ", " + data.date);
 				
 				$("#performance_by").empty();
-				$("#performance_by").append("Peformance by: " + data.organisation);
+				$("#performance_by").append("Peformance by: " + data.organisation + " at " + data.venue);
 				
 				$("#performance_question").empty();
 				$("#performance_question").append("In response to the question: " + data.question);
 				
 				// add the list of feedback
 				for(var i = 0; i < data.feedback.length; i++) {
-					$("#table_anchor").after("<tr><td>" + data.feedback[i] + "</td></tr>");
+					$("#table_anchor").after("<tr><td>" + feedback_count + "</td><td>" + data.feedback[i] + "</td></tr>");
+					feedback_count++;
 				}
 			}		
 		});
-	}	
+	}
 });
 
 /* 
