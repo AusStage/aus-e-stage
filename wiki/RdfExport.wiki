@@ -49,55 +49,10 @@ To export the entire dataset follow these steps:
  # If no format is specified the default format 'RDF/XML' will be used
  # The application will take a short time to complete and the output will look like this:
 
-= Querying the Dataset = 
+= Querying the Dataset =
 
-Querying the dataset is possible using the SPARQL query language with ARQ specific extensions. 
+Querying the dataset is now supported via the [NavigatingNetworksSparqlEndpoint SPARQL Endpoint]
 
-_Note:_ This functionality is designed to assist in the development of queries for use in other applications / services and is not meant to provide a query and export workflow
+= Exporting the Dataset as an Edge List File =
 
-To query the dataset follow these steps:
-
- # Ensure the application is installed by [RdfExportMoreInfo#Installing_the_Application following these directions]
- # Ensure the application is configured by [RdfExportMoreInfo#Configuring_the_Application following these directions]
- # Ensure the dataset has been created by following the [RdfExport#Building_the_Dataset Building the Dataset] steps
- # Change to the _jar_ directory created when the application was installed
- # Run the application using the following command where 
-   # properties-file: is the location of the properties file created in step 2
-   # query-file: is the location of a plain text file that defines the query (including path information)
-   {{{java -Xmx1024m -Xms512m -jar AusStageRdfExport.jar -tasktype run-query -properties properties-file -query query-file}}}
- # The results of the query execution will be printed to the screen
-
-= Exporting the Dataset as an Edge List File = 
-
-The Edge List File is contains data in the following plain text format where each line contains the following
-
- * contributorid - the unique identifier of a contributor
- * givenName - the given name of the contributor
- * familyName - the family name of the contributor
- * tab - the tab character
-
-<pre>
-<contributorid><tab><givenName><tab><familyName><tab><contributorid><tab><givenName><tab><familyName>
-</pre>
-
-_Note:_ This export contains duplicate edges for example:
-
-<pre>
-<01><tab><James><tab><Bond><tab><02><tab><Money><tab><Penny>
-<02><tab><Money><tab><Penny><tab><01><tab><James><tab><Bond>
-</pre>
-
-To produce a an list of edges without duplicates substitute _edge-list-export_ with _edge-list-export-no-dups_ in step 5 below.
-
-This format can be used in a variety of graph based applications. 
-
-To export the dataset in this format use the following steps:
-
- # Ensure the application is installed by [RdfExportMoreInfo#Installing_the_Application following these directions]
- # Ensure the application is configured by [RdfExportMoreInfo#Configuring_the_Application following these directions]
- # Ensure the dataset has been created by following the [RdfExport#Building_the_Dataset Building the Dataset] steps
- # Change to the _jar_ directory created when the application was installed
- # Run the application using the following command where 
-   # properties-file: is the location of the properties file created in step 2
-   # output-file: is the name of the output file to create (including path information)
-   {{{java -Xmx1024m -Xms512m -jar AusStageRdfExport.jar -tasktype edge-list-export -properties properties-file -output output-file}}}
+Exporting the dataset as an Edge List File is now supported via the [NavigatingNetworksDatasetAPIexportEdges Navigating Networks Service API]
