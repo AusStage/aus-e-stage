@@ -36,7 +36,8 @@ public class RdfExport {
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
-	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query", "edge-list-export", "edge-list-export-no-dups"};
+	//private static final String[] TASK_TYPES = {"build-network-data", "export-network-data", "run-query", "edge-list-export", "edge-list-export-no-dups"};
+	private static final String[] TASK_TYPES = {"build-network-data", "export-network-data"};
 	
 	// Valid data formats
 	private static final String[] DATA_FORMATS = {"RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE", "TURTLE", "N3"};
@@ -65,7 +66,6 @@ public class RdfExport {
 		String propsPath  = parser.getValue("properties");
 		String dataFormat = parser.getValue("format");
 		String output     = parser.getValue("output");
-		String query      = parser.getValue("query");
 		
 		// check on the parameters
 		if(InputUtils.isValid(taskType, TASK_TYPES) == false || InputUtils.isValid(propsPath) == false) {
@@ -75,8 +75,7 @@ public class RdfExport {
 			System.err.println("-properties the location of the properties file");
 			System.err.println("-format     (optional) the data format used in an export task");
 			System.err.println("-output     (optional) the output file to create for an export task");
-			System.err.println("-query      (optional) the location of the query file to run");
-			System.err.println("\nValid fix types are:");
+			System.err.println("\nValid task types are:");
 			System.err.println(InputUtils.arrayToString(TASK_TYPES));
 			System.err.println("\nValid data formats are:");
 			System.err.println(InputUtils.arrayToString(DATA_FORMATS));
