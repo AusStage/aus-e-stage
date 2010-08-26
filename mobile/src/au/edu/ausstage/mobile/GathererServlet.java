@@ -113,12 +113,12 @@ public class GathererServlet extends HttpServlet {
 	
 			// declare helper variables
 			String data = null;
-			GathererManager manager = new GathererManager(database);
+			GathererManager manager = new GathererManager(database, servletConfig);
 			
 			data = manager.processSMS(callerId, time, date, message);
 			
 			// add additional data
-			data += "Remote Address: " + request.getRemoteAddr() + "\n";
+			//data += "Remote Address: " + request.getRemoteAddr() + "\n";
 			
 			// ouput the data
 			// set the appropriate content type

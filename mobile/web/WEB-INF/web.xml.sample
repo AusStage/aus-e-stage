@@ -69,4 +69,41 @@
         <!-- Include trailing slash -->
         <param-value>http://beta.ausstage.edu.au/mobile/</param-value>
     </context-param>
+    <!-- email configuration -->
+    <context-param>
+        <param-name>mailHost</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailUser</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailPassword</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailTls</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailSsl</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailPort</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailDebug</param-name>
+        <param-value>no</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailFrom</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailTo</param-name>
+        <param-value></param-value>
+    </context-param>
 </web-app>
