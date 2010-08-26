@@ -450,7 +450,7 @@
 
 -->
 
-  <target name="reload" depends="compile"
+  <target name="reload" depends="clean,compile"
    description="Reload application on servlet container">
 
 
