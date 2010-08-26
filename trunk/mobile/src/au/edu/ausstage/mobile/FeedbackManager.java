@@ -135,7 +135,7 @@ public class FeedbackManager {
 			+ "WHERE mp.performance_id = ? "
 			+ "AND mf.performance_id = mp.performance_id "
 			+ "AND mf.source_type = mst.source_type "
-			+ "ORDER BY mf.received_date_time DESC ";
+			+ "ORDER BY mf.received_date_time ASC "; // order is reverse of what you'd expect due to the way the content is added to the page
 			
 		// get the data
 		results = database.executePreparedStatement(sql, sqlParameters);
