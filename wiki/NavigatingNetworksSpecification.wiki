@@ -617,11 +617,11 @@ nodeName:"DEF",
 ]
 };
 }}}
-Within the nodes array, any number of attributes can be added and manipulated within Protovis, allowing us to wrap all the essential contributor information within this array. 
-The important thing to note is how the source and target values within the links array work:
-Essentially, every object in the nodes array is accessed via it's index. So when we look at the links array, the source value 0 actually refers to the first object in the nodes array. 
-The value variable in the links array can relate to the edge weight. As Protovis receives this information, the value is added up for each source node and is stored with the node information as linkDegree. We can use this as a degree of connection.
-Depending on further studies of Protovis, and whether or not further attributes can be stored in the links array, this value attribute may also be able to determine edge weight. ie assuming we can store within each link object another array storing the events between two collaborators, we can alter the value attribute to reflect the number of times the two collaborators have worked together.
+Within the *nodes* array, any number of attributes can be added and manipulated within Protovis, allowing us to wrap all the essential contributor information within this array. 
+The important thing to note is how the *source* and *target* values within the *links* array work:
+Essentially, every object in the *nodes* array is accessed via it's index. So when we look at the *links* array, the *source* value, 0, actually refers to the first object in the *nodes* array. 
+The *value* variable in the *links* array can relate to the edge weight. As Protovis receives this information, the *value* is added up for each source and target node and is stored within the node information as *linkDegree*. We can use this as a degree of connection.
+Depending on further studies of Protovis, and whether or not further attributes can be stored in the *links* array, this value attribute may also be able to determine edge weight. ie assuming we can store within each *link* object another array storing the events between two collaborators, we can alter the *value* attribute to reflect the number of times the two collaborators have worked together.
 Alternatively, Protovis automatically provides another way of dealing with edge weight that effects the opacity of lines. If a link between two nodes appears more than once in the data provided, the link becomes more opaque.
 
 ==JIT==
