@@ -592,7 +592,37 @@ Its library provides extensive support for force-directed network graphs, and on
 Within the existing force-directed library is support for altering the physics behind the layout, from node repulsion and attraction, drag (friction), to spring dampening.
 I have had some success altering the physics behind the visualization in order to get a reasonable view of the data being represented. 
 
-Protovis is able to render a largely connected network. However my experiments have shown that the physics behind the rendering need to be adjusted. Given the high number of edges in my example network (contributor 2285, 120 nodes and 2863 edges)  the repulsive forces act so strongly that the entire graph gets pushed into the far corners of the screen. I am at present looking into these adjustments.
+Protovis is able to render a largely connected network. The physics behind the Force Directed algorithm will need to be adjusted for our purposes, but a working example has proven this to be a possibility.
+
+One question that remains to be answered is the interactivity of edges rendered with Protivis. 
+
+Protovis is built on javascript, and uses a variable array of data to render the network graphic. I believe it is possible to alter the contents of this data 'on the fly' and re-render.
+
+The data is essentially JSON information wrapped in a variable as shown by the code below:
+{{{
+var contributors = {
+  nodes:[
+{
+id:"123",
+nodeName:"ABC",
+},
+{
+id:"345",
+nodeName:"DEF",
+}
+  ],
+  links:[
+{source:0, target:1, value:1},
+{source:1, target:0, value:1}
+]
+};
+}}}
+Within the nodes array, any number of attributes can be added and manipulated within Protovis, allowing us to wrap all the essential contributor information within this array. 
+The important thing to note is how the source and target values within the links array work:
+Essentially, every object in the nodes array is accessed via it's index. So when we look at the links array, the source value 0 actually refers to the first object in the nodes array. 
+The value variable in the links array can relate to the edge weight. As Protovis receives this information, the value is added up for each source node and is stored with the node information as linkDegree. We can use this as a degree of connection.
+Depending on further studies of Protovis, and whether or not further attributes can be stored in the links array, this value attribute may also be able to determine edge weight. ie assuming we can store within each link object another array storing the events between two collaborators, we can alter the value attribute to reflect the number of times the two collaborators have worked together.
+Alternatively, Protovis automatically provides another way of dealing with edge weight that effects the opacity of lines. If a link between two nodes appears more than once in the data provided, the link becomes more opaque.
 
 ==JIT==
 [http://thejit.org/ JIT] or the JavaScript InfoVis Toolkit is a javascript based library that provides tools for creating interactive web visualisations. 
