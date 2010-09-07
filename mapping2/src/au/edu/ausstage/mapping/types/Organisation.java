@@ -30,12 +30,14 @@ import java.util.Iterator;
 /**
  * A class to represent an Organisation
  */
-public class Organisation implements Comparable<Organisation>{
+public class Organisation implements Comparable<Organisation> {
 
 	// declare private variables
 	private String id = null;
 	private String name = null;
 	private String url  = null;
+	private String eventCount = null;
+	private String mappedEventCount = null;
 	private Set<Event> events;
 	
 	// declare public constants
@@ -245,7 +247,11 @@ public class Organisation implements Comparable<Organisation>{
 	 * @return the number of evens for this organisation
 	 */
 	public int getEventCount() {
-		return events.size();
+		if(events.isEmpty() == true && eventCount != null) {
+			return Integer.parseInt(eventCount);
+		} else {
+			return events.size();
+		}
 	} // end getEventCount method
 	
 	/*
@@ -288,6 +294,26 @@ public class Organisation implements Comparable<Organisation>{
 		}
 		
 		url = value;
+	}
+	
+	public void setEventCount(String value) {
+		if(InputUtils.isValidInt(value) == false) {
+			throw new IllegalArgumentException("The value parameter must be a valid integer");
+		}
+		
+		eventCount = value;
+	}
+	
+	public String getMappedEventCount() {
+		return mappedEventCount;
+	}
+	
+	public void setMappedEventCount(String value) {
+		if(InputUtils.isValidInt(value) == false) {
+			throw new IllegalArgumentException("The value parameter must be a valid integer");
+		}
+		
+		mappedEventCount = value;
 	}
 	
 	/*
