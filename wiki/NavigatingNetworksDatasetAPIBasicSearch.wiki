@@ -23,7 +23,7 @@ Get Request
 || query || search terms || no || ||
 || sort || name || yes || name ||
 || format || json || yes || json ||
-|| limit || integer between 1 and 25 || yes || 5 ||
+|| limit || integer between 5 and 25 || yes || 5 ||
 
 == Parameter Definitions ==
 
