@@ -7,3 +7,4 @@ The second way of retrieving data is by using the [http://en.wikipedia.org/wiki/
  * [NavigatingNetworksDatasetAPIlookup Lookup API] - used to look specific data elements or datasets
  * [NavigatingNetworksDatasetAPIexportGraph Graph Export API] - used to export graphs
  * [NavigatingNetworksDatasetAPIexportEdges Edge List Export API] - used to export edge list files
+ * [NavigatingNetworksDatasetAPIBasicSearch Basic Search API] - used to conduct basic searches
