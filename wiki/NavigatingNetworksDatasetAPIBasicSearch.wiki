@@ -1,0 +1,72 @@
+#summary Information on the Navigating Networks Basic Search API
+
+<wiki:toc max_depth="3" />
+
+= Basic Search API =
+
+The basic search API allows for searches to be undertaken of the [NavigatingNetworksDataset dataset] it is used primarily to provide search capabilities via AJAX for other parts of the [NetworkService Navigating Networks Service] such as the [NavigatingNetworksExportGraphs Graph Export] page.
+
+== Base URL ==
+
+The base URL for the Lookup API is as follows:
+
+http://beta.ausstage.edu.au/networks/search?
+
+== Request Type ==
+
+Get Request
+
+== Available Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| task || collaborator || no || ||
+|| query || search terms || no || ||
+|| sort || name || yes || name ||
+|| format || json || yes || json ||
+|| limit || integer between 1 and 25 || yes || 5 ||
+
+== Parameter Definitions ==
+
+=== Task: collaborator ===
+
+Undertake a collaborator search
+
+=== Query ===
+
+A list of search terms. Currently the search is a case insensitive substring match using the collaborator name
+
+=== Sort: name ===
+
+Sort the search results in name order
+
+=== Format: json ===
+
+Format the search result as a JSON array
+
+== Limit: the number of results to return ==
+
+A maximum limit of 25 is imposed by the API as a way to reduce resource consumption and to reinforce that the search API is designed to be supplementary to other discovery mechanisms that will be made available in the future. 
+
+== Sample Output ==
+
+{{{
+[{
+  "id":414726,
+  "functions":["Properties Master"],
+  "name":"Anni Archer",
+  "familyName":"Archer",
+  "collaborations":1,
+  "givenName":"Anni",
+  "url":"http:\/\/www.ausstage.edu.au\/indexdrilldown.jsp?xcid=59&f_contrib_id=414726"
+ },
+ {
+  "id":253687,
+  "functions":["Actor"],
+  "name":"Brett Archer",
+  "familyName":"Archer",
+  "collaborations":3,
+  "givenName":"Brett",
+  "url":"http:\/\/www.ausstage.edu.au\/indexdrilldown.jsp?xcid=59&f_contrib_id=253687"
+ }
+]
+}}}
