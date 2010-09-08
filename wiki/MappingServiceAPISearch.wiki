@@ -6,7 +6,9 @@ Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki
 
 The Search API exposes methods and data elements that can be used to search for contributors, organisations, etc. 
 
-_Note: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete.
+_Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
+
+_Note 2: At the time of writing searching for an organisation by ID is the only search supported_
 
 == Base URL ==
 
@@ -22,3 +24,38 @@ Combining the base URL with the parameters outlined below constructs a call to t
 || query  || the search query || No || ||
 || format || json || Yes || json ||
 || limit  || an integer between 5 and 25 || Yes || 5 ||
+
+=== task ===
+The type of search task to undertake for example a search for organisation or contributor data
+
+=== type ===
+The type of search to undertake either by name or by id number
+
+=== query ===
+The search query, either a list of search terms or the id number to search for
+
+=== format ===
+The type of data format used to prepare the search results. At the time of writing only [http://en.wikipedia.org/wiki/JSON JSON] is a supported format
+
+== limit ===
+The maximum number of result records to be returned
+
+== Sample Output ==
+
+The search result is formatted as a JSON array with zero, one, or more result objects. 
+
+Below is sample output from an organisation id search. 
+
+{{{
+[
+ {
+  "id":"102",
+  "totalEventCount":435,
+  "mapEventCount":284,
+  "name":"Australian Dance Theatre",
+  "url":"http:\/\/www.ausstage.edu.au\/indexdrilldown.jsp?xcid=59&amp;f_org_id=102"
+ }
+]
+}}}
+
+
