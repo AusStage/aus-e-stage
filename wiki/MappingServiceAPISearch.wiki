@@ -1,0 +1,24 @@
+Mapping Service API - Search
+
+<h1>Search API</h1>
+
+Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
+
+The Search API exposes methods and data elements that can be used to search for contributors, organisations, etc. 
+
+_Note: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete.
+
+== Base URL ==
+
+http://beta.ausstage.edu.au/mapping2/search?
+
+Combining the base URL with the parameters outlined below constructs a call to the API.
+
+== Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| task   || organisation || No || ||
+|| type   || name, id     || No || ||
+|| query  || the search query || No || ||
+|| format || json || Yes || json ||
+|| limit  || an integer between 5 and 25 || Yes || 5 ||
