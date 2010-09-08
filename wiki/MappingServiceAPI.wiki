@@ -10,4 +10,5 @@ _Note: The Mapping Service is undergoing extensive revisions and as such only th
 
 Details of the API are in the following pages:
 
- * [MappingServiceAPIMarkers Marker Data]
+ * [MappingServiceAPIMarkers Marker Data API] - retrieve data used to build markers
+ * [MappingServiceAPISearch Search API] - search for organisations / contributors etc.
