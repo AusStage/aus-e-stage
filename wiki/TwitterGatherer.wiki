@@ -57,3 +57,7 @@ In this way relationships between messages, and the grouping of messages by user
 = Documentation =
 
 Details of the classes and methods available is contained in the standard Javadoc files available via the [http://aus-e-stage.googlecode.com/svn/trunk/twitter-gatherer/docs/api/index.html source repository].
+
+An overview of the way the application works is [http://techxplorer.com/2010/09/09/integrating-ausstage-with-twitter/ available here].
+
+A diagram providing an overview of the application workflow is [http://aus-e-stage.googlecode.com/svn-history/trunk/wiki-assets/twitter-gatherer-workflow.png available here]. 
