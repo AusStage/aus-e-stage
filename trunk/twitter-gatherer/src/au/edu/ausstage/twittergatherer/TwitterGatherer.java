@@ -137,6 +137,10 @@ public class TwitterGatherer {
 	 	hashTags.tidyUp();
 	 	hashTags = null;
 	 	
+	 	// output some helpful text
+	 	System.out.println("INFO: Tracking the following hash tags");
+	 	System.out.println("      " + InputUtils.arrayToString(tracks.toArray(new String[1])));
+	 	
 	 	// instantiate the email related classes
 	 	EmailOptions emailOptions = new EmailOptions();
 	 	
