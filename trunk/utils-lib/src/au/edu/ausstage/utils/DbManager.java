@@ -87,7 +87,9 @@ public class DbManager {
 				
 			}
 		} catch (java.sql.SQLException sqlEx) {
-			// an error occured so return false
+			// an error occured so return false and reset the objects
+			dataSource = null;
+			connection = null;
 			return false;
 		}
 		
@@ -124,8 +126,11 @@ public class DbManager {
 			// check on required objects
 			if(dataSource == null || connection == null || connection.isValid(5) == false) {
 				
-				// return null as nothing can be done
-				return null;
+				// try to reconnect to the database
+				if(connect(true) == false) {
+					// tried to do a reconnect, will attempt again next time method is called
+					return null;
+				}
 			}
 			
 			// build a statement
@@ -162,7 +167,11 @@ public class DbManager {
 		
 			// check on required objects
 			if(dataSource == null || connection == null || connection.isValid(5) == false) {
-				return null;
+				// try to reconnect to the database
+				if(connect(true) == false) {
+					// tried to do a reconnect, will attempt again next time method is called
+					return null;
+				}
 			}
 			
 			// build the statement
@@ -208,7 +217,11 @@ public class DbManager {
 		
 			// check on required objects
 			if(dataSource == null || connection == null || connection.isValid(5) == false) {
-				return false;
+				// try to reconnect to the database
+				if(connect(true) == false) {
+					// tried to do a reconnect, will attempt again next time method is called
+					return false;
+				}
 			}
 			
 			// build the statement
@@ -255,7 +268,11 @@ public class DbManager {
 		
 			// check on required objects
 			if(dataSource == null || connection == null || connection.isValid(5) == false) {
-				return false;
+				// try to reconnect to the database
+				if(connect(true) == false) {
+					// tried to do a reconnect, will attempt again next time method is called
+					return false;
+				}
 			}
 			
 			// build the statement
@@ -298,7 +315,11 @@ public class DbManager {
 		
 			// check on required objects
 			if(dataSource == null || connection == null || connection.isValid(5) == false) {
-				return null;
+				// try to reconnect to the database
+				if(connect(true) == false) {
+					// tried to do a reconnect, will attempt again next time method is called
+					return null;
+				}
 			}
 			
 			// build the statement
