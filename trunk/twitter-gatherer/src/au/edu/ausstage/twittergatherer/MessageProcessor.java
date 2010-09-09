@@ -68,7 +68,7 @@ public class MessageProcessor implements Runnable {
 	private final String DB_DATE_TIME_FORMAT         = "DD-MON-YYYY HH24:MI:SS";
 	private final String JODA_DATE_TIME_FORMAT       = "dd-MMM-YYYY HH:mm:ss";
 
-	private final String JODA_INPUT_DATE_TIME_FORMAT = "E MMM dd hh:mm:ss Z YYYY";
+	private final String JODA_INPUT_DATE_TIME_FORMAT = "E MMM dd HH:mm:ss Z YYYY";
 	
 	private final String EMAIL_SUBJECT = "[AusStage Twitter Gatherer] Message Processing Error";
 	private final String EMAIL_MESSAGE = "Exception Report: The Twitter Gatherer was unable to locate a valid performance for this attached Twitter Message";
