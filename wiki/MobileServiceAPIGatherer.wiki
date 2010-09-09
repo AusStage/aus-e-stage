@@ -10,7 +10,11 @@ An SMS message can be submitted for processing using the following API
 
 == Base URL ==
 
-http://beta.ausstage.edu.au/mobile/gatherer
+TBA
+
+<wiki:comment>
+http://beta.ausstage.edu.au/mobile/gatherer?
+</wiki:comment>
 
 Combining the base URL with the parameters outlined below constructs a call to the API.
 
