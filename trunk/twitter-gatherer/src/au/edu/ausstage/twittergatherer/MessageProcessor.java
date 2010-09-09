@@ -21,6 +21,7 @@ package au.edu.ausstage.twittergatherer;
 // import from the standard java libraries
 import java.util.concurrent.*;
 import java.util.List;
+import java.util.ListIterator;
 import java.sql.ResultSet;
 
 // import additional tweetStream4J packages
@@ -230,6 +231,20 @@ public class MessageProcessor implements Runnable {
 				
 				// get the list of hash tags from the tweet
 				List<String> hashtags = extractHashTags.extractHashtags(jsonTweetObject.getString("text"));
+				
+				// convert all of the found hash tags to lower case
+				ListIterator <String> hashtagsIterator = hashtags.listIterator();
+		
+				while(hashtagsIterator.hasNext() == true) {
+		
+					// get the next tage in the list
+					String tmp = (String) hashtagsIterator.next();
+			
+					tmp = tmp.toLowerCase();
+			
+					// replace the value we retrieved with this updated one
+					hashtagsIterator.set(tmp);
+				}
 				 
 				/*
 				 * get the date & time that the messages was received
