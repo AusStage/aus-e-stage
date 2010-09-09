@@ -161,8 +161,6 @@ public class MessageProcessor implements Runnable {
 				jsonTweetObject = jsonTweetObject.discard("id");
 				jsonTweetObject = jsonTweetObject.element("id", tweetIdHash);
 				
-				//"in_reply_to_status_id"
-				
 				// replace the "in_reply_to_user_id" field with a hash if it is present
 				try {
 					// if it isn't present an exception is thrown
