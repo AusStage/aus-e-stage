@@ -318,14 +318,6 @@ public class MessageProcessor implements Runnable {
 						String insertSql = "INSERT INTO mob_feedback "
 										 + "(performance_id, question_id, source_type, received_date_time, received_from, source_id, short_content) "
 										 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
-										 
-						// define the parameter array
-						sqlParameters = new String[7];
-			
-						// build the parameters				
-						//debug code
-						sqlParameters[0] = "1";
-						sqlParameters[1] = "1";
 			
 						// use the source id from the constant
 						sqlParameters[2] = SOURCE_ID;
