@@ -256,7 +256,9 @@ td.feedback_messages_middle {
 	border-top: 2px solid #aaaaaa;
 }
 
-
+td.feedback_messages_new {
+	background: #ffeb80 url(jquery-ui/images/ui-bg_inset-hard_55_ffeb80_1x100.png) 50% bottom repeat-x;
+}
 
 #table_anchor {
 	display: none;

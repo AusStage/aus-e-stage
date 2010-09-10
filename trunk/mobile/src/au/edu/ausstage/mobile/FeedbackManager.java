@@ -114,7 +114,7 @@ public class FeedbackManager {
 				object.put("organisationUrl", LinksManager.getOrganisationLink(resultSet.getString(5)));
 				object.put("venue", resultSet.getString(6));
 				object.put("venueUrl", LinksManager.getVenueLink(resultSet.getString(7)));
-				object.put("date", resultSet.getString(5));
+				object.put("date", resultSet.getString(8));
 			} else {
 				// add the data
 				object.put("event", "");
