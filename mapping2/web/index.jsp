@@ -27,7 +27,14 @@ response.sendRedirect(redirectURL); %>
 <head>
 	<title>AusStage Mapping Service Google Maps v3 Migration</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>	
+ 	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css"/>
+ 	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery.selecttouislider-2.0.css"/>
+ 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+ 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
+ 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selecttouislider-2.0.js"></script> 	
+ 	
 </head>
 <body>
 <div id="wrap">

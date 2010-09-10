@@ -25,6 +25,8 @@ var infowindow = new google.maps.InfoWindow({});
 var mapData = null;
 var markers = null;
 var mapID = null;
+var task = null;	//'contributor' or 'organisation'
+var ID = null;  //'contributor ID' or 'organisation ID'
 // object to hold marker locations
 var locations = {};
 
@@ -39,7 +41,9 @@ var locations = {};
  * @param updateHeader a flag to indicate that the header of the page shold be updated
  */
 function getMapData(type, id, focus, start, finish, updateHeader) {
-
+	
+	task = type;
+	ID = id;
 	// declare helper variables
 	var url;
 	var map = null;
@@ -86,7 +90,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 		 */
 		$.get(url, function(data, textStatus, XMLHttpRequest) {
 		    // extract the markers from the xml
-		    if (markers == null){
+		    //if (markers == null){
 		    	markers = data.documentElement.getElementsByTagName("marker");
 		    	
 		    	for (var k = 0; k < markers.length; k++) {		    	
@@ -94,7 +98,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 		    		var last  = markers[k].getAttribute("ldatestr");
 		    		//console.log(k, " --first: ", first, "  --last: ", last);
 		    	}
-		    }
+		    //}
 			mapData = data;	
 		// determine if we should update the header
 		//if(updateHeader == true) {
@@ -460,6 +464,35 @@ function buildTimeSlider() {
 	$(".tohide").hide();
 	
 }
+
+//function to reload a map
+function reloadMap() {
+	
+	// check to ensure map data is present
+	if(mapData == null) {
+		$("#map").empty();
+		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please start again.<br/>If the problem persists please contact the site administrator.</p>'); 
+		return false;
+	}
+
+	// get the start date
+	var startDate  = $("#event_start").val();
+	var finishDate = $("#event_finish").val();
+	
+	//getMapData(mapData, true, $("#state").val(), startDate, finishDate);
+	//var focus = $("#state").val();
+	focus = 'a';
+	getMapData(task, ID, focus, startDate, finishDate, false);
+
+}
+
+$(document).ready(function() {
+	
+	$("#reload_map").click(function () {
+		reloadMap();
+	});
+	
+});
 
 /* 
  * Define an Ajax Error handler if something bad happens when we make an Ajax call

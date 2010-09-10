@@ -54,6 +54,7 @@
 }
 .ui-slider a {
 	text-decoration: none;
+/*	outline:none;*/
 }
 .ui-slider ol, .ui-slider li, .ui-slider dl, .ui-slider dd, .ui-slider dt {
 	list-style: none outside none;

@@ -118,7 +118,7 @@ jQuery.fn.selectToUISlider = function(settings){
 	
 
 	//create slider component div
-	var sliderComponent = jQuery('<div></div>');
+	var sliderComponent = jQuery('<div id="sliderComponent"></div>');
 
 	//CREATE HANDLES
 	selects.each(function(i){
