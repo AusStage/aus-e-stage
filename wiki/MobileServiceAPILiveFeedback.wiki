@@ -30,7 +30,7 @@ HTTP get request
 
 A successful request will produce a [http://en.wikipedia.org/wiki/JSON JSON] encoded object that contains metadata about the performance and an array containing a series of feedback objects. 
 
-The fields are as follows:
+The fields of the object are as follows:
 
 || *Field Name* || *Purpose ||
 || event || the name of the event ||
@@ -42,6 +42,42 @@ The fields are as follows:
 || venueUrl || the persistent link for the venue in !AusStage ||
 || date || the date that the event is occurring in the "Day DD Month, YYYY" format ||
 || feedback || an array of feedback objects ||
+
+A feedback object contains the following fields:
+
+|| *Field Name* || *Purpose ||
+|| id || the unique id for this piece of feedback ||
+|| content || the content of the feedback ||
+|| type || the type of feedback. One of either Twitter / SMS / Mobile Web ||
+|| date || the date that feedback was sent in the "Day DD Month, YYYY" format ||
+|| time || the time that the feedback was sent ||
+
+_Note: Dates and times are reported in [http://en.wikipedia.org/wiki/South_Australia South Australian local time]_
+
+= Update Request =
+
+The updates request is used to retrieve feedback that has been recorded by the system since the last check for feedback.
+
+Using this API requires to parameters, the performance id and the unique identifier of the last piece of feedback retrieved. The result will be an array of feedback objects that have been stored in the system after the piece of feedback identified by the lastid parameter.
+
+== Base URL ==
+
+http://beta.ausstage.edu.au/mobile/feedback?
+
+== Request Type == 
+
+HTTP get request
+
+== Parameters ==
+
+|| *Name* || *Required Value* || *Optional* || *Default* ||
+|| task || update || No || ||
+|| performance || the unique performance ID || No || ||
+|| lastid || the unique identifier of the last piece of feedback || No || ||
+
+== Result data ==
+
+A successful request will produce a [http://en.wikipedia.org/wiki/JSON JSON] encoded array containing a series of feedback objects. 
 
 A feedback object contains the following fields:
 
