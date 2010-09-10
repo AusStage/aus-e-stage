@@ -6,4 +6,5 @@ The mobile service exposes an API to make it easier to put data into, and retrie
 
 Details of the API are in the following pages
 
- * [MobileServiceAPIGatherer Input Gatherer]
+ * [MobileServiceAPIGatherer Input Gatherer] - how SMS messages are added to the system
+ * [MobileServiceAPILiveFeedback Live Feedback] - how to retrieve live feedback for display in a web page
