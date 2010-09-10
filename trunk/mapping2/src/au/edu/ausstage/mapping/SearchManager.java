@@ -96,13 +96,14 @@ public class SearchManager {
 		}
 		
 		// declare the SQL variables
-		String sql = "SELECT o.organisationid, o.name, COUNT(e.eventid) as event_count, COUNT(v.longitude) AS map_events "
-				   + "FROM organisation o, orgevlink oel, events e, venue v "
-				   + "WHERE o.organisationid = ? "
-				   + "AND o.organisationid = oel.organisationid "
-				   + "AND oel.eventid = e.eventid "
-				   + "AND e.venueid = v.venueid "
-				   + "GROUP BY o.organisationid, o.name ";
+		String sql = "SELECT organisationid, name, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
+				   + "FROM (SELECT DISTINCT o.organisationid, o.name, e.eventid, v.longitude "
+				   + "      FROM organisation o, orgevlink oel, events e, venue v "
+				   + "      WHERE o.organisationid = ? "
+				   + "      AND o.organisationid = oel.organisationid "
+				   + "      AND oel.eventid = e.eventid "
+				   + "      AND e.venueid = v.venueid) "
+				   + "GROUP BY organisationid, name";
 				   
 		// define the paramaters
 		String[] sqlParameters = {query};
@@ -143,7 +144,7 @@ public class SearchManager {
 			// return an empty JSON Array
 			return jsonList.toString();
 		}
-		
+		 
 		// play nice and tidy up
 		resultSet = null;
 		results.tidyUp();
