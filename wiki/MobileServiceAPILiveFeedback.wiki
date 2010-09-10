@@ -52,4 +52,4 @@ A feedback object contains the following fields:
 || date || the date that feedback was sent in the "Day DD Month, YYYY" format ||
 || time || the time that the feedback was sent ||
 
-_Note: Dates and times are reported in [http://en.wikipedia.org/wiki/South_Australia Adelaide local time]_
+_Note: Dates and times are reported in [http://en.wikipedia.org/wiki/South_Australia South Australian local time]_
