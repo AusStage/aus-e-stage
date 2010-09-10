@@ -21,6 +21,7 @@
      * [MobileServiceDatabaseTables Database Tables]
      * [MobileServiceAPI Mobile Service API]
        * [MobileServiceAPIGatherer Input Gatherer]
+       * [MobileServiceAPILiveFeedback Live Feedback]
    * [NetworkService Network Service]
      * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksGoals   Service Goals]
