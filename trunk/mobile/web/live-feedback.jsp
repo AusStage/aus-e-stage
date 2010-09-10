@@ -35,9 +35,6 @@
 	<div id="nav">
 	</div>
 	<div id="main" style="width: 1086px;">
-		<div id="company_logo">
-			<img src="assets/images/bkgd-adt_logo.gif"/>
-		</div>
 		<h2 id="performance_name">Live Feedback for</h2>
 		<h3 id="performance_by">Performance By: </h3>
 		<h3 id="performance_question">In response to the question: </h3>

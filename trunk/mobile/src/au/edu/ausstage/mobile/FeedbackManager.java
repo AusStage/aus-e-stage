@@ -68,13 +68,13 @@ public class FeedbackManager {
 		String   sql;
 		String[] sqlParameters;
 		
-		//JSONArray list = new JSONArray();
+		//declare JSON related objects
 		JSONObject object = new JSONObject();
 		JSONObject item   = new JSONObject();
 		JSONArray  list   = new JSONArray();
 		
 		// define the sql
-		sql = "SELECT e.event_name, mq.question, o.name, v.venue_name, TO_CHAR(mp.start_date_time, 'FMDay DD Month, YYYY') as performance_date "
+		sql = "SELECT e.event_name, e.eventid, mq.question, o.name, o.organisationid, v.venue_name, v.venueid, TO_CHAR(mp.start_date_time, 'FMDay DD Month, YYYY') as performance_date "
 			+ "FROM mob_performances mp, events e, mob_questions mq, orgevlink oe, organisation o, mob_organisations mo, venue v "
 			+ "WHERE mp.performance_id = ? "
 			+ "AND mp.event_id = e.eventid "
@@ -97,7 +97,7 @@ public class FeedbackManager {
 		
 			// return an empty object	
 			object = new JSONObject();
-			object.put("name", "");
+			object.put("event", "");
 			return object.toString();
 		}
 		
@@ -107,21 +107,24 @@ public class FeedbackManager {
 			if (resultSet.next()) {
 			
 				// add the data
-				object.put("name"    , resultSet.getString(1));
-				object.put("question", resultSet.getString(2));
-				object.put("organisation", resultSet.getString(3));
-				object.put("venue", resultSet.getString(4));
+				object.put("event"    , resultSet.getString(1));
+				object.put("eventUrl", LinksManager.getEventLink(resultSet.getString(2)));
+				object.put("question", resultSet.getString(3));
+				object.put("organisation", resultSet.getString(4));
+				object.put("organisationUrl", LinksManager.getOrganisationLink(resultSet.getString(5)));
+				object.put("venue", resultSet.getString(6));
+				object.put("venueUrl", LinksManager.getVenueLink(resultSet.getString(7)));
 				object.put("date", resultSet.getString(5));
 			} else {
 				// add the data
-				object.put("name", "");
+				object.put("event", "");
 			}
 			
 		}catch (java.sql.SQLException ex) {
 			
 			// return an empty object	
 			object = new JSONObject();
-			object.put("name", "");
+			object.put("event", "");
 			return object.toString();
 		}
 		
@@ -130,7 +133,7 @@ public class FeedbackManager {
 		results.tidyUp();		
 		
 		//get any feedback
-		sql = "SELECT mf.feedback_id, mf.short_content, mst.source_name "
+		sql = "SELECT mf.feedback_id, mf.short_content, mst.source_name, TO_CHAR(mf.received_date_time, 'FMDay DD Month, YYYY') as feedback_date, TO_CHAR(mf.received_date_time, 'HH24:MI:SS') as feedback_time "
 			+ "FROM mob_feedback mf, mob_performances mp, mob_source_types mst "
 			+ "WHERE mp.performance_id = ? "
 			+ "AND mf.performance_id = mp.performance_id "
@@ -148,8 +151,10 @@ public class FeedbackManager {
 				// build a new feedback item object
 				item = new JSONObject();
 				item.put("id", resultSet.getString(1));
-				item.put("message", resultSet.getString(2));
+				item.put("content", resultSet.getString(2));
 				item.put("type", resultSet.getString(3));
+				item.put("date", resultSet.getString(4));
+				item.put("time", resultSet.getString(5));
 		
 				// add the feedback to the list
 				list.add(item);
@@ -178,11 +183,65 @@ public class FeedbackManager {
 	@SuppressWarnings("unchecked")
 	public String getUpdatedFeedback(String performance, String lastId) {
 	
-		return "";
+		// check on the parameters
+		if(InputUtils.isValidInt(performance) == false) {
+			throw new IllegalArgumentException("The performance parameter is required to be a valid integer");
+		}
+		
+		if(InputUtils.isValidInt(lastId) == false) {
+			throw new IllegalArgumentException("The lastId parameter is required to be a valid integer");
+		}
+		
+		// declare helper variables
+		String   sql;
+		String[] sqlParameters = new String[2];
+		sqlParameters[0] = performance;
+		sqlParameters[1] = lastId;
+
+		// declare JSON related objects		
+		JSONArray  list   = new JSONArray();
+		JSONObject item;		
+		
+		//get any feedback
+		sql = "SELECT mf.feedback_id, mf.short_content, mst.source_name, TO_CHAR(mf.received_date_time, 'FMDay DD Month, YYYY') as feedback_date, TO_CHAR(mf.received_date_time, 'HH24:MI:SS') as feedback_time "
+			+ "FROM mob_feedback mf, mob_performances mp, mob_source_types mst "
+			+ "WHERE mp.performance_id = ? "
+			+ "AND mf.performance_id = mp.performance_id "
+			+ "AND mf.source_type = mst.source_type "
+			+ "AND mf.feedback_id > ? "
+			+ "ORDER BY mf.received_date_time ASC "; // order is reverse of what you'd expect due to the way the content is added to the page
+			
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		ResultSet resultSet = results.getResultSet();
+		
+		try {
+		
+			while (resultSet.next()) {
+			
+				// build a new feedback item object
+				item = new JSONObject();
+				item.put("id", resultSet.getString(1));
+				item.put("content", resultSet.getString(2));
+				item.put("type", resultSet.getString(3));
+				item.put("date", resultSet.getString(4));
+				item.put("time", resultSet.getString(5));
+		
+				// add the feedback to the list
+				list.add(item);
+			}
+		}catch (java.sql.SQLException ex) {
+			// return an empty array
+			return list.toString();	
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		
+		// return the json string
+		return list.toString();
 	
 	} // end the getUpdatedFeedback method
 	
-	
-	
-
 }
