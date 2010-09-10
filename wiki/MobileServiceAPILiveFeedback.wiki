@@ -48,7 +48,7 @@ A feedback object contains the following fields:
 || *Field Name* || *Purpose ||
 || id || the unique id for this piece of feedback ||
 || content || the content of the feedback ||
-|| type || the type of feedback. One of either Twitter / SMS / Mobile Web
+|| type || the type of feedback. One of either Twitter / SMS / Mobile Web ||
 || date || the date that feedback was sent in the "Day DD Month, YYYY" format ||
 || time || the time that the feedback was sent ||
 
