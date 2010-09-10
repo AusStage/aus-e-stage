@@ -70,10 +70,10 @@ $(document).ready(function() {
 			} else {
 				// add the performance details
 				$("#performance_name").empty();
-				$("#performance_name").append("Live Feedback for: " + data.name + ", " + data.date);
+				$("#performance_name").append('Live Feedback for: <a href="' + data.eventUrl + '" title="View record for ' + data.event + ' in AusStage" target="ausstage">' + data.event+ "</a>, " + data.date);
 				
 				$("#performance_by").empty();
-				$("#performance_by").append("Peformance by: " + data.organisation + " at " + data.venue);
+				$("#performance_by").append('Peformance by: <a href="' + data.organisationUrl + '" title="View record for ' + data.organisation + ' in AusStage" target="ausstage">' + data.organisation + '</a> at <a href="' + data.venueUrl + '" title="View record for ' + data.venue + ' in AusStage" target="ausstage">' + data.venue + '</a>');
 				
 				$("#performance_question").empty();
 				$("#performance_question").append("In response to the question: " + data.question);
@@ -81,7 +81,7 @@ $(document).ready(function() {
 				// add the list of feedback
 				for(var i = 0; i < data.feedback.length; i++) {
 					item = data.feedback[i];					
-					$("#table_anchor").after('<tr><td class="feedback_messages_left">' + feedback_count + '</td><td class="feedback_messages_middle">' + item.message + '</td><td class="feedback_messages_right">' + item.type + '</td></tr>');
+					$("#table_anchor").after('<tr><td class="feedback_messages_left">' + feedback_count + '</td><td class="feedback_messages_middle">' + item.content + '</td><td class="feedback_messages_right">' + item.type + '</td></tr>');
 					feedback_count++;
 				}
 			}		

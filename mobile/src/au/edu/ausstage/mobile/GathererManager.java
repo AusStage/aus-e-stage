@@ -172,6 +172,7 @@ public class GathererManager {
 		// get the date and time that the message was recieved
 		time = time.split(" ")[0];
 		DateTime messageReceived = inputDateTimeFormat.parseDateTime(date + " " + time);
+		LocalDateTime localMessageReceived = messageReceived.toLocalDateTime();
 		
 		/*
 		 * get the performance and question id
@@ -189,8 +190,8 @@ public class GathererManager {
 
 		// define the parameters array
 		String[] sqlParameters = new String[2];
-		sqlParameters[0] = dateTimeFormat.print(messageReceived);
-		sqlParameters[1] = dateTimeFormat.print(messageReceived);
+		sqlParameters[0] = dateTimeFormat.print(localMessageReceived);
+		sqlParameters[1] = dateTimeFormat.print(localMessageReceived);
 		
 		// get the data
 		DbObjects results = database.executePreparedStatement(selectSql, sqlParameters);
@@ -243,7 +244,7 @@ public class GathererManager {
 				sqlParameters[2] = SMS_SOURCE_ID;
 	
 				// add the date and time
-				sqlParameters[3] = dateTimeFormat.print(messageReceived);
+				sqlParameters[3] = dateTimeFormat.print(localMessageReceived);
 	
 				// add the user id
 				sqlParameters[4] = callerId;
