@@ -44,7 +44,7 @@
 	<div id="main">
 		<h2>Export Graph Data in a Variety of Formats</h2>
 		<p>
-			Use the form below to export graph data in a variety of different formats for use in network visualisation software.
+			Use the form below to export egocentric graph data in a variety of different formats for use in network visualisation software.
 		</p>
 		<p>
 			More information on how to use this page, including guidance on loading the data into a small number of sample programs, is <a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksExportGraphs" target="ausstage" title="Information and Guidance on how to use this page">available in our Wiki</a>.
@@ -83,7 +83,7 @@
 						<label id="task_label" for="task">Graph Type: </label>
 					</th>
 					<td>
-						<select size="1" id="task" name="task" title="Select the desired type of graph. Note: a simple undirected network is the most common">
+						<select size="1" id="task" name="task" title="Select the desired type of graph. Note: a simple ego centric network is the most common">
 						</select>
 					</td>
 				</tr>

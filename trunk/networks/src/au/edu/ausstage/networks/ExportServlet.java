@@ -35,13 +35,13 @@ public class ExportServlet extends HttpServlet {
 	private DataManager database;
 	
 	// declare constants
-	private final String[] TASK_TYPES   = {"simple-network-directed", "simple-network-undirected", 
+	private final String[] TASK_TYPES   = {"ego-centric-network-simple",
 	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only"};
 	                                       
 	public final static String[] FORMAT_TYPES = {"graphml", "debug"};
 	public final static int      MIN_DEGREES  = 1;
 	public final static int      MAX_DEGREES  = 3;
-	public final static String[] EXPORT_TYPES_UI = {"simple-network-directed", "simple-network-undirected"}; // valid export options via the UI
+	public final static String[] EXPORT_TYPES_UI = {"ego-centric-network-simple"}; // valid export options via the UI
 
 	/*
 	 * initialise this instance
@@ -79,7 +79,7 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		// check the other parameters dependant on the task type
-		if(taskType.equals("simple-network-directed") == true || taskType.equals("simple-network-undirected") == true) {
+		if(taskType.equals("ego-centric-network-simple") == true) {
 			// check the other parameters as they are required
 		
 			if(request.getParameter("radius") != null) {
@@ -135,10 +135,8 @@ public class ExportServlet extends HttpServlet {
 			response.setHeader("Content-Disposition", "attachment;filename=" + taskType + ".edge");
 		}
 		
-		// determine the type of lookup to undertake
-		if(taskType.equals("simple-network-directed")) {
-			export.getSimpleNetwork(id, formatType, degrees, "directed", response.getWriter());
-		} else if(taskType.equals("simple-network-undirected")) {
+		// determine the type of export to undertake
+		if(taskType.equals("ego-centric-network-simple")) {
 			export.getSimpleNetwork(id, formatType, degrees, "undirected", response.getWriter());
 		} else if(taskType.startsWith("full-edge-list")) {
 			export.getFullEdgeList(taskType, response.getWriter());

@@ -37,7 +37,7 @@ public class SearchServlet extends HttpServlet {
 	// declare private constants
 	private final String[] TASK_TYPES        = {"collaborator"};
 	private final String[] FORMAT_TYPES      = {"html", "xml", "json"};
-	private final String[] SORT_TYPES        = {"id", "name"};
+	private final String[] SORT_TYPES        = {"name"};
 	private final int      DEFAULT_LIMIT     = 5;
 	private final int      MIN_LIMIT         = 5;
 	private final int      MAX_LIMIT         = 25;
@@ -96,7 +96,7 @@ public class SearchServlet extends HttpServlet {
 		// check the sort parameter
 		if(InputUtils.isValid(sortType) == false) {
 			// use default value
-			sortType = "id";
+			sortType = "name";
 		} else {
 			if(InputUtils.isValid(sortType, SORT_TYPES) == false) {
 				throw new ServletException("Missing sort type. Expected: " + java.util.Arrays.toString(SORT_TYPES).replaceAll("[\\]\\[]", ""));
