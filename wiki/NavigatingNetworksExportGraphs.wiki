@@ -33,8 +33,7 @@ Using the [http://beta.ausstage.edu.au/networks/export.jsp the Export Graph Data
   
 *After selecting your contributor*
 
-  # You then need to choose whether you would like a directed, or undirected graph. The default, recommended graph type is undirected.
-  # Next, select the desired data format from the drop down list.  The data format you choose should depend on the software you are using to visualize the graph. Currently the only option is graphml whic is compatible with both Gephi and Visone.
+  # You then need to select the desired data format from the drop down list.  The data format you choose should depend on the software you are using to visualize the graph. Currently the only option is graphml whic is compatible with both Gephi and Visone.
   # Finally, you need to choose the desired radius of your graph. This relates to how many edges are between the central node (_the contributor_) and the outer lying nodes of the network. For instance, a radius of 2 will give you a network of all the people your selected contributor has worked with, and all the people they have worked with. 
   # Then click the _Export_ button and in a few moments the file will be downloaded to your computer. 
   # The file should appear as *ausstage-graph-_contributorId_-degrees-_numOfDegrees_.graphml* where _contributorId_ is the contributor id you selected and _numOfDegrees_ is the radius you selected.
