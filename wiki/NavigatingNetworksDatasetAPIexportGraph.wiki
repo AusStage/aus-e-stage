@@ -25,20 +25,16 @@ Get Request
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task    || [NavigatingNetworksDatasetAPIexportGraph#Task:_simple-network-directed simple-network-directed], [NavigatingNetworksDatasetAPIexportGraph#Task:_simple-network-undirected simple-network-undirected]|| No || ||
+|| task    || [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-network-simple ego-centric-network-simple]|| No || ||
 || id      || unique identifier of a contributor || No || ||
 || format  || [NavigatingNetworksDatasetAPIexportGraph#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexportGraph#Format:_debug debug] || Yes || graphml ||
 || [NavigatingNetworksDatasetAPIexportGraph#Radius radius] || Integer between 1 and 3 || Yes || 1 ||
 
 == Parameter Definitions ==
 
-=== Task: simple-network-directed ===
+=== Task: ego-centric-network-simple ===
 
-A basic directed ego-centric network starting with the contributor with the supplied id. 
-
-=== Task: simple-network-undirected ===
-
-A basic un-directed ego-centric network starting with the contributor with the supplied id. 
+An ego centric network that has basic information included the central point of the network is the contributor with the supplied id. 
 
 === Format: graphml ===
 
