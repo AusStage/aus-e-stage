@@ -219,7 +219,9 @@ public class ProtovisManager {
 		Iterator   networkValueIterator = networkValues.iterator();
 		String[] edgesToMake = null;
 		altIndexer = 0;
-		Integer source = 0;
+		Integer source = null;
+		Integer target = null;
+		Integer altSourceIndex = null;
 		
 		// add the collaborators
 		while(networkValueIterator.hasNext()) {
@@ -227,7 +229,7 @@ public class ProtovisManager {
 			// get the next collaborator in the list
 			collaborator = (Collaborator)networkValueIterator.next();
 			source = Integer.parseInt(collaborator.getId());
-			source = (Integer)altIndex.get(source);
+			altSourceIndex = (Integer)altIndex.get(source);
 			
 			// get the list of collaborators
 			edgesToMake = collaborator.getCollaboratorsAsArray();
@@ -235,14 +237,18 @@ public class ProtovisManager {
 			// loop through the list of collaborations
 			for(int i = 0; i < edgesToMake.length; i++) {
 				// determine the index value for this collaborator
-				altIndexer = (Integer)altIndex.get(Integer.parseInt(edgesToMake[i]));
+				target = Integer.parseInt(edgesToMake[i]);
 				
-				// build the new edge
-				edge = new JSONObject();
-				edge.put("source", source);
-				edge.put("target", altIndexer);
-				
-				edges.add(edge);
+				if(source < target) {
+					altIndexer = (Integer)altIndex.get(target);
+			
+					// build the new edge
+					edge = new JSONObject();
+					edge.put("source", altSourceIndex);
+					edge.put("target", altIndexer);
+			
+					edges.add(edge);
+				}
 			}		
 		}
 		
