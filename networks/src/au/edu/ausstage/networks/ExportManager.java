@@ -295,6 +295,9 @@ public class ExportManager {
 			
 		}
 		
+		// play nice and tidy up
+		database.tidyUp();
+		
 		return collaborators;
 	
 	} // end getRawCollaboratorData method
