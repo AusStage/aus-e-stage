@@ -17,9 +17,11 @@
 */
 
 // declare global variables
-var idMsg = "The ID appears to be invalid";
-var nameMsg = "The Name appears to be invalid";
-var returnList = [
+var idMsg = "The ID appears to be invalid.\n";
+var nameMsg = "The Name appears to be invalid.\n";
+var noEventMsg = "The organisation does not have any events that can be mapped.\n\n";
+var resultLength = null;
+var resultList = [
 		{	"id"				:"121",
 			"totalEventCount"	:344,
 			"name"				:"Q Theatre Company",
@@ -46,6 +48,10 @@ var returnList = [
 // setup the page
 $(document).ready(function(){
 	
+	$("#ShowCheckBox").click(function () {
+		showCheckBox();
+	});
+/*	
 	// attach the validation plugin to the name search form
 	$("#name_search").validate({
 		rules: { // validation rules
@@ -59,12 +65,12 @@ $(document).ready(function(){
 		submitHandler: function(form) {
 			jQuery(form).ajaxSubmit({
 				dataType:	'json',
-				beforeSubmit: showCheckbox,
-				success:      showSearchResults,
-				error:        showErrorMessage(nameMsg)
+				beforeSubmit: showRequest,
+				success:      showSearchResults,			
+				error:		showErrorMessage("#name_search_results", nameMsg)	
 			});
 		}
-	});
+	});*/
 	
 	$("#id_search").validate({
 		rules: { // validation rules
@@ -80,13 +86,16 @@ $(document).ready(function(){
 			jQuery(form).ajaxSubmit({
 				dataType:	'json',
 				beforeSubmit: showRequest,
-				success:      showResponse,
-				error:        showErrorMessage(idMsg)
+				success:      showResponse
+				//error:		showErrorMessage("#id_search_results", idMsg)
 			});
 		}
 	});	
 	
 	$("#mapInfo").hide();
+	$("#name_search_results").empty();
+	$("#id_search_results").empty();
+	mapAction(false);
 });
 
 function showRequest(formData, jqForm, options) { 
@@ -112,86 +121,111 @@ function showResponse(data)  {
 		$("#org_id").empty();
 		$("#org_id").append(data[0].id);
 		$("#org_name").empty();
-		var name_url = '<a href="' + data[0].url + '" target="ausstage">' + data[0].name + "</a>";
+		var name_url = '<a href="' + data[0].url + '" target="ausstage">' + data[0].name + '</a>';
 		$("#org_name").append(name_url);
 		$("#org_total_events_count").empty();
 		$("#org_total_events_count").append(data[0].totalEventCount);
 		$("#org_mappped_events_count").empty();
 		$("#org_mappped_events_count").append(data[0].mapEventCount);
 		$("#mapInfo").show();
-		$("#mapInfo").show();
 		getMapData('organisation', data[0].id, 'a', null, null, true);
-		$("#map_footer").show();
-		
+		mapAction(true);
 		
 	}else {
-		showErrorMessage('The ID appears to be invalid, or the organisation does not have any events that can be mapped.\n\n');		
-		$("#map").empty();
-		$("#map_footer").hide();
+		alert('Empty return!');
+		removeMarkers();
+		//mapAction(false);
 		$("#mapInfo").hide();
 	}
 } 
 
-/*// functions for showing and hiding the loading message
-function showLoader(formData, jqForm, options) {
-
-	var queryString = $.param(formData); 
-	alert('About to submit: \n\n' + queryString); 
-	
-	$("#search_waiting").show();
-	
-	$("#search_results").hide();
-	$("#search_results").empty();
-	
-	$("#map_header").hide();
-	$("#map").hide();
-	$("#map_legend").hide();
-	$("#map_footer").hide();
-	 return true; 
-}
-
-function hideMap() {
-	// hide the map div
-	$("#map").hide();
-	$("#map_header").hide();
-	$("#map_legend").hide();
-	$("#map_footer").hide();	
-}
-*/
-
+/*
+ * Create checkboxes according to the name search result and append them and a button to the "name_search_result" div 
+ */
 function showCheckBox() {
+	resultLength = resultList.length; 
+	var chBox = new Array();
+	var name_prefix = "chBox_";
+	var href = null;
+		
+	//create checkboxes
+	for (var n = 0; n < resultList.length; n++) {
+		cb_name = name_prefix + n;
+		href = '<a href="' + resultList[n].url + '" target="ausstage">' + resultList[n].name + '</a> (' + resultList[n].mapEventCount+ '/' + resultList[n].totalEventCount + ')<br>';
+		chBox[n] = jQuery('<input type="checkbox" name="' + cb_name + '" id="' + resultList[n].id + '" value="'+ resultList[n].name + '">' + href);
+		chBox[n].appendTo('#name_search_results');         
+    }
+			
+	//create "Add To Map" button
+	var addMapBttn = jQuery('<input class="ui-state-default ui-corner-all button" type="button" name="addToMap" id="addToMap" value="Add To Map"/>');
+	addMapBttn.appendTo('#name_search_results');
+	addMapBttn.attr('disabled', 'disabled');
+	$('#addToMap').live('click', function (event) {
+		addToMap();
+	});
 	
+	//if one of the checkbox is checked, the Add To Map button become enabled. If no checkbox is selected, the AddToMap button becomes disable
+	$('#name_search_results input:checkbox').live('click', function (){
+		var thisCheck = $(this);
+		if (thisCheck.is (':checked'))	{
+			$('#addToMap').attr('disabled', '');
+		}else if ($('#name_search_results  :checkbox:checked').size() == 0){
+			removeMarkers(); //clean the map
+			$('#addToMap').attr('disabled', 'disabled'); //disable the button	
+		}
+	});
 	
+	$("#name_search_results").show();	
 }
+
+function addToMap(){
+	//an array that keep the index of the checked checkbox
+	var toBeShownIDs = '';   
+	var checkBox = null;
+	
+    //construct the multiple ids with comma
+	$('#name_search_results :checkbox:checked').each(function() {
+		toBeShownIDs = toBeShownIDs + $(this).attr('id') + ',';
+	});
+	
+	//get rid of the last comma ','
+	toBeShownIDs = toBeShownIDs.substr(0, toBeShownIDs.length -1);
+	getMapData('organisation', toBeShownIDs, 'a', null, null, true);
+	mapAction(true);
+}
+
+function mapAction(flag) {
+	if (flag == false){
+		// hide the map div
+		$("#map").hide();
+		$("#map_header").hide();
+		$("#map_legend").hide();
+		$("#map_footer").hide();
+	}else { //show the map		
+		$("#map_header").show();
+		$("#map_legend").show();
+		$("#map_footer").show();
+		$("#map").show();
+	}
+}
+
 
 /** form processing functions **/
-//function to show the search results
+//function to show the name search results
 function showSearchResults(data)  {
 	var JSONFile = "someVar = responseText";
 	eval(JSONFile);
 	alert(data.message); 
-	
-	$("#search_results").hide();
-	$("#search_results").empty();
-	$("#search_results").append(data.message);
-	$("#search_results").show();
-	
-	hideLoader();
-	
-	// scroll to the map
-	$.scrollTo("#search_results");
-	
+			
 }
 
 // function to show a generic error message
-function showErrorMessage(msg) {
-
-	$("#search_results").hide();
-	$("#search_results").empty();
-	$("#search_results").append("<table class=\"searchResults\"><tbody><tr class=\"odd\"><td><strong>Error:</strong> An error occured while processing your search.<br/>" + msg + ", or the organisation does not have any events that can be mapped.\n\n<br/>Please check your search terms and try again. If the problem persists contact the site administrator.</td></tr></tbody></table>");
-	$("#search_results").show();		
+function showErrorMessage(whichDiv, msg) {
+	$(whichDiv).empty();
+	$(whichDiv).append("<table class=\"searchResults\"><tbody><tr class=\"odd\"><td><strong>Error:</strong> " + msg + "<br/>Please check your search terms and try again. If the problem persists contact the site administrator.</td></tr></tbody></table>");
+	$(whichDiv).show();		
 }
-/*
+
 // register ajax error handlers
 $(document).ready(function() {
 
@@ -204,4 +238,3 @@ $(document).ready(function() {
 	});
 });
 
-*/

@@ -24,6 +24,7 @@ var MARKER_BASE_URL = "/mapping2/markers?";
 var infowindow = new google.maps.InfoWindow({}); 
 var mapData = null;
 var markers = null;
+var markerArray = new Array();
 var mapID = null;
 var task = null;	//'contributor' or 'organisation'
 var ID = null;  //'contributor ID' or 'organisation ID'
@@ -124,6 +125,7 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			$("#map_name").empty(); // empty the contents of this tag
 			$("#map_name").append(header); // append the contents header variable into the tag
 			
+			$("#map").empty();
 			mapID = document.getElementById("map");
 			
 			// create a new map and centre it on the focus
@@ -157,7 +159,6 @@ function createMap(mapID, focus, start, finish){
     });
 
     var j = 0;
-    var markerArray = new Array();
     // build a group of markers on the map
     for (var i = 0; i < markers.length; i++) {    	
 
@@ -409,6 +410,14 @@ function createMarker(map, latlng, info, venueName, iconURL) {
 		 });  
 	
 	return marker;
+}
+
+function removeMarkers(){
+	for(var i=0; i < this.markerArray.length; i++){
+        this.markerArray[i].setMap(null);
+    }
+    this.markerArray = new Array();
+
 }
 
 //function to build the time slider
