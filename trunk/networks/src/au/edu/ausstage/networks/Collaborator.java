@@ -238,7 +238,11 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @return an array of functions
 	 */
 	public String[] getFunctionAsArray() {
-		return function.split("\\|");
+		if(function != null) {
+			return function.split("\\|");
+		} else {
+			return null;
+		}
 	}
 	
 	/**

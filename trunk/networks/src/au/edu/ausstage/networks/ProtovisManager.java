@@ -60,6 +60,127 @@ public class ProtovisManager {
 	@SuppressWarnings("unchecked")
 	public String getData(String id, int radius) {
 	
+		// check on the parameters
+		// check the parameters
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("Error: the id parameter is required");
+		}
+		
+		if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
+			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
+		}
+	
+		// get an instance of the ExportManager class
+		ExportManager export = new ExportManager(database);
+		
+		// get the data for this collaborator
+		java.util.TreeMap<Integer, Collaborator> network = export.getRawCollaboratorData(id, radius);
+		
+		// play nice and tidy up
+		export = null;
+		
+		// declare helper variables
+		java.util.ArrayList<Collaborator> collaborators = new java.util.ArrayList<Collaborator>();
+		
+		// define a SPARQL query to get details about a collaborator
+		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
+						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
+ 						   + "SELECT ?collabName ?function  "
+						   + "WHERE {  "
+						   + "       @ a foaf:Person ; "
+						   + "           foaf:name ?collabName; "
+						   + "           ausestage:function ?function. "
+						   + "} ";
+
+		String queryToExecute = null;
+		
+		ResultSet     results      = null;
+		QuerySolution row          = null;
+		Collaborator  collaborator = null;
+		
+		// loop through the list of collaborators and get additional information
+		Collection networkKeys        = network.keySet();
+		Iterator   networkKeyIterator = networkKeys.iterator();
+		Integer    networkKey         = null;
+		Integer    centreId           = Integer.parseInt(id);
+		
+		// loop through the list of keys
+		while(networkKeyIterator.hasNext()) {
+		
+			// get the key for this collaborator
+			networkKey = (Integer)networkKeyIterator.next();
+			
+			// create a new collaborator object
+			collaborator = new Collaborator(networkKey.toString());
+			
+			// build the query
+			queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(collaborator.getId()) + ">");
+			
+			//debug code
+			System.out.println("!!! " + AusStageURI.getContributorURI(collaborator.getId()) + " !!!");
+			
+			// execute the query
+			results = database.executeSparqlQuery(queryToExecute);
+		
+			// add details to this contributor
+			while (results.hasNext()) {
+				// loop though the resulset
+				// get a new row of data
+				row = results.nextSolution();
+			
+				// this is a hack I know
+				collaborator.setName(row.get("collabName").toString());
+				collaborator.setFunction(row.get("function").toString());
+			}
+			
+			// play nice and tidy yo
+			database.tidyUp();
+			results = null;
+			
+			// add the collaborator to the list
+			collaborators.add(collaborator);
+		}
+		
+		// find the central collaborator and move them to the head of the array
+		networkKey   = collaborators.indexOf(new Collaborator(id));
+		collaborator = (Collaborator)collaborators.get(networkKey);
+		
+		// add the central collaborator to the head of the list
+		collaborators.add(0, collaborator);
+		
+		// remove the old central collaborator object
+		collaborators.remove(networkKey + 1);
+			
+		
+		
+		
+		//debug code
+		// build the JSON object
+		JSONArray  nodes  = new JSONArray();
+		JSONArray  edges  = new JSONArray();
+		JSONObject object = new JSONObject();
+		
+		ListIterator iterator = collaborators.listIterator();
+		
+		// add the rest of the collaborators
+		while(iterator.hasNext()) {
+		
+			// get the next collaborator in the list
+			collaborator = (Collaborator)iterator.next();
+			
+			// add the collaborator to the list of nodes
+			nodes.add(collaboratorToJSONObject(collaborator));
+
+		}
+		
+		// build the final object
+		object.put("nodes", nodes);
+		object.put("edges", edges);
+		
+		return object.toString();
+		
+		
+	
 //		// define helper variables
 //		// collection of collaborators
 //		java.util.TreeMap<Integer, Collaborator> collaborators = new java.util.TreeMap<Integer, Collaborator>();
@@ -358,55 +479,6 @@ public class ProtovisManager {
 ////			
 ////		}
 ////
-
-//		//debug code
-//		// build the JSON object
-//		JSONArray  nodes  = new JSONArray();
-//		JSONArray  edges  = new JSONArray();
-//		JSONObject object = new JSONObject();
-//		
-//		nodes.add(collaboratorToJSONObject(collaborator));
-//		
-//		// get the list of contributors attached to this contributor
-//		values   = collaborator.getCollaborators();
-//		iterator = values.iterator();
-//		
-//		// add the rest of the collaborators
-//		while(iterator.hasNext()) {
-//		
-//			// get the next collaborator in the list
-//			collaboratorToProcess = (Collaborator)iterator.next();
-//			
-//			// add the collaborator to the list of nodes
-//			nodes.add(collaboratorToJSONObject(collaboratorToProcess));
-//			
-//			// process this level of collaborators
-//			Collection contributorList = null;
-//			Iterator   clIterator      = null;
-//			
-//			contributorList = collaboratorToProcess.getCollaborators();
-//			
-//			if(contributorList != null) {
-//				clIterator = contributorList.iterator();
-//			
-//				while(clIterator.hasNext()) {
-//			
-//					collaboratorToAdd = (Collaborator)clIterator.next();
-//				
-//					// add the collaborator to the list of nodes
-//					nodes.add(collaboratorToJSONObject(collaboratorToProcess));
-//				}
-//			}	
-//		}
-//		
-//		// build the final object
-//		object.put("nodes", nodes);
-//		object.put("edges", edges);
-//		
-//		return object.toString();
-
-		//debug code
-		return "";
 	
 	} // end the getData method
 	
@@ -434,13 +506,18 @@ public class ProtovisManager {
 		object.put("nodeName", value.getName());
 		object.put("nodeUrl", LinksManager.getContributorLink(value.getId()));
 		
-		String[] functionsArray = value.getFunctionAsArray();
+		if(value.getFunctionAsArray() != null) {
 		
-		for(int i = 0; i < functionsArray.length; i++) {
-			functions.add(functionsArray[i].trim());
+			String[] functionsArray = value.getFunctionAsArray();
+		
+			for(int i = 0; i < functionsArray.length; i++) {
+				functions.add(functionsArray[i].trim());
+			}
+		
+			object.put("functions", functions);
+		} else {
+			object.put("functions", new JSONArray());
 		}
-		
-		object.put("functions", functions);
 		
 		// return the object
 		return object;

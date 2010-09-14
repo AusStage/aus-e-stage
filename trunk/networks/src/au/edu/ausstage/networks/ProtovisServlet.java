@@ -36,8 +36,6 @@ public class ProtovisServlet extends HttpServlet {
 	
 	// declare constants
 	private final String[] TASK_TYPES   = {"ego-centric-network"};
-	public final static int      MIN_DEGREES  = 1;
-	public final static int      MAX_DEGREES  = 3;
 
 	/*
 	 * initialise this instance
@@ -84,11 +82,11 @@ public class ProtovisServlet extends HttpServlet {
 			}
 									
 			// double check the parameter
-			if(InputUtils.isValidInt(radius, MIN_DEGREES, MAX_DEGREES) == false) {
-				throw new ServletException("Radius parameter must be less than: " + MAX_DEGREES);
+			if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
+				throw new ServletException("Radius parameter must be less than: " + ExportServlet.MAX_DEGREES);
 			}
 		} else {
-			radius = 1;
+			radius = ExportServlet.MIN_DEGREES;
 		}
 
 		// check on the id parameter
