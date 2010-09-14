@@ -86,15 +86,19 @@
 				
 					<div class="css-panes">
 						<div>
-							<form action="" method="get" id="name_search" name="name_search">
+						
+ 						<!--<form action="" method="get" id="name_search" name="name_search">
 								<input type="hidden" name="task" value="organisation"/>
 								<input type="hidden" name="type" value="single"/>
 								<input type="text" size="40" id="organisation_name" name="organisation_name"/>
 								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="name_search_btn" value="Search"/>								
-							</form>
-							
-							<div id="search_results" style="padding-top: 10px;">
-							</div>						
+ 						</form> 										
+-->
+							<input class="ui-state-default ui-corner-all button" type="button" name="ShowCheckBox" id="ShowCheckBox" value="ShowCheckBox"/>
+
+							<div id="name_search_results" style="padding-top: 60px;">																					
+							</div>	
+																		
 						</div>
 						
 						<div>
@@ -110,7 +114,8 @@
 								  <tr><td>
 								    <input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="id_search_btn" value="Search"/>
 								  </td></tr>
-								  <tr></tr>
+								  <tr>																													
+								  </tr>
 								  <tr><td>
 								    <table id="mapInfo">
 									  	<caption>Map of events for organisation:</caption>	
@@ -134,11 +139,9 @@
 									</table>
 								  </td></tr>
 								</table>									
-							</form>	
-							
-							<div id="search_results" style="padding-top: 10px;">
-							</div>
-							   															 														
+							</form>															
+							<div id="id_search_results" style="padding-top: 60px;">																					
+							</div>   															 														
 						</div>
 					</div>											
 					
