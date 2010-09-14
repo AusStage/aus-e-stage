@@ -70,6 +70,10 @@ public class ProtovisManager {
 			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
 		}
 	
+		/*
+		 * get the base network data
+		 */
+		
 		// get an instance of the ExportManager class
 		ExportManager export = new ExportManager(database);
 		
@@ -78,6 +82,10 @@ public class ProtovisManager {
 		
 		// play nice and tidy up
 		export = null;
+		
+		/*
+		 * add some of the additional required information
+		 */
 		
 		// declare helper variables
 		java.util.ArrayList<Collaborator> collaborators = new java.util.ArrayList<Collaborator>();
@@ -116,9 +124,6 @@ public class ProtovisManager {
 			// build the query
 			queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(collaborator.getId()) + ">");
 			
-			//debug code
-			System.out.println("!!! " + AusStageURI.getContributorURI(collaborator.getId()) + " !!!");
-			
 			// execute the query
 			results = database.executeSparqlQuery(queryToExecute);
 		
@@ -141,6 +146,10 @@ public class ProtovisManager {
 			collaborators.add(collaborator);
 		}
 		
+		/*
+		 * ajust the order of the collaborators in the array
+		 */
+		
 		// find the central collaborator and move them to the head of the array
 		networkKey   = collaborators.indexOf(new Collaborator(id));
 		collaborator = (Collaborator)collaborators.get(networkKey);
@@ -150,19 +159,44 @@ public class ProtovisManager {
 		
 		// remove the old central collaborator object
 		collaborators.remove(networkKey + 1);
-			
 		
+		/*
+		 * build an alternate index to the array
+		 */
 		
+		// build an alternate index to the array
+		java.util.TreeMap<Integer, Integer> altIndex = new java.util.TreeMap<Integer, Integer>();
+		Integer altIndexer = 0;
 		
-		//debug code
-		// build the JSON object
-		JSONArray  nodes  = new JSONArray();
-		JSONArray  edges  = new JSONArray();
-		JSONObject object = new JSONObject();
-		
+		// build the alternate index
 		ListIterator iterator = collaborators.listIterator();
 		
 		// add the rest of the collaborators
+		while(iterator.hasNext()) {
+		
+			// get the next collaborator in the list
+			collaborator = (Collaborator)iterator.next();
+			
+			// add the collaborator id with the spot in the index
+			altIndex.put(Integer.parseInt(collaborator.getId()), altIndexer);
+			
+			// increment the index count
+			altIndexer++;
+		}			
+		
+		/*
+		 * build the JSON object and array of nodes
+		 */
+		
+		// build the JSON object and arrays
+		JSONArray  nodes  = new JSONArray();
+		JSONArray  edges  = new JSONArray();
+		JSONObject object = new JSONObject();
+		JSONObject edge   = null;
+		
+		iterator = collaborators.listIterator();
+		
+		// add the collaborators
 		while(iterator.hasNext()) {
 		
 			// get the next collaborator in the list
@@ -175,310 +209,51 @@ public class ProtovisManager {
 		
 		// build the final object
 		object.put("nodes", nodes);
+		
+		
+		/*
+		 * build the JSON array of edges
+		 */
+		
+		Collection networkValues        = network.values();
+		Iterator   networkValueIterator = networkValues.iterator();
+		String[] edgesToMake = null;
+		altIndexer = 0;
+		Integer source = 0;
+		
+		// add the collaborators
+		while(networkValueIterator.hasNext()) {
+		
+			// get the next collaborator in the list
+			collaborator = (Collaborator)networkValueIterator.next();
+			source = Integer.parseInt(collaborator.getId());
+			source = (Integer)altIndex.get(source);
+			
+			// get the list of collaborators
+			edgesToMake = collaborator.getCollaboratorsAsArray();
+			
+			// loop through the list of collaborations
+			for(int i = 0; i < edgesToMake.length; i++) {
+				// determine the index value for this collaborator
+				altIndexer = (Integer)altIndex.get(Integer.parseInt(edgesToMake[i]));
+				
+				// build the new edge
+				edge = new JSONObject();
+				edge.put("source", source);
+				edge.put("target", altIndexer);
+				
+				edges.add(edge);
+			}		
+		}
+		
+		
+		
+		
+		
 		object.put("edges", edges);
 		
 		return object.toString();
-		
-		
-	
-//		// define helper variables
-//		// collection of collaborators
-//		java.util.TreeMap<Integer, Collaborator> collaborators = new java.util.TreeMap<Integer, Collaborator>();
-//		
-//		// keep a list of collaborators that we've seen
-//		java.util.TreeSet<Integer> previousCollaborators = new java.util.TreeSet<Integer>();
-//		
-//		// define other helper variables
-//		QuerySolution row             = null;
-//		Collaborator  collaborator    = null;
-//		Collaborator  collaboratorToProcess = null;
-//		Collaborator  collaboratorToAdd = null;
-//		int           radiusFollowed = 1;
-//		int           radiusToFollow = radius;
-//		String        queryToExecute  = null;
-//		Collection    values          = null;
-//		Iterator      iterator        = null;
-//	
-//		// define the base sparql query
-//		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
-//						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
-// 						   + "SELECT ?collaborator ?collabName ?function ?collabCount ?collabFirstDate ?collabLastDate "
-//						   + "WHERE {  "
-//						   + "       @ a foaf:Person ; "
-//						   + "                      ausestage:hasCollaboration ?collaboration. "
-//						   + "       ?collaboration ausestage:collaborator ?collaborator; "
-//						   + "                      ausestage:collaborationCount ?collabCount; "
-//						   + "                      ausestage:collaborationFirstDate ?collabFirstDate; "
-//						   + "                      ausestage:collaborationLastDate ?collabLastDate. "
-//						   + "       ?collaborator  foaf:name ?collabName; "
-//						   + "                      ausestage:function ?function. "
-//						   + "       FILTER (?collaborator != @) "
-//						   + "} ";
-//						   
-//		// go and get the intial batch of data
-//		collaborator = new Collaborator(id);
-//		collaborators.put(Integer.parseInt(id), collaborator);
-//		previousCollaborators.add(Integer.parseInt(id));
-//		
-//		// build the query
-//		queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
-//		
-//		// execute the query
-//		ResultSet results = database.executeSparqlQuery(queryToExecute);
-//		
-//		// add the first degree contributors
-//		while (results.hasNext()) {
-//			// loop though the resulset
-//			// get a new row of data
-//			row = results.nextSolution();
-//			
-//			// get any existing collaborator
-//			collaboratorToProcess = collaborator.hasCollaborator(new Collaborator(AusStageURI.getId(row.get("collaborator").toString())));
-//			
-//			if(collaboratorToProcess == null) {
-//			
-//				// check to see if we've seen this collaborator linked to another before
-//				if(previousCollaborators.contains(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
-//			
-//					// no we haven't so create a new one
-//					
-//					// start a new collaborator object
-//					collaboratorToProcess = new Collaborator(AusStageURI.getId(row.get("collaborator").toString()));
-//	
-//					// add the details to this collaborator
-//					collaboratorToProcess.setName(row.get("collabName").toString());
-//					collaboratorToProcess.setCollaborations(Integer.toString(row.get("collabCount").asLiteral().getInt()));
-//					collaboratorToProcess.setFirstDate(row.get("collabFirstDate").toString());
-//					collaboratorToProcess.setLastDate(row.get("collabLastDate").toString());
-//	
-//					// add a function
-//					collaboratorToProcess.setFunction(row.get("function").toString());
-//	
-//					// add this collaborator
-//					collaborator.addCollaborator(collaboratorToProcess);
-//					
-//					// store a reference to this collaborator for later
-//					previousCollaborators.add(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString())));
-//				}
-//				
-//			} else {
-//			
-//				// add the new function to this collaborator
-//				collaboratorToProcess.setFunction(row.get("function").toString());
-//			}			
-//		}
-//		
-//		// play nice and tidy up
-//		results = null;
-//		database.tidyUp();
-//		
-//		// fill in the details of the primary collaborator
-//		sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
-//						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
-// 						   + "SELECT ?collabName ?function  "
-//						   + "WHERE {  "
-//						   + "       @ a foaf:Person ; "
-//						   + "           foaf:name ?collabName; "
-//						   + "           ausestage:function ?function. "
-//						   + "} ";		   
 
-//		// build the query
-//		queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
-//		
-//		// execute the query
-//		results = database.executeSparqlQuery(queryToExecute);
-//		
-//		// add details to this contributor
-//		while (results.hasNext()) {
-//			// loop though the resulset
-//			// get a new row of data
-//			row = results.nextSolution();
-//			
-//			// this is a hack I know
-//			collaborator.setName(row.get("collabName").toString());
-//			collaborator.setFunction(row.get("function").toString());
-//		}
-//		
-//		// play nice and tidy up
-//		results = null;
-//		database.tidyUp();
-//		
-//		// reset the SPARQL query
-//		sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
-//						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
-// 						   + "SELECT ?collaborator ?collabName ?function ?collabCount ?collabFirstDate ?collabLastDate "
-//						   + "WHERE {  "
-//						   + "       @ a foaf:Person ; "
-//						   + "                      ausestage:hasCollaboration ?collaboration. "
-//						   + "       ?collaboration ausestage:collaborator ?collaborator; "
-//						   + "                      ausestage:collaborationCount ?collabCount; "
-//						   + "                      ausestage:collaborationFirstDate ?collabFirstDate; "
-//						   + "                      ausestage:collaborationLastDate ?collabLastDate. "
-//						   + "       ?collaborator  foaf:name ?collabName; "
-//						   + "                      ausestage:function ?function. "
-//						   + "       FILTER (?collaborator != @) "
-//						   + "} ";
-//		
-//		// treat the one degree network as a special case
-//		if(radiusToFollow == 1) {
-//		
-//			// get the list of contributors attached to this contributor
-//			values   = collaborator.getCollaborators();
-//			iterator = values.iterator();
-//			
-//			// loop through the list of collaborators
-//			while(iterator.hasNext()) {
-//			
-//				// loop through the list of collaborators				
-//				collaboratorToProcess = (Collaborator)iterator.next();
-//				
-//				// build the query
-//				queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(collaboratorToProcess.getId()) + ">");
-//				
-//				// get the data
-//				results = database.executeSparqlQuery(queryToExecute);
-//			
-//				// loop though the resulset
-//				while (results.hasNext()) {
-
-//					// get a new row of data
-//					row = results.nextSolution();
-//				
-//					// get any existing collaborator
-//					collaboratorToAdd = collaboratorToProcess.hasCollaborator(new Collaborator(AusStageURI.getId(row.get("collaborator").toString())));
-//			
-//					if(collaboratorToAdd == null) {
-//			
-//						// have we seen this collaborator before?
-//						if(previousCollaborators.contains(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
-//							// no - so start a new collaborator object
-//							collaboratorToAdd = new Collaborator(AusStageURI.getId(row.get("collaborator").toString()));
-//		
-//							// add the details to this collaborator
-//							collaboratorToAdd.setName(row.get("collabName").toString());
-//							collaboratorToAdd.setCollaborations(Integer.toString(row.get("collabCount").asLiteral().getInt()));
-//							collaboratorToAdd.setFirstDate(row.get("collabFirstDate").toString());
-//							collaboratorToAdd.setLastDate(row.get("collabLastDate").toString());
-//		
-//							// add a function
-//							collaboratorToAdd.setFunction(row.get("function").toString());
-//		
-//							// add this collaborator
-//							collaboratorToProcess.addCollaborator(collaboratorToProcess);
-//							
-//							// store a reference to this collaborator for later
-//							previousCollaborators.add(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString())));
-//						}
-//				
-//					} else {
-//						// add the new function to this collaborator
-//						collaboratorToAdd.setFunction(row.get("function").toString());
-//					}
-//				}
-//			}		
-//		}
-//		
-////		} else {
-////		
-////			// get the rest of the degrees
-////			while(degreesFollowed < degreesToFollow) {
-////		
-////				// get all of the known collaborators
-////				values = collaborators.values();
-////				iterator = values.iterator();
-////			
-////				// loop through the list of collaborators
-////				while(iterator.hasNext()) {
-////					// get the collaborator
-////					collaborator = (Collaborator)iterator.next();
-////				
-////					// get the list of contributors to process
-////					toProcess = collaborator.getCollaboratorsAsArray();
-////				
-////					// go through them one by one
-////					for(int i = 0; i < toProcess.length; i++) {
-////						// have we done this collaborator already
-////						if(foundCollaborators.contains(Integer.parseInt(toProcess[i])) == false) {
-////							// we haven't so process them
-////							collaborator = new Collaborator(toProcess[i]);
-////							collaborators.put(Integer.parseInt(toProcess[i]), collaborator);
-////							foundCollaborators.add(Integer.parseInt(toProcess[i]));
-////						
-////							// build the query
-////							queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
-////						
-////							// get the data
-////							results = database.executeSparqlQuery(queryToExecute);
-////							
-////							// loop though the resulset
-////							while (results.hasNext()) {
-////								// get a new row of data
-////								row = results.nextSolution();
-////			
-////								// add the collaboration
-////								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
-////							}
-////						
-////							// play nice and tidy up
-////							database.tidyUp();
-////						}
-////					}
-////				}
-////			
-////				// increment the degrees followed count
-////				degreesFollowed++;
-////			}
-////			
-////			// finalise the graph
-////			// get all of the known collaborators and use a copy of the current list of collaborators
-////			java.util.TreeMap clone = (java.util.TreeMap)collaborators.clone();
-////			values = clone.values();
-////			iterator = values.iterator();
-////		
-////			// loop through the list of collaborators
-////			while(iterator.hasNext()) {
-////				// get the collaborator
-////				collaborator = (Collaborator)iterator.next();
-////			
-////				// get the list of contributors to process
-////				toProcess = collaborator.getCollaboratorsAsArray();
-////			
-////				// go through them one by one
-////				for(int i = 0; i < toProcess.length; i++) {
-////					// have we done this collaborator already
-////					if(foundCollaborators.contains(Integer.parseInt(toProcess[i])) == false) {
-////						// we haven't so process them
-////						collaborator = new Collaborator(toProcess[i]);
-////						collaborators.put(Integer.parseInt(toProcess[i]), collaborator);
-////						foundCollaborators.add(Integer.parseInt(toProcess[i]));
-////					
-////						// build the query
-////						queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
-////					
-////						// get the data
-////						results = database.executeSparqlQuery(queryToExecute);
-////						
-////						// loop though the resulset
-////						while (results.hasNext()) {
-////							// get a new row of data
-////							row = results.nextSolution();
-////							
-////							// limit to only those collaborators we've seen before
-////							if(foundCollaborators.contains(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString()))) == true) {
-////		
-////								// add the collaboration
-////								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
-////							}
-////						}
-////					
-////						// play nice and tidy up
-////						database.tidyUp();
-////					}
-////				}
-////			}
-////			
-////		}
-////
 	
 	} // end the getData method
 	
@@ -501,7 +276,6 @@ public class ProtovisManager {
 		JSONArray  functions = new JSONArray();
 		
 		// add the first object to the array
-		object.put("fix", null);
 		object.put("id", value.getId());
 		object.put("nodeName", value.getName());
 		object.put("nodeUrl", LinksManager.getContributorLink(value.getId()));
