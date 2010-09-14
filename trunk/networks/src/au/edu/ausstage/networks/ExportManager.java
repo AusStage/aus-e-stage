@@ -36,7 +36,7 @@ import javax.xml.transform.stream.*;
 
 // import AusStage related packages
 import au.edu.ausstage.vocabularies.*;
-import au.edu.ausstage.utils.DateUtils;
+import au.edu.ausstage.utils.*;
 
 /**
  * A class to manage the export of information
@@ -60,11 +60,50 @@ public class ExportManager {
 	 *
 	 * @param id          the unique id of the contributor
 	 * @param formatType  the required format of the data
-	 * @param degrees     the required number of degrees of separation
+	 * @param radius      the required number of edges from the central contributor
 	 * @param graphType   the type of graph to created, must be one of directed / undirected
 	 * @param printWriter the output stream to use to stream the output to the client
 	 */
-	public void getSimpleNetwork(String id, String formatType, int degrees, String graphType, PrintWriter printWriter) {
+	public void getSimpleNetwork(String id, String formatType, int radius, String graphType, PrintWriter printWriter) {
+	
+		// check the parameters
+		if(InputUtils.isValidInt(id) == false || InputUtils.isValid(formatType) == false || InputUtils.isValid(graphType) == false || printWriter == null) {
+			throw new IllegalArgumentException("Error: All parameters to this method are required");
+		}
+		
+		if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
+			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
+		}
+		
+		java.util.TreeMap<Integer, Collaborator> collaborators = getRawCollaboratorData(id, radius);
+		
+		
+		// dataset is built so time to do something with it
+		if(formatType.equals("graphml") == true) {
+			buildGraphml(collaborators, graphType, printWriter);
+		} else if(formatType.equals("debug")) {
+			buildDebugFile(collaborators, graphType, printWriter);
+		}	
+	} // end getSimpleNetwork method
+	
+	/**
+	 * A method to build a collection of collaborator object representing a network
+	 *
+	 * @param id     the unique identifier of the root collaborator
+	 * @param radius the number of edges required from the central contributor
+	 *
+	 * @return        the collection of collaborator objects
+	 */
+	public java.util.TreeMap<Integer, Collaborator> getRawCollaboratorData(String id, int radius) {
+	
+		// check the parameters
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("Error: the id parameter is required");
+		}
+		
+		if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
+			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
+		}		
 	
 		// define helper variables
 		// collection of collaborators
@@ -77,7 +116,7 @@ public class ExportManager {
 		QuerySolution row             = null;
 		Collaborator  collaborator    = null;
 		int           degreesFollowed = 1;
-		int           degreesToFollow = degrees;
+		int           degreesToFollow = radius;
 		String        queryToExecute  = null;
 		Collection    values          = null;
 		Iterator      iterator        = null;
@@ -256,13 +295,9 @@ public class ExportManager {
 			
 		}
 		
-		// dataset is built so time to do something with it
-		if(formatType.equals("graphml") == true) {
-			buildGraphml(collaborators, graphType, printWriter);
-		} else if(formatType.equals("debug")) {
-			buildDebugFile(collaborators, graphType, printWriter);
-		}	
-	} // end getSimpleNetwork method
+		return collaborators;
+	
+	} // end getRawCollaboratorData method
 	
 	/**
 	 * A method to output the export in the plain text format used for debugging
