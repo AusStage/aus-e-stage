@@ -421,10 +421,10 @@
     </copy>
 
     <!-- Copy VUE files -->
-    <!--<mkdir dir="${build.home}/diagrams"/>-->
+    <!--<mkdir dir="${build.home}/diagrams"/>
     <copy todir="${web.home}/diagrams">
       <fileset dir="${basedir}/diagrams"/>
-    </copy>
+    </copy>-->
 
   </target>
 

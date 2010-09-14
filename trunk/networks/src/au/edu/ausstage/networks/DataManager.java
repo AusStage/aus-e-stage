@@ -111,7 +111,7 @@ public class DataManager {
 	private ResultSet executeViaLocal(String sparqlQuery) {
 	
 		// play nice and tidy up
-		minTidyUp()
+		minTidyUp();
 		
 		// connect to the dataset
 		if(dataset == null) {
@@ -141,7 +141,7 @@ public class DataManager {
 	private ResultSet executeViaEndpoint(String sparqlQuery) {
 	
 		// play nice and tidy up
-		minTidyUp()
+		minTidyUp();
 	
 		// get a query execution object		
 		execution = QueryExecutionFactory.sparqlService(datastorePath, sparqlQuery);
