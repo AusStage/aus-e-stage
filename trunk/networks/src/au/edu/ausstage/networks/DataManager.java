@@ -111,7 +111,7 @@ public class DataManager {
 	private ResultSet executeViaLocal(String sparqlQuery) {
 	
 		// play nice and tidy up
-		tidyUp();
+		minTidyUp()
 		
 		// connect to the dataset
 		if(dataset == null) {
@@ -141,7 +141,7 @@ public class DataManager {
 	private ResultSet executeViaEndpoint(String sparqlQuery) {
 	
 		// play nice and tidy up
-		tidyUp();
+		minTidyUp()
 	
 		// get a query execution object		
 		execution = QueryExecutionFactory.sparqlService(datastorePath, sparqlQuery);
@@ -178,6 +178,25 @@ public class DataManager {
 		}
 	
 	} // end tidyUp method
+	
+	/** 
+	 * A private tidyup method to perform a minimum tidyup
+	 */
+	private void minTidyUp() {
+	
+		if(results != null) {
+			results = null;
+		}
+		
+		if(execution != null) {
+			execution.close();
+			execution = null;
+		}
+		
+		if(query != null) {
+			query = null;
+		}
+	}
 	
 	/**
 	 * A method used to get the value of a parameter from the ServletConfig object
