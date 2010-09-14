@@ -38,6 +38,10 @@
     	<servlet-name>SearchServlet</servlet-name>
     	<servlet-class>au.edu.ausstage.networks.SearchServlet</servlet-class>
     </servlet>
+    <servlet>
+    	<servlet-name>ProtovisServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.networks.ProtovisServlet</servlet-class>
+    </servlet>
     
     <!-- Servlet Mapping -->
     <servlet-mapping>
@@ -51,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>SearchServlet</servlet-name>
         <url-pattern>/search/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProtovisServlet</servlet-name>
+        <url-pattern>/protovis/*</url-pattern>
     </servlet-mapping>
     
     <!-- Joseki -->
