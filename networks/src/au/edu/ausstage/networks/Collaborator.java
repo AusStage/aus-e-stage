@@ -20,7 +20,6 @@ package au.edu.ausstage.networks;
 
 // import additional classes
 import java.util.TreeSet;
-import java.util.Iterator;
 import org.json.simple.*;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -45,7 +44,6 @@ public class Collaborator implements Comparable<Collaborator>{
 	private String lastDate = null;
 	private String collaborations = null;
 	private TreeSet<String> collaborators = null;
-	private TreeSet<Collaborator> collaboratorObjects = null;
 	
 	/**
 	 * Constructor for this class
@@ -380,92 +378,12 @@ public class Collaborator implements Comparable<Collaborator>{
 	}
 	
 	/**
-	 * A method to add a collaborator to a list of collaborations
-	 *
-	 * @param value the new collaborator object
-	 */
-	public void addCollaborator(Collaborator value) {
-		if(value != null) {
-		
-			// instantiate a collaborations object if required
-			// we do this late to save on resources
-			if(collaboratorObjects == null) {
-				collaboratorObjects = new TreeSet<Collaborator>();
-			}
-			
-			// add to the list of collaborations			
-			collaboratorObjects.add(value);
-		
-		} else {
-			throw new IllegalArgumentException("The value cannot be null");
-		}
-	}
-	
-	/**
-	 * A method to see if the collaborator is in the list already
-	 *
-	 * @param value the collaborator object to use as comparison
-	 *
-	 * @return      the collaborator object which was found
-	 */
-	public Collaborator hasCollaborator(Collaborator value) {
-	
-		if(value != null) {
-
-			// check to see if there is a collation of collaborators		
-			if(collaboratorObjects == null) {
-				return null;
-			} else {
-			
-				// see if this collaborator is in the set
-				if(collaboratorObjects.contains(value) == true) {
-				
-					//debug code
-					System.out.println("###Found Collaborator: " + value.getId());
-					
-					// yes it does
-					// find the objet in the set and return it
-					Iterator iterator = collaboratorObjects.iterator();
-			
-					// loop through the iterator
-					while(iterator.hasNext()) {
-						Collaborator tmp = (Collaborator)iterator.next();
-				
-						if(tmp.getId().equals(value.getId())) {
-							//debug code
-							System.out.println("@@@Found Collaborator: " + value.getId());
-							return tmp;
-						}
-					}
-							
-				} else {
-					// not it doesn't
-					return null;
-				}
-			}
-		
-		} else {
-			throw new IllegalArgumentException("The value cannot be null");
-		}
-		
-		// keep the java compiler happy
-		return null;
-	}
-	
-	
-	/**
 	 * A method to get the list of collaborations
 	 *
 	 * @return the list of collaborations as TeeSet
 	 */
 	public TreeSet getCollaborators() {
-		if(collaborators != null) {
-			return collaborators;
-		} else if (collaboratorObjects != null) {
-			return collaboratorObjects;
-		} else {
-			return null;
-		}
+		return collaborators;
 	}
 	
 	/**
