@@ -640,10 +640,10 @@ At this point I have abandoned testing of JSVis. Although existing examples of n
 
 The Navigating Networks service development schedule will be staged to ensure ongoing collaboration with researchers and testing partners continues throughout.  Endeavour to incorporate as many researcher needs as possible, as identified during the initial researcher consultation stage, will be included in the schedule with Alpha testing phases consecutively built upon many of these concepts.  The final result, provision of an interactive interface for navigating and analysing the network of artistic collaborations embedded in the AusStage dataset, will be delivered following testing and service revision phases by May 2010.  
 
-||*Date:*  28 June – 8 October 2010
-*Task:*  Develop Navigating Networks Engine||
-||*Goals*
-•	To build upon the ARC LIEF funded AusStage Phase 3 (2007 – 2008) and eResearchSA Summer Scholarships (Dec 2008 - Jan 2009) work already undertaken.	||Activities
+|| *Date:*  28 June – 8 October 2010
+*Task:*  Develop Navigating Networks Engine ||
+|| *Goals*
+•	To build upon the ARC LIEF funded AusStage Phase 3 (2007 – 2008) and eResearchSA Summer Scholarships (Dec 2008 - Jan 2009) work already undertaken.	|| Activities
 •	In depth consideration and discussion of the report written and work undertaken by Nathan Lambert and Jonathan Bollen (Visualising Networks of Artistic Collaboration in AusStage, April 2009).
 •	To evaluate and potentially incorporate as many Researcher needs and ideas as possible.	•	Comprehensive consultation process with Humanities Researchers and LIEF Navigating Networks reference group members.
 •	Development of a prioritised listing of desired Navigating Networks service functions.
