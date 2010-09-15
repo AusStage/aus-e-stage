@@ -638,7 +638,7 @@ At this point I have abandoned testing of JSVis. Although existing examples of n
  
 =DEVELOPMENT SCHEDULE=
 
-Please refer to the [http://aus-e-stage.googlecode.com/trunk/wiki-assets/navigating-networks-development-schedule.pdf linked pdf file] for Navigating Networks Development Schedule details.
+Please refer to the [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/navigating-networks-development-schedule.pdf linked pdf file] for Navigating Networks Development Schedule details.
 
 
  
