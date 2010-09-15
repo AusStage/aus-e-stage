@@ -21,12 +21,16 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 || *Name* || *Possible Values* || *Optional* || *Default* ||
 || task   || ego-centric-network || No || ||
 || id     || unique contributor id || No || ||
+|| radius || Integer between 1 and 3 ||	 Yes || 1 ||
 
 === task ===
 The task parameter defines the type of export that is undertaken. Currently only one task is available which is an egocentric network for a contributor and their immediate collaborators. 
 
 === id ===
 The id parameter defines the unique identifier of the contributor that is of interest.
+
+=== radius ===
+The desired number of edges between the central node and the peripheral nodes of the network.
 
 
 == Sample Output == 
