@@ -672,4 +672,78 @@ public class ExportManager {
 		// play nice and tidy up
 		database.tidyUp();	
 	}
+	
+	/**
+	 * A method to build a list of Collaboration objects representing a list of collaborations associated with a collaborator
+	 *
+	 * @param id the unique identifier of a collaborator
+	 *
+	 * @return   a CollaborationList object containing a list of Collaboration objects
+	 */
+	public CollaborationList getCollaborationList(String id) {
+	
+		// check on the input parameters
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter cannot be null");
+		}
+		
+		// declare helper variables
+		CollaborationList list = new CollaborationList(id);
+		
+		// define other helper variables
+		QuerySolution row           = null;
+		Collaboration collaboration = null;
+		
+		// define other helper variables
+		String  partner   = null;
+		Integer count     = null;
+		String  firstDate = null;
+		String  lastDate  = null;
+	
+		// define the base sparql query
+		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
+						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
+ 						   + "SELECT ?collaborator ?firstDate ?lastDate ?collabCount "
+ 						   + "WHERE {  "
+ 						   + "       @ a foaf:Person ; "
+   						   + "ausestage:hasCollaboration ?collaboration. "
+ 						   + "       ?collaboration ausestage:collaborator ?collaborator; "
+ 						   + "                      ausestage:collaborationFirstDate ?firstDate; " 
+ 						   + "                      ausestage:collaborationLastDate ?lastDate; "
+ 						   + "                      ausestage:collaborationCount ?collabCount. "
+ 						   + "       FILTER (?collaborator != @) "
+ 						   + "} ";
+		
+		// build the query
+		String queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+		
+		// execute the query
+		ResultSet results = database.executeSparqlQuery(queryToExecute);
+		
+		// add the first degree contributors
+		while (results.hasNext()) {
+			// loop though the resulset
+			// get a new row of data
+			row = results.nextSolution();
+			
+			// get the data
+			partner   = AusStageURI.getId(row.get("collaborator").toString());
+			count     = row.get("collabCount").asLiteral().getInt();
+			firstDate = row.get("firstDate").toString();
+			lastDate  = row.get("lastDate").toString();
+			
+			// create the collaboration object
+			collaboration = new Collaboration(id, partner, count, firstDate, lastDate);
+			
+			// add the collaboration to the list
+			list.addCollaboration(collaboration); 
+		}
+		
+		// play nice and tidy up
+		database.tidyUp();
+		
+		// return the list of collaborations
+		return list;		
+	
+	} // end the CollaborationList method
 }
