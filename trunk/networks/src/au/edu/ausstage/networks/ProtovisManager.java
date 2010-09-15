@@ -94,8 +94,8 @@ public class ProtovisManager {
  						   + "SELECT ?collabName ?function  "
 						   + "WHERE {  "
 						   + "       @ a foaf:Person ; "
-						   + "           foaf:name ?collabName; "
-						   + "           ausestage:function ?function. "
+						   + "           foaf:name ?collabName. "
+						   + "OPTIONAL {@ ausestage:function ?function} "
 						   + "} ";
 
 		String queryToExecute = null;
@@ -131,9 +131,11 @@ public class ProtovisManager {
 				// get a new row of data
 				row = results.nextSolution();
 			
-				// this is a hack I know
+				// add the data to the collaborator
 				collaborator.setName(row.get("collabName").toString());
-				collaborator.setFunction(row.get("function").toString());
+				if(row.get("function") != null) {
+					collaborator.setFunction(row.get("function").toString());
+				}
 			}
 			
 			// play nice and tidy yo
@@ -278,7 +280,7 @@ public class ProtovisManager {
 					collaborationList = collaborations.get(source);
 					collaboration = collaborationList.getCollaboration(target);
 					
-					edge.put("collaborations", collaboration.getCollaborationCount());
+					edge.put("value", collaboration.getCollaborationCount());
 					edge.put("firstDate",      collaboration.getFirstDate());
 					edge.put("lastDate",       collaboration.getLastDate());					
 			
