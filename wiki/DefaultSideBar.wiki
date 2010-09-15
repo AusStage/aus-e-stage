@@ -33,7 +33,6 @@
          * [NavigatingNetworksDatasetAPIexportEdges Edge List Export API]
          * [NavigatingNetworksDatasetAPIBasicSearch Basic Search API]
          * [NavigatingNetworksDatasetAPIProtovis Protovis Export API]
-
        * [AuseStageOntology Aus-e-Stage Ontology] 
        * [NavigatingNetworksSparqlEndpoint SPARQL End Point]
        * [NavigatingNetworksSparql  Sample SPARQL Queries]
