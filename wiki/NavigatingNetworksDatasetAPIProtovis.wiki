@@ -44,28 +44,28 @@ http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id=414321
             "source": 1,
             "target": 7,
             "lastDate": "2001-11-04",
-            "collaborations": 14
+            "value": 14
         },
         {
             "firstDate": "2001-10-21",
             "source": 1,
             "target": 16,
             "lastDate": "2008-05-24",
-            "collaborations": 2
+            "value": 2
         },
         {
             "firstDate": "2005-07-18",
             "source": 1,
             "target": 19,
             "lastDate": "2005-07-20",
-            "collaborations": 1
+            "value": 1
         },
         {
             "firstDate": "2000-03-02",
             "source": 1,
             "target": 20,
             "lastDate": "2000-03-02",
-            "collaborations": 1
+            "value": 1
         },
         ...
         {
@@ -73,7 +73,7 @@ http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id=414321
             "source": 114,
             "target": 115,
             "lastDate": "2010-08-21",
-            "collaborations": 1
+            "value": 1
         }
     ],
     "nodes": [
