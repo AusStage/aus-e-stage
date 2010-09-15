@@ -638,7 +638,7 @@ At this point I have abandoned testing of JSVis. Although existing examples of n
  
 =DEVELOPMENT SCHEDULE=
 
-Please refer to the linked pdf file for Navigating Networks Development schedule details.
+Please refer to the linked pdf file for Navigating Networks Development Schedule details.
 
 
  
