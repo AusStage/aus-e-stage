@@ -28,6 +28,12 @@
      * [NavigatingNetworksExportGraphs Export Graph Files]
      * [NavigatingNetworksDataset Dataset]
        * [NavigatingNetworksDatasetAPI DataSet API]
+         * [NavigatingNetworksDatasetAPIlookup Lookup API]
+         * [NavigatingNetworksDatasetAPIexportGraph Graph Export API]
+         * [NavigatingNetworksDatasetAPIexportEdges Edge List Export API]
+         * [NavigatingNetworksDatasetAPIBasicSearch Basic Search API]
+         * [NavigatingNetworksDatasetAPIProtovis Protovis Export API]
+
        * [AuseStageOntology Aus-e-Stage Ontology] 
        * [NavigatingNetworksSparqlEndpoint SPARQL End Point]
        * [NavigatingNetworksSparql  Sample SPARQL Queries]
