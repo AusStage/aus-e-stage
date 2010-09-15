@@ -49,12 +49,13 @@
 		});
 	</script>
 	<script type="text/javascript" src="assets/javascript/organisations.js"></script>
-<!--    	<script type="text/javascript" src="assets/javascript/maplinks.js"></script> -->
+   	<!-- <script type="text/javascript" src="assets/javascript/contributors.js"></script> -->
    	<script type="text/javascript" src="assets/javascript/map.functions.js"></script> 	
 
 </head>
 
 <body>
+
 	<div id="header"><h1>AusStage Mapping Service Google Maps v3 Migration</h1></div>
 	<div id="inner"> 
 		<div id="accordion">
@@ -75,7 +76,71 @@
 				</div>
 			
 				<h2>Contributors</h2>
-				<div class="pane">... pane content ...</div>
+				<div class="pane">
+					<ul class="css-tabs">
+						<li><a class="current" href="#tab_contr_name">Name</a></li>
+						<li><a class="" href="#tab_contr_id">ID</a></li>			
+					</ul>
+					<div class="css-panes">
+						<div>
+							<form action="" method="get" id="name_search" name="name_search">
+								<input type="hidden" name="task" value="contributor"/>
+								<input type="hidden" name="type" value="single"/>
+								<input type="text" size="40" id="contributor_name" name="contributor_name"/>
+								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="name_search_btn" value="Search"/>								
+	 						</form> 										
+
+							<!-- <input class="ui-state-default ui-corner-all button" type="button" name="ShowCheckBox" id="ShowCheckBox" value="ShowCheckBox"/> -->
+
+							<div id="contr_name_search_results" style="padding-top: 60px;">																					
+							</div>	
+																		
+						</div>
+						<div>
+<!-- 	 						
+							<form action="search/" method="get" id="id_search" name="id_search">														
+								<input type="hidden" name="task" value="contributor"/>
+								<input type="hidden" name="type"   value="id"/>														
+								<table>
+								  <tr><td>
+								    <input type="text" size="40" id="query" name="query"/>								  
+								  </td></tr>								  
+								  <tr><td>
+								    <input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="id_search_btn" value="Search"/>
+								  </td></tr>
+								  <tr>																													
+								  </tr>
+								  <tr><td>
+								    <table id="contr_mapInfo">
+									  	<caption>Map of events for Contributor:</caption>	
+									  	<tr></tr>
+										<tr>
+										    <td align="right">Name:</td>
+											<td id="contr_name" align="center"></td>										
+										</tr>
+										<tr>
+											<td align="right">ID:</td>
+											<td id="contr_id" align="center"></td>
+										</tr>
+										<tr>
+											<td align="right">Total Events Count:</td>
+											<td id="contr_total_events_count" align="center"></td>
+										</tr>
+										<tr>
+											<td align="right">Mapped Events Count:</td>
+											<td id="contr_mappped_events_count" align="center"></td>
+										</tr>
+									</table>
+								  </td></tr>
+								</table>									
+							</form>															
+							<div id="contr_id_search_results" style="padding-top: 60px;">																					
+							</div>   
+  -->																						 														
+						</div>						
+						
+					</div>	
+				</div>
 			
 				<h2>Organisations</h2>
 				<div class="pane">
@@ -87,15 +152,14 @@
 					<div class="css-panes">
 						<div>
 						
- 						<!--<form action="" method="get" id="name_search" name="name_search">
+ 						<form action="" method="get" id="name_search" name="name_search">
 								<input type="hidden" name="task" value="organisation"/>
 								<input type="hidden" name="type" value="single"/>
 								<input type="text" size="40" id="organisation_name" name="organisation_name"/>
-								<input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="name_search_btn" value="Search"/>								
+								<!-- <input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="name_search_btn" value="Search"/> -->
+								<input class="ui-state-default ui-corner-all button" type="button" name="ShowCheckBox" id="ShowCheckBox" value="ShowCheckBox"/>								
  						</form> 										
--->
-							<input class="ui-state-default ui-corner-all button" type="button" name="ShowCheckBox" id="ShowCheckBox" value="ShowCheckBox"/>
-
+							
 							<div id="name_search_results" style="padding-top: 60px;">																					
 							</div>	
 																		
@@ -109,8 +173,7 @@
 								<table>
 								  <tr><td>
 								    <input type="text" size="40" id="query" name="query"/>
-								    <input type="hidden"/>
-								  </td></tr>								  
+								     </td></tr>								  
 								  <tr><td>
 								    <input class="ui-state-default ui-corner-all button" type="submit" name="submit" id="id_search_btn" value="Search"/>
 								  </td></tr>
@@ -178,8 +241,9 @@
 			</div>
 					
 		</div>
-		
-		 		
+			 		
 	</div>	
+	
+
 </body>
 </html>

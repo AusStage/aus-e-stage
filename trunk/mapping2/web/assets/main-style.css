@@ -116,6 +116,7 @@ blockquote
 	{background-color:#eeeeee;
 }
 
+/*
 #sidebar {
 	float:left;
 	width:174px;
@@ -138,7 +139,7 @@ blockquote
 #sidebar a:hover {
 	text-decoration: underline;
 }
-
+*/
 
 #footer {
 	clear:both;
