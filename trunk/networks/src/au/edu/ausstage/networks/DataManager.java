@@ -111,7 +111,7 @@ public class DataManager {
 	private ResultSet executeViaLocal(String sparqlQuery) {
 	
 		// play nice and tidy up
-		minTidyUp();
+		tidyUp(false);
 		
 		// connect to the dataset
 		if(dataset == null) {
@@ -141,7 +141,7 @@ public class DataManager {
 	private ResultSet executeViaEndpoint(String sparqlQuery) {
 	
 		// play nice and tidy up
-		minTidyUp();
+		tidyUp(false);
 	
 		// get a query execution object		
 		execution = QueryExecutionFactory.sparqlService(datastorePath, sparqlQuery);
@@ -156,47 +156,39 @@ public class DataManager {
 	
 	/**
 	 * A method to tidy up resources after finished with a query
+	 *
+	 * @param fullTidy true, if and only if, a full tidy is required
+	 */
+	public void tidyUp(boolean fullTidy) {
+	
+		if(results != null) {
+			results = null;
+		}
+		
+		if(execution != null) {
+			execution.close();
+			execution = null;
+		}
+		
+		if(query != null) {
+			query = null;
+		}
+		
+		if(fullTidy == true) {		
+			if(dataset != null) {
+				dataset.close();
+				dataset = null;
+			}
+		}	
+	}
+	/**
+	 * A method to tidy up resources after finished with a query
 	 */
 	public void tidyUp() {
 	
-		if(results != null) {
-			results = null;
-		}
-		
-		if(execution != null) {
-			execution.close();
-			execution = null;
-		}
-		
-		if(query != null) {
-			query = null;
-		}
-		
-		if(dataset != null) {
-			dataset.close();
-			dataset = null;
-		}
+		tidyUp(false);
 	
 	} // end tidyUp method
-	
-	/** 
-	 * A private tidyup method to perform a minimum tidyup
-	 */
-	private void minTidyUp() {
-	
-		if(results != null) {
-			results = null;
-		}
-		
-		if(execution != null) {
-			execution.close();
-			execution = null;
-		}
-		
-		if(query != null) {
-			query = null;
-		}
-	}
 	
 	/**
 	 * A method used to get the value of a parameter from the ServletConfig object
@@ -217,7 +209,7 @@ public class DataManager {
 	 */
 	protected void finalize() throws Throwable {
 		try {
-			tidyUp();
+			tidyUp(true);
 			
 			if(accessMethod.equals("http") == false) {
 				dataset.close();

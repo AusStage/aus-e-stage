@@ -680,6 +680,17 @@ public class ExportManager {
 	 *
 	 * @return   a CollaborationList object containing a list of Collaboration objects
 	 */
+	public CollaborationList getCollaborationList(Integer id) {
+		return getCollaborationList(Integer.toString(id));
+	}
+	
+	/**
+	 * A method to build a list of Collaboration objects representing a list of collaborations associated with a collaborator
+	 *
+	 * @param id the unique identifier of a collaborator
+	 *
+	 * @return   a CollaborationList object containing a list of Collaboration objects
+	 */
 	public CollaborationList getCollaborationList(String id) {
 	
 		// check on the input parameters

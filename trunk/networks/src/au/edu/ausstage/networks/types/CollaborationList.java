@@ -109,5 +109,20 @@ public class CollaborationList {
 		
 		return collaborations.get(Integer.parseInt(value));	
 	}
+	
+	/**
+	 * Retrieve a collaboration from the list
+	 *
+	 * @param value the id of the partner of the collaboration with this collaborator
+	 */
+	public Collaboration getCollaboration(Integer value) {
+	
+		// check the input
+		if(value == null) {
+			throw new IllegalArgumentException("The parameter cannot be null");
+		}
+		
+		return collaborations.get(value);	
+	}
 
 } // end class definition

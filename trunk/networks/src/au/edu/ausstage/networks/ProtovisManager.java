@@ -81,9 +81,6 @@ public class ProtovisManager {
 		// get the data for this collaborator
 		java.util.TreeMap<Integer, Collaborator> network = export.getRawCollaboratorData(id, radius);
 		
-		// play nice and tidy up
-		export = null;
-		
 		/*
 		 * add some of the additional required information
 		 */
@@ -146,6 +143,34 @@ public class ProtovisManager {
 			// add the collaborator to the list
 			collaborators.add(collaborator);
 		}
+		
+		/*
+		 * get a list of collaborations
+		 */
+		java.util.HashMap<Integer, CollaborationList> collaborations = new java.util.HashMap<Integer, CollaborationList>();
+		
+		// reset the iterator
+		networkKeys        = network.keySet();
+		networkKeyIterator = networkKeys.iterator();
+		networkKey         = null;
+
+		CollaborationList collaborationList;
+		
+		// loop through the list of keys
+		while(networkKeyIterator.hasNext()) {
+		
+			// get the key
+			networkKey = (Integer)networkKeyIterator.next();
+		
+			// get the list of collaborations for this user
+			collaborationList = export.getCollaborationList(networkKey);
+			
+			// add the collaborationList object to the list
+			collaborations.put(networkKey, collaborationList);
+		}
+		
+		// play nice and tidy up
+		export = null;			
 		
 		/*
 		 * ajust the order of the collaborators in the array
@@ -223,6 +248,7 @@ public class ProtovisManager {
 		Integer source = null;
 		Integer target = null;
 		Integer altSourceIndex = null;
+		Collaboration collaboration = null;
 		
 		// add the collaborators
 		while(networkValueIterator.hasNext()) {
@@ -247,15 +273,19 @@ public class ProtovisManager {
 					edge = new JSONObject();
 					edge.put("source", altSourceIndex);
 					edge.put("target", altIndexer);
+					
+					// get the additional data about the edge
+					collaborationList = collaborations.get(source);
+					collaboration = collaborationList.getCollaboration(target);
+					
+					edge.put("collaborations", collaboration.getCollaborationCount());
+					edge.put("firstDate",      collaboration.getFirstDate());
+					edge.put("lastDate",       collaboration.getLastDate());					
 			
 					edges.add(edge);
 				}
 			}		
 		}
-		
-		
-		
-		
 		
 		object.put("edges", edges);
 		
