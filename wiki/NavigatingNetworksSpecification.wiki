@@ -638,8 +638,6 @@ At this point I have abandoned testing of JSVis. Although existing examples of n
  
 =DEVELOPMENT SCHEDULE=
 
-==Navigating Networks Service:  Development Schedule==
-
 The Navigating Networks service development schedule will be staged to ensure ongoing collaboration with researchers and testing partners continues throughout.  Endeavour to incorporate as many researcher needs as possible, as identified during the initial researcher consultation stage, will be included in the schedule with Alpha testing phases consecutively built upon many of these concepts.  The final result, provision of an interactive interface for navigating and analysing the network of artistic collaborations embedded in the AusStage dataset, will be delivered following testing and service revision phases by May 2010.  
 
 ||*Date:*  28 June – 8 October 2010
