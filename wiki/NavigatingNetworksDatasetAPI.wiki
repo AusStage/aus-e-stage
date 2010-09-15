@@ -8,3 +8,4 @@ The second way of retrieving data is by using the [http://en.wikipedia.org/wiki/
  * [NavigatingNetworksDatasetAPIexportGraph Graph Export API] - used to export graphs
  * [NavigatingNetworksDatasetAPIexportEdges Edge List Export API] - used to export edge list files
  * [NavigatingNetworksDatasetAPIBasicSearch Basic Search API] - used to conduct basic searches
+ * [NavigatingNetworksDatasetAPIProtovis Protovis Export API] - export data for use in Protovis
