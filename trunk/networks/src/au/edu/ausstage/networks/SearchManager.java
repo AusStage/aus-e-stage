@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.DateUtils;
 import au.edu.ausstage.utils.InputUtils;
+import au.edu.ausstage.networks.types.*;
 
 /**
  * A class to manage the searches for information

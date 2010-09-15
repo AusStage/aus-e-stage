@@ -16,7 +16,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-package au.edu.ausstage.networks;
+package au.edu.ausstage.networks.types;
 
 // import additional classes
 import java.util.TreeSet;

@@ -32,6 +32,7 @@ import java.util.*;
 // import AusStage related packages
 import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.*;
+import au.edu.ausstage.networks.types.*;
 
 /**
  * A class to manage the export of information
