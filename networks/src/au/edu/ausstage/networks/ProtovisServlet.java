@@ -98,10 +98,10 @@ public class ProtovisServlet extends HttpServlet {
 		ProtovisManager manager = new ProtovisManager(database);
 		
 		//debug code
-		response.setContentType("text/plain; charset=UTF-8");
+		//response.setContentType("text/plain; charset=UTF-8");
 		
 		// output json mime type
-		//response.setContentType("application/json; charset=UTF-8");
+		response.setContentType("application/json; charset=UTF-8");
 		
 		// output the results of the lookup
 		PrintWriter out = response.getWriter();
