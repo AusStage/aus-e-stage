@@ -48,6 +48,10 @@ var resultList = [
 // setup the page
 $(document).ready(function(){
 	
+	//create an empty Australia map.
+	var mapID = document.getElementById("map");
+	var map = createMap(mapID, 'a');
+	
 	$("#ShowCheckBox").click(function () {
 		showCheckBox();
 	});
@@ -95,7 +99,7 @@ $(document).ready(function(){
 	$("#mapInfo").hide();
 	$("#name_search_results").empty();
 	$("#id_search_results").empty();
-	mapAction(false);
+	mapAction(true);
 });
 
 function showRequest(formData, jqForm, options) { 
@@ -107,7 +111,7 @@ function showRequest(formData, jqForm, options) {
     // DOM element for the form do this: 
     // var formElement = jqForm[0]; 
  
-    alert('About to submit: \n\n' + queryString); 
+    //alert('About to submit: \n\n' + queryString); 
  
     // here we could return false to prevent the form from being submitted; 
     // returning anything other than false will allow the form submit to continue 
@@ -147,7 +151,8 @@ function showCheckBox() {
 	var chBox = new Array();
 	var name_prefix = "chBox_";
 	var href = null;
-		
+
+	$("#name_search_results").empty();
 	//create checkboxes
 	for (var n = 0; n < resultList.length; n++) {
 		cb_name = name_prefix + n;
@@ -168,9 +173,9 @@ function showCheckBox() {
 	$('#name_search_results input:checkbox').live('click', function (){
 		var thisCheck = $(this);
 		if (thisCheck.is (':checked'))	{
-			$('#addToMap').attr('disabled', '');
+			$('#addToMap').attr('disabled', '');			
 		}else if ($('#name_search_results  :checkbox:checked').size() == 0){
-			removeMarkers(); //clean the map
+			//removeMarkers(); //clean the map
 			$('#addToMap').attr('disabled', 'disabled'); //disable the button	
 		}
 	});
@@ -185,6 +190,8 @@ function addToMap(){
 	
     //construct the multiple ids with comma
 	$('#name_search_results :checkbox:checked').each(function() {
+		var thisCheck = $(this);
+		thisCheck.attr('disabled', 'disabled');
 		toBeShownIDs = toBeShownIDs + $(this).attr('id') + ',';
 	});
 	
@@ -230,11 +237,11 @@ function showErrorMessage(whichDiv, msg) {
 $(document).ready(function() {
 
 	// getting marker xml for contributors
-	$("#map").ajaxError(function(e, xhr, settings, exception) {
+/*	$("#map").ajaxError(function(e, xhr, settings, exception) {		
 		if(settings.url.search("action=markers&type=organisation") != -1) {
 			$(this).empty();
 			$(this).append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please try again.<br/>If the problem persists please contact the site administrator.</p>'); 
 		}
 	});
-});
+*/});
 

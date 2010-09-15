@@ -26,6 +26,7 @@ var mapData = null;
 var markers = null;
 var markerArray = new Array();
 var mapID = null;
+var map = null;
 var task = null;	//'contributor' or 'organisation'
 var ID = null;  //'contributor ID' or 'organisation ID'
 // object to hold marker locations
@@ -47,7 +48,6 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 	ID = id;
 	// declare helper variables
 	var url;
-	var map = null;
 	
 	// adjust the dates if necessary
 	if(start != null && finish != null) {
@@ -129,15 +129,17 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			mapID = document.getElementById("map");
 			
 			// create a new map and centre it on the focus
-			map = createMap(mapID, focus, start, finish);			
+			createMapandMarkers(mapID, focus, start, finish);			
 			
-			// build the time slider
-			buildTimeSlider();
-			
+			// build the time slider if there are mapped events
+			if (markers.length >0) {
+				buildTimeSlider();
+			}
+						
 		});	//end of $.get()
 	}else if (updateHeader == false){
 		if (mapID != null) {
-			map = createMap(mapID, focus, start, finish);
+			createMapandMarkers(mapID, focus, start, finish);
 
 		}
 	};//end of if (updateHeader == true)	
@@ -145,19 +147,10 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 }
 
 //create map
-function createMap(mapID, focus, start, finish){
-    var myOptions = {
-		      zoom: getZoom(focus),
-		      center: getMapFocusLatLng(focus),
-		      mapTypeId: google.maps.MapTypeId.ROADMAP
-		    };
-
-    var map = new google.maps.Map(mapID, myOptions);
-
-    google.maps.event.addListener(map, 'click', function() {
-    	infowindow.close();
-    });
-
+function createMapandMarkers(mapID, focus, start, finish){
+   
+    map = createMap(mapID, focus);
+    
     var j = 0;
     // build a group of markers on the map
     for (var i = 0; i < markers.length; i++) {    	
@@ -192,11 +185,26 @@ function createMap(mapID, focus, start, finish){
     		} else {
     			iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|4D3779|000000";
     		}
-    		markerArray[j] = createMarker(map, latlng, info, venueName, iconURL);
+    		markerArray[j] = createMarker(latlng, info, venueName, iconURL);
     	    j = j+1;
     	}
     }//end of for (build group of markers)	
     //console.log("Num of makers created: " + j);
+  
+}
+
+function createMap(mapID, focus){
+    var myOptions = {
+		      zoom: getZoom(focus),
+		      center: getMapFocusLatLng(focus),
+		      mapTypeId: google.maps.MapTypeId.ROADMAP
+		    };
+
+    var map = new google.maps.Map(mapID, myOptions);
+
+    google.maps.event.addListener(map, 'click', function() {
+    	infowindow.close();
+    });
     return map;
 }
 
@@ -395,7 +403,7 @@ function checkMarkersByState(i, focus){
 }
 
 //build a single marker
-function createMarker(map, latlng, info, venueName, iconURL) {
+function createMarker(latlng, info, venueName, iconURL) {
 	
 	var marker = new google.maps.Marker({  
 		   position: latlng,  
@@ -510,7 +518,7 @@ $(document).ready(function() {
 $(document).ready(function() {
 
 	// getting marker xml for contributors
-	$("#map").ajaxError(function(e, xhr, settings, exception) {
+/*	$("#map").ajaxError(function(e, xhr, settings, exception) {
 		// hide certain elements
 		$("#map_name").hide();
 		$("#map_header").hide();
@@ -521,5 +529,5 @@ $(document).ready(function() {
 	
 		// add the error message to the page
 		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst processing your request. Please try again.<br/>If the problem persists please contact the site administrator.</p>'); 
-	});
+	});*/
 });
