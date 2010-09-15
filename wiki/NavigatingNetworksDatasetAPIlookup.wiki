@@ -1,8 +1,8 @@
-#summary One-sentence summary of this page.
+#summary Documentation on the Navigating Networks Lookup API
 
 <wiki:toc max_depth="3" />
 
-= Lookup API =
+<h1> Lookup API </h1>
 
 The lookup API provide the functionality to lookup a defined dataset for a given contributor. The details of the API are as follows:
 
