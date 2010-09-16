@@ -48,10 +48,6 @@ var resultList = [
 // setup the page
 $(document).ready(function(){
 	
-	//create an empty Australia map.
-	var mapID = document.getElementById("map");
-	var map = createMap(mapID, 'a');
-	
 	$("#ShowCheckBox").click(function () {
 		showCheckBox();
 	});
@@ -70,8 +66,7 @@ $(document).ready(function(){
 			jQuery(form).ajaxSubmit({
 				dataType:	'json',
 				beforeSubmit: showRequest,
-				success:      showSearchResults,			
-				error:		showErrorMessage("#name_search_results", nameMsg)	
+				success:      showSearchResults								
 			});
 		}
 	});*/
@@ -90,15 +85,13 @@ $(document).ready(function(){
 			jQuery(form).ajaxSubmit({
 				dataType:	'json',
 				beforeSubmit: showRequest,
-				success:      showResponse
-				//error:		showErrorMessage("#id_search_results", idMsg)
+				success:      showResponse				
 			});
 		}
 	});	
 	
-	$("#mapInfo").hide();
-	$("#name_search_results").empty();
-	$("#id_search_results").empty();
+	$("#org_name_search_results").empty();
+	$("#org_id_search_results").empty();
 	mapAction(true);
 });
 
@@ -121,25 +114,42 @@ function showRequest(formData, jqForm, options) {
 function showResponse(data)  { 
 	// 'data' is the json object returned from the server 
 	//alert('jason length: ' + data.length);
-	if (data.length == 1){		
-		$("#org_id").empty();
-		$("#org_id").append(data[0].id);
-		$("#org_name").empty();
-		var name_url = '<a href="' + data[0].url + '" target="ausstage">' + data[0].name + '</a>';
-		$("#org_name").append(name_url);
-		$("#org_total_events_count").empty();
-		$("#org_total_events_count").append(data[0].totalEventCount);
-		$("#org_mappped_events_count").empty();
-		$("#org_mappped_events_count").append(data[0].mapEventCount);
-		$("#mapInfo").show();
-		getMapData('organisation', data[0].id, 'a', null, null, true);
-		mapAction(true);
+	var name_prefix = "id_chBox_";
+	var cb_name = '';
+	var chBox = null;
+	
+	$("#org_id_search_results").empty();
+	
+	if (data.length == 1){	
+		cb_name = name_prefix + 0;
+		href = '<a href="' + data[0].url + '" target="ausstage">' + data[0].name + '</a> (' + data[0].mapEventCount+ '/' + data[0].totalEventCount + ')<br>';
+		chBox = jQuery('<input type="checkbox" name="' + cb_name + '" id="' + data[0].id + '" value="'+ data[0].name + '">' + href);
+		chBox.appendTo('#org_id_search_results');
 		
-	}else {
-		alert('Empty return!');
-		removeMarkers();
-		//mapAction(false);
-		$("#mapInfo").hide();
+		//create "Add To Map" button
+		var addMapBttn = jQuery('<input class="ui-state-default ui-corner-all button" type="button" name="addToMap_org_id" id="addToMap_org_id" value="Add To Map"/>');
+		addMapBttn.appendTo('#org_id_search_results');
+		addMapBttn.attr('disabled', 'disabled');
+		$('#addToMap_org_id').click(function() {
+			addToMap('#org_id_search_results');
+		});
+		
+		//if one of the checkbox is checked, the Add To Map button become enabled. If no checkbox is selected, the AddToMap button becomes disable
+		$('#org_id_search_results input:checkbox').click(function (){
+			var thisCheck = $(this);
+			if (thisCheck.is (':checked'))	{
+				$('#addToMap_org_id').attr('disabled', '');	
+				
+			}else if ($('#org_id_search_results  :checkbox:checked').size() == 0 ){			
+				
+				$('#addToMap_org_id').attr('disabled', 'disabled'); //disable the button	
+			}
+		});
+		
+		$("#org_id_search_results").show();		
+		
+	}else if (data.length == 0) {
+		alert('Empty return!');		
 	}
 } 
 
@@ -149,68 +159,75 @@ function showResponse(data)  {
 function showCheckBox() {
 	resultLength = resultList.length; 
 	var chBox = new Array();
-	var name_prefix = "chBox_";
+	var name_prefix = "name_chBox_";
 	var href = null;
-
-	$("#name_search_results").empty();
+    var cb_name = '';
+    
+	$("#org_name_search_results").empty();
 	//create checkboxes
 	for (var n = 0; n < resultList.length; n++) {
 		cb_name = name_prefix + n;
 		href = '<a href="' + resultList[n].url + '" target="ausstage">' + resultList[n].name + '</a> (' + resultList[n].mapEventCount+ '/' + resultList[n].totalEventCount + ')<br>';
 		chBox[n] = jQuery('<input type="checkbox" name="' + cb_name + '" id="' + resultList[n].id + '" value="'+ resultList[n].name + '">' + href);
-		chBox[n].appendTo('#name_search_results');         
+		chBox[n].appendTo('#org_name_search_results');         
     }
 			
 	//create "Add To Map" button
-	var addMapBttn = jQuery('<input class="ui-state-default ui-corner-all button" type="button" name="addToMap" id="addToMap" value="Add To Map"/>');
-	addMapBttn.appendTo('#name_search_results');
+	var addMapBttn = jQuery('<input class="ui-state-default ui-corner-all button" type="button" name="addToMap_org_name" id="addToMap_org_name" value="Add To Map"/>');
+	addMapBttn.appendTo('#org_name_search_results');
 	addMapBttn.attr('disabled', 'disabled');
-	$('#addToMap').live('click', function (event) {
-		addToMap();
+	$('#addToMap_org_name').click(function() {
+		addToMap("#org_name_search_results");
 	});
 	
 	//if one of the checkbox is checked, the Add To Map button become enabled. If no checkbox is selected, the AddToMap button becomes disable
-	$('#name_search_results input:checkbox').live('click', function (){
+	$('#org_name_search_results input:checkbox').click(function (){
 		var thisCheck = $(this);
 		if (thisCheck.is (':checked'))	{
-			$('#addToMap').attr('disabled', '');			
-		}else if ($('#name_search_results  :checkbox:checked').size() == 0){
-			//removeMarkers(); //clean the map
-			$('#addToMap').attr('disabled', 'disabled'); //disable the button	
+			$('#addToMap_org_name').attr('disabled', '');	
+			
+		}else if ($('#org_name_search_results  :checkbox:checked').size() == 0 ){			
+			
+			$('#addToMap_org_name').attr('disabled', 'disabled'); //disable the button	
 		}
 	});
 	
-	$("#name_search_results").show();	
+	$("#org_name_search_results").show();	
 }
 
-function addToMap(){
+function addToMap(resultContainer){
 	//an array that keep the index of the checked checkbox
 	var toBeShownIDs = '';   
-	var checkBox = null;
+	var checkedBox = resultContainer + ' input:checkbox:checked';
 	
     //construct the multiple ids with comma
-	$('#name_search_results :checkbox:checked').each(function() {
+//	$('#org_name_search_results input:checkbox:checked').each(function() {
+	$(checkedBox).each(function() {
 		var thisCheck = $(this);
-		thisCheck.attr('disabled', 'disabled');
-		toBeShownIDs = toBeShownIDs + $(this).attr('id') + ',';
+		var isDisabled = thisCheck.attr('disabled');
+		if (!isDisabled) {
+			thisCheck.attr('disabled', 'disabled');
+			toBeShownIDs = toBeShownIDs + $(this).attr('id') + ',';
+		}
 	});
 	
-	//get rid of the last comma ','
-	toBeShownIDs = toBeShownIDs.substr(0, toBeShownIDs.length -1);
-	getMapData('organisation', toBeShownIDs, 'a', null, null, true);
-	mapAction(true);
+	if (toBeShownIDs.length > 0) {
+		//get rid of the last comma ','
+		toBeShownIDs = toBeShownIDs.substr(0, toBeShownIDs.length -1);
+		var focus = 'a';
+		getMapData('organisation', toBeShownIDs, focus, null, null, true);
+		mapAction(true);
+	}else {
+		alert("No ID specified!");
+	}
 }
 
 function mapAction(flag) {
 	if (flag == false){
 		// hide the map div
 		$("#map").hide();
-		$("#map_header").hide();
-		$("#map_legend").hide();
 		$("#map_footer").hide();
 	}else { //show the map		
-		$("#map_header").show();
-		$("#map_legend").show();
 		$("#map_footer").show();
 		$("#map").show();
 	}
@@ -226,22 +243,7 @@ function showSearchResults(data)  {
 			
 }
 
-// function to show a generic error message
-function showErrorMessage(whichDiv, msg) {
-	$(whichDiv).empty();
-	$(whichDiv).append("<table class=\"searchResults\"><tbody><tr class=\"odd\"><td><strong>Error:</strong> " + msg + "<br/>Please check your search terms and try again. If the problem persists contact the site administrator.</td></tr></tbody></table>");
-	$(whichDiv).show();		
-}
-
-// register ajax error handlers
-$(document).ready(function() {
-
-	// getting marker xml for contributors
-/*	$("#map").ajaxError(function(e, xhr, settings, exception) {		
-		if(settings.url.search("action=markers&type=organisation") != -1) {
-			$(this).empty();
-			$(this).append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst loading markers, please try again.<br/>If the problem persists please contact the site administrator.</p>'); 
-		}
-	});
-*/});
+$(document).ajaxError(function(e, xhr, settings, exception) {
+	alert('Error in: ' + settings.url + ' \n'+'error:\n' + xhr.responseText );
+}); 
 
