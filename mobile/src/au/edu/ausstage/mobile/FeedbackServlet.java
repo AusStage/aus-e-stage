@@ -103,12 +103,22 @@ public class FeedbackServlet extends HttpServlet {
 			results = feedback.getUpdatedFeedback(performance, lastId);
 		}
 		
-		// output json mime type
-		response.setContentType("application/json; charset=UTF-8");
+		// check to see if this is a jsonp request
+		if(InputUtils.isValid(request.getParameter("callback")) == false) {
+			// output json mime type
+			response.setContentType("application/json; charset=UTF-8");
+		} else {
+			// output the javascript mime type
+			response.setContentType("application/javascript; charset=UTF-8");
+		}
 		
-		// output the results of the lookup
+		// output the results of the search
 		PrintWriter out = response.getWriter();
-		out.print(results);	
+		if(InputUtils.isValid(request.getParameter("callback")) == true) {
+			out.print(JSONPManager.wrapJSON(results, request.getParameter("callback")));
+		} else {
+			out.print(results);
+		}	
 		
 	} // end doGet method
 	
