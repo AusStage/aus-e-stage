@@ -25,6 +25,7 @@ HTTP get request
 || *Name* || *Required Value* || *Optional* || *Default* ||
 || task || initial || No || ||
 || performance || the unique performance ID || No || ||
+|| callback || function name to use for a JSONP request || Yes || ||
 
 == Result data ==
 
@@ -74,6 +75,7 @@ HTTP get request
 || task || update || No || ||
 || performance || the unique performance ID || No || ||
 || lastid || the unique identifier of the last piece of feedback || No || ||
+|| callback || function name to use for a JSONP request || Yes || ||
 
 == Result data ==
 
