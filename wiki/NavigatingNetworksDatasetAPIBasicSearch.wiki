@@ -24,6 +24,7 @@ Get Request
 || sort || name || yes || name ||
 || format || json || yes || json ||
 || limit || integer between 5 and 25 || yes || 5 ||
+|| callback] || function name to use for a JSONP request || No || ||
 
 == Parameter Definitions ==
 
@@ -46,6 +47,9 @@ Format the search result as a JSON array
 == Limit: the number of results to return ==
 
 A maximum limit of 25 is imposed by the API as a way to reduce resource consumption and to reinforce that the search API is designed to be supplementary to other discovery mechanisms that will be made available in the future. 
+
+== Callback: the name of the callback function ==
+When data is requested using the [http://en.wikipedia.org/wiki/JSON JSON] format the callback parameter specifies the function name to use for a [http://en.wikipedia.org/wiki/JSON#JSONP JSONP] request.
 
 == Sample Output ==
 
