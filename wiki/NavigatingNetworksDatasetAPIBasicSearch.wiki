@@ -19,11 +19,11 @@ Get Request
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task || collaborator || no || ||
-|| query || search terms || no || ||
-|| sort || name || yes || name ||
-|| format || json || yes || json ||
-|| limit || integer between 5 and 25 || yes || 5 ||
+|| task || collaborator || No || ||
+|| query || search terms || No || ||
+|| sort || name || Yes || name ||
+|| format || json || Yes || json ||
+|| limit || integer between 5 and 25 || Yes || 5 ||
 || callback] || function name to use for a JSONP request || No || ||
 
 == Parameter Definitions ==
