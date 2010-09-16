@@ -22,7 +22,7 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 || task   || ego-centric-network || No || ||
 || id     || unique contributor id || No || ||
 || radius || Integer between 1 and 3 ||	 Yes || 1 ||
-|| callback || function name to use for a JSONP request || No || ||
+|| callback || function name to use for a JSONP request || Yes || ||
 
 === task ===
 The task parameter defines the type of export that is undertaken. Currently only one task is available which is an egocentric network for a contributor and their immediate collaborators. 
