@@ -33,6 +33,9 @@ The id parameter defines the unique identifier of the contributor that is of int
 === radius ===
 The desired number of edges between the central node and the peripheral nodes of the network.
 
+=== callback ===
+When data is requested using the [http://en.wikipedia.org/wiki/JSON JSON] format the callback parameter specifies the function name to use for a [http://en.wikipedia.org/wiki/JSON#JSONP JSONP] request.
+
 
 == Sample Output == 
 
