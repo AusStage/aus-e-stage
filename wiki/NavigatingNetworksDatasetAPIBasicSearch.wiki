@@ -24,7 +24,7 @@ Get Request
 || sort || name || Yes || name ||
 || format || json || Yes || json ||
 || limit || integer between 5 and 25 || Yes || 5 ||
-|| callback] || function name to use for a JSONP request || No || ||
+|| callback || function name to use for a JSONP request || Yes || ||
 
 == Parameter Definitions ==
 
