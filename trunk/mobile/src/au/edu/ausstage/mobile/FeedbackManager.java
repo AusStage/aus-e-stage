@@ -25,7 +25,6 @@ import java.sql.ResultSet;
 // import additional java packages / classes
 import org.json.simple.*;
 
-
 /**
  * A class used to compile the marker data which is used to build
  * maps on web pages
