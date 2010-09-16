@@ -24,6 +24,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import au.edu.ausstage.utils.InputUtils;
+import au.edu.ausstage.utils.JSONPManager;
 
 /**
  * A class to respond to requests to search for data
@@ -139,15 +140,23 @@ public class SearchServlet extends HttpServlet {
 			// output xml mime type
 			response.setContentType("text/xml; charset=UTF-8");
 		} else if(formatType.equals("json") == true) {
-			// output json mime type
-			response.setContentType("application/json; charset=UTF-8");
+			// check to see if this is a jsonp request
+			if(InputUtils.isValid(request.getParameter("callback")) == false) {
+				// output json mime type
+				response.setContentType("application/json; charset=UTF-8");
+			} else {
+				// output the javascript mime type
+				response.setContentType("application/javascript; charset=UTF-8");
+			}
 		}
 		
-		// output the results of the lookup
+		// output the results of the search
 		PrintWriter out = response.getWriter();
-		out.print(results);
-	
-		
+		if(formatType.equals("json") == true && InputUtils.isValid(request.getParameter("callback")) == true) {
+			out.print(JSONPManager.wrapJSON(results, request.getParameter("callback")));
+		} else {
+			out.print(results);
+		}		
 	
 	} // end doGet method
 	

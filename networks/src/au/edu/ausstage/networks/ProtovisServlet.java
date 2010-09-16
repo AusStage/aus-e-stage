@@ -24,6 +24,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import au.edu.ausstage.utils.InputUtils;
+import au.edu.ausstage.utils.JSONPManager;
 
 /**
  * A class to respond to requests to export data
@@ -100,12 +101,23 @@ public class ProtovisServlet extends HttpServlet {
 		//debug code
 		//response.setContentType("text/plain; charset=UTF-8");
 		
-		// output json mime type
-		response.setContentType("application/json; charset=UTF-8");
+		// check how to return the data
+		if(InputUtils.isValid(request.getParameter("callback")) == false) {
 		
-		// output the results of the lookup
-		PrintWriter out = response.getWriter();
-		out.print(manager.getData(id, radius));
+			// output json mime type
+			response.setContentType("application/json; charset=UTF-8");
+		
+			// output the results of the export
+			PrintWriter out = response.getWriter();
+			out.print(manager.getData(id, radius));
+		} else {
+			// output javascript mime type
+			response.setContentType("application/javascript; charset=UTF-8");
+		
+			// output the results of the export
+			PrintWriter out = response.getWriter();
+			JSONPManager.wrapJSON(manager.getData(id, radius), request.getParameter("callback"), out);
+		}
 			
 	} // end doGet method
 	
