@@ -24,7 +24,7 @@ var MARKER_BASE_URL = "/mapping2/markers?";
 var infowindow = new google.maps.InfoWindow({}); 
 var mapData = null;
 var markers = null;
-var markerArray = new Array();
+var markersArray = [];  //an array keep the markers
 var mapID = null;
 var map = null;
 var task = null;	//'contributor' or 'organisation'
@@ -42,7 +42,7 @@ var locations = {};
  * @param id   the id number(s) of the organisation / contributor
  * @param updateHeader a flag to indicate that the header of the page shold be updated
  */
-function getMapData(type, id, focus, start, finish, updateHeader) {
+function getMapData(type, id, focus, start, finish, ajaxFlag) {
 	
 	task = type;
 	ID = id;
@@ -70,7 +70,8 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 		finish = parseInt(finish);
 	}
 	
-	if (updateHeader == true) {
+	//if ajaxFlag is false, then no need call servlet
+	if (ajaxFlag == true) {
 	
 		// determine what type of API call to make
 		if(type == "organisation") {
@@ -91,45 +92,16 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 		 */
 		$.get(url, function(data, textStatus, XMLHttpRequest) {
 		    // extract the markers from the xml
-		    //if (markers == null){
-		    	markers = data.documentElement.getElementsByTagName("marker");
-		    	
-		    	for (var k = 0; k < markers.length; k++) {		    	
-		    		var first = markers[k].getAttribute("fdatestr");
-		    		var last  = markers[k].getAttribute("ldatestr");
-		    		//console.log(k, " --first: ", first, "  --last: ", last);
-		    	}
-		    //}
+	    	markers = data.documentElement.getElementsByTagName("marker");
+	    	
+	    	for (var k = 0; k < markers.length; k++) {		    	
+	    		var first = markers[k].getAttribute("fdatestr");
+	    		var last  = markers[k].getAttribute("ldatestr");	  
+	    	}
+	   
 			mapData = data;	
-		// determine if we should update the header
-		//if(updateHeader == true) {
-//			console.log("Updating the header");
-
-			// extract the entity elements from the XML
-			var entities = data.documentElement.getElementsByTagName("entity");
-	
-			// build the header
-			var header = "Map of events for: ";
-	
-			// loop through the entity elements adding the data to the header
-			for(var i = 0; i < entities.length; i++) {
-	
-				header += '<a href="' + entities[i].getAttribute("url") + '" target="ausstage">' + entities[i].getAttribute("name") + "</a>, ";
-			}
-			
-			// tidy up the header by removing the last two characters
-			header = header.substr(0, header.length -2);
-	
-			// add the new header into the page
-			// the $("#map_name") syntax uses jQuery to locate the element within the page with the id attribute "map_name"
-			$("#map_name").empty(); // empty the contents of this tag
-			$("#map_name").append(header); // append the contents header variable into the tag
-			
-			$("#map").empty();
-			mapID = document.getElementById("map");
-			
-			// create a new map and centre it on the focus
-			createMapandMarkers(mapID, focus, start, finish);			
+															
+			addMarkers(type, focus, start, finish);			
 			
 			// build the time slider if there are mapped events
 			if (markers.length >0) {
@@ -137,22 +109,16 @@ function getMapData(type, id, focus, start, finish, updateHeader) {
 			}
 						
 		});	//end of $.get()
-	}else if (updateHeader == false){
-		if (mapID != null) {
-			createMapandMarkers(mapID, focus, start, finish);
-
-		}
-	};//end of if (updateHeader == true)	
+	}else if (ajaxFlag == false) {			
+			addMarkers(type, focus, start, finish);	
+	};//end of if (ajaxFlag)	
 	
 }
 
 //create map
-function createMapandMarkers(mapID, focus, start, finish){
-   
-    map = createMap(mapID, focus);
+function addMarkers(type, focus, start, finish){
     
-    var j = 0;
-    // build a group of markers on the map
+    // build a group of markers
     for (var i = 0; i < markers.length; i++) {    	
 
     	// filter markers if required and add the marker on the map
@@ -174,6 +140,16 @@ function createMapandMarkers(mapID, focus, start, finish){
     		// get the colour of the icon
         	var eventCount = parseInt(markers[i].getAttribute("events"));
         	var iconURL = null;
+        	
+/* using different icons for organisation/contributor/venue markers      	
+        	if (type == "organisation"){
+        		
+        	}else if (type == "contributor"){
+        		
+        	}else if (type == "venue"){
+        		
+        	}
+*/        	
         	if(eventCount == 1) {
         		iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|CCBAD7|000000";
     		}else if(eventCount >=2 && eventCount <=5) {
@@ -185,12 +161,13 @@ function createMapandMarkers(mapID, focus, start, finish){
     		} else {
     			iconURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=|4D3779|000000";
     		}
-    		markerArray[j] = createMarker(latlng, info, venueName, iconURL);
-    	    j = j+1;
+        	
+    		createMarker(latlng, info, venueName, iconURL);    	       		
     	}
     }//end of for (build group of markers)	
-    //console.log("Num of makers created: " + j);
-  
+    
+    //show markers on the map
+    showMarkers();
 }
 
 function createMap(mapID, focus){
@@ -200,12 +177,11 @@ function createMap(mapID, focus){
 		      mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 
-    var map = new google.maps.Map(mapID, myOptions);
+    map = new google.maps.Map(mapID, myOptions);
 
     google.maps.event.addListener(map, 'click', function() {
     	infowindow.close();
     });
-    return map;
 }
 
 //get the zoom number according to the focus
@@ -417,15 +393,25 @@ function createMarker(latlng, info, venueName, iconURL) {
 		   infowindow.open(map, marker);  
 		 });  
 	
-	return marker;
+	markersArray.push(marker);
 }
 
-function removeMarkers(){
-	for(var i=0; i < this.markerArray.length; i++){
-        this.markerArray[i].setMap(null);
+//Shows any markers currently in the array
+function showMarkers() {
+  if (markersArray) {
+    for (i in markersArray) {
+      markersArray[i].setMap(map);
     }
-    this.markerArray = new Array();
+  }
+}
 
+
+//Deletes all markers in the array by removing references to them
+function deleteMarkers(){
+	for(var i=0; i < markersArray.length; i++){
+        markersArray[i].setMap(null);
+    }
+	markersArray.length = 0;
 }
 
 //function to build the time slider
@@ -498,9 +484,22 @@ function reloadMap() {
 	
 	//getMapData(mapData, true, $("#state").val(), startDate, finishDate);
 	//var focus = $("#state").val();
-	focus = 'a';
-	getMapData(task, ID, focus, startDate, finishDate, false);
+	var focus = 'a';
+	//getMapData(task, ID, focus, startDate, finishDate, false);
+	
+	if (markersArray) {
+	    for (i in markersArray) {
+	      markersArray[i].setMap(map);
+	    }
+    }
 
+}
+
+
+function reset(){
+	deleteMarkers();
+	$("#org_name_search_results").empty();
+	$("#org_id_search_results").empty();
 }
 
 $(document).ready(function() {
@@ -508,26 +507,17 @@ $(document).ready(function() {
 	$("#reload_map").click(function () {
 		reloadMap();
 	});
-	
+
+	$("#reset").click(function () {
+		reset();
+	});
+
 });
 
 /* 
  * Define an Ajax Error handler if something bad happens when we make an Ajax call
  * more information here: http://api.jquery.com/ajaxError/
  */
-$(document).ready(function() {
-
-	// getting marker xml for contributors
-/*	$("#map").ajaxError(function(e, xhr, settings, exception) {
-		// hide certain elements
-		$("#map_name").hide();
-		$("#map_header").hide();
-		$("#map_legend").hide();
-	
-		// empty the contents of this tag
-		$("#map").empty();
-	
-		// add the error message to the page
-		$("#map").append('<p style="text-align: center"><strong>Error: </strong>An error occured whilst processing your request. Please try again.<br/>If the problem persists please contact the site administrator.</p>'); 
-	});*/
-});
+$(document).ajaxError(function(e, xhr, settings, exception) {
+	alert('Error in: ' + settings.url + ' \n'+'error:\n' + xhr.responseText );
+}); 
