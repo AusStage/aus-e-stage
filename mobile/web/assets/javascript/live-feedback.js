@@ -68,7 +68,7 @@ $(document).ready(function() {
 		$.get(url, function(data, textStatus, XMLHttpRequest) {
 		
 			// process the batch of data
-			if(data.name == "" || typeof(performance) == "undefined") {
+			if(typeof(data) == "undefined" || data.name == "") {
 				showMissingDataMessage();
 			} else {
 				// add the performance details
