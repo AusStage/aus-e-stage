@@ -7,97 +7,32 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
 
+    <!-- Protovis Files -->
+    <script type="text/javascript" src="assets/javascript/libraries/protovis-r3.2.js"></script>
+
+	<!-- jquery files --> 
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
+    <script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>    
+
 	<!-- helper files -->
     <script type="text/javascript" src="assets/javascript/network-ui.js"></script>
 
 
-    <!-- Protovis Files -->
-    <script type="text/javascript" src="assets/javascript/libraries/protovis-r3.2.js"></script>
-
-	<!-- jquery files for slider -->      
-    <script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>    
-
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css" type="text/css" />
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
-    
-        
+         
     <!-- Input file. JSON format. -->
-    <script type="text/javascript" src="../data/smlNetwork.js"></script>
+   <!-- <script type="text/javascript" src="data/smlNetworkEx.js"></script>-->
 
-    
-</head>
-
-<body onload="displayAllInfo(0)"; >
-<div id="wrap">
-	<div id="header"><h1>AusStage Navigating Networks Protovis Trial</h1></div>
-	<div id="nav">
-	</div>
-	<!-- Include the sidebar -->
-	
-
-<div id="sidebar">
-	<ul>
-		<li><a id="contName" href=""></a></li>
-		<li id="eventRange"></li>
-		<li id="contFunct"></li>
-		<li id="degCon"></li>
-	</ul>
-
-	<ul>
-		<li><a id="collab1" href=""></a></li>
-		<li><a id="collab2" href=""></a></li>
-		<li id="noOfCollab"></li>
-	</ul>
-
-	
-	<ul>
-		<li><h3>Network Properties</h3></li>
-		<li id="nodeCount"></li>
-		<li id="edgeCount"></li>
-		<li id="eventCount"></li>
-		<li id="diameter"></li>
-	</ul>
-	
-</div>
-
-	<div id="main">
-		<div id="protovis">
 			<script type="text/javascript+protovis">
-			var startYear = 1999;
-			var startMonth = 9;
-			var endYear = 2010;	
-			var endMonth = 8;
-			
-
-			
-
-			
-			 
-			var w = 796,
-    		h = 600;
-
-    		setDateRanges(startYear, startMonth, endYear, endMonth, document.dateRanges.startDate, document.dateRanges.endDate);
-    		
-    	////////////////////////////////////////////
-    	// define nodeFocus. True if focus is on nodes. False if on edges.
-    		var nodeFocus = true;
-    	
-    	///////////////////////////////////////////
-    	// define mouseOverEdge. True if mouse is over an edge.
-    		var mouseOver = false;
-		
-		//////////////////////////////////////////
-		// store target and source node for edge focus operations
-    		var targetNodeSelect;
-    		var sourceNodeSelect;
-    	
-    	////////////////////////////////////////////////////////
-    	// store seperate target and source node info for mouse over operations.
-    		var targetNodeMO;
-    		var sourceNodeMO;	
-    	
+var vis;
+function loadNetwork(vis, contributors, targetDiv){
+	if (contributors != null){
     	///////////////////////////////////////////////////////	
     	// define variables for colour options.
     	
@@ -115,11 +50,32 @@
     		var inactiveNodeStroke = "rgba(128,128,128,0.5)";
     		
     		var focusNodeFill =	"blue";
-    		var focusNodeStroke = "white";
+    		var focusNodeStroke = "red";
+			 
+			var w = 796,
+    		h = 600;
+
+    		
+    	////////////////////////////////////////////
+    	// define nodeFocus. True if focus is on nodes. False if on edges.
+    		var nodeFocus = true;    	
+    	///////////////////////////////////////////
+    	// define mouseOverEdge. True if mouse is over an edge.
+    		var mouseOver = false;
+		
+		//////////////////////////////////////////
+		// store target and source node for edge focus operations
+    		var targetNodeSelect;
+    		var sourceNodeSelect;
+    	
+    	////////////////////////////////////////////////////////
+    	// store seperate target and source node info for mouse over operations.
+    		var targetNodeMO;
+    		var sourceNodeMO;	
     		
     	////////////////////////////////////////////////////////	
 		// construct a 3d array of nodes and their neighbors
-			var nodeNeighbors = loadNodeNeighbors();
+			var nodeNeighbors = loadNodeNeighbors(contributors);
 
 		///////////////////////////////////////////////////////
 		//fix the central node in position. This is a fix to help the stability of the system
@@ -134,7 +90,7 @@
 		// new panel. 
 		// Essentially the base element 
 		// for all protovis visualisation
-			var vis = new pv.Panel()
+			vis = new pv.Panel().canvas(targetDiv)
 			    .width(w)
 			    .height(h)
 			    .fillStyle(bgColour)
@@ -216,9 +172,9 @@
 			    .event("click", function(d) { nodeLinkDegree = d.linkDegree;
     										  activeNode = this.index;
     										  nodeFocus = true;
-    										  updateInfoWindow(activeNode);
+    										  updateInfoWindow(activeNode, contributors);
     										  return vis;})
-    			.event("dblclick", function(d) alert("hoorah, this will make another call to the api, and then either reload the entire graph or append it to the existing graph."))
+    			.event("dblclick", function(d) findAndDisplayContributorNetwork(contributors.nodes[this.index].id))
     			.anchor("top").add(pv.Label).text(function(d) d.nodeName)
     										.font("9pt sans-serif")
 											.textStyle(	function() nodeFocus ? 
@@ -233,30 +189,142 @@
 
 
 			vis.render();
-			
-			$('select#startDate, select#endDate').selectToUISlider({
-				labels: 12
-			});
-
-			
+		
+			}			
+}
+					
     </script>
-<!--		<fieldset>-->
-	<form name="dateRanges">
-		<label for="startDate">From:</label>
-		<select name="startDate" id="startDate">
-		</select>
-			
-		<label for="endDate">To:</label>
-		<select name="endDate" id="endDate">
-		</select>
-	</form>
-<!--		</fieldset>-->
 
+    
+</head>
+
+<body>
+<div id="wrap">
+	<div id="header"><h1>AusStage Navigating Networks Protovis Trial</h1></div>
+	<div id="nav">
+	</div>
+	<!-- Include the sidebar -->
+	
+
+<div id="sidebar">
+
+	<ul>
+		<li><a id="contName" href=""></a></li>
+		<li id="contFunct"></li>
+		<li id="degCon"></li>
+	</ul>
+
+	<ul>
+		<li><a id="collab1" href=""></a></li>
+		<li><a id="collab2" href=""></a></li>
+		<li id="noOfCollab"></li>
+		<li id="eventRange"></li>
+	</ul>
+
+	
+	<ul>
+		<li id="networkTitle"></li>
+		<li id="nodeCount"></li>
+		<li id="edgeCount"></li>
+		<li id="eventCount"></li>
+		<li id="diameter"></li>
+	</ul>
+	
+</div>
+
+	<div id="main">
+	
+		<div id="load_network_form">
+		  <form name="search" action="">
+		    <fieldset>
+		      <label for="id" id="id_label">Contributor Id</label>
+		      <input type="text" name="id" id="id" size="30" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/>
+
+		      <label for="name" id="name_label">Name</label>
+		      <input type="text" readonly="readonly" name="name" id="name" size="40" value="" class="text-input" />
+      
+		      <input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
+		      <input type="submit" name="submit" class="button" id="network_btn" value="View Network" />	      
+		      <p align="centre" id="networkCentre"></p>
+		    </fieldset>
+
+		  </form>
+		</div>
+
+		
+
+		<div id="protovis">
 
 		</div>
-			</div>
-	<!-- include the footer -->
-	
+
+		<script type="text/javascript">		
+			$('select#startDate, select#endDate').selectToUISlider({
+				labels: 6
+			});		
+		</script>
+		
+		<div id="date_range_div">
+		<fieldset>
+			<form name="dateRanges">
+				<label for="startDate">From:</label>
+				<select name="startDate" id="startDate">
+				</select>
+			
+				<label for="endDate">To:</label>
+				<select name="endDate" id="endDate">
+				</select>
+			</form>
+		</fieldset>
+		</div>
+</div>
+
+<!--dialogue for loading the network. -->
+<div id="network_loading" style="display: none" title="Loading Network. Please wait...">
+	<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+</div>
+
+	<!-- Search form div -->
+<div id="search_div" title="Contributor Search">
+	<p>Enter a contributor name, or part of their name, and click the search button</p>
+	<form name="search" action="">			
+		<table class="formTable">
+			<tbody>
+				<tr>
+				<th scope="row">
+				<label id="name_label" for="name">Contributor Name: </label>
+				</th>
+				<td>
+				<input type="text" size="40" id="query" name="query" title="Enter the contributor name, or part of their name, and click the search button"/>
+				</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+		<table id="search_results" class="searchResults">
+			<thead>
+				<tr>
+					<th>Contributor Name</th>
+					<th>Functions</th>
+					<th>Collaborations</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body">
+			</tbody>
+		</table>
+		<div id="search_waiting">
+			<p style="text-align: center;">
+				<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+				<br/>Loading Search Results...
+			</p>
+		</div>
+		<div id="error_message">
+		</div>
+		<p>
+		 <strong>Note: </strong>Search results are limited to 5 records. If you do not see the contributor that you expected, please refine your search. Alternatively the contributor may not be part of the Navigating Networks Dataset at this time.
+		</p>		
+</div>
+
 
 <div id="footer">
 
