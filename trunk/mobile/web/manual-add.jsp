@@ -79,7 +79,7 @@
 					</th>
 					<td>
 						<input type="text" size="40" id="date" name="date" title="Enter the date that the feedback was received"/><br/>
-						<strong>Format: </strong> dd/mmm/yyyy e.g. 21/Sep/2010
+						<strong>Format: </strong> dd-mmm-yyyy e.g. 21-Sep-2010
 					</td>
 				</tr>
 				<tr>
