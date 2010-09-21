@@ -237,8 +237,8 @@ public class LookupManager {
 		
 				// add data to the object
 				object.put("id"   , Integer.parseInt(id));
-				object.put("text" , resultSet.getString(1));
-				object.put("notes", resultSet.getString(1));
+				object.put("text" , resultSet.getString(2));
+				object.put("notes", resultSet.getString(3));
 				
 			} else {
 				return new JSONObject().toString();
