@@ -113,7 +113,7 @@ public class LookupManager {
 	 * @param id         the unique identifier of a performance
 	 * @param formatType the type of format used to represent the data
 	 *
-	 * @return a JSON encoded string containing details about the feedback source types
+	 * @return a string containg details of a performance
 	 */
 	@SuppressWarnings("unchecked")
 	public String getPerformanceDetails(String id, String formatType) {
@@ -172,6 +172,74 @@ public class LookupManager {
 				object.put("startDateTime", resultSet.getString(8));
 				object.put("endDateTime", resultSet.getString(9));
 
+			} else {
+				return new JSONObject().toString();
+			}
+		} catch(java.sql.SQLException ex) {
+			return new JSONObject().toString();
+		}
+		
+		// play nice and tidy up
+		results.tidyUp();
+		results = null;
+		
+		// return the data
+		return object.toString();
+	
+	} // end getPerformanceDetails method
+	
+	/**
+	 * A method to lookup the details of a question
+	 *
+	 * @param id         the unique identifier of a question
+	 * @param formatType the type of format used to represent the data
+	 *
+	 * @return a string containing details of the question
+	 */
+	@SuppressWarnings("unchecked")
+	public String getQuestionDetails(String id, String formatType) {
+	
+		// check the input parameters
+		if(InputUtils.isValid(formatType) == false) {
+			throw new IllegalArgumentException("The formatType parameter is required");
+		} else {
+			if(formatType.equals("json") == false) {
+				throw new IllegalArgumentException("The only supported format at this time is json");
+			}
+		}
+		
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The performance id is required");
+		}
+		
+		// declare helper variables
+		JSONObject object = null;
+		
+		// build the sql
+		String sql = "SELECT question_id, question, question_notes "
+				   + "FROM mob_questions "
+				   + "WHERE question_id = ?";
+				   
+		// build parameters
+		String[] sqlParameters = new String[1];
+		sqlParameters[0] = id;
+				   
+		// execute the sql
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		ResultSet resultSet = results.getResultSet();
+		
+		//loop through the resultSet
+		try {
+			if(resultSet.next() == true) {
+		
+				// create a new JSONObject
+				object = new JSONObject();
+		
+				// add data to the object
+				object.put("id"   , Integer.parseInt(id));
+				object.put("text" , resultSet.getString(1));
+				object.put("notes", resultSet.getString(1));
+				
 			} else {
 				return new JSONObject().toString();
 			}

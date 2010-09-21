@@ -31,6 +31,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.maskedinput-1.2.2.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/manual-add.js"></script>
 </head>
 <body>
@@ -55,7 +56,6 @@
 						<input type="text" size="40" id="performance" name="performance" title="Enter the Performance ID from the mob_performance table"/>
 					</td>
 				</tr>
-				<!--
 				<tr>
 					<th scope="row">
 						<label id="question_label" for="question">Question ID: </label>
@@ -64,7 +64,6 @@
 						<input type="text" size="40" id="question" name="question" title="Enter the Question ID from the mob_questions table"/>
 					</td>
 				</tr>
-				-->
 				<tr>
 					<th scope="row">
 						<label id="source_label" for="source_type">Source Type: </label>
@@ -79,7 +78,8 @@
 						<label id="date_label" for="date">Received Date: </label>
 					</th>
 					<td>
-						<input type="text" size="40" id="date" name="date" title="Enter the date that the feedback was received"/>
+						<input type="text" size="40" id="date" name="date" title="Enter the date that the feedback was received"/><br/>
+						<strong>Format: </strong> dd/mmm/yyyy e.g. 21/Sep/2010
 					</td>
 				</tr>
 				<tr>
@@ -87,7 +87,8 @@
 						<label id="time_label" for="time">Received Time: </label>
 					</th>
 					<td>
-						<input type="text" size="40" id="time" name="time" title="Enter the time that the feedback was received"/>
+						<input type="text" size="40" id="time" name="time" title="Enter the time that the feedback was received"/><br/>
+						<strong>Format: </strong> hh:mm:ss (24 hour time) e.g. 13:08:00
 					</td>
 				</tr>
 				<tr>
@@ -100,7 +101,7 @@
 				</tr>
 				<tr>
 					<th scope="row">
-						<label id="source_id_label" for="source_id">Received From Hash: </label>
+						<label id="source_id_label" for="source_id">Source ID Hash: </label>
 					</th>
 					<td>
 						<input type="text" size="40" id="source_id" name="source_id" title="Enter the Source ID hash"/>
