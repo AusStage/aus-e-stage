@@ -1,0 +1,13 @@
+#How to make historical map overlays in Google Earth and KML
+
+= Introduction =
+
+In Google Earth, you can add image overlays over the Earth in the 3D viewer. If the image is a historical map, you can compare the historical maps to the state-of-the-art geographical content that appears in Google Earth. To create an image overlay, you need specify the image file to display and its position. In the following section, we will introduce the image format requirement, how to position the image boundaries to the earth data beneath and how to save it as KML file.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
