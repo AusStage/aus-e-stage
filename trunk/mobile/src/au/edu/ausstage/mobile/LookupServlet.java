@@ -36,10 +36,10 @@ public class LookupServlet extends HttpServlet {
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES        = {"system-property", "performance", "validate"};
+	private final String[] TASK_TYPES        = {"system-property", "performance", "validate", "question"};
 	private final String[] FORMAT_TYPES      = {"json"};
 	private final String[] PROPERTY_ID_TYPES = {"feedback-source-types"};
-	private final String[] VALIDATION_TYPES  = {"performance"};
+	private final String[] VALIDATION_TYPES  = {"performance", "question"};
 
 	/*
 	 * initialise this instance
@@ -81,13 +81,23 @@ public class LookupServlet extends HttpServlet {
 			}
 		} else if(taskType.equals("validate") == true) {
 			// this is a validation request
-			if(InputUtils.isValid(request.getParameter("performance")) == false) {
+			if(InputUtils.isValid(request.getParameter("performance")) == false && InputUtils.isValid(request.getParameter("question")) == false) {
 				throw new ServletException("Missing parameter for validation. Expected one of: " + java.util.Arrays.toString(VALIDATION_TYPES).replaceAll("[\\]\\[]", ""));
 			} else {
-				if(InputUtils.isValidInt(request.getParameter("performance")) == true) {
-					validationType = "performance";
-				} else {
-					throw new ServletException("Performance parameter is expected to be a valid integer");
+				if(InputUtils.isValid(request.getParameter("performance")) == true) {
+					// this is a performance id that needs to be validated
+					if(InputUtils.isValidInt(request.getParameter("performance")) == true) {
+						validationType = "performance";
+					} else {
+						throw new ServletException("Performance parameter is expected to be a valid integer");
+					}
+				} else if (InputUtils.isValid(request.getParameter("question")) == true) {
+					// this is a performance id that needs to be validated
+					if(InputUtils.isValidInt(request.getParameter("question")) == true) {
+						validationType = "question";
+					} else {
+						throw new ServletException("Question parameter is expected to be a valid integer");
+					}
 				}
 			}
 		} else {
@@ -132,9 +142,18 @@ public class LookupServlet extends HttpServlet {
 			}
 		} else if(taskType.equals("performance") == true) {
 			results = lookup.getPerformanceDetails(id, formatType);
+		} else if(taskType.equals("question") == true) {
+			results = lookup.getQuestionDetails(id, formatType);
 		} else if(taskType.equals("validate") == true) {
 			if(validationType.equals("performance") == true) {
 				results = lookup.getPerformanceDetails(request.getParameter("performance"), formatType);
+				if(results.length() > 10) {
+					results = "true";
+				} else {
+					results = "false";
+				}
+			} else if(validationType.equals("question") == true) {
+				results = lookup.getQuestionDetails(request.getParameter("question"), formatType);
 				if(results.length() > 10) {
 					results = "true";
 				} else {

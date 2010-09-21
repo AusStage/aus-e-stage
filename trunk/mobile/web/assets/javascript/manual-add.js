@@ -55,10 +55,83 @@ $(document).ready(function() {
 
 });
 
-// attach validation to the form
+// define custom validation methods
 $(document).ready(function() {
 
-	// attach the validation plugin to the export form
+	// custom validation of dates
+	jQuery.validator.addMethod("validDate", function(value, element) {
+
+		var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+		// check to see if there is three elements
+		var elements = value.split("-");
+	
+		if(elements.length != 3) {
+			return false;
+		}
+	
+		// check on the individual elements
+		if(elements[0] < 0 || elements[0] > 32) {
+			return false;
+		}
+	
+		// check on the month
+		elements[1] = elements[1].toLowerCase();
+		var found = false;
+	
+		for( var i = 0; i < months.length; i++) {
+			if(months[i] == elements[1]) {
+				found = true;
+			}
+		}
+	
+		if(found != true) {
+			return false;
+		}	
+	
+		// check on the year
+		if(elements[2] < 2010) {
+			return false;
+		}
+	
+		// if we get this far everything is OK
+		return true;
+	} , "The date is invalid");
+	
+	// custom validation of dates
+	jQuery.validator.addMethod("validTime", function(value, element) {
+
+		// check to see if there is three elements
+		var elements = value.split(":");
+	
+		if(elements.length != 3) {
+			return false;
+		}
+	
+		// check on the hour
+		if(elements[0] < 1 || elements[0] > 23) {
+			return false;
+		}
+		
+		// check the minute
+		if(elements[1] < 1 || elements[1] > 59) {
+			return false;
+		}
+		
+		// check the second
+		if(elements[2] < 1 || elements[2] > 59) {
+			return false;
+		}
+			
+		// if we get this far everything is OK
+		return true;
+	} , "The time is invalid");
+});
+
+// attach validation and masked input to the form
+$(document).ready(function() {
+
+	// attach the validation plugin to the form
 	$("#feedback").validate({
 		rules: { // validation rules
 			performance: {
@@ -71,11 +144,23 @@ $(document).ready(function() {
 					}
 				}
 			},
+			question: {
+				required: true,
+				digits: true,
+				remote: {
+					url: "/mobile/lookup",
+					data: {
+						task: "validate"
+					}
+				}
+			},
 			date: {
-				required: true
+				required: true,
+				validDate: true
 			},
 			time: {
-				required: true
+				required: true,
+				validTime: true
 			},
 			from: {
 				required: true,
@@ -93,10 +178,59 @@ $(document).ready(function() {
 		messages: {
 			performance: {
 				remote: "The perfomance ID is invalid"
+			},
+			question: {
+				remote: "The question ID is invalid"
 			}
 		}	
 	});
+	
+	// attached the masked input plugin to the form
+	$("#date").mask("99-aaa-9999");
+	$("#time").mask("99:99:99");
 });
+
+/*
+ * A function to validate a date
+ */
+function validDate(value, element) {
+
+	var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+	// check to see if there is three elements
+	var elements = value.split("-");
+	
+	if(elements.length != 3) {
+		return false;
+	}
+	
+	// check on the individual elements
+	if(elements[0] < 0 || elements[0] > 32) {
+		return false;
+	}
+	
+	// check on the month
+	elements[1] = elements[1].toLowerCase();
+	var found = false;
+	
+	for( var i = 0; i < months.length; i++) {
+		if(months[i] = elements[1]) {
+			found = true;
+		}
+	}
+	
+	if(found != true) {
+		return false;
+	}	
+	
+	// check on the year
+	if(elements[2] < 2010) {
+		return false;
+	}
+	
+	// if we get this far everything is OK
+	return true;
+} 
 
 /* 
  * A function to show an error message
