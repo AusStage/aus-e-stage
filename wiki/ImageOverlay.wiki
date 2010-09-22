@@ -1,4 +1,4 @@
-#summary How to make historical map overlays in Google Earth and KML
+#summary How to make historical map overlays in Google Earth and export it as KML
 
 == Introduction ==
 
