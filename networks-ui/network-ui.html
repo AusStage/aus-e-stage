@@ -21,177 +21,15 @@
 
 	<!-- helper files -->
     <script type="text/javascript" src="assets/javascript/network-ui.js"></script>
-
+    <script type="text/javascript" src="assets/javascript/protovis-ui.js"></script>    
 
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css" type="text/css" />
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
-         
+
     <!-- Input file. JSON format. -->
    <!-- <script type="text/javascript" src="data/smlNetworkEx.js"></script>-->
 
 			<script type="text/javascript+protovis">
-var vis;
-function loadNetwork(vis, contributors, targetDiv){
-	if (contributors != null){
-    	///////////////////////////////////////////////////////	
-    	// define variables for colour options.
-    	
-    		var bgColour = "white";
-    		var activeLinkOpaqueStroke = "rgba(47,79,79,1)";
-    		var activeLinkStroke = "rgba(47,79,79,.5)";
-    		var inactiveLinkStroke = "rgba(102,139,139,.2)";
-    		var mouseoverLinkStroke = "rgba(220,20,60,1)";
-    		var linkColourHolder;
-    		
-    		var relatedNodeFill = "rgba(0,0,255,0.7)";
-    		var relatedNodeStroke = "rgba(0,0,255,0.9)";
-    		
-    		var inactiveNodeFill = "rgba(128,128,128,0.5)";
-    		var inactiveNodeStroke = "rgba(128,128,128,0.5)";
-    		
-    		var focusNodeFill =	"blue";
-    		var focusNodeStroke = "red";
-			 
-			var w = 796,
-    		h = 600;
-
-    		
-    	////////////////////////////////////////////
-    	// define nodeFocus. True if focus is on nodes. False if on edges.
-    		var nodeFocus = true;    	
-    	///////////////////////////////////////////
-    	// define mouseOverEdge. True if mouse is over an edge.
-    		var mouseOver = false;
-		
-		//////////////////////////////////////////
-		// store target and source node for edge focus operations
-    		var targetNodeSelect;
-    		var sourceNodeSelect;
-    	
-    	////////////////////////////////////////////////////////
-    	// store seperate target and source node info for mouse over operations.
-    		var targetNodeMO;
-    		var sourceNodeMO;	
-    		
-    	////////////////////////////////////////////////////////	
-		// construct a 3d array of nodes and their neighbors
-			var nodeNeighbors = loadNodeNeighbors(contributors);
-
-		///////////////////////////////////////////////////////
-		//fix the central node in position. This is a fix to help the stability of the system
-			contributors.nodes[0].fix = new pv.Vector(w/2,h/2);
-
-		///////////////////////////////////////////////////////
-		// keep a record of the currently selected node. Assuming, on load that the currently selected node is the first in the array.
-			var activeNode = 0; 
-			var nodeLinkDegree = contributors.nodes[0].collaborations;
-
-		///////////////////////////////////////////////////////
-		// new panel. 
-		// Essentially the base element 
-		// for all protovis visualisation
-			vis = new pv.Panel().canvas(targetDiv)
-			    .width(w)
-			    .height(h)
-			    .fillStyle(bgColour)
-			    .event("mousedown", pv.Behavior.pan())
-			    .event("mousewheel", pv.Behavior.zoom());
-
-		///////////////////////////////////////////////////////
-		//add a force layout to the Panel. 
-			var force = vis.add(pv.Layout.Force)
-			    .nodes(contributors.nodes)
-			    .links(contributors.edges)
-			    .bound(true)
-			    .dragConstant(0.05)
-			    .springConstant(0.05)
- 			    .iterations(500)
-			    .transform(pv.Transform.identity.scale(3).translate(-w/3,-h/3)) 
-
-				;
-
-		/////////////////////////////////////////////////////////
-		//add the edges
-  		   force.link.add(pv.Line) 
-			    .strokeStyle(function(d, p) mouseOver && p.targetNode.index == targetNodeMO && p.sourceNode.index == sourceNodeMO ? mouseoverLinkStroke :
-			    								 nodeFocus ? 
-			    									p.sourceNode.index == activeNode ?
-			    									 activeLinkStroke : 
-		    									p.targetNode.index == activeNode ? activeLinkStroke : inactiveLinkStroke : 
-		    								p.targetNode.index == targetNodeSelect && p.sourceNode.index == sourceNodeSelect ? activeLinkOpaqueStroke : inactiveLinkStroke
-		    				 )
-		    				 
-	//	    	.event("mouseover", function(d, p) {targetNodeMO = p.targetNode.index;
-	//		    									sourceNodeMO = p.sourceNode.index;
-	//		    									mouseOver = true;
-	//		    									return vis;
-	//	    										})
-		    										
-	//	    	.event("mouseout", function(d,p) {mouseOver = false;
-	//	    									  targetNodeMO = -1;
-	//	    									  sourceNodeMO = -1;
-	//	    									  return vis;
-	//	    									  })
-
-			    .event("click", function(d, p) {updateInfoWindowEdge(p);
-			    								targetNodeSelect = p.targetNode.index;
-			    								sourceNodeSelect = p.sourceNode.index;
-			    								targetNodeMO = -1;
-			    								sourceNodeMO = -1;
-			    								nodeFocus=false;
-			    								vis.render();})
-			;
-			
-		//add the nodes
-			force.node.add(pv.Dot)
-			    .size(function(d) (d.linkDegree + 1) * Math.pow(this.scale, -1.5))
-			    .fillStyle(function() nodeFocus ? 
-			    					  	activeNode == this.index ? focusNodeFill : 
-			    							contains(nodeNeighbors[activeNode], this.index) ? relatedNodeFill :inactiveNodeFill : 
-			    						 targetNodeSelect == this.index || sourceNodeSelect == this.index ? focusNodeFill : inactiveNodeFill)
-
-//mouseover functionality removed. can be added to the function below.
-//mouseOver && this.index == targetNodeMO || this.index == sourceNodeMO ? mouseoverLink : 
-
-			    .strokeStyle(function() 
-			    						nodeFocus ? 
-			    							activeNode == this.index ? focusNodeStroke : 
-			    								contains(nodeNeighbors[activeNode], this.index) ? relatedNodeStroke:inactiveNodeStroke:
-			    							targetNodeSelect == this.index || sourceNodeSelect == this.index ? focusNodeStroke : inactiveNodeStroke)
-
-			    .lineWidth(2)
-			  
-	 		  	.event("mouseover", function(d) {targetNodeMO = d.index;
-		    									mouseOver = true;
-		    									return vis;})
-		    	.event("mouseout", function() {mouseOver = false;
-		    								   targetNodeMO = -1;
-											   return vis;})
-			    .event("mousedown", pv.Behavior.drag())
-			    .event("drag", force)
-			    .event("click", function(d) { nodeLinkDegree = d.linkDegree;
-    										  activeNode = this.index;
-    										  nodeFocus = true;
-    										  updateInfoWindow(activeNode, contributors);
-    										  return vis;})
-    			.event("dblclick", function(d) findAndDisplayContributorNetwork(contributors.nodes[this.index].id))
-    			.anchor("top").add(pv.Label).text(function(d) d.nodeName)
-    										.font("9pt sans-serif")
-											.textStyle(	function() nodeFocus ? 
-			    													activeNode == this.index ? focusNodeStroke : 
-					    											contains(nodeNeighbors[activeNode], this.index) ? relatedNodeStroke:inactiveNodeStroke:
-									    							targetNodeSelect == this.index || sourceNodeSelect == this.index ? focusNodeStroke : inactiveNodeStroke)
-    										.textShadow("0.1em 0.1em 0.1em #333")
-							    			.visible(function() mouseOver && this.index == targetNodeMO || this.index == sourceNodeMO ? true :
-							    			     				nodeFocus ? activeNode == this.index?true:false:
-							    								targetNodeSelect == this.index || sourceNodeSelect == this.index ? true : false)
-    			;
-
-
-			vis.render();
-		
-			}			
-}
 					
     </script>
 
@@ -208,6 +46,17 @@ function loadNetwork(vis, contributors, targetDiv){
 
 <div id="sidebar">
 
+<div id="load_network_form">
+		  <form name="search" action="" align=right>
+		    <label for="id" id="id_label">ID</label>
+		     <input type="text" name="id" id="id" size="10" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/><br><label for="name" id="name_label">Name</label>
+ <input type="text" readonly="readonly" name="name" id="name" size="20" value="" class="text-input" />
+<br>      
+		      <input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
+		      <input type="submit" name="submit" class="button" id="network_btn" value="View" />	             
+		  </form>
+		</div>
+
 	<ul>
 		<li><a id="contName" href=""></a></li>
 		<li id="contFunct"></li>
@@ -220,10 +69,11 @@ function loadNetwork(vis, contributors, targetDiv){
 		<li id="noOfCollab"></li>
 		<li id="eventRange"></li>
 	</ul>
-
 	
 	<ul>
 		<li id="networkTitle"></li>
+		<li id="networkCentreTitle"></li>
+		<li><a id="networkCentre" href=""></a></li>
 		<li id="nodeCount"></li>
 		<li id="edgeCount"></li>
 		<li id="eventCount"></li>
@@ -234,34 +84,11 @@ function loadNetwork(vis, contributors, targetDiv){
 
 	<div id="main">
 	
-		<div id="load_network_form">
-		  <form name="search" action="">
-		    <fieldset>
-		      <label for="id" id="id_label">Contributor Id</label>
-		      <input type="text" name="id" id="id" size="30" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/>
-
-		      <label for="name" id="name_label">Name</label>
-		      <input type="text" readonly="readonly" name="name" id="name" size="40" value="" class="text-input" />
-      
-		      <input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
-		      <input type="submit" name="submit" class="button" id="network_btn" value="View Network" />	      
-		      <p align="centre" id="networkCentre"></p>
-		    </fieldset>
-
-		  </form>
-		</div>
-
-		
-
 		<div id="protovis">
 
 		</div>
 
-		<script type="text/javascript">		
-			$('select#startDate, select#endDate').selectToUISlider({
-				labels: 6
-			});		
-		</script>
+
 		
 		<div id="date_range_div">
 		<fieldset>
@@ -273,6 +100,12 @@ function loadNetwork(vis, contributors, targetDiv){
 				<label for="endDate">To:</label>
 				<select name="endDate" id="endDate">
 				</select>
+				<input type="submit" name="submit" class="button" id="refresh_date_btn" value="refresh" />	
+		<script type="text/javascript">		
+			$('select#startDate, select#endDate').selectToUISlider({
+				labels: 12
+			});		
+		</script>
 			</form>
 		</fieldset>
 		</div>

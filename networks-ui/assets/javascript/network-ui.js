@@ -1,8 +1,6 @@
-//global variables, to be used with protovis code.
-var contributors ;
-var vis;
 
 
+//style buttons
 
 $(document).ready(function() {
 	// style the buttons
@@ -22,10 +20,8 @@ $(document).ready(function() {
 
 
 
-
 // define lookup functionality
 $(document).ready(function() {
-
 
 	//define the lookup button
     $("#lookup_btn").click(function() {
@@ -52,6 +48,7 @@ $(document).ready(function() {
 					// use the name to fill in the text box
 					$("#name").val(data.name);
 					$("#network_btn").button("enable");
+					
 				}
 			});
 			
@@ -60,8 +57,7 @@ $(document).ready(function() {
   	  }
 	  return false;
     });
-    
-    
+        
     // bind a focusout event to the id text field
 	$("#id").focusout(function() {
 
@@ -79,6 +75,7 @@ $(document).ready(function() {
 			
 			// disable the export button
 			$("#network_btn").button("disable");
+			$("#network_btn").focus();
 		}
 	});
     
@@ -91,13 +88,12 @@ $(document).ready(function() {
 		width: 650,
 		modal: true,
 		buttons: {
-				'Search': function() {
-				// search for the contributor
-				 getContributors($("input#query").val());
-			},
-
 			Cancel: function() {
 				$(this).dialog('close');
+			},
+			'Search': function() {
+				// search for the contributor
+				 getContributors($("input#query").val());
 			}
 		},
 		open: function() {
@@ -114,7 +110,8 @@ $(document).ready(function() {
 		}
 	});
     
-    
+
+	//set up network button    
 	$("#network_btn").click(function() {
 
     	// validate and process form here
@@ -125,19 +122,19 @@ $(document).ready(function() {
         	return false;
       	}
 	 
-	 	findAndDisplayContributorNetwork(id);
-	 	
-	 	//clear search fields
-	 	$("#id").val("");
-		$("#name").val("");	
-		$("#network_btn").button("disable");
-     
+	 	findAndDisplayContributorNetwork(id);  
      	return false;
+    });
+    
+    //set up date range refresh button
+    $("#refresh_date_btn").click(function() {
+		refreshNetworkForDateRange();
+	    return false;
     });
 
     
 });
-  
+
   
 
 function showLoader(type) {
@@ -312,75 +309,94 @@ function findAndDisplayContributorNetwork(id){
    var dataString = "http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id="+id+"&radius=1&callback=?";
 
    //display the loading bar
-  // $("#network_loading").show();	
 				waitingDialog();
+
 	//query the api
 	  jQuery.getJSON(dataString, 
 			function(data) {
 				contributors = null;
 				contributors = data;
-				loadNetwork(vis, contributors, "protovis");
 				
-				//hide the loading bar
-//			    $("#network_loading").hide();	
+				//need to do date population before loading the graph
+				//get the date ranges
+				var dateRange = findDateRange(contributors.edges);
+
+				//set the date ranges for the slider
+				setDateRanges(dateRange);				
 				
+				//load the graph
+				reloadNetwork("protovis")
+
+				//hide the loading bar				
 				closeWaitingDialog();
 				//update the side panel with contributor infomation
 				displayAllInfo(0,contributors);
-
+				
+				//display the slider
+				$("#date_range_div").show();   
+				
 			});
 	}
 
-
-
-		//loadNodeNeighbors takes the json data and loads each node as the first value in a 3d array. Any 
-		// associated nodes are then added into the second array. 
-			function loadNodeNeighbors(contributors){
-				
-			var nodeHash = new Array();
-			var firstIndex=0;
-			for(firstIndex; firstIndex < contributors.nodes.length; firstIndex++){
-				
-				var secondIndex = 0;	
-				nodeHash[firstIndex] = new Array();
-				
-				for(var x=0; x<contributors.edges.length; x++){
-					if (contributors.edges[x].source == firstIndex){	
-						nodeHash[firstIndex][secondIndex]=contributors.edges[x].target;
-						secondIndex++;						
-					}
-					if (contributors.edges[x].target == firstIndex){
-						nodeHash[firstIndex][secondIndex]=contributors.edges[x].source;
-						secondIndex++;
-					}
-					}
-				}
-			return nodeHash;
+//findDateRange - traverses the firstdate of contributors and gets the largest and smallest values to become our date range.
+function findDateRange(edgeList){
+	var startDate = edgeList[0].firstDate;
+	var endDate = edgeList[0].firstDate;
+	for (i = 1; i < edgeList.length; i++){
+		if (startDate > edgeList[i].firstDate){
+			startDate = edgeList[i].firstDate;			
 			}
+		if (endDate < edgeList[i].firstDate){
+			endDate = edgeList[i].firstDate;
+			}
+		}
+		return new Array(startDate, endDate);
+	
+	}
 
-//set date ranges for the time slider
-	function setDateRanges(startYear, startMonth, endYear, endMonth){
-			var monthList=new Array(12);
-			monthList[0]="Jan";
-			monthList[1]="Feb";
-			monthList[2]="Mar";
-			monthList[3]="April";
-			monthList[4]="May";
-			monthList[5]="June";
-			monthList[6]="July";
-			monthList[7]="Aug";
-			monthList[8]="Sept";
-			monthList[9]="Oct";
-			monthList[10]="Nov";
-			monthList[11]="Dec";
+
+//loadNodeNeighbors takes the json data and loads each node as the first value in a 3d array. Any 
+// associated nodes are then added into the second array. 
+function loadNodeNeighbors(contributors){
 				
-			var firstRun = true;
-			var finishPopulate = false;
-			var currYear = startYear;
-			var currMonth = startMonth;
-			var startList = document.getElementById("startDate");
-			var endList = document.getElementById("endDate");
+	var nodeHash = new Array();
+	var firstIndex=0;
+	for(firstIndex; firstIndex < contributors.nodes.length; firstIndex++){
 				
+		var secondIndex = 0;	
+		nodeHash[firstIndex] = new Array();
+				
+		for(var x=0; x<contributors.edges.length; x++){
+			if (contributors.edges[x].source == firstIndex){	
+				nodeHash[firstIndex][secondIndex]=contributors.edges[x].target;
+				secondIndex++;						
+			}
+			if (contributors.edges[x].target == firstIndex){
+				nodeHash[firstIndex][secondIndex]=contributors.edges[x].source;
+				secondIndex++;
+			}
+		}
+	}
+	return nodeHash;
+}
+
+function setDateRanges(dateRange){
+		//set the start and end dates
+		var startDate = dateRange[0];
+		var endDate = dateRange[1];
+		
+		var currYear = startDate.substring(0,4);
+		var currMonth = startDate.substring(5,7);
+		var endYear = endDate.substring(0,4);
+		var endMonth = endDate.substring(5,7);		
+		var startList = document.getElementById("startDate");
+		var endList = document.getElementById("endDate");
+
+		var firstRun = true;
+		var finishPopulate = false;
+		
+
+		//clear date range select boxes
 		while (startList.hasChildNodes()) {
  			 startList.removeChild(startList.firstChild);
 		}
@@ -401,10 +417,10 @@ function findAndDisplayContributorNetwork(id){
 						var month = document.createElement("option");
 						var month2 = document.createElement("option");							
 							
-						month2.value = monthList[currMonth-1];
-						month2.appendChild(document.createTextNode(monthList[currMonth-1] + " "+ currYear));							
-						month.value = monthList[currMonth-1];
-						month.appendChild(document.createTextNode(monthList[currMonth-1]+ " "+ currYear));
+						month2.value = (currYear+"-"+currMonth+"-"+"01");
+						month2.appendChild(document.createTextNode(currYear+"-"+currMonth));							
+						month.value = (currYear+"-"+currMonth+"-"+"01");
+						month.appendChild(document.createTextNode(currYear+"-"+currMonth));							
 						if (firstRun){
 								month.selected = true;
 								firstRun = false; 
@@ -422,7 +438,9 @@ function findAndDisplayContributorNetwork(id){
 						
 						
 		}
-	}
+	
+		
+}
 
 
 //SIDE PANEL information display functions
@@ -436,7 +454,9 @@ function findAndDisplayContributorNetwork(id){
     function displayAllInfo(activeNode, contributors){
     	updateNetworkInfo(contributors);
     	updateInfoWindow(activeNode, contributors);
-    	document.getElementById("networkCentre").innerHTML = ("<H2> Currently displaying network for : "+contributors.nodes[activeNode].nodeName+"</H2>");
+    	document.getElementById("networkCentreTitle").innerHTML = ("<b>Centre :</b><br>");
+    	document.getElementById("networkCentre").innerHTML = (contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")");
+    	document.getElementById("networkCentre").href = contributors.nodes[activeNode].nodeUrl;
     	}
     
     //displays the network statistics in the side panel
@@ -468,12 +488,12 @@ function findAndDisplayContributorNetwork(id){
 
 	//set the contributor name
     	var infoDetails = document.getElementById("contName");
-    	infoDetails.innerHTML = "<b>"+contributors.nodes[activeNode].nodeName + 		" ("+contributors.nodes[activeNode].id+")</b>";
+    	infoDetails.innerHTML = "<br><b>"+contributors.nodes[activeNode].nodeName + 		" ("+contributors.nodes[activeNode].id+")</b>";
     	infoDetails.href = contributors.nodes[activeNode].nodeUrl;
 
     //set the functions
     	infoDetails = document.getElementById("contFunct");
-    	infoDetails.innerHTML = "<b>Functions:</b><br>"+functionList;		
+    	infoDetails.innerHTML = "<br><b>Functions:</b><br>"+functionList;		
     	}
 
 
@@ -498,6 +518,9 @@ function findAndDisplayContributorNetwork(id){
 		//remove the edge weight
 			infoDetails = document.getElementById("noOfCollab");
     		infoDetails.innerHTML = " ";
+    	//remove the date range	
+			infoDetails = document.getElementById("eventRange");
+    		infoDetails.innerHTML = " ";    		
 		}
 	}
     
@@ -510,7 +533,7 @@ function findAndDisplayContributorNetwork(id){
 
 		//set collaborator information
 	    	var infoDetails = document.getElementById("collab1");
-    		infoDetails.innerHTML = "<b>"+edgeInformation.sourceNode.nodeName + " ("+edgeInformation.sourceNode.id+")</b>";
+    		infoDetails.innerHTML = "<br><b>"+edgeInformation.sourceNode.nodeName + " ("+edgeInformation.sourceNode.id+")</b>";
     		infoDetails.href = edgeInformation.sourceNode.nodeUrl;
     		var infoDetails = document.getElementById("collab2");
     		infoDetails.innerHTML = "<b>"+edgeInformation.targetNode.nodeName + " ("+edgeInformation.targetNode.id+")</b>";
