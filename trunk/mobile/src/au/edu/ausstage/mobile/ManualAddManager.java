@@ -23,6 +23,7 @@ import au.edu.ausstage.utils.*;
 
 // import additional java packages / classes
 import java.sql.ResultSet;
+import org.json.simple.*;
 
 /**
  * A class to manage the lookup of information
@@ -30,7 +31,8 @@ import java.sql.ResultSet;
 public class ManualAddManager {
 
 	// declare private class variables
-	DbManager database;
+	private DbManager database;
+	private final String DB_DATE_TIME_FORMAT = "DD-MON-YYYY HH24:MI:SS";
 	
 	/**
 	 * Constructor for this class
@@ -46,5 +48,93 @@ public class ManualAddManager {
 		this.database = database;
 	}
 	
+	/**
+	 * A method to manually add a piece of feedback to the database
+	 *
+	 * @param performance the unique performance identifier
+	 * @param question    the unique question identifier
+	 * @param SourceType  the type of source that this feedback came from
+	 * @param date        the date that this feedback arrived
+	 * @param time        the time that this feedback arrived
+	 * @param from        the unique hashed identifier for the source of the feedback
+	 * @param sourceId    the unique hashed identifier of the feedback in the source system
+	 * @param content     the content of the feedback
+	 *
+	 * @return            a json encoded object indicating success or failure	 
+	 */
+	@SuppressWarnings("unchecked")
+	public String addFeedback(String performance, String question, String sourceType, String date, String time, String from, String sourceId, String content) {
+	
+		// check the parameters
+		if(InputUtils.isValidInt(performance) == false || InputUtils.isValidInt(question) == false || InputUtils.isValidInt(sourceType) == false) {
+			throw new IllegalArgumentException("One of the performance, question and source_type parameters is invalid");
+		}
+		
+		if(InputUtils.isValid(date) == false || InputUtils.isValid(time) == false) {
+			throw new IllegalArgumentException("One of the date or time parameters is invalid");
+		}
+		
+		if(InputUtils.isValid(from) == false) {
+			throw new IllegalArgumentException("The from parameter is invalid");
+		}
+		
+		if(InputUtils.isValid(content) == false) {
+			throw new IllegalArgumentException("The content parameter is invalid");
+		}
+		
+		// check the hashed parameters
+		if(HashUtils.isValid(from) == false) {
+			throw new IllegalArgumentException("The from parameter is not a valid hash");
+		}
+		
+		if(InputUtils.isValid(sourceId) == true) {
+			if(HashUtils.isValid(sourceId) == false) {
+				throw new IllegalArgumentException("The source_id parameter is not a valid hash");
+			}
+		}
+		
+		// declare helper variables
+		String   sql           = null;
+		String[] sqlParameters = null;
+		JSONObject object = new JSONObject();
+		
+		if(InputUtils.isValid(sourceId) == false) {
+			sql = "INSERT INTO mob_feedback "
+				+ "(performance_id, question_id, source_type, received_date_time, received_from, short_content) "
+				+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?)";
+				
+			sqlParameters = new String[6];
+			
+		} else {
+			sql = "INSERT INTO mob_feedback "
+				+ "(performance_id, question_id, source_type, received_date_time, received_from, short_content, source_id) "
+				+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
+				
+			sqlParameters = new String[7];
+		}
+		
+		// add the parameters
+		sqlParameters[0] = performance;
+		sqlParameters[1] = question;
+		sqlParameters[2] = sourceType;
+		sqlParameters[3] = date + " " + time;
+		sqlParameters[4] = from;
+		sqlParameters[5] = content;
+		
+		if(InputUtils.isValid(sourceId) == true) {
+			sqlParameters[6] = sourceId;
+		}
+		
+		// execute the sql
+		if(database.executePreparedInsertStatement(sql, sqlParameters) == false) {
+			object.put("status", "error");
+		} else {
+			object.put("status", "success");
+		}
+		
+		//debug code
+		return object.toString();
+		
+	} // end the addFeedback method	
 	
 } // end class definition

@@ -43,7 +43,7 @@ import javax.servlet.ServletConfig;
 public class GathererManager {
 
 	// declare private class variables
-	DbManager database;
+	private DbManager database;
 	
 	// declare class level constants
 	public static final String SMS_SOURCE_ID = "2";

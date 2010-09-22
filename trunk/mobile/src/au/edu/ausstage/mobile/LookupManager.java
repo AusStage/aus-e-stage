@@ -31,7 +31,7 @@ import org.json.simple.*;
 public class LookupManager {
 
 	// declare private class variables
-	DbManager database;
+	private DbManager database;
 	
 	/**
 	 * Constructor for this class

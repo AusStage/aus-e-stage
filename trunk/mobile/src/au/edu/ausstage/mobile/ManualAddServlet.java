@@ -35,12 +35,6 @@ public class ManualAddServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	private DbManager database;
 	
-	// declare private constants
-	private final String[] TASK_TYPES        = {"system-property", "performance", "validate", "question"};
-	private final String[] FORMAT_TYPES      = {"json"};
-	private final String[] PROPERTY_ID_TYPES = {"feedback-source-types"};
-	private final String[] VALIDATION_TYPES  = {"performance", "question"};
-
 	/*
 	 * initialise this instance
 	 */
@@ -61,59 +55,54 @@ public class ManualAddServlet extends HttpServlet {
 	 */
 	public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
+		// don't respond to get requests
+		throw new ServletException("Invalid Request Type");
+	
+	} // end doGet method
+	
+	/**
+	 * Method to respond to a post request
+	 *
+	 * @param request a HttpServletRequest object representing the current request
+	 * @param response a HttpServletResponse object representing the current response
+	 */
+	public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
 		// get the parameters
-		String taskType       = request.getParameter("task");
-		String id             = request.getParameter("id");
-		String formatType     = request.getParameter("format");
-		String validationType = null;
+		String performance = request.getParameter("performance");
+		String question    = request.getParameter("question");
+		String sourceType  = request.getParameter("source_type");
+		String date        = request.getParameter("date");
+		String time        = request.getParameter("time");
+		String from        = request.getParameter("from");
+		String sourceId    = request.getParameter("source_id");
+		String content     = request.getParameter("content");
 		
-		// check on the taskType parameter
-		if(InputUtils.isValid(taskType, TASK_TYPES) == false) {
-			// no valid task type was found
-			throw new ServletException("Missing task parameter. Expected one of: " + java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
+		// check the parameters
+		if(InputUtils.isValidInt(performance) == false || InputUtils.isValidInt(question) == false || InputUtils.isValidInt(sourceType) == false) {
+			throw new ServletException("One of the performance, question and source_type parameters is invalid");
 		}
-
-		// check on the id parameter
-		if(taskType.equals("system-property") == true) {
-			// this is a system property lookup request
-			if(InputUtils.isValid(id, PROPERTY_ID_TYPES) == false) {
-				throw new ServletException("Missing id parameter. Expected one of: " + java.util.Arrays.toString(PROPERTY_ID_TYPES).replaceAll("[\\]\\[]", ""));
-			}
-		} else if(taskType.equals("validate") == true) {
-			// this is a validation request
-			if(InputUtils.isValid(request.getParameter("performance")) == false && InputUtils.isValid(request.getParameter("question")) == false) {
-				throw new ServletException("Missing parameter for validation. Expected one of: " + java.util.Arrays.toString(VALIDATION_TYPES).replaceAll("[\\]\\[]", ""));
-			} else {
-				if(InputUtils.isValid(request.getParameter("performance")) == true) {
-					// this is a performance id that needs to be validated
-					if(InputUtils.isValidInt(request.getParameter("performance")) == true) {
-						validationType = "performance";
-					} else {
-						throw new ServletException("Performance parameter is expected to be a valid integer");
-					}
-				} else if (InputUtils.isValid(request.getParameter("question")) == true) {
-					// this is a performance id that needs to be validated
-					if(InputUtils.isValidInt(request.getParameter("question")) == true) {
-						validationType = "question";
-					} else {
-						throw new ServletException("Question parameter is expected to be a valid integer");
-					}
-				}
-			}
-		} else {
-			// this is another type of lookup request
-			if(InputUtils.isValidInt(id) == false) {
-				throw new ServletException("Missing or invalid id parameter.");
-			}
+		
+		if(InputUtils.isValid(date) == false || InputUtils.isValid(time) == false) {
+			throw new ServletException("One of the date or time parameters is invalid");
 		}
-
-		// check the format parameter
-		if(InputUtils.isValid(formatType) == false) {
-			// use default value
-			formatType = "json";
-		} else {
-			if(InputUtils.isValid(formatType, FORMAT_TYPES) == false) {
-				throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
+		
+		if(InputUtils.isValid(from) == false) {
+			throw new ServletException("The from parameter is invalid");
+		}
+		
+		if(InputUtils.isValid(content) == false) {
+			throw new ServletException("The content parameter is invalid");
+		}
+		
+		// check the hashed parameters
+		if(HashUtils.isValid(from) == false) {
+			throw new ServletException("The from parameter is not a valid hash");
+		}
+		
+		if(InputUtils.isValid(sourceId) == true) {
+			if(HashUtils.isValid(sourceId) == false) {
+				throw new ServletException("The source_id parameter is not a valid hash");
 			}
 		}
 		
@@ -131,67 +120,16 @@ public class ManualAddServlet extends HttpServlet {
 		}
 		
 		// instantiate a lookup object
-		LookupManager lookup = new LookupManager(database);
+		ManualAddManager manager = new ManualAddManager(database);
 		
-		String results = null;
+		String results = manager.addFeedback(performance, question, sourceType, date, time, from, sourceId, content);
 		
-		if(taskType.equals("system-property") == true) {
-			// this is a system property that we need to get
-			if(id.equals("feedback-source-types") == true) {
-				results = lookup.getFeedbackSourceTypes(formatType);
-			}
-		} else if(taskType.equals("performance") == true) {
-			results = lookup.getPerformanceDetails(id, formatType);
-		} else if(taskType.equals("question") == true) {
-			results = lookup.getQuestionDetails(id, formatType);
-		} else if(taskType.equals("validate") == true) {
-			if(validationType.equals("performance") == true) {
-				results = lookup.getPerformanceDetails(request.getParameter("performance"), formatType);
-				if(results.length() > 10) {
-					results = "true";
-				} else {
-					results = "false";
-				}
-			} else if(validationType.equals("question") == true) {
-				results = lookup.getQuestionDetails(request.getParameter("question"), formatType);
-				if(results.length() > 10) {
-					results = "true";
-				} else {
-					results = "false";
-				}
-			}
-		}
-		
-		
-		// check to see if this is a jsonp request
-		if(InputUtils.isValid(request.getParameter("callback")) == false) {
-			// output json mime type
-			response.setContentType("application/json; charset=UTF-8");
-		} else {
-			// output the javascript mime type
-			response.setContentType("application/javascript; charset=UTF-8");
-		}
+		// output json mime type
+		response.setContentType("application/json; charset=UTF-8");	
 		
 		// output the results of the search
 		PrintWriter out = response.getWriter();
-		if(InputUtils.isValid(request.getParameter("callback")) == true) {
-			out.print(JSONPManager.wrapJSON(results, request.getParameter("callback")));
-		} else {
-			out.print(results);
-		}
-	
-	} // end doGet method
-	
-	/**
-	 * Method to respond to a post request
-	 *
-	 * @param request a HttpServletRequest object representing the current request
-	 * @param response a HttpServletResponse object representing the current response
-	 */
-	public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-		// don't respond to post requests
-		throw new ServletException("Invalid Request Type");
+		out.print(results);
 	
 	} // end doPost method
 
