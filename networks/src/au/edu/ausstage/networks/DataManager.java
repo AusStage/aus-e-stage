@@ -160,21 +160,20 @@ public class DataManager {
 	 * @param fullTidy true, if and only if, a full tidy is required
 	 */
 	public void tidyUp(boolean fullTidy) {
-	
-		if(results != null) {
-			results = null;
-		}
 		
-		if(execution != null) {
-			execution.close();
-			execution = null;
-		}
+		if(fullTidy == true) {
+			if(results != null) {
+				results = null;
+			}
 		
-		if(query != null) {
-			query = null;
-		}
+			if(execution != null) {
+				execution.close();
+				execution = null;
+			}
 		
-		if(fullTidy == true) {		
+			if(query != null) {
+				query = null;
+			}		
 			if(dataset != null) {
 				dataset.close();
 				dataset = null;
