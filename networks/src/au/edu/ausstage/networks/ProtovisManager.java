@@ -62,7 +62,6 @@ public class ProtovisManager {
 	public String getData(String id, int radius) {
 	
 		// check on the parameters
-		// check the parameters
 		if(InputUtils.isValidInt(id) == false) {
 			throw new IllegalArgumentException("Error: the id parameter is required");
 		}
@@ -78,7 +77,7 @@ public class ProtovisManager {
 		// get an instance of the ExportManager class
 		ExportManager export = new ExportManager(database);
 		
-		// get the data for this collaborator
+		// get the network data for this collaborator
 		java.util.TreeMap<Integer, Collaborator> network = export.getRawCollaboratorData(id, radius);
 		
 		/*
@@ -138,7 +137,7 @@ public class ProtovisManager {
 				}
 			}
 			
-			// play nice and tidy yo
+			// play nice and tidy
 			database.tidyUp();
 			results = null;
 			
@@ -172,7 +171,7 @@ public class ProtovisManager {
 		}
 		
 		// play nice and tidy up
-		export = null;			
+		export = null;
 		
 		/*
 		 * ajust the order of the collaborators in the array
@@ -210,7 +209,7 @@ public class ProtovisManager {
 			
 			// increment the index count
 			altIndexer++;
-		}			
+		}
 		
 		/*
 		 * build the JSON object and array of nodes
@@ -252,7 +251,7 @@ public class ProtovisManager {
 		Integer altSourceIndex = null;
 		Collaboration collaboration = null;
 		
-		// add the collaborators
+		// add the edges
 		while(networkValueIterator.hasNext()) {
 		
 			// get the next collaborator in the list
@@ -268,25 +267,24 @@ public class ProtovisManager {
 				// determine the index value for this collaborator
 				target = Integer.parseInt(edgesToMake[i]);
 				
-				if(source < target) {
-					altIndexer = (Integer)altIndex.get(target);
-			
-					// build the new edge
-					edge = new JSONObject();
-					edge.put("source", altSourceIndex);
-					edge.put("target", altIndexer);
-					
-					// get the additional data about the edge
-					collaborationList = collaborations.get(source);
-					collaboration = collaborationList.getCollaboration(target);
-					
-					edge.put("value", collaboration.getCollaborationCount());
-					edge.put("firstDate",      collaboration.getFirstDate());
-					edge.put("lastDate",       collaboration.getLastDate());					
-			
-					edges.add(edge);
-				}
-			}		
+				altIndexer = (Integer)altIndex.get(target);
+		
+				// build the new edge
+				edge = new JSONObject();
+				edge.put("source", altSourceIndex);
+				edge.put("target", altIndexer);
+				
+				// get the additional data about the edge
+				collaborationList = collaborations.get(source);
+				collaboration = collaborationList.getCollaboration(target);
+				
+				edge.put("value", collaboration.getCollaborationCount());
+				edge.put("firstDate",      collaboration.getFirstDate());
+				edge.put("lastDate",       collaboration.getLastDate());					
+		
+				edges.add(edge);
+			}
+	
 		}
 		
 		object.put("edges", edges);
