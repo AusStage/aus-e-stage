@@ -53,7 +53,7 @@ public class ManualAddManager {
 	 *
 	 * @param performance the unique performance identifier
 	 * @param question    the unique question identifier
-	 * @param SourceType  the type of source that this feedback came from
+	 * @param sourceType  the type of source that this feedback came from
 	 * @param date        the date that this feedback arrived
 	 * @param time        the time that this feedback arrived
 	 * @param from        the unique hashed identifier for the source of the feedback
