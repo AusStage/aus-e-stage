@@ -186,6 +186,7 @@ $(document).ready(function() {
 		submitHandler: function(form) {
 			jQuery(form).ajaxSubmit({ 
 				beforeSubmit: function() {$("#error_message").hide(); },
+				clearForm:    true,
 				success:      showSuccess,
 				error:        showError
 			});
