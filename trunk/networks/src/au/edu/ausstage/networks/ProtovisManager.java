@@ -181,11 +181,18 @@ public class ProtovisManager {
 		networkKey   = collaborators.indexOf(new Collaborator(id));
 		collaborator = (Collaborator)collaborators.get(networkKey);
 		
+		/*
 		// add the central collaborator to the head of the list
 		collaborators.add(0, collaborator);
 		
 		// remove the old central collaborator object
 		collaborators.remove(networkKey + 1);
+		*/
+		// add the central collaborator to the end of the list
+		collaborators.add(collaborator);
+		
+		// remove the old central collaborator object
+		collaborators.remove(networkKey);
 		
 		/*
 		 * build an alternate index to the array
