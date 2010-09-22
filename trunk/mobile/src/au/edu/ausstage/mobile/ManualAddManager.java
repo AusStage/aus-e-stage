@@ -100,15 +100,15 @@ public class ManualAddManager {
 		
 		if(InputUtils.isValid(sourceId) == false) {
 			sql = "INSERT INTO mob_feedback "
-				+ "(performance_id, question_id, source_type, received_date_time, received_from, short_content) "
-				+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?)";
+				+ "(performance_id, question_id, source_type, received_date_time, received_from, short_content, manual_add) "
+				+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?, 'Y')";
 				
 			sqlParameters = new String[6];
 			
 		} else {
 			sql = "INSERT INTO mob_feedback "
-				+ "(performance_id, question_id, source_type, received_date_time, received_from, short_content, source_id) "
-				+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
+				+ "(performance_id, question_id, source_type, received_date_time, received_from, short_content, source_id, manual_add) "
+				+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?, 'Y')";
 				
 			sqlParameters = new String[7];
 		}
