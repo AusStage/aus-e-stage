@@ -32,7 +32,7 @@ import org.json.simple.*;
 public class FeedbackManager {
 
 	// declare private class variables
-	DbManager database;
+	private DbManager database;
 	
 	/**
 	 * Constructor for this class
