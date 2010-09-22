@@ -37,6 +37,10 @@
     	<servlet-name>LookupServlet</servlet-name>
     	<servlet-class>au.edu.ausstage.mobile.LookupServlet</servlet-class>
     </servlet>
+    <servlet>
+    	<servlet-name>ManualAddServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.mobile.ManualAddServlet</servlet-class>
+    </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>GathererServlet</servlet-name>
@@ -49,6 +53,10 @@
     <servlet-mapping>
     	<servlet-name>LookupServlet</servlet-name>
     	<url-pattern>/lookup/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>ManualAddServlet</servlet-name>
+    	<url-pattern>/manualadd/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
