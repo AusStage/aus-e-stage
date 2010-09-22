@@ -6,7 +6,7 @@
    * [SourcingAbsData Sourcing data from the ABS]
    * [SubversionRepository Using our Subversion Repository]
    * [WikiImages Using Images in the Wiki]
-   * [ImageOverlay Image Overlay Construction Procedure]
+   * [GoogleEarthImageOverlay Image Overlays in Google Earth]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
    * [MappingService Mapping Service]
