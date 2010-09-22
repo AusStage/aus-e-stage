@@ -109,17 +109,17 @@ $(document).ready(function() {
 		}
 	
 		// check on the hour
-		if(elements[0] < 1 || elements[0] > 23) {
+		if(elements[0] < 0 || elements[0] > 23) {
 			return false;
 		}
 		
 		// check the minute
-		if(elements[1] < 1 || elements[1] > 59) {
+		if(elements[1] < 0 || elements[1] > 59) {
 			return false;
 		}
 		
 		// check the second
-		if(elements[2] < 1 || elements[2] > 59) {
+		if(elements[2] < 0 || elements[2] > 59) {
 			return false;
 		}
 			
@@ -182,7 +182,14 @@ $(document).ready(function() {
 			question: {
 				remote: "The question ID is invalid"
 			}
-		}	
+		},
+		submitHandler: function(form) {
+			jQuery(form).ajaxSubmit({ 
+				beforeSubmit: function() {$("#error_message").hide(); },
+				success:      showSuccess,
+				error:        showError
+			});
+		}
 	});
 	
 	// attached the masked input plugin to the form
@@ -190,56 +197,32 @@ $(document).ready(function() {
 	$("#time").mask("99:99:99");
 });
 
-/*
- * A function to validate a date
+/* 
+ * A function to show an error message
  */
-function validDate(value, element) {
+function showSuccess(responseText, statusText, xhr, $form)  { 
 
-	var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-
-	// check to see if there is three elements
-	var elements = value.split("-");
-	
-	if(elements.length != 3) {
-		return false;
+	if(responseText.status == "success") {
+		$("#error_message").hide();
+		$("#error_message").empty();
+		$("#error_message").append('<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Success:</strong> The feedback has been saved successfully</p></div>');	
+		$("#error_message").show();
+	} else {
+		$("#error_message").hide();
+		$("#error_message").empty();
+		$("#error_message").append('<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Warning:</strong> An error occured during a request to save feedback. <br/>Please try again and if the problem persists contact the site administrator.</p></div>');	
+		$("#error_message").show();
 	}
-	
-	// check on the individual elements
-	if(elements[0] < 0 || elements[0] > 32) {
-		return false;
-	}
-	
-	// check on the month
-	elements[1] = elements[1].toLowerCase();
-	var found = false;
-	
-	for( var i = 0; i < months.length; i++) {
-		if(months[i] = elements[1]) {
-			found = true;
-		}
-	}
-	
-	if(found != true) {
-		return false;
-	}	
-	
-	// check on the year
-	if(elements[2] < 2010) {
-		return false;
-	}
-	
-	// if we get this far everything is OK
-	return true;
 } 
 
 /* 
  * A function to show an error message
  */
-function showMissingDataMessage() {
+function showError() {
 
 	$("#error_message").hide();
 	$("#error_message").empty();
-	$("#error_message").append('<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Warning:</strong> An error occured during a request for data. <br/>Please try again and if the problem persists contact the site administrator.</p></div>');	
+	$("#error_message").append('<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Warning:</strong> An error occured during a request to save feedback. <br/>Please try again and if the problem persists contact the site administrator.</p></div>');	
 	$("#error_message").show();
 }
 
