@@ -53,3 +53,152 @@ The type of data format used to prepare the search results. At the time of writi
 
 === callback ===
 The name of the callback function used when a request is made for JSONP encoded data
+
+== Sample Output ==
+
+=== state-list ===
+{{{
+[ { "id" : 99,
+    "name" : "Australia"
+  },
+  { "id" : 7,
+    "name" : "Australian Capital Territory"
+  },
+  { "id" : 3,
+    "name" : "New South Wales"
+  },
+  { "id" : 8,
+    "name" : "Northern Territory"
+  },
+  { "id" : 4,
+    "name" : "Queensland"
+  },
+  { "id" : 1,
+    "name" : "South Australia"
+  },
+  { "id" : 5,
+    "name" : "Tasmania"
+  },
+  { "id" : 6,
+    "name" : "Victoria"
+  },
+  { "id" : 2,
+    "name" : "Western Australia"
+  },
+  { "id" : 999,
+    "name" : "International"
+  }
+]
+}}}
+
+=== suburb-list ===
+{{{
+[ { "mapVenueCount" : "3",
+    "name" : "Aberfoyle Park",
+    "venueCount" : "3"
+  },
+  { "mapVenueCount" : "331",
+    "name" : "Adelaide",
+    "venueCount" : "359"
+  },
+  { "mapVenueCount" : "1",
+    "name" : "Adelaide University, North Terrace",
+    "venueCount" : "1"
+  },
+  { "mapVenueCount" : "1",
+    "name" : "Alberton ",
+    "venueCount" : "1"
+  },
+  { "mapVenueCount" : "1",
+    "name" : "Aldinga Beach",
+    "venueCount" : "1"
+  },
+  { "mapVenueCount" : "1",
+    "name" : "Allenby Gardens",
+    "venueCount" : "1"
+  },
+...
+  { "mapVenueCount" : "4",
+    "name" : "Woodville",
+    "venueCount" : "4"
+  },
+  { "mapVenueCount" : "1",
+    "name" : "Wudinna",
+    "venueCount" : "1"
+  },
+  { "mapVenueCount" : "1",
+    "name" : "Wynn Vale",
+    "venueCount" : "1"
+  },
+  { "mapVenueCount" : "1",
+    "name" : "Yorketown",
+    "venueCount" : "1"
+  }
+]
+}}}
+
+=== suburb-venue-list ===
+{{{
+ { "eventCount" : "1",
+    "id" : "3793",
+    "mapEventCount" : "1",
+    "name" : "109 South Terrace",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3793"
+  },
+  { "eventCount" : "15",
+    "id" : "4817",
+    "mapEventCount" : "15",
+    "name" : "1st Site Club",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4817"
+  },
+  { "eventCount" : "1",
+    "id" : "3990",
+    "mapEventCount" : "1",
+    "name" : "256 Rundle Street",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3990"
+  },
+  { "eventCount" : "1",
+    "id" : "10592",
+    "mapEventCount" : "1",
+    "name" : "39a Rundle Street",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10592"
+  },
+  { "eventCount" : "3",
+    "id" : "10436",
+    "mapEventCount" : "3",
+    "name" : "AIT Arts (Acting Studio)",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10436"
+  },
+...
+  { "eventCount" : "1",
+    "id" : "3791",
+    "mapEventCount" : "0",
+    "name" : "Wills Court",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3791"
+  },
+  { "eventCount" : "1",
+    "id" : "2317",
+    "mapEventCount" : "1",
+    "name" : "World Dance Centre",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2317"
+  },
+  { "eventCount" : "13",
+    "id" : "2948",
+    "mapEventCount" : "13",
+    "name" : "Worldsend Hotel",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2948"
+  },
+  { "eventCount" : "2",
+    "id" : "2994",
+    "mapEventCount" : "2",
+    "name" : "Wyatt Hall",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2994"
+  },
+  { "eventCount" : "3",
+    "id" : "3917",
+    "mapEventCount" : "3",
+    "name" : "X Space",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3917"
+  }
+]
+}}}
