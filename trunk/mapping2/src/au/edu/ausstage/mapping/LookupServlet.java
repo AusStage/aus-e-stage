@@ -78,6 +78,21 @@ public class LookupServlet extends HttpServlet {
 				if(InputUtils.isValid(id, VALID_STATES) == false) {
 					throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
 				}
+			} else if(taskType.equals("suburb-venue-list") == true) {
+				if(InputUtils.isValid(id) == false) {
+					throw new ServletException("The id parameter is required");
+				} else if(id.indexOf("_") == -1) {
+					throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+				} else {
+					String[] tmp = id.split("_");
+					if(tmp.length > 2) {
+						throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+					} else {
+						if(InputUtils.isValid(tmp[0], VALID_STATES) == false) {
+							throw new ServletException("Invalid state code. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
+						}
+					}
+				}
 			} else if(InputUtils.isValid(id) == false) {
 				throw new ServletException("The id parameter is required");
 			}

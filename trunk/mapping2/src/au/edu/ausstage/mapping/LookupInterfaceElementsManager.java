@@ -126,7 +126,6 @@ public class LookupInterfaceElementsManager {
 		}
 		
 		// declare helper variables
-		// define some helper variables
 		JSONArray list    = new JSONArray();
 		JSONObject object = null;
 		
@@ -194,14 +193,87 @@ public class LookupInterfaceElementsManager {
 	@SuppressWarnings("unchecked")
 	public String getVenueListBySuburb(String suburbName) {
 	
-		// check the parameters
+		// declare helper variables
+		String[] sqlParameters = null;
+	
+		// validate the input
 		if(InputUtils.isValid(suburbName) == false) {
-			throw new IllegalArgumentException("The suburb name is a required parameter");
+			throw new IllegalArgumentException("The suburbName parameter is required");
+		} else if(suburbName.indexOf("_") == -1) {
+			throw new IllegalArgumentException("The suburbName parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+		} else {
+			sqlParameters = suburbName.split("_");
+			if(sqlParameters.length > 2) {
+				throw new IllegalArgumentException("The suburbName parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+			} else {
+				if(InputUtils.isValid(sqlParameters[0], LookupServlet.VALID_STATES) == false) {
+					throw new IllegalArgumentException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+				}
+			}
 		}
 		
+		// declare helper variables
+		JSONArray list    = new JSONArray();
+		JSONObject object = null;
 		
-		//debug code
-		return "";
+		// define the sql
+		String sql = "SELECT venue.venueid, venue_name, latitude, COUNT(events.eventid) "
+				   + "FROM venue, events "
+				   + "WHERE state = ? "
+				   + "AND suburb = ? "
+				   + "AND venue.venueid = events.venueid "
+				   + "GROUP BY venue.venueid, venue_name, latitude "
+				   + "ORDER BY venue_name ";
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return list.toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		try {
+		
+			// loop through the dataset
+			while(resultSet.next() == true) {
+			
+				// declare a new object
+				object = new JSONObject();
+				
+				// add the data
+				object.put("id", resultSet.getString(1));
+				object.put("name", resultSet.getString(2));
+				object.put("venueUrl", LinksManager.getVenueLink(resultSet.getString(1)));
+				object.put("eventCount", resultSet.getString(4));
+				
+				if(resultSet.getString(3) == null) {
+					object.put("mapEventCount", "0");
+				} else {
+					object.put("mapEventCount", resultSet.getString(4));
+				}
+				
+				// add the object to the list
+				list.add(object);			
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return list.toString();
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// return the data
+		return list.toString();
+		
 	} // end the getVenueListBySuburb method	 
 	
 } // end class definition
