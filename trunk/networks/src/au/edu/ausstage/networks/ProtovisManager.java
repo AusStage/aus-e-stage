@@ -188,11 +188,12 @@ public class ProtovisManager {
 		// remove the old central collaborator object
 		collaborators.remove(networkKey + 1);
 		*/
-		// add the central collaborator to the end of the list
-		collaborators.add(collaborator);
 		
 		// remove the old central collaborator object
-		collaborators.remove(networkKey);
+		collaborators.remove(new Collaborator(id));
+		
+		// add the central collaborator to the end of the list
+		collaborators.add(collaborator);
 		
 		/*
 		 * build an alternate index to the array
