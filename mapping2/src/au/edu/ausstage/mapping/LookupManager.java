@@ -85,9 +85,20 @@ public class LookupManager {
 	 */
 	public String getVenueListBySuburb(String suburbName) {
 	
-		// check the parameters
+		// validate the input
 		if(InputUtils.isValid(suburbName) == false) {
-			throw new IllegalArgumentException("The suburb name is a required parameter");
+			throw new IllegalArgumentException("The suburbName parameter is required");
+		} else if(suburbName.indexOf("_") == -1) {
+			throw new IllegalArgumentException("The suburbName parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+		} else {
+			String[] tmp = suburbName.split("_");
+			if(tmp.length > 2) {
+				throw new IllegalArgumentException("The suburbName parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+			} else {
+				if(InputUtils.isValid(tmp[0], LookupServlet.VALID_STATES) == false) {
+					throw new IllegalArgumentException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+				}
+			}
 		}
 		
 		// get the required sub manager
