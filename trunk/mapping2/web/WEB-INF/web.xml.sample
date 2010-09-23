@@ -24,7 +24,7 @@
     <description>
         This software updates the Mapping Service to use Google Maps API v3
     </description>
-    <!-- Servlets -->
+     <!-- Servlets -->
     <servlet>
         <servlet-name>MarkerServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mapping.MarkerServlet</servlet-class>
@@ -32,6 +32,10 @@
     <servlet>
         <servlet-name>SearchServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mapping.SearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LookupServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mapping.LookupServlet</servlet-class>
     </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
@@ -41,6 +45,10 @@
     <servlet-mapping>
         <servlet-name>SearchServlet</servlet-name>
         <url-pattern>/search/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LookupServlet</servlet-name>
+        <url-pattern>/lookup/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
