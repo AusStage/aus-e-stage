@@ -34,7 +34,9 @@ A list of objects that can be used to construct UI elements that allow the user 
 
 ==== suburb-list ====
 
-A list of suburbs that are located in the state as identified by the id parameter
+A list of suburbs that are located in the state as identified by the id parameter.
+
+_Note:_ The id parameter is only valid if it contains an id for one of the 8 state and territories.
 
 ==== suburb-venue-list ====
 
