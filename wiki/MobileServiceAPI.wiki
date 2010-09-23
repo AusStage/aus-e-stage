@@ -8,3 +8,4 @@ Details of the API are in the following pages
 
  * [MobileServiceAPIGatherer Input Gatherer] - how SMS messages are added to the system
  * [MobileServiceAPILiveFeedback Live Feedback] - how to retrieve live feedback for display in a web page
+ * [MobileServiceAPILookup Lookup Information] - how to lookup various data items
