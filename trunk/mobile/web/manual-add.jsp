@@ -120,8 +120,38 @@
 						<input type="submit" name="submit" id="add_btn" value="Add Feedback"/>
 					</td>
 				</tr>
+				</tbody>
 			</table>
 		</form>
+		<hr/>
+		<h3>Decode Hex String into Characters</h3>
+		<form id="decode" name="decode">
+			<table class="formTable">
+				<tbody>
+				<tr>
+					<th scope="row">
+						<label id="hexstring_label" for="hexstring">Hex Encoded String: </label>
+					</th>
+					<td>
+						<textarea rows="5" cols="45" id="hexstring" name="hexstring" title="Enter the hex encoded string"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label id="charstring_label" for="charstring">Decoded String: </label>
+					</th>
+					<td>
+						<textarea rows="5" cols="45" id="charstring" name="charstring" title="Decoded string will appear here"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" name="submit" id="decode_btn" value="Decode the String"/>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>		
 	</div>
 	<!-- include the footer -->
 	<jsp:include page="footer.jsp"/>

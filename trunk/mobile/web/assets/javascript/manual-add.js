@@ -198,6 +198,34 @@ $(document).ready(function() {
 	$("#time").mask("99:99:99");
 });
 
+// attach validation and masked input to the form
+$(document).ready(function() {
+
+	$("#decode").validate({
+		rules: { // validation rules
+			hexstring: {
+				required: true,
+			}
+		},
+		submitHandler: function(form) {
+			// get the hex string
+			var hexString = $("#hexstring").val();
+			
+			// trim the whitespace from the hexstring
+			hexString = hexString.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+			
+			// decode and turn it into the character string
+			var decodeString = "";
+			
+			for(i = 0; i < hexString.length; i+=2) {
+				decodeString += String.fromCharCode(parseInt(hexString.substring(i, i+2), 16));
+			}
+			
+			$("#charstring").val(decodeString);
+		}
+	});
+});
+
 /* 
  * A function to show an error message
  */
