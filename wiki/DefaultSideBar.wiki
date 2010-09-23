@@ -13,6 +13,7 @@
      * [MappingServiceAPI Mapping Service API]
        * [MappingServiceAPIMarkers Marker Data]
        * [MappingServiceAPISearch Search API]
+       * [MappingServiceAPILookup Lookup API]
      * [MappingServiceFeedback Mapping Service Feedback]
        * [Alpha1 Alpha 1]
        * [Alpha2 Alpha 2]
