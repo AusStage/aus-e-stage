@@ -270,27 +270,58 @@ public class ProtovisManager {
 			// get the list of collaborators
 			edgesToMake = collaborator.getCollaboratorsAsArray();
 			
-			// loop through the list of collaborations
-			for(int i = 0; i < edgesToMake.length; i++) {
-				// determine the index value for this collaborator
-				target = Integer.parseInt(edgesToMake[i]);
+			// treat the edges to the central node different to the other edges
+			if(source == Integer.parseInt(id)) {
+			
+				// edges to the central node
+				// loop through the list of collaborations
+				for(int i = 0; i < edgesToMake.length; i++) {
+					// determine the index value for this collaborator
+					target = Integer.parseInt(edgesToMake[i]);
 				
-				altIndexer = (Integer)altIndex.get(target);
+					altIndexer = (Integer)altIndex.get(target);
 		
-				// build the new edge
-				edge = new JSONObject();
-				edge.put("source", altSourceIndex);
-				edge.put("target", altIndexer);
+					// build the new edge
+					edge = new JSONObject();
+					edge.put("source", altSourceIndex);
+					edge.put("target", altIndexer);
 				
-				// get the additional data about the edge
-				collaborationList = collaborations.get(source);
-				collaboration = collaborationList.getCollaboration(target);
+					// get the additional data about the edge
+					collaborationList = collaborations.get(source);
+					collaboration = collaborationList.getCollaboration(target);
 				
-				edge.put("value", collaboration.getCollaborationCount());
-				edge.put("firstDate",      collaboration.getFirstDate());
-				edge.put("lastDate",       collaboration.getLastDate());					
+					edge.put("value", collaboration.getCollaborationCount());
+					edge.put("firstDate",      collaboration.getFirstDate());
+					edge.put("lastDate",       collaboration.getLastDate());					
 		
-				edges.add(edge);
+					edges.add(edge);
+				}
+			} else {
+				// other edges
+				// loop through the list of collaborations
+				for(int i = 0; i < edgesToMake.length; i++) {
+					// determine the index value for this collaborator
+					target = Integer.parseInt(edgesToMake[i]);
+				
+					altIndexer = (Integer)altIndex.get(target);
+		
+					if(source < target) {
+						// build the new edge
+						edge = new JSONObject();
+						edge.put("source", altSourceIndex);
+						edge.put("target", altIndexer);
+				
+						// get the additional data about the edge
+						collaborationList = collaborations.get(source);
+						collaboration = collaborationList.getCollaboration(target);
+				
+						edge.put("value", collaboration.getCollaborationCount());
+						edge.put("firstDate",      collaboration.getFirstDate());
+						edge.put("lastDate",       collaboration.getLastDate());					
+		
+						edges.add(edge);
+					}
+				}
 			}
 	
 		}
