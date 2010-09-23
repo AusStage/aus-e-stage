@@ -23,6 +23,7 @@
      * [MobileServiceAPI Mobile Service API]
        * [MobileServiceAPIGatherer Input Gatherer]
        * [MobileServiceAPILiveFeedback Live Feedback]
+       * [MobileServiceAPILookup Lookup Information]
    * [NetworkService Network Service]
      * [NavigatingNetworksSpecification Specification]
      * [NavigatingNetworksGoals   Service Goals]
