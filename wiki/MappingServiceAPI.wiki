@@ -12,3 +12,4 @@ Details of the API are in the following pages:
 
  * [MappingServiceAPIMarkers Marker Data API] - retrieve data used to build markers
  * [MappingServiceAPISearch Search API] - search for organisations / contributors etc.
+ * [MappingServiceAPILookup Lookup API] - lookup various data elements in the system
