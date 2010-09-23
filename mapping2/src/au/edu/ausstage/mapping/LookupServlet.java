@@ -36,8 +36,9 @@ public class LookupServlet extends HttpServlet {
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES        = {"state-list", "suburb-list", "suburb-venue-list"};
-	private final String[] FORMAT_TYPES      = {"json"};
+	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list"};
+	private final String[] FORMAT_TYPES       = {"json"};
+	public static final String[] VALID_STATES = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
 	/*
 	 * initialise this instance
@@ -74,8 +75,8 @@ public class LookupServlet extends HttpServlet {
 		if(taskType.equals("state-list") == false) {
 			// this is a lookup task that requires the id
 			if(taskType.equals("suburb-list") == true) {
-				if(InputUtils.isValidInt(id) == false) {
-					throw new ServletException("The id parameter must be a valid integer");
+				if(InputUtils.isValid(id, VALID_STATES) == false) {
+					throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
 				}
 			} else if(InputUtils.isValid(id) == false) {
 				throw new ServletException("The id parameter is required");

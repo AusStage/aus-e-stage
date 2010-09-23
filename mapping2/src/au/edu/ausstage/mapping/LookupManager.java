@@ -22,15 +22,11 @@ package au.edu.ausstage.mapping;
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.mapping.types.*;
 
-// import additional java packages / classes
-import java.sql.ResultSet;
-import org.json.simple.*;
-
 /**
  * A class used to compile the marker data which is used to build
  * maps on web pages
  */
-public class SearchManager {
+public class LookupManager {
 
 	// declare private class variables
 	DbManager database;
@@ -40,7 +36,7 @@ public class SearchManager {
 	 *
 	 * @param database a valid DbManager object
 	 */
-	public SearchManager(DbManager database) {
+	public LookupManager(DbManager database) {
 		this.database = database;
 	}
 	
@@ -51,8 +47,12 @@ public class SearchManager {
 	 */
 	public String getStateList() {
 	
-		//debug code
-		return "";
+		// get the required sub manager
+		LookupInterfaceElementsManager lookup = new LookupInterfaceElementsManager(database);
+		
+		// return the data
+		return lookup.getStateList();
+		
 	} // end the getStateList method
 	
 	/**
@@ -64,8 +64,15 @@ public class SearchManager {
 	 */
 	public String getSuburbList(String stateId) {
 	
-		//debug code
-		return "";
+		if(InputUtils.isValid(stateId, LookupServlet.VALID_STATES) == false) {
+			throw new IllegalArgumentException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+		}
+	
+		// get the required sub manager
+		LookupInterfaceElementsManager lookup = new LookupInterfaceElementsManager(database);
+		
+		// return the data
+		return lookup.getSuburbList(stateId);
 	
 	} // end the getSuburbList method
 	
@@ -77,9 +84,17 @@ public class SearchManager {
 	 * @return a JSON encoded string containing the data
 	 */
 	public String getVenueListBySuburb(String suburbName) {
+	
+		// check the parameters
+		if(InputUtils.isValid(suburbName) == false) {
+			throw new IllegalArgumentException("The suburb name is a required parameter");
+		}
 		
-		//debug code
-		return "";
+		// get the required sub manager
+		LookupInterfaceElementsManager lookup = new LookupInterfaceElementsManager(database);
+		
+		// return the data
+		return lookup.getVenueListBySuburb(suburbName);
 	} // end the getVenueListBySuburb method	 
 	
 } // end class definition
