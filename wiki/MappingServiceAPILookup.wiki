@@ -1,0 +1,53 @@
+Mapping Service API - Lookup
+
+<h1>Lookup API</h1>
+
+Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
+
+The Lookup API exposes methods that can be used to lookup a variety of data elements. 
+
+_Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
+
+
+== Base URL ==
+
+http://beta.ausstage.edu.au/mapping2/lookup?
+
+Combining the base URL with the parameters outlined below constructs a call to the API.
+
+== Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| task   || state-list, suburb-list, suburb-venue-list || No || ||
+|| id     || unique identifier use with the lookup task || No* || ||
+|| format || json || Yes || json ||
+|| callback || function name to use for a JSONP request || Yes || ||
+
+id* is not required for a state-list lookup
+
+=== task ===
+The type of search task to undertake for example a search for organisation or contributor data
+
+==== state-list ===
+
+A list of objects that can be used to construct UI elements that allow the user to select a state or other geographic area in which to narrow their browse activity
+
+==== suburb-list ====
+
+A list of suburbs that are located in the state as identified by the id parameter
+
+==== suburb-venue-list ====
+
+A list of venues that are located in the state and suburb combination as identified by the id parameter
+
+_Note:_ The id parameter is expected to be encoded as follows state-id|suburb name
+
+=== id ===
+
+The unique identifier used to lookup the data as identified by the task parameter
+
+=== format ===
+The type of data format used to prepare the search results. At the time of writing only [http://en.wikipedia.org/wiki/JSON JSON] is a supported format
+
+=== callback ===
+The name of the callback function used when a request is made for JSONP encoded data
