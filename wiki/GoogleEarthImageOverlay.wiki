@@ -27,7 +27,8 @@ Since the overlay feature in Google Earth is of memory intensive, Google recomme
 
 Try to position the viewer so that it corresponds in viewing altitude to the overlay. If the overlay is of a detailed view, zoom into the subject area so that you don't have to make large adjustments later. By contrast, if the overlay covers a large area, make sure the entire area is encompassed in the 3D viewer with some margins for adjusting the imagery.
 
-2.	Click *Add* > *Image Overlay* or click  . The 'New Image Overlay' dialog box appears.
+2.	Click *Add* > *Image Overlay* or click the highlighted button in the following image. The 'New Image Overlay' dialog box appears.
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/google-earth-button-bar.png]
 
 3.	Provide a descriptive name in the *Name* field.
 
