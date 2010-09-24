@@ -46,29 +46,32 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
 == Sample Output (state, suburb, venue) == 
 
 {{{
-[ { "id" : "184",
-    "latitude" : "-34.922921",
-    "longitude" : "138.614116",
-    "name" : "The Fringe Club",
-    "postcode" : "5000",
-    "suburb" : "Adelaide",
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=184"
+[ { "id" : "13209",
+    "latitude" : "-18.338844",
+    "longitude" : "130.636744",
+    "name" : "Lajamanu",
+    "postcode" : "0852",
+    "street" : "North Tanami Desert",
+    "suburb" : "Lajamanu",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=13209"
   },
-  { "id" : "2965",
-    "latitude" : "-34.92832",
-    "longitude" : "138.597007",
-    "name" : "Tivoli Theatre",
-    "postcode" : "5000",
-    "suburb" : "Adelaide",
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2965"
+  { "id" : "11234",
+    "latitude" : "-13.822876",
+    "longitude" : "131.83479",
+    "name" : "Unknown",
+    "postcode" : "0847",
+    "street" : null,
+    "suburb" : "Pine Creek",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=11234"
   },
-  { "id" : "697",
-    "latitude" : "-34.923255",
-    "longitude" : "138.612356",
-    "name" : "Rymill Park",
-    "postcode" : "5000",
-    "suburb" : "Adelaide",
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=697"
+  { "id" : "10680",
+    "latitude" : "-12.401695",
+    "longitude" : "130.854604",
+    "name" : "Marko's Warehouse",
+    "postcode" : "0810",
+    "street" : "4/9 De Latour Street",
+    "suburb" : "Coconut Grove",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10680"
   }
 ]
 }}}
