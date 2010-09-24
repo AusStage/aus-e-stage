@@ -380,8 +380,94 @@ public class MarkerManager {
 	 * @return               json encoded data as a string
 	 */
 	public String getContributorMarkers(String contributorId) {
-		//debug code
-		return "";
+	
+		// declare helper variables
+		String[] sqlParameters = null;
+	
+		// check the parameter
+		if(InputUtils.isValid(contributorId) == true) {
+			if(contributorId.indexOf(',') == -1) {
+				// a single id
+				if(InputUtils.isValidInt(contributorId) == false) {
+					throw new IllegalArgumentException("The id parameter must be a valid integer");
+				}
+			} else {
+				// multiple ids
+				sqlParameters = contributorId.split(",");
+			
+				if(InputUtils.isValidArrayInt(sqlParameters) == false) {
+					throw new IllegalArgumentException("The id parameter must contain a list of valid integers seperated by commas only");
+				}
+			}
+		} else {
+			throw new IllegalArgumentException("Missing id parameter.");
+		}
+		
+		// double check the parameters
+		if(sqlParameters == null) {
+			sqlParameters = new String[1];
+			sqlParameters[0] = contributorId;
+		}
+		
+		// build the SQL
+		String sql = null;
+		
+		if(sqlParameters.length == 1) {
+			sql = "SELECT DISTINCT c.contributorid, v.venueid, v.venue_name, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				+ "FROM contributor c, conevlink cel, events e, venue v, states s "
+				+ "WHERE c.contributorid = ?"
+				+ "AND c.contributorid = cel.contributorid "
+				+ "AND cel.eventid = e.eventid "
+				+ "AND e.venueid = v.venueid "
+				+ "AND v.state = s.stateid "
+				+ "AND latitude IS NOT NULL ";
+		} else {
+			sql = "SELECT DISTINCT c.contributorid, v.venueid, v.venue_name, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				+ "FROM contributor c, conevlink cel, events e, venue v, states s "
+				+ "WHERE c.contributorid = ANY (";
+					   
+			// add sufficient place holders for all of the ids
+			for(int i = 0; i < sqlParameters.length; i++) {
+				sql += "?,";
+			}
+	
+			// tidy up the sql
+			sql = sql.substring(0, sql.length() -1);
+			
+			// finalise the sql string
+			sql += ") "
+				+ "AND c.contributorid = cel.contributorid "
+				+ "AND cel.eventid = e.eventid "
+				+ "AND e.venueid = v.venueid "
+				+ "AND v.state = s.stateid "
+				+ "AND latitude IS NOT NULL "
+				+ "ORDER BY c.contributorid";
+		}
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			return getEmptyArray();
+		}
+		
+		// build the dataset using internal objects
+		ResultSet resultSet = results.getResultSet();
+		HashMap<Integer, VenueList> venueListMap = buildVenueListMap(resultSet);
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;	
+		
+		// check what was returned
+		if(venueListMap.size() == 0) {
+			return getEmptyArray();
+		}		
+		
+		// return the list
+		return buildVenueListMapJSONArray(venueListMap).toString();
 	}
 	
 	/**
