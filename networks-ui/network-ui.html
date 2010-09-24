@@ -27,7 +27,7 @@
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
 
     <!-- Input file. JSON format. -->
-   <!-- <script type="text/javascript" src="data/smlNetworkEx.js"></script>-->
+<!--    <script type="text/javascript" src="smlNetworkEx.js"></script>-->
 
 			<script type="text/javascript+protovis">
 					
@@ -79,35 +79,33 @@
 		<li id="eventCount"></li>
 		<li id="diameter"></li>
 	</ul>
-	
 </div>
-
+	
 	<div id="main">
 	
 		<div id="protovis">
+		<script type="text/javascript">		
+		</script>
 
 		</div>
 
 
 		
-		<div id="date_range_div">
-		<fieldset>
+		<div id="date_range_div" align=right>
+
 			<form name="dateRanges">
-				<label for="startDate">From:</label>
-				<select name="startDate" id="startDate">
-				</select>
+				<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
+				<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
 			
-				<label for="endDate">To:</label>
-				<select name="endDate" id="endDate">
-				</select>
-				<input type="submit" name="submit" class="button" id="refresh_date_btn" value="refresh" />	
-		<script type="text/javascript">		
-			$('select#startDate, select#endDate').selectToUISlider({
-				labels: 12
-			});		
-		</script>
+					<select name="startDate" id="startDate">
+					</select>
+			
+					<select name="endDate" id="endDate">
+					</select>	
+					<br>
+					<input type="submit" name="submit" class="button" id="refresh_date_btn" value="refresh" />												
 			</form>
-		</fieldset>
+			
 		</div>
 </div>
 
