@@ -276,6 +276,104 @@ public class MarkerManager {
 	}
 	
 	/**
+	 * A public method to build marker data for a venue or list of venues
+	 *
+	 * @param organisationId the unique venue ID or a list of venue ids
+	 *
+	 * @return               json encoded data as a string
+	 */
+	public String getOrganisationMarkers(String organisationId) {
+	
+		// declare helper variables
+		String[] sqlParameters = null;
+	
+		// check the parameter
+		if(InputUtils.isValid(organisationId) == true) {
+			if(organisationId.indexOf(',') == -1) {
+				// a single id
+				if(InputUtils.isValidInt(organisationId) == false) {
+					throw new IllegalArgumentException("The id parameter must be a valid integer");
+				}
+			} else {
+				// multiple ids
+				sqlParameters = organisationId.split(",");
+			
+				if(InputUtils.isValidArrayInt(sqlParameters) == false) {
+					throw new IllegalArgumentException("The id parameter must contain a list of valid integers seperated by commas only");
+				}
+			}
+		} else {
+			throw new IllegalArgumentException("Missing id parameter.");
+		}
+		
+		// double check the parameters
+		if(sqlParameters == null) {
+			sqlParameters = new String[1];
+			sqlParameters[0] = organisationId;
+		}
+		
+		// build the SQL
+		String sql = null;
+		
+		if(sqlParameters.length == 1) {
+			sql = "SELECT DISTINCT o.organisationid, v.venueid, v.venue_name, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				+ "FROM organisation o, orgevlink oel, events e, venue v, states s "
+				+ "WHERE o.organisationid = ?"
+				+ "AND o.organisationid = oel.organisationid "
+				+ "AND oel.eventid = e.eventid "
+				+ "AND e.venueid = v.venueid "
+				+ "AND v.state = s.stateid "
+				+ "AND latitude IS NOT NULL ";
+		} else {
+			sql = "SELECT DISTINCT o.organisationid, v.venueid, v.venue_name, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				+ "FROM organisation o, orgevlink oel, events e, venue v, states s "
+				+ "WHERE o.organisationid = ANY (";
+					   
+			// add sufficient place holders for all of the ids
+			for(int i = 0; i < sqlParameters.length; i++) {
+				sql += "?,";
+			}
+	
+			// tidy up the sql
+			sql = sql.substring(0, sql.length() -1);
+			
+			// finalise the sql string
+			sql += ") "
+				+ "AND o.organisationid = oel.organisationid "
+				+ "AND oel.eventid = e.eventid "
+				+ "AND e.venueid = v.venueid "
+				+ "AND v.state = s.stateid "
+				+ "AND latitude IS NOT NULL ";
+		}
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			return getEmptyArray();
+		}
+		
+		// build the dataset using internal objects
+		// build a list of venues
+		ResultSet resultSet = results.getResultSet();
+		VenueList venues = buildVenueList(resultSet);
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;	
+		
+		// check what was returned
+		if(venues == null) {
+			return getEmptyArray();
+		}
+		
+		// build and return the JSON data
+		return venueListToJson(venues);		
+	}
+	
+	/**
 	 * A private method to build a venueList given a resultSet
 	 *
 	 * @param resultSet the result set to process
@@ -393,6 +491,8 @@ public class MarkerManager {
 		JSONObject object = new JSONObject();
 		return object.toString();
 	}
+	
+	
 	
 	
 	
