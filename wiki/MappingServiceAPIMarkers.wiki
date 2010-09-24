@@ -16,80 +16,59 @@ Combining the base URL with the parameters outlined below constructs a call to t
 
 == Parameters ==
 
-|| *Name* || *Possible Values* || *Optional* || *Default* ||
-|| type   || organisation, contributor || No || ||
-|| id     || Unique contributor or organisation id || No || ||
+|| *Name*   || *Possible Values* || *Optional* || *Default* ||
+|| type     || state, suburb, venue || No || ||
+|| id       || Unique contributor or organisation id || No || ||
+|| callback || function name to use for a JSONP request || Yes || || 
+
+_Note: _ The id parameter is optional when used with the state task
 
 === type ===
 
-The type parameter specifies whether the call to the API is for data on an organisation or a contributor.
+The type parameter specifies whether the call to the API is for data on venues at the state, suburb or specific venue. As well as data on venues associated with an organisation or a contributor
 
 === id ===
 
-The id parameter is a comma separated list of unique identifiers.
+If the task type is set to state this parameter, if present, is ignored.
 
-_Note: It is not possible to mix types of ids in a single call to the API. Therefore if the type is set to organisation only organisation ids must be specified, conversely if the type is set to contributor only contributor ids must be specified._
+If the task type is set to suburb the parameter is is expected to be encoded as follows:
+
+state-id_suburb-name
+
+For example:
+
+1_Adelaide
+
+For all other task types the id parameter is a comma separated list of unique identifiers.
+
+_Note: It is not possible to mix types of ids in a single call to the API. Therefore if the type is set to venue only venue ids must be specified, conversely if the type is set to contributor only contributor ids must be specified._
 
 == Sample Output == 
 
-The output is an XML document that contains markers for venues that can be mapped including various data fields. Those fields are:
-
-|| *Element Name* || *Attribute Name* || *Purpose* || 
-|| mapdata || || XML Root Element ||
-|| markers || || Root Element of the markers data ||
-|| marker  || || An individual marker representing a venue <br/>The text content of this element is the content used to build the infoWindow ||
-|| || events  || the number of events  at this venue ||
-|| || fdate   || the first date of an event at this venue (as an integer) ||
-|| || fdatestr ||the first date of an event at this venue (as a date string) ||
-|| || lat || the latitude coordinate for the venue ||
-|| || ldate || the last date of an event at this venue (as an integer) ||
-|| || ldatestr || the last date of an event at this venye (as a date string) ||
-|| || lng || the longitude coordinate for the venue ||
-|| || name || the name of the venue ||
-|| || postcode || the postcode of the suburb where the venue is located || 
-|| || state || the identifier for the state where the venue is located ||
-|| || suburb || the name of the the suburb where the venue is located || 
-|| entities || || Root element of the entity data ||
-|| entity || || Details of an entity displayed on the map ||
-|| || id || the unique identifier of the entity (organisation / contributor ||
-|| || name || the name of the entity ||
-|| || url || the persistent URL for the record in AusStage for this entity ||
-
-Below is an XML snippet representing output from this API
-
 {{{
-<mapdata>
-    <markers>
-        <marker events="1" fdate="20081209" fdatestr="2008-12-09" lat="46.189347" ldate="20081209"
-            ldatestr="2008-12-09" lng="6.235511" name="Relais Culturel Chateau Rouge" postcode=""
-            state="9" suburb="Annemasse">&lt;p&gt;&lt;a
-            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_venue_id=13371"
-            title= "View the Relais Culturel Chateau Rouge record in AusStage"
-            target="ausstage"&gt;Relais Culturel Chateau
-            Rouge&lt;/a&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a
-            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_org_id=102"
-            title="View the Australian Dance Theatre record in AusStage"
-            target="ausstage"&gt;Australian Dance Theatre&lt;/a&gt;&lt;ul&gt;&lt;li&gt;&lt;a
-            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_event_id=82985"
-            title="View the G record in AusStage" target="ausstage"&gt;G&lt;/a&gt;, 09 December
-            2008&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</marker>
-        <marker events="1" fdate="20050310" fdatestr="2005-03-10" lat="50.864588" ldate="20081209"
-            ldatestr="2008-12-09" lng="-0.089885" name="Gardner Arts Centre" postcode="" state="9"
-            suburb="Brighton">&lt;p&gt;&lt;a
-            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_venue_id=10940"
-            title= "View the Gardner Arts Centre record in AusStage" target="ausstage"&gt;Gardner
-            Arts Centre&lt;/a&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a
-            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_org_id=102"
-            title="View the Australian Dance Theatre record in AusStage"
-            target="ausstage"&gt;Australian Dance Theatre&lt;/a&gt;&lt;ul&gt;&lt;li&gt;&lt;a
-            href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_event_id=67614"
-            title="View the Birdbrain record in AusStage" target="ausstage"&gt;Birdbrain&lt;/a&gt;,
-            10 March 2005&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</marker>
-    </markers>
-    <entities>
-        <entity id="102" name="Australian Dance Theatre"
-            url="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;amp;f_org_id=102"/>
-    </entities>
-</mapdata>
-
+[ { "id" : "184",
+    "latitude" : "-34.922921",
+    "longitude" : "138.614116",
+    "name" : "The Fringe Club",
+    "postcode" : "5000",
+    "suburb" : "Adelaide",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=184"
+  },
+  { "id" : "2965",
+    "latitude" : "-34.92832",
+    "longitude" : "138.597007",
+    "name" : "Tivoli Theatre",
+    "postcode" : "5000",
+    "suburb" : "Adelaide",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2965"
+  },
+  { "id" : "697",
+    "latitude" : "-34.923255",
+    "longitude" : "138.612356",
+    "name" : "Rymill Park",
+    "postcode" : "5000",
+    "suburb" : "Adelaide",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=697"
+  }
+]
 }}}
