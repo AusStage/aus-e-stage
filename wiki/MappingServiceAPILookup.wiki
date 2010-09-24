@@ -19,11 +19,11 @@ Combining the base URL with the parameters outlined below constructs a call to t
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
 || task   || state-list, suburb-list, suburb-venue-list || No || ||
-|| id     || unique identifier use with the lookup task || No* || ||
+|| id     || unique identifier use with the lookup task || No || ||
 || format || json || Yes || json ||
 || callback || function name to use for a JSONP request || Yes || ||
 
-id* is not required for a state-list lookup
+_Note:_ id is not required for a state-list lookup
 
 === task ===
 The type of search task to undertake for example a search for organisation or contributor data
@@ -42,7 +42,7 @@ _Note:_ The id parameter is only valid if it contains an id for one of the 8 Aus
 
 A list of venues that are located in the state and suburb combination as identified by the id parameter
 
-_Note:_ The id parameter is expected to be encoded as follows state-id|suburb name
+_Note:_ The id parameter is expected to be encoded as follows state-id_suburb name
 
 === id ===
 
