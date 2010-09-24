@@ -32,7 +32,8 @@ public class MarkerServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	
 	// declare private class constants
-	private final String[] MARKER_TYPES = {"organisation", "contributor"};
+	private final String[] MARKER_TYPES = {"state", "suburb", "venue"};
+	public static final String[] VALID_STATES = {"1", "2", "3", "4", "5", "6", "7", "8", "99", "999"};
 
 	/*
 	 * initialise this instance
@@ -61,11 +62,29 @@ public class MarkerServlet extends HttpServlet {
 		// check on the marker types
 		if(InputUtils.isValid(type, MARKER_TYPES) == false) {
 			// no valid marker type was found
-			throw new ServletException("Missing type parameter. Expected one of: " + java.util.Arrays.toString(MARKER_TYPES).replaceAll("[\\]\\[]", ""));
+			throw new ServletException("Missing type parameter. Expected one of: " + InputUtils.arrayToString(MARKER_TYPES));
 		}
 		
-		// check on the id
-		if(InputUtils.isValid(id) == true) {
+		// check on the id value
+		if(type.equals("state") == true) {
+			if(InputUtils.isValid(id, VALID_STATES) == false) {
+				// no valid state id was found
+				throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
+			}
+		} else if(type.equals("suburb") == true) {
+			if(id.indexOf("_") == -1) {
+				throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+			} else {
+				String[] tmp = id.split("_");
+				if(tmp.length > 2) {
+					throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+				} else {
+					if(InputUtils.isValid(tmp[0], LookupServlet.VALID_STATES) == false) {
+						throw new ServletException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+					}
+				}
+			}
+		} else if(InputUtils.isValid(id) == true) {
 			if(id.indexOf(',') == -1) {
 				// a single id
 				if(InputUtils.isValidInt(id) == false) {
@@ -97,36 +116,35 @@ public class MarkerServlet extends HttpServlet {
 		}
 		
 		// declare helper variables
-		String data = null;
+		String results = null;
 		MarkerManager manager = new MarkerManager(database);
 		
-		// determine what type of markers to get
-		if(type.equals(MARKER_TYPES[0]) == true) {
-			// get markers for an organisation
-			data = manager.getOrganisationMarkers(id);
-		} else {
-			// get markers for a contributor
-			data = manager.getContributorMarkers(id);
-		}
-		
-		// check on the data to return
-		if(data == null) {
-			throw new ServletException("An error occured during the compilation of the marker data. Contact the system administrator if this continues");
+		//determine what type or markers to get
+		if(type.equals("state") == true) {
+			results = manager.getStateMarkers(id);
+		} else if(type.equals("suburb") == true) {
+			results = manager.getSuburbMarkers(id);
+		} else if(type.equals("venue") == true) {
+			results = manager.getVenueMarkers(id);
 		}
 		
 		// ouput the data
-		// set the appropriate content type
-		response.setContentType("text/xml; charset=UTF-8");
+		// check to see if this is a jsonp request
+		if(InputUtils.isValid(request.getParameter("callback")) == false) {
+			// output json mime type
+			response.setContentType("application/json; charset=UTF-8");
+		} else {
+			// output the javascript mime type
+			response.setContentType("application/javascript; charset=UTF-8");
+		}
 		
-		// set the appropriate headers to disable caching
-		// particularly for IE
-		response.setHeader("Cache-Control", "max-age=0,no-cache,no-store,post-check=0,pre-check=0");
-		
-		//get the output print writer
+		// output the results of the search
 		PrintWriter out = response.getWriter();
-		
-		// send some output
-		out.print(data);
+		if(InputUtils.isValid(request.getParameter("callback")) == true) {
+			out.print(JSONPManager.wrapJSON(results, request.getParameter("callback")));
+		} else {
+			out.print(results);
+		}
 	
 	} // end doGet method
 	
