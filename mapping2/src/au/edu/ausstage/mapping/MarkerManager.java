@@ -25,6 +25,7 @@ import au.edu.ausstage.mapping.types.*;
 // import additional java packages / classes
 import java.sql.ResultSet;
 import java.util.Set;
+import java.util.Iterator;
 import org.json.simple.*;
 
 /**
@@ -129,10 +130,16 @@ public class MarkerManager {
 		
 		} catch (java.sql.SQLException ex) {
 			return getEmptyArray();
-		}	
+		}
 		
-		//debug code
-		return "";
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		
+		// build and return the JSON data
+		return venueLisToJson(venues);
 	}
 	
 	/**
@@ -159,6 +166,50 @@ public class MarkerManager {
 		
 		//debug code
 		return "";
+	}
+	
+	/**
+	 * A private method to build a JSON array of venue objects using a VenueList
+	 *
+	 * @param venues an instance of the VenueList object
+	 *
+	 * @return       the JSON encoded string 
+	 */
+	@SuppressWarnings("unchecked") 
+	private String venueLisToJson(VenueList venues) {
+	
+		// declare helper variables
+		JSONArray  list   = new JSONArray();
+		JSONObject object = null;
+		Venue      venue  = null;
+		
+		// get the iterator for the list
+		Set<Venue> venueSet      = venues.getVenues();
+		Iterator   venueIterator = venueSet.iterator();
+		
+		// iterate over the venues
+		while(venueIterator.hasNext()) {
+		
+			// get the current venue
+			venue = (Venue)venueIterator.next();
+			
+			// create the JSON object
+			object = new JSONObject();
+			
+			object.put("id", venue.getId());
+			object.put("name", venue.getName());
+			object.put("suburb", venue.getSuburb());
+			object.put("postcode", venue.getPostcode());
+			object.put("latitude", venue.getLatitude());
+			object.put("longitude", venue.getLongitude());
+			object.put("url", venue.getUrl());
+			
+			// add this object to the list
+			list.add(object);			
+		}
+		
+		// return the JSON encoded string
+		return list.toString();
 	}
 	
 	/**
