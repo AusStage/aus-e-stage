@@ -191,9 +191,88 @@ public class MarkerManager {
 	 * @return        json encoded data as a string
 	 */
 	public String getVenueMarkers(String venueId) {
+	
+		// declare helper variables
+		String[] sqlParameters = null;
+	
+		// check the parameter
+		if(InputUtils.isValid(venueId) == true) {
+			if(venueId.indexOf(',') == -1) {
+				// a single id
+				if(InputUtils.isValidInt(venueId) == false) {
+					throw new IllegalArgumentException("The id parameter must be a valid integer");
+				}
+			} else {
+				// multiple ids
+				sqlParameters = venueId.split(",");
+			
+				if(InputUtils.isValidArrayInt(sqlParameters) == false) {
+					throw new IllegalArgumentException("The id parameter must contain a list of valid integers seperated by commas only");
+				}
+			}
+		} else {
+			throw new IllegalArgumentException("Missing id parameter.");
+		}
 		
-		//debug code
-		return "";
+		// double check the parameters
+		if(sqlParameters == null) {
+			sqlParameters = new String[1];
+			sqlParameters[0] = venueId;
+		}
+		
+		// build the SQL
+		String sql = null;
+		
+		if(sqlParameters.length == 1) {
+			sql = "SELECT v.venueid, v.venue_name, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				+ "FROM venue v, states s "
+				+ "WHERE v.venueid = ? "
+				+ "AND v.state = s.stateid "
+				+ "AND latitude IS NOT NULL ";
+		} else {
+			sql = "SELECT v.venueid, v.venue_name, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				+ "FROM venue v, states s "
+				+ "WHERE v.venueid = ANY (";
+					   
+			// add sufficient place holders for all of the ids
+			for(int i = 0; i < sqlParameters.length; i++) {
+				sql += "?,";
+			}
+	
+			// tidy up the sql
+			sql = sql.substring(0, sql.length() -1);
+			
+			// finalise the sql string
+			sql += ") "
+				+ "AND v.state = s.stateid "
+				+ "AND latitude IS NOT NULL ";
+		}
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			return getEmptyArray();
+		}
+		
+		// build the dataset using internal objects
+		// build a list of venues
+		ResultSet resultSet = results.getResultSet();
+		VenueList venues = buildVenueList(resultSet);
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;	
+		
+		// check what was returned
+		if(venues == null) {
+			return getEmptyArray();
+		}
+		
+		// build and return the JSON data
+		return venueListToJson(venues);		
 	}
 	
 	/**
@@ -260,25 +339,37 @@ public class MarkerManager {
 		while(venueIterator.hasNext()) {
 		
 			// get the current venue
-			venue = (Venue)venueIterator.next();
-			
-			// create the JSON object
-			object = new JSONObject();
-			
-			object.put("id", venue.getId());
-			object.put("name", venue.getName());
-			object.put("suburb", venue.getSuburb());
-			object.put("postcode", venue.getPostcode());
-			object.put("latitude", venue.getLatitude());
-			object.put("longitude", venue.getLongitude());
-			object.put("url", venue.getUrl());
+			venue = (Venue)venueIterator.next();		
 			
 			// add this object to the list
-			list.add(object);			
+			list.add(venueToJson(venue));			
 		}
 		
 		// return the JSON encoded string
 		return list.toString();
+	}
+	
+	/**
+	 * A private method to return the JSON version of a venue object
+	 *
+	 * @param venue a valid venue object
+	 *
+	 * @return      the JSON object
+	 */
+	@SuppressWarnings("unchecked")
+	private JSONObject venueToJson(Venue venue) {
+	
+		JSONObject object = new JSONObject();
+		
+		object.put("id", venue.getId());
+		object.put("name", venue.getName());
+		object.put("suburb", venue.getSuburb());
+		object.put("postcode", venue.getPostcode());
+		object.put("latitude", venue.getLatitude());
+		object.put("longitude", venue.getLongitude());
+		object.put("url", venue.getUrl());
+		
+		return object;	
 	}
 	
 	/**
@@ -298,7 +389,7 @@ public class MarkerManager {
 	 * @return an empty JSON object as a string
 	 */
 	@SuppressWarnings("unchecked")
-	private String getEmptyArray() {
+	private String getEmptyObject() {
 		JSONObject object = new JSONObject();
 		return object.toString();
 	}
