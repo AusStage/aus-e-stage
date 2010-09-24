@@ -10,6 +10,8 @@ $(document).ready(function() {
 	$("#network_btn").button("disable");	
 	
 	//hide the date range
+	$("select#startDate").hide();
+	$("select#endDate").hide();
 	$("#date_range_div").hide();
 	
 	//clear search field values
@@ -19,8 +21,8 @@ $(document).ready(function() {
 });
 
 
-
-// define lookup functionality
+//search area ////////////////////////////////////////////////////////////////////////////
+// define lookup functionality /
 $(document).ready(function() {
 
 	//define the lookup button
@@ -122,12 +124,19 @@ $(document).ready(function() {
         	return false;
       	}
 	 
-	 	findAndDisplayContributorNetwork(id);  
+	 	findAndDisplayContributorNetwork(id); 
+	 	
+	 	//tidy up the form
+	 	$("#name").val("");
+		$("#id").val(""); 
      	return false;
     });
     
     //set up date range refresh button
     $("#refresh_date_btn").click(function() {
+    	$("#startDateStore").val( $("select#startDate").val()) ;
+    	$("#endDateStore").val( $("select#endDate").val()) ;  
+    	
 		refreshNetworkForDateRange();
 	    return false;
     });
@@ -153,11 +162,6 @@ function showLoader(type) {
 	
 }
  
-  
-  // define the network button function (displays network)
-$(document).ready(function() {
-});
-
 
 
 // set up loading network dialogue box
@@ -183,9 +187,6 @@ function closeWaitingDialog() {
 }
 
 
-
-
-
 // SEARCH DIV functions.
 // query dataset for contributor
 // display returned results.
@@ -200,8 +201,6 @@ function getContributors(queryString){
 				showLoader("hide");
 				displayResults(data);
 			});
-
-	
 	}
 
 
@@ -297,6 +296,8 @@ function displayResults(results){
 }
 
 
+//Network display/////////////////////////////////////////////////////////////////////////////////////////
+
 // NETWORK information search and display functions
 // 	find and display contributor network,
 //  load node neighbors (used in network interaction)
@@ -330,10 +331,10 @@ function findAndDisplayContributorNetwork(id){
 				//hide the loading bar				
 				closeWaitingDialog();
 				//update the side panel with contributor infomation
-				displayAllInfo(0,contributors);
+				displayAllInfo(contributors.nodes.length-1,contributors);
 				
 				//display the slider
-				$("#date_range_div").show();   
+				$("#date_range_div").show(); 
 				
 			});
 	}
@@ -381,12 +382,15 @@ function loadNodeNeighbors(contributors){
 }
 
 function setDateRanges(dateRange){
+		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+		var days = [31,28,31,30,31,30,31,31,30,31,30,31]
 		//set the start and end dates
 		var startDate = dateRange[0];
 		var endDate = dateRange[1];
 		
 		var currYear = startDate.substring(0,4);
 		var currMonth = startDate.substring(5,7);
+		
 		var endYear = endDate.substring(0,4);
 		var endMonth = endDate.substring(5,7);		
 		var startList = document.getElementById("startDate");
@@ -405,10 +409,10 @@ function setDateRanges(dateRange){
 		}
 
 		for(currYear; currYear<=endYear; currYear++){ 
-				var yearGroup = document.createElement("optgroup")
-				var yearGroup2 = document.createElement("optgroup")						
-				yearGroup.label = currYear;
-				yearGroup2.label = currYear						
+				//var yearGroup = document.createElement("optgroup")
+				//var yearGroup2 = document.createElement("optgroup")						
+				//yearGroup.label = currYear;
+				//yearGroup2.label = currYear						
 						
 				if (!firstRun) currMonth = 1; 
 						
@@ -417,10 +421,10 @@ function setDateRanges(dateRange){
 						var month = document.createElement("option");
 						var month2 = document.createElement("option");							
 							
-						month2.value = (currYear+"-"+currMonth+"-"+"01");
-						month2.appendChild(document.createTextNode(currYear+"-"+currMonth));							
+						month2.value = (currYear+"-"+currMonth+"-"+days[currMonth-1]);
+						month2.appendChild(document.createTextNode(months[currMonth-1]+"-"+currYear));							
 						month.value = (currYear+"-"+currMonth+"-"+"01");
-						month.appendChild(document.createTextNode(currYear+"-"+currMonth));							
+						month.appendChild(document.createTextNode(months[currMonth-1]+"-"+currYear));							
 						if (firstRun){
 								month.selected = true;
 								firstRun = false; 
@@ -429,16 +433,27 @@ function setDateRanges(dateRange){
 								month2.selected = true;
 								finishPopulate=true;
 						}
-						yearGroup.appendChild(month);
-						yearGroup2.appendChild(month2);							
+				//		yearGroup.appendChild(month);
+				//		yearGroup2.appendChild(month2);							
+						startList.appendChild(month);
+						endList.appendChild(month2);
 					}
 				}
-				startList.appendChild(yearGroup);
-				endList.appendChild(yearGroup2);
+//				startList.appendChild(yearGroup);
+//				endList.appendChild(yearGroup2);
 						
 						
 		}
-	
+		$("#startDateStore").val( $("select#startDate").val()) ;
+    	$("#endDateStore").val( $("select#endDate").val()) ;
+		
+		// remove any existing slider
+	    $('.ui-slider-scale').hide();
+		$('.ui-slider').slider('destroy');
+        
+		$('select#startDate, select#endDate').selectToUISlider({
+			labels: 6
+		});	
 		
 }
 
@@ -563,4 +578,269 @@ function setDateRanges(dateRange){
   		return false;
 	}
 	
+//global variables, to be used with protovis code.
+//var contributors = null ;
+var vis = null;
+
+// define variables for colour options.
+    	
+	var bgColour = "white";
+    		
+	var activeLinkStroke = "rgba(0,0,255,1)";
+    var relatedLinkStroke = "rgba(46,46,46,0.7)"; 
+    var inactiveLinkStroke = "rgba(170,170,170,0.7)";
+    var mouseoverLinkStroke = "rgba(220,20,60,0.7)";
+
+    var linkColourHolder;
+
+    var outOfDateEdge = "rgba(170,170,170,0.05)";
+    var outOfDateNode = "rgba(170,170,170,0.1)";
+        		
+    var relatedNodeFill = "rgba(46,46,46,1)";
+    var relatedNodeStroke = "rgba(46,46,46,1)";
+    		
+    var inactiveNodeFill = "rgba(170,170,170,1)";
+    var inactiveNodeStroke = "rgba(170,170,170,1)";
+    		
+    var focusNodeFill = "blue";
+    var focusNodeStroke = "blue";
+			 
+	var w = 796,
+    	h = 600;
+
+// define the active node
+	var activeNode;
+// define nodeFocus. True if focus is on nodes. False if on edges.
+    var nodeFocus = true;    	
+
+// define mouseOverEdge. True if mouse is over an edge.
+    var mouseOver = false;
+		
+// store target and source node for edge focus operations
+    var targetNodeSelect;
+    var sourceNodeSelect;
+    	
+// store seperate target and source node info for mouse over operations.
+    var targetNodeMO;
+    var sourceNodeMO;	
+
+
+
+function getNodes(){return contributors.nodes;}
+function getEdges(){return contributors.edges;}
+
+
+
+//create the network
+function createNetwork(targetDiv){
+	if (contributors != null){
+    	
+    	resetDateRangeVisibility();    		
+    	////////////////////////////////////////////////////////	
+		// construct a 3d array of nodes and their neighbors
+			var nodeNeighbors = loadNodeNeighbors(contributors);
+
+		///////////////////////////////////////////////////////
+		// set the active node to the last in the array. -JSON data export puts the central node last.
+		//fix the central node in position. This is a fix to help the stability of the system
+			activeNode = contributors.nodes.length-1;
+			
+			contributors.nodes[activeNode].fix = new pv.Vector(w/2,h/2);
+
+		///////////////////////////////////////////////////////
+		// new panel. 
+		// Essentially the base element 
+		// for all protovis visualisation
+			vis = new pv.Panel().canvas(targetDiv)
+			    .width(w)
+			    .height(h)
+			    .fillStyle(bgColour)
+			    .event("mousedown", pv.Behavior.pan())
+			    .event("mousewheel", pv.Behavior.zoom());
+
+		
+		///////////////////////////////////////////////////////
+		//add a force layout to the Panel. 
+			var	force = vis.add(pv.Layout.Force)
+			    .nodes(getNodes())
+			    .links(getEdges())
+			    .bound(true)
+			    .dragConstant(0.05)
+			    .springConstant(0.05)
+ 			    .iterations(500)
+			    .transform(pv.Transform.identity.scale(3).translate(-w/3,-h/3)) 
+
+				;
+		
+		/////////////////////////////////////////////////////////
+		//add the edges
+  		   force.link.add(pv.Line) 
+  		   		.strokeStyle(function(d, p){return getLinkStrokeStyle(d, p) })
+	/*		    .visible(function (d, p){
+			    							if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
+			    							($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)) {			    														
+			    								return false; 
+			    							}else 
+			    							p.targetNode.visible = true;
+			    							p.sourceNode.visible = true;
+			    							return true;	
+			    						})
+	*/	    	
+
+	//	    	.event("mouseover", function(d, p) {targetNodeMO = p.targetNode.index;
+	//		    									sourceNodeMO = p.sourceNode.index;
+	//		    									mouseOver = true;
+	//		    									return vis;
+	//	    										})
+		    										
+	//	    	.event("mouseout", function(d,p) {mouseOver = false;
+	//	    									  targetNodeMO = -1;
+	//	    									  sourceNodeMO = -1;
+	//	    									  return vis;
+	//	    									  })
+
+			    .event("click", function(d, p) {updateInfoWindowEdge(p);
+			    								targetNodeSelect = p.targetNode.index;
+			    								sourceNodeSelect = p.sourceNode.index;
+			    								targetNodeMO = -1;
+			    								sourceNodeMO = -1;
+			    								nodeFocus=false;
+			    								vis.render();})
+			;		
+		//add the nodes
+			force.node.add(pv.Dot)
+
+			    .size(function(d){return (d.linkDegree + 1) * Math.pow(this.scale, -1.5)})
+
+			    .fillStyle(function(d){ return getNodeFillStyle(d, this, nodeNeighbors)})
+
+			    .strokeStyle(function(d) { return getNodeStrokeStyle(d, this, nodeNeighbors)})
+
+			    .lineWidth(2)
+
+	 		  	.event("mouseover", function(d) {targetNodeMO = d.index;
+		    									mouseOver = true;
+		    									return vis;})
+
+		    	.event("mouseout", function() {mouseOver = false;
+		    								   targetNodeMO = -1;
+											   return vis;})
+
+			    .event("mousedown", pv.Behavior.drag())
+
+			    .event("drag", force)
+
+			    .event("click", function(d) { activeNode = this.index;
+    										  nodeFocus = true;
+    										  updateInfoWindow(activeNode, contributors);
+    										  return vis;})
+    										  
+    			.event("dblclick", function(d){return findAndDisplayContributorNetwork(contributors.nodes[this.index].id)})
+    			.anchor("top").add(pv.Label).text(function(d){return d.nodeName})
+    				.font("9pt sans-serif")
+					.textStyle(	function(d) { return getNodeStrokeStyle(d, this, nodeNeighbors)})
+					.textShadow("0.1em 0.1em 0.1em #fff")
+					.visible(function(){return mouseOver && this.index == targetNodeMO || this.index == sourceNodeMO ? true :
+										nodeFocus ? activeNode == this.index?true:false:
+							    		targetNodeSelect == this.index || sourceNodeSelect == this.index ? true : false})
+    			;
+
+
+
+		
+			}
+					    	
+}
+
+//reload network and render
+function reloadNetwork(targetDiv){
+		createNetwork(targetDiv);
+		
+		vis.render();	
+		
+	}
 	
+//refresh network for date range	
+function refreshNetworkForDateRange(){
+	resetDateRangeVisibility();
+	vis.render();	
+	}
+
+//resets all the visibility fields for nodes
+function resetDateRangeVisibility(){
+
+	for (var i = 0; i<contributors.nodes.length; i++){
+
+		contributors.nodes[i].visible=false;
+		}
+	}
+
+
+//functions to set the colour and style of nodes and links	
+
+//link stroke style rules
+function getLinkStrokeStyle(d, p){
+	//mouse over stuff, not used anymore, but may come back
+	if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
+		($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)){
+			return outOfDateEdge;
+			}
+	else{	
+		p.targetNode.visible = true;
+		p.sourceNode.visible = true;
+		 if (mouseOver == true && p.targetNode.index == targetNodeMO && p.sourceNode.index == sourceNodeMO) {
+			return mouseoverLinkStroke;
+			} 
+	//if the focus is on a node rather than a link
+		else if (nodeFocus == true && (p.sourceNode.index == activeNode || p.targetNode.index == activeNode)){
+			return relatedLinkStroke;
+			}
+	//if the focus is on edges
+		else if (p.targetNode.index == targetNodeSelect && p.sourceNode.index == sourceNodeSelect){
+			return activeLinkStroke;
+			}
+		else 
+			return inactiveLinkStroke;	
+	}	
+}
+
+//node fill style rules
+function getNodeFillStyle(d, node, nodeNeighbors){
+	if (!d.visible){
+		return outOfDateNode;
+	}
+	else
+	if (nodeFocus==true){
+		if (activeNode== node.index){ 
+			return focusNodeFill;
+		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
+			return relatedNodeFill;	
+		}
+		else return inactiveNodeFill;		
+	}
+	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
+		return focusNodeFill;
+	}
+	else return inactiveNodeFill;	
+}
+
+//node stroke style rules
+function getNodeStrokeStyle(d, node, nodeNeighbors){
+	if (!d.visible){
+		return outOfDateNode;
+	}
+	else
+	if (nodeFocus==true){
+		if (activeNode== node.index){ 
+			return focusNodeStroke;
+		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
+			return relatedNodeStroke;	
+		}
+		else return inactiveNodeStroke;		
+	}
+	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
+		return focusNodeStroke;
+	}
+	else return inactiveNodeStroke;		
+
+}	
