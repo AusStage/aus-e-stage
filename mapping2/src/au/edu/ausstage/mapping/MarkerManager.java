@@ -92,9 +92,69 @@ public class MarkerManager {
 				+ "AND latitude IS NOT NULL";
 		}
 		
-		//declare additional helper variables
-		VenueList venues = new VenueList();
-		Venue     venue  = null;
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			return getEmptyArray();
+		}
+		
+		// build the dataset using internal objects
+		// build a list of venues
+		ResultSet resultSet = results.getResultSet();
+		VenueList venues = buildVenueList(resultSet);
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;		
+		
+		// check what was returned
+		if(venues == null) {
+			return getEmptyArray();
+		}
+		
+		// build and return the JSON data
+		return venueListToJson(venues);
+	}
+	
+	/**
+	 * A public method to build the marker data for a suburb
+	 *
+	 * @param suburbId the unique identifier of the suburb
+	 *
+	 * @return         json encoded data as a string
+	 */
+	public String getSuburbMarkers(String suburbId) {
+	
+		// declare helper variables
+		String[] sqlParameters = null;
+	
+		// double check the parameters
+		if(suburbId.indexOf("_") == -1) {
+			throw new IllegalArgumentException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+		} else {
+			sqlParameters = suburbId.split("_");
+			if(sqlParameters.length > 2) {
+				throw new IllegalArgumentException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
+			} else {
+				if(InputUtils.isValid(sqlParameters[0], LookupServlet.VALID_STATES) == false) {
+					throw new IllegalArgumentException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+				}
+			}
+		}
+		
+		// tidy up the parameters
+		sqlParameters[1] = sqlParameters[1].toLowerCase();
+		
+		// build the SQL
+		String sql = "SELECT v.venueid, v.venue_name, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				   + "FROM venue v, states s "
+				   + "WHERE v.state = ? "
+				   + "AND LOWER(v.suburb) = ? "
+				   + "AND v.state = s.stateid "
+				   + "AND latitude IS NOT NULL ";
 		
 		// get the data
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
@@ -107,7 +167,48 @@ public class MarkerManager {
 		// build the dataset using internal objects
 		// build a list of venues
 		ResultSet resultSet = results.getResultSet();
+		VenueList venues = buildVenueList(resultSet);
 		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;		
+		
+		// check what was returned
+		if(venues == null) {
+			return getEmptyArray();
+		}
+		
+		// build and return the JSON data
+		return venueListToJson(venues);
+	}
+	
+	/**
+	 * A public method to build marker data for a venue or list of venues
+	 *
+	 * @param venueId the unique venue ID or a list of venue ids
+	 *
+	 * @return        json encoded data as a string
+	 */
+	public String getVenueMarkers(String venueId) {
+		
+		//debug code
+		return "";
+	}
+	
+	/**
+	 * A private method to build a venueList given a resultSet
+	 *
+	 * @param resultSet the result set to process
+	 *
+	 * @return          a completed venueList
+	 */
+	private VenueList buildVenueList(ResultSet resultSet) {
+		
+		// declare helper variables
+		VenueList venues = new VenueList();
+		Venue     venue  = null;
+	
 		try {
 			// loop through the resultset
 			while (resultSet.next()) {
@@ -129,43 +230,11 @@ public class MarkerManager {
 			}
 		
 		} catch (java.sql.SQLException ex) {
-			return getEmptyArray();
+			return null;
 		}
 		
-		// play nice and tidy up
-		resultSet = null;
-		results.tidyUp();
-		results = null;
-		
-		
-		// build and return the JSON data
-		return venueLisToJson(venues);
-	}
-	
-	/**
-	 * A public method to build the marker data for a suburb
-	 *
-	 * @param suburbId the unique identifier of the suburb
-	 *
-	 * @return         json encoded data as a string
-	 */
-	public String getSuburbMarkers(String suburbId) {
-		
-		//debug code
-		return "";
-	}
-	
-	/**
-	 * A public method to build marker data for a venue or list of venues
-	 *
-	 * @param venueId the unique venue ID or a list of venue ids
-	 *
-	 * @return        json encoded data as a string
-	 */
-	public String getVenueMarkers(String venueId) {
-		
-		//debug code
-		return "";
+		// if we get this far everything worked as expected
+		return venues;	
 	}
 	
 	/**
@@ -176,7 +245,7 @@ public class MarkerManager {
 	 * @return       the JSON encoded string 
 	 */
 	@SuppressWarnings("unchecked") 
-	private String venueLisToJson(VenueList venues) {
+	private String venueListToJson(VenueList venues) {
 	
 		// declare helper variables
 		JSONArray  list   = new JSONArray();
@@ -221,6 +290,17 @@ public class MarkerManager {
 	private String getEmptyArray() {
 		JSONArray list = new JSONArray();
 		return list.toString();
+	}
+	
+	/**
+	 * A private method to return an empty JSON object
+	 *
+	 * @return an empty JSON object as a string
+	 */
+	@SuppressWarnings("unchecked")
+	private String getEmptyArray() {
+		JSONObject object = new JSONObject();
+		return object.toString();
 	}
 	
 	
