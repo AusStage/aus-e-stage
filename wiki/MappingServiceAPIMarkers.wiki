@@ -17,7 +17,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 == Parameters ==
 
 || *Name*   || *Possible Values* || *Optional* || *Default* ||
-|| type     || state, suburb, venue || No || ||
+|| type     || state, suburb, venue, organisation, contributor || No || ||
 || id       || Unique contributor or organisation id || No || ||
 || callback || function name to use for a JSONP request || Yes || || 
 
