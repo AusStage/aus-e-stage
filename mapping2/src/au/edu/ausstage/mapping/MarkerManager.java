@@ -24,8 +24,7 @@ import au.edu.ausstage.mapping.types.*;
 
 // import additional java packages / classes
 import java.sql.ResultSet;
-import java.util.Set;
-import java.util.Iterator;
+import java.util.*;
 import org.json.simple.*;
 
 /**
@@ -343,7 +342,8 @@ public class MarkerManager {
 				+ "AND oel.eventid = e.eventid "
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.state = s.stateid "
-				+ "AND latitude IS NOT NULL ";
+				+ "AND latitude IS NOT NULL "
+				+ "ORDER BY o.organisationid";
 		}
 		
 		// get the data
@@ -357,20 +357,93 @@ public class MarkerManager {
 		// build the dataset using internal objects
 		// build a list of venues
 		ResultSet resultSet = results.getResultSet();
-		VenueList venues = buildVenueList(resultSet);
 		
+		HashMap<Integer, VenueList> organisations = new HashMap<Integer, VenueList>();
+		
+		VenueList  venues = null;
+		Venue      venue  = null;
+		JSONArray  list   = new JSONArray();
+		JSONObject object;
+		Integer    index;
+		
+		try {
+			// loop through the resultset
+			while (resultSet.next()) {
+			
+				if(organisations.containsKey(Integer.parseInt(resultSet.getString(1))) == true) {
+					venues = organisations.get(Integer.parseInt(resultSet.getString(1)));
+				} else {
+					venues = new VenueList();
+					organisations.put(Integer.parseInt(resultSet.getString(1)), venues);
+				}
+			
+				// build a new venue object
+				venue = new Venue(resultSet.getString(2));
+				
+				// add the other information
+				venue.setName(resultSet.getString(3));
+				venue.setSuburb(resultSet.getString(4));
+				venue.setState(resultSet.getString(5));
+				venue.setPostcode(resultSet.getString(6));
+				venue.setLatitude(resultSet.getString(7));
+				venue.setLongitude(resultSet.getString(8));
+				venue.setUrl(LinksManager.getVenueLink(resultSet.getString(2)));
+				
+				// add the venue to the list
+				venues.addVenue(venue);			
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			return null;
+		}
+				
 		// play nice and tidy up
 		resultSet = null;
 		results.tidyUp();
 		results = null;	
 		
 		// check what was returned
-		if(venues == null) {
+		if(organisations.size() == 0) {
 			return getEmptyArray();
 		}
 		
-		// build and return the JSON data
-		return venueListToJson(venues);		
+		// loop through the organisations map
+		Collection keys     = organisations.keySet();
+		Iterator   iterator = keys.iterator();
+		
+		while(iterator.hasNext()) {
+			
+			// get the index
+			index = (Integer)iterator.next();
+			
+			// get the venue list
+			venues = (VenueList)organisations.get(index);
+			
+			// create a new object
+			object = new JSONObject();
+			
+			// add the index and the venues
+			object.put("id", index);
+			object.put("venues", venueListToJsonArray(venues));
+			
+			// add this object to the list
+			list.add(object);
+		}
+		
+		// return the list
+		return list.toString();
+	}
+	
+	/**
+	 * A public method to build marker data for a venue or list of venues
+	 *
+	 * @param contributorId  the unique venue ID or a list of venue ids
+	 *
+	 * @return               json encoded data as a string
+	 */
+	public String getContributorMarkers(String contributorId) {
+		//debug code
+		return "";
 	}
 	
 	/**
@@ -425,6 +498,21 @@ public class MarkerManager {
 	private String venueListToJson(VenueList venues) {
 	
 		// declare helper variables
+		JSONArray  list   = venueListToJsonArray(venues);
+		return list.toString();
+	}
+	
+	/**
+	 * A private method to build a JSON array of venue objects using a VenueList
+	 *
+	 * @param venues an instance of the VenueList object
+	 *
+	 * @return       the JSON encoded string 
+	 */
+	@SuppressWarnings("unchecked") 
+	private JSONArray venueListToJsonArray(VenueList venues) {
+	
+		// declare helper variables
 		JSONArray  list   = new JSONArray();
 		JSONObject object = null;
 		Venue      venue  = null;
@@ -444,8 +532,10 @@ public class MarkerManager {
 		}
 		
 		// return the JSON encoded string
-		return list.toString();
+		return list;
 	}
+	
+	
 	
 	/**
 	 * A private method to return the JSON version of a venue object
