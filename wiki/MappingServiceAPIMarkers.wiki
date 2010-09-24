@@ -43,7 +43,7 @@ For all other task types the id parameter is a comma separated list of unique id
 
 _Note: It is not possible to mix types of ids in a single call to the API. Therefore if the type is set to venue only venue ids must be specified, conversely if the type is set to contributor only contributor ids must be specified._
 
-== Sample Output == 
+== Sample Output (state, suburb, venue) == 
 
 {{{
 [ { "id" : "184",
@@ -71,4 +71,103 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=697"
   }
 ]
+}}}
+
+== Sample Output (organisation, contributor) ==
+
+{{{
+[ { "id" : 102,
+    "venues" : [ { "id" : "302",
+          "latitude" : "-34.919681",
+          "longitude" : "138.597095",
+          "name" : "The Space",
+          "postcode" : "5000",
+          "suburb" : "Adelaide",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=302"
+        },
+        { "id" : "555",
+          "latitude" : "-35.281282",
+          "longitude" : "149.130596",
+          "name" : "Canberra Theatre ",
+          "postcode" : "2608",
+          "suburb" : "Civic Square",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=555"
+        },
+        { "id" : "4569",
+          "latitude" : "37.984016",
+          "longitude" : "23.747066",
+          "name" : "Lycabettus Theatre",
+          "postcode" : null,
+          "suburb" : "Athens",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4569"
+        },
+        { "id" : "13375",
+          "latitude" : "51.4288889",
+          "longitude" : "5.4847222",
+          "name" : "Stadsschouwburg Eindhoven",
+          "postcode" : null,
+          "suburb" : "Eindhoven, Netherlands",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=13375"
+        },
+        ...
+        { "id" : "614",
+          "latitude" : "-34.4264860",
+          "longitude" : "150.8983750",
+          "name" : "Illawarra Performing Arts Centre",
+          "postcode" : "2500",
+          "suburb" : "Wollongong",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=614"
+        }
+      ]
+  },
+  { "id" : 11898,
+    "venues" : [ { "id" : "4686",
+          "latitude" : "51.218667",
+          "longitude" : "4.416022",
+          "name" : "Antwerpen Opernhaus",
+          "postcode" : null,
+          "suburb" : "Antwerpen",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4686"
+        },
+        { "id" : "4677",
+          "latitude" : "50.8443176",
+          "longitude" : "4.3593582",
+          "name" : "Palais des Beaux Arts",
+          "postcode" : null,
+          "suburb" : "Brussels",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4677"
+        },
+        { "id" : "306",
+          "latitude" : "-34.919681",
+          "longitude" : "138.597095",
+          "name" : "The Playhouse",
+          "postcode" : "5000",
+          "suburb" : "Adelaide",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=306"
+        },
+        ...
+        { "id" : "4688",
+          "latitude" : "56.1518",
+          "longitude" : "10.200697",
+          "name" : "Musikhuset Aarhus",
+          "postcode" : null,
+          "suburb" : "Denmark",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4688"
+        }
+      ]
+  },
+  { "id" : 32347,
+    "venues" : [ { "id" : "10270",
+          "latitude" : "-34.921044",
+          "longitude" : "138.60502",
+          "name" : "Adelaide University",
+          "postcode" : "5005",
+          "suburb" : "Adelaide",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10270"
+        } ]
+  }
+]
+
+
+
 }}}
