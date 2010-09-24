@@ -355,26 +355,59 @@ public class MarkerManager {
 		}
 		
 		// build the dataset using internal objects
-		// build a list of venues
 		ResultSet resultSet = results.getResultSet();
+		HashMap<Integer, VenueList> venueListMap = buildVenueListMap(resultSet);
 		
-		HashMap<Integer, VenueList> organisations = new HashMap<Integer, VenueList>();
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;	
 		
+		// check what was returned
+		if(venueListMap.size() == 0) {
+			return getEmptyArray();
+		}		
+		
+		// return the list
+		return buildVenueListMapJSONArray(venueListMap).toString();
+	}
+	
+	/**
+	 * A public method to build marker data for a venue or list of venues
+	 *
+	 * @param contributorId  the unique venue ID or a list of venue ids
+	 *
+	 * @return               json encoded data as a string
+	 */
+	public String getContributorMarkers(String contributorId) {
+		//debug code
+		return "";
+	}
+	
+	/**
+	 * A private method to build a venue list map given a resultset
+	 * Assumes the first column is the index to the map
+	 *
+	 * @param resultSet the result set to proces
+	 *
+	 * @return          a completed map
+	 */
+	private HashMap<Integer, VenueList> buildVenueListMap(ResultSet resultSet) {
+	
+		// declare helper variables
+		HashMap<Integer, VenueList> venueListMap = new HashMap<Integer, VenueList>();
 		VenueList  venues = null;
 		Venue      venue  = null;
-		JSONArray  list   = new JSONArray();
-		JSONObject object;
-		Integer    index;
 		
 		try {
 			// loop through the resultset
 			while (resultSet.next()) {
 			
-				if(organisations.containsKey(Integer.parseInt(resultSet.getString(1))) == true) {
-					venues = organisations.get(Integer.parseInt(resultSet.getString(1)));
+				if(venueListMap.containsKey(Integer.parseInt(resultSet.getString(1))) == true) {
+					venues = venueListMap.get(Integer.parseInt(resultSet.getString(1)));
 				} else {
 					venues = new VenueList();
-					organisations.put(Integer.parseInt(resultSet.getString(1)), venues);
+					venueListMap.put(Integer.parseInt(resultSet.getString(1)), venues);
 				}
 			
 				// build a new venue object
@@ -396,20 +429,32 @@ public class MarkerManager {
 		} catch (java.sql.SQLException ex) {
 			return null;
 		}
-				
-		// play nice and tidy up
-		resultSet = null;
-		results.tidyUp();
-		results = null;	
 		
-		// check what was returned
-		if(organisations.size() == 0) {
-			return getEmptyArray();
-		}
-		
-		// loop through the organisations map
-		Collection keys     = organisations.keySet();
+		return venueListMap;	
+	}
+	
+	/**
+	 * A private method to take a venueListMap and convert it into a JSONArray of objects
+	 *
+	 * @param venueListMap the venue list map to process
+	 *
+	 * @return             the JSONArray representing the map
+	 */
+	@SuppressWarnings("unchecked") 
+	private JSONArray buildVenueListMapJSONArray(HashMap<Integer, VenueList> venueListMap) {
+	
+		// declare helper variables
+		Collection keys     = venueListMap.keySet();
 		Iterator   iterator = keys.iterator();
+		
+		JSONArray list = new JSONArray();
+		JSONObject object;
+		Integer index;
+		
+		VenueList  venues = null;
+		Venue      venue  = null;
+		
+		// loop through the map
 		
 		while(iterator.hasNext()) {
 			
@@ -417,7 +462,7 @@ public class MarkerManager {
 			index = (Integer)iterator.next();
 			
 			// get the venue list
-			venues = (VenueList)organisations.get(index);
+			venues = (VenueList)venueListMap.get(index);
 			
 			// create a new object
 			object = new JSONObject();
@@ -430,21 +475,8 @@ public class MarkerManager {
 			list.add(object);
 		}
 		
-		// return the list
-		return list.toString();
-	}
-	
-	/**
-	 * A public method to build marker data for a venue or list of venues
-	 *
-	 * @param contributorId  the unique venue ID or a list of venue ids
-	 *
-	 * @return               json encoded data as a string
-	 */
-	public String getContributorMarkers(String contributorId) {
-		//debug code
-		return "";
-	}
+		return list;	
+	}	 
 	
 	/**
 	 * A private method to build a venueList given a resultSet
