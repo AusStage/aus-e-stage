@@ -35,6 +35,7 @@ public class Venue implements Comparable<Venue>{
 	// declare private variables
 	private String id = null;
 	private String name = null;
+	private String street = null;
 	private String suburb = null;
 	private String state = null;
 	private String postcode = null;
@@ -458,6 +459,14 @@ public class Venue implements Comparable<Venue>{
 	
 	public void setSuburb(String value) {
 		suburb = value;
+	}
+	
+	public String getStreet() {
+		return street;
+	}
+	
+	public void setStreet(String value) {
+		street = value;
 	}
 	
 	public String getPostcode() {
