@@ -82,6 +82,7 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "138.597095",
           "name" : "The Space",
           "postcode" : "5000",
+          "street" : "Adelaide Festival Centre,King William Street",
           "suburb" : "Adelaide",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=302"
         },
@@ -90,6 +91,7 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "149.130596",
           "name" : "Canberra Theatre ",
           "postcode" : "2608",
+          "street" : "London Circuit",
           "suburb" : "Civic Square",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=555"
         },
@@ -98,6 +100,7 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "23.747066",
           "name" : "Lycabettus Theatre",
           "postcode" : null,
+          "street" : null,
           "suburb" : "Athens",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4569"
         },
@@ -106,15 +109,26 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "5.4847222",
           "name" : "Stadsschouwburg Eindhoven",
           "postcode" : null,
+          "street" : null,
           "suburb" : "Eindhoven, Netherlands",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=13375"
         },
         ...
+       { "id" : "1414",
+          "latitude" : "-27.466764",
+          "longitude" : "153.023776",
+          "name" : "SGIO Theatre",
+          "postcode" : "4000",
+          "street" : "179 Turbot Street",
+          "suburb" : "Brisbane",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=1414"
+        },
         { "id" : "614",
           "latitude" : "-34.4264860",
           "longitude" : "150.8983750",
           "name" : "Illawarra Performing Arts Centre",
           "postcode" : "2500",
+          "street" : "32 Burelli Street,Wollongong 2500,Postal Address:,GPO Box 786,Wollongong East NSW 2520",
           "suburb" : "Wollongong",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=614"
         }
@@ -126,6 +140,7 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "4.416022",
           "name" : "Antwerpen Opernhaus",
           "postcode" : null,
+          "street" : null,
           "suburb" : "Antwerpen",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4686"
         },
@@ -134,16 +149,9 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "4.3593582",
           "name" : "Palais des Beaux Arts",
           "postcode" : null,
+          "street" : "Ravensteinstraat 23 Rue Ravenstein",
           "suburb" : "Brussels",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4677"
-        },
-        { "id" : "306",
-          "latitude" : "-34.919681",
-          "longitude" : "138.597095",
-          "name" : "The Playhouse",
-          "postcode" : "5000",
-          "suburb" : "Adelaide",
-          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=306"
         },
         ...
         { "id" : "4688",
@@ -151,6 +159,7 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "10.200697",
           "name" : "Musikhuset Aarhus",
           "postcode" : null,
+          "street" : "Thomas Jensens Alle",
           "suburb" : "Denmark",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4688"
         }
@@ -162,12 +171,12 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
           "longitude" : "138.60502",
           "name" : "Adelaide University",
           "postcode" : "5005",
+          "street" : "North Terrace",
           "suburb" : "Adelaide",
           "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10270"
         } ]
   }
 ]
-
 
 
 }}}
