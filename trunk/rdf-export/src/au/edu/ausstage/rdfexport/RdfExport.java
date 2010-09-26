@@ -31,8 +31,8 @@ import au.edu.ausstage.utils.*;
 public class RdfExport {
 
 	// Version information 
-	private static final String VERSION    = "1.1.0";
-	private static final String BUILD_DATE = "2010-08-25";
+	private static final String VERSION    = "1.1.1";
+	private static final String BUILD_DATE = "2010-09-27";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
@@ -48,7 +48,7 @@ public class RdfExport {
 	public static void main(String args[]) {
 	
 		// output some basic information
-		System.out.println("AusStage RdfExport - Export AusStage data into a variety of RDF related data formats");
+		System.out.println("AusStage RdfExport - Export AusStage data into a variety of RDF related formats");
 		System.out.println("Version: " + VERSION + " Build Date: " + BUILD_DATE);
 		System.out.println("More Info: " + INFO_URL + "\n");
 		
