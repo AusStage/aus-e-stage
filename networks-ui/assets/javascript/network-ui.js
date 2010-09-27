@@ -401,9 +401,7 @@ function setAllFunctions(functionList){
 	
 	$("#functions").multiselect("destroy");
 		
-	$("#functions").multiselect({
-		header: "Choose options below"
-	});
+	$("#functions").multiselect({});
 }
 
 
@@ -648,10 +646,10 @@ function clearInfoWindow(info){
 	function findMatch(arrayOne, arrayTwo){
 		for(i=0; i<arrayOne.length;i++){
 			if (contains(arrayTwo, arrayOne[i])){
-				return true;
+				return i;
 			}	
 		}
-		return false;
+		return null;
 	}
 
 
@@ -663,7 +661,9 @@ var vis = null;
 //
 var functionsToHighlight = [""];
 // define variables for colour options.
-    
+	// legend colours for faceted browsing
+	functionColours = pv.Colors.category19();
+
     //backgound for the graph	
 	var bgColour = "white";
     		
@@ -859,14 +859,22 @@ function resetDateRangeVisibility(){
 		}
 	}
 
-//faceted 
+//resets the checked values for faceted browsing 
 function refreshNetworkForBrowse(selectedFunctions){
+	var html = "";
+	$("#legend").empty();
+	//reset the array
 	for (i = 0; i < functionsToHighlight.length; i++){
 		functionsToHighlight[i] = "";
 	}
+	//set the array with chosen values
 	for (i = 0; i < selectedFunctions.length; i++){
 		functionsToHighlight[i] = selectedFunctions[i].value;
+		//build the legend
+		html+= "<tr> <td bgcolor="+functionColours(i).color+"> &nbsp </td><td>"+functionsToHighlight[i]+"</td></tr>";
+
 		}
+		$("#legend").append(html);
 	}
 
 //functions to set the colour and style of nodes and links	
@@ -904,9 +912,11 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 		return outOfDateNode;
 	}
 	else
-	if (findMatch(functionsToHighlight, d.functions)){ 
-		return highlightNodeFill;
-	}
+	var testing = findMatch(functionsToHighlight, d.functions);
+	if (testing != null){return functionColours(testing);}
+//	if (findMatch(functionsToHighlight, d.functions)){ 
+//		return highlightNodeFill;
+//	}
 	else
 	if (nodeFocus==true){
 //		for (i = 0; i < functionsToHighlight.length; i++)
