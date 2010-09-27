@@ -106,6 +106,44 @@ public class LookupManager {
 		
 		// return the data
 		return lookup.getVenueListBySuburb(suburbName);
-	} // end the getVenueListBySuburb method	 
+	} // end the getVenueListBySuburb method
+	
+	/**
+	 * A method to lookup the details of an organisation
+	 *
+	 * @param id the unique identifier of the organisation
+	 *
+	 * @ return a JSON encoded string containing the data
+	 */
+	public String getOrganisation(String id) {
+	
+		// validate the input
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter is required to be a valid integer");
+		}
+		
+		SearchManager search = new SearchManager(database);
+		
+		return search.doOrganisationSearch("id", id, null, null, null);
+	}
+	
+	/**
+	 * A method to lookup the details of a contributor
+	 *
+	 * @param id the unique identifier of the contributor
+	 *
+	 * @ return a JSON encoded string containing the data
+	 */
+	public String getContributor(String id) {
+	
+		// validate the input
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter is required to be a valid integer");
+		}
+		
+		SearchManager search = new SearchManager(database);
+		
+		return search.doContributorSearch("id", id, null, null, null);
+	}
 	
 } // end class definition

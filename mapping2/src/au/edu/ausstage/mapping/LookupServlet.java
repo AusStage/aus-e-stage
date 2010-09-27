@@ -36,7 +36,7 @@ public class LookupServlet extends HttpServlet {
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list"};
+	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list", "organisation", "contributor"};
 	private final String[] FORMAT_TYPES       = {"json"};
 	public static final String[] VALID_STATES = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
@@ -138,6 +138,12 @@ public class LookupServlet extends HttpServlet {
 		} else if(taskType.equals("suburb-venue-list") == true) {
 			// lookup a list of venues in a specific state
 			results = lookup.getVenueListBySuburb(id);
+		} else if(taskType.equals("organisation") == true) {
+			// lookup a list of venues in a specific state
+			results = lookup.getOrganisation(id);
+		} else if(taskType.equals("contributor") == true) {
+			// lookup a list of venues in a specific state
+			results = lookup.getContributor(id);
 		}
 		
 		// check to see if this is a jsonp request
