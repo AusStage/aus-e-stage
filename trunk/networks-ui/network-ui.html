@@ -17,14 +17,17 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
-    <script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>    
+    <script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>  
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-min.js"></script>	
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.js"></script>	
 
 	<!-- helper files -->
-    <script type="text/javascript" src="assets/javascript/network-ui.js"></script>
-    <script type="text/javascript" src="assets/javascript/protovis-ui.js"></script>    
+    <script type="text/javascript" src="assets/javascript/network-ui.js"></script>   
 
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.css" />	
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
+	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
 
     <!-- Input file. JSON format. -->
 <!--    <script type="text/javascript" src="smlNetworkEx.js"></script>-->
@@ -46,7 +49,7 @@
 
 <div id="sidebar">
 
-<div id="load_network_form">
+	<div id="load_network_form">
 		  <form name="search" action="" align=right>
 		    <label for="id" id="id_label">ID</label>
 		     <input type="text" name="id" id="id" size="10" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/><br><label for="name" id="name_label">Name</label>
@@ -55,31 +58,36 @@
 		      <input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
 		      <input type="submit" name="submit" class="button" id="network_btn" value="View" />	             
 		  </form>
-		</div>
+	</div>
 
-	<ul>
-		<li><a id="contName" href=""></a></li>
-		<li id="contFunct"></li>
-		<li id="degCon"></li>
-	</ul>
+	<div id="network_details_div">
+		<ul>
+			<li><a id="contName" href=""></a></li>
+			<li id="contFunct"></li>
+			<li id="degCon"></li>
+		</ul>
 
-	<ul>
-		<li><a id="collab1" href=""></a></li>
-		<li><a id="collab2" href=""></a></li>
-		<li id="noOfCollab"></li>
-		<li id="eventRange"></li>
-	</ul>
+		<ul>
+			<li><a id="collab1" href=""></a></li>
+			<li><a id="collab2" href=""></a></li>
+			<li id="noOfCollab"></li>
+			<li id="eventRange"></li>
+		</ul>
 	
-	<ul>
-		<li id="networkTitle"></li>
-		<li id="networkCentreTitle"></li>
-		<li><a id="networkCentre" href=""></a></li>
-		<li id="nodeCount"></li>
-		<li id="edgeCount"></li>
-		<li id="eventCount"></li>
-		<li id="diameter"></li>
-	</ul>
+		<ul>
+			<li id="networkTitle"></li>
+			<li id="networkCentreTitle"></li>
+			<li><a id="networkCentre" href=""></a></li>
+			<li id="nodeCount"></li>
+			<li id="edgeCount"></li>
+			<li id="eventCount"></li>
+			<li id="diameter"></li>
+		</ul>
+	</div>
+	
 </div>
+
+
 	
 	<div id="main">
 	
@@ -90,22 +98,45 @@
 		</div>
 
 
-		
-		<div id="date_range_div" align=right>
+		<div id="advanced_search_div">
+			<div id="date_range_div" align=right>
 
-			<form name="dateRanges">
-				<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
-				<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
+				<form name="dateRanges">
+					<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
+					<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
 			
-					<select name="startDate" id="startDate">
-					</select>
+						<select name="startDate" id="startDate">
+						</select>
 			
-					<select name="endDate" id="endDate">
-					</select>	
-					<br>
-					<input type="submit" name="submit" class="button" id="refresh_date_btn" value="refresh" />												
-			</form>
+						<select name="endDate" id="endDate">
+						</select>	
+						<br>
+						<input type="submit" name="submit" class="button" id="refresh_btn" value="refresh" />												
+				</form>
 			
+			</div>
+			<div id="faceted_browsing_div">
+			Faceted Browsing Options
+				<table border=1>
+					<tr>
+						<th>Contributor Functions</th>
+					</tr>
+					<tr>
+						<td>
+							<select name="functions" id="functions" multiple="multiple" >
+							</select>
+						</td>
+					</tr>
+				</table>
+				<table id="legend" border=1>
+				<td>
+				stuff goes here
+				</td>
+				</table>
+				<br>
+				<br>
+				<br>
+			</div>
 		</div>
 </div>
 

@@ -14,6 +14,9 @@ $(document).ready(function() {
 	$("select#endDate").hide();
 	$("#date_range_div").hide();
 	
+	//hide the faceted browsing
+	$("#faceted_browsing_div").hide();
+	
 	//clear search field values
 	$("#id").val("");
 	$("#name").val("");
@@ -22,7 +25,7 @@ $(document).ready(function() {
 
 
 //search area ////////////////////////////////////////////////////////////////////////////
-// define lookup functionality /
+// define lookup functionality and all the buttons for search and display /
 $(document).ready(function() {
 
 	//define the lookup button
@@ -132,12 +135,15 @@ $(document).ready(function() {
      	return false;
     });
     
-    //set up date range refresh button
-    $("#refresh_date_btn").click(function() {
+    //set up refresh button
+    $("#refresh_btn").click(function() {
     	$("#startDateStore").val( $("select#startDate").val()) ;
     	$("#endDateStore").val( $("select#endDate").val()) ;  
-    	
-		refreshNetworkForDateRange();
+
+  	
+		refreshNetwork();
+
+
 	    return false;
     });
 
@@ -323,13 +329,20 @@ function findAndDisplayContributorNetwork(id){
 				var dateRange = findDateRange(contributors.edges);
 
 				//set the date ranges for the slider
-				setDateRanges(dateRange);				
+				setDateRanges(dateRange);		
+				
+				//find all functions for faceted browsing
+				setAllFunctions(findAllFunctions(contributors.nodes));		
+				
+				//display the faceted Options
+				$("#faceted_browsing_div").show();
 				
 				//load the graph
 				reloadNetwork("protovis")
 
 				//hide the loading bar				
 				closeWaitingDialog();
+
 				//update the side panel with contributor infomation
 				displayAllInfo(contributors.nodes.length-1,contributors);
 				
@@ -338,6 +351,61 @@ function findAndDisplayContributorNetwork(id){
 				
 			});
 	}
+
+//Faceted Browsing operations.//////////////////////////
+
+//get all functions from the contributor list.
+function findAllFunctions(nodeList){
+	var functionList = [""];
+	var funct;
+	var functIndex = 0;
+
+	//loop through the nodelist.
+	for (i=0; i<nodeList.length; i++){
+
+		//loop through the function list. 
+		for (x=0; x<nodeList[i].functions.length; x++){	
+
+			//if - this function is not in function list, add it to the function list.
+			funct = nodeList[i].functions[x];
+			
+			if (contains(functionList, funct ) == false){
+				functionList[functIndex] = funct;
+				functIndex++;
+				}
+			//else do nothing
+		}
+	}
+	return functionList;
+}
+
+//set the select box with functions
+function setAllFunctions(functionList){
+
+	var functionSelect = document.getElementById("functions");	
+	
+	//clear the select list
+	while (functionSelect.hasChildNodes()) {
+ 			 functionSelect.removeChild(functionSelect.firstChild);
+		}
+	
+	for(i = 0; i<functionList.length; i++){
+		
+		var functionOption = document.createElement("option");					
+		
+		functionOption.value = (functionList[i]);
+		
+		functionOption.appendChild(document.createTextNode(functionList[i]));							
+		functionSelect.appendChild(functionOption);
+	}	
+	
+	$("#functions").multiselect("destroy");
+		
+	$("#functions").multiselect({
+		header: "Choose options below"
+	});
+}
+
 
 //findDateRange - traverses the firstdate of contributors and gets the largest and smallest values to become our date range.
 function findDateRange(edgeList){
@@ -356,31 +424,7 @@ function findDateRange(edgeList){
 	}
 
 
-//loadNodeNeighbors takes the json data and loads each node as the first value in a 3d array. Any 
-// associated nodes are then added into the second array. 
-function loadNodeNeighbors(contributors){
-				
-	var nodeHash = new Array();
-	var firstIndex=0;
-	for(firstIndex; firstIndex < contributors.nodes.length; firstIndex++){
-				
-		var secondIndex = 0;	
-		nodeHash[firstIndex] = new Array();
-				
-		for(var x=0; x<contributors.edges.length; x++){
-			if (contributors.edges[x].source == firstIndex){	
-				nodeHash[firstIndex][secondIndex]=contributors.edges[x].target;
-				secondIndex++;						
-			}
-			if (contributors.edges[x].target == firstIndex){
-				nodeHash[firstIndex][secondIndex]=contributors.edges[x].source;
-				secondIndex++;
-			}
-		}
-	}
-	return nodeHash;
-}
-
+// sets the slider values.
 function setDateRanges(dateRange){
 		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 		var days = [31,28,31,30,31,30,31,31,30,31,30,31]
@@ -457,6 +501,32 @@ function setDateRanges(dateRange){
 		
 }
 
+//loadNodeNeighbors takes the json data and loads each node as the first value in a 3d array. Any 
+// associated nodes are then added into the second array. 
+function loadNodeNeighbors(contributors){
+				
+	var nodeHash = new Array();
+	var firstIndex=0;
+	for(firstIndex; firstIndex < contributors.nodes.length; firstIndex++){
+				
+		var secondIndex = 0;	
+		nodeHash[firstIndex] = new Array();
+				
+		for(var x=0; x<contributors.edges.length; x++){
+			if (contributors.edges[x].source == firstIndex){	
+				nodeHash[firstIndex][secondIndex]=contributors.edges[x].target;
+				secondIndex++;						
+			}
+			if (contributors.edges[x].target == firstIndex){
+				nodeHash[firstIndex][secondIndex]=contributors.edges[x].source;
+				secondIndex++;
+			}
+		}
+	}
+	return nodeHash;
+}
+
+
 
 //SIDE PANEL information display functions
 //  display all info
@@ -475,7 +545,7 @@ function setDateRanges(dateRange){
     	}
     
     //displays the network statistics in the side panel
-    function updateNetworkInfo(contributors){
+function updateNetworkInfo(contributors){
     	var networkDetails = document.getElementById("networkTitle");
 	    	networkDetails.innerHTML = "<H3> Network Properties </H3>";
     	networkDetails = document.getElementById("nodeCount");
@@ -487,10 +557,10 @@ function setDateRanges(dateRange){
     	networkDetails = document.getElementById("diameter");
     		networkDetails.innerHTML = "<b> Diameter: </b>Undefined.";
 
-    	}
+}
     
     //displays information on the selected contributor in the side panel
-    function updateInfoWindow(activeNode, contributors){
+function updateInfoWindow(activeNode, contributors){
   
     //get contributor functions
     	var functionList = "";
@@ -509,11 +579,35 @@ function setDateRanges(dateRange){
     //set the functions
     	infoDetails = document.getElementById("contFunct");
     	infoDetails.innerHTML = "<br><b>Functions:</b><br>"+functionList;		
-    	}
+}
+
+	//displays information on the selected edge in the side panel    
+function updateInfoWindowEdge(edgeInformation){
+
+		//clear the infoWindow
+			clearInfoWindow("node");
+
+		//set collaborator information
+	    	var infoDetails = document.getElementById("collab1");
+    		infoDetails.innerHTML = "<br><b>"+edgeInformation.sourceNode.nodeName + " ("+edgeInformation.sourceNode.id+")</b>";
+    		infoDetails.href = edgeInformation.sourceNode.nodeUrl;
+    		var infoDetails = document.getElementById("collab2");
+    		infoDetails.innerHTML = "<b>"+edgeInformation.targetNode.nodeName + " ("+edgeInformation.targetNode.id+")</b>";
+    		infoDetails.href = edgeInformation.targetNode.nodeUrl;
+
+		//date range
+			infoDetails = document.getElementById("eventRange");
+    		infoDetails.innerHTML = "<br><b>Date Range: </b><br>" + edgeInformation.firstDate + " to " + edgeInformation.lastDate;
+    		
+		//set the edge weight
+			infoDetails = document.getElementById("noOfCollab");
+    		infoDetails.innerHTML = "<br><b>Number of collaborations: </b>" + edgeInformation.value;
+
+    }
 
 
 	//clear the side panel of edge or contributor information
-	function clearInfoWindow(info){
+function clearInfoWindow(info){
 		if (info == "node"){
 			
 	    //remove the contributor name
@@ -537,34 +631,7 @@ function setDateRanges(dateRange){
 			infoDetails = document.getElementById("eventRange");
     		infoDetails.innerHTML = " ";    		
 		}
-	}
-    
-
-	//displays information on the selected edge in the side panel    
-    function updateInfoWindowEdge(edgeInformation){
-
-		//clear the infoWindow
-			clearInfoWindow("node");
-
-		//set collaborator information
-	    	var infoDetails = document.getElementById("collab1");
-    		infoDetails.innerHTML = "<br><b>"+edgeInformation.sourceNode.nodeName + " ("+edgeInformation.sourceNode.id+")</b>";
-    		infoDetails.href = edgeInformation.sourceNode.nodeUrl;
-    		var infoDetails = document.getElementById("collab2");
-    		infoDetails.innerHTML = "<b>"+edgeInformation.targetNode.nodeName + " ("+edgeInformation.targetNode.id+")</b>";
-    		infoDetails.href = edgeInformation.targetNode.nodeUrl;
-
-		//date range
-			infoDetails = document.getElementById("eventRange");
-    		infoDetails.innerHTML = "<br><b>Date Range: </b><br>" + edgeInformation.firstDate + " to " + edgeInformation.lastDate;
-    		
-		//set the edge weight
-			infoDetails = document.getElementById("noOfCollab");
-    		infoDetails.innerHTML = "<br><b>Number of collaborations: </b>" + edgeInformation.value;
-
-    }
-    
-    
+}
     
 //small helper functions.
  	
@@ -578,38 +645,66 @@ function setDateRanges(dateRange){
   		return false;
 	}
 	
+	function findMatch(arrayOne, arrayTwo){
+		for(i=0; i<arrayOne.length;i++){
+			if (contains(arrayTwo, arrayOne[i])){
+				return true;
+			}	
+		}
+		return false;
+	}
+
+
+//Protovis code. for displaying the graph/////////////////////////////////////////////////
+	
 //global variables, to be used with protovis code.
-//var contributors = null ;
 var vis = null;
 
+//
+var functionsToHighlight = [""];
 // define variables for colour options.
-    	
+    
+    //backgound for the graph	
 	var bgColour = "white";
     		
+    //edge colour for Selected edges		
 	var activeLinkStroke = "rgba(0,0,255,1)";
+	
+	//edge colour for related edges.
     var relatedLinkStroke = "rgba(46,46,46,0.7)"; 
+    
+    //edge colour for non related edges
     var inactiveLinkStroke = "rgba(170,170,170,0.7)";
+    
+    //mouse over colour for edges. - not currently in use.
     var mouseoverLinkStroke = "rgba(220,20,60,0.7)";
 
-    var linkColourHolder;
-
+	//edge and node colouring for elemenst out of the range of the date slider.
     var outOfDateEdge = "rgba(170,170,170,0.05)";
     var outOfDateNode = "rgba(170,170,170,0.1)";
         		
+    // node fill and stroke for related nodes    		
     var relatedNodeFill = "rgba(46,46,46,1)";
     var relatedNodeStroke = "rgba(46,46,46,1)";
     		
+    // node fill and stroke for unrelated nodes		
     var inactiveNodeFill = "rgba(170,170,170,1)";
     var inactiveNodeStroke = "rgba(170,170,170,1)";
     		
+    // node fill and stroke for focus-central node.
     var focusNodeFill = "blue";
     var focusNodeStroke = "blue";
+    
+    // node fill for faceted browsing. May need to become more than one colour
+    var highlightNodeFill = "rgba(255, 215, 0, 1)";
 			 
+	//width and height settings for the protovis window.
 	var w = 796,
     	h = 600;
 
 // define the active node
 	var activeNode;
+
 // define nodeFocus. True if focus is on nodes. False if on edges.
     var nodeFocus = true;    	
 
@@ -624,18 +719,17 @@ var vis = null;
     var targetNodeMO;
     var sourceNodeMO;	
 
-
-
 function getNodes(){return contributors.nodes;}
 function getEdges(){return contributors.edges;}
 
 
 
 //create the network
+//sets the focus node in position and creates the visualisation. does not render it though.
 function createNetwork(targetDiv){
 	if (contributors != null){
     	
-    	resetDateRangeVisibility();    		
+    	
     	////////////////////////////////////////////////////////	
 		// construct a 3d array of nodes and their neighbors
 			var nodeNeighbors = loadNodeNeighbors(contributors);
@@ -676,16 +770,6 @@ function createNetwork(targetDiv){
 		//add the edges
   		   force.link.add(pv.Line) 
   		   		.strokeStyle(function(d, p){return getLinkStrokeStyle(d, p) })
-	/*		    .visible(function (d, p){
-			    							if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
-			    							($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)) {			    														
-			    								return false; 
-			    							}else 
-			    							p.targetNode.visible = true;
-			    							p.sourceNode.visible = true;
-			    							return true;	
-			    						})
-	*/	    	
 
 	//	    	.event("mouseover", function(d, p) {targetNodeMO = p.targetNode.index;
 	//		    									sourceNodeMO = p.sourceNode.index;
@@ -732,49 +816,58 @@ function createNetwork(targetDiv){
 
 			    .event("click", function(d) { activeNode = this.index;
     										  nodeFocus = true;
+			    							  targetNodeSelect = -1;
+			    							  sourceNodeSelect = -1;    										 
     										  updateInfoWindow(activeNode, contributors);
     										  return vis;})
     										  
     			.event("dblclick", function(d){return findAndDisplayContributorNetwork(contributors.nodes[this.index].id)})
+    			
     			.anchor("top").add(pv.Label).text(function(d){return d.nodeName})
+    			
     				.font("9pt sans-serif")
 					.textStyle(	function(d) { return getNodeStrokeStyle(d, this, nodeNeighbors)})
 					.textShadow("0.1em 0.1em 0.1em #fff")
+				
 					.visible(function(){return mouseOver && this.index == targetNodeMO || this.index == sourceNodeMO ? true :
 										nodeFocus ? activeNode == this.index?true:false:
 							    		targetNodeSelect == this.index || sourceNodeSelect == this.index ? true : false})
-    			;
-
-
-
-		
+    			;		
 			}
 					    	
 }
 
 //reload network and render
 function reloadNetwork(targetDiv){
+		resetDateRangeVisibility();    		
 		createNetwork(targetDiv);
-		
 		vis.render();	
-		
 	}
 	
-//refresh network for date range	
-function refreshNetworkForDateRange(){
+//refresh network 
+function refreshNetwork(){
 	resetDateRangeVisibility();
-	vis.render();	
+	refreshNetworkForBrowse($("#functions").multiselect("getChecked"));  
+	vis.render();
 	}
 
 //resets all the visibility fields for nodes
 function resetDateRangeVisibility(){
 
 	for (var i = 0; i<contributors.nodes.length; i++){
-
 		contributors.nodes[i].visible=false;
 		}
 	}
 
+//faceted 
+function refreshNetworkForBrowse(selectedFunctions){
+	for (i = 0; i < functionsToHighlight.length; i++){
+		functionsToHighlight[i] = "";
+	}
+	for (i = 0; i < selectedFunctions.length; i++){
+		functionsToHighlight[i] = selectedFunctions[i].value;
+		}
+	}
 
 //functions to set the colour and style of nodes and links	
 
@@ -804,13 +897,20 @@ function getLinkStrokeStyle(d, p){
 	}	
 }
 
+
 //node fill style rules
 function getNodeFillStyle(d, node, nodeNeighbors){
 	if (!d.visible){
 		return outOfDateNode;
 	}
 	else
+	if (findMatch(functionsToHighlight, d.functions)){ 
+		return highlightNodeFill;
+	}
+	else
 	if (nodeFocus==true){
+//		for (i = 0; i < functionsToHighlight.length; i++)
+		
 		if (activeNode== node.index){ 
 			return focusNodeFill;
 		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
@@ -844,3 +944,5 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 	else return inactiveNodeStroke;		
 
 }	
+
+
