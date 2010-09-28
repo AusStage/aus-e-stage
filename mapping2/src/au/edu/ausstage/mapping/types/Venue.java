@@ -42,6 +42,7 @@ public class Venue implements Comparable<Venue>{
 	private String latitude = null;
 	private String longitude = null;
 	private String url = null;
+	private String eventCount = null;
 	private Set<Contributor> contributors;
 	private Set<Organisation> organisations;
 	
@@ -508,6 +509,19 @@ public class Venue implements Comparable<Venue>{
 			throw new IllegalArgumentException("The value cannot be null");
 		}
 		url = value;
+	}
+	
+	public String getEventCount() {
+		return eventCount;
+	}
+	
+	public void setEventCount(String value) {
+		// check on the parameter
+		if(InputUtils.isValidInt(value) == false) {
+			throw new IllegalArgumentException("The id parameter must be a valid integer");
+		}
+		
+		this.eventCount = value;
 	}
 	
 	/*
