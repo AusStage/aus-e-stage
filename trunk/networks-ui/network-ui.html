@@ -19,16 +19,21 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
     <script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>  
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-min.js"></script>	
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.js"></script>	
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.filter.js"></script>		
 
 	<!-- helper files -->
     <script type="text/javascript" src="assets/javascript/network-ui.js"></script>   
 
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.css" />	
+	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.filter.css" />	
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
 	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
 
+<style>
+//#protovis   { position: absolute; width: 986px; float:left; top: 75px; bottom: 50px; left: 200px; background-color: red; }
+</style>
     <!-- Input file. JSON format. -->
 <!--    <script type="text/javascript" src="smlNetworkEx.js"></script>-->
 
@@ -47,54 +52,52 @@
 	<!-- Include the sidebar -->
 	
 
-<div id="sidebar">
+	<div id="sidebar">
 
-	<div id="load_network_form">
-		  <form name="search" action="" align=right>
-		    <label for="id" id="id_label">ID</label>
-		     <input type="text" name="id" id="id" size="10" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/><br><label for="name" id="name_label">Name</label>
- <input type="text" readonly="readonly" name="name" id="name" size="20" value="" class="text-input" />
-<br>      
-		      <input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
-		      <input type="submit" name="submit" class="button" id="network_btn" value="View" />	             
-		  </form>
-	</div>
+		<div id="load_network_form">
+			  <form name="search" action="" align=right>
+		    	<label for="id" id="id_label">ID</label>
+		     	<input type="text" name="id" id="id" size="10" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/><br><label for="name" id="name_label">Name</label>
+ 				<input type="text" readonly="readonly" name="name" id="name" size="20" value="" class="text-input" />
+				<br>      
+		      	<input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
+		      	<input type="submit" name="submit" class="button" id="network_btn" value="View" />	             
+	  	  	  </form>
+		</div>
 
-	<div id="network_details_div">
-		<ul>
-			<li><a id="contName" href=""></a></li>
-			<li id="contFunct"></li>
-			<li id="degCon"></li>
-		</ul>
+		<div id="network_details_div">
+			<ul>
+				<li><a id="contName" href=""></a></li>
+				<li id="contFunct"></li>
+				<li id="degCon"></li>
+			</ul>
 
-		<ul>
-			<li><a id="collab1" href=""></a></li>
-			<li><a id="collab2" href=""></a></li>
-			<li id="noOfCollab"></li>
-			<li id="eventRange"></li>
-		</ul>
+			<ul>
+				<li><a id="collab1" href=""></a></li>
+				<li><a id="collab2" href=""></a></li>
+				<li id="noOfCollab"></li>
+				<li id="eventRange"></li>
+			</ul>
 	
-		<ul>
-			<li id="networkTitle"></li>
-			<li id="networkCentreTitle"></li>
-			<li><a id="networkCentre" href=""></a></li>
-			<li id="nodeCount"></li>
-			<li id="edgeCount"></li>
-			<li id="eventCount"></li>
-			<li id="diameter"></li>
-		</ul>
-	</div>
+			<ul>
+				<li id="networkTitle"></li>
+				<li id="networkCentreTitle"></li>
+				<li><a id="networkCentre" href=""></a></li>
+				<li id="nodeCount"></li>
+				<li id="edgeCount"></li>
+				<li id="eventCount"></li>
+				<li id="diameter"></li>
+			</ul>
+		</div>
 	
-</div>
-
+	</div>
 
 	
 	<div id="main">
-	
-		<div id="protovis">
-		<script type="text/javascript">		
-		</script>
-
+		<div id="protovis" >
+		<p>If you know the contributor ID of the contributor network you wish to graph, enter it in the ID field to the left.<br>
+		Use the <b>Lookup</b> button to confirm a contributor exists with that ID. <br>
+		Otherwise, use the lookup button to perform a basic contributor search by name.</p>
 		</div>
 
 
@@ -102,27 +105,40 @@
 			<div id="date_range_div" align=right>
 
 				<form name="dateRanges">
-					<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
-					<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
-			
-						<select name="startDate" id="startDate">
-						</select>
-			
-						<select name="endDate" id="endDate">
-						</select>	
-						<br>
-						<input type="submit" name="submit" class="button" id="refresh_btn" value="refresh" />												
+					<table width = 100%>
+						<tr>
+							<th colspan=2>Time Slider</th>
+						</tr>
+						<tr>
+							<td colspan=2>
+							<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
+							<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
+							<select name="startDate" id="startDate">
+							</select>
+							<select name="endDate" id="endDate">
+							</select>	
+							</td>
+						</tr>
+						<tr>
+						<!-- little hack to space out the information nicer. Hopefully I'll find a better way to do this.-->
+						<td colspan=2>&nbsp</td>
+						</tr>
+						<tr>
+							<td><p>Use the Time Slider to view network activity in a given time period. To use the slider, position the start and end pointers and click the refresh button </p></td>
+							<td><input type="submit" name="submit" class="button" id="refresh_date_btn" value="Refresh" />
+								<input type="submit" name="submit" class="button" id="faceted_browsing_btn" value="Advanced Options" /></td>
+						</tr>					
+
+					</table>												
 				</form>
 			
 			</div>
-			<div id="faceted_browsing_div">
-				
+			<div id="faceted_browsing_div" Title="Faceted Browsing Options">
+				<p>Faceted browsing allows you to browse the current network by contributor function, gender, nationality or a combination of all three.
+				Please select the browse criteria, and then turn faceted browsing on. </p>
 				<table>
 					<tr>
-						<th> Faceted Browsing Options </th>
-					</tr>
-					<tr>
-						<th>Contributor Functions</th>
+						<th>Browse by contributor function</th>
 
 					</tr>
 					<tr>

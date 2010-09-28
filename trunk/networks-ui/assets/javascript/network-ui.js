@@ -7,8 +7,8 @@ $(document).ready(function() {
 	$("button, input:submit").button();
 	
 	// disable network button
-	$("#network_btn").button("disable");	
-	
+	$("#network_btn").button("disable");
+		
 	//hide the date range
 	$("select#startDate").hide();
 	$("select#endDate").hide();
@@ -20,6 +20,9 @@ $(document).ready(function() {
 	//clear search field values
 	$("#id").val("");
 	$("#name").val("");
+	
+	//set the focus to id
+	$("#id").focus();
 		
 });
 
@@ -53,12 +56,13 @@ $(document).ready(function() {
 					// use the name to fill in the text box
 					$("#name").val(data.name);
 					$("#network_btn").button("enable");
-					
+					$("#network_btn").focus();
 				}
 			});
 			
   	  } else {
   	  	$("#search_div").dialog('open');
+  	  	
   	  }
 	  return false;
     });
@@ -78,13 +82,24 @@ $(document).ready(function() {
 			$("#name").val("");
 			$("#id").val("");
 			
-			// disable the export button
+			// disable the network button
 			$("#network_btn").button("disable");
-			$("#network_btn").focus();
+
 		}
 	});
     
-    
+  	//handle enter in the search dialogue
+	$("#query").keypress(function(event){
+			if (event.keyCode == '13') {
+    			 event.preventDefault();
+    			 var i = $("#query").val();
+    			 if (i == ""){
+    			 	$("#query").val("please enter a contributor name or part of");
+    			 	}
+    			 else getContributors($("input#query").val());
+   			}
+	});	
+
     
     //setup the search contributors dialogue
 	$("#search_div").dialog({ 
@@ -93,12 +108,19 @@ $(document).ready(function() {
 		width: 650,
 		modal: true,
 		buttons: {
-			Cancel: function() {
-				$(this).dialog('close');
-			},
 			'Search': function() {
 				// search for the contributor
-				 getContributors($("input#query").val());
+				 if ($("#query").val()==""){
+				 	$("#query").val("please enter a contributor name or part of");
+				 }else{
+				 	getContributors($("input#query").val());
+				 }
+				 return false;
+			},
+			Cancel: function() {
+				$(this).dialog('close');
+				$("#id").focus();
+				return false;
 			}
 		},
 		open: function() {
@@ -121,7 +143,6 @@ $(document).ready(function() {
 
     	// validate and process form here
   		var id = $("input#id").val();
-
   		if (id == "") {
         	$("input#id").focus();
         	return false;
@@ -136,17 +157,59 @@ $(document).ready(function() {
     });
     
     //set up refresh button
-    $("#refresh_btn").click(function() {
+    $("#refresh_date_btn").click(function() {
     	$("#startDateStore").val( $("select#startDate").val()) ;
     	$("#endDateStore").val( $("select#endDate").val()) ;  
-
-  	
-		refreshNetwork();
-
-
+		refreshNetwork("dateRange");
 	    return false;
     });
 
+    //set up browsing button
+    $("#faceted_browsing_btn").click(function() {
+		$("#faceted_browsing_div").dialog("open");
+	    return false;
+    });
+
+    //set up faceted browsing dialog
+    $("#faceted_browsing_div").dialog({ 
+		autoOpen: false,
+		closeOnEscape: false,
+		height: 500,
+		width: 400,
+		modal: false,
+		buttons: {
+			'On/Off': function() {
+				if (browseTrigger){
+					browseTrigger = false;
+					refreshNetwork("dateRange");
+				}
+				else if (!browseTrigger){
+					browseTrigger = true;
+					refreshNetwork("browse");
+				}
+				 return false;
+			},
+			"Refresh": function() {
+				if (browseTrigger){
+					refreshNetwork("browse");					
+				}
+				return false;
+			},
+			'Close': function(){
+				$(this).dialog('close');
+				return false;
+			}
+		},
+		open: function(){
+		$("#refresh_date_btn").button("disable");	
+		},
+	  	close: function() {
+		$("#refresh_date_btn").button("enable");	
+		browseTrigger= false;
+		refreshNetwork("dateRange");
+		}
+	
+	});
     
 });
 
@@ -401,7 +464,7 @@ function setAllFunctions(functionList){
 	
 	$("#functions").multiselect("destroy");
 		
-	$("#functions").multiselect({});
+	$("#functions").multiselect({}).multiselectfilter();
 }
 
 
@@ -539,7 +602,7 @@ function loadNodeNeighbors(contributors){
     	updateInfoWindow(activeNode, contributors);
     	document.getElementById("networkCentreTitle").innerHTML = ("<b>Centre :</b><br>");
     	document.getElementById("networkCentre").innerHTML = (contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")");
-    	document.getElementById("networkCentre").href = contributors.nodes[activeNode].nodeUrl;
+    	document.getElementById("networkCentre").href = contributors.nodes[activeNode].nodeUrl.replace("amp;", "");
     	}
     
     //displays the network statistics in the side panel
@@ -572,7 +635,7 @@ function updateInfoWindow(activeNode, contributors){
 	//set the contributor name
     	var infoDetails = document.getElementById("contName");
     	infoDetails.innerHTML = "<br><b>"+contributors.nodes[activeNode].nodeName + 		" ("+contributors.nodes[activeNode].id+")</b>";
-    	infoDetails.href = contributors.nodes[activeNode].nodeUrl;
+    	infoDetails.href = contributors.nodes[activeNode].nodeUrl.replace("amp;", "");
 
     //set the functions
     	infoDetails = document.getElementById("contFunct");
@@ -588,10 +651,10 @@ function updateInfoWindowEdge(edgeInformation){
 		//set collaborator information
 	    	var infoDetails = document.getElementById("collab1");
     		infoDetails.innerHTML = "<br><b>"+edgeInformation.sourceNode.nodeName + " ("+edgeInformation.sourceNode.id+")</b>";
-    		infoDetails.href = edgeInformation.sourceNode.nodeUrl;
+    		infoDetails.href = edgeInformation.sourceNode.nodeUrl.replace("amp;", "");
     		var infoDetails = document.getElementById("collab2");
     		infoDetails.innerHTML = "<b>"+edgeInformation.targetNode.nodeName + " ("+edgeInformation.targetNode.id+")</b>";
-    		infoDetails.href = edgeInformation.targetNode.nodeUrl;
+    		infoDetails.href = edgeInformation.targetNode.nodeUrl.replace("amp;", "");
 
 		//date range
 			infoDetails = document.getElementById("eventRange");
@@ -662,11 +725,11 @@ var vis = null;
 var functionsToHighlight = [""];
 // define variables for colour options.
 	// legend colours for faceted browsing
-	functionColours = pv.Colors.category19();
+	functionColours = pv.Colors.category20();
 
     //backgound for the graph	
 	var bgColour = "white";
-    		
+			
     //edge colour for Selected edges		
 	var activeLinkStroke = "rgba(0,0,255,1)";
 	
@@ -695,12 +758,18 @@ var functionsToHighlight = [""];
     var focusNodeFill = "blue";
     var focusNodeStroke = "blue";
     
-    // node fill for faceted browsing. May need to become more than one colour
-    var highlightNodeFill = "rgba(255, 215, 0, 1)";
-			 
+    
+    // faceted colour scheme
+    var bgColourFacet = "black";   
+    var nodeFacet = "rgba(255,255,255,0.5)";
+    var linkFacet = "rgba(255,255,255,0.2)";
+  		 
 	//width and height settings for the protovis window.
 	var w = 796,
     	h = 600;
+
+//define the faceted browsing switch
+	var browseTrigger = false;
 
 // define the active node
 	var activeNode;
@@ -748,7 +817,10 @@ function createNetwork(targetDiv){
 			vis = new pv.Panel().canvas(targetDiv)
 			    .width(w)
 			    .height(h)
-			    .fillStyle(bgColour)
+			    .fillStyle(function(){if (browseTrigger==true) {
+			    						return bgColourFacet;
+			    					  }else return bgColour;
+			    						})
 			    .event("mousedown", pv.Behavior.pan())
 			    .event("mousewheel", pv.Behavior.zoom());
 
@@ -845,9 +917,13 @@ function reloadNetwork(targetDiv){
 	}
 	
 //refresh network 
-function refreshNetwork(){
-	resetDateRangeVisibility();
-	refreshNetworkForBrowse($("#functions").multiselect("getChecked"));  
+function refreshNetwork(typeOfRefresh){
+	if(typeOfRefresh == "dateRange"){
+		resetDateRangeVisibility();
+	}
+	else if (typeOfRefresh == "browse"){
+		refreshNetworkForBrowse($("#functions").multiselect("getChecked"));  
+	}
 	vis.render();
 	}
 
@@ -881,7 +957,10 @@ function refreshNetworkForBrowse(selectedFunctions){
 
 //link stroke style rules
 function getLinkStrokeStyle(d, p){
-	//mouse over stuff, not used anymore, but may come back
+	if (browseTrigger){
+		 return linkFacet;
+	}
+	else
 	if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
 		($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)){
 			return outOfDateEdge;
@@ -908,15 +987,16 @@ function getLinkStrokeStyle(d, p){
 
 //node fill style rules
 function getNodeFillStyle(d, node, nodeNeighbors){
+	if (browseTrigger){
+		var i = findMatch(functionsToHighlight, d.functions);
+		if (i != null){
+			return functionColours(i);
+		}else return nodeFacet;
+	}
+		else
 	if (!d.visible){
 		return outOfDateNode;
 	}
-	else
-	var testing = findMatch(functionsToHighlight, d.functions);
-	if (testing != null){return functionColours(testing);}
-//	if (findMatch(functionsToHighlight, d.functions)){ 
-//		return highlightNodeFill;
-//	}
 	else
 	if (nodeFocus==true){
 //		for (i = 0; i < functionsToHighlight.length; i++)
@@ -936,6 +1016,13 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 
 //node stroke style rules
 function getNodeStrokeStyle(d, node, nodeNeighbors){
+	if (browseTrigger){
+		var i = findMatch(functionsToHighlight, d.functions);
+		if (i != null){
+			return functionColours(i);
+		}else return nodeFacet;
+	}
+	else
 	if (!d.visible){
 		return outOfDateNode;
 	}
