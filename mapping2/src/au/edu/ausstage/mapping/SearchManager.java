@@ -158,6 +158,9 @@ public class SearchManager {
 		
 				// add the contrbutor to this venue
 				list.addOrganisation(organisation);
+				
+				// increment the loop count
+				loopCount++;
 			}
 		
 		} catch (java.sql.SQLException ex) {
