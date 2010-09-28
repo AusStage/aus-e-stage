@@ -120,7 +120,14 @@ public class SearchManager {
 				   + "      AND o.organisationid = oel.organisationid "
 				   + "      AND oel.eventid = e.eventid "
 				   + "      AND e.venueid = v.venueid) "
-				   + "GROUP BY organisationid, name";
+				   + "GROUP BY organisationid, name ";
+				   
+		// finalise the sql
+		if(sortType.equals("name") == true) {
+			sql += "ORDER BY name";
+		} else {
+			sql += "ORDER BY organisationid";
+		}
 				   
 		// define the paramaters
 		String[] sqlParameters = {query};
@@ -365,12 +372,114 @@ public class SearchManager {
 		
 		if(searchType.equals("id") == true) {
 			data = doContributorIdSearch(query, formatType);
-		}	
+		} else {
+			data = doContributorNameSearch(query, formatType, sortType, limit);
+		}
 	
 		// return the data
 		return data;
 		
 	} // end the doOrganisationSearch method
+	
+	/**
+	 * A private method to undertake a contrubutor name search
+	 *
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for theresults
+	 * @param sortType   the sort order for the results
+	 * @param limit      the maximum number of search results
+	 *
+	 * @return           the search results encoded in the requested format
+	 */
+	private String doContributorNameSearch(String query, String formatType, String sortType, Integer limit) {
+	
+		// sanitise the search query
+		query = sanitiseQuery(query);
+		
+		// declare the sql variables
+		String sql = "SELECT contributorid, first_name, last_name, COUNT(eventid), COUNT(latitude) "
+				   + "FROM (SELECT DISTINCT c.contributorid, c.first_name, c.last_name, e.eventid, v.latitude "
+				   + "      FROM contributor c, search_contributor sc, conevlink cel, events e, venue v "
+				   + "      WHERE CONTAINS(sc.combined_all, ?, 1) > 0 "
+				   + "      AND c.contributorid = sc.contributorid "
+				   + "      AND c.contributorid = cel.contributorid "
+				   + "      AND cel.eventid = e.eventid "
+				   + "      AND e.venueid = v.venueid) "
+				   + "GROUP BY contributorid, first_name, last_name ";
+				   
+		// finalise the sql
+		if(sortType.equals("name") == true) {
+			sql += "ORDER BY last_name, first_name";
+		} else {
+			sql += "ORDER BY contributorid";
+		}
+				   
+		// define the paramaters
+		String[] sqlParameters = {query};
+		
+		// declare additional helper variables
+		ContributorList list         = new ContributorList();
+		Contributor     contributor  = null;
+		JSONArray       jsonList     = new JSONArray();
+		Integer         loopCount     = 0;
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		// build the list of results
+		try {
+		
+			// loop through the resulset
+			while(resultSet.next() && loopCount < limit) {
+			
+				// build the contributor object
+				contributor = new Contributor(resultSet.getString(1));
+				contributor.setFirstName(resultSet.getString(2));
+				contributor.setLastName(resultSet.getString(3));
+				contributor.setUrl(LinksManager.getContributorLink(resultSet.getString(1)));
+				contributor.setEventCount(resultSet.getString(4));
+				contributor.setMappedEventCount(resultSet.getString(5));			
+		
+				// add the contrbutor to this venue
+				list.addContributor(contributor);
+				
+				// increment the loop count
+				loopCount++;
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		
+		// determine how to format the result
+		String data = null;		
+		if(formatType.equals("json") == true) {
+			if(sortType.equals("name") == true) {
+				data = createJSONOutput(list, ContributorList.CONTRIBUTOR_NAME_SORT);
+			} else {
+				data = createJSONOutput(list, null);
+			}
+		}
+		
+		// return the data
+		return data;
+	}
 	
 	/**
 	 * A private method to undertake a Organisation id search
