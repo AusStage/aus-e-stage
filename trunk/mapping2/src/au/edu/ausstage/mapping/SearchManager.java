@@ -87,12 +87,103 @@ public class SearchManager {
 		
 		if(searchType.equals("id") == true) {
 			data = doOrganisationIdSearch(query, formatType);
-		}	
+		} else {
+			data = doOrganisationNameSearch(query, formatType, sortType, limit);
+		}
 	
 		// return the data
 		return data;
 		
 	} // end the doOrganisationSearch method
+	
+	/**
+	 * A private method to undertake an organisation name search
+	 *
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for theresults
+	 * @param sortType   the sort order for the results
+	 * @param limit      the maximum number of search results
+	 *
+	 * @return           the search results encoded in the requested format
+	 */
+	private String doOrganisationNameSearch(String query, String formatType, String sortType, Integer limit) {
+	
+		// sanitise the search query
+		query = sanitiseQuery(query);
+		
+		// declare the sql variables
+		String sql = "SELECT organisationid, name, COUNT(eventid), COUNT(latitude) "
+				   + "FROM (SELECT DISTINCT o.organisationid, o.name, e.eventid, v.latitude "
+				   + "      FROM organisation o, search_organisation so, orgevlink oel, events e, venue v "
+				   + "      WHERE CONTAINS(so.combined_all, ?, 1) > 0 "
+				   + "      AND so.organisationid = o.organisationid "
+				   + "      AND o.organisationid = oel.organisationid "
+				   + "      AND oel.eventid = e.eventid "
+				   + "      AND e.venueid = v.venueid) "
+				   + "GROUP BY organisationid, name";
+				   
+		// define the paramaters
+		String[] sqlParameters = {query};
+		
+		// declare additional helper variables
+		OrganisationList list          = new OrganisationList();
+		Organisation     organisation  = null;
+		JSONArray        jsonList      = new JSONArray();
+		Integer          loopCount     = 0;
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		// build the list of results
+		try {
+		
+			// loop through the resulset
+			while(resultSet.next() && loopCount < limit) {
+			
+				// build the organisation object
+				organisation = new Organisation(resultSet.getString(1));
+				organisation.setName(resultSet.getString(2));
+				organisation.setUrl(LinksManager.getOrganisationLink(resultSet.getString(1)));
+				organisation.setEventCount(resultSet.getString(3));
+				organisation.setMappedEventCount(resultSet.getString(4));			
+		
+				// add the contrbutor to this venue
+				list.addOrganisation(organisation);
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		
+		// determine how to format the result
+		String data = null;		
+		if(formatType.equals("json") == true) {
+			if(sortType.equals("name") == true) {
+				data = createJSONOutput(list, OrganisationList.ORGANISATION_NAME_SORT);
+			} else {
+				data = createJSONOutput(list, null);
+			}
+		}
+		
+		// return the data
+		return data;
+	}
 	
 	/**
 	 * A private method to undertake a Organisation id search
@@ -103,16 +194,7 @@ public class SearchManager {
 	 * @return           the results of the search
 	 */
 	private String doOrganisationIdSearch(String query, String formatType) {
-	
-		// check the parameters
-		if(InputUtils.isValid(query) == false || InputUtils.isValid(formatType) == false) {
-			throw new IllegalArgumentException("All of the parameters to this method are required");
-		}
-		
-		if(InputUtils.isValidInt(query) == false) {
-			throw new IllegalArgumentException("The query parameter must be a valid integer");
-		}
-		
+
 		// declare the SQL variables
 		String sql = "SELECT organisationid, name, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
 				   + "FROM (SELECT DISTINCT o.organisationid, o.name, e.eventid, v.longitude "
@@ -180,13 +262,6 @@ public class SearchManager {
 			
 	} // end doOrganisationIdSearch method
 	
-	/**
-	 * A private method to turn an organisation list into a JSON Array
-	 *
-	 * @param orgList the OrganisationList object
-	 *
-	 * @return        the list of organisations as a JSON Array
-	 */
 	/**
 	 * A method to take a group of collaborators and output JSON encoded text
 	 *
@@ -303,15 +378,6 @@ public class SearchManager {
 	 * @return           the results of the search
 	 */
 	private String doContributorIdSearch(String query, String formatType) {
-	
-		// check the parameters
-		if(InputUtils.isValid(query) == false || InputUtils.isValid(formatType) == false) {
-			throw new IllegalArgumentException("All of the parameters to this method are required");
-		}
-		
-		if(InputUtils.isValidInt(query) == false) {
-			throw new IllegalArgumentException("The query parameter must be a valid integer");
-		}
 		
 		// declare the SQL variables
 		String sql = "SELECT contributorid, first_name, last_name, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
@@ -441,6 +507,10 @@ public class SearchManager {
 			
 	} // end the createJSONOutput method
 	
+	/*
+	 * Venue Searching
+	 */
+	
 	/** 
 	 * A method to undertake a Organisation search
 	 *
@@ -493,15 +563,6 @@ public class SearchManager {
 	 * @return           the results of the search
 	 */
 	private String doVenueIdSearch(String query, String formatType) {
-	
-		// check the parameters
-		if(InputUtils.isValid(query) == false || InputUtils.isValid(formatType) == false) {
-			throw new IllegalArgumentException("All of the parameters to this method are required");
-		}
-		
-		if(InputUtils.isValidInt(query) == false) {
-			throw new IllegalArgumentException("The query parameter must be a valid integer");
-		}
 		
 		// declare the SQL variables
 		String sql = "SELECT venueid, venue_name, street, suburb, state, postcode, latitude, longitude, COUNT(eventid) "
@@ -636,4 +697,34 @@ public class SearchManager {
 			
 	} // end the createJSONOutput method
 	
+	/**
+	 * A private method to sanitise the search query by:
+	 * stripping white space, search operator keywords and punctuation as well as automatically add and between each search term
+	 *
+	 * @param query the search query
+	 *
+	 * @return      the sanitised search query
+	 */
+	private String sanitiseQuery(String query) {
+	
+		// trim the query
+		query = query.trim();
+		
+		// change search query to lower case
+		query = query.toLowerCase();
+		
+		// remove any existing search terms
+		query = query.replace(" and ", "");
+		query = query.replace(" or ", "");
+		query = query.replace(" not ", "");
+		
+		// remove any punctuation
+		query = query.replaceAll("\\p{P}+", "");
+		
+		// rewrite the search terms
+		query = query.replace(" ", " and ");
+		
+		// return the sanitised query
+		return query;	
+	}	
 } // end class definition
