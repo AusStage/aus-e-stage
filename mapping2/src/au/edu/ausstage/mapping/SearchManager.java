@@ -94,7 +94,7 @@ public class SearchManager {
 		// return the data
 		return data;
 		
-	} // end the doOrganisationSearch method
+	} 
 	
 	/**
 	 * A private method to undertake an organisation name search
@@ -163,7 +163,7 @@ public class SearchManager {
 				organisation.setEventCount(resultSet.getString(3));
 				organisation.setMappedEventCount(resultSet.getString(4));			
 		
-				// add the contrbutor to this venue
+				// add the organisation to the list
 				list.addOrganisation(organisation);
 				
 				// increment the loop count
@@ -247,7 +247,7 @@ public class SearchManager {
 			organisation.setEventCount(resultSet.getString(3));
 			organisation.setMappedEventCount(resultSet.getString(4));			
 		
-			// add the contrbutor to this venue
+			// add the organisation to the list
 			list.addOrganisation(organisation);
 		
 		} catch (java.sql.SQLException ex) {
@@ -270,7 +270,7 @@ public class SearchManager {
 		// return the data
 		return data;
 			
-	} // end doOrganisationIdSearch method
+	} 
 	
 	/**
 	 * A method to take a group of collaborators and output JSON encoded text
@@ -329,7 +329,7 @@ public class SearchManager {
 		// return the JSON encoded string
 		return list.toString();
 			
-	} // end the createJSONOutput method
+	} 
 	
 	/*
 	 * contributor searching
@@ -379,7 +379,7 @@ public class SearchManager {
 		// return the data
 		return data;
 		
-	} // end the doOrganisationSearch method
+	} 
 	
 	/**
 	 * A private method to undertake a contrubutor name search
@@ -449,7 +449,7 @@ public class SearchManager {
 				contributor.setEventCount(resultSet.getString(4));
 				contributor.setMappedEventCount(resultSet.getString(5));			
 		
-				// add the contrbutor to this venue
+				// add the contrbutor to the list
 				list.addContributor(contributor);
 				
 				// increment the loop count
@@ -533,7 +533,7 @@ public class SearchManager {
 			contributor.setEventCount(resultSet.getString(4));
 			contributor.setMappedEventCount(resultSet.getString(5));		
 		
-			// add the contrbutor to this venue
+			// add the contrbutor to the list
 			list.addContributor(contributor);
 		
 		} catch (java.sql.SQLException ex) {
@@ -556,7 +556,7 @@ public class SearchManager {
 		// return the data
 		return data;
 			
-	} // end doOrganisationIdSearch method
+	} 
 	
 
 	/**
@@ -617,7 +617,7 @@ public class SearchManager {
 		// return the JSON encoded string
 		return list.toString();
 			
-	} // end the createJSONOutput method
+	} 
 	
 	/*
 	 * Venue Searching
@@ -659,12 +659,122 @@ public class SearchManager {
 		
 		if(searchType.equals("id") == true) {
 			data = doVenueIdSearch(query, formatType);
-		}	
+		} else {
+			data = doVenueNameSearch(query, formatType, sortType, limit);
+		}
 	
 		// return the data
 		return data;
 		
-	} // end the doOrganisationSearch method
+	} 
+	
+	/**
+	 * A private method to undertake a venue name search
+	 *
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for theresults
+	 * @param sortType   the sort order for the results
+	 * @param limit      the maximum number of search results
+	 *
+	 * @return           the search results encoded in the requested format
+	 */
+	private String doVenueNameSearch(String query, String formatType, String sortType, Integer limit) {
+	
+		// sanitise the search query
+		query = sanitiseQuery(query);
+		
+		// declare the sql variables
+		String sql = "SELECT venueid, venue_name, street, suburb, state, postcode, latitude, longitude, COUNT(eventid) "
+				   + "FROM (SELECT DISTINCT venue.venueid, venue.venue_name, venue.street, venue.suburb, states.state, venue.postcode, venue.latitude, venue.longitude, events.eventid "
+				   + "      FROM venue, search_venue, events, states "
+				   + "      WHERE CONTAINS(search_venue.combined_all, ?, 1) > 0 "
+				   + "      AND venue.venueid = search_venue.venueid "
+				   + "      AND venue.venueid = events.venueid "
+				   + "      AND venue.state = states.stateid) "
+				   + "GROUP BY venueid, venue_name, street, suburb, state, postcode, latitude, longitude ";
+				   
+		// finalise the sql
+		if(sortType.equals("name") == true) {
+			sql += "ORDER BY venue_name";
+		} else {
+			sql += "ORDER BY venueid";
+		}
+				   
+		// define the paramaters
+		String[] sqlParameters = {query};
+		
+		// declare additional helper variables
+		VenueList  list      = new VenueList();
+		Venue      venue     = null;
+		JSONArray  jsonList  = new JSONArray();
+		Integer    loopCount = 0;
+		
+		//debug code
+		limit = Integer.MAX_VALUE;
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		// build the list of results
+		try {
+		
+			// loop through the resulset
+			while(resultSet.next() && loopCount < limit) {
+			
+				// build and populate a new venue object
+				venue = new Venue(resultSet.getString(1));
+				venue.setName(resultSet.getString(2));
+				venue.setStreet(resultSet.getString(3));
+				venue.setSuburb(resultSet.getString(4));
+				venue.setState(resultSet.getString(5));
+				venue.setPostcode(resultSet.getString(6));
+				venue.setLatitude(resultSet.getString(7));
+				venue.setLongitude(resultSet.getString(8));
+				venue.setEventCount(resultSet.getString(9));
+				venue.setUrl(LinksManager.getVenueLink(resultSet.getString(1)));
+		
+				// add the venue to the list
+				list.addVenue(venue);
+				
+				// increment the loop count
+				loopCount++;
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		
+		// determine how to format the result
+		String data = null;		
+		if(formatType.equals("json") == true) {
+			if(sortType.equals("name") == true) {
+				data = createJSONOutput(list, ContributorList.CONTRIBUTOR_NAME_SORT);
+			} else {
+				data = createJSONOutput(list, null);
+			}
+		}
+		
+		// return the data
+		return data;
+	}
+	
+	
 	
 	/**
 	 * A private method to undertake a Organisation id search
@@ -721,7 +831,7 @@ public class SearchManager {
 			venue.setEventCount(resultSet.getString(9));
 			venue.setUrl(LinksManager.getVenueLink(resultSet.getString(1)));
 		
-			// add the contrbutor to this venue
+			// add the venue to the list
 			list.addVenue(venue);
 		
 		} catch (java.sql.SQLException ex) {
@@ -743,7 +853,7 @@ public class SearchManager {
 		// return the data
 		return data;
 			
-	} // end doOrganisationIdSearch method
+	} 
 
 	/**
 	 * A method to take a group of venues and output JSON encoded text
@@ -807,7 +917,7 @@ public class SearchManager {
 		// return the JSON encoded string
 		return list.toString();
 			
-	} // end the createJSONOutput method
+	} 
 	
 	/**
 	 * A private method to sanitise the search query by:
@@ -839,4 +949,4 @@ public class SearchManager {
 		// return the sanitised query
 		return query;	
 	}	
-} // end class definition
+} 
