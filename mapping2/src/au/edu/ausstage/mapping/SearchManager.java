@@ -380,13 +380,7 @@ public class SearchManager {
 			
 	} // end doOrganisationIdSearch method
 	
-	/**
-	 * A private method to turn an organisation list into a JSON Array
-	 *
-	 * @param orgList the OrganisationList object
-	 *
-	 * @return        the list of organisations as a JSON Array
-	 */
+
 	/**
 	 * A method to take a group of collaborators and output JSON encoded text
 	 *
@@ -437,6 +431,201 @@ public class SearchManager {
 			object.put("lastName", contributor.getLastName());
 			object.put("totalEventCount", new Integer(contributor.getEventCount()));
 			object.put("mapEventCount", new Integer(contributor.getMappedEventCount()));
+			
+			// add the new object to the array
+			list.add(object);		
+		}
+		
+		// return the JSON encoded string
+		return list.toString();
+			
+	} // end the createJSONOutput method
+	
+	/** 
+	 * A method to undertake a Organisation search
+	 *
+	 * @param searchType the type of search to undertake
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for the results
+	 * @param sortType   the way in which to sort the results
+	 * @param limit      the number to limit the search results
+	 */
+	public String doVenueSearch(String searchType, String query, String formatType, String sortType, Integer limit) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(searchType) == false || InputUtils.isValid(query) == false) {
+			throw new IllegalArgumentException("All of the parameters to this method are required");
+		}
+		
+		// double check the parameter
+		if(searchType.equals("id") != true) {
+			if(InputUtils.isValidInt(limit, SearchServlet.MIN_LIMIT, SearchServlet.MAX_LIMIT) == false) {
+				throw new IllegalArgumentException("Limit parameter must be between '" + SearchServlet.MIN_LIMIT + "' and '" + SearchServlet.MAX_LIMIT + "'");
+			}
+		}
+		
+		if(InputUtils.isValid(formatType) == false) {
+			formatType = "json";
+		} 
+		
+		if(InputUtils.isValid(sortType) == false) {
+			sortType = "id";
+		}
+		
+		// get the results of the search
+		String data = null;
+		
+		if(searchType.equals("id") == true) {
+			data = doVenueIdSearch(query, formatType);
+		}	
+	
+		// return the data
+		return data;
+		
+	} // end the doOrganisationSearch method
+	
+	/**
+	 * A private method to undertake a Organisation id search
+	 *
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for the results
+	 *
+	 * @return           the results of the search
+	 */
+	private String doVenueIdSearch(String query, String formatType) {
+	
+		// check the parameters
+		if(InputUtils.isValid(query) == false || InputUtils.isValid(formatType) == false) {
+			throw new IllegalArgumentException("All of the parameters to this method are required");
+		}
+		
+		if(InputUtils.isValidInt(query) == false) {
+			throw new IllegalArgumentException("The query parameter must be a valid integer");
+		}
+		
+		// declare the SQL variables
+		String sql = "SELECT venueid, venue_name, street, suburb, state, postcode, latitude, longitude, COUNT(eventid) "
+				   + "FROM (SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, e.eventid "
+				   + "      FROM venue v, states s, events e "
+				   + "      WHERE v.venueid = ? "
+				   + "      AND v.state = s.stateid "
+				   + "      AND v.venueid = e.venueid) "
+				   + "GROUP BY venueid, venue_name, street, suburb, state, postcode, latitude, longitude";
+				   
+		// define the paramaters
+		String[] sqlParameters = {query};
+		
+		// declare additional helper variables
+		VenueList list     = new VenueList();
+		Venue     venue    = null;
+		JSONArray jsonList = new JSONArray();
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		try {
+		
+			// move to the result record
+			resultSet.next();
+			
+			venue = new Venue(resultSet.getString(1));
+			venue.setName(resultSet.getString(2));
+			venue.setStreet(resultSet.getString(3));
+			venue.setSuburb(resultSet.getString(4));
+			venue.setState(resultSet.getString(5));
+			venue.setPostcode(resultSet.getString(6));
+			venue.setLatitude(resultSet.getString(7));
+			venue.setLongitude(resultSet.getString(8));
+			venue.setEventCount(resultSet.getString(9));
+			venue.setUrl(LinksManager.getVenueLink(resultSet.getString(1)));
+		
+			// add the contrbutor to this venue
+			list.addVenue(venue);
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		 
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;		
+		
+		// determine how to format the result
+		String data = null;		
+		if(formatType.equals("json") == true) {
+			data = createJSONOutput(list, null);
+		}
+		
+		// return the data
+		return data;
+			
+	} // end doOrganisationIdSearch method
+
+	/**
+	 * A method to take a group of venues and output JSON encoded text
+	 *
+	 * @param venueList the list of organisations
+	 * @param sortOrder     the order to sort the list of organisations as defined in the OrganisationList class
+	 *
+	 * @return              the JSON encoded string
+	 */
+	@SuppressWarnings("unchecked")
+	private String createJSONOutput(VenueList venueList, Integer sortOrder) {
+	
+		Set<Venue> venues = null;
+		
+		if(sortOrder != null) {
+			if(InputUtils.isValidInt(sortOrder, VenueList.VENUE_ID_SORT, VenueList.VENUE_NAME_SORT) != false) {
+				if(sortOrder == VenueList.VENUE_ID_SORT) {
+					venues = venueList.getSortedVenues(VenueList.VENUE_ID_SORT);
+				} else {
+					venues = venueList.getSortedVenues(VenueList.VENUE_NAME_SORT);
+				}
+			} else {
+				venues = venueList.getVenues();
+			}
+		} else {
+			venues = venueList.getVenues();
+		}		
+	
+		// assume that all sorting and ordering has already been carried out
+		// loop through the list of organisations and add them to the new JSON objects
+		Iterator iterator = venues.iterator();
+		
+		// declare helper variables
+		JSONArray  list   = new JSONArray();
+		JSONObject object = null;
+		Venue      venue  = null;
+		
+		while(iterator.hasNext()) {
+		
+			// get the organisation
+			venue = (Venue)iterator.next();
+			
+			// start a new JSON object
+			object = new JSONObject();
+			
+			// build the object
+			object.put("id", venue.getId());
+			object.put("name", venue.getName());
+			object.put("street", venue.getStreet());
+			object.put("suburb", venue.getSuburb());
+			object.put("postcode", venue.getPostcode());
+			object.put("latitude", venue.getLatitude());
+			object.put("longitude", venue.getLongitude());
+			object.put("url", venue.getUrl());
+			object.put("totalEventCount", new Integer(venue.getEventCount()));
 			
 			// add the new object to the array
 			list.add(object);		
