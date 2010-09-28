@@ -18,7 +18,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 == Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || state-list, suburb-list, suburb-venue-list || No || ||
+|| task   || state-list, suburb-list, suburb-venue-list, organisation, contributor || No || ||
 || id     || unique identifier use with the lookup task || No || ||
 || format || json || Yes || json ||
 || callback || function name to use for a JSONP request || Yes || ||
@@ -43,6 +43,14 @@ _Note:_ The id parameter is only valid if it contains an id for one of the 8 Aus
 A list of venues that are located in the state and suburb combination as identified by the id parameter
 
 _Note:_ The id parameter is expected to be encoded as follows state-id_suburb name
+
+==== organisation ====
+
+The details of an organisation
+
+==== contributor ====
+
+The details for a contributor
 
 === id ===
 
@@ -201,4 +209,25 @@ The name of the callback function used when a request is made for JSONP encoded 
     "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3917"
   }
 ]
+}}}
+
+=== organisation ===
+{{{
+[ { "id" : "102",
+    "mapEventCount" : 264,
+    "name" : "Australian Dance Theatre",
+    "totalEventCount" : 408,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102"
+  } ]
+}}}
+
+=== contributor ===
+{{{
+[ { "firstName" : "Brad",
+    "id" : "414321",
+    "lastName" : "Williams",
+    "mapEventCount" : 13,
+    "totalEventCount" : 13,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=414321"
+  } ]
 }}}
