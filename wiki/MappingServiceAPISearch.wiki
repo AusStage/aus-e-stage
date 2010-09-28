@@ -153,3 +153,77 @@ The search result is formatted as a JSON array with zero, one, or more result ob
 }}}
 
 === Venue Name Search ===
+{{{
+[ { "id" : "11093",
+    "latitude" : "-37.810916",
+    "longitude" : "144.969755",
+    "name" : "Alexandra Theatre",
+    "postcode" : "3000",
+    "street" : "219 Exhibition Street",
+    "suburb" : "Melbourne",
+    "totalEventCount" : 5,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=11093"
+  },
+  { "id" : "2778",
+    "latitude" : "-27.469146",
+    "longitude" : "153.025862",
+    "name" : "Her Majesty's Theatre",
+    "postcode" : "4000",
+    "street" : "197 Queen Street",
+    "suburb" : "Brisbane",
+    "totalEventCount" : 121,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2778"
+  },
+  { "id" : "76",
+    "latitude" : "-37.810916",
+    "longitude" : "144.969755",
+    "name" : "Her Majesty's Theatre",
+    "postcode" : "3000",
+    "street" : "219 Exhibition Street",
+    "suburb" : "Melbourne",
+    "totalEventCount" : 186,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=76"
+  },
+  { "id" : "815",
+    "latitude" : "-34.92832",
+    "longitude" : "138.597007",
+    "name" : "Her Majesty's Theatre",
+    "postcode" : "5000",
+    "street" : "58 Grote Street",
+    "suburb" : "Adelaide",
+    "totalEventCount" : 313,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
+  },
+  { "id" : "13496",
+    "latitude" : null,
+    "longitude" : null,
+    "name" : "Her Majesty's Theatre",
+    "postcode" : null,
+    "street" : null,
+    "suburb" : "Haymarket",
+    "totalEventCount" : 2,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=13496"
+  },
+  ...
+  { "id" : "3853",
+    "latitude" : "-34.92832",
+    "longitude" : "138.597007",
+    "name" : "Prince of Wales Theatre",
+    "postcode" : "5000",
+    "street" : "58 Grote Street",
+    "suburb" : "Adelaide",
+    "totalEventCount" : 3,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3853"
+  },
+  { "id" : "2965",
+    "latitude" : "-34.92832",
+    "longitude" : "138.597007",
+    "name" : "Tivoli Theatre",
+    "postcode" : "5000",
+    "street" : "58 Grote Street",
+    "suburb" : "Adelaide",
+    "totalEventCount" : 68,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2965"
+  }
+]
+}}}
