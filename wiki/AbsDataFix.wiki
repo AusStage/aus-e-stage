@@ -1,5 +1,10 @@
 #summary How to build overlays using ABS Data
 
+----
+_NOTE:_ This procedure document is deprecated due to a change in direction for the development of overlays for maps using ABS data. It will be updated once the new direction has been finalised.
+----
+
+
 <h1>!AbsDataFix - Building Map Overlays using ABS Data</h1>
 
 The AbsDataFix application has been designed to provide a flexible framework for the manipulation of data sourced from the [http://www.abs.gov.au Australian Bureau of Statistics (ABS)] on the 2006 census. 
