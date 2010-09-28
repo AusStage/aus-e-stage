@@ -23,6 +23,7 @@ import au.edu.ausstage.utils.InputUtils;
 
 // import additional libraries
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -33,6 +34,18 @@ public class VenueList {
 
 	// declare private variables
 	private Set<Venue> venues;
+	
+	// declare public constants
+	
+	/**
+	 * Sort venues by id
+	 */
+	public final static int VENUE_ID_SORT = 0;
+	
+	/**
+	 * sort venues by name
+	 */
+	public final static int VENUE_NAME_SORT = 1;
 	
 	/**
 	 * A constructor for this class
@@ -142,5 +155,47 @@ public class VenueList {
 	public Venue[] getVenuesArray() {
 		return venues.toArray(new Venue[0]);
 	} // end getEvents method
+	
+	/**
+	 * A method to get the sorted list of organisations for this venue
+	 *
+	 * @param sortType the type of sort to use on the list of organisations
+	 *
+	 * @return the sorted list of events
+	 */
+	public Set<Venue> getSortedVenues(int sortType) {
+	
+		// declare helper variables
+		Set<Venue> sortedVenues;
+	
+		// determine what type of sort to do
+		if(sortType == VENUE_ID_SORT) {
+			sortedVenues = new TreeSet<Venue>(venues);
+		} else if (sortType == VENUE_NAME_SORT) {
+			sortedVenues = new TreeSet<Venue>(new VenueNameComparator());
+			sortedVenues.addAll(venues);
+		} else {
+			throw new IllegalArgumentException("Unknown sort type specified");
+		}
+		
+		return sortedVenues;
+	
+	}
+	
+	/**
+	 * A method to get the sorted list of contributors for this venue as an array
+	 *
+	 * @param sortType the type of sort to use on the list of contributors
+	 *
+	 * @return the sorted list of events
+	 */
+	public Venue[] getSortedVenuesArray(int sortType) {
+	
+		// get the sorted events
+		Set<Venue> sortedVenues = getSortedVenues(sortType);
+		
+		// convert to an array
+		return sortedVenues.toArray(new Venue[0]);
+	}
 
 }
