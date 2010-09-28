@@ -295,11 +295,13 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @param value the new value
 	 */	
 	public void setNationality(String value) {
-		if(InputUtils.isValid(value)) {
-			nationality = value;
-		} else {
-			throw new IllegalArgumentException("Value cannot be null or an empty string");
-		}
+//		if(InputUtils.isValid(value)) {
+//			nationality = value;
+//		} else {
+//			throw new IllegalArgumentException("Value cannot be null or an empty string");
+//		}
+
+		nationality = value;
 	}
 	
 	/**
@@ -317,11 +319,13 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @param value the new value
 	 */	
 	public void setGender(String value) {
-		if(InputUtils.isValid(value)) {
-			gender = value;
-		} else {
-			throw new IllegalArgumentException("Value cannot be null or an empty string");
-		}
+//		if(InputUtils.isValid(value)) {
+//			gender = value;
+//		} else {
+//			throw new IllegalArgumentException("Value cannot be null or an empty string");
+//		}
+		
+		gender = value;
 	}
 	
 	/**
@@ -432,6 +436,8 @@ public class Collaborator implements Comparable<Collaborator>{
 		object.put("givenName", givenName);
 		object.put("familyName", familyName);
 		object.put("name", getName());
+		object.put("gender", gender);
+		object.put("nationality", nationality);
 		object.put("collaborations", Integer.parseInt(getCollaborations()));
 		
 		String[] functions = getFunctionAsArray();
@@ -468,6 +474,9 @@ public class Collaborator implements Comparable<Collaborator>{
 			xmlMarkup.append("<function>" + functions[i].trim() + "</function>");
 		}
 		
+		xmlMarkup.append("<gender>" + gender + "</gender>");
+		xmlMarkup.append("<nationality>" + nationality + "</nationality>");
+		
 		
 		xmlMarkup.append("</functions>");
 		xmlMarkup.append("<collaborations>" + getCollaborations() + "</collaborations>");
@@ -496,6 +505,8 @@ public class Collaborator implements Comparable<Collaborator>{
 		}
 		
 		htmlMarkup.append("</ul><p>Collaborations: " + getCollaborations() + "</p>");
+		htmlMarkup.append("<p>Gender: " + gender + "</p>");
+		htmlMarkup.append("<p>Nationality: " + nationality + "</p>");
 		
 		return htmlMarkup.toString();
 	}

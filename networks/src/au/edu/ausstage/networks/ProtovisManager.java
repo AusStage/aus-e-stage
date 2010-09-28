@@ -90,11 +90,13 @@ public class ProtovisManager {
 		// define a SPARQL query to get details about a collaborator
 		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
 						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
- 						   + "SELECT ?collabName ?function  "
+ 						   + "SELECT ?collabName ?function ?gender ?nationality  "
 						   + "WHERE {  "
 						   + "       @ a foaf:Person ; "
 						   + "           foaf:name ?collabName. "
 						   + "OPTIONAL {@ ausestage:function ?function} "
+						   + "OPTIONAL {@ foaf:gender ?gender} "
+						   + "OPTIONAL {@ ausestage:nationality ?nationality} "
 						   + "} ";
 
 		String queryToExecute = null;
@@ -135,6 +137,15 @@ public class ProtovisManager {
 				if(row.get("function") != null) {
 					collaborator.setFunction(row.get("function").toString());
 				}
+				
+				if(row.get("gender") != null) {
+					collaborator.setGender(row.get("gender").toString());
+				}
+				
+				if(row.get("nationality") != null) {
+					collaborator.setNationality(row.get("nationality").toString());
+				}
+
 			}
 			
 			// play nice and tidy
@@ -368,6 +379,9 @@ public class ProtovisManager {
 		} else {
 			object.put("functions", new JSONArray());
 		}
+		
+		object.put("gender", value.getGender());
+		object.put("nationality", value.getNationality());
 		
 		// return the object
 		return object;
