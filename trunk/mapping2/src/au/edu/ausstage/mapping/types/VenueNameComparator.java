@@ -36,11 +36,25 @@ public class VenueNameComparator implements Comparator<Venue>, java.io.Serializa
 	 */
 	public int compare(Venue first, Venue second) {
 	
-		// get the dates
-		String firstName  = first.getName();
-		String secondName = second.getName();
+		/*
+		 * have to use more than just the name as so many venues have the same name :(
+		 */
+		 
+	
+		// get the values to compare
+		String firstValue  = first.getName();
+		String secondValue = second.getName();
 		
-		return firstName.compareTo(secondName);
+		if(firstValue.equals(secondValue) == true) {
+		
+			firstValue  += first.getStreet();
+			secondValue += second.getStreet();
+		
+			firstValue += first.getSuburb();
+			secondValue += second.getSuburb();
+		}
+		
+		return firstValue.compareTo(secondValue);
 	
 	} // end compare method
 

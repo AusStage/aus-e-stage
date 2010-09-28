@@ -36,9 +36,19 @@ public class ContributorNameComparator implements Comparator<Contributor>, java.
 	 */
 	public int compare(Contributor firstContributor, Contributor secondContributor) {
 	
-		// get the dates
+		// get the values
 		String firstName  = firstContributor.getName();
 		String secondName = secondContributor.getName();
+		
+		// check for legitimate duplication
+		if(firstName.equals(secondName) == true) {
+			if(firstContributor.getId().equals(secondContributor.getId()) == true) {
+				return firstName.compareTo(secondName);
+			} else {
+				firstName += firstContributor.getId();
+				secondName += secondContributor.getId();
+			}
+		}
 		
 		return firstName.compareTo(secondName);
 	
