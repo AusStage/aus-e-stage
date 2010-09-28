@@ -18,7 +18,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 == Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || state-list, suburb-list, suburb-venue-list, organisation, contributor || No || ||
+|| task   || state-list, suburb-list, suburb-venue-list, organisation, contributor, venue || No || ||
 || id     || unique identifier use with the lookup task || No || ||
 || format || json || Yes || json ||
 || callback || function name to use for a JSONP request || Yes || ||
