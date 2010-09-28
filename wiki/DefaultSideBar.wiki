@@ -1,4 +1,5 @@
 #summary Default Sidebar for all Wiki pages
+#labels Deprecated
 
  * [StartPage Wiki Start Page]
  * !HowTo articles
