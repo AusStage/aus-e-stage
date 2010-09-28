@@ -8,7 +8,7 @@ The Search API exposes methods and data elements that can be used to search for 
 
 _Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
 
-_Note 2: At the time of writing searching for an organisation by ID is the only search supported_
+_Note 2: At the time of writing searching for an organisation or contributor by ID are the only searches supported_
 
 == Base URL ==
 
@@ -19,7 +19,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 == Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || organisation || No || ||
+|| task   || organisation, contributor || No || ||
 || type   || name, id     || No || ||
 || query  || the search query || No || ||
 || format || json || Yes || json ||
@@ -57,5 +57,3 @@ Below is sample output from an organisation id search.
  }
 ]
 }}}
-
-
