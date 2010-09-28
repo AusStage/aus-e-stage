@@ -36,9 +36,19 @@ public class OrganisationNameComparator implements Comparator<Organisation>, jav
 	 */
 	public int compare(Organisation first, Organisation second) {
 	
-		// get the dates
+		// get the values
 		String firstName  = first.getName();
 		String secondName = second.getName();
+		
+		// check for legitimate duplication
+		if(firstName.equals(secondName) == true) {
+			if(first.getId().equals(second.getId()) == true) {
+				return firstName.compareTo(secondName);
+			} else {
+				firstName += first.getId();
+				secondName += second.getId();
+			}
+		}
 		
 		return firstName.compareTo(secondName);
 	

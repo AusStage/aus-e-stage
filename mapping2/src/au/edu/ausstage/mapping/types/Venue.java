@@ -483,9 +483,9 @@ public class Venue implements Comparable<Venue>{
 	}
 	
 	public void setLatitude(String value) {
-		if(InputUtils.isValid(value) == false) {
-			throw new IllegalArgumentException("The value cannot be null");
-		}
+//		if(InputUtils.isValid(value) == false) {
+//			throw new IllegalArgumentException("The value cannot be null");
+//		}
 		latitude = value;
 	}
 	
@@ -494,9 +494,9 @@ public class Venue implements Comparable<Venue>{
 	}
 	
 	public void setLongitude(String value) {
-		if(InputUtils.isValid(value) == false) {
-			throw new IllegalArgumentException("The value cannot be null");
-		}
+//		if(InputUtils.isValid(value) == false) {
+//			throw new IllegalArgumentException("The value cannot be null");
+//		}
 		longitude = value;
 	}
 	
