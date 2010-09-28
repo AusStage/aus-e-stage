@@ -146,4 +146,23 @@ public class LookupManager {
 		return search.doContributorSearch("id", id, null, null, null);
 	}
 	
+	/**
+	 * A method to lookup the details of a venue
+	 *
+	 * @param id the unique identifier of the venue
+	 *
+	 * @ return a JSON encoded string containing the data
+	 */
+	public String getVenue(String id) {
+	
+		// validate the input
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter is required to be a valid integer");
+		}
+		
+		SearchManager search = new SearchManager(database);
+		
+		return search.doVenueSearch("id", id, null, null, null);
+	}	
+	
 } // end class definition

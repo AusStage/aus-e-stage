@@ -32,7 +32,7 @@ public class SearchServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	
 	// declare private class constants
-	private final String[] TASK_TYPES    = {"organisation", "contributor"};
+	private final String[] TASK_TYPES    = {"organisation", "contributor", "venue"};
 	private final String[] SEARCH_TYPES  = {"name", "id"};
 	private final String[] FORMAT_TYPES  = {"json"};
 	private final String[] SORT_TYPES    = {"name", "id"};
@@ -78,7 +78,7 @@ public class SearchServlet extends HttpServlet {
 		// check on the searchType parameter
 		if(InputUtils.isValid(searchType, SEARCH_TYPES) == false) {
 			// no valid task type was found
-			throw new ServletException("Missing search parameter. Expected one of: " + InputUtils.arrayToString(SEARCH_TYPES));
+			throw new ServletException("Missing type parameter. Expected one of: " + InputUtils.arrayToString(SEARCH_TYPES));
 		}
 
 		// check on the id parameter
@@ -155,6 +155,8 @@ public class SearchServlet extends HttpServlet {
 			data = manager.doOrganisationSearch(searchType, query, formatType, sortType, limit);
 		} else if(taskType.equals("contributor") == true) {
 			data = manager.doContributorSearch(searchType, query, formatType, sortType, limit);
+		} else if(taskType.equals("venue") == true) {
+			data = manager.doVenueSearch(searchType, query, formatType, sortType, limit);
 		}			
 			
 		// output the appropriate mime type
