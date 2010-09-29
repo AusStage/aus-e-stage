@@ -709,9 +709,6 @@ public class SearchManager {
 		JSONArray  jsonList  = new JSONArray();
 		Integer    loopCount = 0;
 		
-		//debug code
-		limit = Integer.MAX_VALUE;
-		
 		// get the data
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
 		
