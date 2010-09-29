@@ -1,4 +1,4 @@
-Mapping Service API - Lookup
+#summary Mapping Service API - Lookup
 
 <h1>Lookup API</h1>
 
