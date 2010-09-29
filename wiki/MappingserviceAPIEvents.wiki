@@ -6,7 +6,7 @@ Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki
 
 The Lookup API exposes methods that can be used to retrieve details of events that occurred at a venue for use in populating infoWindows in the maps.
 
-_Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
+_Note: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
 
 
 == Base URL ==
