@@ -177,6 +177,7 @@ $(document).ready(function() {
 		height: 500,
 		width: 400,
 		modal: false,
+		position: ["right","top"],
 		buttons: {
 			'On/Off': function() {
 				if (browseTrigger){
@@ -599,101 +600,62 @@ function loadNodeNeighbors(contributors){
     //displays overall network and selected contributor information
     function displayAllInfo(activeNode, contributors){
     	updateNetworkInfo(contributors);
-    	updateInfoWindow(activeNode, contributors);
-    	document.getElementById("networkCentreTitle").innerHTML = ("<b>Centre :</b><br>");
-    	document.getElementById("networkCentre").innerHTML = (contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")");
-    	document.getElementById("networkCentre").href = contributors.nodes[activeNode].nodeUrl.replace("amp;", "");
+    	updateSelectedInfo(activeNode, contributors, "nodes");
     	}
     
     //displays the network statistics in the side panel
 function updateNetworkInfo(contributors){
-    	var networkDetails = document.getElementById("networkTitle");
-	    	networkDetails.innerHTML = "<H3> Network Properties </H3>";
-    	networkDetails = document.getElementById("nodeCount");
-    		networkDetails.innerHTML = "<b> Node Count: </b>"+contributors.nodes.length;
-    	networkDetails = document.getElementById("edgeCount");
-    		networkDetails.innerHTML = "<b> Edge Count: </b>"+contributors.edges.length;
-    	networkDetails = document.getElementById("eventCount");
-    		networkDetails.innerHTML = "<b> Event Count: </b>Undefined.";
-    	networkDetails = document.getElementById("diameter");
-    		networkDetails.innerHTML = "<b> Diameter: </b>Undefined.";
+		var eventCount = 0;
+		for (i=0;i<contributors.edges.length;i++){
+			eventCount = eventCount+contributors.edges[i].value;
+		}
+	
+    	var html = 	"<li> <h3> Network Properties </h3> </li>"+
+    				"<li><b> Centre:</b> <a href ="+contributors.nodes[activeNode].nodeUrl.replace("amp;", "")+">"+
+    				contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")"+
+    				"</a></li>"+
+    				"<li><b>Node Count:</b> "+contributors.nodes.length+"</li>"+
+					"<li><b>Edge Count:</b> "+contributors.edges.length+"</li>"+
+					"<li><b>Event Count:</b> "+eventCount+"</li>";
+  
+		$("#network_details").empty();
+		$("#network_details").append(html);
 
 }
     
     //displays information on the selected contributor in the side panel
-function updateInfoWindow(activeNode, contributors){
-  
+function updateSelectedInfo(activeNode, contributorArray, ui_focus){
     //get contributor functions
-    	var functionList = "";
-    	for(i = 0;i<contributors.nodes[activeNode].functions.length; i++){
-			functionList = functionList + contributors.nodes[activeNode].functions[i] + "<br>";
-    	}
-  
+    var functionList = "";
+    var html = "<br><table style=\"border-bottom: grey 1px solid; border-top:grey 1px solid;\" >";
+    
     //clear the window of previous information
-    	clearInfoWindow("edge");
+    $("#selected_details").empty(); 
 
-	//set the contributor name
-    	var infoDetails = document.getElementById("contName");
-    	infoDetails.innerHTML = "<br><b>"+contributors.nodes[activeNode].nodeName + 		" ("+contributors.nodes[activeNode].id+")</b>";
-    	infoDetails.href = contributors.nodes[activeNode].nodeUrl.replace("amp;", "");
-
-    //set the functions
-    	infoDetails = document.getElementById("contFunct");
-    	infoDetails.innerHTML = "<br><b>Functions:</b><br>"+functionList;		
-}
-
-	//displays information on the selected edge in the side panel    
-function updateInfoWindowEdge(edgeInformation){
-
-		//clear the infoWindow
-			clearInfoWindow("node");
-
-		//set collaborator information
-	    	var infoDetails = document.getElementById("collab1");
-    		infoDetails.innerHTML = "<br><b>"+edgeInformation.sourceNode.nodeName + " ("+edgeInformation.sourceNode.id+")</b>";
-    		infoDetails.href = edgeInformation.sourceNode.nodeUrl.replace("amp;", "");
-    		var infoDetails = document.getElementById("collab2");
-    		infoDetails.innerHTML = "<b>"+edgeInformation.targetNode.nodeName + " ("+edgeInformation.targetNode.id+")</b>";
-    		infoDetails.href = edgeInformation.targetNode.nodeUrl.replace("amp;", "");
-
-		//date range
-			infoDetails = document.getElementById("eventRange");
-    		infoDetails.innerHTML = "<br><b>Date Range: </b><br>" + edgeInformation.firstDate + " to " + edgeInformation.lastDate;
-    		
-		//set the edge weight
-			infoDetails = document.getElementById("noOfCollab");
-    		infoDetails.innerHTML = "<br><b>Number of collaborations: </b>" + edgeInformation.value;
+    if (ui_focus == "nodes"){	  	
+    	for(i = 0;i<contributorArray.nodes[activeNode].functions.length; i++){
+			functionList = functionList + contributorArray.nodes[activeNode].functions[i] + "<br>";
+    	} 
+    	html += 	"<tr><td colspan=2>"+ 
+    			"<a href="+contributorArray.nodes[activeNode].nodeUrl.replace("amp;", "")+"><b>"+contributorArray.nodes[activeNode].nodeName + 				" ("+contributorArray.nodes[activeNode].id+")</b></a>"+
+    			"</td></tr>"+
+    			"<tr><td valign=top>"+
+    			"<b>Functions: </b></td>"+
+    			"<td>"+functionList+"</td></tr>"+
+    			"</table>";
 
     }
+    else if(ui_focus =="link"){
+    	html +=  "<tr><td><a href="+contributorArray.sourceNode.nodeUrl.replace("amp;", "")+"><b>"+contributorArray.sourceNode.nodeName+
+				" ("+contributorArray.sourceNode.id+")</b></a>"+
+    			"</td></tr><tr><td><a href="+contributorArray.targetNode.nodeUrl.replace("amp;", "")+"><b>"+contributorArray.targetNode.nodeName+
+				" ("+contributorArray.targetNode.id+")</b></a></td></tr>"+
+				"<tr><td><b>Date Range: </b></td></tr><tr><td>"+contributorArray.firstDate + " to " + contributorArray.lastDate+"</td> </tr>"+
+				"<tr><td><b>No. Of collaborations: </b></td></tr><tr><td>"+contributorArray.value+"</td></tr>" ;
+    }
 
-
-	//clear the side panel of edge or contributor information
-function clearInfoWindow(info){
-		if (info == "node"){
-			
-	    //remove the contributor name
-    		var infoDetails = document.getElementById("contName");
-    		infoDetails.innerHTML = " ";
-    		
-    	//remove the functions
-    		infoDetails = document.getElementById("contFunct");
-    		infoDetails.innerHTML = " ";	
-		}
-		else if (info == "edge"){
-		//remove the contributors	
-			infoDetails = document.getElementById("collab1");
-    		infoDetails.innerHTML = " ";
-			infoDetails = document.getElementById("collab2");
-    		infoDetails.innerHTML = " ";
-		//remove the edge weight
-			infoDetails = document.getElementById("noOfCollab");
-    		infoDetails.innerHTML = " ";
-    	//remove the date range	
-			infoDetails = document.getElementById("eventRange");
-    		infoDetails.innerHTML = " ";    		
-		}
+		$("#selected_details").append(html);    		
 }
-    
 //small helper functions.
  	
     //quick function to check if an array contains a property	
@@ -721,8 +683,12 @@ function clearInfoWindow(info){
 //global variables, to be used with protovis code.
 var vis = null;
 
-//
-var functionsToHighlight = [""];
+// holds functions selected by faceted browsing criteria
+var selectedFunctions = [""];
+
+// holds gender selected by faceted browsing criteria
+var selectedGender = [""];
+
 // define variables for colour options.
 	// legend colours for faceted browsing
 	functionColours = pv.Colors.category20();
@@ -855,7 +821,7 @@ function createNetwork(targetDiv){
 	//	    									  return vis;
 	//	    									  })
 
-			    .event("click", function(d, p) {updateInfoWindowEdge(p);
+			    .event("click", function(d, p) {updateSelectedInfo(activeNode, p, "link");
 			    								targetNodeSelect = p.targetNode.index;
 			    								sourceNodeSelect = p.sourceNode.index;
 			    								targetNodeMO = -1;
@@ -890,7 +856,7 @@ function createNetwork(targetDiv){
     										  nodeFocus = true;
 			    							  targetNodeSelect = -1;
 			    							  sourceNodeSelect = -1;    										 
-    										  updateInfoWindow(activeNode, contributors);
+    										  updateSelectedInfo(activeNode, contributors, "nodes");
     										  return vis;})
     										  
     			.event("dblclick", function(d){return findAndDisplayContributorNetwork(contributors.nodes[this.index].id)})
@@ -922,7 +888,7 @@ function refreshNetwork(typeOfRefresh){
 		resetDateRangeVisibility();
 	}
 	else if (typeOfRefresh == "browse"){
-		refreshNetworkForBrowse($("#functions").multiselect("getChecked"));  
+		setBrowseOptions($("#functions").multiselect("getChecked"), $("#faceted_browsing input:radio:checked").val());  
 	}
 	vis.render();
 	}
@@ -936,18 +902,39 @@ function resetDateRangeVisibility(){
 	}
 
 //resets the checked values for faceted browsing 
-function refreshNetworkForBrowse(selectedFunctions){
+function setBrowseOptions(chosenFunctions, chosenGender){
+	
 	var html = "";
+	//clear the legend
 	$("#legend").empty();
-	//reset the array
-	for (i = 0; i < functionsToHighlight.length; i++){
-		functionsToHighlight[i] = "";
+
+	//reset the gender array
+	for (i = 0; i<selectedGender.length;i++){
+		selectedGender[i] = "";
 	}
-	//set the array with chosen values
+	
+	//set the gender array depending on the selected value
+	if ((chosenGender == "male") || (chosenGender == "female")){
+		selectedGender[0] = chosenGender;
+	} else if (chosenGender=="unknown"){
+		selectedGender[0] = null;
+	} else if (chosenGender == "all"){
+		selectedGender[0] = "male";
+		selectedGender[1] = "female";
+		selectedGender[2] = null;	
+	}
+
+	//reset the function array
 	for (i = 0; i < selectedFunctions.length; i++){
-		functionsToHighlight[i] = selectedFunctions[i].value;
+		selectedFunctions[i] = "";
+	}
+
+	//set the function array with chosen values
+	for (i = 0; i < chosenFunctions.length; i++){
+		selectedFunctions[i] = chosenFunctions[i].value;
+
 		//build the legend
-		html+= "<tr> <td bgcolor="+functionColours(i).color+"> &nbsp </td><td>"+functionsToHighlight[i]+"</td></tr>";
+		html+= "<tr> <td bgcolor="+functionColours(i).color+"> &nbsp </td><td>"+selectedFunctions[i]+"</td></tr>";
 
 		}
 		$("#legend").append(html);
@@ -988,9 +975,14 @@ function getLinkStrokeStyle(d, p){
 //node fill style rules
 function getNodeFillStyle(d, node, nodeNeighbors){
 	if (browseTrigger){
-		var i = findMatch(functionsToHighlight, d.functions);
-		if (i != null){
-			return functionColours(i);
+		if (contains(selectedGender, d.gender)){ 
+			if (selectedFunctions[0] !=  ""){
+				var i = findMatch(selectedFunctions, d.functions);
+				if (i != null){
+					return functionColours(i);
+				}else return nodeFacet;
+			}else 
+			return functionColours(1)
 		}else return nodeFacet;
 	}
 		else
@@ -999,7 +991,7 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 	}
 	else
 	if (nodeFocus==true){
-//		for (i = 0; i < functionsToHighlight.length; i++)
+//		for (i = 0; i < selectedFunctions.length; i++)
 		
 		if (activeNode== node.index){ 
 			return focusNodeFill;
@@ -1017,9 +1009,14 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 //node stroke style rules
 function getNodeStrokeStyle(d, node, nodeNeighbors){
 	if (browseTrigger){
-		var i = findMatch(functionsToHighlight, d.functions);
-		if (i != null){
-			return functionColours(i);
+		if (contains(selectedGender, d.gender)){ 
+			if (selectedFunctions[0] !=  ""){
+				var i = findMatch(selectedFunctions, d.functions);
+				if (i != null){
+					return functionColours(i);
+				}else return nodeFacet;
+			}else 
+			return functionColours(1)
 		}else return nodeFacet;
 	}
 	else
