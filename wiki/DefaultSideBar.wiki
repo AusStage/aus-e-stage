@@ -15,6 +15,7 @@
        * [MappingServiceAPIMarkers Marker Data]
        * [MappingServiceAPISearch Search API]
        * [MappingServiceAPILookup Lookup API]
+       * [MappingserviceAPIEvents Events API]
      * [MappingServiceFeedback Mapping Service Feedback]
        * [Alpha1 Alpha 1]
        * [Alpha2 Alpha 2]
