@@ -113,7 +113,7 @@ public class LookupManager {
 	 *
 	 * @param id the unique identifier of the organisation
 	 *
-	 * @ return a JSON encoded string containing the data
+	 * @return a JSON encoded string containing the data
 	 */
 	public String getOrganisation(String id) {
 	
@@ -132,7 +132,7 @@ public class LookupManager {
 	 *
 	 * @param id the unique identifier of the contributor
 	 *
-	 * @ return a JSON encoded string containing the data
+	 * @return a JSON encoded string containing the data
 	 */
 	public String getContributor(String id) {
 	
@@ -151,7 +151,7 @@ public class LookupManager {
 	 *
 	 * @param id the unique identifier of the venue
 	 *
-	 * @ return a JSON encoded string containing the data
+	 * @return a JSON encoded string containing the data
 	 */
 	public String getVenue(String id) {
 	
