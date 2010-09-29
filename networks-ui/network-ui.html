@@ -47,8 +47,8 @@
 <body>
 <div id="wrap">
 	<div id="header"><h1>AusStage Navigating Networks Protovis Trial</h1></div>
-	<div id="nav">
-	</div>
+<!--	<div id="nav">
+	</div>-->
 	<!-- Include the sidebar -->
 	
 
@@ -66,20 +66,10 @@
 		</div>
 
 		<div id="network_details_div">
-			<ul>
-				<li><a id="contName" href=""></a></li>
-				<li id="contFunct"></li>
-				<li id="degCon"></li>
-			</ul>
-
-			<ul>
-				<li><a id="collab1" href=""></a></li>
-				<li><a id="collab2" href=""></a></li>
-				<li id="noOfCollab"></li>
-				<li id="eventRange"></li>
+			<ul id="selected_details">
 			</ul>
 	
-			<ul>
+			<ul id="network_details">
 				<li id="networkTitle"></li>
 				<li id="networkCentreTitle"></li>
 				<li><a id="networkCentre" href=""></a></li>
@@ -134,25 +124,30 @@
 			
 			</div>
 			<div id="faceted_browsing_div" Title="Faceted Browsing Options">
-				<p>Faceted browsing allows you to browse the current network by contributor function, gender, nationality or a combination of all three.
-				Please select the browse criteria, and then turn faceted browsing on. </p>
-				<table>
-					<tr>
-						<th>Browse by contributor function</th>
-
-					</tr>
-					<tr>
-						<td valign="top">
-							<select name="functions" id="functions" multiple="multiple" >
-							</select>
-						</td>
-						<td>
-							<table id="legend">
-								
-							</table>
-						</td>
-					</tr>
-				</table>
+				<form id = "faceted_browsing">
+					<p>Faceted browsing allows you to browse the current network by contributor function, gender, nationality or a combination of all three.
+					Please select the browse criteria, and then turn faceted browsing on. </p>
+					<table>
+						<tr>
+							<th>Browse by contributor function</th>
+						</tr>
+						<tr>
+							<td valign="top">
+								<select name="functions" id="functions" multiple="multiple" >
+								</select>
+							</td>
+							<td>
+								<table id="legend">
+								</table>
+							</td>
+						</tr>
+						<tr><th>Refine search by gender or browse by gender</th></tr>
+						<tr><td><input type="radio" name="sex" value="male" /> Male
+								<input type="radio" name="sex" value="female" /> Female
+								<input type="radio" name="sex" value="unknown" /> Unknown
+								<input type="radio" name="sex" value="all" checked="true"/> All</td></tr>
+					</table>
+				</form>
 				<br>
 				<br>
 				<br>
