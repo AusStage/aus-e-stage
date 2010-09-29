@@ -488,9 +488,6 @@ public class LookupManager {
 		// add the contributor URI to the query
 		sparqlQuery = sparqlQuery.replaceAll("@", "<" + id + ">");
 		
-		//debug code
-		System.out.println("!!!\n" + sparqlQuery + "\n!!!\n");
-		
 		// execute the query
 		ResultSet results = database.executeSparqlQuery(sparqlQuery);
 		
