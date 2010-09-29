@@ -107,6 +107,7 @@ public class EventLookupManager {
 				object.put("id", resultSet.getString(1));
 				object.put("name", resultSet.getString(2));
 				object.put("firstDate", DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				object.put("url", LinksManager.getEventLink(resultSet.getString(1)));
 				
 				// add the object to the list
 				list.add(object);
@@ -130,7 +131,7 @@ public class EventLookupManager {
 	}
 	
 	/**
-	 * A private method to get the details of the venue from the search servlet
+	 * A private method to get the details of the venue from the search manager
 	 *
 	 * @param id the venue id
 	 * @return a JSONObject containing details of the venue
@@ -156,6 +157,58 @@ public class EventLookupManager {
 	}
 	
 	/**
+	 * A private method to get the details of the organisation from the search manager
+	 *
+	 * @param id the organisation id
+	 * @return a JSONObject containing details of the venue
+	 */
+	private JSONObject getOrganisationObject(String id) {
+
+		// get the details of the venue
+		SearchManager manager = new SearchManager(database);		
+		String results = manager.doOrganisationSearch("id", id, null, null, null);
+		
+		// check on what was returned
+		if(results.length() < 10) {
+			return null;
+		}
+		
+		// decode the JSON
+		Object    obj   = JSONValue.parse(results);  // decode the JSON
+		JSONArray array = (JSONArray)obj;		     // cast the object as an JSONArray
+		JSONObject organisation = (JSONObject)array.get(0); // case the first element in the array as JSONObject
+		
+		// return the details of the venue
+		return organisation;	
+	}
+	
+	/**
+	 * A private method to get the details of the contributor from the search manager
+	 *
+	 * @param id the organisation id
+	 * @return a JSONObject containing details of the venue
+	 */
+	private JSONObject getContributorObject(String id) {
+
+		// get the details of the venue
+		SearchManager manager = new SearchManager(database);		
+		String results = manager.doContributorSearch("id", id, null, null, null);
+		
+		// check on what was returned
+		if(results.length() < 10) {
+			return null;
+		}
+		
+		// decode the JSON
+		Object    obj   = JSONValue.parse(results);  // decode the JSON
+		JSONArray array = (JSONArray)obj;		     // cast the object as an JSONArray
+		JSONObject contributor = (JSONObject)array.get(0); // case the first element in the array as JSONObject
+		
+		// return the details of the venue
+		return contributor;	
+	}
+	
+	/**
 	 * A method to get a list of events for an organisation at a venue
 	 *
 	 * @param id         the unique identifier of the organisation
@@ -164,10 +217,88 @@ public class EventLookupManager {
 	 *
 	 * @return           the results of the lookup encoded in the specified format
 	 */
+	@SuppressWarnings("unchecked")
 	public String getEventsByOrganisation(String id, String venueId, String formatType) {
 	
-		//debug code
-		return "";
+		// check the parameters
+		if(InputUtils.isValid(id) == false) {
+			throw new IllegalArgumentException("The id parameter must be a valid integer");
+		}
+		
+		if(InputUtils.isValid(venueId) == false) {
+			throw new IllegalArgumentException("The venue id parameter must be a valid integer");
+		}
+		
+		if(InputUtils.isValid(formatType, EventLookupServlet.FORMAT_TYPES) == false) {
+			throw new IllegalArgumentException("The specified formatType is invalid. Expected one of: " + InputUtils.arrayToString(EventLookupServlet.FORMAT_TYPES));
+		}
+		
+		// get the details of the venue
+		JSONObject venue        = getVenueObject(venueId);
+		JSONObject organisation = getOrganisationObject(id);
+		JSONArray  list  = new JSONArray();
+		JSONObject object;
+		
+		// check on what was returned
+		if(venue == null || organisation == null) {
+			return new JSONObject().toString();
+		}
+		
+		// get the events at this venue
+		String sql = "SELECT DISTINCT events.eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date "
+				   + "FROM events, orgevlink "
+				   + "WHERE venueid = ? "
+				   + "AND events.eventid = orgevlink.eventid "
+				   + "AND orgevlink.organisationid = ? "
+				   + "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
+				   
+		String[] sqlParameters = {venueId, id};
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return new JSONObject().toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		// build the list of results
+		try {
+		
+			// loop through the resulset
+			while(resultSet.next()) {
+			
+				// start a new JSON object
+				object = new JSONObject();
+				object.put("id", resultSet.getString(1));
+				object.put("name", resultSet.getString(2));
+				object.put("firstDate", DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				object.put("url", LinksManager.getEventLink(resultSet.getString(1)));
+				
+				// add the object to the list
+				list.add(object);
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return new JSONObject().toString();
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// finalise the object
+		venue.put("events", list);
+		venue.put("organisation", organisation);
+		
+		// return the data
+		return venue.toString();
 	}
 	
 	/**
@@ -179,10 +310,88 @@ public class EventLookupManager {
 	 *
 	 * @return           the results of the lookup encoded in the specified format
 	 */
+	@SuppressWarnings("unchecked")
 	public String getEventsByContributor(String id, String venueId, String formatType) {
 	
-		//debug code
-		return "";
+		// check the parameters
+		if(InputUtils.isValid(id) == false) {
+			throw new IllegalArgumentException("The id parameter must be a valid integer");
+		}
+		
+		if(InputUtils.isValid(venueId) == false) {
+			throw new IllegalArgumentException("The venue id parameter must be a valid integer");
+		}
+		
+		if(InputUtils.isValid(formatType, EventLookupServlet.FORMAT_TYPES) == false) {
+			throw new IllegalArgumentException("The specified formatType is invalid. Expected one of: " + InputUtils.arrayToString(EventLookupServlet.FORMAT_TYPES));
+		}
+		
+		// get the details of the venue
+		JSONObject venue       = getVenueObject(venueId);
+		JSONObject contributor = getContributorObject(id);
+		JSONArray  list  = new JSONArray();
+		JSONObject object;
+		
+		// check on what was returned
+		if(venue == null || contributor == null) {
+			return new JSONObject().toString();
+		}
+		
+		// get the events at this venue
+		String sql = "SELECT DISTINCT events.eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date "
+				   + "FROM events, conevlink "
+				   + "WHERE venueid = ? "
+				   + "AND events.eventid = conevlink.eventid "
+				   + "AND conevlink.contributorid = ? "
+				   + "ORDER BY yyyyfirst_date DESC, mmfirst_date DESC, ddfirst_date DESC";
+				   
+		String[] sqlParameters = {venueId, id};
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return new JSONObject().toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		// build the list of results
+		try {
+		
+			// loop through the resulset
+			while(resultSet.next()) {
+			
+				// start a new JSON object
+				object = new JSONObject();
+				object.put("id", resultSet.getString(1));
+				object.put("name", resultSet.getString(2));
+				object.put("firstDate", DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				object.put("url", LinksManager.getEventLink(resultSet.getString(1)));
+				
+				// add the object to the list
+				list.add(object);
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return new JSONObject().toString();
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// finalise the object
+		venue.put("events", list);
+		venue.put("contributor", contributor);
+		
+		// return the data
+		return venue.toString();
 	}	
 	
 } // end class definition
