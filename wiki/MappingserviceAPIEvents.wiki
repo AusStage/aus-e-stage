@@ -1,0 +1,113 @@
+#summary Mapping Service API - Event Lookup
+
+<h1>Event API</h1>
+
+Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
+
+The Lookup API exposes methods that can be used to retrieve details of events that occurred at a venue for use in populating infoWindows in the maps.
+
+_Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
+
+
+== Base URL ==
+
+http://beta.ausstage.edu.au/mapping2/events?
+
+Combining the base URL with the parameters outlined below constructs a call to the API.
+
+== Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| task   || organisation, contributor, venue || No || ||
+|| id     || unique identifier use with the task || No || ||
+|| venue  || specify the unique identifier of the venue when undertaking an organisation or contributor lookup || yes || ||
+|| format || json || Yes || json ||
+|| callback || function name to use for a JSONP request || Yes || ||
+
+=== task ===
+The type of search task to undertake for example a search for events that occurred at a venue, or the events associated with an organisation that occurred at the specified venue.
+
+==== organisation ===
+
+A list of events that occurred at a venue associated with the specified organisation
+
+==== contributor ====
+
+A list of events that occurred at a venue associated with the specified contributor
+
+==== venue ====
+
+A list of events that have occurred at the specified venue
+
+=== id ===
+
+The unique identifier of a venue, when undertaking a venue lookup, or the unique identifier of the organisation or contributor
+
+=== venue ===
+
+The unique identifier of a venue when undertaking a lookup for events associated with an organisation or contributor
+
+=== format ===
+The type of data format used to prepare the search results. At the time of writing only [http://en.wikipedia.org/wiki/JSON JSON] is a supported format
+
+=== callback ===
+The name of the callback function used when a request is made for JSONP encoded data
+
+== Sample Output ==
+
+=== venue ===
+
+{{{
+{ "events" : [ { "firstDate" : "13 October 2010",
+        "id" : "85146",
+        "name" : "When The Rain Stops Falling"
+      },
+      { "firstDate" : "09 June 2010",
+        "id" : "83901",
+        "name" : "Waiting for Godot"
+      },
+      { "firstDate" : "11 March 2010",
+        "id" : "83038",
+        "name" : "Ngurrumilmarrmiriyu (Wrong Skin)"
+      },
+      { "firstDate" : "03 March 2010",
+        "id" : "82956",
+        "name" : "The Walworth Farce"
+      },
+      { "firstDate" : "19 February 2010",
+        "id" : "82957",
+        "name" : "Be Your Self"
+      },
+      { "firstDate" : "07 January 2010",
+        "id" : "82802",
+        "name" : "Avenue Q"
+      },
+      { "firstDate" : "20 November 2009",
+        "id" : "82881",
+        "name" : "Steel Magnolias"
+      },
+      { "firstDate" : "12 November 2009",
+        "id" : "82882",
+        "name" : "Menopause the Musical"
+      },
+      ...
+      { "firstDate" : "01 October 1941",
+        "id" : "69863",
+        "name" : "The Guinea Pig"
+      },
+      { "firstDate" : "01 January 1941",
+        "id" : "69862",
+        "name" : "Cinderella / Will Mahony / The Naughty Nineties"
+      }
+    ],
+  "id" : "815",
+  "latitude" : "-34.92832",
+  "longitude" : "138.597007",
+  "name" : "Her Majesty's Theatre",
+  "postcode" : "5000",
+  "street" : "58 Grote Street",
+  "suburb" : "Adelaide",
+  "totalEventCount" : 313,
+  "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
+}
+}}}
