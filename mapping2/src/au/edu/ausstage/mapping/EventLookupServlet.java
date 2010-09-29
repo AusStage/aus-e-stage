@@ -29,16 +29,15 @@ import javax.servlet.http.*;
 /**
  * A class to respond to requests to lookup data
  */
-public class LookupServlet extends HttpServlet {
+public class EventLookupServlet extends HttpServlet {
 
 	// declare private variables
 	private ServletConfig servletConfig;
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list", "organisation", "contributor", "venue"};
-	private final String[] FORMAT_TYPES       = {"json"};
-	public static final String[] VALID_STATES = {"1", "2", "3", "4", "5", "6", "7", "8"};
+	private final String[] TASK_TYPES         = {"organisation", "contributor", "venue"};
+	public static final String[] FORMAT_TYPES = {"json"};
 
 	/*
 	 * initialise this instance
@@ -62,6 +61,7 @@ public class LookupServlet extends HttpServlet {
 	
 		// get the parameters
 		String taskType       = request.getParameter("task");
+		String venueId        = request.getParameter("venue");
 		String id             = request.getParameter("id");
 		String formatType     = request.getParameter("format");
 
@@ -72,32 +72,16 @@ public class LookupServlet extends HttpServlet {
 		}
 		
 		// check on the other parameters
-		if(taskType.equals("state-list") == false) {
-			// this is a lookup task that requires the id
-			if(taskType.equals("suburb-list") == true) {
-				if(InputUtils.isValid(id, VALID_STATES) == false) {
-					throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
-				}
-			} else if(taskType.equals("suburb-venue-list") == true) {
-				if(InputUtils.isValid(id) == false) {
-					throw new ServletException("The id parameter is required");
-				} else if(id.indexOf("_") == -1) {
-					throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
-				} else {
-					String[] tmp = id.split("_");
-					if(tmp.length > 2) {
-						throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
-					} else {
-						if(InputUtils.isValid(tmp[0], VALID_STATES) == false) {
-							throw new ServletException("Invalid state code. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
-						}
-					}
-				}
-			} else if(InputUtils.isValid(id) == false) {
-				throw new ServletException("The id parameter is required");
+		if(taskType.equals("organisation") == true || taskType.equals("contributor") == true) {
+			// check on the venue parameter
+			if(InputUtils.isValidInt(venueId) == false) {
+				throw new ServletException("Missing venue parameter, expected a valid integer");
 			}
-		} else {
-			id = null;
+		}
+		
+		// check on the id parameter
+		if(InputUtils.isValidInt(id) == false) {
+			throw new ServletException("Missing id parameter, expected a valid integer");
 		}
 		
 		// check the format parameter
@@ -106,7 +90,7 @@ public class LookupServlet extends HttpServlet {
 			formatType = "json";
 		} else {
 			if(InputUtils.isValid(formatType, FORMAT_TYPES) == false) {
-				throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
+				throw new ServletException("Missing format type. Expected one of: " + InputUtils.arrayToString(FORMAT_TYPES));
 			}
 		}
 		
@@ -124,28 +108,17 @@ public class LookupServlet extends HttpServlet {
 		}
 		
 		// instantiate a lookup object
-		LookupManager lookup = new LookupManager(database);
+		EventLookupManager lookup = new EventLookupManager(database);
 		
 		String results = null;
 		
-		// determine what to lookup
-		if(taskType.equals("state-list") == true) {
-			// lookup the list of states
-			results = lookup.getStateList();
-		} else if(taskType.equals("suburb-list") == true) {
-			// lookup the list of available suburbs in selected state
-			results = lookup.getSuburbList(id);
-		} else if(taskType.equals("suburb-venue-list") == true) {
-			// lookup a list of venues in a specific state
-			results = lookup.getVenueListBySuburb(id);
-		} else if(taskType.equals("organisation") == true) {
-			// lookup a list of venues in a specific state
-			results = lookup.getOrganisation(id);
+		// determine which lookup to undertake
+		if(taskType.equals("organisation") == true) {
+			results = lookup.getEventsByOrganisation(id, venueId, formatType);
 		} else if(taskType.equals("contributor") == true) {
-			// lookup a list of venues in a specific state
-			results = lookup.getContributor(id);
+			results = lookup.getEventsByContributor(id, venueId, formatType);
 		} else if(taskType.equals("venue") == true) {
-			results = lookup.getVenue(id);
+			results = lookup.getEventsByVenue(id, formatType);
 		}
 		
 		// check to see if this is a jsonp request
