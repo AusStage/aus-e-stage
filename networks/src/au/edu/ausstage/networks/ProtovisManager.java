@@ -458,6 +458,10 @@ public class ProtovisManager {
 		ArrayList<Integer> nodesIndex = new ArrayList<Integer>();
 		ArrayList<String> functions = null;
 		
+		ArrayList<Edge>   edges     = new ArrayList<Edge>();
+		ArrayList<String> edgeIndex = new ArrayList<String>();
+		Edge              edge      = null;
+		
 		boolean centralNodeFunctionsComplete = false;
 		boolean nodeFunctionsComplete        = false;
 	
@@ -540,24 +544,75 @@ public class ProtovisManager {
 						node.addFunction(row.get("collabFunction").toString());
 					}
 				}			
-			}			
-					
+			}
+			
+			// build an edge if required
+			if(edgeIndex.contains(id + AusStageURI.getId(row.get("collaborator").toString())) == false || edgeIndex.contains(AusStageURI.getId(row.get("collaborator").toString()) + id) == false) {
+				
+				// create a new edge
+				edge = new Edge();
+				
+				edge.setSource(new Integer(id));
+				edge.setTarget(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
+				edge.setFirstDate(row.get("collabFirstDate").toString());
+				edge.setLastDate(row.get("collabLastDate").toString());
+				edge.setValue(row.get("collabCount").asLiteral().getInt());
+				
+				edges.add(edge);
+				edgeIndex.add(id + AusStageURI.getId(row.get("collaborator").toString()));
+				edgeIndex.add(AusStageURI.getId(row.get("collaborator").toString()) + id);
+			}
+			
+			// build an edge if required
+			if(edgeIndex.contains(AusStageURI.getId(row.get("collabCollaborator").toString()) + AusStageURI.getId(row.get("collaborator").toString())) == false || edgeIndex.contains(AusStageURI.getId(row.get("collaborator").toString()) + AusStageURI.getId(row.get("collabCollaborator").toString())) == false) {
+			
+				// create a new edge
+				edge = new Edge();
+				
+				edge.setSource(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
+				edge.setTarget(new Integer(AusStageURI.getId(row.get("collabCollaborator").toString())));
+				edge.setFirstDate(row.get("collabCollabFirstDate").toString());
+				edge.setLastDate(row.get("collabCollabLastDate").toString());
+				edge.setValue(row.get("collabCollabCount").asLiteral().getInt());
+				
+				edges.add(edge);
+				edgeIndex.add(AusStageURI.getId(row.get("collabCollaborator").toString()) + AusStageURI.getId(row.get("collaborator").toString()));
+				edgeIndex.add(AusStageURI.getId(row.get("collaborator").toString()) + AusStageURI.getId(row.get("collabCollaborator").toString()));
+			}					
 		}
-		
+				
 		// finalise the list of nodes
 		nodes.add(centralNode);
 		nodesIndex.add(centralNode.getId());
+			
+		// reindex the edges
+		for(int i = 0; i < edges.size(); i++) {
+			
+			edge = (Edge)edges.get(i);
+			
+			if(nodesIndex.indexOf(edge.getSource()) != -1 && nodesIndex.indexOf(edge.getTarget()) != -1) {
+				edge.setSource(nodesIndex.indexOf(edge.getSource()));
+				edge.setTarget(nodesIndex.indexOf(edge.getTarget()));
+			} else {
+				edges.remove(edge);
+				i--;
+			}
+		}
 		
 		//declare JSON related variables
-		JSONObject object    = new JSONObject();
-		JSONArray  nodesList = new JSONArray();
-		JSONArray  edgeList  = new JSONArray();
+		JSONObject object     = new JSONObject();
+		JSONArray  nodesList  = new JSONArray();
+		JSONArray  edgesList  = new JSONArray();
 		
 		// add the list of nodes to the list
 		nodesList.addAll(nodes);
 		
+		// add the list of edges to the list
+		edgesList.addAll(edges);
+		
 		// build the final object
 		object.put("nodes", nodesList);
+		object.put("edges", edgesList);
 		
 		// return the JSON string
 		return object.toString();
@@ -566,7 +621,7 @@ public class ProtovisManager {
 	/**
 	 * A private class used to represent a node in the export
 	 */
-	private class Node implements JSONAware{
+	private class Node implements JSONAware {
 	
 		// declare private class variables
 		Integer id          = null;
@@ -690,5 +745,86 @@ public class ProtovisManager {
 		public String toJSONString(){
 			return getJSONObject().toString();
 		}
+	}
+	
+	/**
+	 * A private class used to represent an edge in the export
+	 */
+	private class Edge implements JSONAware {
+	
+		// declare private variables
+		Integer source;
+		Integer target;
+		String  firstDate;
+		String  lastDate;
+		Integer value;
+		
+		public Edge(Integer source, Integer target, String firstDate, String lastDate, Integer value) {
+			this.source = source;
+			this.target = target;
+			this.firstDate = firstDate;
+			this.lastDate = lastDate;
+			this.value = value;
+		}
+		
+		public Edge() {};
+		
+		public void setSource(Integer value) {
+			this.source = value;
+		}
+		
+		public Integer getSource() {
+			return source;
+		}
+		
+		public void setTarget(Integer value) {
+			this.target = value;
+		}
+		
+		public Integer getTarget() {
+			return target;
+		}
+		
+		public void setFirstDate(String value) {
+			firstDate = value;
+		}
+		
+		public String getFirstDate() {
+			return firstDate;
+		}
+		
+		public void setLastDate(String value) {
+			lastDate = value;
+		} 
+		
+		public String getLastDate() {
+			return lastDate;
+		}
+		
+		public void setValue(Integer value) {
+			this.value = value;
+		}
+		
+		public Integer getValue() {
+			return value;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public JSONObject getJSONObject() {
+			JSONObject object = new JSONObject();
+			
+			object.put("source", source);
+			object.put("target", target);
+			object.put("firstDate", firstDate);
+			object.put("lastDate", lastDate);
+			object.put("value", value);
+			
+			return object;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public String toJSONString(){
+			return getJSONObject().toString();
+		}		
 	}
 }
