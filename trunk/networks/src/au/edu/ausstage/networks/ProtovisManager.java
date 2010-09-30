@@ -69,6 +69,12 @@ public class ProtovisManager {
 		if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
 			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
 		}
+		
+		// determine how to build the export
+		if(radius == 1) {
+			// use the alternate method for an export with a radius of 1
+			return alternateData(id);
+		} 
 	
 		/*
 		 * get the base network data
@@ -387,4 +393,302 @@ public class ProtovisManager {
 		return object;
 	
 	} // end the JSONObject method
+	
+	/**
+	 * A private method to use an alternate algorithm to build a protovise export
+	 *
+	 * @param id the unique identifier of the collaborator
+	 *
+	 * @return   the JSON encoded protovis export
+	 */
+	@SuppressWarnings("unchecked")
+	private String alternateData(String id) {
+	
+		// check on the parameters
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("Error: the id parameter is required");
+		}
+		
+		// define a SPARQL query to get details about a collaborator
+		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
+						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
+ 						   + "SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaborator ?collabGivenName ?collabFamilyName ?collabFunction ?collabGender ?collabNationality ?collabFirstDate ?collabLastDate ?collabCount ?collabCollaborator ?collabCollabFirstDate ?collabCollabLastDate ?collabCollabCount "
+						   + "WHERE { "
+						   + "       @                    a                                foaf:Person;  " 
+						   + "                            foaf:givenName                   ?givenName; "
+						   + "                            foaf:familyName                  ?familyName; "
+						   + "                            ausestage:hasCollaboration       ?collaboration. "
+						   + "       ?collaboration       ausestage:collaborator           ?collaborator; "
+						   + "                            ausestage:collaborationFirstDate ?collabFirstDate; "
+						   + "                            ausestage:collaborationLastDate  ?collabLastDate; "
+						   + "                            ausestage:collaborationCount     ?collabCount. "
+						   + "       ?collaborator        foaf:givenName                   ?collabGivenName; "
+						   + "                            foaf:familyName                  ?collabFamilyName; "
+						   + "                            ausestage:hasCollaboration       ?collabCollaboration. "
+						   + "       ?collabCollaboration ausestage:collaborator           ?collabCollaborator; "
+						   + "                            ausestage:collaborationFirstDate ?collabCollabFirstDate; "
+						   + "                            ausestage:collaborationLastDate  ?collabCollabLastDate; "
+						   + "                            ausestage:collaborationCount     ?collabCollabCount. "
+						   + "       FILTER ((?collaborator != @) && (?collabCollaborator != @) && (?collaborator != ?collabCollaborator)) "
+						   + "       OPTIONAL {@ ausestage:function    ?function} "
+						   + "       OPTIONAL {?collaborator       ausestage:function    ?collabFunction} "
+						   + "       OPTIONAL {@ foaf:gender           ?gender} "
+						   + "       OPTIONAL {?collaborator       foaf:gender           ?collabGender} "
+						   + "       OPTIONAL {@ ausestage:nationality ?nationality} "
+						   + "       OPTIONAL {?collaborator       ausestage:nationality ?collabNationality} "
+						   + "}";
+						   
+		// replace the placeholder with the collaborator id
+		sparqlQuery = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+			
+		// execute the query
+		ResultSet results = database.executeSparqlQuery(sparqlQuery);
+		
+		// check on what was returned
+		if(results.hasNext() == false) {
+			return new JSONObject().toString();
+		}
+		
+		// declare additional helper variables
+		QuerySolution row = null;
+		Node centralNode  = null;
+		Node node         = null;
+		
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		ArrayList<Integer> nodesIndex = new ArrayList<Integer>();
+		ArrayList<String> functions = null;
+		
+		boolean centralNodeFunctionsComplete = false;
+		boolean nodeFunctionsComplete        = false;
+	
+		// add details to this contributor
+		while (results.hasNext()) {
+			// loop though the resulset
+			// get a new row of data
+			row = results.nextSolution();
+			
+			// build the nodes
+			if(centralNode == null) {
+				centralNode = new Node();
+				
+				centralNode.setId(new Integer(id));
+				centralNode.setName(row.get("givenName").toString() + " " + row.get("familyName").toString());
+				
+				if(row.get("gender") != null) {
+					centralNode.setGender(row.get("gender").toString());
+				}
+				
+				if(row.get("nationality") != null) {
+					centralNode.setNationality(row.get("nationality").toString());
+				}
+				
+				centralNode.setUrl(LinksManager.getContributorLink(id));
+				
+				// add the first function
+				centralNode.addFunction(row.get("function").toString());
+			} else {
+				
+				if(centralNodeFunctionsComplete == false) {
+					functions = centralNode.getFunctions();
+				
+					if(functions.contains(row.get("function").toString()) == true) {
+						centralNodeFunctionsComplete = true;
+					} else {
+						centralNode.addFunction(row.get("function").toString());
+					}
+				}
+			}
+			
+			if(nodesIndex.contains(new Integer(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
+			
+				// build the node for this collaborator
+				node = new Node();
+				
+				// reset the functions flag
+				nodeFunctionsComplete = false;
+			
+				node.setId(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
+				node.setName(row.get("collabGivenName").toString() + " " + row.get("collabFamilyName").toString());
+			
+				if(row.get("collabGender") != null) {
+					node.setGender(row.get("collabGender").toString());
+				}
+			
+				if(row.get("collabNationality") != null) {
+					node.setNationality(row.get("collabNationality").toString());
+				}
+			
+				node.setUrl(LinksManager.getContributorLink(node.getId().toString()));
+			
+				// add this node to the list
+				nodes.add(node);
+				
+				// add this node id to the index
+				nodesIndex.add(node.getId());
+				
+				// add the first function
+				node.addFunction(row.get("collabFunction").toString());
+				
+			} else {
+			
+				if(nodeFunctionsComplete == false) {
+					functions = node.getFunctions();
+				
+					if(functions.contains(row.get("collabFunction").toString()) == true) {
+						nodeFunctionsComplete = true;
+					} else {
+						node.addFunction(row.get("collabFunction").toString());
+					}
+				}			
+			}			
+					
+		}
+		
+		// finalise the list of nodes
+		nodes.add(centralNode);
+		nodesIndex.add(centralNode.getId());
+		
+		//declare JSON related variables
+		JSONObject object    = new JSONObject();
+		JSONArray  nodesList = new JSONArray();
+		JSONArray  edgeList  = new JSONArray();
+		
+		// add the list of nodes to the list
+		nodesList.addAll(nodes);
+		
+		// build the final object
+		object.put("nodes", nodesList);
+		
+		// return the JSON string
+		return object.toString();
+	}
+	
+	/**
+	 * A private class used to represent a node in the export
+	 */
+	private class Node implements JSONAware{
+	
+		// declare private class variables
+		Integer id          = null;
+		String  name        = null;
+		String  url         = null;
+		String  gender      = null;
+		String  nationality = null;
+		java.util.ArrayList<String> functions;		
+	
+		/**
+		 * Constructor for this class
+		 */
+		public Node(Integer id, String name, String url, String gender, String nationality) {
+			
+			// store the details of this node
+			this.id          = id;
+			this.name        = name;
+			this.url         = url;
+			this.gender      = gender;
+			this.nationality = nationality;
+			
+			// instantiate other variables
+			functions = new ArrayList<String>();
+		}
+		
+		public Node() {
+			
+			// instantiate other variables
+			functions = new ArrayList<String>();
+		}
+		
+		/*
+		 * get and set methods
+		 */
+		public Integer getId() {
+			return id;
+		}
+		
+		public void setId(Integer value) {
+			this.id = value;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public void setName(String value) {
+			this.name = value;
+		}
+		
+		public String getUrl() {
+			return url;
+		}
+		
+		public void setUrl(String value) {
+			this.url = value;
+		}
+		
+		public String getGender() {
+			return gender;
+		}
+		
+		public void setGender(String value) {
+			this.gender = value;
+		}
+		
+		public String getNationality() {
+			return nationality;
+		}
+		
+		public void setNationality(String value) {
+			this.nationality = value;
+		}
+		
+		public void addFunction(String value) {
+			functions.add(value);
+		}
+		
+		public java.util.ArrayList<String> getFunctions() {
+			return functions;
+		}
+		
+		public String[] getFunctionArray() {
+			return functions.toArray(new String[1]);
+		}
+		
+		@SuppressWarnings("unchecked")
+		public JSONArray getFunctionJSONArray() {
+			String[] functions = getFunctionArray();
+			
+			if(functions.length > 0) {
+			
+				JSONArray list = new JSONArray();
+				
+				for(int i = 0; i < functions.length; i++) {
+					list.add(functions[i]);
+				}
+				
+				return list;
+			
+			} else {
+				return new JSONArray();
+			}
+		}
+		
+		@SuppressWarnings("unchecked")
+		public JSONObject getJSONObject() {
+			JSONObject object = new JSONObject();
+			
+			object.put("id", id);
+			object.put("nodeName", name);
+			object.put("nodeUrl", url);
+			object.put("gender", gender);
+			object.put("nationality", nationality);
+			object.put("functions", getFunctionJSONArray());
+			
+			return object;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public String toJSONString(){
+			return getJSONObject().toString();
+		}
+	}
 }
