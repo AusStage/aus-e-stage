@@ -70,11 +70,11 @@ public class ProtovisManager {
 			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
 		}
 		
-//		// determine how to build the export
-//		if(radius == 1) {
-//			// use the alternate method for an export with a radius of 1
-//			return alternateData(id);
-//		} 
+		// determine how to build the export
+		if(radius == 1) {
+			// use the alternate method for an export with a radius of 1
+			return alternateData(id);
+		} 
 	
 		/*
 		 * get the base network data
@@ -401,203 +401,425 @@ public class ProtovisManager {
 	 *
 	 * @return   the JSON encoded protovis export
 	 */
+//	@SuppressWarnings("unchecked")
+//	private String alternateData(String id) {
+//	
+//		// check on the parameters
+//		if(InputUtils.isValidInt(id) == false) {
+//			throw new IllegalArgumentException("Error: the id parameter is required");
+//		}
+//		
+//		// define a SPARQL query to get details about a collaborator
+//		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
+//						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
+// 						   + "SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaborator ?collabGivenName ?collabFamilyName ?collabFunction ?collabGender ?collabNationality ?collabFirstDate ?collabLastDate ?collabCount ?collabCollaborator ?collabCollabFirstDate ?collabCollabLastDate ?collabCollabCount "
+//						   + "WHERE { "
+//						   + "       @                    a                                foaf:Person;  " 
+//						   + "                            foaf:givenName                   ?givenName; "
+//						   + "                            foaf:familyName                  ?familyName; "
+//						   + "                            ausestage:hasCollaboration       ?collaboration. "
+//						   + "       ?collaboration       ausestage:collaborator           ?collaborator; "
+//						   + "                            ausestage:collaborationFirstDate ?collabFirstDate; "
+//						   + "                            ausestage:collaborationLastDate  ?collabLastDate; "
+//						   + "                            ausestage:collaborationCount     ?collabCount. "
+//						   + "       ?collaborator        foaf:givenName                   ?collabGivenName; "
+//						   + "                            foaf:familyName                  ?collabFamilyName; "
+//						   + "                            ausestage:hasCollaboration       ?collabCollaboration. "
+//						   + "       ?collabCollaboration ausestage:collaborator           ?collabCollaborator; "
+//						   + "                            ausestage:collaborationFirstDate ?collabCollabFirstDate; "
+//						   + "                            ausestage:collaborationLastDate  ?collabCollabLastDate; "
+//						   + "                            ausestage:collaborationCount     ?collabCollabCount. "
+//						   + "       FILTER ((?collaborator != @) && (?collabCollaborator != @) && (?collaborator != ?collabCollaborator)) "
+//						   + "       OPTIONAL {@ ausestage:function    ?function} "
+//						   + "       OPTIONAL {?collaborator       ausestage:function    ?collabFunction} "
+//						   + "       OPTIONAL {@ foaf:gender           ?gender} "
+//						   + "       OPTIONAL {?collaborator       foaf:gender           ?collabGender} "
+//						   + "       OPTIONAL {@ ausestage:nationality ?nationality} "
+//						   + "       OPTIONAL {?collaborator       ausestage:nationality ?collabNationality} "
+//						   + "}";
+//						   
+//		// replace the placeholder with the collaborator id
+//		sparqlQuery = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+//			
+//		// execute the query
+//		ResultSet results = database.executeSparqlQuery(sparqlQuery);
+//		
+//		// check on what was returned
+//		if(results.hasNext() == false) {
+//			return new JSONObject().toString();
+//		}
+//		
+//		// declare additional helper variables
+//		QuerySolution row = null;
+//		Node centralNode  = null;
+//		Node node         = null;
+//		
+//		ArrayList<Node> nodes = new ArrayList<Node>();
+//		ArrayList<Integer> nodesIndex = new ArrayList<Integer>();
+//		ArrayList<String> functions = null;
+//		
+//		ArrayList<Edge>   edges     = new ArrayList<Edge>();
+//		//ArrayList<String> edgeIndex = new ArrayList<String>();
+//		HashSet<String> edgeIndex = new HashSet<String>();
+//		Edge              edge      = null;
+//		
+//		boolean centralNodeFunctionsComplete = false;
+//		boolean nodeFunctionsComplete        = false;
+//	
+//		// add details to this contributor
+//		while (results.hasNext()) {
+//			// loop though the resulset
+//			// get a new row of data
+//			row = results.nextSolution();
+//			
+//			// build the nodes
+//			if(centralNode == null) {
+//				centralNode = new Node();
+//				
+//				centralNode.setId(new Integer(id));
+//				centralNode.setName(row.get("givenName").toString() + " " + row.get("familyName").toString());
+//				
+//				if(row.get("gender") != null) {
+//					centralNode.setGender(row.get("gender").toString());
+//				}
+//				
+//				if(row.get("nationality") != null) {
+//					centralNode.setNationality(row.get("nationality").toString());
+//				}
+//				
+//				centralNode.setUrl(LinksManager.getContributorLink(id));
+//				
+//				// add the first function
+//				centralNode.addFunction(row.get("function").toString());
+//			} else {
+//				
+//				if(centralNodeFunctionsComplete == false) {
+//					functions = centralNode.getFunctions();
+//				
+//					if(functions.contains(row.get("function").toString()) == true) {
+//						centralNodeFunctionsComplete = true;
+//					} else {
+//						centralNode.addFunction(row.get("function").toString());
+//					}
+//				}
+//			}
+//			
+//			if(nodesIndex.contains(new Integer(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
+//			
+//				// build the node for this collaborator
+//				node = new Node();
+//				
+//				// reset the functions flag
+//				nodeFunctionsComplete = false;
+//			
+//				node.setId(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
+//				node.setName(row.get("collabGivenName").toString() + " " + row.get("collabFamilyName").toString());
+//			
+//				if(row.get("collabGender") != null) {
+//					node.setGender(row.get("collabGender").toString());
+//				}
+//			
+//				if(row.get("collabNationality") != null) {
+//					node.setNationality(row.get("collabNationality").toString());
+//				}
+//			
+//				node.setUrl(LinksManager.getContributorLink(node.getId().toString()));
+//			
+//				// add this node to the list
+//				nodes.add(node);
+//				
+//				// add this node id to the index
+//				nodesIndex.add(node.getId());
+//				
+//				// add the first function
+//				node.addFunction(row.get("collabFunction").toString());
+//				
+//			} else {
+//			
+//				if(nodeFunctionsComplete == false) {
+//					functions = node.getFunctions();
+//				
+//					if(functions.contains(row.get("collabFunction").toString()) == true) {
+//						nodeFunctionsComplete = true;
+//					} else {
+//						node.addFunction(row.get("collabFunction").toString());
+//					}
+//				}			
+//			}
+//			
+//			// build an edge if required
+//			if(edgeIndex.contains(id + AusStageURI.getId(row.get("collaborator").toString())) == false || edgeIndex.contains(AusStageURI.getId(row.get("collaborator").toString()) + id) == false) {
+//				
+//				// create a new edge
+//				edge = new Edge();
+//				
+//				edge.setSource(new Integer(id));
+//				edge.setTarget(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
+//				edge.setFirstDate(row.get("collabFirstDate").toString());
+//				edge.setLastDate(row.get("collabLastDate").toString());
+//				edge.setValue(row.get("collabCount").asLiteral().getInt());
+//				
+//				edges.add(edge);
+//				edgeIndex.add(id + AusStageURI.getId(row.get("collaborator").toString()));
+//				edgeIndex.add(AusStageURI.getId(row.get("collaborator").toString()) + id);
+//			}
+//			
+//			// build an edge if required
+//			if(edgeIndex.contains(AusStageURI.getId(row.get("collabCollaborator").toString()) + AusStageURI.getId(row.get("collaborator").toString())) == false || edgeIndex.contains(AusStageURI.getId(row.get("collaborator").toString()) + AusStageURI.getId(row.get("collabCollaborator").toString())) == false) {
+//			
+//				// create a new edge
+//				edge = new Edge();
+//				
+//				edge.setSource(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
+//				edge.setTarget(new Integer(AusStageURI.getId(row.get("collabCollaborator").toString())));
+//				edge.setFirstDate(row.get("collabCollabFirstDate").toString());
+//				edge.setLastDate(row.get("collabCollabLastDate").toString());
+//				edge.setValue(row.get("collabCollabCount").asLiteral().getInt());
+//				
+//				edges.add(edge);
+//				edgeIndex.add(AusStageURI.getId(row.get("collabCollaborator").toString()) + AusStageURI.getId(row.get("collaborator").toString()));
+//				edgeIndex.add(AusStageURI.getId(row.get("collaborator").toString()) + AusStageURI.getId(row.get("collabCollaborator").toString()));
+//			}					
+//		}
+//				
+//		// finalise the list of nodes
+//		nodes.add(centralNode);
+//		nodesIndex.add(centralNode.getId());
+//			
+//		// reindex the edges
+//		for(int i = 0; i < edges.size(); i++) {
+//			
+//			edge = (Edge)edges.get(i);
+//			
+//			if(nodesIndex.indexOf(edge.getSource()) != -1 && nodesIndex.indexOf(edge.getTarget()) != -1) {
+//				edge.setSource(nodesIndex.indexOf(edge.getSource()));
+//				edge.setTarget(nodesIndex.indexOf(edge.getTarget()));
+//			} else {
+//				edges.remove(edge);
+//				i--;
+//			}
+//		}
+//		
+//		//declare JSON related variables
+//		JSONObject object     = new JSONObject();
+//		JSONArray  nodesList  = new JSONArray();
+//		JSONArray  edgesList  = new JSONArray();
+//		
+//		// add the list of nodes to the list
+//		nodesList.addAll(nodes);
+//		
+//		// add the list of edges to the list
+//		edgesList.addAll(edges);
+//		
+//		// build the final object
+//		object.put("nodes", nodesList);
+//		object.put("edges", edgesList);
+//		
+//		// return the JSON string
+//		return object.toString();
+//	}
+
+	/**
+	 * A private method to use an alternate algorithm to build a protovise export
+	 *
+	 * @param id the unique identifier of the collaborator
+	 *
+	 * @return   the JSON encoded protovis export
+	 */
 	@SuppressWarnings("unchecked")
 	private String alternateData(String id) {
 	
-		// check on the parameters
-		if(InputUtils.isValidInt(id) == false) {
-			throw new IllegalArgumentException("Error: the id parameter is required");
+		// instantiate a connection to the database
+		DbManager database;
+		
+		//TODO get the connection string from the config file
+		try {
+			database = new DbManager("jdbc:oracle:thin:ausstage_schema/ausstage@www.ausstage.edu.au:1521:drama11");
+		} catch (IllegalArgumentException ex) {
+			throw new RuntimeException("Unable to read the connection string parameter from the web.xml file");
 		}
 		
-		// define a SPARQL query to get details about a collaborator
-		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
-						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
- 						   + "SELECT ?givenName ?familyName ?function ?gender ?nationality ?collaborator ?collabGivenName ?collabFamilyName ?collabFunction ?collabGender ?collabNationality ?collabFirstDate ?collabLastDate ?collabCount ?collabCollaborator ?collabCollabFirstDate ?collabCollabLastDate ?collabCollabCount "
-						   + "WHERE { "
-						   + "       @                    a                                foaf:Person;  " 
-						   + "                            foaf:givenName                   ?givenName; "
-						   + "                            foaf:familyName                  ?familyName; "
-						   + "                            ausestage:hasCollaboration       ?collaboration. "
-						   + "       ?collaboration       ausestage:collaborator           ?collaborator; "
-						   + "                            ausestage:collaborationFirstDate ?collabFirstDate; "
-						   + "                            ausestage:collaborationLastDate  ?collabLastDate; "
-						   + "                            ausestage:collaborationCount     ?collabCount. "
-						   + "       ?collaborator        foaf:givenName                   ?collabGivenName; "
-						   + "                            foaf:familyName                  ?collabFamilyName; "
-						   + "                            ausestage:hasCollaboration       ?collabCollaboration. "
-						   + "       ?collabCollaboration ausestage:collaborator           ?collabCollaborator; "
-						   + "                            ausestage:collaborationFirstDate ?collabCollabFirstDate; "
-						   + "                            ausestage:collaborationLastDate  ?collabCollabLastDate; "
-						   + "                            ausestage:collaborationCount     ?collabCollabCount. "
-						   + "       FILTER ((?collaborator != @) && (?collabCollaborator != @) && (?collaborator != ?collabCollaborator)) "
-						   + "       OPTIONAL {@ ausestage:function    ?function} "
-						   + "       OPTIONAL {?collaborator       ausestage:function    ?collabFunction} "
-						   + "       OPTIONAL {@ foaf:gender           ?gender} "
-						   + "       OPTIONAL {?collaborator       foaf:gender           ?collabGender} "
-						   + "       OPTIONAL {@ ausestage:nationality ?nationality} "
-						   + "       OPTIONAL {?collaborator       ausestage:nationality ?collabNationality} "
-						   + "}";
-						   
-		// replace the placeholder with the collaborator id
-		sparqlQuery = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
-			
-		// execute the query
-		ResultSet results = database.executeSparqlQuery(sparqlQuery);
-		
-		// check on what was returned
-		if(results.hasNext() == false) {
-			return new JSONObject().toString();
+		if(database.connect() == false) {
+			throw new RuntimeException("Unable to connect to the database");
 		}
 		
-		// declare additional helper variables
-		QuerySolution row = null;
-		Node centralNode  = null;
-		Node node         = null;
+		// declare the sql variables
+		String sql = "SELECT f.contributorid AS contrib1, e.contributorid AS contrib2, COUNT(f.eventid) as collaborations,  "
+				   + "       MIN(CONCAT(events.yyyyfirst_date, CONCAT('-', CONCAT(events.mmfirst_date, CONCAT('-', events.ddfirst_date))))) as first_date,  "
+				   + "       MAX(CONCAT(events.yyyylast_date, CONCAT('-', CONCAT(events.mmlast_date, CONCAT('-', events.ddlast_date))))) as last_date  "
+				   + "FROM conevlink f, (SELECT DISTINCT d.contributorid, d.eventid "
+				   + "                   FROM conevlink d, (SELECT DISTINCT b.contributorid "
+				   + "                                      FROM conevlink b, (SELECT DISTINCT eventid FROM conevlink WHERE contributorid = ?) a "
+				   + "                                      WHERE b.eventid = a.eventid) c "
+				   + "                   WHERE d.contributorid = c.contributorid) e, "
+				   + "                   (SELECT DISTINCT b.contributorid "
+				   + "                    FROM conevlink b, (SELECT DISTINCT eventid FROM conevlink WHERE contributorid = ?) a "
+				   + "                    WHERE b.eventid = a.eventid) g, "
+				   + "     events "
+				   + "WHERE e.eventid = f.eventid "
+				   + "AND f.contributorid = g.contributorid "
+				   + "AND f.eventid = events.eventid "
+				   + "GROUP BY f.contributorid, e.contributorid";
+				   
+		// define the paramaters
+		String[] sqlParameters = {id, id};
+
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
 		
-		ArrayList<Node> nodes = new ArrayList<Node>();
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return new JSONArray().toString();
+		}
+		
+		// instantiate helper objects
+		ArrayList<Node>    nodes      = new ArrayList<Node>();
 		ArrayList<Integer> nodesIndex = new ArrayList<Integer>();
-		ArrayList<String> functions = null;
+		HashSet<Integer>   nodesToGet = new HashSet<Integer>();
+		Node               node       = null;
 		
-		ArrayList<Edge>   edges     = new ArrayList<Edge>();
-		//ArrayList<String> edgeIndex = new ArrayList<String>();
-		HashSet<String> edgeIndex = new HashSet<String>();
-		Edge              edge      = null;
+		HashSet<Edge> edges = new HashSet<Edge>();
+		Edge          edge  = null;
 		
-		boolean centralNodeFunctionsComplete = false;
-		boolean nodeFunctionsComplete        = false;
-	
-		// add details to this contributor
-		while (results.hasNext()) {
-			// loop though the resulset
-			// get a new row of data
-			row = results.nextSolution();
+		Integer source = null;
+		Integer target = null;
+		
+		// build the result data
+		java.sql.ResultSet resultSet = results.getResultSet();
+		
+		// build the list of results
+		try {
+		
+			// loop through the resultset
+			while(resultSet.next() == true) {
 			
-			// build the nodes
-			if(centralNode == null) {
-				centralNode = new Node();
+				// check to see if we've seen this node before
+				source = new Integer(resultSet.getString(1));
+				target = new Integer(resultSet.getString(2));
 				
-				centralNode.setId(new Integer(id));
-				centralNode.setName(row.get("givenName").toString() + " " + row.get("familyName").toString());
+				if(source < target) {
 				
-				if(row.get("gender") != null) {
-					centralNode.setGender(row.get("gender").toString());
-				}
-				
-				if(row.get("nationality") != null) {
-					centralNode.setNationality(row.get("nationality").toString());
-				}
-				
-				centralNode.setUrl(LinksManager.getContributorLink(id));
-				
-				// add the first function
-				centralNode.addFunction(row.get("function").toString());
-			} else {
-				
-				if(centralNodeFunctionsComplete == false) {
-					functions = centralNode.getFunctions();
-				
-					if(functions.contains(row.get("function").toString()) == true) {
-						centralNodeFunctionsComplete = true;
-					} else {
-						centralNode.addFunction(row.get("function").toString());
+					if(nodesToGet.contains(source) == false) {
+						nodesToGet.add(source);
 					}
-				}
-			}
-			
-			if(nodesIndex.contains(new Integer(AusStageURI.getId(row.get("collaborator").toString()))) == false) {
-			
-				// build the node for this collaborator
-				node = new Node();
 				
-				// reset the functions flag
-				nodeFunctionsComplete = false;
-			
-				node.setId(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
-				node.setName(row.get("collabGivenName").toString() + " " + row.get("collabFamilyName").toString());
-			
-				if(row.get("collabGender") != null) {
-					node.setGender(row.get("collabGender").toString());
-				}
-			
-				if(row.get("collabNationality") != null) {
-					node.setNationality(row.get("collabNationality").toString());
-				}
-			
-				node.setUrl(LinksManager.getContributorLink(node.getId().toString()));
-			
-				// add this node to the list
-				nodes.add(node);
 				
-				// add this node id to the index
-				nodesIndex.add(node.getId());
 				
-				// add the first function
-				node.addFunction(row.get("collabFunction").toString());
-				
-			} else {
-			
-				if(nodeFunctionsComplete == false) {
-					functions = node.getFunctions();
-				
-					if(functions.contains(row.get("collabFunction").toString()) == true) {
-						nodeFunctionsComplete = true;
-					} else {
-						node.addFunction(row.get("collabFunction").toString());
+					if(nodesToGet.contains(target) == false) {
+						nodesToGet.add(target);
 					}
-				}			
+				
+					// build a new edge object
+					edge = new Edge();
+				
+					edge.setSource(source);
+					edge.setTarget(target);
+					edge.setValue(new Integer(resultSet.getString(3)));
+					edge.setFirstDate(resultSet.getString(4));
+					edge.setLastDate(resultSet.getString(5));
+				
+					edges.add(edge);				
+				}
 			}
-			
-			// build an edge if required
-			if(edgeIndex.contains(id + AusStageURI.getId(row.get("collaborator").toString())) == false || edgeIndex.contains(AusStageURI.getId(row.get("collaborator").toString()) + id) == false) {
-				
-				// create a new edge
-				edge = new Edge();
-				
-				edge.setSource(new Integer(id));
-				edge.setTarget(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
-				edge.setFirstDate(row.get("collabFirstDate").toString());
-				edge.setLastDate(row.get("collabLastDate").toString());
-				edge.setValue(row.get("collabCount").asLiteral().getInt());
-				
-				edges.add(edge);
-				edgeIndex.add(id + AusStageURI.getId(row.get("collaborator").toString()));
-				edgeIndex.add(AusStageURI.getId(row.get("collaborator").toString()) + id);
-			}
-			
-			// build an edge if required
-			if(edgeIndex.contains(AusStageURI.getId(row.get("collabCollaborator").toString()) + AusStageURI.getId(row.get("collaborator").toString())) == false || edgeIndex.contains(AusStageURI.getId(row.get("collaborator").toString()) + AusStageURI.getId(row.get("collabCollaborator").toString())) == false) {
-			
-				// create a new edge
-				edge = new Edge();
-				
-				edge.setSource(new Integer(AusStageURI.getId(row.get("collaborator").toString())));
-				edge.setTarget(new Integer(AusStageURI.getId(row.get("collabCollaborator").toString())));
-				edge.setFirstDate(row.get("collabCollabFirstDate").toString());
-				edge.setLastDate(row.get("collabCollabLastDate").toString());
-				edge.setValue(row.get("collabCollabCount").asLiteral().getInt());
-				
-				edges.add(edge);
-				edgeIndex.add(AusStageURI.getId(row.get("collabCollaborator").toString()) + AusStageURI.getId(row.get("collaborator").toString()));
-				edgeIndex.add(AusStageURI.getId(row.get("collaborator").toString()) + AusStageURI.getId(row.get("collabCollaborator").toString()));
-			}					
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return new JSONArray().toString();
 		}
-				
-		// finalise the list of nodes
-		nodes.add(centralNode);
-		nodesIndex.add(centralNode.getId());
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// get the rest of the information about the nodes
+		
+		// redefine the sql variables
+		sql = "SELECT c.first_name, c.last_name, DECODE(g.gender, null, 'Unknown', g.gender) as gender, c.nationality, cp.preferredterm "
+			+ "FROM contributor c, gendermenu g, contributorfunctpreferred cp, contfunctlink cl "
+			+ "WHERE c.contributorid = ? "
+			+ "AND c.gender = g.genderid (+) "
+			+ "AND c.contributorid = cl.contributorid "
+			+ "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid";
 			
-		// reindex the edges
-		for(int i = 0; i < edges.size(); i++) {
+		sqlParameters = new String[1];
+		
+		// loop through the list of contributors
+		Iterator iterator = nodesToGet.iterator();
+		
+		while(iterator.hasNext() == true) {
 			
-			edge = (Edge)edges.get(i);
+			// reuse one of the integer variables
+			source = (Integer)iterator.next();			
+			sqlParameters[0] = source.toString();
 			
-			if(nodesIndex.indexOf(edge.getSource()) != -1 && nodesIndex.indexOf(edge.getTarget()) != -1) {
-				edge.setSource(nodesIndex.indexOf(edge.getSource()));
-				edge.setTarget(nodesIndex.indexOf(edge.getTarget()));
-			} else {
-				edges.remove(edge);
-				i--;
+			// reset the node variable
+			node = null;
+			
+			results = database.executePreparedStatement(sql, sqlParameters);
+		
+			// check to see that data was returned
+			if(results == null) {
+				// return an empty JSON Array
+				return new JSONArray().toString();
 			}
+			
+			resultSet = results.getResultSet();
+		
+			// build the list of results
+			try {
+	
+				// loop through the resultset
+				while(resultSet.next() == true) {
+				
+					if(node == null) {
+						node = new Node();
+						
+						// build the new node
+						node.setId(source);
+						node.setName(resultSet.getString(1) + " " + resultSet.getString(2));
+						node.setGender(resultSet.getString(3));
+						node.setNationality(resultSet.getString(4));
+						node.addFunction(resultSet.getString(5));
+						node.setUrl(LinksManager.getContributorLink(source.toString()));
+					} else {
+						node.addFunction(resultSet.getString(5));
+					}				
+				}
+				
+			} catch (java.sql.SQLException ex) {
+				// return an empty JSON Array
+				return new JSONArray().toString();
+			}
+			
+			// play nice and tidy up
+			resultSet = null;
+			results.tidyUp();
+			results = null;
+			
+			// add the node to the list
+			nodes.add(node);
+			nodesIndex.add(source);
+		}
+		
+		// finalise the list of nodes
+		source = new Integer(id);
+		target = nodesIndex.indexOf(source);
+		node = (Node)nodes.get(target);
+		nodes.remove(target.intValue());
+		nodesIndex.remove(nodesIndex.indexOf(source));
+		nodes.add(node);
+		nodesIndex.add(source);
+		
+		//reindex the edges
+		iterator = edges.iterator();
+		
+		while(iterator.hasNext() == true) {
+
+			edge = (Edge)iterator.next();
+			edge.setSource(nodesIndex.indexOf(edge.getSource()));
+			edge.setTarget(nodesIndex.indexOf(edge.getTarget()));
 		}
 		
 		//declare JSON related variables
@@ -616,7 +838,7 @@ public class ProtovisManager {
 		object.put("edges", edgesList);
 		
 		// return the JSON string
-		return object.toString();
+		return object.toString();	
 	}
 	
 	/**
