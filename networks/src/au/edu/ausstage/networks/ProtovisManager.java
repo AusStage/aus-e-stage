@@ -70,11 +70,11 @@ public class ProtovisManager {
 			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
 		}
 		
-		// determine how to build the export
-		if(radius == 1) {
-			// use the alternate method for an export with a radius of 1
-			return alternateData(id);
-		} 
+//		// determine how to build the export
+//		if(radius == 1) {
+//			// use the alternate method for an export with a radius of 1
+//			return alternateData(id);
+//		} 
 	
 		/*
 		 * get the base network data
@@ -459,7 +459,8 @@ public class ProtovisManager {
 		ArrayList<String> functions = null;
 		
 		ArrayList<Edge>   edges     = new ArrayList<Edge>();
-		ArrayList<String> edgeIndex = new ArrayList<String>();
+		//ArrayList<String> edgeIndex = new ArrayList<String>();
+		HashSet<String> edgeIndex = new HashSet<String>();
 		Edge              edge      = null;
 		
 		boolean centralNodeFunctionsComplete = false;
