@@ -70,24 +70,24 @@
 			</ul>
 	
 			<ul id="network_details">
-				<li id="networkTitle"></li>
-				<li id="networkCentreTitle"></li>
-				<li><a id="networkCentre" href=""></a></li>
-				<li id="nodeCount"></li>
-				<li id="edgeCount"></li>
-				<li id="eventCount"></li>
-				<li id="diameter"></li>
 			</ul>
 		</div>
-	
+		<br>
+		<div id="faceted_browsing_btn_div" align=right>
+			<input type="submit" name="submit" class="button" id="faceted_browsing_btn" value="Faceted Browsing" />
+		</div>
+		
 	</div>
 
 	
 	<div id="main">
 		<div id="protovis" >
-		<p>If you know the contributor ID of the contributor network you wish to graph, enter it in the ID field to the left.<br>
-		Use the <b>Lookup</b> button to confirm a contributor exists with that ID. <br>
-		Otherwise, use the lookup button to perform a basic contributor search by name.</p>
+			<br>
+			<br>
+			<br>				
+			<br>
+			<br>
+			<br>	
 		</div>
 
 
@@ -96,9 +96,6 @@
 
 				<form name="dateRanges">
 					<table width = 100%>
-						<tr>
-							<th colspan=2>Time Slider</th>
-						</tr>
 						<tr>
 							<td colspan=2>
 							<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
@@ -114,22 +111,19 @@
 						<td colspan=2>&nbsp</td>
 						</tr>
 						<tr>
-							<td><p>Use the Time Slider to view network activity in a given time period. To use the slider, position the start and end pointers and click the refresh button </p></td>
-							<td><input type="submit" name="submit" class="button" id="refresh_date_btn" value="Refresh" />
-								<input type="submit" name="submit" class="button" id="faceted_browsing_btn" value="Advanced Options" /></td>
+							<td></td>
+							<td><input type="submit" name="submit" class="button" id="refresh_date_btn" value="Refresh" /></td>
 						</tr>					
 
 					</table>												
 				</form>
 			
 			</div>
-			<div id="faceted_browsing_div" Title="Faceted Browsing Options">
+			<div id="faceted_browsing_div" Title="Faceted Browsing">
 				<form id = "faceted_browsing">
-					<p>Faceted browsing allows you to browse the current network by contributor function, gender, nationality or a combination of all three.
-					Please select the browse criteria, and then turn faceted browsing on. </p>
 					<table>
 						<tr>
-							<th>Browse by contributor function</th>
+							<th>Contributor function</th>
 						</tr>
 						<tr>
 							<td valign="top">
@@ -141,7 +135,7 @@
 								</table>
 							</td>
 						</tr>
-						<tr><th>Refine search by gender or browse by gender</th></tr>
+						<tr><th>Gender</th></tr>
 						<tr><td><input type="radio" name="sex" value="male" /> Male
 								<input type="radio" name="sex" value="female" /> Female
 								<input type="radio" name="sex" value="unknown" /> Unknown
