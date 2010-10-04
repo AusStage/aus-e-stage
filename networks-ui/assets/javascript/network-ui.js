@@ -14,8 +14,11 @@ $(document).ready(function() {
 	$("select#endDate").hide();
 	$("#date_range_div").hide();
 	
+	//hide the faceted browsing button
+	$("#faceted_browsing_btn_div").hide();
 	//hide the faceted browsing
 	$("#faceted_browsing_div").hide();
+	
 	
 	//clear search field values
 	$("#id").val("");
@@ -86,6 +89,16 @@ $(document).ready(function() {
 			$("#network_btn").button("disable");
 
 		}
+	});
+	
+	//focus in event on the name field. If clicked it automatically calls the lookup
+	$("#name").focusin(function(){
+		var val = $("#id").val(); 
+		if (val == ""){
+			$("#name").val("");
+			$("#lookup_btn").trigger('click');
+		}
+			
 	});
     
   	//handle enter in the search dialogue
@@ -412,6 +425,8 @@ function findAndDisplayContributorNetwork(id){
 				
 				//display the slider
 				$("#date_range_div").show(); 
+				//display the faceted browsing button
+				$("#faceted_browsing_btn_div").show();
 				
 			});
 	}
@@ -515,11 +530,7 @@ function setDateRanges(dateRange){
 		}
 
 		for(currYear; currYear<=endYear; currYear++){ 
-				//var yearGroup = document.createElement("optgroup")
-				//var yearGroup2 = document.createElement("optgroup")						
-				//yearGroup.label = currYear;
-				//yearGroup2.label = currYear						
-						
+
 				if (!firstRun) currMonth = 1; 
 						
 				for(currMonth; currMonth<=12 ; currMonth++){
@@ -528,28 +539,27 @@ function setDateRanges(dateRange){
 						var month2 = document.createElement("option");							
 							
 						month2.value = (currYear+"-"+currMonth+"-"+days[currMonth-1]);
-						month2.appendChild(document.createTextNode(months[currMonth-1]+"-"+currYear));							
+						month2.appendChild(document.createTextNode(months[currMonth-1]+"_"+currYear));							
 						month.value = (currYear+"-"+currMonth+"-"+"01");
-						month.appendChild(document.createTextNode(months[currMonth-1]+"-"+currYear));							
+						month.appendChild(document.createTextNode(months[currMonth-1]+"_"+currYear));							
 						if (firstRun){
-								month.selected = true;
 								firstRun = false; 
 						}
 						if (currYear == endYear && currMonth == endMonth){
-								month2.selected = true;
 								finishPopulate=true;
 						}
-				//		yearGroup.appendChild(month);
-				//		yearGroup2.appendChild(month2);							
 						startList.appendChild(month);
 						endList.appendChild(month2);
 					}
 				}
-//				startList.appendChild(yearGroup);
-//				endList.appendChild(yearGroup2);
 						
 						
 		}
+		// select the last and first options before building the time slider
+        $("#startDate option:first").attr("selected", "selected");
+        $("#endDate option:last").attr("selected", "selected");
+
+		
 		$("#startDateStore").val( $("select#startDate").val()) ;
     	$("#endDateStore").val( $("select#endDate").val()) ;
 		
@@ -558,7 +568,8 @@ function setDateRanges(dateRange){
 		$('.ui-slider').slider('destroy');
         
 		$('select#startDate, select#endDate').selectToUISlider({
-			labels: 6
+			labels: 6,
+			labelSrc:"text"
 		});	
 		
 }
@@ -609,16 +620,17 @@ function updateNetworkInfo(contributors){
 		for (i=0;i<contributors.edges.length;i++){
 			eventCount = eventCount+contributors.edges[i].value;
 		}
-	
-    	var html = 	"<li> <h3> Network Properties </h3> </li>"+
-    				"<li><b> Centre:</b> <a href ="+contributors.nodes[activeNode].nodeUrl.replace("amp;", "")+">"+
-    				contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")"+
-    				"</a></li>"+
-    				"<li><b>Node Count:</b> "+contributors.nodes.length+"</li>"+
-					"<li><b>Edge Count:</b> "+contributors.edges.length+"</li>"+
-					"<li><b>Event Count:</b> "+eventCount+"</li>";
-  
-		$("#network_details").empty();
+		
+	    var html = 	"<br><table style=\"border-bottom: grey 1px solid; border-top:grey 1px solid;\" >"+
+	    			"<tr><td colspan=2> <h3> Network Properties </h3></td> </tr>"+
+    				"<tr><td valign=top><b> Centre:</b></td><td> <a href ="+contributors.nodes[activeNode].nodeUrl.replace("amp;", "")+">"+	    
+					contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")"+    				
+    				"</a></td></tr>"+
+    				"<tr><td><b>Contributors:</b></td><td> "+contributors.nodes.length+"</td></tr>"+					
+					"<tr><td><b>Relationships:</b> </td><td>"+contributors.edges.length+"</td></tr>"+
+					"<tr><td><b>Events:</b> </td><td>"+eventCount+"</td></tr>";
+    				
+ 		$("#network_details").empty();
 		$("#network_details").append(html);
 
 }
@@ -640,24 +652,40 @@ function updateSelectedInfo(activeNode, contributorArray, ui_focus){
     			"<a href="+contributorArray.nodes[activeNode].nodeUrl.replace("amp;", "")+"><b>"+contributorArray.nodes[activeNode].nodeName + 				" ("+contributorArray.nodes[activeNode].id+")</b></a>"+
     			"</td></tr>"+
     			"<tr><td valign=top>"+
-    			"<b>Functions: </b></td>"+
-    			"<td>"+functionList+"</td></tr>"+
+    			"<b>Functions: </b><br>"+
+    			functionList+"</td></tr>"+
+    			"<tr><td><b>Relationships:</b> "+nodeNeighbors[activeNode].length+"</td></tr>"
     			"</table>";
 
     }
     else if(ui_focus =="link"){
+		
+    	
     	html +=  "<tr><td><a href="+contributorArray.sourceNode.nodeUrl.replace("amp;", "")+"><b>"+contributorArray.sourceNode.nodeName+
 				" ("+contributorArray.sourceNode.id+")</b></a>"+
     			"</td></tr><tr><td><a href="+contributorArray.targetNode.nodeUrl.replace("amp;", "")+"><b>"+contributorArray.targetNode.nodeName+
 				" ("+contributorArray.targetNode.id+")</b></a></td></tr>"+
-				"<tr><td><b>Date Range: </b></td></tr><tr><td>"+contributorArray.firstDate + " to " + contributorArray.lastDate+"</td> </tr>"+
-				"<tr><td><b>No. Of collaborations: </b></td></tr><tr><td>"+contributorArray.value+"</td></tr>" ;
+				"<tr><td><b>Date Range: </b></td></tr><tr><td>"+formatDate(contributorArray.firstDate) + " to " + formatDate(contributorArray.lastDate)+"</td> </tr>"+
+				"<tr><td><b>Events: </b>"+contributorArray.value+"</td></tr>" ;
     }
 
 		$("#selected_details").append(html);    		
 }
 //small helper functions.
- 	
+
+	// formatDate function, takes in Ausstage format date, and spits out date string as dd mmm yyyy
+	// ASSUMES date input as YYYY-MM-DD
+	function formatDate(d){
+		
+		var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+		var dateToken = d.split("-");
+		var day = dateToken[2];
+		var month = monthNames[dateToken[1]-1];
+		var year = dateToken[0];
+
+		return day+" "+month+" "+year;		
+	}
+	 	
     //quick function to check if an array contains a property	
 	function contains(a, obj){
 		for(var i = 0; i < a.length; i++) {
@@ -731,7 +759,7 @@ var selectedGender = [""];
     var linkFacet = "rgba(255,255,255,0.2)";
   		 
 	//width and height settings for the protovis window.
-	var w = 796,
+	var w = 995,
     	h = 600;
 
 //define the faceted browsing switch
@@ -753,6 +781,8 @@ var selectedGender = [""];
 // store seperate target and source node info for mouse over operations.
     var targetNodeMO;
     var sourceNodeMO;	
+    
+	var nodeNeighbors;
 
 function getNodes(){return contributors.nodes;}
 function getEdges(){return contributors.edges;}
@@ -767,7 +797,7 @@ function createNetwork(targetDiv){
     	
     	////////////////////////////////////////////////////////	
 		// construct a 3d array of nodes and their neighbors
-			var nodeNeighbors = loadNodeNeighbors(contributors);
+			nodeNeighbors = loadNodeNeighbors(contributors);
 
 		///////////////////////////////////////////////////////
 		// set the active node to the last in the array. -JSON data export puts the central node last.

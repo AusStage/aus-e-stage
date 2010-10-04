@@ -105,17 +105,19 @@ blockquote
 	padding-right:10px;
 	padding-left: 10px;
 	background-color: #aaaaaa;
+	font-size: 80%;		
 }
 
 #sidebar ul {
 	margin:0;
 	padding:0;
+//font-size: 90%;	
 	list-style:none;
 }
 
 #sidebar ul a {
 	color: #fff;
-	font-size: 90%;
+//font-size: 90%;
 	text-decoration: none;
 }
 
@@ -124,8 +126,8 @@ blockquote
 }
 
 #sidebar h3 {
-	color: #fff;
-	font-size: 90%;
+	color: #000;
+	font-size: 110%;
 	margin-bottom: 0px;
 	padding-bottom: 0px;
 }
