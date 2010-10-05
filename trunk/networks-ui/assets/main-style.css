@@ -234,3 +234,18 @@ table.searchResults tfoot {
 .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
 .tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
 .tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+
+/*Protovis faceted browsing style*/
+.scroll_checkboxes {
+    height: 100px;
+    padding: 5px;
+    overflow: auto;
+    border: 1px solid #ccc;
+}
+.scroll_checkboxes_small {
+    height: 50px;
+    padding: 5px;
+    overflow: auto;
+    border: 1px solid #ccc;
+}
+
