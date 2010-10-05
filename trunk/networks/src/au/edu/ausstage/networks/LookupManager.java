@@ -516,7 +516,8 @@ public class LookupManager {
 				}
 				
 				// get the collaboration count
-				collaborator.setCollaborations(Integer.toString(row.get("collaboratorCount").asLiteral().getInt()));
+				/* collaborator count is incorrect */
+				//collaborator.setCollaborations(Integer.toString(row.get("collaboratorCount").asLiteral().getInt()));
 				
 				// add a function
 				collaborator.setFunction(row.get("function").toString());		
