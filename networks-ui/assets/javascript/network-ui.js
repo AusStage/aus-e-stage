@@ -187,26 +187,13 @@ $(document).ready(function() {
     $("#faceted_browsing_div").dialog({ 
 		autoOpen: false,
 		closeOnEscape: false,
-		height: 500,
+		height: 600,
 		width: 400,
 		modal: false,
 		position: ["right","top"],
 		buttons: {
-			'On/Off': function() {
-				if (browseTrigger){
-					browseTrigger = false;
-					refreshNetwork("dateRange");
-				}
-				else if (!browseTrigger){
-					browseTrigger = true;
-					refreshNetwork("browse");
-				}
-				 return false;
-			},
 			"Refresh": function() {
-				if (browseTrigger){
-					refreshNetwork("browse");					
-				}
+				refreshNetwork("browse");
 				return false;
 			},
 			'Close': function(){
@@ -216,6 +203,8 @@ $(document).ready(function() {
 		},
 		open: function(){
 		$("#refresh_date_btn").button("disable");	
+		browseTrigger = true;
+		refreshNetwork("browse");
 		},
 	  	close: function() {
 		$("#refresh_date_btn").button("enable");	
@@ -409,7 +398,7 @@ function findAndDisplayContributorNetwork(id){
 				setDateRanges(dateRange);		
 				
 				//find all functions for faceted browsing
-				setAllFunctions(findAllFunctions(contributors.nodes));		
+				setFacetedOptions(getFacetedOptions(contributors.nodes));		
 				
 				//display the faceted Options
 				$("#faceted_browsing_div").show();
@@ -434,53 +423,116 @@ function findAndDisplayContributorNetwork(id){
 //Faceted Browsing operations.//////////////////////////
 
 //get all functions from the contributor list.
-function findAllFunctions(nodeList){
+function getFacetedOptions(nodeList){
+	
+	//function variables
 	var functionList = [""];
-	var funct;
-	var functIndex = 0;
+	var currFunction;
+	var functionIndex = 0;
+	
+	//gender variables
+	var genderList = [""];
+	var currGender;
+	var genderIndex = 0;
+	
+	//nationality variables
+	var nationalityList = [""];
+	var currNationality;
+	var nationalityIndex = 0;
+
+	var returnArray = [""];
 
 	//loop through the nodelist.
 	for (i=0; i<nodeList.length; i++){
-
+		
+		//find unique genders. if null set to unknown
+		currGender = nodeList[i].gender;
+		if (currGender == null){
+			currGender = "unknown";
+		}
+		if (contains(genderList, currGender) == false){
+			genderList[genderIndex] = currGender;
+			genderIndex++;
+		}
+		
+		//find unique nationality. If null set to unknown
+		currNationality = nodeList[i].nationality;
+		if (currNationality == null){
+			currNationality = "unknown";
+		}
+		if (contains(nationalityList, currNationality) == false){
+			nationalityList[nationalityIndex] = currNationality;
+			nationalityIndex++;
+		}
+						
 		//loop through the function list. 
 		for (x=0; x<nodeList[i].functions.length; x++){	
-
-			//if - this function is not in function list, add it to the function list.
-			funct = nodeList[i].functions[x];
 			
-			if (contains(functionList, funct ) == false){
-				functionList[functIndex] = funct;
-				functIndex++;
+			//if - this function is not in function list, add it to the function list.
+			currFunction = nodeList[i].functions[x];
+			
+			if (contains(functionList, currFunction ) == false){
+				functionList[functionIndex] = currFunction;
+				functionIndex++;
 				}
 			//else do nothing
 		}
 	}
-	return functionList;
+	returnArray[0] = functionList;
+	returnArray[1] = genderList;
+	returnArray[2] = nationalityList;
+	
+	return returnArray;
 }
 
-//set the select box with functions
-function setAllFunctions(functionList){
 
-	var functionSelect = document.getElementById("functions");	
+//set the select box with functions
+function setFacetedOptions(facetedList){
 	
-	//clear the select list
-	while (functionSelect.hasChildNodes()) {
- 			 functionSelect.removeChild(functionSelect.firstChild);
-		}
+	var functionList = facetedList[0];
+	var genderList = facetedList[1];
+	var nationalityList = facetedList[2];
+
+	//clear the functions list
+	$("#faceted_function_div").empty();
+	//clear the gender list
+	$("#faceted_gender_div").empty();
+	//clear the nationality list
+	$("#faceted_nationality_div").empty();
 	
+	//sort and create the function checkboxes
+	functionList.sort();	
 	for(i = 0; i<functionList.length; i++){
-		
-		var functionOption = document.createElement("option");					
-		
-		functionOption.value = (functionList[i]);
-		
-		functionOption.appendChild(document.createTextNode(functionList[i]));							
-		functionSelect.appendChild(functionOption);
+	$("#faceted_function_div").append('<input type="checkbox" id="function" value="'+functionList[i]+'" /> <label for="'+i+'">'+functionList[i]+
+	'</label><br>');
 	}	
 	
-	$("#functions").multiselect("destroy");
+	//sort and create the gender checkboxes
+	genderList.sort();	
+	for(i = 0; i<genderList.length; i++){
+	$("#faceted_gender_div").append('<input type="checkbox" id="gender" value="'+genderList[i]+'" /> <label for="'+i+'">'+genderList[i]+
+	'</label><br>');
+	}	
+
+	//sort and create the nationality checkboxes
+	nationalityList.sort();	
+	for(i = 0; i<nationalityList.length; i++){
+	$("#faceted_nationality_div").append('<input type="checkbox" id="nationality" value="'+nationalityList[i]+'" /> <label for="'+i+'">'+nationalityList[i]+
+	'</label><br>');
+	}	
+
+	//restrict gender and nationality to only one check box selected.
+	$('#faceted_gender_div input:checkbox').exclusiveCheck();
+	$('#faceted_nationality_div input:checkbox').exclusiveCheck();
+
+	//add handlers
+//	$("input#function").click(
+//		function(){ var stuff = $("input#function:checked");
+//			for(i=0;i<stuff.length;i++){alert(stuff[i].value);}
 		
-	$("#functions").multiselect({}).multiselectfilter();
+		//something here?
+//	});
+	
 }
 
 
@@ -715,7 +767,10 @@ var vis = null;
 var selectedFunctions = [""];
 
 // holds gender selected by faceted browsing criteria
-var selectedGender = [""];
+var selectedGender = "";
+
+// holds the nationality selected by faceted browsing options
+var selectedNationality = "";
 
 // define variables for colour options.
 	// legend colours for faceted browsing
@@ -754,7 +809,7 @@ var selectedGender = [""];
     
     
     // faceted colour scheme
-    var bgColourFacet = "black";   
+    var bgColourFacet = "#333333";   
     var nodeFacet = "rgba(255,255,255,0.5)";
     var linkFacet = "rgba(255,255,255,0.2)";
   		 
@@ -918,7 +973,7 @@ function refreshNetwork(typeOfRefresh){
 		resetDateRangeVisibility();
 	}
 	else if (typeOfRefresh == "browse"){
-		setBrowseOptions($("#functions").multiselect("getChecked"), $("#faceted_browsing input:radio:checked").val());  
+		setFacetedSelection($("input#function:checked"),$("input#gender:checked"),$("input#nationality:checked"));  
 	}
 	vis.render();
 	}
@@ -932,28 +987,10 @@ function resetDateRangeVisibility(){
 	}
 
 //resets the checked values for faceted browsing 
-function setBrowseOptions(chosenFunctions, chosenGender){
+function setFacetedSelection(chosenFunctions, chosenGender, chosenNationality){
 	
 	var html = "";
-	//clear the legend
-	$("#legend").empty();
-
-	//reset the gender array
-	for (i = 0; i<selectedGender.length;i++){
-		selectedGender[i] = "";
-	}
 	
-	//set the gender array depending on the selected value
-	if ((chosenGender == "male") || (chosenGender == "female")){
-		selectedGender[0] = chosenGender;
-	} else if (chosenGender=="unknown"){
-		selectedGender[0] = null;
-	} else if (chosenGender == "all"){
-		selectedGender[0] = "male";
-		selectedGender[1] = "female";
-		selectedGender[2] = null;	
-	}
-
 	//reset the function array
 	for (i = 0; i < selectedFunctions.length; i++){
 		selectedFunctions[i] = "";
@@ -962,18 +999,30 @@ function setBrowseOptions(chosenFunctions, chosenGender){
 	//set the function array with chosen values
 	for (i = 0; i < chosenFunctions.length; i++){
 		selectedFunctions[i] = chosenFunctions[i].value;
-
-		//build the legend
-		html+= "<tr> <td bgcolor="+functionColours(i).color+"> &nbsp </td><td>"+selectedFunctions[i]+"</td></tr>";
-
-		}
-		$("#legend").append(html);
 	}
+	
+	//reset the gender variable
+	if(chosenGender.length == 1){
+		selectedGender = chosenGender[0].value;
+	}
+	else{
+		selectedGender = "";
+	}
+
+	//reset the nationality variable
+	if(chosenNationality.length == 1){
+		selectedNationality = chosenNationality[0].value;
+	}
+	else{
+		selectedNationality = "";
+	}
+
+}
 
 //functions to set the colour and style of nodes and links	
 
 //link stroke style rules
-function getLinkStrokeStyle(d, p){
+/*function getLinkStrokeStyle(d, p){
 	if (browseTrigger){
 		 return linkFacet;
 	}
@@ -1000,7 +1049,35 @@ function getLinkStrokeStyle(d, p){
 			return inactiveLinkStroke;	
 	}	
 }
-
+*/
+function getLinkStrokeStyle(d, p){
+	
+//	if (browseTrigger){
+//		 return linkFacet;
+//	}
+	//else
+	if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
+		($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)){
+			return outOfDateEdge;
+			}
+	else{	
+		p.targetNode.visible = true;
+		p.sourceNode.visible = true;
+		 if (mouseOver == true && p.targetNode.index == targetNodeMO && p.sourceNode.index == sourceNodeMO) {
+			return mouseoverLinkStroke;
+			} 
+	//if the focus is on a node rather than a link
+		else if (nodeFocus == true && (p.sourceNode.index == activeNode || p.targetNode.index == activeNode)){
+			return relatedLinkStroke;
+			}
+	//if the focus is on edges
+		else if (p.targetNode.index == targetNodeSelect && p.sourceNode.index == sourceNodeSelect){
+			return activeLinkStroke;
+			}
+		else 
+			return inactiveLinkStroke;	
+	}	
+}
 
 //node fill style rules
 function getNodeFillStyle(d, node, nodeNeighbors){

@@ -20,7 +20,9 @@
     <script type="text/javascript" src="assets/javascript/libraries/selectToUISlider.jQuery.js"></script>  
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-min.js"></script>	
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.filter.js"></script>		
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.filter.js"></script>	
+	<script type="text/javascript" src="assets/javascript/libraries/exclusivecheck.jquery.min.js"></script>		
+		
 
 	<!-- helper files -->
     <script type="text/javascript" src="assets/javascript/network-ui.js"></script>   
@@ -117,30 +119,16 @@
 
 					</table>												
 				</form>
-			
 			</div>
+			
 			<div id="faceted_browsing_div" Title="Faceted Browsing">
 				<form id = "faceted_browsing">
-					<table>
-						<tr>
-							<th>Contributor function</th>
-						</tr>
-						<tr>
-							<td valign="top">
-								<select name="functions" id="functions" multiple="multiple" >
-								</select>
-							</td>
-							<td>
-								<table id="legend">
-								</table>
-							</td>
-						</tr>
-						<tr><th>Gender</th></tr>
-						<tr><td><input type="radio" name="sex" value="male" /> Male
-								<input type="radio" name="sex" value="female" /> Female
-								<input type="radio" name="sex" value="unknown" /> Unknown
-								<input type="radio" name="sex" value="all" checked="true"/> All</td></tr>
-					</table>
+					<p><b>Contributor Functions</b></p>
+					<div id="faceted_function_div" class="scroll_checkboxes"></div>
+					<p><b>Gender</b></p>
+					<div id="faceted_gender_div" class="scroll_checkboxes_small"></div>
+					<p><b>Nationality</b></p>
+					<div id="faceted_nationality_div" class="scroll_checkboxes"></div>
 				</form>
 				<br>
 				<br>
