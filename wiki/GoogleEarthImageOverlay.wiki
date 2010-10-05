@@ -2,7 +2,7 @@
 
 == Introduction ==
 
-In Google Earth, you can add image overlays over the Earth in the 3D viewer. If the image is a historical map, you can compare the historical maps to the state-of-the-art geographical content that appears in Google Earth. To create an image overlay, you need specify the image file to display and its position. In the following section, we will introduce the image format requirement, how to position the image boundaries to the earth data beneath and how to save it as KML file.
+In Google Earth, you can add image overlays over the Earth in the 3D viewer. If the image is a historical map, you can compare the historical maps to the state-of-the-art geographical content that appears in Google Earth. To create an image overlay, you need to specify the image file to display and its position. In the following section, we will introduce the image format requirements, how to position the image boundaries to the earth data beneath and how to save it as KML file.
 
 
 == Overlay Image Format ==
@@ -18,7 +18,7 @@ The image format must be one of the following:
   * TGA
   * TIFF
 
-Since the overlay feature in Google Earth is of memory intensive, Google recommends keeping the image size smaller than 2000 x 2000 pixels to minimize the system strain.
+Since the overlay feature in Google Earth is memory intensive, Google recommends keeping the image size smaller than 2000 x 2000 pixels to minimize the system strain.
 
 
 == Creating an overlay ==
@@ -49,4 +49,4 @@ Try to position the viewer so that it corresponds in viewing altitude to the ove
 
 == Exporting image overlay as KML ==
 
-Select the image overlay that you want to export in the *Places* panel, right click and select *Save Place As...* in the pop up window. The *Save file* window opened for you to specify the file name, select KML as *Save as type* and select a folder on your computer where the file should be saved.
+Select the image overlay that you want to export in the *Places* panel, right click and select *Save Place As...* in the pop up window. The *Save file* window will open for you to specify the file name, select KML as *Save as type* and select a folder on your computer where the file should be saved.
