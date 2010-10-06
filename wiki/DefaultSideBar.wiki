@@ -1,5 +1,4 @@
 #summary Default Sidebar for all Wiki pages
-#labels Deprecated
 
  * [StartPage Wiki Start Page]
  * !HowTo articles
@@ -8,6 +7,7 @@
    * [SubversionRepository Using our Subversion Repository]
    * [WikiImages Using Images in the Wiki]
    * [GoogleEarthImageOverlay Image Overlays in Google Earth]
+   * [UsingTwitterGatherer Using the Twitter Gatherer App]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
    * [MappingService Mapping Service]
