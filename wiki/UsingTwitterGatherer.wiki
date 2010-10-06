@@ -18,4 +18,40 @@ _Before attempting this procedure please ensure that the following requirements 
 = 1. Prepare the !TwitterGatherer Application = 
 
  # Extract the contents of the zip file downloaded from the [http://code.google.com/p/aus-e-stage/downloads/list Downloads] area
- # 
+ # Ensure that the following directories have been created
+   * twitter-gatherer - The parent !TwitterGather directory
+     * jar - a sub directory containing the main !TwitterGatherer application
+     * lib - a sub directory containing all of the required libraries
+     * logs - an empty sub directory used to store log files
+
+= 2. Create a properties file = 
+
+ # Create an empty text file in the parent directory, as defined in step 1 above, named `default.properties`
+ # Add the following lines to the text file, replacing the text in the { } brackets with the appropriate values
+ {{{
+# Properties file for the TwitterGatherer Application
+# Any line starting with a '#' is a comment and is ignored
+
+# database connection string
+db-connection-string = {AusStage Database Connection String}
+
+# twitter user name
+twitter-user = {AusStage Twitter Account User Name}
+
+# twitter password
+twitter-password = {AusStage Twitter Account Password}
+
+# log file directory
+log-dir = ../logs/
+
+# settings for sending email
+mail-host = {Outgoing SMTP email server host name}
+mail-user = {Outgoing SMTP user name}
+mail-password = {Outgoing SMTP password}
+mail-ssl = {yes / no flag to use SSL for sending email}
+mail-tls = {yes / no flag to use TLS for sending email}
+mail-port = {Outgoing SMTP Server Port}
+mail-from-address = {Address to send email from}
+mail-to-address = {Address(s) to send email to separated by commas}
+ }}}
+ # Save the file, and ensure it is saved as plain text
