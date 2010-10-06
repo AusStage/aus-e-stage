@@ -29,7 +29,7 @@ _Before attempting this procedure please ensure that the following requirements 
  # Create an empty text file in the parent directory, as defined in step 1 above
  # Name the file `default.properties`
  # Add the following lines to the text file, replacing the text in the { } brackets with the appropriate values
-<code>
+{{{
 # Properties file for the TwitterGatherer Application
 # Any line starting with a '#' is a comment and is ignored
 
@@ -54,7 +54,7 @@ mail-tls = {yes / no flag to use TLS for sending email}
 mail-port = {Outgoing SMTP Server Port}
 mail-from-address = {Address to send email from}
 mail-to-address = {Address(s) to send email to separated by commas}
-</code>
+}}}
  # If you are unsure about any values for the above options, contact the !AusStage team
  # Save the file, and ensure it is saved as plain text
 
