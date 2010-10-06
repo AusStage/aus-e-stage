@@ -1,0 +1,16 @@
+#summary Procedure document on how to use the TwitterGatherer Application
+
+<h1> Gathering Twitter Messages </h1>
+
+This procedure document outlines how to use the TwitterGatherer application to gather messages from the [http://twitter.com Twitter] service. 
+
+<wiki:toc max_depth="3" />
+
+= Requirements = 
+
+_Before attempting this procedure please ensure that the following requirements are met_
+
+ # The computer that you intend on running the software on has access to the !AusStage database either via the Flinders University Network or via the [https://vpn.csem.flinders.edu.au/ CSEM Virtual Private Network (VPN)]
+ # The latest version of [http://java.com/en/ Java] is installed on your system. At the time of writing the latest version was 1.6.x
+ # You have downloaded the latest version of the TwitterGatherer application [http://code.google.com/p/aus-e-stage/downloads/list available here]
+ # You have experience in using applications via the [http://en.wikipedia.org/wiki/Command-line_interface Command Line Interface]
