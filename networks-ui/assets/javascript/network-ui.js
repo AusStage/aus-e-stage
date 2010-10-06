@@ -314,7 +314,7 @@ function displayResults(results){
 		html += '</ul></td>';
 		
 		// add the contributor count
-		html += '<td>' + contributor.collaborations + '</td>';
+//		html += '<td>' + contributor.collaborations + '</td>';
 		
 		// add the button
 		html += '<td><button id="choose_' + contributor.id + '" class="choose_button">Choose</button></td>';
@@ -393,13 +393,13 @@ function findAndDisplayContributorNetwork(id){
 				//need to do date population before loading the graph
 				//get the date ranges
 				var dateRange = findDateRange(contributors.edges);
-
+	
 				//set the date ranges for the slider
 				setDateRanges(dateRange);		
-				
+
 				//find all functions for faceted browsing
 				setFacetedOptions(getFacetedOptions(contributors.nodes));		
-				
+
 				//display the faceted Options
 				$("#faceted_browsing_div").show();
 				
@@ -439,7 +439,6 @@ function getFacetedOptions(nodeList){
 	var nationalityList = [""];
 	var currNationality;
 	var nationalityIndex = 0;
-
 	var returnArray = [""];
 
 	//loop through the nodelist.
@@ -448,8 +447,9 @@ function getFacetedOptions(nodeList){
 		//find unique genders. if null set to unknown
 		currGender = nodeList[i].gender;
 		if (currGender == null){
-			currGender = "unknown";
+			currGender = "Unknown";
 		}
+		
 		if (contains(genderList, currGender) == false){
 			genderList[genderIndex] = currGender;
 			genderIndex++;
@@ -458,7 +458,7 @@ function getFacetedOptions(nodeList){
 		//find unique nationality. If null set to unknown
 		currNationality = nodeList[i].nationality;
 		if (currNationality == null){
-			currNationality = "unknown";
+			currNationality = "Unknown";
 		}
 		if (contains(nationalityList, currNationality) == false){
 			nationalityList[nationalityIndex] = currNationality;
@@ -467,17 +467,19 @@ function getFacetedOptions(nodeList){
 						
 		//loop through the function list. 
 		for (x=0; x<nodeList[i].functions.length; x++){	
-			
+		
 			//if - this function is not in function list, add it to the function list.
 			currFunction = nodeList[i].functions[x];
-			
+
 			if (contains(functionList, currFunction ) == false){
 				functionList[functionIndex] = currFunction;
+
 				functionIndex++;
-				}
-			//else do nothing
+			}
+		//else do nothing
 		}
 	}
+
 	returnArray[0] = functionList;
 	returnArray[1] = genderList;
 	returnArray[2] = nationalityList;
@@ -506,6 +508,7 @@ function setFacetedOptions(facetedList){
 	$("#faceted_function_div").append('<input type="checkbox" id="function" value="'+functionList[i]+'" /> <label for="'+i+'">'+functionList[i]+
 	'</label><br>');
 	}	
+
 	
 	//sort and create the gender checkboxes
 	genderList.sort();	
@@ -525,15 +528,29 @@ function setFacetedOptions(facetedList){
 	$('#faceted_gender_div input:checkbox').exclusiveCheck();
 	$('#faceted_nationality_div input:checkbox').exclusiveCheck();
 
-	//add handlers
-//	$("input#function").click(
-//		function(){ var stuff = $("input#function:checked");
-//			for(i=0;i<stuff.length;i++){alert(stuff[i].value);}
+	$('input:checkbox').change(function() {
+
+		var str = "";
 		
-		//something here?
-//	});
-	
+		if($("input:checked").length>0){
+	         str = "Contributors who are ";         
+		}
+         $("input#function:checked").each(function (index, value) {
+                str += value.value + ", ";
+         });
+         
+         $("input#gender:checked").each(function (index, value) {
+                str += "and "+ value.value + " ";
+         });
+         
+         $("input#nationality:checked").each(function (index, value) {
+                str += "and "+ value.value + " ";
+         });
+                     
+         $("#faceted_selection_div").text(str);
+   });
 }
+
 
 
 //findDateRange - traverses the firstdate of contributors and gets the largest and smallest values to become our date range.
@@ -680,7 +697,7 @@ function updateNetworkInfo(contributors){
     				"</a></td></tr>"+
     				"<tr><td><b>Contributors:</b></td><td> "+contributors.nodes.length+"</td></tr>"+					
 					"<tr><td><b>Relationships:</b> </td><td>"+contributors.edges.length+"</td></tr>"+
-					"<tr><td><b>Events:</b> </td><td>"+eventCount+"</td></tr>";
+					"<tr><td><b>Collaborations:</b> </td><td>"+eventCount+"</td></tr>";
     				
  		$("#network_details").empty();
 		$("#network_details").append(html);
@@ -748,15 +765,6 @@ function updateSelectedInfo(activeNode, contributorArray, ui_focus){
   		return false;
 	}
 	
-	function findMatch(arrayOne, arrayTwo){
-		for(i=0; i<arrayOne.length;i++){
-			if (contains(arrayTwo, arrayOne[i])){
-				return i;
-			}	
-		}
-		return null;
-	}
-
 
 //Protovis code. for displaying the graph/////////////////////////////////////////////////
 	
@@ -773,8 +781,6 @@ var selectedGender = "";
 var selectedNationality = "";
 
 // define variables for colour options.
-	// legend colours for faceted browsing
-	functionColours = pv.Colors.category20();
 
     //backgound for the graph	
 	var bgColour = "white";
@@ -806,12 +812,18 @@ var selectedNationality = "";
     // node fill and stroke for focus-central node.
     var focusNodeFill = "blue";
     var focusNodeStroke = "blue";
+    var focusText = "blue";
     
     
     // faceted colour scheme
     var bgColourFacet = "#333333";   
-    var nodeFacet = "rgba(255,255,255,0.5)";
-    var linkFacet = "rgba(255,255,255,0.2)";
+    var nodeFacet = "rgba(170,170,170,1)";
+    var focusNodeFacet = "blue";
+    var focusNodeStrokeFacet = "white";
+    var linkFacet = "rgba(170,170,170,0.2)";
+	var relatedLinkFacet = "rgba(255,255,255,0.9)";
+	var activeLinkFacet = "rgba(255,255,255,0.9)";    
+    var textFacet = "white";
   		 
 	//width and height settings for the protovis window.
 	var w = 995,
@@ -842,7 +854,18 @@ var selectedNationality = "";
 function getNodes(){return contributors.nodes;}
 function getEdges(){return contributors.edges;}
 
+function resetProtovisVariables(){
 
+	activeNode = null;
+	nodeFocus = true;    	
+	mouseOver = false;
+	targetNodeSelect = -1;
+    sourceNodeSelect = -1;
+    targetNodeMO = -1;
+	sourceNodeMO = -1;	
+
+	
+}
 
 //create the network
 //sets the focus node in position and creates the visualisation. does not render it though.
@@ -882,7 +905,7 @@ function createNetwork(targetDiv){
 			    .nodes(getNodes())
 			    .links(getEdges())
 			    .bound(true)
-			    .dragConstant(0.05)
+			    .dragConstant(0.06)
 			    .springConstant(0.05)
  			    .iterations(500)
 			    .transform(pv.Transform.identity.scale(3).translate(-w/3,-h/3)) 
@@ -949,7 +972,7 @@ function createNetwork(targetDiv){
     			.anchor("top").add(pv.Label).text(function(d){return d.nodeName})
     			
     				.font("9pt sans-serif")
-					.textStyle(	function(d) { return getNodeStrokeStyle(d, this, nodeNeighbors)})
+					.textStyle(	function(d) { return getTextStyle(d, this, nodeNeighbors)})
 					.textShadow("0.1em 0.1em 0.1em #fff")
 				
 					.visible(function(){return mouseOver && this.index == targetNodeMO || this.index == sourceNodeMO ? true :
@@ -962,7 +985,8 @@ function createNetwork(targetDiv){
 
 //reload network and render
 function reloadNetwork(targetDiv){
-		resetDateRangeVisibility();    		
+		resetDateRangeVisibility();
+		resetProtovisVariables();    		
 		createNetwork(targetDiv);
 		vis.render();	
 	}
@@ -989,12 +1013,9 @@ function resetDateRangeVisibility(){
 //resets the checked values for faceted browsing 
 function setFacetedSelection(chosenFunctions, chosenGender, chosenNationality){
 	
-	var html = "";
 	
 	//reset the function array
-	for (i = 0; i < selectedFunctions.length; i++){
-		selectedFunctions[i] = "";
-	}
+	selectedFunctions.splice(0, selectedFunctions.length);
 
 	//set the function array with chosen values
 	for (i = 0; i < chosenFunctions.length; i++){
@@ -1022,40 +1043,7 @@ function setFacetedSelection(chosenFunctions, chosenGender, chosenNationality){
 //functions to set the colour and style of nodes and links	
 
 //link stroke style rules
-/*function getLinkStrokeStyle(d, p){
-	if (browseTrigger){
-		 return linkFacet;
-	}
-	else
-	if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
-		($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)){
-			return outOfDateEdge;
-			}
-	else{	
-		p.targetNode.visible = true;
-		p.sourceNode.visible = true;
-		 if (mouseOver == true && p.targetNode.index == targetNodeMO && p.sourceNode.index == sourceNodeMO) {
-			return mouseoverLinkStroke;
-			} 
-	//if the focus is on a node rather than a link
-		else if (nodeFocus == true && (p.sourceNode.index == activeNode || p.targetNode.index == activeNode)){
-			return relatedLinkStroke;
-			}
-	//if the focus is on edges
-		else if (p.targetNode.index == targetNodeSelect && p.sourceNode.index == sourceNodeSelect){
-			return activeLinkStroke;
-			}
-		else 
-			return inactiveLinkStroke;	
-	}	
-}
-*/
 function getLinkStrokeStyle(d, p){
-	
-//	if (browseTrigger){
-//		 return linkFacet;
-//	}
-	//else
 	if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
 		($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)){
 			return outOfDateEdge;
@@ -1068,12 +1056,23 @@ function getLinkStrokeStyle(d, p){
 			} 
 	//if the focus is on a node rather than a link
 		else if (nodeFocus == true && (p.sourceNode.index == activeNode || p.targetNode.index == activeNode)){
-			return relatedLinkStroke;
+			if (browseTrigger){ 
+				return relatedLinkFacet;
 			}
+			else
+				return relatedLinkStroke;
+		}
 	//if the focus is on edges
 		else if (p.targetNode.index == targetNodeSelect && p.sourceNode.index == sourceNodeSelect){
-			return activeLinkStroke;
+			if(browseTrigger){
+				return activeLinkFacet;
 			}
+			else
+				return activeLinkStroke;
+			}
+		else if(browseTrigger){
+			return linkFacet;
+		}
 		else 
 			return inactiveLinkStroke;	
 	}	
@@ -1082,15 +1081,54 @@ function getLinkStrokeStyle(d, p){
 //node fill style rules
 function getNodeFillStyle(d, node, nodeNeighbors){
 	if (browseTrigger){
-		if (contains(selectedGender, d.gender)){ 
-			if (selectedFunctions[0] !=  ""){
-				var i = findMatch(selectedFunctions, d.functions);
-				if (i != null){
-					return functionColours(i);
-				}else return nodeFacet;
-			}else 
-			return functionColours(1)
-		}else return nodeFacet;
+		
+		var functionMatch = true;
+		var genderMatch = true;
+		var nationalityMatch = true;
+		var selectedOptions = 0;
+		
+		
+		if(selectedFunctions.length != 0) selectedOptions += 1;
+		if(selectedGender != "") selectedOptions += 1;
+		if(selectedNationality != "") selectedOptions += 1;
+		
+		if(selectedFunctions[0] != ""){
+			//check for matching functions		
+			for(i=0; i<selectedFunctions.length; i++){			
+				if(contains(d.functions, selectedFunctions[i])){
+					functionMatch = true;
+	
+				}
+				else{
+					 functionMatch = false; 
+					 break;
+				}
+			
+			}
+		}
+		
+		if (selectedGender!=""){
+			if(d.gender == null){d.gender = "Unknown";}
+			if (selectedGender == d.gender){
+				genderMatch = true;	
+			}	
+			else genderMatch = false;
+		}
+		
+		if (selectedNationality != ""){
+			if (d.nationality == null){d.nationality = "Unknown";}
+			if (selectedNationality == d.nationality){
+				nationalityMatch = true;
+			}	
+			else nationalityMatch = false;
+		}
+		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
+
+			return focusNodeFacet;
+		}
+		else{
+			return nodeFacet;
+		}
 	}
 		else
 	if (!d.visible){
@@ -1115,35 +1153,39 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 
 //node stroke style rules
 function getNodeStrokeStyle(d, node, nodeNeighbors){
-	if (browseTrigger){
-		if (contains(selectedGender, d.gender)){ 
-			if (selectedFunctions[0] !=  ""){
-				var i = findMatch(selectedFunctions, d.functions);
-				if (i != null){
-					return functionColours(i);
-				}else return nodeFacet;
-			}else 
-			return functionColours(1)
-		}else return nodeFacet;
-	}
-	else
 	if (!d.visible){
 		return outOfDateNode;
 	}
 	else
 	if (nodeFocus==true){
 		if (activeNode== node.index){ 
-			return focusNodeStroke;
+			if(browseTrigger){
+				return focusNodeStrokeFacet;
+			}
+			else return focusNodeStroke;
+			
 		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
-			return relatedNodeStroke;	
+			if (browseTrigger) {
+				return focusNodeStrokeFacet;
+			}
+			else return relatedNodeStroke;	
 		}
 		else return inactiveNodeStroke;		
 	}
 	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
-		return focusNodeStroke;
+		if(browseTrigger){
+			return focusNodeStrokeFacet;
+		}return focusNodeStroke;
 	}
 	else return inactiveNodeStroke;		
 
 }	
 
+//Text style rules
+function getTextStyle(d, node, nodeNeighbors){
+	if (browseTrigger){
+		return textFacet;
+	}
+	else return focusText;		
+}	
 
