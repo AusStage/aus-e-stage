@@ -110,6 +110,21 @@ public class RdfExport {
 	 		System.exit(-1);
 	 	}
 	 	
+	 	// get the location of sdb store description
+ 		String sdbStoreDescription = properties.getProperty("sdb-store-description");
+ 		
+ 		// check on the store description
+ 		if(sdbStoreDescription == null) {
+ 			System.err.println("ERROR: unable to read the sdb-store-description property");
+	 		System.exit(-1);
+	 	} else {
+	 		// check to see if the file exists
+	 		if(FileUtils.doesFileExist(sdbStoreDescription) == false) {
+	 			System.err.println("ERROR: unable to locate the file specified by the sdb-store-description property");
+	 			System.exit(-1);
+	 		}
+	 	}
+	 	
 	 	// execute the appropriate task		
 		if(taskType.equals("build-network-data") == true) {
 				
@@ -127,7 +142,7 @@ public class RdfExport {
 	 		}
 	 		
 	 		// do the build-network-data task
-			BuildNetworkData task = new BuildNetworkData(database, properties);
+			BuildNetworkData task = new BuildNetworkData(database, sdbStoreDescription);
 			
 			// tidy up any existing TDB datastore
 			status = task.doReset();
