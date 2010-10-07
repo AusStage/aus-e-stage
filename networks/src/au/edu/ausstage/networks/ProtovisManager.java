@@ -736,12 +736,20 @@ public class ProtovisManager {
 		// get the rest of the information about the nodes
 		
 		// redefine the sql variables
+		/*
 		sql = "SELECT c.first_name, c.last_name, DECODE(g.gender, null, 'Unknown', g.gender) as gender, DECODE(c.nationality, null, 'Unknown', c.nationality), cp.preferredterm "
 			+ "FROM contributor c, gendermenu g, contributorfunctpreferred cp, contfunctlink cl "
 			+ "WHERE c.contributorid = ? "
 			+ "AND c.gender = g.genderid (+) "
 			+ "AND c.contributorid = cl.contributorid "
 			+ "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid";
+		*/
+		sql = "SELECT c.first_name, c.last_name, DECODE(g.gender, null, 'Unknown', g.gender) as gender, DECODE(c.nationality, null, 'Unknown', c.nationality), cp.preferredterm "
+			+ "FROM contributor c, gendermenu g, contributorfunctpreferred cp, contfunctlink cl "
+			+ "WHERE c.contributorid = ? " 
+			+ "AND c.gender = g.genderid (+) "
+			+ "AND c.contributorid = cl.contributorid (+) "
+			+ "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid (+)";
 			
 		sqlParameters = new String[1];
 		
@@ -781,7 +789,14 @@ public class ProtovisManager {
 						node.setName(resultSet.getString(1) + " " + resultSet.getString(2));
 						node.setGender(resultSet.getString(3));
 						node.setNationality(resultSet.getString(4));
-						node.addFunction(resultSet.getString(5));
+						
+						// deal with those contributors that do not have functions
+						if(resultSet.getString(5) != null) {
+							node.addFunction(resultSet.getString(5));
+						} else {
+							node.addFunction("Unknown");
+						}
+						
 						node.setUrl(LinksManager.getContributorLink(source.toString()));
 					} else {
 						node.addFunction(resultSet.getString(5));
@@ -826,11 +841,6 @@ public class ProtovisManager {
 		JSONObject object     = new JSONObject();
 		JSONArray  nodesList  = new JSONArray();
 		JSONArray  edgesList  = new JSONArray();
-		
-		// hack to remove null objects
-		// TODO find out where these null objects come from
-		while(nodes.remove(null) == true) {}
-		while(edges.remove(null) == true) {}
 		
 		// add the list of nodes to the list
 		nodesList.addAll(nodes);
