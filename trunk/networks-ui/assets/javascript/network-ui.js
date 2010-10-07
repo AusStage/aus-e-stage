@@ -388,36 +388,43 @@ function findAndDisplayContributorNetwork(id){
 	//query the api
 	  jQuery.getJSON(dataString, 
 			function(data) {
-				contributors = null;
-				contributors = data;
 				
-				//need to do date population before loading the graph
-				//get the date ranges
-				var dateRange = findDateRange(contributors.edges);
+				// small fix for erroneous export, should be able to remove later
+				if(!contains(data.nodes, null)){ 
+					
+					contributors = null;
+					contributors = data;
+					
+					//need to do date population before loading the graph
+					//get the date ranges
+					var dateRange = findDateRange(contributors.edges);
 	
-				//set the date ranges for the slider
-				setDateRanges(dateRange);		
+					//set the date ranges for the slider
+					setDateRanges(dateRange);		
 
-				//find all functions for faceted browsing
-				setFacetedOptions(getFacetedOptions(contributors.nodes));		
+					//find all functions for faceted browsing
+					setFacetedOptions(getFacetedOptions(contributors.nodes));		
 
-				//display the faceted Options
-				$("#faceted_browsing_div").show();
+					//display the faceted Options
+					$("#faceted_browsing_div").show();
 				
-				//load the graph
-				reloadNetwork("protovis")
+					//load the graph
+					reloadNetwork("protovis")
 
+					//update the side panel with contributor infomation
+					displayAllInfo(contributors.nodes.length-1,contributors);
+				
+					//display the slider
+					$("#date_range_div").show(); 
+					//display the faceted browsing button
+					$("#faceted_browsing_btn_div").show();
+				}
+				else{
+					alert("Data for contributor "+id+" is corrupted. Please search for another contributor");
+				}
 				//hide the loading bar				
 				closeWaitingDialog();
 
-				//update the side panel with contributor infomation
-				displayAllInfo(contributors.nodes.length-1,contributors);
-				
-				//display the slider
-				$("#date_range_div").show(); 
-				//display the faceted browsing button
-				$("#faceted_browsing_btn_div").show();
-				
 			});
 	}
 
@@ -727,7 +734,8 @@ function updateNetworkInfo(contributors){
 		
 	    var html = 	"<br><table style=\"border-bottom: grey 1px solid; border-top:grey 1px solid;\" >"+
 	    			"<tr><td colspan=2> <h3> Network Properties </h3></td> </tr>"+
-    				"<tr><td valign=top><b> Centre:</b></td><td> <a href ="+contributors.nodes[activeNode].nodeUrl.replace("amp;", "")+">"+	    
+    				"<tr><td valign=top><b> Centre:</b></td><td> <a href ="+contributors.nodes[activeNode].nodeUrl.replace("amp;", "")+
+    				" target=\"_blank\">"+	    
 					contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")"+    				
     				"</a></td></tr>"+
     				"<tr><td><b>Contributors:</b></td><td> "+contributors.nodes.length+"</td></tr>"+					
@@ -753,7 +761,8 @@ function updateSelectedInfo(activeNode, contributorArray, ui_focus){
 			functionList = functionList + contributorArray.nodes[activeNode].functions[i] + "<br>";
     	} 
     	html += 	"<tr><td colspan=2>"+ 
-    			"<a href="+contributorArray.nodes[activeNode].nodeUrl.replace("amp;", "")+"><b>"+contributorArray.nodes[activeNode].nodeName + 				" ("+contributorArray.nodes[activeNode].id+")</b></a>"+
+    			"<a href="+contributorArray.nodes[activeNode].nodeUrl.replace("amp;", "")+" target=\"_blank\"><b>"
+    			+contributorArray.nodes[activeNode].nodeName +" ("+contributorArray.nodes[activeNode].id+")</b></a>"+
     			"</td></tr>"+
     			"<tr><td valign=top>"+
     			"<b>Functions: </b><br>"+
