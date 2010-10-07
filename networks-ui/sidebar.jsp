@@ -23,6 +23,7 @@
 	<ul>
 		<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
 		<li><a href="/networks/" title="Networks Service Homepage">Networks Homepage</a></li>
+		<li><a href="network-ui.html" title="Browse Ego-Centric Networks">Protovis Trial</a></li>
 		<li><a href="/networks/export.jsp" title="Export Data in a Variety of Formats">Export Graph Data</a></li>
 	</ul>
 	<h3>Advanced Users</h3>
