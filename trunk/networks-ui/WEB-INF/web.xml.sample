@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the AusStage Navigating Networks Service
+ *
+ * The AusStage Navigating Networks Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The AusStage Navigating Networks Service is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+-->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+    <display-name>Aus-e-Stage Navigating Networks Service</display-name>
+    <description>
+        This software visualises contributor relationships and exports data for external visualisation
+    </description>
+    <!-- AusStage -->
+    <!-- Servlets -->
+    <servlet>
+    	<servlet-name>LookupServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.networks.LookupServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<servlet-name>ExportServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.networks.ExportServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<servlet-name>SearchServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.networks.SearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<servlet-name>ProtovisServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.networks.ProtovisServlet</servlet-class>
+    </servlet>
+    
+    <!-- Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>LookupServlet</servlet-name>
+        <url-pattern>/lookup/*</url-pattern>
+    </servlet-mapping>    
+    <servlet-mapping>
+        <servlet-name>ExportServlet</servlet-name>
+        <url-pattern>/export/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/search/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProtovisServlet</servlet-name>
+        <url-pattern>/protovis/*</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Joseki -->
+    <!-- Servlets -->
+    <!-- SPARQL service -->
+    <servlet>
+        <servlet-name>SPARQL service processor</servlet-name>
+        <servlet-class>org.joseki.http.Servlet</servlet-class>
+        <!-- Configuration file -->
+        <init-param>
+            <param-name>org.joseki.rdfserver.config</param-name>
+            <param-value></param-value>
+        </init-param>        
+    </servlet>
+    <!-- Validator -->    
+    <servlet>
+        <servlet-name>Validator</servlet-name>
+        <servlet-class>
+            org.joseki.validator.Validator
+        </servlet-class>
+    </servlet>    
+    <!-- Well-known Joseki servlets for testing --> 
+    <!--    
+        <servlet>
+        <servlet-name>Dumper</servlet-name>
+        <servlet-class>
+        org.joseki.servlets.DumpServlet
+        </servlet-class>
+        </servlet>    
+        <servlet>
+        <servlet-name>DumpBody</servlet-name>
+        <servlet-class>
+        org.joseki.servlets.DumpBodyServlet
+        </servlet-class>
+        </servlet>
+    -->
+    <!-- Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>SPARQL service processor</servlet-name>
+        <url-pattern>/sparql</url-pattern>
+    </servlet-mapping>    
+    <servlet-mapping>
+        <servlet-name>SPARQL service processor</servlet-name>
+        <url-pattern>/sparql/*</url-pattern>
+    </servlet-mapping>    
+    <servlet-mapping>
+        <servlet-name>SPARQL service processor</servlet-name>
+        <url-pattern>/service/*</url-pattern>
+    </servlet-mapping>    
+    <servlet-mapping>
+        <servlet-name>Validator</servlet-name>
+        <url-pattern>/validator</url-pattern>
+    </servlet-mapping>
+    <!--
+        <servlet-mapping>
+        <servlet-name>Dumper</servlet-name>
+        <url-pattern>/dump</url-pattern>
+        </servlet-mapping>    
+        <servlet-mapping>
+        <servlet-name>DumpBody</servlet-name>
+        <url-pattern>/dump-body</url-pattern>
+        </servlet-mapping>
+    -->
+    
+    <!-- Context Params to Share Common Information-->
+    <!-- AusStage Options -->
+    <context-param>
+        <param-name>databaseConnectionString</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>systemName</param-name>
+        <param-value>Navigating Networks Service</param-value>
+    </context-param>    
+    <context-param>
+        <param-name>systemVersion</param-name>
+        <param-value>1.0 (Alpha)</param-value>
+    </context-param>
+    <context-param>
+        <param-name>buildVersion</param-name>
+        <param-value>1</param-value>
+    </context-param>
+    <context-param>
+        <param-name>moreInfo</param-name>
+        <param-value>http://www.ausstage.edu.au</param-value>
+    </context-param>
+    <context-param>
+        <param-name>systemUrl</param-name>
+        <!-- Include trailing slash -->
+        <param-value>http://beta.ausstage.edu.au/networks/</param-value>
+    </context-param> 
+	 <!-- Point to the SPARQL endpoint provided by Joseki -->
+   <!-- Mean we could host parts on different machines -->
+	<context-param>
+		<param-name>sparqlEndpoint</param-name>
+		<param-value></param-value>
+	</context-param>      
+    <!-- Add mime mapping for additional files -->
+    <mime-mapping>
+        <extension>vue</extension>
+        <mime-type>text/xml</mime-type>
+    </mime-mapping> 
+</web-app>
