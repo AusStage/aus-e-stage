@@ -37,7 +37,12 @@
 		<p>
 			The Navigating Network Service will provide an interactive interface for navigating and analysing the network of artistic collaborations embedded in the <a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage</a> dataset. The service will present existing data in new ways and allow researchers to interrogate the collaborative methodologies underpinning creativity in the performing arts.  
 		</p>
-		<p>A network-based interface will humanise the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. The interface will transform research practice in the performing arts. The application of network visualisation and analysis will reveal patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. </p>
+		<p>
+			A network-based interface will humanise the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. The interface will transform research practice in the performing arts. The application of network visualisation and analysis will reveal patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. 
+		</p>
+		<p>
+			We encourage you to explore the networks of artistic collaboration using our <a href="network-ui.html" title="Browse Ego-Centric Networks">Protovis Trial</a> interface and the <a href="/networks/export.jsp" title="Export Data in a Variety of Formats">Export Graph Data</a> interface.
+		</p>
 		<p>
 			More information on the service is available in our Wiki including:
 		</p>
