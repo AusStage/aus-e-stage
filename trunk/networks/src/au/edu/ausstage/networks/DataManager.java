@@ -212,6 +212,9 @@ public class DataManager {
 			
 			if(accessMethod.equals("http") == false) {
 				dataset.close();
+				
+				//release all TDB related resources
+				com.hp.hpl.jena.tdb.TDB.closedown();
 			}
 		} catch (Exception ex) {}
 	} // end finalize method
