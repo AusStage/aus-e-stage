@@ -736,7 +736,7 @@ public class ProtovisManager {
 		// get the rest of the information about the nodes
 		
 		// redefine the sql variables
-		sql = "SELECT c.first_name, c.last_name, DECODE(g.gender, null, 'Unknown', g.gender) as gender, c.nationality, cp.preferredterm "
+		sql = "SELECT c.first_name, c.last_name, DECODE(g.gender, null, 'Unknown', g.gender) as gender, DECODE(c.nationality, null, 'Unknown', c.nationality), cp.preferredterm "
 			+ "FROM contributor c, gendermenu g, contributorfunctpreferred cp, contfunctlink cl "
 			+ "WHERE c.contributorid = ? "
 			+ "AND c.gender = g.genderid (+) "
@@ -826,6 +826,11 @@ public class ProtovisManager {
 		JSONObject object     = new JSONObject();
 		JSONArray  nodesList  = new JSONArray();
 		JSONArray  edgesList  = new JSONArray();
+		
+		// hack to remove null objects
+		// TODO find out where these null objects come from
+		while(nodes.remove(null) == true) {}
+		while(edges.remove(null) == true) {}
 		
 		// add the list of nodes to the list
 		nodesList.addAll(nodes);
