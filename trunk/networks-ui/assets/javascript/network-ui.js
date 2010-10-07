@@ -188,11 +188,12 @@ $(document).ready(function() {
 		autoOpen: false,
 		closeOnEscape: false,
 		height: 600,
-		width: 400,
+		width: 300,
 		modal: false,
 		position: ["right","top"],
 		buttons: {
 			"Refresh": function() {
+				reloadFacetedSelection();
 				refreshNetwork("browse");
 				return false;
 			},
@@ -528,28 +529,62 @@ function setFacetedOptions(facetedList){
 	$('#faceted_gender_div input:checkbox').exclusiveCheck();
 	$('#faceted_nationality_div input:checkbox').exclusiveCheck();
 
-	$('input:checkbox').change(function() {
+}
 
-		var str = "";
+	//update the display to show what's been selected
+	function reloadFacetedSelection() {
+		
+		$("#faceted_selection_p").empty();
+		var displayStr = "";
+		var startStr = "<b>Contributors who are: </b><br>";
+		var middleStr = "<br><b>and </b>";
+		var functionStr = "";
+		var genderStr = "";
+		var nationalityStr = "";
 		
 		if($("input:checked").length>0){
-	         str = "Contributors who are ";         
+	         displayStr = startStr;         
 		}
-         $("input#function:checked").each(function (index, value) {
-                str += value.value + ", ";
-         });
          
-         $("input#gender:checked").each(function (index, value) {
-                str += "and "+ value.value + " ";
-         });
-         
-         $("input#nationality:checked").each(function (index, value) {
-                str += "and "+ value.value + " ";
-         });
+        $("input#function:checked").each(function (index, value) {
+               functionStr += value.value + "<br>";
+        });
+        
+        if(functionStr.length !=0){
+        	functionStr += " ";
+        }
+        
+        //remove the last - and replace with s
+		functionStr = functionStr.replace("<br> ","s ");
+
+        
+        $("input#gender:checked").each(function (index, value) {
+               genderStr += value.value + " ";
+        });
+        
+        $("input#nationality:checked").each(function (index, value) {
+               nationalityStr += value.value + " ";
+        });
+
+		
+		displayStr += functionStr;
+		
+		if(functionStr.length !=0 && genderStr.length != 0){
+			displayStr += middleStr;			
+		}
+		displayStr += genderStr;
+		
+		if((functionStr.length !=0 && genderStr.length != 0 && nationalityStr.length !=0)||
+			(functionStr.length == 0 && genderStr.length !=0 && nationalityStr.length !=0)||
+			(functionStr.length !=0 && genderStr.length ==0 && nationalityStr.length !=0) ){
+				displayStr += middleStr;
+		}
+		displayStr += nationalityStr;
+		
                      
-         $("#faceted_selection_div").text(str);
-   });
-}
+        $("#faceted_selection_p").append(displayStr);
+   };
+
 
 
 
