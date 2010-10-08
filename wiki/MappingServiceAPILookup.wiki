@@ -239,3 +239,32 @@ The name of the callback function used when a request is made for JSONP encoded 
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=414321"
   } ]
 }}}
+
+=== venue ===
+{{{
+[ { "id" : "815",
+    "latitude" : "-34.92832",
+    "longitude" : "138.597007",
+    "name" : "Her Majesty's Theatre",
+    "postcode" : "5000",
+    "street" : "58 Grote Street",
+    "suburb" : "Adelaide",
+    "totalEventCount" : 313,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
+  } ]
+}}}
+
+=== map-colour-list ===
+{{{
+[ "#75b4e2",
+  "#0058a7",
+  "#00344e",
+  "#59c3ec",
+  "#004f5a",
+  "#005675",
+  ...
+ "#7f8e76",
+  "#4e532e",
+  "#668293"
+]
+}}}
