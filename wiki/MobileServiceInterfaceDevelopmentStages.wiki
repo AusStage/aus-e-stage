@@ -1,0 +1,34 @@
+Draft outline of first few stages of the implementing the Mobile Service Use Cases
+
+=Stage 1 - Focusing on level 1 Priorities of  MobileServiceUseCases=
+
+*Note: what is difficult here is there a number of technical problems to get over as well as the interface problems*
+==PART 1) Detail Visual mockup's and designs of how the system could work.==
+
+==PART 2) Working Simple interface for iphone/android using jqTouch - *this might not actually be an implementation of the mockup in part 1==
+
+*Focus is on getting data on and off the phone. *
+
+  # A list of possible performance's is shown 
+  # The user choose those performances 
+  # They have the choice to *Add *feedback and to *View *feedback 
+  # Add feedback in simple text form 
+  # View in a simple a twitter style timeline 
+
+=Stage 2 - Adding additional functionality =
+
+ # Adding features to be able search for performances or performances being show by geo location
+ # Refinements to mobile interfaces - adding the more information about the performances.  
+ # implementation of the visual design. 
+
+= Stage 3 - Starting on the visual analysis systems for the desktop =
+
+  # A list of performances that have feedback being shown 
+  # The user being able to choose one of performances and get the timeline/twitter style view
+
+= Stage 4 - Starting on the visual analysis systems for the desktop= 
+
+ # A list of performances that have feedback being shown
+ # The user being able to choose one of performances and choose what type of display 
+ # timeline
+ # digital signage
