@@ -22,14 +22,9 @@ package au.edu.ausstage.utils;
 import java.util.ArrayList;
 
 // include libraries for XML processing
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -39,11 +34,12 @@ public class ColourManager {
 
 	// declare class level variables
 	String xmlPathName;
+	ArrayList<String> colourList = null;
 
 	/**
 	 * Constructor for this class
 	 *
-	 * @pathName the path to the xml file defining the colours
+	 * @param pathName the path to the xml file defining the colours
 	 */
 	public ColourManager(String pathName) {
 	
@@ -75,13 +71,54 @@ public class ColourManager {
 			ColourHandler handler = new ColourHandler();
 		
 			saxParser.parse(xmlPathName, handler);
+			
+			// get the list of colours
+			colourList = handler.getColourList();
+			
 		} catch (javax.xml.parsers.ParserConfigurationException ex) {return false;} 
 		  catch (org.xml.sax.SAXException ex) {return false;}
 		  catch (java.io.IOException ex) {return false;}
-
 	
 		// if we get this far everything went OK
 		return true;	
+	}
+	
+	/**
+	 * A method to return the list of colours
+	 *
+	 * @return the list of colours retrieved from the XML file
+	 */
+	public ArrayList<String> getColourList() {
+		return colourList;
+	}
+	
+	/**
+	 * A method to return the list of colours in a format
+	 * that can be included directly into HTML markup
+	 *
+	 * @return the list of colours with a "#" in front of the value
+	 */
+	public ArrayList<String> getColourListForWeb() {
+	
+		// don't try to process an empty list
+		if(colourList == null) {
+			return null;
+		}
+	
+		// declare helper variables
+		String tmp;
+	
+		// make a copy of the existing list of colours
+		ArrayList<String> webColours = new ArrayList<String>();
+		
+		// prepend hash onto the list of colours
+		for(int i = 0; i < colourList.size(); i++) {
+			tmp = (String)colourList.get(i);
+			tmp = "#" + tmp;
+			webColours.add(tmp);
+		}
+		
+		return webColours;	
 	}
 	
 } // end class definition
