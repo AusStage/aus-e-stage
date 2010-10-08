@@ -22,6 +22,7 @@
        * [Beta Beta]
    * [MobileService  Mobile Service]
      * [MobileServiceSpecification Specification]
+       * [MobileServiceUseCases]
      * [MobileServiceDatabaseTables Database Tables]
      * [MobileServiceAPI Mobile Service API]
        * [MobileServiceAPIGatherer Input Gatherer]
