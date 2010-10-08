@@ -64,6 +64,10 @@
         <param-value></param-value>
     </context-param>
     <context-param>
+        <param-name>colourXMLFilePath</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
         <param-name>systemName</param-name>
         <param-value>AusStage Mapping System Google Maps v3 Migration</param-value>
     </context-param>    
