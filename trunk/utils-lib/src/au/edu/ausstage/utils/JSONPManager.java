@@ -19,7 +19,7 @@
 package au.edu.ausstage.utils;
 
 /**
- * A class of methods useful when reading data from a properties file
+ * A class of methods useful when outputing data in JSON format in response to a JSONP request
  */
 public class JSONPManager {
 
