@@ -41,7 +41,9 @@
 			A network-based interface will humanise the representation of artists in AusStage by modelling the collaborative ethic of the performing arts. The interface will transform research practice in the performing arts. The application of network visualisation and analysis will reveal patterns of collaborative creativity in the performing arts that have previously been unrepresentable using conventional text-based displays. 
 		</p>
 		<p>
-			We encourage you to explore the networks of artistic collaboration using our <a href="network-ui.html" title="Browse Ego-Centric Networks">Protovis Trial</a> interface and the <a href="/networks/export.jsp" title="Export Data in a Variety of Formats">Export Graph Data</a> interface.
+			We encourage you to explore the networks of artistic collaboration using our <a href="network-ui.html" title="Browse Ego-Centric Networks">Protovis Trial interface</a> and the <a href="/networks/export.jsp" title="Export Data in a Variety of Formats">Export Graph Data</a> interface.
+			<br/>
+			<strong>Please Note: </strong> the <a href="network-ui.html" title="Browse Ego-Centric Networks">Protovis Trial interface</a> will only work in up-to-date browsers, such as <a href="http://www.apple.com/safari/" title="More information about this browser">Safari 5.x</a>, <a href="http://www.mozilla.com/en-US/" title="More information about this browser">Firefox 3.6x</a> and works best in <a href="http://www.google.com/chrome/" title="More information about this browser">Google Chrome 6.x</a>.
 		</p>
 		<p>
 			More information on the service is available in our Wiki including:
