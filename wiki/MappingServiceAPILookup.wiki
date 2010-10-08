@@ -18,12 +18,12 @@ Combining the base URL with the parameters outlined below constructs a call to t
 == Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || state-list, suburb-list, suburb-venue-list, organisation, contributor, venue || No || ||
+|| task   || state-list, suburb-list, suburb-venue-list, organisation, contributor, venue, map-colour-list || No || ||
 || id     || unique identifier use with the lookup task || No || ||
 || format || json || Yes || json ||
 || callback || function name to use for a JSONP request || Yes || ||
 
-_Note:_ id is not required for a state-list lookup
+_Note:_ id is not required for a state-list or map-colour-list lookup task
 
 === task ===
 The type of search task to undertake for example a search for organisation or contributor data
@@ -51,6 +51,14 @@ The details of an organisation
 ==== contributor ====
 
 The details for a contributor
+
+==== venue ====
+
+The details for a venue
+
+==== map-colour-list ====
+
+A list of common colours that can be used for styling elements in a map, such as trajectory etc.
 
 === id ===
 
