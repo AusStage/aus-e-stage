@@ -138,7 +138,7 @@ class ColourHandler extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName, Attributes atts) {
 	
 		// check to make sure we're processing a tag we expect
-		if(localName.equals("colour") == true) {
+		if(qName.equals("colour") == true) {
 			if(atts.getValue("hex") != null) {
 				colourList.add(atts.getValue("hex"));
 			}		
