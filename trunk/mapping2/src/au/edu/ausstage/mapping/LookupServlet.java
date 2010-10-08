@@ -36,7 +36,7 @@ public class LookupServlet extends HttpServlet {
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list", "organisation", "contributor", "venue"};
+	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list", "organisation", "contributor", "venue", "map-colour-list"};
 	private final String[] FORMAT_TYPES       = {"json"};
 	public static final String[] VALID_STATES = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
@@ -72,7 +72,7 @@ public class LookupServlet extends HttpServlet {
 		}
 		
 		// check on the other parameters
-		if(taskType.equals("state-list") == false) {
+		if(taskType.equals("state-list") == false && taskType.equals("map-colour-list") == false) {
 			// this is a lookup task that requires the id
 			if(taskType.equals("suburb-list") == true) {
 				if(InputUtils.isValid(id, VALID_STATES) == false) {
@@ -110,23 +110,30 @@ public class LookupServlet extends HttpServlet {
 			}
 		}
 		
-		// instantiate a connection to the database
-		DbManager database;
-		
-		try {
-			database = new DbManager(servletConfig.getServletContext().getInitParameter("databaseConnectionString"));
-		} catch (IllegalArgumentException ex) {
-			throw new ServletException("Unable to read the connection string parameter from the web.xml file");
-		}
-		
-		if(database.connect() == false) {
-			throw new ServletException("Unable to connect to the database");
-		}
-		
-		// instantiate a lookup object
-		LookupManager lookup = new LookupManager(database);
-		
 		String results = null;
+		LookupManager lookup = null;
+		
+		// see if this is just a request for the colour list
+		if(taskType.equals("map-colour-list") == true) {
+			results = LookupManager.getMapElementColourList(servletConfig.getServletContext().getInitParameter("colourXMLFilePath"));
+		} else {
+		
+			// instantiate a connection to the database
+			DbManager database;
+		
+			try {
+				database = new DbManager(servletConfig.getServletContext().getInitParameter("databaseConnectionString"));
+			} catch (IllegalArgumentException ex) {
+				throw new ServletException("Unable to read the connection string parameter from the web.xml file");
+			}
+		
+			if(database.connect() == false) {
+				throw new ServletException("Unable to connect to the database");
+			}
+		
+			// instantiate a lookup object
+			lookup = new LookupManager(database);
+		}
 		
 		// determine what to lookup
 		if(taskType.equals("state-list") == true) {
@@ -145,8 +152,10 @@ public class LookupServlet extends HttpServlet {
 			// lookup a list of venues in a specific state
 			results = lookup.getContributor(id);
 		} else if(taskType.equals("venue") == true) {
+			// lookup information about a venue
 			results = lookup.getVenue(id);
 		}
+			
 		
 		// check to see if this is a jsonp request
 		if(InputUtils.isValid(request.getParameter("callback")) == false) {

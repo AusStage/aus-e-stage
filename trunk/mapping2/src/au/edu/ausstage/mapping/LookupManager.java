@@ -22,6 +22,9 @@ package au.edu.ausstage.mapping;
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.mapping.types.*;
 
+// import additional libraries
+import org.json.simple.*;
+
 /**
  * A class used to compile the marker data which is used to build
  * maps on web pages
@@ -163,6 +166,34 @@ public class LookupManager {
 		SearchManager search = new SearchManager(database);
 		
 		return search.doVenueSearch("id", id, null, null, null);
-	}	
+	}
+	
+	/**
+	 * A method to return the list of colours that can be used for 
+	 * elements displayed on a map
+	 *
+	 * @param xmlFilePath the path to the XML file that specifies the colours
+	 * 
+	 * @return a JSON encoded array of colour attributes
+	 */	
+	@SuppressWarnings("unchecked")	
+	public static String getMapElementColourList(String xmlFilePath) {
+	
+		// double check on the parameter
+		if(InputUtils.isValid(xmlFilePath) == false) {
+			throw new IllegalArgumentException("The xmlFilePath parameter is required");
+		}
+		
+		ColourManager colours = new ColourManager(xmlFilePath);
+		
+		if(colours.parseXML() == false) {
+			return new JSONArray().toString();
+		}
+		
+		// get the list of colours
+		JSONArray list = new JSONArray();
+		list.addAll(colours.getColourListForWeb());
+		return list.toString();
+	}
 	
 } // end class definition
