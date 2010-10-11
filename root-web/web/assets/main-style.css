@@ -1,34 +1,44 @@
 /*
- * This file is part of the Aus-e-Stage Beta Root Website
+ * This file is part of the AusStage Mapping Service
  *
- * The Aus-e-Stage Beta Root Website is free software: you can redistribute
+ * The AusStage Mapping Service is free software: you can redistribute
  * it and/or modify it under the terms of the GNU General Public License 
  * as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
- * The Aus-e-Stage Beta Root Website is distributed in the hope that it will 
+ * The AusStage Mapping Service is distributed in the hope that it will 
  * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the Aus-e-Stage Beta Root Website.  
+ * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
-body html {
+html, body {
 	margin:0;
 	padding:0;
-	color:#000;
-	background:#fff;
+	color:#333333;
+	background: #fff;
+	font-family:Helvetica, Arial, sans-serif;
 }
+
+a {
+	color: #4433cc;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 #wrap {
-	width:1000px;
+	width:1200px;
 	margin:0 auto;
-	background:#7eba5e;
+	background:#aaaaaa;
 }
 #header {
-	padding:5px 10px;
-	height: 99px;
+	height: 64px;
 	padding:0px;
 	background: #333333;
 	background-image: url('images/ausstagehomebrand.gif');
@@ -36,20 +46,23 @@ body html {
 	background-position: top left;
 }
 #header h1 {
-	color: #fff;
+	color: #eeeeee;
 	text-align: right;
-	font-size: 150%;
-	padding-top: 40px;
+	font-size: 110%;
+	font-weight: normal;
+	padding-top: 24px;
 	padding-right: 10px;
 }
 
 h1 {
     margin:0;
 }
+
 #nav {
 	padding:5px 10px;
-	background:#999999;
+	background:#333333;
 	font-size: 90%;
+
 }
 #nav ul {
 	margin:0;
@@ -69,20 +82,35 @@ h1 {
 
 #main {
 	float:right;
-	width:786px;
+	width:986px;
 	padding:10px;
-	background:#a0ca76;
+	background:#ffffff;
 	font-size: 90%;
+	font-family:Helvetica,Arial;
+    color:#333333;
 }
 h2 {
 	margin:0 0 1em;
-	font-size: 125%;
+	font-size: 110%;
+	
 }
+
+h3 {
+	margin:0 0 1em;
+	font-size: 110%;
+	
+}
+
+blockquote
+	{background-color:#eeeeee;
+}
+
 #sidebar {
 	float:left;
 	width:174px;
-	padding:10px;
-	background-color: #7eba5e;
+	padding-right:10px;
+	padding-left: 10px;
+	background-color: #aaaaaa;
 }
 
 #sidebar ul {
@@ -101,16 +129,34 @@ h2 {
 	text-decoration: underline;
 }
 
+#sidebar h3 {
+	color: #fff;
+	font-size: 90%;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
 
 #footer {
 	clear:both;
 	padding:5px 10px;
-	background:#999999;
+	background:#aaaaaa;
+	color:#fff;
 }
 #footer p {
 	margin:0;
 	font-size: 75%;
+    text-align: center;
 }
+
+#footer a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#footer a:hover {
+	text-decoration: underline;
+}
+
 * html #footer {
 	height:1px;
 	font-size: 90%;
@@ -131,19 +177,7 @@ table.formTable th {
 table.formTable th label {
 	text-align: left;
 
-}
-
-/* extends jquery ui button style */
-input.button {
-	/*float: right; */
-	margin: .5em .4em .5em 0; 
-	cursor: pointer; 
-	padding: .2em .6em .3em .6em; 
-	line-height: 1.4em; 
-	width:auto; 
-	overflow:visible; 
-}
-	
+}	
 
 /* Styles for Validation Errors */
 label.error { 
@@ -157,14 +191,16 @@ label.error {
 table.searchResults {
 	background-color: #fff;
 	text-align: left;
-	border: 1px solid #333333;
+	border: 1px solid #aaaaaa;
 	border-collapse: collapse;
-	width: 98%;
+	width: 100%;
 }
 
 table.searchResults th {
-	border: 1px solid #333333;
+	border: 1px solid #aaaaaa;
 	padding: 2px;
+	text-align: left;
+	color: #000;
 }
 
 table.searchResults td {
@@ -172,66 +208,12 @@ table.searchResults td {
 }
 
 tr.odd {
-	background-color: #e3e3e3;
+	background-color: #eeeeee;
 }
 
 table.searchResults tfoot {
-	border: 1px solid #333333;
+	border: 1px solid #aaaaaa;
 	font-size: 90%;
-}
-
-/* Styles for Maps */
-#map {
-	width: 780px;
-	height: 585px;
-	margin-top: 15px;
-}
-
-#map_legend {
-	margin-top: 25px;
-}
-
-table.mapLegend {
-	background-color: #fff;
-	text-align: left;
-	border: 1px solid #333333;
-	border-collapse: collapse;
-	width: 98%;
-}
-
-table.mapLegend th {
-	border: 1px solid #333333;
-	padding: 2px;
-	text-align: center;
-}
-
-table.mapLegend td {
-	padding: 2px;
-}
-
-table.mapLegend tfoot {
-	border: 1px solid #333333;
-	font-size: 90%;
-}
-
-.map_header_footer {
-	background: #fff;
-}
-
-.map_header_footer h3 {
-	text-align: center;
-}
-
-.map_links li {
-	display: inline;
-	list-style-type: none;
-	padding-right: 10px;
-}
-
-.map_links {
-	/*text-align: center;*/
-	font-size: 90%;
-	margin-top: -10px;
 }
 
 /* Dialog styles */
@@ -243,8 +225,55 @@ table.mapLegend tfoot {
 	color: purple!important;
 }
 
-/* Slider style */
-#time_slider_header {
-	height: 20px;
+/* Styles for the feedback table */
+#feedback_messages {
+	border-collapse: collapse;
+	width: 100%;
 }
 
+
+#feedback_messages td {
+	padding-top: 5px;
+}
+
+
+td.feedback_messages_left {
+	border-left: 2px solid #aaaaaa;
+	border-bottom: 2px solid #aaaaaa;
+	border-top: 2px solid #aaaaaa;
+	padding-right: 15px;
+}
+
+td.feedback_messages_right {
+	border-right: 2px solid #aaaaaa;
+	border-bottom: 2px solid #aaaaaa;
+	border-top: 2px solid #aaaaaa;
+	padding-left: 15px;
+}
+
+td.feedback_messages_middle {
+	border-bottom: 2px solid #aaaaaa;
+	border-top: 2px solid #aaaaaa;
+}
+
+td.feedback_messages_new {
+	background: #ffeb80 url(jquery-ui/images/ui-bg_inset-hard_55_ffeb80_1x100.png) 50% bottom repeat-x;
+}
+
+#table_anchor {
+	display: none;
+}
+
+/* Styles for the Tipsy Library */
+.tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }
+.tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
+.tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+.tipsy-arrow { position: absolute; background: url('images/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
+.tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
+.tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
+.tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
+.tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
+.tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
+.tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
+.tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
+.tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
