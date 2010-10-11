@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the AusStage Audience Participation Service
+ *
+ * The AusStage Audience Participation Service is free software: you can 
+ * redistribute it and/or modify it under the terms of the GNU General 
+ * Public License as published by the Free Software Foundation, either 
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * The AusStage Audience Participation Service is distributed in the hope 
+ * that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Audience Participation Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+-->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+    <display-name>Aus-e-Stage Audience Participation System</display-name>
+    <description>
+        This software provides services for the collection, manipulation, analysis and reporting of audience participation data 
+    </description>
+    <!-- Servlets -->
+    <servlet>
+        <servlet-name>GathererServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mobile.GathererServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.mobile.FeedbackServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<servlet-name>LookupServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.mobile.LookupServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<servlet-name>ManualAddServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.mobile.ManualAddServlet</servlet-class>
+    </servlet>
+    <!-- Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>GathererServlet</servlet-name>
+        <url-pattern>/gatherer/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <url-pattern>/feedback/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>LookupServlet</servlet-name>
+    	<url-pattern>/lookup/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>ManualAddServlet</servlet-name>
+    	<url-pattern>/manualadd/*</url-pattern>
+    </servlet-mapping>
+    <!-- Context Params to Share Common Information-->
+    <context-param>
+        <param-name>databaseConnectionString</param-name>
+        <!-- production database -->
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>systemName</param-name>
+        <param-value>AusStage Audience Feedback</param-value>
+    </context-param>    
+    <context-param>
+       	<param-name>systemVersion</param-name>
+       	<param-value>1.0 (Alpha)</param-value>
+    </context-param>
+    <context-param>
+        <param-name>buildVersion</param-name>
+        <param-value>1</param-value>
+    </context-param>
+    <context-param>
+        <param-name>moreInfo</param-name>
+        <param-value>http://beta.ausstage.edu.au</param-value>
+    </context-param>
+    <context-param>
+        <param-name>systemUrl</param-name>
+        <!-- Include trailing slash -->
+        <param-value>http://beta.ausstage.edu.au/mobile/</param-value>
+    </context-param>
+    <!-- email configuration -->
+    <context-param>
+        <param-name>mailHost</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailUser</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailPassword</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailTls</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailSsl</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailPort</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailDebug</param-name>
+        <param-value>no</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailFrom</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailTo</param-name>
+        <param-value></param-value>
+    </context-param>
+</web-app>
