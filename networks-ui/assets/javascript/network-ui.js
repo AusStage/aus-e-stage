@@ -1172,7 +1172,7 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 			else genderMatch = false;
 		}
 
-		if(selectedNationality[0] != ""){
+		if(selectedNationality.length!=0){
 			if (d.nationality == null){d.nationality = "Unknown";}			
 			//check for matching functions		
 			if (contains(selectedNationality, d.nationality)){
@@ -1248,7 +1248,8 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 			else genderMatch = false;
 		}
 		
-		if(selectedNationality[0] != ""){
+		if(selectedNationality.length!=0){
+			alert("nationality check");
 			if (d.nationality == null){d.nationality = "Unknown";}			
 			//check for matching functions		
 			if (contains(selectedNationality, d.nationality)){
@@ -1257,7 +1258,7 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 			else nationalityMatch = false;
 		
 		}
-
+		alert(functionMatch+" "+genderMatch+" "+nationalityMatch);
 		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
 			if (contains(nodeNeighbors[activeNode], node.index)==true || activeNode == node.index){
 				return focusNodeRelStrokeFacet;
@@ -1290,34 +1291,6 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 	}
 	else return inactiveNodeStroke;	
 }
-/*function getNodeStrokeStyle(d, node, nodeNeighbors){
-	if (!d.visible){
-		return outOfDateNode;
-	}
-	else
-	if (nodeFocus==true){
-		if (activeNode== node.index){ 
-			if(browseTrigger){
-				return focusNodeStrokeFacet;
-			}
-			else return focusNodeStroke;
-			
-		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
-			if (browseTrigger) {
-				return focusNodeStrokeFacet;
-			}
-			else return relatedNodeStroke;	
-		}
-		else return inactiveNodeStroke;		
-	}
-	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
-		if(browseTrigger){
-			return focusNodeStrokeFacet;
-		}return focusNodeStroke;
-	}
-	else return inactiveNodeStroke;		
-
-}*/	
 
 //Text style rules
 function getTextStyle(d, node, nodeNeighbors){
@@ -1356,7 +1329,7 @@ function getTextStyle(d, node, nodeNeighbors){
 			else genderMatch = false;
 		}
 		
-		if(selectedNationality[0] != ""){
+		if(selectedNationality.length!=0){
 			if (d.nationality == null){d.nationality = "Unknown";}			
 			//check for matching nationality		
 			if (contains(selectedNationality, d.nationality)){
