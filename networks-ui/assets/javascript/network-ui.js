@@ -532,9 +532,8 @@ function setFacetedOptions(facetedList){
 	'</label><br>');
 	}	
 
-	//restrict gender and nationality to only one check box selected.
+	//restrict gender to only one check box selected.
 	$('#faceted_gender_div input:checkbox').exclusiveCheck();
-	$('#faceted_nationality_div input:checkbox').exclusiveCheck();
 
 }
 
@@ -545,6 +544,7 @@ function setFacetedOptions(facetedList){
 		var displayStr = "";
 		var startStr = "<b>Contributors who are: </b><br>";
 		var middleStr = "<br><b>and </b>";
+		var middleOrStr = "<br><b>or </b>";
 		var functionStr = "";
 		var genderStr = "";
 		var nationalityStr = "";
@@ -570,8 +570,13 @@ function setFacetedOptions(facetedList){
         });
         
         $("input#nationality:checked").each(function (index, value) {
-               nationalityStr += value.value + " ";
+               nationalityStr += value.value + " "+ middleOrStr;
         });
+        
+        if(nationalityStr.length!=0){
+        	nationalityStr+= " ";
+        }
+        nationalityStr = nationalityStr.replace(middleOrStr+" "," ");
 
 		
 		displayStr += functionStr;
@@ -862,8 +867,10 @@ var selectedNationality = "";
     // faceted colour scheme
     var bgColourFacet = "#333333";   
     var nodeFacet = "rgba(170,170,170,1)";
+    var nodeFacetStroke = "rgba(170,170,170,1)";
     var focusNodeFacet = "blue";
-    var focusNodeStrokeFacet = "white";
+    var focusNodeStrokeFacet = "blue";
+    var focusNodeRelStrokeFacet = "white";
     var linkFacet = "rgba(170,170,170,0.2)";
 	var relatedLinkFacet = "rgba(255,255,255,0.9)";
 	var activeLinkFacet = "rgba(255,255,255,0.9)";    
@@ -949,10 +956,15 @@ function createNetwork(targetDiv){
 			    .nodes(getNodes())
 			    .links(getEdges())
 			    .bound(true)
+			    .chargeConstant(-80)
 			    .dragConstant(0.06)
 			    .springConstant(0.05)
+			    .chargeMaxDistance(600)			    
+			    .springLength(150)
+//			    .dragConstant(0.06)
+			   // .springConstant(0.05)
  			    .iterations(500)
-			    .transform(pv.Transform.identity.scale(3).translate(-w/3,-h/3)) 
+			   // .transform(pv.Transform.identity.scale(3).translate(-w/3,-h/3)) 
 
 				;
 		
@@ -1180,7 +1192,6 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 	}
 	else
 	if (nodeFocus==true){
-//		for (i = 0; i < selectedFunctions.length; i++)
 		
 		if (activeNode== node.index){ 
 			return focusNodeFill;
@@ -1195,8 +1206,84 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 	else return inactiveNodeFill;	
 }
 
+
 //node stroke style rules
 function getNodeStrokeStyle(d, node, nodeNeighbors){
+	if (browseTrigger){
+		
+		var functionMatch = true;
+		var genderMatch = true;
+		var nationalityMatch = true;
+		var selectedOptions = 0;
+		
+		
+		if(selectedFunctions.length != 0) selectedOptions += 1;
+		if(selectedGender != "") selectedOptions += 1;
+		if(selectedNationality != "") selectedOptions += 1;
+		
+		if(selectedFunctions[0] != ""){
+			//check for matching functions		
+			for(i=0; i<selectedFunctions.length; i++){			
+				if(contains(d.functions, selectedFunctions[i])){
+					functionMatch = true;
+	
+				}
+				else{
+					 functionMatch = false; 
+					 break;
+				}
+			
+			}
+		}
+		
+		if (selectedGender!=""){
+			if(d.gender == null){d.gender = "Unknown";}
+			if (selectedGender == d.gender){
+				genderMatch = true;	
+			}	
+			else genderMatch = false;
+		}
+		
+		if (selectedNationality != ""){
+			if (d.nationality == null){d.nationality = "Unknown";}
+			if (selectedNationality == d.nationality){
+				nationalityMatch = true;
+			}	
+			else nationalityMatch = false;
+		}
+		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
+			if (contains(nodeNeighbors[activeNode], node.index)==true || activeNode == node.index){
+				return focusNodeRelStrokeFacet;
+			}
+			return focusNodeStrokeFacet;
+		}
+		else{
+			if (contains(nodeNeighbors[activeNode], node.index)==true|| activeNode == node.index){
+				return focusNodeRelStrokeFacet;
+			}
+			return nodeFacetStroke;
+		}
+	}
+		else
+	if (!d.visible){
+		return outOfDateNode;
+	}
+	else
+	if (nodeFocus==true){
+		
+		if (activeNode== node.index){ 
+			return focusNodeStroke;
+		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
+			return relatedNodeStroke;	
+		}
+		else return inactiveNodeStroke;		
+	}
+	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
+		return focusNodeStroke;
+	}
+	else return inactiveNodeStroke;	
+}
+/*function getNodeStrokeStyle(d, node, nodeNeighbors){
 	if (!d.visible){
 		return outOfDateNode;
 	}
@@ -1223,13 +1310,78 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 	}
 	else return inactiveNodeStroke;		
 
-}	
+}*/	
 
 //Text style rules
 function getTextStyle(d, node, nodeNeighbors){
 	if (browseTrigger){
-		return textFacet;
+		
+		var functionMatch = true;
+		var genderMatch = true;
+		var nationalityMatch = true;
+		var selectedOptions = 0;
+		
+		
+		if(selectedFunctions.length != 0) selectedOptions += 1;
+		if(selectedGender != "") selectedOptions += 1;
+		if(selectedNationality != "") selectedOptions += 1;
+		
+		if(selectedFunctions[0] != ""){
+			//check for matching functions		
+			for(i=0; i<selectedFunctions.length; i++){			
+				if(contains(d.functions, selectedFunctions[i])){
+					functionMatch = true;
+	
+				}
+				else{
+					 functionMatch = false; 
+					 break;
+				}
+			
+			}
+		}
+		
+		if (selectedGender!=""){
+			if(d.gender == null){d.gender = "Unknown";}
+			if (selectedGender == d.gender){
+				genderMatch = true;	
+			}	
+			else genderMatch = false;
+		}
+		
+		if (selectedNationality != ""){
+			if (d.nationality == null){d.nationality = "Unknown";}
+			if (selectedNationality == d.nationality){
+				nationalityMatch = true;
+			}	
+			else nationalityMatch = false;
+		}
+		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
+
+			return focusNodeFacet;
+		}
+		else{
+			return nodeFacet;
+		}
 	}
-	else return focusText;		
-}	
+		else
+	if (!d.visible){
+		return outOfDateNode;
+	}
+	else
+	if (nodeFocus==true){
+		
+		if (activeNode== node.index){ 
+			return focusNodeFill;
+		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
+			return relatedNodeFill;	
+		}
+		else return inactiveNodeFill;		
+	}
+	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
+		return focusNodeFill;
+	}
+	else return inactiveNodeFill;	
+}
+
 
