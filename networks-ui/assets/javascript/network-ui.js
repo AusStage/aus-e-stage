@@ -827,7 +827,7 @@ var selectedFunctions = [""];
 var selectedGender = "";
 
 // holds the nationality selected by faceted browsing options
-var selectedNationality = "";
+var selectedNationality = [""];
 
 // define variables for colour options.
 
@@ -1073,6 +1073,10 @@ function setFacetedSelection(chosenFunctions, chosenGender, chosenNationality){
 	//reset the function array
 	selectedFunctions.splice(0, selectedFunctions.length);
 
+	//reset the nationality array
+	selectedNationality.splice(0, selectedNationality.length);
+
+
 	//set the function array with chosen values
 	for (i = 0; i < chosenFunctions.length; i++){
 		selectedFunctions[i] = chosenFunctions[i].value;
@@ -1086,12 +1090,9 @@ function setFacetedSelection(chosenFunctions, chosenGender, chosenNationality){
 		selectedGender = "";
 	}
 
-	//reset the nationality variable
-	if(chosenNationality.length == 1){
-		selectedNationality = chosenNationality[0].value;
-	}
-	else{
-		selectedNationality = "";
+	//set the function array with chosen values
+	for (i = 0; i < chosenNationality.length; i++){
+		selectedNationality[i] = chosenNationality[i].value;
 	}
 
 }
@@ -1146,7 +1147,7 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 		
 		if(selectedFunctions.length != 0) selectedOptions += 1;
 		if(selectedGender != "") selectedOptions += 1;
-		if(selectedNationality != "") selectedOptions += 1;
+		if(selectedNationality.length != 0) selectedOptions += 1;
 		
 		if(selectedFunctions[0] != ""){
 			//check for matching functions		
@@ -1170,14 +1171,17 @@ function getNodeFillStyle(d, node, nodeNeighbors){
 			}	
 			else genderMatch = false;
 		}
-		
-		if (selectedNationality != ""){
-			if (d.nationality == null){d.nationality = "Unknown";}
-			if (selectedNationality == d.nationality){
+
+		if(selectedNationality[0] != ""){
+			if (d.nationality == null){d.nationality = "Unknown";}			
+			//check for matching functions		
+			if (contains(selectedNationality, d.nationality)){
 				nationalityMatch = true;
-			}	
+			}
 			else nationalityMatch = false;
+		
 		}
+		
 		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
 
 			return focusNodeFacet;
@@ -1219,7 +1223,7 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 		
 		if(selectedFunctions.length != 0) selectedOptions += 1;
 		if(selectedGender != "") selectedOptions += 1;
-		if(selectedNationality != "") selectedOptions += 1;
+		if(selectedNationality.length != 0) selectedOptions += 1;
 		
 		if(selectedFunctions[0] != ""){
 			//check for matching functions		
@@ -1244,13 +1248,16 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 			else genderMatch = false;
 		}
 		
-		if (selectedNationality != ""){
-			if (d.nationality == null){d.nationality = "Unknown";}
-			if (selectedNationality == d.nationality){
+		if(selectedNationality[0] != ""){
+			if (d.nationality == null){d.nationality = "Unknown";}			
+			//check for matching functions		
+			if (contains(selectedNationality, d.nationality)){
 				nationalityMatch = true;
-			}	
+			}
 			else nationalityMatch = false;
+		
 		}
+
 		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
 			if (contains(nodeNeighbors[activeNode], node.index)==true || activeNode == node.index){
 				return focusNodeRelStrokeFacet;
@@ -1324,7 +1331,7 @@ function getTextStyle(d, node, nodeNeighbors){
 		
 		if(selectedFunctions.length != 0) selectedOptions += 1;
 		if(selectedGender != "") selectedOptions += 1;
-		if(selectedNationality != "") selectedOptions += 1;
+		if(selectedNationality.length != 0) selectedOptions += 1;
 		
 		if(selectedFunctions[0] != ""){
 			//check for matching functions		
@@ -1349,13 +1356,16 @@ function getTextStyle(d, node, nodeNeighbors){
 			else genderMatch = false;
 		}
 		
-		if (selectedNationality != ""){
-			if (d.nationality == null){d.nationality = "Unknown";}
-			if (selectedNationality == d.nationality){
+		if(selectedNationality[0] != ""){
+			if (d.nationality == null){d.nationality = "Unknown";}			
+			//check for matching nationality		
+			if (contains(selectedNationality, d.nationality)){
 				nationalityMatch = true;
-			}	
+			}
 			else nationalityMatch = false;
+		
 		}
+
 		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
 
 			return focusNodeFacet;
