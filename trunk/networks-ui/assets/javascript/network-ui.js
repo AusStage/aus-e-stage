@@ -503,12 +503,16 @@ function setFacetedOptions(facetedList){
 	var genderList = facetedList[1];
 	var nationalityList = facetedList[2];
 
+	
 	//clear the functions list
 	$("#faceted_function_div").empty();
 	//clear the gender list
 	$("#faceted_gender_div").empty();
 	//clear the nationality list
 	$("#faceted_nationality_div").empty();
+	//clear the description area
+	$("#faceted_selection_p").empty();
+	
 	
 	//sort and create the function checkboxes
 	functionList.sort();	
@@ -914,7 +918,10 @@ function resetProtovisVariables(){
     sourceNodeSelect = -1;
     targetNodeMO = -1;
 	sourceNodeMO = -1;	
-
+	
+	selectedFunctions.splice(0, selectedFunctions.length); 
+	selectedGender = "";
+	selectedNationality.splice(0,selectedNationality.length);
 	
 }
 
@@ -1249,7 +1256,7 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 		}
 		
 		if(selectedNationality.length!=0){
-			alert("nationality check");
+			
 			if (d.nationality == null){d.nationality = "Unknown";}			
 			//check for matching functions		
 			if (contains(selectedNationality, d.nationality)){
@@ -1258,7 +1265,7 @@ function getNodeStrokeStyle(d, node, nodeNeighbors){
 			else nationalityMatch = false;
 		
 		}
-		alert(functionMatch+" "+genderMatch+" "+nationalityMatch);
+		
 		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
 			if (contains(nodeNeighbors[activeNode], node.index)==true || activeNode == node.index){
 				return focusNodeRelStrokeFacet;
