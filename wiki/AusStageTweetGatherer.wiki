@@ -1,0 +1,9 @@
+#summary Overview of the AusStage Tweet Gatherer Application
+
+<h1>!AusStage Tweet Gatherer</h1>
+
+The !AusStage Tweet Gatherer Application is designed to collect messages from [http://twitter.com Twitter] that are sent by audience participants either during, or immediately after a performance. The messages will be aggregated, and made part of the dataset used by the [MobileService Mobile Service].
+
+The AusStage Tweet Gatherer application replaces the [TwitterGatherer Twitter Gatherer] application. This new application supports the [http://dev.twitter.com/pages/oauth_faq OAuth] protocol via an updated version of the [http://github.com/seejohnrun/tweetStream4J tweetStream4J] library which uses the [http://dev.twitter.com/pages/streaming_api Twitter Streaming API].
+
+*Note:* This application is currently undergoing active development and will be updated as the new application is developed.
