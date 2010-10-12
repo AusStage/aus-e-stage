@@ -1,6 +1,8 @@
 #summary Documentation about the TwitterGatherer Application
 
-*Note:* The Twitter Gatherer application is no longer supported and has been replaced by the [AusStageTweetGatherer AusStage Tweet Gatherer] application which is currently under development.
+----
+*Note:* The Twitter Gatherer application is no longer supported and has been replaced by the [AusStageTweetGatherer AusStage Tweet Gatherer] application which is currently under development. This page is kept here for historical purposes and to provide and overview of the goals of the new application.
+----
 
 <h1>Twitter Gatherer</h1>
 
