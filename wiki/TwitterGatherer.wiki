@@ -1,5 +1,7 @@
 #summary Documentation about the TwitterGatherer Application
 
+*Note:* The Twitter Gatherer application is no longer supported and has been replaced by the [AusStageTweetGatherer AusStage Tweet Gatherer] application which is currently under development.
+
 <h1>Twitter Gatherer</h1>
 
 The !AusStage Twitter Gatherer is a Java based application that collects messages from [http://twitter.com Twitter] using the [http://dev.twitter.com/pages/streaming_api Twitter Streaming API]. 
