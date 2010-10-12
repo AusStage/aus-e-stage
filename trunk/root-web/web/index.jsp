@@ -24,13 +24,12 @@
 	<title>Aus-e-Stage Service Development</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/jquery-ui-1.7.2.custom.css"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/report-style.css"/>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.7.2.custom.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.bgiframe.min.js"></script>
-	<!--<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAokh3vtCLg3EQykFxKl2aQBRcqV8LHQN2o3XXxxVSrkLbt4i0AxQ5l2CeCM-F5zjn8uvEwY2dI90uFg"></script>-->
+	<!--<script type="text/javascript" src="assets/javascript/libraries/jquery.bgiframe.min.js"></script>-->
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="assets/javascript/main.js"></script>
 	<style type="text/css" media="screen">
@@ -53,10 +52,9 @@
 			<ul>
 				<li><a href="#tabs-1">Project Overview</a></li>
 				<li><a href="#tabs-2">Delicious Links</a></li>
-				<li><a href="#tabs-3">Zotero Links</a></li>
-				<li><a href="#tabs-4">Analytics</a></li>
-				<li><a href="#tabs-5">Extras</a></li>
-				<li><a href="#tabs-6">Contact Us</a></li>
+				<li><a href="#tabs-3">Analytics</a></li>
+				<li><a href="#tabs-4">Extras</a></li>
+				<li><a href="#tabs-5">Contact Us</a></li>
 			</ul>
 			<div id="tabs-1">
 				<p>
@@ -81,8 +79,8 @@
 				</p>
 				<ol>
 					<li><a href="/mapping/" title="AusStage Mapping Service (Beta)">Mapping Events</a></li>
-					<li>Navigating Networks</li>
-					<li>Researching Audiences</li>
+					<li><a href="/networks/" title="AusStage Navigating Networks Service (Beta)">Navigating Networks</a></li>
+					<li><a href="http://code.google.com/p/aus-e-stage/wiki/MobileService" title="More Information About This Service">Researching Audiences</a></li>
 				</ol>
 				<p>
 					The source code for these services is available on the <a href="http://code.google.com/p/aus-e-stage/" title="Source code repository, issue tracker etc.">aus-e-stage</a> project hosted on Google Code.
@@ -99,26 +97,11 @@
 				<div id="delicious_feed"></div>
 			</div>
 			<div id="tabs-3">
-				<p>
-					Aus-e-Stage project members undertake research in a number of different areas related to the services currently under development. Where resources are found that 
-					are on public websites links are added to the <a href="http://delicious.com/" title="Delicious homepage">Delicious</a> bookmark service using a common tag. 
-					You can see these links by clicking on the Delicious tab on this page. 
-				</p>
-				<p>
-					Journal articles and other research papers are typically in databases and other online repositories. These items are collected by Aus-e-Stage project members and
-					stored using the <a href="http://www.zotero.org/" title="Zotero homepage">Zotero citation management system</a>. Aus-e-Stage project members are all members of the 
-					<a href="http://www.zotero.org/groups/ausstage/items" title="Group page in the Zotero system">AusStage group</a> on Zotero to maintain a common library.
-				</p>
-				<p>
-					Below are the 10 most recent items added to the library. 
-				</p>
-				<div id="zotero_feed"></div> 
-			</div>
-			<div id="tabs-4">
 				<div id="analytics-tabs">
 					<ul>
 						<li><a href="#analytics-1">Data Exchange Service</a></li>
 						<li><a href="#analytics-2">Mapping Service</a></li>
+						<!--<li><a href="#analytics-3">Networks Service</a></li>-->
 					</ul>
 					<div id="analytics-1">
 						<p style="text-align: center;">
@@ -138,9 +121,20 @@
 							If you continue to see this message after 5 seconds please contact us.
 						</p>
 					</div>
+					<!--
+					<div id="analytics-3">
+						<p style="text-align: center;">
+							<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+							<br/>Loading analytics report...
+						</p>
+						<p style="text-align: center;">
+							If you continue to see this message after 5 seconds please contact us.
+						</p>
+					</div>
+					-->
 				</div>
 			</div>
-			<div id="tabs-5">
+			<div id="tabs-4">
 				<p>
 					On this page we list small applications, scripts and web pages that we're exploring that may be of use to others in the AusStage community. <br/>The first such extra is a bookmarklet to show maps in AusStage.
 				</p>
@@ -153,7 +147,7 @@
 					  title="Link directly from an organisation record to the Mapping Service"/>View AusStage Map</a>
 				</p>
 			</div>
-			<div id="tabs-6">
+			<div id="tabs-5">
 				<p>
 					We encourage you to explore our services and provide as much feedback as you wish. Please contact us using the details below:
 				</p>

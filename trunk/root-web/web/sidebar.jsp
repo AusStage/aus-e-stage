@@ -21,6 +21,8 @@
 <div id="sidebar">
 		<ul>
 			<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
-			<li><a href="/mapping/" title="View maps of AusStage data">Mapping Events</a></li>
+			<li><a href="/mapping/" title="AusStage Mapping Service (Beta)">Mapping Events</a></li>
+			<li><a href="/networks/" title="AusStage Navigating Networks Service (Beta)">Navigating Networks</a></li>
+			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MobileService" title="More Information About This Service">Researching Audiences</a></li>
 		</ul>
 	</div>
