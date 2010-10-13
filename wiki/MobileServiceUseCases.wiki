@@ -40,16 +40,16 @@ These users will want to use the system to further enhance to audience‚' exper
 
 i.e. they will want audience members'‚ contributions to result in the revealing of a picture
 
-{{{These users will also want the same functionality as audiences (See Audiences)}}}
+These users will also want the same functionality as audiences (See Audiences)
 
 *Suitable Visualisation/Display methods*
-  *   {{{These will be determined by the project partners with input from Mobile Service team members *Priority level 1*}}}
+  * These will be determined by the project partners with input from Mobile Service team members *Priority level 1*
   * Image Translation *Priority Level 2*
   * Other visualisation are to be explored with the companies 
 
 ==Researchers (a) Undergradute==
 
-These users will access the system and want to retrieve processed data results that allow them to draw some broad and general conclusions from a pool of feedback. They can't have access to downloadable, unprocessed results but they will have access to *geographically*, *chronologically* processed representations of results. They also have access to results have undergo some {{{semantic analysis, to extract keywords related to *emotion* or *geography* or *related performances*. }}}
+These users will access the system and want to retrieve processed data results that allow them to draw some broad and general conclusions from a pool of feedback. They can't have access to downloadable, unprocessed results but they will have access to *geographically*, *chronologically* processed representations of results. They also have access to results have undergo some semantic analysis, to extract keywords related to *emotion* or *geography* or *related performances*.
 
 *Suitable Visualisation/Display methods*
 
