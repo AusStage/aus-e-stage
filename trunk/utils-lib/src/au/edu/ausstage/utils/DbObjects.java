@@ -114,7 +114,7 @@ public class DbObjects {
 				}
 				
 				// reset the cursor on the resultSet
-				resultSet.first();
+				resultSet.beforeFirst();
 				
 				// check on the array list
 				if(list.isEmpty() == true) {
