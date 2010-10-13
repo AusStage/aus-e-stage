@@ -395,9 +395,10 @@ function findAndDisplayContributorNetwork(id){
 					contributors = null;
 					contributors = data;
 					
+					
 					//need to do date population before loading the graph
 					//get the date ranges
-					var dateRange = findDateRange(contributors.edges);
+					var dateRange = findDateRange();
 	
 					//set the date ranges for the slider
 					setDateRanges(dateRange);		
@@ -427,6 +428,8 @@ function findAndDisplayContributorNetwork(id){
 
 			});
 	}
+
+
 
 //Faceted Browsing operations.//////////////////////////
 
@@ -602,18 +605,34 @@ function setFacetedOptions(facetedList){
    };
 
 
-
+//validate and clean date records.
+function validateDate(dateRecord){
+	switch (dateRecord.length){
+		case 6:
+			dateRecord = dateRecord.substring(0,4)+"-01-01";
+			break;
+		case 8:
+			dateRecord = dateRecord.substring(0,7)+"-01";
+			break;
+	}
+	return dateRecord;		
+}
 
 //findDateRange - traverses the firstdate of contributors and gets the largest and smallest values to become our date range.
-function findDateRange(edgeList){
-	var startDate = edgeList[0].firstDate;
-	var endDate = edgeList[0].firstDate;
-	for (i = 1; i < edgeList.length; i++){
-		if (startDate > edgeList[i].firstDate){
-			startDate = edgeList[i].firstDate;			
+function findDateRange(){
+	contributors.edges[0].firstDate = validateDate(contributors.edges[0].firstDate)
+	
+	var startDate = contributors.edges[0].firstDate;
+	var endDate = contributors.edges[0].firstDate;
+	for (i = 1; i < contributors.edges.length; i++){
+		
+		contributors.edges[i].firstDate = validateDate(contributors.edges[i].firstDate);
+		
+		if (startDate > contributors.edges[i].firstDate){
+			startDate = contributors.edges[i].firstDate;			
 			}
-		if (endDate < edgeList[i].firstDate){
-			endDate = edgeList[i].firstDate;
+		if (endDate < contributors.edges[i].firstDate){
+			endDate = contributors.edges[i].firstDate;
 			}
 		}
 		return new Array(startDate, endDate);
@@ -623,24 +642,25 @@ function findDateRange(edgeList){
 
 // sets the slider values.
 function setDateRanges(dateRange){
+
 		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 		var days = [31,28,31,30,31,30,31,31,30,31,30,31]
 		//set the start and end dates
 		var startDate = dateRange[0];
 		var endDate = dateRange[1];
-		
+
 		var currYear = startDate.substring(0,4);
 		var currMonth = startDate.substring(5,7);
-		
+
 		var endYear = endDate.substring(0,4);
 		var endMonth = endDate.substring(5,7);		
+
 		var startList = document.getElementById("startDate");
 		var endList = document.getElementById("endDate");
 
 		var firstRun = true;
 		var finishPopulate = false;
 		
-
 		//clear date range select boxes
 		while (startList.hasChildNodes()) {
  			 startList.removeChild(startList.firstChild);
@@ -651,16 +671,18 @@ function setDateRanges(dateRange){
 
 		for(currYear; currYear<=endYear; currYear++){ 
 
-				if (!firstRun) currMonth = 1; 
-						
+				if (!firstRun) currMonth = 1; 						
 				for(currMonth; currMonth<=12 ; currMonth++){
+
 					if(!finishPopulate){
 						var month = document.createElement("option");
 						var month2 = document.createElement("option");							
 							
 						month2.value = (currYear+"-"+currMonth+"-"+days[currMonth-1]);
+						
 						month2.appendChild(document.createTextNode(months[currMonth-1]+"_"+currYear));							
 						month.value = (currYear+"-"+currMonth+"-"+"01");
+						
 						month.appendChild(document.createTextNode(months[currMonth-1]+"_"+currYear));							
 						if (firstRun){
 								firstRun = false; 
