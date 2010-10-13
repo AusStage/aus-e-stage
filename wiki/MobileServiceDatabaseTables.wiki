@@ -30,12 +30,15 @@ Details of the individual performances that have sought feedback using the Mobil
 || start_date_time || the start of the period during which valid feedback can be received || date || ||
 || end_date_time || the end of the period during which valid feedback can be received || date || ||
 || question_id || the id of the question asked at this performance used to solicit feedback || number || FK (mob_questions) ||
+|| hash_tag || the unique hash tag for this performance || varchar(40) || Unique ||
+|| deprecated_hash_tag || a field to indicate that this hash tag has been deprecated || varchar(1) - default 'N' || || 
 
 == Notes == 
 
  # For simplicity during initial development each performance can only have on question associated with it. This can be expanded to multiple questions using an intermediary table that linked a performance to multiple questions
  # The `events` table already exists in the AusStage database
  # Date and time fields are entered and stored using [http://en.wikipedia.org/wiki/Adelaide Adelaide Local Time]
+ # The Twitter API imposes a limit on the number of keywords (hashtags) that can be used with the streaming API. As performance specific identifiers do not have a date / time restriction it is necessary to have an alternate method of identifying hashtags that are no longer being used. This is why the deprecated_hash_tag field is used. If set to 'Y' the hash tag is considered to be deprecated and will not be used when connecting to the streaming API.
 
 = Organisations =
 
