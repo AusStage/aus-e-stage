@@ -69,7 +69,7 @@
 	</manifestclasspath>
 
 
-	<target name="jar" depends="compile,javadoc">
+	<target name="jar" depends="compile">
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${build.dir}">
 			<manifest>
