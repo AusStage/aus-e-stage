@@ -16,7 +16,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<project name="TwitterGatherer" default="main" basedir=".">
+<project name="TweetGatherer" default="main" basedir=".">
 	
 	<!-- Directories -->
 	<property name="src.dir"     value="${basedir}/src"/>
@@ -24,7 +24,7 @@
     <property name="jar.dir"     value="${basedir}/jar"/>
     <property name="lib.dir"     value="${basedir}/lib"/>
     <property name="docs.dir"    value="${basedir}/docs/api"/>
-    <property name="main-class"  value="au.edu.ausstage.twittergatherer.TwitterGatherer"/> 
+    <property name="main-class"  value="au.edu.ausstage.tweetgatherer.TweetGatherer"/> 
     
     <!-- custom paths such as the class path -->
     <path id="classpath">
@@ -83,7 +83,7 @@
 	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
 
 		<mkdir dir="${docs.dir}"/>
-			<javadoc sourcepath="${src.dir}" destdir="${docs.dir}" packagenames="au.edu.ausstage.twittergatherer">
+			<javadoc sourcepath="${src.dir}" destdir="${docs.dir}" packagenames="au.edu.ausstage.tweetgatherer">
 			<classpath refid="classpath"/>
 		</javadoc>
 
