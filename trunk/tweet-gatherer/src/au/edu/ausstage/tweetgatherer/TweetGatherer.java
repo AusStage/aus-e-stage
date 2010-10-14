@@ -222,32 +222,23 @@ public class TweetGatherer {
 		// define our processor to process the incoming deletions
 		DeletionProcessor deletions = new DeletionProcessor(deleteQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database, emailManager);
 		
-		// configure access to Twitter
-		TwitterStreamConfiguration tws = null;
-		try{
-			tws = new TwitterStreamConfiguration(properties.getValue("consumer-key"), properties.getValue("consumer-secret"));
-			tws.setTokenAndSecret(properties.getValue("oauth-token"), properties.getValue("oauth-secret"));
-		} catch (oauth.signpost.exception.OAuthException ex) {
-			System.err.println("ERROR: An error occuring during an OAuth process. Details are:");
-			System.err.println("       " + ex.toString());
-			System.err.println("       If the problem persists, contact the AusStage project manager");
-			System.exit(-1);
-		}
-		
 		// get our message handler
 		TweetHandler handler = new TweetHandler(tweetQueue, deleteQueue);
 		
-		// configure the tweet stream
+		// configure access to Twitter
+		TwitterStreamConfiguration tws = null;
 		TwitterStream ts = null;
-		try {
-			ts = TweetRiver.filter(tws, handler, null, (java.util.Collection<String>)tracks, null);
-		} catch (java.io.IOException ex) {
-			System.err.println("ERROR: An error occured while connecting to Twitter. Details are:");
+		try{
+			tws = new TwitterStreamConfiguration(properties.getValue("consumer-key"), properties.getValue("consumer-secret"));
+			tws.setTokenAndSecret(properties.getValue("oauth-token"), properties.getValue("oauth-secret"));
+			ts = TweetRiver.filter(tws, handler, null, tracks, null);
+		} catch (oauth.signpost.exception.OAuthException ex) {
+			System.err.println("ERROR: An error occuring during an OAuth process. Details are:");
 			System.err.println("       " + ex.toString());
 			System.err.println("       If the problem persists, contact the AusStage project manager");
 			System.exit(-1);
-		} catch (oauth.signpost.exception.OAuthException ex) {
-			System.err.println("ERROR: An error occuring during an OAuth process. Details are:");
+		} catch (java.io.IOException ex) {
+			System.err.println("ERROR: An error occured while connecting to Twitter. Details are:");
 			System.err.println("       " + ex.toString());
 			System.err.println("       If the problem persists, contact the AusStage project manager");
 			System.exit(-1);
