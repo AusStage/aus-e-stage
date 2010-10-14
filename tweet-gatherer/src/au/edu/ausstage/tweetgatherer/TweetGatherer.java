@@ -75,6 +75,13 @@ public class TweetGatherer {
 	 	
 	 	// check on the pin-code property if necessary
 	 	if(cli.containsKey("getauthtoken") == false) {
+	 		// check on the required properties
+		 	if(InputUtils.isValid(properties.getValue("consumer-key")) == false || InputUtils.isValid(properties.getValue("consumer-secret")) == false) {
+		 		System.err.println("ERROR: the 'consumer-key' and 'consumer-secret' properties could not be found");
+		 		System.err.println("       Please contact the AusStage project manager");
+		 		System.exit(-1);
+		 	}
+	 	
 		 	if(InputUtils.isValid(properties.getValue("oauth-token")) == false || InputUtils.isValid(properties.getValue("oauth-secret")) == false) {
 		 		System.err.println("ERROR: the 'oauth-token' or 'oauth-secret' property could not be found");
 		 		System.err.println("       Please add these properties to the property file");
@@ -117,6 +124,7 @@ public class TweetGatherer {
 				System.err.println("ERROR: An error occuring during an OAuth process. Details are:");
 				System.err.println("      " + ex.toString());
 				System.err.println("      If the problem persists, contact the AusStage project manager");
+				System.exit(-1);
 			}
 		}
 		
@@ -189,9 +197,6 @@ public class TweetGatherer {
 	 		System.exit(-1);
 	 	}
 	 	
-	 	//debug code
-	 	System.out.println(hashTags.getColumn(1));
-	 	
 	 	if(hashTags.getColumn(1) != null) {
 		 	tracks.addAll(hashTags.getColumn(1));
 		}
@@ -205,11 +210,84 @@ public class TweetGatherer {
 	 	System.out.println("INFO: Tracking the following hash tags");
 	 	System.out.println("      " + InputUtils.arrayToString(tracks.toArray(new String[1])));
 	 	
-	 	
-	 	
-
-	 	
-	 	
+	 	// create the queue to store the tweets
+		LinkedBlockingQueue<STweet> tweetQueue = new LinkedBlockingQueue<STweet>();
+		
+		// create the queue to store the deletions
+		LinkedBlockingQueue<SDeletion> deleteQueue = new LinkedBlockingQueue<SDeletion>();
+		
+		// define the processor of incoming messages
+		MessageProcessor messages = new MessageProcessor(tweetQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database, emailManager);
+		
+		// define our processor to process the incoming deletions
+		DeletionProcessor deletions = new DeletionProcessor(deleteQueue, FileUtils.getCanonicalPath(properties.getValue("log-dir")), database, emailManager);
+		
+		// configure access to Twitter
+		TwitterStreamConfiguration tws = null;
+		try{
+			tws = new TwitterStreamConfiguration(properties.getValue("consumer-key"), properties.getValue("consumer-secret"));
+			tws.setTokenAndSecret(properties.getValue("oauth-token"), properties.getValue("oauth-secret"));
+		} catch (oauth.signpost.exception.OAuthException ex) {
+			System.err.println("ERROR: An error occuring during an OAuth process. Details are:");
+			System.err.println("       " + ex.toString());
+			System.err.println("       If the problem persists, contact the AusStage project manager");
+			System.exit(-1);
+		}
+		
+		// get our message handler
+		TweetHandler handler = new TweetHandler(tweetQueue, deleteQueue);
+		
+		// configure the tweet stream
+		TwitterStream ts = null;
+		try {
+			ts = TweetRiver.filter(tws, handler, null, (java.util.Collection<String>)tracks, null);
+		} catch (java.io.IOException ex) {
+			System.err.println("ERROR: An error occured while connecting to Twitter. Details are:");
+			System.err.println("       " + ex.toString());
+			System.err.println("       If the problem persists, contact the AusStage project manager");
+			System.exit(-1);
+		} catch (oauth.signpost.exception.OAuthException ex) {
+			System.err.println("ERROR: An error occuring during an OAuth process. Details are:");
+			System.err.println("       " + ex.toString());
+			System.err.println("       If the problem persists, contact the AusStage project manager");
+			System.exit(-1);
+		}
+		
+		// create our threads
+		Thread streamThread  = new Thread(ts);
+		Thread messageThread = new Thread(messages);
+		Thread deleteThread  = new Thread(deletions);
+		
+		// start our threads
+		streamThread.start();
+		messageThread.start();
+		deleteThread.start();
+		
+		// loop checking to ensure the threads are running
+		try {
+			while(true) {
+				if(streamThread.isAlive() == false) {
+					System.err.println("ERROR: The TwitterStream thread stopped unexpectedly.");
+					System.exit(-1);
+				} else if(messageThread.isAlive() == false) {
+					System.err.println("ERROR: The Message processing thread stopped unexpectedly.");
+					System.exit(-1);			
+				} else if(deleteThread.isAlive() == false) {
+					System.err.println("ERROR: The Deletion processing thread stopped unexpectedly.");
+					System.exit(-1);			
+				}
+		
+				// sleep this main thread for 5 seconds
+				Thread.sleep(5000);			
+			}
+		} catch (InterruptedException ex) {
+			// inform user of error
+			System.err.println("ERROR: The main thread experienced an error unexpectedly.");
+			System.exit(-1);			
+		}
+		
+		// exit from the main app
+		System.exit(0);
 		
 	} // end the main method
 	
