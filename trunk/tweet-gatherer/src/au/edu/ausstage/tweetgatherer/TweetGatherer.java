@@ -244,6 +244,11 @@ public class TweetGatherer {
 			System.exit(-1);
 		}
 		
+		//debug code
+//		org.apache.log4j.Logger logger =  org.apache.log4j.Logger.getLogger(TwitterStream.class);
+//		logger.setLevel(org.apache.log4j.Level.OFF);
+		System.setProperty("simplelog.dev.debug", "true");
+		
 		// create our threads
 		Thread streamThread  = new Thread(ts);
 		Thread messageThread = new Thread(messages);
