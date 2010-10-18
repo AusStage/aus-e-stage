@@ -118,3 +118,40 @@ If an exception report is generated use the following steps as a guide to determ
 
  # Manually match the feedback to a performance using the hash tag and your own judgement about the date and time that it was sent by matching the hash tag to a company hash tag and matching the date and time with an entry in the `mob_performance` table
  # Manually add the feedback to the !AusStage system using the Manual Feedback Entry page
+
+= 8. Further Information = 
+== Twitter and OAuth Authentication ==
+The Tweet Gatherer application authenticates to Twitter using [http://oauth.net/ OAuth]. Conceptually, for the purposes of this discussion, this means that the Tweet Gatherer application does not authenticate to Twitter using a username and password. Rather it uses four security tokens which are called:
+
+ * consumer-key
+ * consumer-secret
+ * oauth-token 
+ * oauth-secret
+
+These tokens are kept by the AusStage project manager. If however they are no longer available follow the procedure below to generate new tokens. 
+
+=== Generating New Consumer Tokens ===
+
+ # Login to [http://twitter.com] using the @ausstage account
+ # Click on the _Profile_ link
+ # Click on the _Edit your profile_ link
+ # Click on the _Connections_ link
+ # Click on the _Revoke Access_ link under the _AusStage Tweet Gatherer_ entry in the _Applications_ list
+ # Enter the following URL in the address bar of your browser:<br/>http://twitter.com/apps
+ # Click on the heading for the _AusStage Tweet Gatherer_ entry
+ # Click the _Reset Consumer Key/Secret button
+ # Make a note of the new _Consumer Key_ and _Consumer Secret_ 
+ # Store these values in the `default.properties` file as the _consumer-key_ and _consumer-secret_ entries respectively
+
+=== Generating new OAuth tokens ===
+
+ # # Open a new terminal window
+ # Navigate to the parent  directory, as defined in step 1 above
+ # Navigate to the `bin` sub directory 
+ # Start the application using the following command <br/>`java -jar TweetGatherer.jar -properties ../default.properties -getauthtoken=yes`
+ # Copy the URL provided by the application into the address bar of your same browser you used to access Twitter
+ # Make a note of the PIN displayed on the page
+ # Enter the PIN into the terminal window
+ # Make a note of the new _oauth-token_ and _oauth-secret_ values
+ # Store these values in the `default.properties` file as the oauth-token_ and _oauth-secret_ values entries respectively
+ 
