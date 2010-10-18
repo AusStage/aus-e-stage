@@ -234,11 +234,13 @@ public class MessageProcessor implements Runnable {
 
 			// get a hash of the value
 			JsonElement elem = jsonTweetObject.get("in_reply_to_user_id");
-			String      hash = HashUtils.hashValue(elem.getAsString());
+			if(elem.isJsonNull() == false) {
+				String      hash = HashUtils.hashValue(elem.getAsString());
 			
-			// update the value
-			jsonTweetObject.remove("in_reply_to_user_id");
-			jsonTweetObject.addProperty("in_reply_to_user_id", hash);
+				// update the value
+				jsonTweetObject.remove("in_reply_to_user_id");
+				jsonTweetObject.addProperty("in_reply_to_user_id", hash);
+			}
 		}
 		
 		// replace the "in_reply_to_status_id" field with a hash if present
@@ -246,11 +248,13 @@ public class MessageProcessor implements Runnable {
 
 			// get a hash of the value
 			JsonElement elem = jsonTweetObject.get("in_reply_to_status_id");
-			String      hash = HashUtils.hashValue(elem.getAsString());
+			if(elem.isJsonNull() == false) {
+				String      hash = HashUtils.hashValue(elem.getAsString());
 			
-			// update the value
-			jsonTweetObject.remove("in_reply_to_status_id");
-			jsonTweetObject.addProperty("in_reply_to_status_id", hash);
+				// update the value
+				jsonTweetObject.remove("in_reply_to_status_id");
+				jsonTweetObject.addProperty("in_reply_to_status_id", hash);
+			}
 		}
 		
 		// replace the "retweeted_status" field with a hash if present
@@ -258,11 +262,13 @@ public class MessageProcessor implements Runnable {
 
 			// get a hash of the value
 			JsonElement elem = jsonTweetObject.get("retweeted_status");
-			String      hash = HashUtils.hashValue(elem.getAsString());
+			if(elem.isJsonNull() == false) {
+				String      hash = HashUtils.hashValue(elem.getAsString());
 			
-			// update the value
-			jsonTweetObject.remove("retweeted_status");
-			jsonTweetObject.addProperty("retweeted_status", hash);
+				// update the value
+				jsonTweetObject.remove("retweeted_status");
+				jsonTweetObject.addProperty("retweeted_status", hash);
+			}
 		}
 			
 		// return the sanitised object
