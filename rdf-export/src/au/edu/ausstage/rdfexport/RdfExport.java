@@ -31,8 +31,8 @@ import au.edu.ausstage.utils.*;
 public class RdfExport {
 
 	// Version information 
-	private static final String VERSION    = "1.2.0";
-	private static final String BUILD_DATE = "2010-10-06";
+	private static final String VERSION    = "1.1.1";
+	private static final String BUILD_DATE = "2010-09-27";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
@@ -110,21 +110,6 @@ public class RdfExport {
 	 		System.exit(-1);
 	 	}
 	 	
-	 	// get the location of sdb store description
- 		String sdbStoreDescription = properties.getProperty("sdb-store-description");
- 		
- 		// check on the store description
- 		if(sdbStoreDescription == null) {
- 			System.err.println("ERROR: unable to read the sdb-store-description property");
-	 		System.exit(-1);
-	 	} else {
-	 		// check to see if the file exists
-	 		if(FileUtils.doesFileExist(sdbStoreDescription) == false) {
-	 			System.err.println("ERROR: unable to locate the file specified by the sdb-store-description property");
-	 			System.exit(-1);
-	 		}
-	 	}
-	 	
 	 	// execute the appropriate task		
 		if(taskType.equals("build-network-data") == true) {
 				
@@ -142,7 +127,7 @@ public class RdfExport {
 	 		}
 	 		
 	 		// do the build-network-data task
-			BuildNetworkData task = new BuildNetworkData(database, sdbStoreDescription);
+			BuildNetworkData task = new BuildNetworkData(database, properties);
 			
 			// tidy up any existing TDB datastore
 			status = task.doReset();

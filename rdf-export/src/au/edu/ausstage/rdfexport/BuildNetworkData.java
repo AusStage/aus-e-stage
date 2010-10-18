@@ -36,12 +36,14 @@ import java.util.regex.Matcher;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.tdb.*;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 
-import com.hp.hpl.jena.sdb.SDBFactory;
-import com.hp.hpl.jena.sdb.Store;
-import com.hp.hpl.jena.sdb.store.StoreFactory;
-import com.hp.hpl.jena.sdb.util.StoreUtils;
+
+//debug code
+import com.hp.hpl.jena.sparql.sse.Item;
+import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
+import com.hp.hpl.jena.tdb.store.GraphTDB;
 
 // import the AusStage classes
 import au.edu.ausstage.vocabularies.*;
@@ -55,10 +57,9 @@ import au.edu.ausstage.utils.*;
 public class BuildNetworkData {
 
 	// declare private class level variables
-	private DbManager database;                   // access the AusStage database
-	private String    sdbStoreDescription = null; // location of the SDB Store Description file
- 	private String    datastorePath       = null; // directory for the tdb datastore
- 	private Store     store               = null; // object representing the data store
+	private DbManager              database;             // access the AusStage database
+	private PropertiesManager      settings;             // access the properties / settings
+	private String                 datastorePath = null; // directory for the tdb datastore
 	
 	// declare private class level constants
 	private final int RECORD_NOTIFY_COUNT = 10000;
@@ -70,19 +71,19 @@ public class BuildNetworkData {
 	/**
 	 * A constructor for this class
 	 *
-	 * @param dataManager              the DatabaseManager class connected to the AusStage database
-	 * @param sdbStoreDescriptionPath  the path to the file specifying the SDB Store Description
+	 * @param dataManager the DatabaseManager class connected to the AusStage database
+	 * @param properties  the PropertiesManager providing access to properties and settings
 	 */
-	public BuildNetworkData(DbManager dataManager, String sdbStoreDescriptionPath) {
+	public BuildNetworkData(DbManager dataManager, PropertiesManager properties) {
 		
 		// double check the parameters
-		if(dataManager == null || InputUtils.isValid(sdbStoreDescriptionPath) == false) {
+		if(dataManager == null || properties == null) {
 			throw new IllegalArgumentException("ERROR: The parameters to the BuildNetworkData constructor cannot be null");
 		}
 		
 		// store references to these objects for later
 		database = dataManager;
-		sdbStoreDescription = sdbStoreDescriptionPath;
+		settings = properties;
 	}
 	
 	/**
@@ -94,35 +95,62 @@ public class BuildNetworkData {
 	public boolean doReset() {
 	
 		// keep the user informed
-		System.out.println("INFO: Connecting to the SDB datastore...");
+		System.out.println("INFO: Deleting the existing TDB datastore...");
+	
+		// get the path to the datastore
+		datastorePath = settings.getProperty("tdb-datastore");
 		
-		// connect to the new datastore
-		store = SDBFactory.connectStore(sdbStoreDescription);
-		
-		if(store == null) {
-			System.err.println("ERROR: Unable to connect to the SDB datastore");
+		// check the path
+		if(InputUtils.isValid(datastorePath) == false) {
+			System.err.println("ERROR: Unable to load the tdb-datastore property");
 			return false;
 		}
 		
-		try {		
-			// check to see if the store is formatted
-			if(StoreUtils.isFormatted(store) == false) {
-				System.out.println("INFO: Formatting the datastore before first use...");
-				store.getTableFormatter().create();
-				store.getTableFormatter().dropIndexes();
-				System.out.println("INFO: Formatting of the datastore is complete");
-			} else {
-				System.out.println("INFO: Truncating the datastore...");
-				store.getTableFormatter().truncate();
-				store.getTableFormatter().dropIndexes();
-				System.out.println("INFO: Truncation of the datastore is complete");
-			}
-		} catch (java.sql.SQLException ex) {
-			System.err.println("ERROR: An unexpected error has occured. Details are:\n       " + ex.toString());
+		// check on the datastore directory
+		if(FileUtils.doesDirExist(datastorePath) == false) {
+			System.err.println("ERROR: Unable to access the specified datastore directory");
+			System.err.println("       " + datastorePath);
 			return false;
 		}
 		
-		// if we get this far everything went ok
+		// delete any files in the directory
+		File datastore = new File(datastorePath);
+		File[] tdbFiles = datastore.listFiles(new FileListFilter());
+		
+		// loop through the list of files and delete them
+		for(File tdbFile : tdbFiles) {
+		
+			try {
+				boolean status = tdbFile.delete();
+				
+				if(status == false) {
+					System.err.println("ERROR: Unable to delete the following file:");
+					System.err.println("       " + tdbFile.getCanonicalPath());
+					return false;
+				}
+			} catch (IOException ex) {
+				System.err.println("ERROR: Unable to delete one of the files in the datastore directory.");
+			} catch (SecurityException ex) {
+				System.err.println("ERROR: Unable to delete one of the files in the datastore directory.");
+				return false;
+			}		
+		}
+		
+		// create the basic optimisation file the TDB engine
+		File opt = new File(datastorePath + "/fixed.opt");
+		
+		try {
+			opt.createNewFile();
+		} catch (IOException ex) {
+			System.err.println("WARN: Unable to create the TDB optimisation file:");
+			System.err.println("       " + opt.getAbsolutePath());
+		} catch (SecurityException ex) {
+			System.err.println("WARN: Unable to create the TDB optimisation file:");
+			System.err.println("       " + opt.getAbsolutePath());
+		}
+		
+		// if we get this far everything is ok
+		System.out.println("INFO: Existing TDB datastore deleted");
 		return true;
 		
 	} // end the doReset method
@@ -133,6 +161,10 @@ public class BuildNetworkData {
 	 * @return true if, and only if, the task completes successfully
 	 */
 	public boolean doTask() {
+	
+		// turn off the TDB logging
+		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("com.hp.hpl.jena.tdb.info");
+		logger.setLevel(org.apache.log4j.Level.OFF);
 		
 		// declare some helper variables
 		int contributorCount       = 0;
@@ -153,11 +185,11 @@ public class BuildNetworkData {
 		// create an empty persistent model
 		Model model = null;
 		
-		if(store == null) {
+		if(InputUtils.isValid(datastorePath) == false) {
 			System.err.println("ERROR: the doReset() method must be run before building the network datastore");
 			return false;
 		} else {
-			model = SDBFactory.connectDefaultModel(store);
+			model = TDBFactory.createModel(datastorePath) ;
 		}
 		
 		// set a namespace prefixes
@@ -1032,16 +1064,98 @@ public class BuildNetworkData {
 		metadata.addProperty(AuseStage.tdbCreateDateTime, DateUtils.getCurrentDateAndTime());
 		
 		/*
-		 * create the indexes
+		 * generate the statistics files
 		 */
-		System.out.println("INFO: Creating the datastore indexes");
-		store.getTableFormatter().addIndexes();
-		System.out.println("INFO: Index creation completed...");
+		System.out.println("INFO: Writing BGP optimiser file...");
+		
+		// ensure that everything has been written
+		TDB.sync(model);
+		model.close();
+		model = null;
+		TDB.closedown();
+		
+		// pause for five seconds to allow writes to finish etc. 
+		try {
+			Thread.sleep(5000);
+		} catch (java.lang.InterruptedException ex) {}
+		
+		// reconnect to the TDB datastore and generate the statistics file
+		model = TDBFactory.createModel(datastorePath);
+		 
+		// get the graph from the model 
+		GraphTDB graph = (GraphTDB) model.getGraph(); // TDB Specific graph class (Graph is a lower level representation of the data)
+		 
+		// gather the statistics
+		Item item = StatsCollector.gatherTDB(graph);
+		
+		// delete the existing stats file
+		boolean status;
+		File opt = new File(datastorePath + "/fixed.opt");
+		
+		try {
+			status = opt.delete();
+			
+			if(status == false) {
+				System.err.println("WARN: Unable to delete the old query optimisation file:");
+				System.err.println("      " + opt.getAbsolutePath());
+			}
+		} catch (SecurityException ex) {
+			System.err.println("WARN: Unable to delete the old query optimisation file:");
+			System.err.println("      " + opt.getAbsolutePath());
+		}
+		
+		if(status = true) {
+			
+			// reset the opt variable to a new file
+			opt = null;
+			
+			if(FileUtils.writeNewFile(datastorePath + "/stats.opt", item.toString()) == false) {
+				System.err.println("WARN: Unable to create the TDB optimisation file:");
+			} else {
+				System.out.println("INFO: BGP optimiser file successfully written");
+			}
+		}
+		
+		// play nice and tidy up
+		TDB.sync(model);
+		model.close();
+		model = null;
+		TDB.closedown();
+		database = null;
 		
 		// if we get this far, everything went OK
 		return true;
 	} // end the doTask method
 	
+	/**
+	 * A class used to filter the list of files
+	 * in the TDB directory
+	 */
+	class FileListFilter implements FilenameFilter {
+
+		/**
+		 * Method to test if the specified file matches the predetermined
+		 * name and extension requirements
+		 *
+		 * @param dir the directory in which the file was found.
+		 * @param filename the name of the file
+		 *
+		 * @return true if and only if the file should be included
+		 */
+		public boolean accept(File dir, String filename) {
+	
+			if(filename != null) {
+				if(filename.equals(".") == false && filename.equals("..") == false) {
+					return true;
+				} else {
+					return false;
+				}		
+			} else {
+				return false;
+			}
+		}
+	} // end FileListFilter class definition
+
 } // end class definition
 
 
