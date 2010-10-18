@@ -7,7 +7,6 @@
    * [SubversionRepository Using our Subversion Repository]
    * [WikiImages Using Images in the Wiki]
    * [GoogleEarthImageOverlay Image Overlays in Google Earth]
-   * [UsingTwitterGatherer Using the Twitter Gatherer App]
    * [UsingTweetGatherer Using the Tweet Gatherer App]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
