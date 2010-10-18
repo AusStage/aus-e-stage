@@ -308,8 +308,107 @@ public class MessageProcessor implements Runnable {
 	 */
 	private boolean isPerformance(List<String> hashtags, JsonObject jsonTweetObject, JsonObject jsonUserObject, String tweetIdHash) {
 	
-		return false;
+		/*
+		 * get the performance and question id
+		 */
+		String      performanceId = null;
+		String      questionId    = null;
+		
+		JsonElement elem = jsonTweetObject.get("created_at");
+		DateTime messageCreated = inputDateTimeFormat.parseDateTime(elem.getAsString());
+		
+		String selectSql = "SELECT performance_id, question_id, SUBSTR(hash_tag, 2) "
+						 + "FROM mob_performances "
+						 + "WHERE deprecated_hash_tag = 'N'";
+				   
+		// get the data
+		DbObjects results = database.executeStatement(selectSql);
+		
+		// double check the results
+		if(results == null) {
+			System.err.println("ERROR: Unable to execute the SQL to lookup performance specific hashtags");
+			
+			// send an exception report
+			if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
+				System.err.println("ERROR: Unable to send the exception report");
+			}
+			
+			return false;
+
+		} else {
+			// look for performances matching the hash tag from the message
+			ResultSet resultSet = results.getResultSet();
+			
+			// loop through the resultset
+			boolean found = false; // exit the loop early
+			String[] sqlParameters = new String[7]; // store the parameters
+			
+			try {
+			
+				while (resultSet.next() && found == false) {
+			
+					// see if the hashtags in the message match one in the DB
+					if(hashtags.contains(resultSet.getString(3)) == true) {
+						// yep
+						sqlParameters[0] = resultSet.getString(1);
+						sqlParameters[1] = resultSet.getString(2);
+						found = true;
+					}
+				}
+			}catch (java.sql.SQLException ex) {
+				found = false;
+			}
+			
+			if(found == false) {
+				// no performance with a matching company id was found
+				return false;
+			} else {
+				
+				/*
+				 * write the message to the database
+				 */
+				 
+				// define the sql
+				String insertSql = "INSERT INTO mob_feedback "
+								 + "(performance_id, question_id, source_type, received_date_time, received_from, source_id, short_content) "
+								 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
 	
+				// use the source id from the constant
+				sqlParameters[2] = SOURCE_ID;
+	
+				// add the date and time
+				sqlParameters[3] = dateTimeFormat.print(messageCreated);
+	
+				// add the user id
+				elem = jsonUserObject.get("id");
+				sqlParameters[4] = elem.getAsString();
+	
+				// add the source id
+				elem = jsonTweetObject.get("id");
+				sqlParameters[5] = elem.getAsString();
+	
+				// add the message
+				elem = jsonUserObject.get("text");
+				sqlParameters[6] = elem.getAsString();
+	
+				// insert the data
+				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
+					System.err.println("ERROR: Unable to add the message to the database");
+					
+					// send an exception report
+					if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, "Exception Report: The Tweet Gatherer was unable to store this message in the database", logFiles + "/" + tweetIdHash) == false) {
+						System.err.println("ERROR: Unable to send the exception report");
+					}
+				
+				} else {
+					System.out.println("INFO: Successfully added the message to the database");
+					return true;
+				}	
+			}
+		} // end performance check
+		
+		// if we get this far, something bad happend
+		return false;	
 	}
 	
 	/**
@@ -361,6 +460,8 @@ public class MessageProcessor implements Runnable {
 			if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
 				System.err.println("ERROR: Unable to send the exception report");
 			}
+			
+			return false;
 
 		} else {
 		
