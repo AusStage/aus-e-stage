@@ -37,6 +37,10 @@ import org.joda.time.format.DateTimeFormatter;
 // import the twitter-text-java library
 import com.twitter.Extractor;
 
+// import from the Google gson library
+import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
+
 // import additional ausstage packages
 import au.edu.ausstage.utils.*;
 
@@ -54,7 +58,6 @@ public class MessageProcessor implements Runnable {
 	private DateTimeFormatter inputDateTimeFormat;
 	private Extractor         extractHashTags;
 	private EmailManager      emailManager;
-	private boolean           doContinue = true;
 	
 	// declare class level constants
 	private final int JSON_INDENT_LEVEL = 4;
@@ -68,8 +71,8 @@ public class MessageProcessor implements Runnable {
 
 	private final String JODA_INPUT_DATE_TIME_FORMAT = "E MMM dd HH:mm:ss Z YYYY";
 	
-	private final String EMAIL_SUBJECT = "[AusStage Twitter Gatherer] Message Processing Error";
-	private final String EMAIL_MESSAGE = "Exception Report: The Twitter Gatherer was unable to locate a valid performance for this attached Twitter Message";
+	private final String EMAIL_SUBJECT = "[AusStage Tweet Gatherer] Message Processing Error";
+	private final String EMAIL_MESSAGE = "Exception Report: The Tweet Gatherer was unable to locate a valid performance for this attached Twitter Message";
 	
 	/**
 	 * A constructor for this class
@@ -126,12 +129,84 @@ public class MessageProcessor implements Runnable {
 		try {
 		
 			// infinite loop to keep the thread running
-			while(doContinue) {
+			while(true) {
 			
 				// take a tweet from the queue
 				tweet = newTweets.take();
 				
-				System.out.println("DEBUG: " + tweet.toString());
+				// get the tweet id number
+				String tweetId = Long.toString(tweet.getStatusId());
+				
+				// get a hash of the tweet id
+				String tweetIdHash = HashUtils.hashValue(tweetId);
+				
+				// get the user
+				STweetUser user = tweet.getUser();
+				
+				// get the user id
+				String userId = Long.toString(user.getUserId());
+				
+				// get a hash of the user id
+				String userIdHash = HashUtils.hashValue(userId);
+				
+				// get the JSON value of the tweet
+				JsonObject jsonTweetObject = sanitiseMessage(tweet.getJSON(), tweetIdHash);
+				
+				// get the JSON value of the user
+				JsonObject jsonUserObject = sanitiseUser(user.getJSON(), userIdHash);
+				
+				// replace the user with the sanitised version
+				jsonTweetObject.remove("user");
+				jsonTweetObject.addProperty("user", "");
+				
+				/*
+				 * Write the file
+				 */
+				
+				if(FileUtils.writeNewFile(logFiles + "/" + tweetIdHash, jsonTweetObject.toString() + "\n" + jsonUserObject.toString()) == false) {
+					System.err.println("ERROR: Unable to write file to the specified log file");
+					System.err.println("       twitter message with id '" + tweetId + "' is now lost");
+				} else {
+					System.out.println("INFO: New Message written to the log directory:");
+					System.out.println("      " + tweetIdHash);
+				}
+				
+				/*
+				 * get the hash tags from this message
+				 */
+				
+				// get the list of hash tags from the tweet
+				JsonElement elem = jsonTweetObject.get("text");
+				List<String> hashtags = extractHashTags.extractHashtags(elem.getAsString());
+				
+				// convert all of the found hash tags to lower case
+				ListIterator <String> hashtagsIterator = hashtags.listIterator();
+		
+				while(hashtagsIterator.hasNext() == true) {
+		
+					// get the next tage in the list
+					String tmp = (String) hashtagsIterator.next();
+			
+					tmp = tmp.toLowerCase();
+			
+					// replace the value we retrieved with this updated one
+					hashtagsIterator.set(tmp);
+				}
+				
+				// see if this is a company performance
+				if(isCompanyPerformance(hashtags, jsonTweetObject, jsonUserObject, tweetIdHash) == false) {
+					// this isn't a company performance
+					// is it using a performance specific id?
+					if(isPerformance(hashtags, jsonTweetObject, jsonUserObject, tweetIdHash) == false) {
+						//this isn't a valid performance
+						System.err.println("ERROR: Unable to find a matching performance for this message");
+						
+						// send an exception report
+						if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
+							System.err.println("ERROR: Unable to send the exception report");
+						}
+					}
+				}								
 			}
 		
 		} catch (InterruptedException ex) {
@@ -140,140 +215,232 @@ public class MessageProcessor implements Runnable {
 		}
 	} // end the run method
 	
-//	/**
-//	 * A method that is run in the thread
-//	 * Takes a tweet from the queue and processes it
-//	 */
-//	public void run() {
-//	
-//		// declare helper variables
-//		STweet tweet = null;
-//		
-//		try {
-//			// infinite loop to keep the thread running
-//			while(true) {
-//				
-//				// take a tweet from the queue
-//				tweet = newTweets.take();
-//				
-//				// get the tweet id number
-//				String tweetId = Long.toString(tweet.getStatusId());
-//				
-//				// get a hash of the tweet id
-//				String tweetIdHash = HashUtils.hashValue(tweetId);
-//				
-//				// get the user
-//				STweetUser user = tweet.getUser();
-//				
-//				// get the user id numbers
-//				String userId = Long.toString(user.getUserId());
-//				
-//				// get a hash of the user id
-//				String userIdHash = HashUtils.hashValue(userId);
-//				
-//				// get the JSON value of the tweet
-//				JSONObject jsonTweetObject = tweet.getJSON();
-//				
-//				// get the JSON value of the user
-//				JSONObject jsonUserObject = user.getJSON();
-//				
-//				/*
-//				 * Sanitise the message
-//				 */
-//				jsonTweetObject = jsonTweetObject.discard("id");
-//				jsonTweetObject = jsonTweetObject.element("id", tweetIdHash);
-//				
-//				// replace the "in_reply_to_user_id" field with a hash if it is present
-//				try {
-//					// if it isn't present an exception is thrown
-//					String replyId = Long.toString(jsonTweetObject.getLong("in_reply_to_user_id"));
-//					jsonTweetObject = jsonTweetObject.discard("in_reply_to_user_id");
-//					jsonTweetObject = jsonTweetObject.element("in_reply_to_user_id", HashUtils.hashValue(replyId));
-//									
-//				} catch (net.sf.json.JSONException ex) {}
-//				
-//				// replace the "in_reply_to_status_id" field with a hash if it is present
-//				try {
-//					// if it isn't present an exception is thrown
-//					String replyId = Long.toString(jsonTweetObject.getLong("in_reply_to_status_id"));
-//					jsonTweetObject = jsonTweetObject.discard("in_reply_to_status_id");
-//					jsonTweetObject = jsonTweetObject.element("in_reply_to_status_id", HashUtils.hashValue(replyId));
-//									
-//				} catch (net.sf.json.JSONException ex) {}
-//				
-//				// remove the "retweeted_status" field if present
-//				try {
-//					// if it isn't present an exception is thrown
-//					JSONObject retweet = jsonTweetObject.getJSONObject("retweeted_status");
-//					jsonTweetObject = jsonTweetObject.discard("retweeted_status");
-//					
-//					// get the id of the retweet
-//					String retweetId = Long.toString(retweet.getLong("id"));
-//					
-//					// add a hash of the id back into the object
-//					jsonTweetObject = jsonTweetObject.element("retweeted_status", HashUtils.hashValue(retweetId));
-//									
-//				} catch (net.sf.json.JSONException ex) {}
-//				
-//				/*
-//				 * Sanitise the user
-//				 */
-//				 
-//				// loop through the list of sanitised fields
-//				for(int i = 0; i < SANITISED_FIELDS.length; i++) {
-//					jsonUserObject = jsonUserObject.discard(SANITISED_FIELDS[i]);
-//					jsonUserObject = jsonUserObject.element(SANITISED_FIELDS[i], JSONNull.getInstance());
-//				}
-//				
-//				// fix the user id
-//				jsonUserObject = jsonUserObject.discard("id");
-//				jsonUserObject = jsonUserObject.element("id", userIdHash);
-//				
-//				// replace the existing user with the new one
-//				jsonTweetObject = jsonTweetObject.discard("user");
-//				jsonTweetObject = jsonTweetObject.element("user", jsonUserObject);				
-//				
-//				
-//				/*
-//				 * Write the file
-//				 */
-//				
-//				if(FileUtils.writeNewFile(logFiles + "/" + tweetIdHash, jsonTweetObject.toString(JSON_INDENT_LEVEL)) == false) {
-//					System.err.println("ERROR: Unable to write file to the specified log file");
-//					System.err.println("       twitter message with id '" + tweetId + "' is now lost");
-//				} else {
-//					System.out.println("INFO: New Message written to the log directory:");
-//					System.out.println("      " + tweetIdHash);
-//				}
-//				
-//				/*
-//				 * get the hash tags from this message
-//				 */
-//				
-//				// get the list of hash tags from the tweet
-//				List<String> hashtags = extractHashTags.extractHashtags(jsonTweetObject.getString("text"));
-//				
-//				// convert all of the found hash tags to lower case
-//				ListIterator <String> hashtagsIterator = hashtags.listIterator();
-//		
-//				while(hashtagsIterator.hasNext() == true) {
-//		
-//					// get the next tage in the list
-//					String tmp = (String) hashtagsIterator.next();
-//			
-//					tmp = tmp.toLowerCase();
-//			
-//					// replace the value we retrieved with this updated one
-//					hashtagsIterator.set(tmp);
-//				}
-//				 
-//				/*
-//				 * get the date & time that the messages was received
-//				 */
-//				DateTime messageCreated = inputDateTimeFormat.parseDateTime(jsonTweetObject.getString("created_at"));
-//				LocalDateTime localMessageCreated = messageCreated.toLocalDateTime();
-//				
-//				/*
+	/**
+	 * A private method to sanitise the message
+	 *
+	 * @param jsonTweetObject the original message object
+	 * @param idHash          the hash of the message id
+	 *
+	 * @return                the sanitised message object
+	 */
+	private JsonObject sanitiseMessage(JsonObject jsonTweetObject, String idHash) {
+	
+		// remove the id and replace it with the hash
+		jsonTweetObject.remove("id");
+		jsonTweetObject.addProperty("id", idHash);
+		
+		// replace the "in_reply_to_user_id" field with a hash if present
+		if(jsonTweetObject.has("in_reply_to_user_id") == true) {
+
+			// get a hash of the value
+			JsonElement elem = jsonTweetObject.get("in_reply_to_user_id");
+			String      hash = HashUtils.hashValue(elem.getAsString());
+			
+			// update the value
+			jsonTweetObject.remove("in_reply_to_user_id");
+			jsonTweetObject.addProperty("in_reply_to_user_id", hash);
+		}
+		
+		// replace the "in_reply_to_status_id" field with a hash if present
+		if(jsonTweetObject.has("in_reply_to_status_id") == true) {
+
+			// get a hash of the value
+			JsonElement elem = jsonTweetObject.get("in_reply_to_status_id");
+			String      hash = HashUtils.hashValue(elem.getAsString());
+			
+			// update the value
+			jsonTweetObject.remove("in_reply_to_status_id");
+			jsonTweetObject.addProperty("in_reply_to_status_id", hash);
+		}
+		
+		// replace the "retweeted_status" field with a hash if present
+		if(jsonTweetObject.has("retweeted_status") == true) {
+
+			// get a hash of the value
+			JsonElement elem = jsonTweetObject.get("retweeted_status");
+			String      hash = HashUtils.hashValue(elem.getAsString());
+			
+			// update the value
+			jsonTweetObject.remove("retweeted_status");
+			jsonTweetObject.addProperty("retweeted_status", hash);
+		}
+			
+		// return the sanitised object
+		return jsonTweetObject;
+	
+	}
+	
+	/**
+	 * A private method to sanitise the message
+	 *
+	 * @param jsonTweetObject the original user object
+	 * @param idHash          the hash of the user id
+	 *
+	 * @return                the sanitised user object
+	 */
+	private JsonObject sanitiseUser(JsonObject jsonTweetObject, String idHash) {
+	
+		// remove the id and replace it with the hash
+		jsonTweetObject.remove("id");
+		jsonTweetObject.addProperty("id", idHash);
+		
+		// loop through the list of sanitised fields
+		for(int i = 0; i < SANITISED_FIELDS.length; i++) {
+			if(jsonTweetObject.has(SANITISED_FIELDS[i]) == true) {
+				jsonTweetObject.remove(SANITISED_FIELDS[i]);
+				jsonTweetObject.addProperty(SANITISED_FIELDS[i],"");
+			}
+		}
+		
+		// return the sanitised object
+		return jsonTweetObject;
+	
+	}
+	
+	/**
+	 * A private method to process a message containing a company hash tag
+	 *
+	 * @param hashtags        a list of hashtags associated with this message
+	 * @param jsonTweetObject the message
+	 * @param jsonUserObject  the user object
+	 * @param tweetIdHash     the hash of the message id
+	 *
+	 * @return                true if, and only if, the message was processed successfully
+	 */
+	private boolean isPerformance(List<String> hashtags, JsonObject jsonTweetObject, JsonObject jsonUserObject, String tweetIdHash) {
+	
+		return false;
+	
+	}
+	
+	/**
+	 * A private method to process a message containing a company hash tag
+	 *
+	 * @param hashtags        a list of hashtags associated with this message
+	 * @param jsonTweetObject the message
+	 * @param jsonUserObject  the user object
+	 * @param tweetIdHash     the hash of the message id
+	 *
+	 * @return                true if, and only if, the message was processed successfully
+	 */
+	private boolean isCompanyPerformance(List<String> hashtags, JsonObject jsonTweetObject, JsonObject jsonUserObject, String tweetIdHash) {
+	
+		/*
+		 * get the date & time that the message was received
+		 */
+		JsonElement elem = jsonTweetObject.get("created_at");
+		DateTime messageCreated = inputDateTimeFormat.parseDateTime(elem.getAsString());
+		LocalDateTime localMessageCreated = messageCreated.toLocalDateTime();
+		
+		/*
+		 * get the performance and question id
+		 */
+		String performanceId = null;
+		String questionId    = null;
+		
+		// define the sql				
+		String selectSql = "SELECT performance_id, question_id, SUBSTR(twitter_hash_tag, 2) "
+						 + "FROM mob_performances, mob_organisations, orgevlink "
+						 + "WHERE mob_performances.event_id = orgevlink.eventid "
+						 + "AND mob_organisations.organisation_id = orgevlink.organisationid "
+						 + "AND start_date_time < TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') "
+						 + "AND end_date_time + 1/12 > TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') ";
+
+		// define the parameters array
+		String[] sqlParameters = new String[2];
+		sqlParameters[0] = dateTimeFormat.print(messageCreated);
+		sqlParameters[1] = dateTimeFormat.print(messageCreated);
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(selectSql, sqlParameters);
+		
+		// double check the results
+		if(results == null) {
+			System.err.println("ERROR: Unable to execute the SQL to lookup performances");
+			
+			// send an exception report
+			if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
+				System.err.println("ERROR: Unable to send the exception report");
+			}
+
+		} else {
+		
+			// look for performances matching the hash tag from the message
+			ResultSet resultSet = results.getResultSet();
+			
+			// loop through the resultset
+			boolean found = false; // exit the loop early
+			sqlParameters = new String[7]; // store the parameters
+			
+			try {
+			
+				while (resultSet.next() && found == false) {
+			
+					// see if the hashtags in the message match one in the DB
+					if(hashtags.contains(resultSet.getString(3)) == true) {
+						// yep
+						sqlParameters[0] = resultSet.getString(1);
+						sqlParameters[1] = resultSet.getString(2);
+						found = true;
+					}
+				}
+			}catch (java.sql.SQLException ex) {
+				found = false;
+			}
+			
+			if(found == false) {
+				// no performance with a matching company id was found
+				return false;
+			} else {
+				
+				/*
+				 * write the message to the database
+				 */
+				 
+				// define the sql
+				String insertSql = "INSERT INTO mob_feedback "
+								 + "(performance_id, question_id, source_type, received_date_time, received_from, source_id, short_content) "
+								 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
+	
+				// use the source id from the constant
+				sqlParameters[2] = SOURCE_ID;
+	
+				// add the date and time
+				sqlParameters[3] = dateTimeFormat.print(messageCreated);
+	
+				// add the user id
+				elem = jsonUserObject.get("id");
+				sqlParameters[4] = elem.getAsString();
+	
+				// add the source id
+				elem = jsonTweetObject.get("id");
+				sqlParameters[5] = elem.getAsString();
+	
+				// add the message
+				elem = jsonUserObject.get("text");
+				sqlParameters[6] = elem.getAsString();
+	
+				// insert the data
+				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
+					System.err.println("ERROR: Unable to add the message to the database");
+					
+					// send an exception report
+					if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, "Exception Report: The Tweet Gatherer was unable to store this message in the database", logFiles + "/" + tweetIdHash) == false) {
+						System.err.println("ERROR: Unable to send the exception report");
+					}
+				
+				} else {
+					System.out.println("INFO: Successfully added the message to the database");
+					return true;
+				}	
+			}
+		} // end performance check
+		
+		// if we get this far, something bad happend
+		return false;	
+	}
+	
+				/*
 //				 * get the performance and question id
 //				 */
 //				String performanceId = null;

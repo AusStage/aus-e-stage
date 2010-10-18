@@ -38,16 +38,13 @@ public class DeletionProcessor implements Runnable {
 
 	// declare class level private variables
 	private LinkedBlockingQueue<SDeletion> newDeletes;
-	private String logFiles;
-	private DbManager database;
-	private EmailManager      emailManager;
+	private String                         logFiles;
+	private DbManager                      database;
+	private EmailManager                   emailManager;
 	
 	// declare class level constants
-	private final int JSON_INDENT_LEVEL = 4;
 	
 	public final String SOURCE_ID = "1";
-	
-	private final String[] SANITISED_FIELDS = {"url", "profile_image_url", "screen_name", "profile_background_image_url", "name", "description"};
 	
 	private final String EMAIL_SUBJECT = "[AusStage Twitter Gatherer] Deletion Processing Error";
 	private final String EMAIL_MESSAGE = "Exception Report: The Twitter Gatherer was unable to process the deletion request for message with id: ";
