@@ -64,4 +64,4 @@ Details of the classes and methods available is contained in the standard Javado
 
 An overview of the way the application works is [http://techxplorer.com/2010/09/09/integrating-ausstage-with-twitter/ available here].
 
-A diagram providing an overview of the application workflow is [http://aus-e-stage.googlecode.com/svn-history/trunk/wiki-assets/twitter-gatherer-workflow.png available here]. .
+A diagram providing an overview of the application workflow is [http://aus-e-stage.googlecode.com/svn-history/trunk/wiki-assets/tweet-gatherer-workflow.png available here]. .
