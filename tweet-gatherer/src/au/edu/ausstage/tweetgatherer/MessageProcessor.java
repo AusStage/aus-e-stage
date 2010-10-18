@@ -293,8 +293,7 @@ public class MessageProcessor implements Runnable {
 		}
 		
 		// return the sanitised object
-		return jsonTweetObject;
-	
+		return jsonTweetObject;	
 	}
 	
 	/**
@@ -439,109 +438,4 @@ public class MessageProcessor implements Runnable {
 		// if we get this far, something bad happend
 		return false;	
 	}
-	
-				/*
-//				 * get the performance and question id
-//				 */
-//				String performanceId = null;
-//				String questionId    = null;
-//				
-//				// define the sql				
-//				String selectSql = "SELECT performance_id, question_id, SUBSTR(twitter_hash_tag, 2) "
-//								 + "FROM mob_performances, mob_organisations, orgevlink "
-//								 + "WHERE mob_performances.event_id = orgevlink.eventid "
-//								 + "AND mob_organisations.organisation_id = orgevlink.organisationid "
-//								 + "AND start_date_time < TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') "
-//								 + "AND end_date_time + 1/12 > TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "') ";
-
-//				// define the parameters array
-//				String[] sqlParameters = new String[2];
-//				sqlParameters[0] = dateTimeFormat.print(messageCreated);
-//				sqlParameters[1] = dateTimeFormat.print(messageCreated);
-//				
-//				// get the data
-//				DbObjects results = database.executePreparedStatement(selectSql, sqlParameters);
-//				
-//				// double check the results
-//				if(results == null) {
-//					System.err.println("ERROR: Unable to execute the SQL to lookup performances");
-//					
-//					// send an exception report
-//					if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
-//						System.err.println("ERROR: Unable to send the exception report");
-//					}
-
-//				} else {
-//				
-//					// look for performances matching the hash tag from the message
-//					ResultSet resultSet = results.getResultSet();
-//					
-//					// loop through the resultset
-//					boolean found = false; // exit the loop early
-//					sqlParameters = new String[7]; // store the parameters
-//					
-//					try {
-//					
-//						while (resultSet.next() && found == false) {
-//					
-//							// see if the hashtags in the message match one in the DB
-//							if(hashtags.contains(resultSet.getString(3)) == true) {
-//								// yep
-//								sqlParameters[0] = resultSet.getString(1);
-//								sqlParameters[1] = resultSet.getString(2);
-//								found = true;
-//							}
-//						}
-//					}catch (java.sql.SQLException ex) {
-//						found = false;
-//					}
-//					
-//					if(found == true) {
-//						
-//						/*
-//						 * write the message to the database
-//						 */
-//						 
-//						// define the sql
-//						String insertSql = "INSERT INTO mob_feedback "
-//										 + "(performance_id, question_id, source_type, received_date_time, received_from, source_id, short_content) "
-//										 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
-//			
-//						// use the source id from the constant
-//						sqlParameters[2] = SOURCE_ID;
-//			
-//						// add the date and time
-//						sqlParameters[3] = dateTimeFormat.print(messageCreated);
-//			
-//						// add the user id
-//						sqlParameters[4] = jsonUserObject.getString("id");
-//			
-//						// add the source id
-//						sqlParameters[5] = jsonTweetObject.getString("id");
-//			
-//						// add the message
-//						sqlParameters[6] = jsonTweetObject.getString("text");
-//			
-//						// insert the data
-//						if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
-//							System.err.println("ERROR: Unable to add the message to the database");
-//						} else {
-//							System.out.println("INFO: Successfully added the message to the database");
-//						}	
-//					} else {
-//						System.err.println("ERROR: Unable to find a matching performance for this message");
-//						
-//						// send an exception report
-//						if(emailManager.sendMessageWithAttachment(EMAIL_SUBJECT, EMAIL_MESSAGE, logFiles + "/" + tweetIdHash) == false) {
-//							System.err.println("ERROR: Unable to send the exception report");
-//						}
-//					}
-//				} // end performance check	
-//			}
-//		} catch (InterruptedException ex) {
-//			// thread has been interrupted
-//			System.out.println("INFO: The Message processing thread has stopped");
-//		}
-//	} // end the run method
-
 }
