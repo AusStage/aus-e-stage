@@ -36,7 +36,7 @@ public class TweetGatherer {
 
 	// Version information 
 	private static final String VERSION    = "1.0.0";
-	private static final String BUILD_DATE = "2010-10-13";
+	private static final String BUILD_DATE = "2010-10-18";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/TweetGatherer";
 	
 	/**
@@ -243,11 +243,6 @@ public class TweetGatherer {
 			System.err.println("       If the problem persists, contact the AusStage project manager");
 			System.exit(-1);
 		}
-		
-		//debug code
-//		org.apache.log4j.Logger logger =  org.apache.log4j.Logger.getLogger(TwitterStream.class);
-//		logger.setLevel(org.apache.log4j.Level.OFF);
-		System.setProperty("simplelog.dev.debug", "true");
 		
 		// create our threads
 		Thread streamThread  = new Thread(ts);
