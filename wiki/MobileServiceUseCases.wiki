@@ -65,6 +65,7 @@ These users will access the system and want to retrieve processed and unprocesse
 They will also be able to access the same processed data as the users in Researchers (a) Undergraduate (see above). 
 
 *Suitable Visualisation/Display methods*
+  * Export of data  *Priority Level 1*
   * tag clouds *Priority Level 1*
   * tree maps
   * cluster/bubble maps on a timeline, includes a representation of the volume and text *Priority Level 2*
