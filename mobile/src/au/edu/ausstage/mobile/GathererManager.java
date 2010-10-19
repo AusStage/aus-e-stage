@@ -46,12 +46,14 @@ public class GathererManager {
 	private DbManager database;
 	
 	// declare class level constants
-	public static final String SMS_SOURCE_ID = "2";
+	public static final String SOURCE_ID = "2";
 	
 	// date related constants
 	private final String DB_DATE_TIME_FORMAT = "DD-MON-YYYY HH24:MI:SS";
 	private final String JODA_DATE_TIME_FORMAT = "dd-MMM-YYYY HH:mm:ss";
 	private final String JODA_INPUT_DATE_TIME_FORMAT = "YY.MM.dd HH:mm:ss";
+	private DateTimeFormatter dateTimeFormat = null;
+	private DateTimeFormatter inputDateTimeFormat = null;
 	
 	// email related variables
 	private EmailOptions emailOptions = null;
@@ -117,6 +119,10 @@ public class GathererManager {
 		
 		// instantiate the email manager class
 		emailManager = new EmailManager(emailOptions);
+		
+		// instantiate the date time helper variables variables
+		DateTimeFormatter dateTimeFormat      = DateTimeFormat.forPattern(JODA_DATE_TIME_FORMAT);
+		DateTimeFormatter inputDateTimeFormat = DateTimeFormat.forPattern(JODA_INPUT_DATE_TIME_FORMAT);
 	}
 	
 	/**
@@ -138,8 +144,11 @@ public class GathererManager {
 		
 		// define helper variables
 		Extractor extractHashTags = new Extractor();
-		DateTimeFormatter dateTimeFormat      = DateTimeFormat.forPattern(JODA_DATE_TIME_FORMAT);
-		DateTimeFormatter inputDateTimeFormat = DateTimeFormat.forPattern(JODA_INPUT_DATE_TIME_FORMAT);
+		
+		// get the date and time that the message was recieved
+		time = time.split(" ")[0];
+		DateTime messageReceived = inputDateTimeFormat.parseDateTime(date + " " + time);
+		LocalDateTime localMessageReceived = messageReceived.toLocalDateTime();
 		
 		// get a santised version of the callerId
 		callerId = HashUtils.hashValue(callerId);
@@ -151,7 +160,7 @@ public class GathererManager {
 		if(hashtags.isEmpty() == true) {
 			// no hashtags were found
 			// send an exception report
-			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + buildException(callerId, date, time, message));
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: No hashtags found in the message\n" + buildException(callerId, localMessageReceived, message));
 			return "Error";
 		}
 		
@@ -169,11 +178,32 @@ public class GathererManager {
 			hashtagsIterator.set(tmp);
 		}
 		
-		// get the date and time that the message was recieved
-		time = time.split(" ")[0];
-		DateTime messageReceived = inputDateTimeFormat.parseDateTime(date + " " + time);
-		LocalDateTime localMessageReceived = messageReceived.toLocalDateTime();
+		// see if this is a company performance
+		if(isCompanyPerformance(hashtags, callerId, message, localMessageReceived) == false) {
+			// this isn't a company performance
+			// is it using a performance specific id?
+			if(isPerformance(hashtags, callerId, message, localMessageReceived) == false) {
+				// send an exception report
+				emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to find a matching performance\n" + buildException(callerId, localMessageReceived, message));
+				return "ERROR";
+			}
+		}
 		
+		// if we get this far everything is ok
+		return "OK";
+
+	}
+	
+	/**
+	 * A private method to process an incoming message using company specific tags
+	 *
+	 * @param hashtags a list of hashtags retrieved from the message
+	 * @param callerId the hash of the mobile device number
+	 * @param message  the text of the message
+	 * @param localMessageRecieved the date and time that the message was receieved
+	 */	 
+	private boolean isCompanyPerformance(List<String> hashtags, String callerId, String message, LocalDateTime localMessageReceived) {
+	
 		/*
 		 * get the performance and question id
 		 */
@@ -198,8 +228,8 @@ public class GathererManager {
 		
 		// check on what is returned
 		if(results == null) {
-			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to lookup performance information\n" + buildException(callerId, date, time, message));
-			return "Error";
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to lookup performance information\n" + buildException(callerId, localMessageReceived, message));
+			return false;
 		} else {
 		
 			// look for performances matching the hash tag from the message
@@ -241,7 +271,7 @@ public class GathererManager {
 				// build the remaining parameters
 	
 				// use the source id from the constant
-				sqlParameters[2] = SMS_SOURCE_ID;
+				sqlParameters[2] = SOURCE_ID;
 	
 				// add the date and time
 				sqlParameters[3] = dateTimeFormat.print(localMessageReceived);
@@ -254,19 +284,106 @@ public class GathererManager {
 	
 				// insert the data
 				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
-					emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to add information to the database\n" + buildException(callerId, date, time, message));
-					return "Error";
+					emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to add information to the database\n" + buildException(callerId, localMessageReceived, message));
+					return false;
 				}	
 			} else {
-				emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to find a matching performance\n" + buildException(callerId, date, time, message));
-				return "Error";
+				return false;
+			}
+		} // end performance check
+		
+		// if we get this far everything went OK
+		return true;		
+	}
+	
+	/**
+	 * A private method to process an incoming message using company specific tags
+	 *
+	 * @param hashtags a list of hashtags retrieved from the message
+	 * @param callerId the hash of the mobile device number
+	 * @param message  the text of the message
+	 * @param localMessageRecieved the date and time that the message was receieved
+	 */	 
+	private boolean isPerformance(List<String> hashtags, String callerId, String message, LocalDateTime localMessageReceived) {
+	
+		/*
+		 * get the performance and question id
+		 */
+		String      performanceId = null;
+		String      questionId    = null;
+		
+		String selectSql = "SELECT performance_id, question_id, SUBSTR(hash_tag, 2) "
+						 + "FROM mob_performances "
+						 + "WHERE deprecated_hash_tag = 'N'";
+				   
+		// get the data
+		DbObjects results = database.executeStatement(selectSql);
+		
+		// double check the results
+		if(results == null) {
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to lookup performance specific hash tags\n" + buildException(callerId, localMessageReceived, message));			
+			return false;
+
+		} else {
+			// look for performances matching the hash tag from the message
+			ResultSet resultSet = results.getResultSet();
+			
+			// loop through the resultset
+			boolean found = false; // exit the loop early
+			String[] sqlParameters = new String[7]; // store the parameters
+			
+			try {
+			
+				while (resultSet.next() && found == false) {
+			
+					// see if the hashtags in the message match one in the DB
+					if(hashtags.contains(resultSet.getString(3)) == true) {
+						// yep
+						sqlParameters[0] = resultSet.getString(1);
+						sqlParameters[1] = resultSet.getString(2);
+						found = true;
+					}
+				}
+			}catch (java.sql.SQLException ex) {
+				found = false;
+			}
+			
+			if(found == false) {
+				// no performance with a matching company id was found
+				return false;
+			} else {
+				
+				/*
+				 * write the message to the database
+				 */
+				 
+				// define the sql
+				String insertSql = "INSERT INTO mob_feedback "
+								 + "(performance_id, question_id, source_type, received_date_time, received_from, short_content) "
+								 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
+	
+				// use the source id from the constant
+				sqlParameters[2] = SOURCE_ID;
+	
+				// add the date and time
+				sqlParameters[3] = dateTimeFormat.print(localMessageReceived);
+	
+				// add the user id
+				sqlParameters[4] = callerId;
+	
+				// add the message
+				sqlParameters[6] = message;
+	
+				// insert the data
+				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
+				
+					emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to add the feedback to the database\n" + buildException(callerId, localMessageReceived, message));	
+					return false;				
+				} else {
+					return true;
+				}	
 			}
 		} // end performance check	
-		
-		
-		// if we get this far everything is ok
-		return "OK";
-
 	}
 	
 	/**
@@ -279,12 +396,11 @@ public class GathererManager {
 	 *
 	 * @return         a string representation of the message to use in the exception report
 	 */
-	private String buildException(String callerId, String date, String time, String message) {
+	private String buildException(String callerId, LocalDateTime localMessageReceived, String message) {
 	
 		StringBuilder builder = new StringBuilder("\n******************************************\n");
 		builder.append("Caller ID: " + callerId + "\n");
-		builder.append("Date: " + date + "\n");
-		builder.append("Time: " + time + "\n");
+		builder.append("Date & Time: " + dateTimeFormat.print(localMessageReceived) + "\n");
 		builder.append("Message: " + message + "\n");
 		
 		return builder.toString();
