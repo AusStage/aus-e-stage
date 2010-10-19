@@ -68,7 +68,7 @@ They will also be able to access the same processed data as the users in Researc
   * Export of data  *Priority Level 1*
   * tag clouds *Priority Level 1*
   * tree maps
-  * cluster/bubble maps on a timeline, includes a representation of the volume and text *Priority Level 2*
+  * cluster/bubble maps on a timeline, includes a representation of the volume and text *Priority Level 1*
   * emergent tag cloud (filtered tag clouds) 
   * stream graphs - where the size of stream are based on the volume of keywords
   * graph of the volumes of tweets *Priority level 2*
