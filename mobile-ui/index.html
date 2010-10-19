@@ -7,6 +7,9 @@
         <style type="text/css" media="screen">@import "assets/jqtouch/themes/jqt/theme.min.css";</style>
         <script src="assets/jqtouch/jquery.1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="assets/jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>
+        <script type="text/javascript" src="assets/javascript/chain-0.2.js" type="application/x-javascript" charset="utf-8"></script>
+
+
         <script type="text/javascript" charset="utf-8">
             var jQT = new $.jQTouch({
                 icon: 'jqtouch.png',
@@ -23,6 +26,41 @@
                     ]
             });
         
+		
+	
+	
+		//Our main document load 
+		$(document).ready(function() {
+
+    		
+		});
+
+
+	function loadFeedback() {
+		
+		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
+		  var performance =   $(element).children("span.performance").text();
+
+	      //now build the url  
+		var source =  'http://beta.ausstage.edu.au/mobile/feedback?task=initial&performance=' + performance  ;  //TODO code to see what server the system is running on and build this URL 
+		alert(source);
+		$.ajax({
+				type:   'GET',
+				//url:    'feedback.json',
+				url: source, 
+				dataType: 'json',
+				success: function(data)
+				{   
+						//alert('got the data');
+				      	$("#feedback").items(data.feedback).chain();//load this data in the feedback 				
+				},  
+				async: true 
+			}); 
+			
+				
+		}; 
+		
+		
         </script>
         <style type="text/css" media="screen">
             body.fullscreen #home .info {
@@ -63,16 +101,30 @@
             
                   <div class="info">
                 <p>Intro</p>
+               
             </div>
             
-            
+      
+      
             <ul class="rounded">
-                <li class="arrow"><a href="#ui">User Interface</a> <small class="counter">4</small></li>
+                <li class="arrow"><a href="#Recent">User Interface</a> <small class="counter">4</small></li>
+                <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">4</small></li>
+
                 
             </ul>
            
+           
+
+      
+      
       
         </div>
+
+		 <div id="FeedbackDisplay">
+             <ul id="feedback">
+                    <li><a href="#details"><span class="content"></span></a></li>
+                </ul>
+         </div>
 
 
 
