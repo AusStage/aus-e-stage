@@ -264,6 +264,35 @@ public class DateUtils {
 		return explodedDate;
 	
 	} // end getExplodedDate method
-
-
+	
+	/**
+	 * A method to "minify" a date by using zero in any missing values
+	 * Assumes the format yyyy-mm-dd where - is a delimiter
+	 *
+	 * @param date the date to explode
+	 * @param delim the delimiter in the date components
+	 *
+	 * @return     an array with three elements containing the date components
+	 */
+	public static String getMinifiedDate(String date, String delim) {
+		// check on the parameters
+		if(InputUtils.isValid(date) == false || InputUtils.isValid(delim) == false) {
+			throw new IllegalArgumentException("Error: All parameters to this method are required");
+		}
+		
+		// explode the date
+		String[] explodedDate = getExplodedDate(date, delim);
+		
+		// check on what was returned
+		if(explodedDate[1] == null) {
+			explodedDate[1] = "00";
+		} 
+		
+		if(explodedDate[2] == null) {
+			explodedDate[2] = "00";
+		}
+		
+		// reassemble the date
+		return explodedDate[0] + delim + explodedDate[1] + delim + explodedDate[2];
+	}
 } // end class definition
