@@ -284,6 +284,10 @@ public class DateUtils {
 		String[] explodedDate = getExplodedDate(date, delim);
 		
 		// check on what was returned
+		if(explodedDate[0] == null) {
+			explodedDate[0] = "00";
+		}
+		
 		if(explodedDate[1] == null) {
 			explodedDate[1] = "00";
 		} 
@@ -295,4 +299,43 @@ public class DateUtils {
 		// reassemble the date
 		return explodedDate[0] + delim + explodedDate[1] + delim + explodedDate[2];
 	}
+	
+	/**
+	 * A method to convert a date string into an integer
+	 * Assumes the format yyyy-mm-dd where - is a delimiter
+	 * Dates are minified before conversion if required
+	 *
+	 * @param date the date to explode
+	 * @param delim the delimiter in the date components
+	 *
+	 * @return     an array with three elements containing the date components
+	 */
+	public static int getIntegerFromDate(String date, String delim) {
+		// check on the parameters
+		if(InputUtils.isValid(date) == false || InputUtils.isValid(delim) == false) {
+			throw new IllegalArgumentException("Error: All parameters to this method are required");
+		}
+		
+		// minify the date
+		if(date.length() != 10) {
+			date = getMinifiedDate(date, delim);
+		}
+			
+		
+		// replace the delimiter with nothing
+		date = date.replace(delim, "");
+		
+		// convert the date
+		int integerDate;
+		
+		try {
+			integerDate = Integer.parseInt(date);
+		} catch(java.lang.NumberFormatException ex) {
+			throw new IllegalArgumentException("Error: the date parameter does not meet the requirements for conversion");
+		}
+		
+		return integerDate;
+	}
+		
+		
 } // end class definition
