@@ -552,7 +552,7 @@ public class Collaborator implements Comparable<Collaborator>{
      * negative integer, 0, or a positive integer depending on whether the receiving object is 
      * less than, equal to, or greater than the specified object.
      *
-     * @param c the event to compare this one to
+     * @param c the collaborator to compare this one to
      *
      * @return  an integer indicating comparison result
      */    
