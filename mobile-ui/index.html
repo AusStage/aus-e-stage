@@ -36,29 +36,75 @@
 		});
 
 
-	function loadFeedback() {
+		
+		function getPerformanceData(performance) {
+			
+				  var host = $(location).attr('host');
+				  
+				  //now do the stuff to make the host names work 
+				  if (host != 'http://beta.ausstage.edu.au')  { 
+					  host = 'http://beta.ausstage.edu.au';
+					  mydataType =  'jsonp';
+				  } else {
+					   mydataType =  'json';
+				  }
+				  
+				//now build the url  
+				var source =  host + '/mobile/feedback?task=initial&performance=' + performance  ;  //TODO code to see what server the system is running on and build this URL 
+				
+				window.console.log(source);
+				
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						dataType: mydataType,
+						success: function (data) {
+
+							populate(data);
+						},
+						async: true 
+					}); 			
+
+		}; 
+		
+		/*
+		* This is the main call that loads the json in to the correct D
+		*
+		**/
+		function populate(data){
+			//alert("ye got here"); 
+			window.console.log(data);
+			$("#Add").item(data).chain();//load this data in the feedback 
+			$("#feedback").items(data.feedback).chain();//load this data in the feedback 		
+			$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 	
+								
+		
+		};
+		
+	
+		
+		
+		function loadFeedbackForm() {
 		
 		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
 		  var performance =   $(element).children("span.performance").text();
+		  getPerformanceData(performance);
 
-	      //now build the url  
-		var source =  'http://beta.ausstage.edu.au/mobile/feedback?task=initial&performance=' + performance  ;  //TODO code to see what server the system is running on and build this URL 
-		//alert(source);
-		$.ajax({
-				type:   'GET',
-				//url:    'feedback.json',
-				url: source, 
-				dataType: 'json',
-				success: function(data)
-				{   
-						//alert('got the data');
-				      	$("#feedback").items(data.feedback).chain();//load this data in the feedback 				
-				},  
-				async: true 
-			}); 
-			
 				
 		}; 
+		
+		
+		
+		function loadFeedback() {
+		
+		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
+		  var performance =   $(element).children("span.performance").text();
+		  getPerformanceData(performance);
+
+		}; 
+		
+		
+		
 		
 		
         </script>
@@ -99,31 +145,81 @@
                 <a class="button slideup" id="infoButton" href="#about">About</a>
             </div>
             
-                  <div class="info">
+            <div class="info">
                 <p>Intro</p>
-               
             </div>
             
       
       	
             <ul class="rounded">
-                <li class="arrow"><a href="#Recent">User Interface</a> <small class="counter">4</small></li>
-                <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">4</small></li>
+                <li class="arrow"><a href="#About">About</a> <small class="counter">1</small></li>
+                <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">2</small></li>
+		        <li class="arrow"><a href="#Add"  onClick="loadFeedbackForm(event)">Add<span class="performance">4</span></a>  <small class="counter">3</small></li>
+
 
             </ul>
         </div>
 
 
-         
-	 <div id="FeedbackDisplay">
+ <div id="Add">
             <div class="toolbar">
-                <h1>TODO - ADD NAME FROM JSON</h1>
+                <h1 class="event"></h1>
+                <a class="back" href="#">Home</a>
+                <a class="button slideup" id="infoButton" href="#about">About</a>
+            </div> 
+         
+         <form id="ajax_post" action="http://beta.ausstage.edu.au/mobile/feedback" method="GET" class="form">
+        		<h3 class="question">Question</h3>
+				<ul class="edit rounded">
+                <li><input type="text" name="performance" class="performance">#</input></li>
+            	<li><textarea placeholder="Textarea" ></textarea></li>
+                    
+               </ul>
+            <a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" class="submit whiteButton">Submit</a>
+        </form>
+        
+      
+    </form>
+           
+   
+        
+      
+</div> 
+      
+          <div id="About">
+            <div class="toolbar">
+                <h1>About</h1>
                 <a class="back" href="#">Home</a>
                                 <a class="button slideup" id="infoButton" href="#about">About</a>
 
-            </div>             <ul id="feedback">
+            </div>          
+         </div> 
+         
+                  
+	 <div id="FeedbackDisplay">
+            <div class="toolbar">
+                <h1 class="event"></h1>
+                <a class="back" href="#">Home</a>
+               <a class="button slideup" id="infoButton" href="#about">About</a>
+
+            </div>             
+            
+             <div class="info">
+            
+            <div class="organisation">organisation</div>
+            <div class="venue">venue</div>
+            <div class="date">date</div>
+            </div>
+            
+            
+           <h3 class="question"></h3>
+
+            <ul id="feedback">
                     <li><a href="#details"><span class="content"></span></a></li>
-                </ul>
+            </ul>
+         
+         
+         
          </div>      
       
     </body>
