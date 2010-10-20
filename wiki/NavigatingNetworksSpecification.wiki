@@ -465,6 +465,7 @@ The event-to-event network browsing interface allows the user to search the AusS
 Events are related by the contributors who have been involved with them. 
 Clicking on a link should reveal the contributor, and highlight any other links that refer to that particular contributor.
 If an event on the edge of the network is selected, the display should be refreshed to reveal its first degree network of events. 
+It should be noted here, the event to event network graph will display and perform differently to a person to person network graph. Where a person to person network graph doesn't include time as a basis for the layout of people and events, a event to event network will layout the network on a timeline. With each event occuring at a certain period in time, and people being the links from one event to the next.
 
 Work flow:
   # Initial event-to-event Display
@@ -624,6 +625,8 @@ The *value* variable in the *links* array can relate to the edge weight. As Prot
 Depending on further studies of Protovis, and whether or not further attributes can be stored in the *links* array, this value attribute may also be able to determine edge weight. ie assuming we can store within each *link* object another array storing the events between two collaborators, we can alter the *value* attribute to reflect the number of times the two collaborators have worked together.
 Alternatively, Protovis automatically provides another way of dealing with edge weight that effects the opacity of lines. If a link between two nodes appears more than once in the data provided, the link becomes more opaque.
 
+In the case of event to event networks Protovis is not quite as straight forward. A force directed layout is not appropriate given the time aspect to the layout required. It may be possible with further investigation to create an appropriate layout however it should be noted there is no prototype available at this time, therefore the visualisation and the logic behind it will need to be designed.
+
 ==JIT==
 [http://thejit.org/ JIT] or the JavaScript InfoVis Toolkit is a javascript based library that provides tools for creating interactive web visualisations. 
 At the time of writing, this particular library had provided me with the best results. 
@@ -635,7 +638,9 @@ This is an example of one contributors first degree network. The interaction had
 Another javascript visualisation library with physics and layout support for force directed layouts. This library also supports the dynamic generation of graphs using XML. 
 At this point I have abandoned testing of JSVis. Although existing examples of networks using this library are promising, I have had trouble creating a working example. Investigation in a few forums (Apologies, I did not keep the links and hence cannot reference them!) suggests that JSVis is also not geared towards larger networks.  
 
- 
+== SIMILE==
+discuss.
+
 =DEVELOPMENT SCHEDULE=
 
 Please refer to the [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/navigating-networks-development-schedule.pdf linked pdf file] for Navigating Networks Development Schedule details.
