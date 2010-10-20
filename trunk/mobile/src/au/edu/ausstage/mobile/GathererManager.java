@@ -142,6 +142,12 @@ public class GathererManager {
 			return null;
 		}
 		
+		// url decode the message
+		try {
+			String tmp = java.net.URLDecoder.decode(message, "UTF-8");
+			message = tmp;
+		} catch(java.io.UnsupportedEncodingException ex) {}
+		
 		// define helper variables
 		Extractor extractHashTags = new Extractor();
 		
