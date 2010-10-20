@@ -59,7 +59,7 @@ public class GathererManager {
 	private EmailOptions emailOptions = null;
 	private EmailManager emailManager = null;
 	private final String EMAIL_SUBJECT = "[AusStage Feedback Gatherer] Message Processing Error";
-	private final String EMAIL_MESSAGE = "Exception Report: The Feedback Gatherer was unable to locate a valid performance for the SMS Message below";
+	private final String EMAIL_MESSAGE = "Exception Report: The Feedback Gatherer experienced an error while processing the message. Details Follow:\n";
 	
 	/**
 	 * Constructor for this class
@@ -121,8 +121,8 @@ public class GathererManager {
 		emailManager = new EmailManager(emailOptions);
 		
 		// instantiate the date time helper variables variables
-		DateTimeFormatter dateTimeFormat      = DateTimeFormat.forPattern(JODA_DATE_TIME_FORMAT);
-		DateTimeFormatter inputDateTimeFormat = DateTimeFormat.forPattern(JODA_INPUT_DATE_TIME_FORMAT);
+		dateTimeFormat      = DateTimeFormat.forPattern(JODA_DATE_TIME_FORMAT);
+		inputDateTimeFormat = DateTimeFormat.forPattern(JODA_INPUT_DATE_TIME_FORMAT);
 	}
 	
 	/**
@@ -147,6 +147,11 @@ public class GathererManager {
 		
 		// get the date and time that the message was recieved
 		time = time.split(" ")[0];
+		if(time == null) {
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Incompatible time format detected\n" + buildException(callerId, null, message));
+			return "Error";
+		}
+		
 		DateTime messageReceived = inputDateTimeFormat.parseDateTime(date + " " + time);
 		LocalDateTime localMessageReceived = messageReceived.toLocalDateTime();
 		
@@ -284,7 +289,7 @@ public class GathererManager {
 	
 				// insert the data
 				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
-					emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to add information to the database\n" + buildException(callerId, localMessageReceived, message));
+					emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to add information to the database" + buildException(callerId, localMessageReceived, message));
 					return false;
 				}	
 			} else {
@@ -330,7 +335,7 @@ public class GathererManager {
 			
 			// loop through the resultset
 			boolean found = false; // exit the loop early
-			String[] sqlParameters = new String[7]; // store the parameters
+			String[] sqlParameters = new String[6]; // store the parameters
 			
 			try {
 			
@@ -360,7 +365,7 @@ public class GathererManager {
 				// define the sql
 				String insertSql = "INSERT INTO mob_feedback "
 								 + "(performance_id, question_id, source_type, received_date_time, received_from, short_content) "
-								 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?,?)";
+								 + "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?)";
 	
 				// use the source id from the constant
 				sqlParameters[2] = SOURCE_ID;
@@ -372,7 +377,7 @@ public class GathererManager {
 				sqlParameters[4] = callerId;
 	
 				// add the message
-				sqlParameters[6] = message;
+				sqlParameters[5] = message;
 	
 				// insert the data
 				if(database.executePreparedInsertStatement(insertSql, sqlParameters) == false) {
@@ -400,7 +405,11 @@ public class GathererManager {
 	
 		StringBuilder builder = new StringBuilder("\n******************************************\n");
 		builder.append("Caller ID: " + callerId + "\n");
-		builder.append("Date & Time: " + dateTimeFormat.print(localMessageReceived) + "\n");
+		if(localMessageReceived != null) {	
+			builder.append("Date & Time: " + dateTimeFormat.print(localMessageReceived) + "\n");
+		} else {
+			builder.append("Date & Time: Unavailable");
+		}
 		builder.append("Message: " + message + "\n");
 		
 		return builder.toString();
