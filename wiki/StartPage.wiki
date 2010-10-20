@@ -19,8 +19,3 @@ The three main services currently under development are:
 = Purpose of this Wiki =
 
 The purpose of this Wiki is to manage documentation specifically related to the development activities that are building the above services.
-
-
-
-Aus-e-Stage Staff Calendar
-http://www.google.com/calendar/embed?src=liz.milford%40flinders.edu.au&ctz=Australia/Adelaide
