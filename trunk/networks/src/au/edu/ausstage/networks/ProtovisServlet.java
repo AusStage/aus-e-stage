@@ -36,7 +36,7 @@ public class ProtovisServlet extends HttpServlet {
 	private DataManager database;
 	
 	// declare constants
-	private final String[] TASK_TYPES   = {"ego-centric-network"};
+	private final String[] TASK_TYPES   = {"ego-centric-network", "event-centric-network"};
 
 	/*
 	 * initialise this instance
@@ -95,28 +95,50 @@ public class ProtovisServlet extends HttpServlet {
 			throw new ServletException("Missing or invalid id parameter.");
 		}
 		
-		// instantiate a manger object
-		ProtovisManager manager = new ProtovisManager(database);
+		if(taskType.equals("ego-centric-network") == true) {
 		
-		//debug code
-		//response.setContentType("text/plain; charset=UTF-8");
+			// instantiate a manger object
+			ProtovisEgoCentricManager manager = new ProtovisEgoCentricManager(database);
 		
-		// check how to return the data
-		if(InputUtils.isValid(request.getParameter("callback")) == false) {
+			// check how to return the data
+			if(InputUtils.isValid(request.getParameter("callback")) == false) {
 		
-			// output json mime type
-			response.setContentType("application/json; charset=UTF-8");
+				// output json mime type
+				response.setContentType("application/json; charset=UTF-8");
 		
-			// output the results of the export
-			PrintWriter out = response.getWriter();
-			out.print(manager.getData(id, radius));
-		} else {
-			// output javascript mime type
-			response.setContentType("application/javascript; charset=UTF-8");
+				// output the results of the export
+				PrintWriter out = response.getWriter();
+				out.print(manager.getData(id, radius));
+			} else {
+				// output javascript mime type
+				response.setContentType("application/javascript; charset=UTF-8");
 		
-			// output the results of the export
-			PrintWriter out = response.getWriter();
-			JSONPManager.wrapJSON(manager.getData(id, radius), request.getParameter("callback"), out);
+				// output the results of the export
+				PrintWriter out = response.getWriter();
+				JSONPManager.wrapJSON(manager.getData(id, radius), request.getParameter("callback"), out);
+			}
+		} else if(taskType.equals("event-centric-network") == true) {
+		
+			// instantiate a manger object
+			ProtovisEventCentricManager manager = new ProtovisEventCentricManager(database);
+		
+			// check how to return the data
+			if(InputUtils.isValid(request.getParameter("callback")) == false) {
+		
+				// output json mime type
+				response.setContentType("application/json; charset=UTF-8");
+		
+				// output the results of the export
+				PrintWriter out = response.getWriter();
+				out.print(manager.getData(id, radius));
+			} else {
+				// output javascript mime type
+				response.setContentType("application/javascript; charset=UTF-8");
+		
+				// output the results of the export
+				PrintWriter out = response.getWriter();
+				JSONPManager.wrapJSON(manager.getData(id, radius), request.getParameter("callback"), out);
+			}		
 		}
 			
 	} // end doGet method
