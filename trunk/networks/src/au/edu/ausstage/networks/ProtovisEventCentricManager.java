@@ -40,14 +40,17 @@ import au.edu.ausstage.networks.types.*;
 public class ProtovisEventCentricManager {
 
 	// declare private class level variables
-	private DataManager database = null;
+	private DataManager RdfDatabase = null;
+	private DbManager   database    = null;
 
 	/**
 	 * Constructor for this class
+	 *
+	 * @param RdfDatabase an already instantiated instance of the DataManager class
 	 */
-	public ProtovisEventCentricManager(DataManager database) {	
+	public ProtovisEventCentricManager(DataManager RdfDatabase) {	
 		// store a reference to this DataManager for later
-		this.database = database;
+		this.RdfDatabase = RdfDatabase;
 	} // end constructor
 	
 	/**
@@ -75,7 +78,7 @@ public class ProtovisEventCentricManager {
 		}
 		
 		// instantiate a connection to the database
-		DbManager database = new DbManager(getConnectionString());
+		database = new DbManager(getConnectionString());
 		
 		if(database.connect() == false) {
 			throw new RuntimeException("Error: Unable to connect to the database");
@@ -131,15 +134,30 @@ public class ProtovisEventCentricManager {
 	} // end the getData method
 	
 	/**
+	 * A private method to get the details for an event
+	 *
+	 * @param id the event id
+	 *
+	 * @return a completed event object
+	 */
+	private au.edu.ausstage.networks.types.Event getEventDetails(String id) {
+	
+		// define the sql
+		String sql = "";
+		
+		return null;	
+	}
+	
+	/**
 	 * A private method to read the connection string parameter from the web.xml file
 	 *
 	 * @return the database connection string
 	 */
 	private String getConnectionString() {
-		if(InputUtils.isValid(database.getContextParam("databaseConnectionString")) == false) {
+		if(InputUtils.isValid(RdfDatabase.getContextParam("databaseConnectionString")) == false) {
 			throw new RuntimeException("Unable to read the connection string parameter from the web.xml file");
 		} else {
-			return database.getContextParam("databaseConnectionString");
+			return RdfDatabase.getContextParam("databaseConnectionString");
 		}
 	}
 }
