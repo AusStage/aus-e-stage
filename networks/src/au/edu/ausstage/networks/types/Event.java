@@ -33,6 +33,7 @@ public class Event implements JSONAware, Comparable<Event>{
 	private String name      = null;
 	private String url       = null;
 	private String firstDate = null;
+	private String lastDate  = null;
 
 	/**
 	 * constructor for this class
@@ -138,6 +139,32 @@ public class Event implements JSONAware, Comparable<Event>{
 	public String getFirstDate() {
 		return firstDate;
 	}
+	
+	/**
+	 * set a new lastDate value for this event
+	 * 
+	 * @param value the new lastDate value
+	 */
+	public void setLastDate(String value) {
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("Error: The parameter cannot be null");
+		} else {
+			lastDate = value;
+		}
+	}
+	
+	/**
+	 * get the lastDate value for this event
+	 *
+	 * @return the lastDate value for this event
+	 */
+	public String getLastDate() {
+		return lastDate;
+	}
+	
+	/*
+	 * JSON related methods
+	 */
 	
 	/**
 	 * get the JSONObject representation of this object
