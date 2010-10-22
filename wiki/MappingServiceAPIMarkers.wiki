@@ -28,7 +28,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 
 The type parameter specifies whether the call to the API is for data on venues at the state, suburb or specific venue. As well as data on venues associated with an organisation or a contributor
 
-=== id ===
+=== id for states ===
 
 Valid State Identifiers are:
 
@@ -44,6 +44,8 @@ Valid State Identifiers are:
 || 99 || Australia ||
 || 999 || Outside Australia ||
 
+=== id for suburbs ===
+
 If the task type is set to suburb the parameter is is expected to be encoded as follows:
 
 state-id_suburb-name
@@ -51,6 +53,8 @@ state-id_suburb-name
 For example:
 
 1_Adelaide
+
+=== id for contributors, organisations and venues ===
 
 For all other task types the id parameter is a comma separated list of unique identifiers.
 
