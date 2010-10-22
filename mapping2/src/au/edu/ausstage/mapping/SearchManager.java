@@ -938,7 +938,7 @@ public class SearchManager {
 		query = query.replace(" not ", "");
 		
 		// remove any punctuation
-		query = query.replaceAll("\\p{P}+", "");
+		//query = query.replaceAll("\\p{P}+", "");
 		
 		// rewrite the search terms
 		query = query.replace(" ", " and ");
