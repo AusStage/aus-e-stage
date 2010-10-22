@@ -232,7 +232,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=contributor&id=482
   } ]
 }}}
 
-=== contributor ===
+=== multiple contributor ===
 Retrieve markers for venues where an event occurred involving [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=482 Geoffrey Rush] or [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=4921 Cate Blanchett]
 
 URL: http://beta.ausstage.edu.au/mapping3/markers?type=contributor&id=482,4921
