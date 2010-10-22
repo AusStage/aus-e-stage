@@ -8,6 +8,8 @@ The Marker Data API exposes methods and data elements that can be used to constr
 
 _Note: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete.
 
+<wiki:toc max_depth="3" />
+
 == Base URL ==
 
 http://beta.ausstage.edu.au/mapping3/markers?
