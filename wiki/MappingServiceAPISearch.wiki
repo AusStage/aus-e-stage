@@ -8,13 +8,17 @@ The Search API exposes methods and data elements that can be used to search for 
 
 _Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
 
-== Base URL ==
+_Note 2: The search interface provided by the mapping service is designed to be supplementary to the existing text based search interface. Once the new !AusStage website is in place this API is expected to be deprecated as the mapping service will be integrated with the new !AusStage website._
 
-http://beta.ausstage.edu.au/mapping2/search?
+<wiki:toc max_depth="3" />
+
+= Base URL =
+
+http://beta.ausstage.edu.au/mapping3/search?
 
 Combining the base URL with the parameters outlined below constructs a call to the API.
 
-== Parameters ==
+= Parameters =
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
 || task   || organisation, contributor, venue || No || ||
@@ -23,33 +27,37 @@ Combining the base URL with the parameters outlined below constructs a call to t
 || format || json || Yes || json ||
 || limit  || an integer between 5 and 25 || Yes || 5 ||
 
-=== task ===
+== task ==
 The type of search task to undertake for example a search for organisation or contributor data
 
-=== type ===
+== type ==
 The type of search to undertake either by name or by id number
 
-=== query ===
-The search query, either a list of search terms or the id number to search for
+== query ==
+The search query, either a list of search terms that must be present in the name or the id number to search for
 
 _Note:_ If a name search is undertaken the query is sanitised by:
 
  * removing white-space at the start and end of the query
  * remove all occurrences of the words and, or, not
- * removing all punctuation characters
- * adding the keyword "and" between each remaining word
 
-=== format ===
+Records containing all of the search terms are returned within the record limit specified
+
+== format ==
 The type of data format used to prepare the search results. At the time of writing only [http://en.wikipedia.org/wiki/JSON JSON] is a supported format
 
-== limit ===
-The maximum number of result records to be returned
+== limit ==
+The maximum number of result records to be returned. By default only 5 records are returned
 
-== Sample Output ==
+= Sample Output =
 
 The search result is formatted as a JSON array with zero, one, or more result objects. 
 
-=== Organisation ID Search ===
+== Organisation ID Search ==
+
+Conduct a search for the organisation with id 102
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=id&query=102
 
 {{{
 [
@@ -63,10 +71,33 @@ The search result is formatted as a JSON array with zero, one, or more result ob
 ]
 }}}
 
-=== Organisation Name Search ===
+== Organisation Name Search ==
+
+Conduct a search for organisations that contain the words "australian" and "dance" in their name using the default record limit
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=name&query=australian+dance
+
 {{{
-[ { "id" : "102",
-    "mapEventCount" : 264,
+[ { "id" : "9703",
+    "mapEventCount" : 2,
+    "name" : "Australian Contemporary Dance Company",
+    "totalEventCount" : 2,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=9703"
+  },
+  { "id" : "12224",
+    "mapEventCount" : 2,
+    "name" : "Australian Dance Festival",
+    "totalEventCount" : 2,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=12224"
+  },
+  { "id" : "30769",
+    "mapEventCount" : 1,
+    "name" : "Australian Dance Performance Institute",
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=30769"
+  },
+  { "id" : "102",
+    "mapEventCount" : 303,
     "name" : "Australian Dance Theatre",
     "totalEventCount" : 408,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102"
@@ -76,69 +107,111 @@ The search result is formatted as a JSON array with zero, one, or more result ob
     "name" : "Australian Dance Theatre Academy",
     "totalEventCount" : 1,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=32347"
-  },
-  { "id" : "11898",
-    "mapEventCount" : 49,
-    "name" : "Meryl Tankard Australian Dance Theatre",
-    "totalEventCount" : 98,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=11898"
   }
 ]
 }}}
 
 === Contributor ID Search ===
-{{{
-[ { "firstName" : "Brad",
-    "id" : "414321",
-    "lastName" : "Williams",
-    "mapEventCount" : 13,
-    "totalEventCount" : 13,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=414321"
-  } ]
 
+A search for the contributor with id 482
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=id&query=482
+
+{{{
+[ { "firstName" : "Geoffrey",
+    "id" : "482",
+    "lastName" : "Rush",
+    "mapEventCount" : 75,
+    "totalEventCount" : 88,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=482"
+  } ]
 }}}
 
 === Contributor Name Search ===
+A search for any contributors with "cate" in their name, specifying a limit of 10 records returned
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=name&query=cate&limit=10
+
 {{{
-[ { "firstName" : "Brad",
-    "id" : "255501",
-    "lastName" : "Anderson",
+[ { "firstName" : "Cate",
+    "id" : "4921",
+    "lastName" : "Blanchett",
+    "mapEventCount" : 24,
+    "totalEventCount" : 31,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=4921"
+  },
+  { "firstName" : "Cate",
+    "id" : "227811",
+    "lastName" : "Brennan",
+    "mapEventCount" : 1,
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=227811"
+  },
+  { "firstName" : "Cate",
+    "id" : "246522",
+    "lastName" : "Crowe",
+    "mapEventCount" : 0,
+    "totalEventCount" : 2,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=246522"
+  },
+  { "firstName" : "Cate",
+    "id" : "258170",
+    "lastName" : "Dunn",
+    "mapEventCount" : 1,
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=258170"
+  },
+  { "firstName" : "Cate",
+    "id" : "245256",
+    "lastName" : "Fowler",
+    "mapEventCount" : 34,
+    "totalEventCount" : 38,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=245256"
+  },
+  { "firstName" : "Cate",
+    "id" : "6900",
+    "lastName" : "Furey",
     "mapEventCount" : 0,
     "totalEventCount" : 1,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=255501"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=6900"
   },
-  { "firstName" : "Brad",
-    "id" : "229139",
-    "lastName" : "Ashwood",
+  { "firstName" : "Cate",
+    "id" : "252341",
+    "lastName" : "Handley",
+    "mapEventCount" : 1,
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=252341"
+  },
+  { "firstName" : "Cate",
+    "id" : "245142",
+    "lastName" : "Kennedy",
+    "mapEventCount" : 1,
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=245142"
+  },
+  { "firstName" : "Cate",
+    "id" : "257270",
+    "lastName" : "Lay",
     "mapEventCount" : 3,
-    "totalEventCount" : 4,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=229139"
+    "totalEventCount" : 3,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=257270"
   },
-  { "firstName" : "Brad",
-    "id" : "258120",
-    "lastName" : "Bennett",
-    "mapEventCount" : 3,
-    "totalEventCount" : 4,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=258120"
-  },
-  { "firstName" : "Brad",
-    "id" : "415144",
-    "lastName" : "Bridger",
-    "mapEventCount" : 0,
+  { "firstName" : "Paul",
+    "id" : "420686",
+    "lastName" : "Cate",
+    "mapEventCount" : 1,
     "totalEventCount" : 1,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=415144"
-  },
-  { "firstName" : "Brad",
-    "id" : "238884",
-    "lastName" : "Buckingham",
-    "mapEventCount" : 0,
-    "totalEventCount" : 1,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=238884"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=420686"
   }
 ]
 }}}
 
 === Venue ID Search ===
+
+A search for the venue with id 815
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=id&query=815
+
 {{{
 [ { "id" : "815",
     "latitude" : "-34.92832",
@@ -153,6 +226,11 @@ The search result is formatted as a JSON array with zero, one, or more result ob
 }}}
 
 === Venue Name Search ===
+
+A search for any venue with the words "her" and "majesty's" and "theatre" specifying the maximum record limit
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=name&query=her+majesty%27s+theatre&limit=25
+
 {{{
 [ { "id" : "11093",
     "latitude" : "-37.810916",
@@ -191,7 +269,7 @@ The search result is formatted as a JSON array with zero, one, or more result ob
     "postcode" : "5000",
     "street" : "58 Grote Street",
     "suburb" : "Adelaide",
-    "totalEventCount" : 313,
+    "totalEventCount" : 314,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
   },
   { "id" : "13496",
@@ -204,7 +282,116 @@ The search result is formatted as a JSON array with zero, one, or more result ob
     "totalEventCount" : 2,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=13496"
   },
-  ...
+  { "id" : "13477",
+    "latitude" : "-31.954748",
+    "longitude" : "115.856495",
+    "name" : "Her Majesty's Theatre",
+    "postcode" : "6000",
+    "street" : null,
+    "suburb" : "Perth",
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=13477"
+  },
+  { "id" : "11904",
+    "latitude" : "-33.870577",
+    "longitude" : "151.208483",
+    "name" : "Her Majesty's Theatre (1887-1933)",
+    "postcode" : "2000",
+    "street" : "Pitt St",
+    "suburb" : "Sydney",
+    "totalEventCount" : 17,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=11904"
+  },
+  { "id" : "23",
+    "latitude" : null,
+    "longitude" : null,
+    "name" : "Her Majesty's Theatre (1960-2001)",
+    "postcode" : "2000",
+    "street" : "Quay Street",
+    "suburb" : "Sydney",
+    "totalEventCount" : 193,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=23"
+  },
+  { "id" : "143",
+    "latitude" : "-37.56269",
+    "longitude" : "143.857598",
+    "name" : "Her Majestys ",
+    "postcode" : "3350",
+    "street" : "17 Lydiard Street South",
+    "suburb" : "Ballarat",
+    "totalEventCount" : 56,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=143"
+  },
+  { "id" : "3238",
+    "latitude" : "-36.847928",
+    "longitude" : "174.765134",
+    "name" : "His Majesty's Theatre",
+    "postcode" : null,
+    "street" : "1902 Durham St West ",
+    "suburb" : "Auckland",
+    "totalEventCount" : 8,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3238"
+  },
+  { "id" : "2798",
+    "latitude" : "-27.4688022",
+    "longitude" : "153.0263346",
+    "name" : "His Majesty's Theatre",
+    "postcode" : "4000",
+    "street" : "193 Queen Street",
+    "suburb" : "Brisbane",
+    "totalEventCount" : 64,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2798"
+  },
+  { "id" : "10985",
+    "latitude" : "-37.810916",
+    "longitude" : "144.96975",
+    "name" : "His Majesty's Theatre",
+    "postcode" : "3000",
+    "street" : "219 Exhibition Street",
+    "suburb" : "Melbourne",
+    "totalEventCount" : 87,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10985"
+  },
+  { "id" : "13425",
+    "latitude" : "-45.880206",
+    "longitude" : "170.502266",
+    "name" : "His Majesty's Theatre",
+    "postcode" : null,
+    "street" : "65 Crawford Street",
+    "suburb" : "Dunedin",
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=13425"
+  },
+  { "id" : "355",
+    "latitude" : "-31.953078",
+    "longitude" : "115.854439",
+    "name" : "His Majesty's Theatre",
+    "postcode" : "6000",
+    "street" : "825 Hay Street",
+    "suburb" : "Perth",
+    "totalEventCount" : 199,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=355"
+  },
+  { "id" : "4353",
+    "latitude" : "57.147875",
+    "longitude" : "-2.105373",
+    "name" : "His Majesty's Theatre",
+    "postcode" : null,
+    "street" : "Rosemount Viaduct",
+    "suburb" : "Aberdeen",
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4353"
+  },
+  { "id" : "10408",
+    "latitude" : null,
+    "longitude" : null,
+    "name" : "His Majesty's Theatre ",
+    "postcode" : null,
+    "street" : null,
+    "suburb" : "London",
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10408"
+  },
   { "id" : "3853",
     "latitude" : "-34.92832",
     "longitude" : "138.597007",
