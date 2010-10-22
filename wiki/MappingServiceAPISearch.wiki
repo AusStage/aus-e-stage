@@ -111,7 +111,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=name&que
 ]
 }}}
 
-=== Contributor ID Search ===
+== Contributor ID Search ==
 
 A search for the contributor with id 482
 
@@ -127,7 +127,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=id&query=
   } ]
 }}}
 
-=== Contributor Name Search ===
+== Contributor Name Search ==
 A search for any contributors with "cate" in their name, specifying a limit of 10 records returned
 
 URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=name&query=cate&limit=10
@@ -206,7 +206,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=name&quer
 ]
 }}}
 
-=== Venue ID Search ===
+== Venue ID Search ==
 
 A search for the venue with id 815
 
@@ -225,7 +225,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=id&query=815
   } ]
 }}}
 
-=== Venue Name Search ===
+== Venue Name Search ==
 
 A search for any venue with the words "her" and "majesty's" and "theatre" specifying the maximum record limit
 
