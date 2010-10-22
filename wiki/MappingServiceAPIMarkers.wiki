@@ -23,7 +23,6 @@ Combining the base URL with the parameters outlined below constructs a call to t
 || id       || Unique contributor or organisation id || No || ||
 || callback || function name to use for a JSONP request || Yes || || 
 
-
 == type ==
 
 The type parameter specifies whether the call to the API is for data on venues at the state, suburb or specific venue. As well as data on venues associated with an organisation or a contributor
@@ -59,6 +58,9 @@ For example:
 For all other task types the id parameter is a comma separated list of unique identifiers.
 
 _Note: It is not possible to mix types of ids in a single call to the API. Therefore if the type is set to venue only venue ids must be specified, conversely if the type is set to contributor only contributor ids must be specified._
+
+== callback ==
+The name of the callback function used when a request is made for JSONP encoded data
 
 = Sample Output =
 
