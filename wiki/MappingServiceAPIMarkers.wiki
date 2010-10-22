@@ -21,7 +21,6 @@ Combining the base URL with the parameters outlined below constructs a call to t
 || id       || Unique contributor or organisation id || No || ||
 || callback || function name to use for a JSONP request || Yes || || 
 
-_Note: _ The id parameter is optional when used with the state task
 
 === type ===
 
@@ -29,7 +28,19 @@ The type parameter specifies whether the call to the API is for data on venues a
 
 === id ===
 
-If the task type is set to state this parameter, if present, is ignored.
+Valid State Identifiers are:
+
+|| *id* || *State / Region* ||
+|| 1 || SA ||
+|| 2 || WA ||
+|| 3 || NSW ||
+|| 4 || QLD ||
+|| 5 || TAS ||
+|| 6 || VIC ||
+|| 7 || ACT ||
+|| 8 || NT ||
+|| 99 || Australia ||
+|| 999 || Outside Australia ||
 
 If the task type is set to suburb the parameter is is expected to be encoded as follows:
 
@@ -48,6 +59,7 @@ _Note: It is not possible to mix types of ids in a single call to the API. There
 === state ===
 
 Retrieve markers for all venues in SA:
+
 URL: http://beta.ausstage.edu.au/mapping3/markers?type=state&id=1
 
 {{{
@@ -85,6 +97,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=state&id=1
 === suburb ===
 
 Retrieve markers for all venues in Adelaide, SA:
+
 URL: http://beta.ausstage.edu.au/mapping3/markers?type=suburb&id=1_adelaide
 
 {{{
@@ -122,6 +135,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=suburb&id=1_adelaide
 === venue ===
 
 Retrieve a marker for "Her Majesty's Theatre" in Adelaide
+
 URL: http://beta.ausstage.edu.au/mapping3/markers?type=venue&id=815
 
 {{{
@@ -139,6 +153,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=venue&id=815
 === organisation ==
 
 Retrieve markers for venues where an event occurred involving the [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_org_id=102 Australian Dance Theatre]
+
 URL: http://beta.ausstage.edu.au/mapping3/markers?type=organisation&id=102
 
 {{{
@@ -177,10 +192,82 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=organisation&id=102
 }}}
 
 === contributor ===
-Retrieve markers for venues where an event occurred involving the [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=482 Geoffrey Rush]
+Retrieve markers for venues where an event occurred involving [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=482 Geoffrey Rush]
+
 URL: http://beta.ausstage.edu.au/mapping3/markers?type=contributor&id=482
+
 {{{
 [ { "id" : 482,
+    "venues" : [ { "id" : "302",
+          "latitude" : "-34.919681",
+          "longitude" : "138.597095",
+          "name" : "The Space",
+          "postcode" : "5000",
+          "street" : "Adelaide Festival Centre,King William Street",
+          "suburb" : "Adelaide",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=302"
+        },
+        { "id" : "106",
+          "latitude" : "-33.751108",
+          "longitude" : "150.696716",
+          "name" : "Q Theatre",
+          "postcode" : "2750",
+          "street" : "Railway Street",
+          "suburb" : "Penrith",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=106"
+        },
+...
+ { "id" : "98",
+          "latitude" : "-37.810308",
+          "longitude" : "144.970033",
+          "name" : "Comedy Theatre",
+          "postcode" : "3000",
+          "street" : "240 Exhibition Street",
+          "suburb" : "Melbourne",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=98"
+        }
+      ]
+  } ]
+}}}
+
+=== contributor ===
+Retrieve markers for venues where an event occurred involving [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=482 Geoffrey Rush] or [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=4921 Cate Blanchett]
+
+URL: http://beta.ausstage.edu.au/mapping3/markers?type=contributor&id=482,4921
+
+{{{
+[ { "id" : 4921,
+    "venues" : [ { "id" : "302",
+          "latitude" : "-34.919681",
+          "longitude" : "138.597095",
+          "name" : "The Space",
+          "postcode" : "5000",
+          "street" : "Adelaide Festival Centre,King William Street",
+          "suburb" : "Adelaide",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=302"
+        },
+        { "id" : "3",
+          "latitude" : "-37.8214040",
+          "longitude" : "144.9687240",
+          "name" : "Playhouse",
+          "postcode" : "3004",
+          "street" : "Victorian Arts Centre. 100 St Kilda Rd",
+          "suburb" : "Melbourne",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3"
+        },
+...
+{ "id" : "33",
+          "latitude" : "-37.827082",
+          "longitude" : "144.96654",
+          "name" : "CUB Malthouse",
+          "postcode" : "3006",
+          "street" : "113 Sturt Street",
+          "suburb" : "Southbank",
+          "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=33"
+        }
+      ]
+  },
+  { "id" : 482,
     "venues" : [ { "id" : "302",
           "latitude" : "-34.919681",
           "longitude" : "138.597095",
