@@ -8,14 +8,15 @@ The Lookup API exposes methods that can be used to lookup a variety of data elem
 
 _Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
 
+<wiki:toc max_depth="3" />
 
-== Base URL ==
+= Base URL =
 
-http://beta.ausstage.edu.au/mapping2/lookup?
+http://beta.ausstage.edu.au/mapping3/lookup?
 
 Combining the base URL with the parameters outlined below constructs a call to the API.
 
-== Parameters ==
+= Parameters =
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
 || task   || state-list, suburb-list, suburb-venue-list, organisation, contributor, venue, map-colour-list || No || ||
@@ -25,54 +26,78 @@ Combining the base URL with the parameters outlined below constructs a call to t
 
 _Note:_ id is not required for a state-list or map-colour-list lookup task
 
-=== task ===
-The type of search task to undertake for example a search for organisation or contributor data
+== task ==
+The type of lookup task to undertake for example a lookup of organisation or contributor data
 
-==== state-list ===
+=== state-list ===
 
 A list of objects that can be used to construct UI elements that allow the user to select a state or other geographic area in which to narrow their browse activity
 
-==== suburb-list ====
+=== suburb-list ===
 
-A list of suburbs that are located in the state as identified by the id parameter.
+A list of objects that can be used to construct UI elements that allow the user to select one of the suburbs that are located in the state as identified by the id parameter.
 
-_Note:_ The id parameter is only valid if it contains an id for one of the 8 Australian states or territories.
-
-==== suburb-venue-list ====
+=== suburb-venue-list ===
 
 A list of venues that are located in the state and suburb combination as identified by the id parameter
 
-_Note:_ The id parameter is expected to be encoded as follows state-id_suburb name
-
-==== organisation ====
+=== organisation ===
 
 The details of an organisation
 
-==== contributor ====
+=== contributor ===
 
 The details for a contributor
 
-==== venue ====
+=== venue ===
 
 The details for a venue
 
-==== map-colour-list ====
+== map-colour-list ==
 
 A list of common colours that can be used for styling elements in a map, such as trajectory etc.
 
-=== id ===
+== id ==
 
 The unique identifier used to lookup the data as identified by the task parameter
 
-=== format ===
+=== State identifiers ===
+Valid State Identifiers are:
+
+|| *id* || *State* ||
+|| 1 || SA ||
+|| 2 || WA ||
+|| 3 || NSW ||
+|| 4 || QLD ||
+|| 5 || TAS ||
+|| 6 || VIC ||
+|| 7 || ACT ||
+|| 8 || NT ||
+
+=== Suburb identifiers ===
+
+The id parameter is expected to be encoded as follows:
+
+state-id_suburb-name
+
+For example:
+
+1_Adelaide
+
+== format ==
 The type of data format used to prepare the search results. At the time of writing only [http://en.wikipedia.org/wiki/JSON JSON] is a supported format
 
-=== callback ===
+== callback ==
 The name of the callback function used when a request is made for JSONP encoded data
 
-== Sample Output ==
+= Sample Output =
 
-=== state-list ===
+== state-list ==
+
+Retrieve a list of state objects.
+
+URL: http://beta.ausstage.edu.au/mapping3/lookup?task=state-list
+
 {{{
 [ { "id" : 99,
     "name" : "Australia"
@@ -107,15 +132,22 @@ The name of the callback function used when a request is made for JSONP encoded 
 ]
 }}}
 
-=== suburb-list ===
+== suburb-list ==
+
+Retrieve a list of suburb objects.
+
+URL: http://beta.ausstage.edu.au/mapping3/lookup?task=suburb-list&id=1
+
+The field "mapVenueCount" indicates the number of venues that can be put on a map. The field "venueCount" indicates the number of venues in the suburb
+
 {{{
 [ { "mapVenueCount" : "3",
     "name" : "Aberfoyle Park",
     "venueCount" : "3"
   },
-  { "mapVenueCount" : "331",
+  { "mapVenueCount" : "332",
     "name" : "Adelaide",
-    "venueCount" : "359"
+    "venueCount" : "360"
   },
   { "mapVenueCount" : "1",
     "name" : "Adelaide University, North Terrace",
@@ -129,20 +161,8 @@ The name of the callback function used when a request is made for JSONP encoded 
     "name" : "Aldinga Beach",
     "venueCount" : "1"
   },
-  { "mapVenueCount" : "1",
-    "name" : "Allenby Gardens",
-    "venueCount" : "1"
-  },
 ...
-  { "mapVenueCount" : "4",
-    "name" : "Woodville",
-    "venueCount" : "4"
-  },
-  { "mapVenueCount" : "1",
-    "name" : "Wudinna",
-    "venueCount" : "1"
-  },
-  { "mapVenueCount" : "1",
+{ "mapVenueCount" : "1",
     "name" : "Wynn Vale",
     "venueCount" : "1"
   },
@@ -153,9 +173,14 @@ The name of the callback function used when a request is made for JSONP encoded 
 ]
 }}}
 
-=== suburb-venue-list ===
+== suburb-venue-list ==
+
+Retrieve a list of venues in Adelaide, SA:
+
+URL: http://beta.ausstage.edu.au/mapping3/lookup?task=suburb-venue-list&id=1_Adelaide
+
 {{{
- { "eventCount" : "1",
+[ { "eventCount" : "1",
     "id" : "3793",
     "mapEventCount" : "1",
     "name" : "109 South Terrace",
@@ -185,25 +210,13 @@ The name of the callback function used when a request is made for JSONP encoded 
     "name" : "AIT Arts (Acting Studio)",
     "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10436"
   },
+  { "eventCount" : "25",
+    "id" : "4193",
+    "mapEventCount" : "25",
+    "name" : "AMP Theatre",
+    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4193"
+  },
 ...
-  { "eventCount" : "1",
-    "id" : "3791",
-    "mapEventCount" : "0",
-    "name" : "Wills Court",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3791"
-  },
-  { "eventCount" : "1",
-    "id" : "2317",
-    "mapEventCount" : "1",
-    "name" : "World Dance Centre",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2317"
-  },
-  { "eventCount" : "13",
-    "id" : "2948",
-    "mapEventCount" : "13",
-    "name" : "Worldsend Hotel",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2948"
-  },
   { "eventCount" : "2",
     "id" : "2994",
     "mapEventCount" : "2",
@@ -219,28 +232,41 @@ The name of the callback function used when a request is made for JSONP encoded 
 ]
 }}}
 
-=== organisation ===
+== organisation ==
+
+Lookup information on the organisation with id: 102
+
+URL: http://beta.ausstage.edu.au/mapping3/lookup?task=organisation&id=102
+
 {{{
 [ { "id" : "102",
-    "mapEventCount" : 264,
+    "mapEventCount" : 303,
     "name" : "Australian Dance Theatre",
     "totalEventCount" : 408,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102"
   } ]
 }}}
 
-=== contributor ===
-{{{
-[ { "firstName" : "Brad",
-    "id" : "414321",
-    "lastName" : "Williams",
-    "mapEventCount" : 13,
-    "totalEventCount" : 13,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=414321"
-  } ]
-}}}
+== contributor ==
 
-=== venue ===
+Lookup information on the contributor with id: 482
+
+http://beta.ausstage.edu.au/mapping3/lookup?task=contributor&id=482
+
+[ { "firstName" : "Geoffrey",
+    "id" : "482",
+    "lastName" : "Rush",
+    "mapEventCount" : 75,
+    "totalEventCount" : 88,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=482"
+  } ]
+
+== venue ==
+
+Lookup information on the venue with id: 815
+
+URL: http://beta.ausstage.edu.au/mapping3/lookup?task=venue&id=815
+
 {{{
 [ { "id" : "815",
     "latitude" : "-34.92832",
@@ -249,12 +275,17 @@ The name of the callback function used when a request is made for JSONP encoded 
     "postcode" : "5000",
     "street" : "58 Grote Street",
     "suburb" : "Adelaide",
-    "totalEventCount" : 313,
+    "totalEventCount" : 314,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
   } ]
 }}}
 
-=== map-colour-list ===
+== map-colour-list ==
+
+Lookup information on the colour palette to be used for UI elements on the map
+
+URL: http://beta.ausstage.edu.au/mapping3/lookup?task=map-colour-list
+
 {{{
 [ "#75b4e2",
   "#0058a7",
@@ -262,8 +293,10 @@ The name of the callback function used when a request is made for JSONP encoded 
   "#59c3ec",
   "#004f5a",
   "#005675",
-  ...
- "#7f8e76",
+  "#008694",
+  "#315b69",
+  "#006883",
+...
   "#4e532e",
   "#668293"
 ]
