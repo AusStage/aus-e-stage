@@ -26,6 +26,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 || query  || the search query || No || ||
 || format || json || Yes || json ||
 || limit  || an integer between 5 and 25 || Yes || 5 ||
+|| callback || function name to use for a JSONP request || Yes || || 
 
 == task ==
 The type of search task to undertake for example a search for organisation or contributor data
@@ -48,6 +49,9 @@ The type of data format used to prepare the search results. At the time of writi
 
 == limit ==
 The maximum number of result records to be returned. By default only 5 records are returned
+
+== callback ==
+The name of the callback function used when a request is made for JSONP encoded data
 
 = Sample Output =
 
