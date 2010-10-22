@@ -168,7 +168,7 @@ URL: http://beta.ausstage.edu.au/mapping3/events?task=organisation&id=102&venue=
 
 Events that include the contributor with id: 482 at the venue with id: 36
 
-URL: 
+URL: http://beta.ausstage.edu.au/mapping3/events?task=contributor&id=482&venue=36
 
 {{{
 { "contributor" : { "firstName" : "Geoffrey",
