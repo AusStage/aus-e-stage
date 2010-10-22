@@ -106,7 +106,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=state&id=1
 
 Retrieve markers for all venues in Adelaide, SA:
 
-URL: http://beta.ausstage.edu.au/mapping3/markers?type=suburb&id=1_adelaide
+URL: http://beta.ausstage.edu.au/mapping3/markers?type=suburb&id=1_Adelaide
 
 {{{
 [ { "id" : "184",
