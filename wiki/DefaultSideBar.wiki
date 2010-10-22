@@ -1,6 +1,5 @@
 #summary Default Sidebar for all Wiki pages
 
- * [StartPage Wiki Start Page]
  * !HowTo articles
    * [AbsDataFix Building ABS Overlays]
    * [SourcingAbsData Sourcing data from the ABS]
