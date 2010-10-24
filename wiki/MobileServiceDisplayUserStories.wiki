@@ -1,0 +1,39 @@
+=Step 1. User loads Desktop web page.=
+
+=Step 2. Using Search page user queries Analysis Results Manager for all search-term specific results. Search terms can be either hashtags, Event names or Company names=
+
+=Step 3. Search results displayed to user along with available processing options.= Search results are in the form of
+
+
+Event Title	Start Date  & Time	Finish Date & Time	Hashtag/s	Available data
+
+For example:
+
+
+Be Yourself	2010.09.30  19:30	2010.09.31  00:00	adt		real time results; processed results
+
+
+=Step 4. User selects ‘available data option’.=
+
+
+=Option 1. “real time results” =
+
+Step i.  Analysis Results Manager pulls all search-term specific results from Feedback Gatherer.
+
+Step ii.  Analysis Results Manager delivers results from step i. to Desktop Web page 2
+
+
+=Option 2. “processed results”=
+
+Step a.  Analysis Results Manager pulls all search-term specific results from Feedback Gatherer.
+
+Step b. Analysis Results Manager delivers results from Step a. to Analysis Process.
+
+Step c. Analysis Process performs analysis on results
+	Analysis Process 1: 
+	Analysis Process 2:
+	Analysis Process 3:
+
+Step d. Analysis Process delivers results from Step c. to Analysis Results Manager
+
+Step e. Analysis Results Manager delivers results to Desktop Web page 3
