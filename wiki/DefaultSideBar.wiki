@@ -22,6 +22,7 @@
    * [MobileService  Mobile Service]
      * [MobileServiceSpecification Specification]
        * [MobileServiceUseCases Use Cases]
+       * [MobileServiceDisplayUserStories User Stories - Desktop]
        * [MobileServiceInterfaceDevelopmentStages Interface Development Stages]  
      * [MobileServiceDatabaseTables Database Tables]
      * [MobileServiceAPI Mobile Service API]
