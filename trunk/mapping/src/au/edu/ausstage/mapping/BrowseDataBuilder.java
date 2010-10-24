@@ -634,14 +634,14 @@ public class BrowseDataBuilder extends DataBuilder {
 	/**
 	 * A method declared in the abstract class but not used in this class
 	 */
-	public String getKMLString(String queryParameter) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
+	public String getKMLString(String queryParameter, boolean flag) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
 		throw new java.lang.NoSuchMethodException("Method not implemented");
 	}
 	
 	/**
 	 * A method declared in the abstract class but not used in this class
 	 */
-	public String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
+	public String doKMLExport(String queryParameter, KMLExportOptions exportOptions, boolean flag) throws javax.servlet.ServletException, java.lang.NoSuchMethodException {
 		throw new java.lang.NoSuchMethodException("Method not implemented");
 	}
 

@@ -614,13 +614,13 @@ public class ContributorDataBuilder extends DataBuilder {
 	 *
 	 * @return               a string containing the KML XML
 	 */
-	public String getKMLString(String queryParameter) throws javax.servlet.ServletException {
+	public String getKMLString(String queryParameter, boolean flag) throws javax.servlet.ServletException {
 	 	
 		// get the default options
 	 	KMLExportOptions exportOptions = new KMLExportOptions();
 	 	
 	 	// do a KML export with the default options
-	 	return doKMLExport(queryParameter, exportOptions);
+	 	return doKMLExport(queryParameter, exportOptions, flag);
 	 	
 	} // end getKMLString function
 	
@@ -632,7 +632,7 @@ public class ContributorDataBuilder extends DataBuilder {
 	  *
 	  * @return               a string containing the KML XML
 	  */
-	 public String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException {
+	 public String doKMLExport(String queryParameter, KMLExportOptions exportOptions, boolean flag) throws javax.servlet.ServletException {
 	 
 	 	// define helper variables
 	 	String currentContributor = null;

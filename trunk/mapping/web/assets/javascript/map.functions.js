@@ -207,7 +207,7 @@ function showMap(data, trajectory, focus, start, finish) {
 					// filter markers by state
 					if(focus != null && focus != "nolimit") {
 						// use the state to filter
-						var state = markers[i].getAttribute("state")
+						var state = markers[i].getAttribute("state");
 			
 						if(focus == "a" && state != "9") {
 							okToAdd = true;

@@ -138,8 +138,9 @@ public class MappingServlet extends HttpServlet {
 			// need to build a kml file
 			
 			// get remaining parameters
-			String type = request.getParameter("type");
+			String type = request.getParameter("type");			
 			String id   = request.getParameter("id");
+			String tour = request.getParameter("tour");
 			
 			// check on the parameters
 			if(type == null || id == null) {
@@ -157,12 +158,15 @@ public class MappingServlet extends HttpServlet {
 			// determine the type of kml we need
 			if(type.equals("organisation")) {
 				// build marker KML related to organisations
-			
+								
 				// get an instance of the OrganisationDataBuilder class
 				OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
-				
+					
+				boolean flag = false;
 				// get the markers XML
-				String results = data.getKMLString(id);
+				if (tour.equals("yes"))
+					flag = true;
+				String results = data.getKMLString(id, flag);
 				
 				// build a file name
 				String fileName = null;
@@ -193,7 +197,7 @@ public class MappingServlet extends HttpServlet {
 				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
 				
 				// get the KML data
-				String results = data.getKMLString(id);
+				String results = data.getKMLString(id, false);
 				
 				// build a file name
 				String fileName = null;
@@ -523,7 +527,7 @@ public class MappingServlet extends HttpServlet {
 				OrganisationDataBuilder data = new OrganisationDataBuilder(dataManager);
 				
 				// get the markers XML
-				String results = data.doKMLExport(id, exportOptions);
+				String results = data.doKMLExport(id, exportOptions, false);
 				
 				// build a file name
 				String fileName = null;
@@ -555,7 +559,7 @@ public class MappingServlet extends HttpServlet {
 				ContributorDataBuilder data = new ContributorDataBuilder(dataManager);
 				
 				// get the KML data
-				String results = data.doKMLExport(id, exportOptions);
+				String results = data.doKMLExport(id, exportOptions, false);
 				
 				// build a file name
 				String fileName = null;

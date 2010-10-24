@@ -175,6 +175,7 @@
 				<li><a href="#" title="Link for this map" id="map_header_link">Persistent link for this map</a></li>
 				<li><a href="#" title="Download KML file" id="map_header_kml">Download KML version of this map</a></li>
 				<li><a href="#" title="Export data using advanced options" id="map_header_export">Download KML data with advanced options</a></li>
+				<li><a href="#" title="My KML Export with Tour" id="map_header_MyExport">Export Tour</a></li>
 			</ul>
 			<div id="map_content_list">
 				<div id="map_contents">
