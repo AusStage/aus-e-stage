@@ -1,15 +1,17 @@
+ _italic's are note about which api might be involved_
+
 ==User:  Jim - post graduate researcher ==
 
 ===Step 1. The launch page===
 Jim opens the Feedback Search page.  He can see a search form, a list of current performances links to more information about the system.  
 
-===Step 2 Search === 
+===Step 2. Search === 
 He can search on
   * Hashtags
   * Event names
   * Company names
 
-This time he  searches on *Australia Dance Theatre* 
+This time he  searches on *Australia Dance Theatre* _calls NEW search api_
 
 ===Step 3. Results===
 
@@ -20,11 +22,11 @@ Jim gets back the search results in table.  There search form is still showing s
 
 ===Step 4. Choosing the view ===
 
-Jim is shown list of how he can view the feedback
+Jim is shown a list of how he can view the feedback
 
-  * Realtime timeline _calls feedback api and taken to the viewer_
-  * Realtime presentation -  A 'Digital Signage system'  _calls feedback api and taken  to the viewer_
-  * Tag Clouds _calls NEW analysis api and taken  to the viewer_
-  * Cluster/Bubble Maps _calls NEW analysis api and taken to the viewer_
-  * Image Translation  _calls NEW analysis api and taken  to the viewer_
-  * Export of data  (thishowing because Jim is researcher)  _calls feedback api_
+  * Realtime Timeline  _taken to the viewer which calls the feedback api_
+  * Realtime Presentation -  A 'Digital Signage system'  _taken to the viewer which calls the feedback api_
+  * Tag Clouds  _taken to the viewer which calls the NEW analysis api_
+  * Cluster/Bubble Maps  _taken to the viewer which calls the NEW analysis api _
+  * Image Translation  _taken to the viewer which calls the calls NEW analysis api _
+  * Export data  (this showing because Jim is a researcher ??)  _calls feedback api and Jim gets the JSON output_
