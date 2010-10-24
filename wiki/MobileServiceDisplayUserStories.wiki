@@ -9,7 +9,7 @@ He can search on
   * Event names
   * Company names
 
-This time he  searches on *Australia Dance Theatre* _calls NEW search api_
+This time he  searches on *Australia Dance Theatre* 
 
 ===Step 3. Results===
 
@@ -22,9 +22,9 @@ Jim gets back the search results in table.  There search form is still showing s
 
 Jim is shown list of how he can view the feedback
 
-  * Realtime timeline _calls feedback api and taken to viewer_
-  * Realtime presentation -  A 'Digital Signage system'  _calls feedback api and taken to viewer_
-  * Tag Clouds _calls NEW analysis api and taken to viewer_
-  * Cluster/Bubble Maps _calls NEW analysis api and taken to viewer_
-  * Image Translation  _calls NEW analysis api and taken to viewer_
+  * Realtime timeline _calls feedback api and taken to the viewer_
+  * Realtime presentation -  A 'Digital Signage system'  _calls feedback api and taken  to the viewer_
+  * Tag Clouds _calls NEW analysis api and taken  to the viewer_
+  * Cluster/Bubble Maps _calls NEW analysis api and taken to the viewer_
+  * Image Translation  _calls NEW analysis api and taken  to the viewer_
   * Export of data  (thishowing because Jim is researcher)  _calls feedback api_
