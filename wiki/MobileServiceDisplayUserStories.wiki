@@ -1,34 +1,32 @@
-==User:  Jim - post graduate researcer ==
+==User:  Jim - post graduate researcher ==
 
 ===Step 1. The launch page===
-Jim opens the Feedback Search page.  He can see a search form and links to more information about the system.  
+Jim opens the Feedback Search page.  He can see a search form, a list of current performances links to more information about the system.  
 
 ===Step 2 Search === 
-Jim has option to search  
-
-He can search one 
+He can search on
   * Hashtags
   * Event names
   * Company names
 
 This time searches on *Australia Dance Theatre*
 
-==Step 3. Results==
+===Step 3. Results===
 
 Jim gets back the search results in table.  There search form is still showing so he can refine his search.  The  results are in the form of
 
 ||Event Title||Start Date  & Time||Finish Date & Time||Hashtag/s ||View as (Maybe this comes later) ||
 ||Be Yourself||2010.09.30  19:30||2010.09.31 00:00||adt||||	      
 
-=-Step 4. Choosing the view ==
+===Step 4. Choosing the view ===
 
 Jim is shown list of how he can view the feedback
 
-  * Realtime timeline
-  * Realtime Present -  A 'Digital Signage system' 
+  * Realtime timeline _calls feedback api_
+  * Realtime presentation -  A 'Digital Signage system'  _calls feedback api_
   * Tag Clouds
   * Cluster/Bubble Maps
   * Image Translation 
-  * Export of data  (thishowing because Jim is researcher)  
+  * Export of data  (thishowing because Jim is researcher)  _calls feedback api_
 
-Jim is then taken to a view of the data.  
+Jim is then taken
