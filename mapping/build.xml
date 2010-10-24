@@ -95,17 +95,17 @@
 
 -->
 
-  <property name="app.name"      value="myapp"/>
-  <property name="app.path"      value="/${app.name}"/>
+  <property name="app.name"      value=""/>
+  <property name="app.path"      value=""/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
-  <property name="catalina.home" value="/usr/share/tomcat6"/> <!-- UPDATE THIS! -->
+<!--  <property name="catalina.home" value="/usr/share/tomcat6"/> <!-\- UPDATE THIS! -\->-->
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/dist/docs"/>
-  <property name="manager.url"   value="http://localhost:8181/manager"/>
+  <!--<property name="manager.url"   value="http://localhost:8080/manager"/>--> <!-- see build.properties-->
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
-
+<property name="lib.home"      value="${basedir}/lib"/>
 
 <!-- ==================== External Dependencies =========================== -->
 
@@ -149,6 +149,9 @@
 
     <!-- Include all JAR files that will be included in /WEB-INF/lib -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+   <fileset dir="${lib.home}">
+	<include name="*.jar"/>
+   </fileset>
 <!--
     <pathelement location="${foo.jar}"/>
 -->
@@ -432,6 +435,12 @@
       <fileset dir="${basedir}/diagrams"/>
     </copy>
 
+<copy todir="${build.home}/WEB-INF/lib">
+    	<fileset dir="${lib.home}">
+			<include name="*.jar"/>
+		</fileset>
+	</copy>
+
   </target>
 
 
@@ -451,7 +460,7 @@
 
 -->
 
-  <target name="reload" depends="compile"
+  <target name="reload" depends="clean,compile"
    description="Reload application on servlet container">
 
 

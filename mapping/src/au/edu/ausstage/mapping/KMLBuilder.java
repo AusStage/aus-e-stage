@@ -68,11 +68,14 @@ public class KMLBuilder {
 		// add atom namespace to the root element
 		rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:atom", "http://www.w3.org/2005/Atom");
 		
+		// add google earth extension namespace to the root element
+		rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:gx", "http://www.google.com/kml/ext/2.2");
+		
 		// add schema namespace to the root element
-		rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		//rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		
 		// add reference to the kml schema
-		rootElement.setAttribute("xsi:schemaLocation", "http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd");
+		//rootElement.setAttribute("xsi:schemaLocation", "http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd");
 		
 	} // end the constructor
 	
@@ -497,6 +500,121 @@ public class KMLBuilder {
 		addIconStyle(null, id, href);
 		
 	} // end addIconStyle element
+	
+	/**
+	 * Add a placemark to the KML
+	 *
+	 * @param document    the document to add the placemark to
+	 * @param id		  the id of the placemark
+	 * @param name        the name of the placemark
+	 * @param link        the link for further information
+	 * @param description the description for this placemark
+	 * @param style       the style for this placemark
+	 * @param latitude    the latitidude for this placemark
+	 * @param longitude   the longitude for this placemark
+	 *
+	 * @return            the Element representing this placemark
+	 */
+	public Element addPlacemarkWithID(Element document, String id, String name, String link, String description, String style, String latitude, String longitude) {
+	
+		// check the parameters
+		if(document == null) {
+			throw new IllegalArgumentException("The document that holds this placemark must be specified");
+		}
+		
+		if(name == null) {
+			throw new IllegalArgumentException("The name of this placemark must be specified");
+		}
+		
+		name = name.trim();
+		
+		if(name.equals("") == true) {
+			throw new IllegalArgumentException("The name of this placemark must be specified");
+		}
+		
+		if(description == null) {
+			throw new IllegalArgumentException("The description of this placemark must be specified");
+		}
+		
+		description = description.trim();
+		
+		if(description.equals("") == true) {
+			throw new IllegalArgumentException("The description of this placemark must be specified");
+		}
+		
+		if(style == null) {
+			throw new IllegalArgumentException("The style id for use with this placemark must be specified");
+		}
+		
+		style = style.trim();
+		
+		if(style.equals("") == true) {
+			throw new IllegalArgumentException("The style id for use with this placemark must be specified");
+		}
+		
+		if(latitude == null) {
+			throw new IllegalArgumentException("The latitude for use with this placemark must be specified");
+		}
+		
+		latitude = latitude.trim();
+		
+		if(latitude.equals("") == true) {
+			throw new IllegalArgumentException("The latitude for use with this placemark must be specified");
+		}
+		
+		if(longitude == null) {
+			throw new IllegalArgumentException("The longitude for use with this placemark must be specified");
+		}
+		
+		longitude = longitude.trim();
+		
+		if(longitude.equals("") == true) {
+			throw new IllegalArgumentException("The longitude for use with this placemark must be specified");
+		}
+		
+		// add a placemark to the document
+		Element placemark = xmlDoc.createElement("Placemark");
+		placemark.setAttributeNS(null, "id", id);
+		document.appendChild(placemark);
+		
+		// add the name to the placemark
+		Element eventName = xmlDoc.createElement("name");
+		placemark.appendChild(eventName);
+		eventName.setTextContent(name);
+
+		// add a link element
+		if(link != null && link.equals("") == false) {
+			Element eventLink = xmlDoc.createElement("atom:link");
+			eventLink.setAttribute("href", link);
+			placemark.appendChild(eventLink);
+		}
+		
+		// add the description to the placemark
+		Element descriptionElement = xmlDoc.createElement("description");
+		placemark.appendChild(descriptionElement);
+		
+		// create the CDATASection to hold the html
+		CDATASection cdata = xmlDoc.createCDATASection(description);
+		descriptionElement.appendChild(cdata);
+		
+		// add the style information
+		Element styleElement = xmlDoc.createElement("styleUrl");
+		placemark.appendChild(styleElement);
+		styleElement.setTextContent(style);
+		
+		// create the point element
+		Element point = xmlDoc.createElement("Point");
+		placemark.appendChild(point);
+	
+		// add the coordinates
+		Element coordinates = xmlDoc.createElement("coordinates");
+		point.appendChild(coordinates);
+		coordinates.setTextContent(latitude + "," + longitude);
+		
+		// return the placemark
+		return placemark;	
+	
+	} // end addPlacemarkWithID method
 	
 	/**
 	 * Add a placemark to the KML
@@ -1031,4 +1149,161 @@ public class KMLBuilder {
 	
 	} // end toString method
 
+	
+	public Element addTourPlaylistElement(Element parentElement, String tourName) {
+		
+		// check the parameters
+		if(tourName == null) {
+			throw new IllegalArgumentException("The name of the tour must be specified");
+		}
+		
+		tourName = tourName.trim();
+		
+		if(tourName.equals("") == true) {
+			throw new IllegalArgumentException("The name of the tour must be specified");
+		}
+	
+		// create the tour element
+		Element tourElement = xmlDoc.createElement("gx:Tour");
+		
+		// create the name element
+		Element name = xmlDoc.createElement("name");
+		name.setTextContent(tourName);	
+		
+		// create the Playlist element
+		Element playlistElement = xmlDoc.createElement("gx:Playlist");
+		
+		// add the name element to the tour
+		tourElement.appendChild(name);
+		tourElement.appendChild(playlistElement);
+
+		if(parentElement == null) {
+			// assume we want to add the folder to the root element
+			rootElement.appendChild(tourElement);
+		} else {
+			// add this folder to the specified folder
+			parentElement.appendChild(tourElement);
+		}
+		
+		// return the new element
+		return playlistElement;
+	 
+	}
+	
+	public void addFlyToElement(Element parentElement, float duration, float lon, float lat, float range) {
+		
+		// add gx:FlyTo element
+		Element flytoElement = xmlDoc.createElement("gx:FlyTo");
+		
+		// add gx:duration  element
+		Element durationElement = xmlDoc.createElement("gx:duration");
+		durationElement.setTextContent(Float.toString(duration));
+		flytoElement.appendChild(durationElement);
+		
+		//add gx:flyToMode elemment
+		Element flyToModeElement = xmlDoc.createElement("gx:flyToMode");
+		flyToModeElement.setTextContent("smooth");
+		flytoElement.appendChild(flyToModeElement);
+		
+		//add LookAt element
+		Element lookAtElement = xmlDoc.createElement("LookAt");
+		
+		//add longitude element to LookAt element
+		Element longitudeElement = xmlDoc.createElement("longitude");
+		longitudeElement.setTextContent(Float.toString(lon));
+		lookAtElement.appendChild(longitudeElement);
+		
+		//add latitude element to LookAt element
+		Element latitudeElement = xmlDoc.createElement("latitude");
+		latitudeElement.setTextContent(Float.toString(lat));
+		lookAtElement.appendChild(latitudeElement);
+		
+		//add altitude element to LookAt element
+		Element altitudeElement = xmlDoc.createElement("altitude");
+		altitudeElement.setTextContent("0");
+		lookAtElement.appendChild(altitudeElement);
+		
+		//add range element to LookAt element
+		Element rangeElement = xmlDoc.createElement("range");
+		rangeElement.setTextContent(Float.toString(range));
+		lookAtElement.appendChild(rangeElement);
+		
+		//append lookAtElement to flytoElement
+		flytoElement.appendChild(lookAtElement);
+		
+		
+		
+		if(parentElement == null) {
+			// assume this is to be added to the first folder
+			if(rootFolder == null) {
+				throw new IllegalArgumentException("No parent element specified and the root folder doesn't exist");
+			} else {
+				rootFolder.appendChild(flytoElement);				
+			}
+		} else {
+			// add this to the specified parent
+			parentElement.appendChild(flytoElement);			
+		}
+		
+	} 
+	
+	public void addAnimatedUpdate(Element parentElement, String p_id , float waitDuration){
+
+		Element animatedUpdateElement = null;
+		
+		// First gx:AnimatedUpdate element		
+		animatedUpdateElement = addAnimatedUpdateElement(parentElement, p_id, "1");
+		
+		parentElement.appendChild(animatedUpdateElement);
+		
+		// gx:Wait element
+		Element waitElement = xmlDoc.createElement("gx:Wait");
+		
+		// add gx:duration element to gx:Wait element
+		Element durationElement = xmlDoc.createElement("gx:duration");
+		durationElement.setTextContent(Float.toString(waitDuration));
+		waitElement.appendChild(durationElement);
+		
+		parentElement.appendChild(waitElement);
+		
+		// Second gx:AnimatedUpdate element	
+		animatedUpdateElement = addAnimatedUpdateElement(parentElement, p_id, "0");	
+			
+		parentElement.appendChild(animatedUpdateElement);
+	}
+	
+	
+	public Element addAnimatedUpdateElement(Element parentElement, String p_id, String visibility){
+	
+		// add gx:AnimatedUpdate element
+		Element animatedUpdateElement = xmlDoc.createElement("gx:AnimatedUpdate");
+		
+		// add Update  element to gx:AnimatedUpdate element
+		Element updateElement = xmlDoc.createElement("Update");				
+		
+		// add targetHref element to Update element
+		Element targetHrefElement = xmlDoc.createElement("targetHref");		
+		updateElement.appendChild(targetHrefElement);
+		
+		// add Change element to Update element
+		Element changeElement = xmlDoc.createElement("Change");	
+		
+		// add Placemark element to Change element
+		Element placemarkElement = xmlDoc.createElement("Placemark");
+		placemarkElement.setAttributeNS(null, "targetId", p_id);
+		
+		// add gx:balloonVisibility to Placemark element
+		Element balloonVisibilityElement = xmlDoc.createElement("gx:balloonVisibility");
+		balloonVisibilityElement.setTextContent(visibility);
+		placemarkElement.appendChild(balloonVisibilityElement);
+		
+		changeElement.appendChild(placemarkElement);
+		updateElement.appendChild(changeElement);
+	
+		animatedUpdateElement.appendChild(updateElement);
+		
+		return animatedUpdateElement;
+		
+	}
+	
 } // end class definition

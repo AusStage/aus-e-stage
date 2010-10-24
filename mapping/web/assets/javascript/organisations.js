@@ -222,6 +222,9 @@ function showOrganisationMap(id, contrib, url) {
 	// update the export KML link
 	$("#map_header_export").attr("href", "exportdata.jsp?type=organisation&id=" + id);
 	
+	// update the export track link
+	$("#map_header_MyExport").attr("href", "data?action=kml&type=organisation&tour=yes&id=" + id);
+	
 	var rnd = Math.random();
 	
 	// get the marker xml data

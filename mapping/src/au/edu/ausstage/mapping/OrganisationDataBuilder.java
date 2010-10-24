@@ -585,16 +585,17 @@ public class OrganisationDataBuilder extends DataBuilder {
 	 * using the default options
 	 *
 	 * @param queryParameter the parameter to determine what is of interest
+	 * @param flag 	indicate whether export tour in kml
 	 *
 	 * @return               a string containing the KML XML
 	 */
-	public String getKMLString(String queryParameter) throws javax.servlet.ServletException {
+	public String getKMLString(String queryParameter, boolean flag) throws javax.servlet.ServletException {
 	 	
 		// get the default options
 	 	KMLExportOptions exportOptions = new KMLExportOptions();
 	 	
 	 	// do a KML export with the default options
-	 	return doKMLExport(queryParameter, exportOptions);
+	 	return doKMLExport(queryParameter, exportOptions, flag);
 	 	
 	} // end getKMLString function
 	
@@ -606,7 +607,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 	  *
 	  * @return               a string containing the KML XML
 	  */
-	 public String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException {
+	 public String doKMLExport(String queryParameter, KMLExportOptions exportOptions, boolean flag) throws javax.servlet.ServletException {
 	 
 	 	// define helper variables
 	 	String currentOrganisation = null;
@@ -664,6 +665,7 @@ public class OrganisationDataBuilder extends DataBuilder {
 			
 				// define the query parameters
 				parameters[0] = ids[organisationCount];
+				Element tourPlaylistElement = null;
 				
 				// store the current contributor name
 				currentOrganisation = getNameByID(ids[organisationCount]);
@@ -676,13 +678,39 @@ public class OrganisationDataBuilder extends DataBuilder {
 					Element organisationFolder = exportFile.addFolder(firstFolder, currentOrganisation); // add a folder to hold all of the maps
 					exportFile.addDescriptionElement(organisationFolder, "Maps of events associated with: " + currentOrganisation);
 					
+					if (flag){
+						tourPlaylistElement = exportFile.addTourPlaylistElement(organisationFolder, "Tour");
+					}
+					
 					// add a document for the standard map
 					Element document = exportFile.addDocument(organisationFolder, "Events");
 					exportFile.addDescriptionElement(document, "One place marker for each event");
 					
+					//placemark ID
+					int placemark_id = 0;
+					
 					// loop through the dataset adding placemarks to the basic doc
 					while (resultSet.next()) {
-					
+						//placemark id attribute
+						placemark_id ++;
+						String p_id = "p" + Integer.toString(placemark_id);
+						float duration = 6;
+						float waitDuration = 5;
+						float range = 0;
+						float lon = Float.valueOf(resultSet.getString(15).trim()).floatValue();
+						float lat = Float.valueOf(resultSet.getString(16).trim()).floatValue();
+						if (lon<155 && lon>110 && lat <-9 && lat > -44){
+							range = 3000000;
+						}else { 
+							range = 7000000;
+						}				
+						
+						//add gx:FlyTo element to tourPlaylistElement
+						exportFile.addFlyToElement(tourPlaylistElement, duration, lon, lat, range);
+						
+						//add gx:AnimatedUpdate elements to tourPlaylistElement
+						exportFile.addAnimatedUpdate(tourPlaylistElement, p_id, waitDuration);
+						
 						// build the event url
 						String url = eventURLTemplate.replace("[event-id]", resultSet.getString(1));  // replace the constant with the event id
 						
@@ -691,15 +719,15 @@ public class OrganisationDataBuilder extends DataBuilder {
 				
 						if (resultSet.getString(11) != null) {
 							if(resultSet.getString(6) != null) {
-								html = "<p>" + resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								html = "<p>" + resultSet.getString(2) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
 							} else {
-								html = "<p>" + resultSet.getString(9) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								html = "<p>" + resultSet.getString(2) + ", " + resultSet.getString(11) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
 							}
 						} else {
 							if(resultSet.getString(6) != null) {
-								html = "<p>" + resultSet.getString(9) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+								html = "<p>" + resultSet.getString(2) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)) + " - " + buildDisplayDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
 							} else {
-								html = "<p>" + resultSet.getString(9) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+								html = "<p>" + resultSet.getString(2) + ", " + buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
 							}
 						}
 						
@@ -707,7 +735,11 @@ public class OrganisationDataBuilder extends DataBuilder {
 						html += " <br/><a href=\"" + url + "\">More Information</a></p>";
 						
 						// add the placemark
-						exportFile.addPlacemark(document, resultSet.getString(2), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));				
+						//exportFile.addPlacemark(document, resultSet.getString(2), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));
+						//add the placemark with venue name.
+						exportFile.addPlacemarkWithID(document, p_id, resultSet.getString(9), url, html, "basic-event", resultSet.getString(15), resultSet.getString(16));
+						
+												
 					} // end basic document
 					
 					// add additional documents as necessary

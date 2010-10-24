@@ -58,7 +58,7 @@ public abstract class DataBuilder {
 	 *
 	 * @return               a string containing the KML XML
 	 */
-	public abstract String getKMLString(String queryParameter) throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
+	public abstract String getKMLString(String queryParameter, boolean flag) throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
 	
 	/**
 	 * A abstract method used to export data in the KML format
@@ -68,7 +68,7 @@ public abstract class DataBuilder {
 	 *
 	 * @return               a string containing the KML XML
 	 */
-	public abstract String doKMLExport(String queryParameter, KMLExportOptions exportOptions) throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
+	public abstract String doKMLExport(String queryParameter, KMLExportOptions exportOptions, boolean flag) throws javax.servlet.ServletException, java.lang.NoSuchMethodException;
 	 
 	/**
 	 * A method used to build a date for use Marker XML and KML data
