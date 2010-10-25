@@ -1,4 +1,26 @@
-#summary Template of the information card to be handed out at performances where we're seeking feedback
+#summary Template of the text for the information card to be handed out at performances where we're seeking feedback.
 
 
-Text to go here
+Information cards might contain logos, icons and other images or formatting not detailed here.
+
+==Insert Company/AusStage Heading==
+
+AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to AusStage, search and retrieve information about
+
+  * company and performer histories
+  * maps, tours and
+  * links to related material
+
+all at www.ausstage.edu.au. For free.
+
+AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies know what you thought of the production you’re seeing right now. You can use your phone to send a text message or, if you’re a tweeter you can use Twitter or, if you’d like to jump on the web and use the mobile web site you could do that too.
+
+Don’t worry – AusStage doesn’t record or store ANY IDENTIFYING INFORMATION about you. In fact, it doesn’t even record the phone number or Twitter account you’ve used to respond so there’s no way that they, or the company whose show you’re talking about, can tell who you are, let alone contact you.
+
+Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn’t like.
+
+This project is being led by Flinders University alongside the companies and artists who you are seeing tonight. It has been funded by the National e-Research Architecture Taskforce (NeAT). 
+
+If you do decide that you’d like to have your say about what you see tonight your standard costs for SMS and network access apply. If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study.  
+
+^This research project has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892). For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on human.researchethics@flinders.edu.au.  Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to jonathan.bollen@flinders.edu.au^
