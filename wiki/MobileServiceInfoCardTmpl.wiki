@@ -5,7 +5,7 @@ Information cards might contain logos, icons and other images or formatting not 
 
 ==Insert Company/!AusStage Heading==
 
-AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to AusStage, search and retrieve information about
+!AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to !AusStage, search and retrieve information about
 
   * company and performer histories
   * maps, tours and
