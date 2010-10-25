@@ -3,7 +3,7 @@
 
 Information cards might contain logos, icons and other images or formatting not detailed here.
 
-==Insert Company/AusStage Heading==
+==Insert Company/!AusStage Heading==
 
 AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to AusStage, search and retrieve information about
 
@@ -13,9 +13,9 @@ AusStage documents the performing arts in Australia. Future generations, researc
 
 all at www.ausstage.edu.au. For free.
 
-AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies know what you thought of the production you’re seeing right now. You can use your phone to send a text message or, if you’re a tweeter you can use Twitter or, if you’d like to jump on the web and use the mobile web site you could do that too.
+!AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies know what you thought of the production you’re seeing right now. You can use your phone to send a text message or, if you’re a tweeter you can use Twitter or, if you’d like to jump on the web and use the mobile web site you could do that too.
 
-Don’t worry – AusStage doesn’t record or store ANY IDENTIFYING INFORMATION about you. In fact, it doesn’t even record the phone number or Twitter account you’ve used to respond so there’s no way that they, or the company whose show you’re talking about, can tell who you are, let alone contact you.
+Don’t worry – !AusStage doesn’t record or store ANY IDENTIFYING INFORMATION about you. In fact, it doesn’t even record the phone number or Twitter account you’ve used to respond so there’s no way that they, or the company whose show you’re talking about, can tell who you are, let alone contact you.
 
 Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn’t like.
 
