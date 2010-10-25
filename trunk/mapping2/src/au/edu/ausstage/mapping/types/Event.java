@@ -32,6 +32,9 @@ public class Event implements Comparable<Event> {
 	private String firstDate = null;
 	private String firstDisplayDate = null;
 	private String url = null;
+	private String venueId;
+	private String latitude;
+	private String longitude;
 	
 	/**
 	 * Constructor for this class
@@ -144,6 +147,42 @@ public class Event implements Comparable<Event> {
 	public int getFirstDateAsInt() {
 		String date = firstDate.replace("-", "");
 		return Integer.valueOf(date);
+	}
+	
+	public void setVenueId(String value) {
+		// check on the parameter
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("The parameter must be not be null or empty");
+		}
+		venueId = value;
+	}
+	
+	public String getVenueId() {
+		return venueId;
+	}
+	
+	public void setLatitude(String value) {
+		// check on the parameter
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("The parameter must be not be null or empty");
+		}
+		latitude = value;
+	}
+	
+	public String getLatitude() {
+		return latitude;
+	}
+	
+	public void setLongitude(String value) {
+		// check on the parameter
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("The parameter must be not be null or empty");
+		}
+		longitude = value;
+	}
+	
+	public String getLongitude() {
+		return longitude;
 	}
 
 	/*
