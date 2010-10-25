@@ -20,9 +20,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
-    <display-name>Aus-e-Stage Mapping Project (Google Maps API Migration)</display-name>
+    <display-name>Aus-e-Stage Mapping Service</display-name>
     <description>
-        This software updates the Mapping Service to use Google Maps API v3
+        Search the AusStage database and put the results on a map
     </description>
     <!-- Servlets -->
     <servlet>
@@ -57,7 +57,7 @@
     <servlet-mapping>
         <servlet-name>EventLookupServlet</servlet-name>
         <url-pattern>/events/*</url-pattern>
-    </servlet-mapping> 
+    </servlet-mapping>    
     <!-- Context Params to Share Common Information-->
     <context-param>
         <param-name>databaseConnectionString</param-name>
@@ -69,11 +69,11 @@
     </context-param>
     <context-param>
         <param-name>systemName</param-name>
-        <param-value>AusStage Mapping System Google Maps v3 Migration</param-value>
+        <param-value>AusStage Mapping System</param-value>
     </context-param>    
     <context-param>
        	<param-name>systemVersion</param-name>
-       	<param-value>1.0 (Alpha)</param-value>
+       	<param-value>1.0 (Beta)</param-value>
     </context-param>
     <context-param>
         <param-name>buildVersion</param-name>
@@ -86,6 +86,6 @@
     <context-param>
         <param-name>systemUrl</param-name>
         <!-- Include trailing slash -->
-        <param-value>http://beta.ausstage.edu.au/mapping2/</param-value>
+        <param-value>http://beta.ausstage.edu.au/mapping3/</param-value>
     </context-param>
 </web-app>

@@ -35,7 +35,7 @@ a:hover {
 #wrap {
 	width:1200px;
 	margin:0 auto;
-	background:#aaaaaa;
+	background: #aaaaaa;
 }
 #header {
 	height: 64px;
@@ -88,6 +88,7 @@ h1 {
 	font-size: 90%;
 	font-family:Helvetica,Arial;
     color:#333333;
+	min-height: 550px;
 }
 h2 {
 	margin:0 0 1em;
