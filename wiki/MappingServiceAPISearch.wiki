@@ -21,7 +21,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 = Parameters =
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || organisation, contributor, venue || No || ||
+|| task   || organisation, contributor, venue, event || No || ||
 || type   || name, id     || No || ||
 || query  || the search query || No || ||
 || format || json || Yes || json ||
@@ -415,6 +415,51 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=name&query=her+
     "suburb" : "Adelaide",
     "totalEventCount" : 68,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2965"
+  }
+]
+}}}
+
+== Event ID Search ==
+Conduct a search for the event with the id 71254
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=event&type=id&query=71254
+
+{{{
+[ { "firstDate" : "2007-06-17",
+    "firstDisplayDate" : "17 June 2007",
+    "id" : "71254",
+    "latitude" : "-34.919681",
+    "longitude" : "138.597095",
+    "name" : "Shane Warne: the Musical ",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=71254",
+    "venueid" : "10806"
+  } ]
+}}}
+
+== Event Name Search ==
+
+Conduct a search for events with the words "shane" and "warne" in the event name
+
+URL: http://beta.ausstage.edu.au/mapping3/search?task=event&type=name&query=shane+warne
+
+{{{
+[ { "firstDate" : "2008-03-21",
+    "firstDisplayDate" : "21 March 2008",
+    "id" : "85842",
+    "latitude" : "-37.814725",
+    "longitude" : "144.965902",
+    "name" : "Shane Warne The Musical: A Work In Progress",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=85842",
+    "venueid" : "655"
+  },
+  { "firstDate" : "2008-12-10",
+    "firstDisplayDate" : "10 December 2008",
+    "id" : "80487",
+    "latitude" : "-37.815039",
+    "longitude" : "144.967359",
+    "name" : "Shane Warne: the Musical ",
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=80487",
+    "venueid" : "83"
   }
 ]
 }}}
