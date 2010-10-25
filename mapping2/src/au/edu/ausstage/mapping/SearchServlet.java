@@ -32,7 +32,7 @@ public class SearchServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	
 	// declare private class constants
-	private final String[] TASK_TYPES    = {"organisation", "contributor", "venue"};
+	private final String[] TASK_TYPES    = {"organisation", "contributor", "venue", "event"};
 	private final String[] SEARCH_TYPES  = {"name", "id"};
 	private final String[] FORMAT_TYPES  = {"json"};
 	private final String[] SORT_TYPES    = {"name", "id"};
@@ -157,24 +157,27 @@ public class SearchServlet extends HttpServlet {
 			data = manager.doContributorSearch(searchType, query, formatType, sortType, limit);
 		} else if(taskType.equals("venue") == true) {
 			data = manager.doVenueSearch(searchType, query, formatType, sortType, limit);
-		}			
-			
-		// output the appropriate mime type
-		if(formatType.equals("html") == true) {
-			// output html mime type
-			response.setContentType("text/html; charset=UTF-8");
-		} else if(formatType.equals("xml") == true) {
-			// output xml mime type
-			response.setContentType("text/xml; charset=UTF-8");
-		} else if(formatType.equals("json") == true) {
-			// output json mime type
-			response.setContentType("application/json; charset=UTF-8");
+		} else if(taskType.equals("event") == true) {
+			data = manager.doEventSearch(searchType, query, formatType, sortType, limit);
 		}
 		
-		// output the results of the lookup
+		
+		// check to see if this is a jsonp request
+		if(InputUtils.isValid(request.getParameter("callback")) == false) {
+			// output json mime type
+			response.setContentType("application/json; charset=UTF-8");
+		} else {
+			// output the javascript mime type
+			response.setContentType("application/javascript; charset=UTF-8");
+		}
+		
+		// output the results of the search
 		PrintWriter out = response.getWriter();
-		out.print(data);
-	
+		if(InputUtils.isValid(request.getParameter("callback")) == true) {
+			out.print(JSONPManager.wrapJSON(data, request.getParameter("callback")));
+		} else {
+			out.print(data);
+		}
 	
 	} // end doGet method
 	

@@ -52,7 +52,7 @@ public class SearchManager {
 	
 	
 	/** 
-	 * A method to undertake a Organisation search
+	 * A method to undertake an Organisation search
 	 *
 	 * @param searchType the type of search to undertake
 	 * @param query      the search query to use
@@ -337,7 +337,7 @@ public class SearchManager {
 	
 	
 	/** 
-	 * A method to undertake a Organisation search
+	 * A method to undertake a Contributor search
 	 *
 	 * @param searchType the type of search to undertake
 	 * @param query      the search query to use
@@ -624,7 +624,7 @@ public class SearchManager {
 	 */
 	
 	/** 
-	 * A method to undertake a Organisation search
+	 * A method to undertake a Venue search
 	 *
 	 * @param searchType the type of search to undertake
 	 * @param query      the search query to use
@@ -761,7 +761,7 @@ public class SearchManager {
 		String data = null;		
 		if(formatType.equals("json") == true) {
 			if(sortType.equals("name") == true) {
-				data = createJSONOutput(list, ContributorList.CONTRIBUTOR_NAME_SORT);
+				data = createJSONOutput(list, VenueList.VENUE_NAME_SORT);
 			} else {
 				data = createJSONOutput(list, null);
 			}
@@ -915,6 +915,290 @@ public class SearchManager {
 		return list.toString();
 			
 	} 
+	
+	/*
+	 * Event Searching
+	 */
+	
+	/** 
+	 * A method to undertake an Event search
+	 *
+	 * @param searchType the type of search to undertake
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for the results
+	 * @param sortType   the way in which to sort the results
+	 * @param limit      the number to limit the search results
+	 */
+	public String doEventSearch(String searchType, String query, String formatType, String sortType, Integer limit) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(searchType) == false || InputUtils.isValid(query) == false) {
+			throw new IllegalArgumentException("All of the parameters to this method are required");
+		}
+		
+		// double check the parameter
+		if(searchType.equals("id") != true) {
+			if(InputUtils.isValidInt(limit, SearchServlet.MIN_LIMIT, SearchServlet.MAX_LIMIT) == false) {
+				throw new IllegalArgumentException("Limit parameter must be between '" + SearchServlet.MIN_LIMIT + "' and '" + SearchServlet.MAX_LIMIT + "'");
+			}
+		}
+		
+		if(InputUtils.isValid(formatType) == false) {
+			formatType = "json";
+		} 
+		
+		if(InputUtils.isValid(sortType) == false) {
+			sortType = "id";
+		}
+		
+		// get the results of the search
+		String data = null;
+		
+		if(searchType.equals("id") == true) {
+			data = doEventIdSearch(query, formatType);
+		} else {
+			data = doEventNameSearch(query, formatType, sortType, limit);
+		}
+	
+		// return the data
+		return data;		
+	}
+	
+	/**
+	 * A private method to undertake a Organisation id search
+	 *
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for the results
+	 *
+	 * @return           the results of the search
+	 */
+	private String doEventIdSearch(String query, String formatType) {
+		
+		// declare the SQL variables
+		String sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, latitude, longitude "
+				   + "FROM events, venue "
+				   + "WHERE eventid = ? "
+				   + "AND events.venueid = venue.venueid";
+				   
+		// define the paramaters
+		String[] sqlParameters = {query};
+		
+		// declare additional helper variables
+		EventList list     = new EventList();
+		Event     event    = null;
+		JSONArray jsonList = new JSONArray();
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		try {
+		
+			// move to the result record
+			resultSet.next();
+			
+			// build the event object
+			event = new Event(resultSet.getString(1));
+			event.setName(resultSet.getString(2));
+			event.setFirstDate(DateUtils.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+			event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+			event.setVenueId(resultSet.getString(6));
+			event.setLatitude(resultSet.getString(7));
+			event.setLongitude(resultSet.getString(8));
+			event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+		
+			// add the event to the list
+			list.addEvent(event);
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		 
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;		
+		
+		// determine how to format the result
+		String data = null;		
+		
+		if(formatType.equals("json") == true) {
+			data = createJSONOutput(list, null);
+		}
+		
+		// return the data
+		return data;
+			
+	}
+	
+	/**
+	 * A private method to undertake a venue name search
+	 *
+	 * @param query      the search query to use
+	 * @param formatType the type of data format for theresults
+	 * @param sortType   the sort order for the results
+	 * @param limit      the maximum number of search results
+	 *
+	 * @return           the search results encoded in the requested format
+	 */
+	private String doEventNameSearch(String query, String formatType, String sortType, Integer limit) {
+	
+		// sanitise the search query
+		query = sanitiseQuery(query);
+		
+		// declare the sql variables
+		String sql = "SELECT events.eventid, events.event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, latitude, longitude "
+				   + "FROM events, venue, search_event "
+				   + "WHERE CONTAINS(search_event.combined_all, ?, 1) > 0 "
+				   + "AND search_event.eventid = events.eventid "
+				   + "AND events.venueid = venue.venueid ";
+				   
+		// finalise the sql
+		if(sortType.equals("name") == true) {
+			sql += "ORDER BY event_name";
+		} else {
+			sql += "ORDER BY eventid";
+		}
+				   
+		// define the paramaters
+		String[] sqlParameters = {query};
+		
+		// declare additional helper variables
+		EventList  list      = new EventList();
+		Event      event     = null;
+		JSONArray  jsonList  = new JSONArray();
+		Integer    loopCount = 0;
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		// build the list of results
+		try {
+		
+			// loop through the resulset
+			while(resultSet.next() && loopCount < limit) {
+			
+				// build the event object
+				event = new Event(resultSet.getString(1));
+				event.setName(resultSet.getString(2));
+				event.setFirstDate(DateUtils.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				event.setVenueId(resultSet.getString(6));
+				event.setLatitude(resultSet.getString(7));
+				event.setLongitude(resultSet.getString(8));
+				event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+		
+				// add the venue to the list
+				list.addEvent(event);
+				
+				// increment the loop count
+				loopCount++;
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return jsonList.toString();
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		
+		// determine how to format the result
+		String data = null;		
+		if(formatType.equals("json") == true) {
+			if(sortType.equals("name") == true) {
+				data = createJSONOutput(list, EventList.EVENT_NAME_SORT);
+			} else {
+				data = createJSONOutput(list, null);
+			}
+		}
+		
+		// return the data
+		return data;
+	} 
+
+	/**
+	 * A method to take a group of events and output JSON encoded text
+	 *
+	 * @param eventList the list of organisations
+	 * @param sortOrder     the order to sort the list of organisations as defined in the OrganisationList class
+	 *
+	 * @return              the JSON encoded string
+	 */
+	@SuppressWarnings("unchecked")
+	private String createJSONOutput(EventList eventList, Integer sortOrder) {
+	
+		Set<Event> events = null;
+		
+		if(sortOrder != null) {
+			if(InputUtils.isValidInt(sortOrder, EventList.EVENT_ID_SORT, EventList.EVENT_NAME_SORT) != false) {
+				if(sortOrder == EventList.EVENT_ID_SORT) {
+					events = eventList.getSortedEvents(EventList.EVENT_ID_SORT);
+				} else {
+					events = eventList.getSortedEvents(EventList.EVENT_NAME_SORT);
+				}
+			} else {
+				events = eventList.getEvents();
+			}
+		} else {
+			events = eventList.getEvents();
+		}		
+	
+		// assume that all sorting and ordering has already been carried out
+		// loop through the list of organisations and add them to the new JSON objects
+		Iterator iterator = events.iterator();
+		
+		// declare helper variables
+		JSONArray  list   = new JSONArray();
+		JSONObject object = null;
+		Event      event  = null;
+		
+		while(iterator.hasNext()) {
+		
+			// get the organisation
+			event = (Event)iterator.next();
+			
+			// start a new JSON object
+			object = new JSONObject();
+			
+			// build the object
+			object.put("id", event.getId());
+			object.put("name", event.getName());
+			object.put("firstDate", event.getFirstDate());
+			object.put("firstDisplayDate", event.getFirstDisplayDate());
+			object.put("venueid", event.getVenueId());
+			object.put("latitude", event.getLatitude());
+			object.put("longitude", event.getLongitude());
+			object.put("url", event.getUrl());
+			
+			// add the new object to the array
+			list.add(object);		
+		}
+		
+		// return the JSON encoded string
+		return list.toString();
+	}
 	
 	/**
 	 * A private method to sanitise the search query by:
