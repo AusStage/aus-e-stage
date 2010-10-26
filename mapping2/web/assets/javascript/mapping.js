@@ -17,7 +17,7 @@
  */
  
 // declare global variables
-var BASE_URL = "/mapping2/";
+var BASE_URL = "/mapping3/";
 var DEFAULT_SEARCH_LIMIT = "25";
 var UPDATE_DELAY = 500;
 var searching_underway_flag = false;
