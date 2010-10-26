@@ -1,12 +1,16 @@
 #summary Default Sidebar for all Wiki pages
 
  * !HowTo articles
-   * [AbsDataFix Building ABS Overlays]
-   * [SourcingAbsData Sourcing data from the ABS]
-   * [SubversionRepository Using our Subversion Repository]
-   * [WikiImages Using Images in the Wiki]
-   * [GoogleEarthImageOverlay Image Overlays in Google Earth]
-   * [UsingTweetGatherer Using the Tweet Gatherer App]
+   * Working With Maps
+     * [GoogleEarthImageOverlay Image Overlays in Google Earth]
+     * [MapInfoToKML Converting MapInfo Data to KML]
+   * Aus-e-Stage Software
+     * [UsingTweetGatherer Using the Tweet Gatherer App]
+   * External Data
+     * [SourcingAbsData Sourcing data from the ABS]
+   * Project Management Tasks
+     * [SubversionRepository Using our Subversion Repository]
+     * [WikiImages Using Images in the Wiki]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
    * [MappingService Mapping Service]
