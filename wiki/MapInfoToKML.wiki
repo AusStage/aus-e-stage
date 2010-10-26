@@ -7,10 +7,14 @@ In order to display ABS statistical data in our mapping service, we need create 
 
 == Construction Procedure ==
 
-1.	Download and install [http://home.gdal.org/fwtools/FWTools247.exe FWtools 2.4.7 for Windows]. Follow the instructions on page [http://fwtools.maptools.org/windows-main.html]. Open the *setfw.bat* and *openev.bat* scripts in the FWTools install directory to setup the environment variables appropriately. To run ogr2ogr, select  *Start -> All Programs menu -> FWTools 2.4.7 -> FWTools Shell*. FWTools shell launches a DOS shell (cmd.exe) with the environment pre-initialized to use all the FWTools commands.
+1.	Download and install [http://home.gdal.org/fwtools/FWTools247.exe FWtools 2.4.7 for Windows]. Follow the instructions on page [http://fwtools.maptools.org/windows-main.html]. Open the *setfw.bat* and *openev.bat* scripts in the FWTools install directory to setup the environment variables appropriately. 
+
+To run ogr2ogr, select  *Start -> All Programs menu -> FWTools 2.4.7 -> FWTools Shell*. FWTools shell launches a DOS shell (cmd.exe) with the environment pre-initialized to use all the FWTools commands.
 
 2.	Type the following command in the Dos shell mentioned above. Specify the directory as part of the file path if necessary.
-ogr2ogr -f "KML" -where "state_code_2010 = 7" LGA-7-NT.kml LGA10aAust.mid
+
+{{{ogr2ogr -f "KML" -where "state_code_2010 = 7" LGA-7-NT.kml LGA10aAust.mid}}}
+
 This command will extract the local government areas from the Northern Territory into a file in the KML format. For more details please refer to the Thoughts by Techxplorer website.
 
 
