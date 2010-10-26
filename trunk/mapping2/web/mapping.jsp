@@ -70,6 +70,9 @@
 					<p>
 						This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
 						alternate names, and previous names. Please wait for the search to complete before exploring the results.
+						<br/>&nbsp;<br/>
+						At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
+						that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database. 
 					</p>
 					<div id="messages">
 						<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
