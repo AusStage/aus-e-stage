@@ -1,5 +1,3 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"%>
-<%
 /*
  * This file is part of the AusStage Mapping Service
  *
@@ -17,14 +15,25 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
  */
-%>
-<div id="sidebar">
-	<div id="panel">
-		<h3>Main Menu</h3>
-		<ul>
-			<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
-			<li><a href="/mapping2/" title="Networks Service Homepage">Mapping Homepage</a></li>
-		</ul>
-		<div id="hidePanel"><a href="#" style="color: #fff;">&laquo; Hide Menu</a></div>
-	</div>
-</div>
+ 
+/**
+ * Common functions used across more than one page in the site
+ */
+
+// show / hide the menu
+$(document).ready(function(){
+	// add a click handler to the hide menu link
+	$("#hidePanel").click(function(){
+		$("#panel").animate({marginLeft:"-175px"}, 500 );
+		$("#sidebar").animate({width:"0px", opacity:0}, 400 );
+		$("#showPanel").show("normal").animate({width:"18px", opacity:1}, 200);
+		$("#main").animate({marginLeft:"30px"}, 500);
+	});
+	// add a click handler to the show menu link
+	$("#showPanel").click(function(){
+		$("#main").animate({marginLeft:"200px"}, 200);
+		$("#panel").animate({marginLeft:"0px"}, 400 );
+		$("#sidebar").animate({width:"175px", opacity:1}, 400 );
+		$("#showPanel").animate({width:"0px", opacity:0}, 600).hide("slow");
+	});
+});
