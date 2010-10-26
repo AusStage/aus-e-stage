@@ -81,14 +81,12 @@ h1 {
 }
 
 #main {
-	float:right;
-	width:986px;
-	padding:10px;
+	margin-left:200px;
 	background:#ffffff;
 	font-size: 90%;
-	font-family:Helvetica,Arial;
-    color:#333333;
+    color: #333333;
 	min-height: 550px;
+	padding: 5px;
 }
 h2 {
 	margin:0 0 1em;
@@ -102,16 +100,14 @@ h3 {
 	
 }
 
-blockquote
-	{background-color:#eeeeee;
-}
-
+/* styles for the sidebar */
 #sidebar {
-	float:left;
-	width:174px;
+	float: left;
+	font-size:90%;
+	width: 174px;
 	padding-right:10px;
-	padding-left: 10px;
 	background-color: #aaaaaa;
+	overflow: hidden;
 }
 
 #sidebar ul {
@@ -122,7 +118,7 @@ blockquote
 
 #sidebar ul a {
 	color: #fff;
-	font-size: 90%;
+	/*font-size: 90%;*/
 	text-decoration: none;
 }
 
@@ -132,11 +128,43 @@ blockquote
 
 #sidebar h3 {
 	color: #fff;
-	font-size: 90%;
 	margin-bottom: 0px;
 	padding-bottom: 0px;
 }
 
+#showPanel { 
+	position:inherit; 
+	z-index:2; 
+	left:0; 
+	float:left; 
+	padding-top:40px; 
+	display:none; 
+	width:0px; 
+	height:100px;
+	cursor:pointer;
+
+}
+
+#showPanel span {
+	display:block; 
+	font-size: 150%;
+	height:30px; 
+	margin-top:20px; 
+	/*padding:0px 0px 10px 10px;*/
+	width:10px; 
+	background: #aaaaaa;
+	color: #fff;
+}
+
+#panel {
+	padding-left: 10px;
+}
+
+#hidepanel {
+	color: #fff;
+}
+
+/* styles for the footer */
 #footer {
 	clear:both;
 	padding:5px 10px;
