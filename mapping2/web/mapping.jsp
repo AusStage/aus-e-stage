@@ -29,6 +29,8 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.3.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.5.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-0.1.7.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.06.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 </head>
@@ -65,6 +67,30 @@
 							</tbody>
 						</table>
 					</form>
+					<p>
+						This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
+						alternate names, and previous names. Please wait for the search to complete before exploring the results.
+					</p>
+					<div id="messages">
+						<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+							<p>
+								<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+								Search is underway...
+							</p>
+						</div>
+						<br/>&nbsp;
+					</div>
+					<h3>Search Results</h3>
+					<div id="accordion">
+						<h3><a href="#">Contributors</a></h3>
+							<div id="contributor_results">Contributor Results</div>
+						<h3><a href="#">Organisations</a></h3>
+							<div id="organisation_results">Organisation Results</div>
+						<h3><a href="#">Venues</a></h3>
+							<div id="venue_results">Venue Results</div>
+						<h3><a href="#">Events</a></h3>
+							<div id="event_results">Event Results</div>
+					</div>
 				</div>
 				<div id="tabs-2">
 					<h3>Map of the Search Results</h3>
