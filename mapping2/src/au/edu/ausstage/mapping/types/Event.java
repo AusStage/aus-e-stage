@@ -163,9 +163,9 @@ public class Event implements Comparable<Event> {
 	
 	public void setLatitude(String value) {
 		// check on the parameter
-		if(InputUtils.isValid(value) == false) {
-			throw new IllegalArgumentException("The parameter must be not be null or empty");
-		}
+//		if(InputUtils.isValid(value) == false) {
+//			throw new IllegalArgumentException("The parameter must be not be null or empty");
+//		}
 		latitude = value;
 	}
 	
@@ -175,9 +175,9 @@ public class Event implements Comparable<Event> {
 	
 	public void setLongitude(String value) {
 		// check on the parameter
-		if(InputUtils.isValid(value) == false) {
-			throw new IllegalArgumentException("The parameter must be not be null or empty");
-		}
+//		if(InputUtils.isValid(value) == false) {
+//			throw new IllegalArgumentException("The parameter must be not be null or empty");
+//		}
 		longitude = value;
 	}
 	
