@@ -254,6 +254,14 @@ table.searchResults tfoot {
 	color: purple!important;
 }
 
+/* Styles for the tabs */
+
+.tab-container {
+	min-height: 545px;
+	min-width: 990px;
+	display: inline-block;
+}
+
 /* Styles for the Tipsy Library */
 .tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }
 .tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }

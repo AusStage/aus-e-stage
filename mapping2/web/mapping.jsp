@@ -29,7 +29,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.3.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.5.custom.min.js"></script>
 	<!-- custom code -->
-	<script type="text/javascript" src="assets/javascript/common.js"></script>
+	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 </head>
 <div id="wrap">
 	<div id="header"><h1>AusStage Mapping Service</h1></div>
@@ -37,7 +37,20 @@
 	<jsp:include page="sidebar.jsp"/>
 	<div id="showPanel"><span>&raquo;</span></div>
 	<div id="main">
-		<h2>Page Header</h2>
+		<div id="tabs" class="tab-container">
+			<ul>
+				<li><a href="#tabs-1">Search</a></li>
+				<li><a href="#tabs-2">Map</a></li>
+			</ul>
+			<div class="ui-layout-content">
+				<div id="tabs-1">
+					<h3>Search the AusStage Database</h3>
+				</div>
+				<div id="tabs-2">
+					<h3>Map of the Search Results</h3>
+				</div>
+			</div>
+		</div>
 	</div>
 	<jsp:include page="footer.jsp"/>
 </div>
