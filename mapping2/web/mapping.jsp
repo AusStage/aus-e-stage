@@ -28,6 +28,7 @@
 	<!-- libraries -->
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.3.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.5.custom.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-0.1.7.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 </head>
@@ -42,9 +43,28 @@
 				<li><a href="#tabs-1">Search</a></li>
 				<li><a href="#tabs-2">Map</a></li>
 			</ul>
-			<div class="ui-layout-content">
+			<div class="ui-layout-content" style="font-size:90%">
 				<div id="tabs-1">
 					<h3>Search the AusStage Database</h3>
+					<form action="/mapping/" method="get" id="search" name="search">
+						<table class="formTable">
+							<tbody>
+							<tr>
+								<th scope="row">
+									<label id="query-label" for="query">Search Terms: </label>
+								</th>
+								<td>
+									<input type="text" size="80" id="query" name="query" title="Enter a few search terms into this box"/>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="submit" name="submit" id="search_btn" value="Search"/>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</form>
 				</div>
 				<div id="tabs-2">
 					<h3>Map of the Search Results</h3>

@@ -34,9 +34,23 @@ $(document).ready(function(){
 		$("#sidebar").animate({width:"175px", opacity:1}, 400 );
 		$("#showPanel").animate({width:"0px", opacity:0}, 600).hide("slow");
 	});
+	
+	// set the tabs
+	$("#tabs").tabs();
+	
+	// style the buttons
+	$("button, input:submit").button();
+	
+	// associate the tipsy library with the form elements
+	$('#search [title]').tipsy({trigger: 'focus', gravity: 'n'});
 });
  
 // setup the analytics tabs
 $(document).ready(function() {
-	$("#tabs").tabs();
+	
+});
+
+// common theme actions
+$(document).ready(function() {
+	
 });
