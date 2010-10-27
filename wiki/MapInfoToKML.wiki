@@ -28,7 +28,7 @@ In some cases, you will find that one or more polygons are not filled with white
 
 *a)*    Examine the KML file and locate the polygons with problem, see the Figure [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/kml-By-State.png KML By State]
 
-*b)*	Extract the polygon with problem and create a KML file (*polygon.kml*) for it by adding a KML header element. Please see [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/broken-down-procedure.png break down procedure Figure] for the overview of the broken down procedure as described in the following steps.
+*b)*	Extract the polygon with problem and create a KML file (*polygon.kml*) for it by adding a KML header element. Please see the Figure [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/broken-down-procedure.png Break Down Procedure]  for the overview of the broken down procedure as described in the following steps.
 
 *c)*	To edit the polygon features (break down the polygon) in ArcMap, we need an ESRI shapefile format file of that polygon. Type the following command in the FWTools Shell as mentioned in _step 2_ to transform the KML file with the problem polygon into an ESRI shapefile format (*mydata.shp*). Specify the directory as part of the file path if necessary.
 
@@ -41,14 +41,4 @@ In some cases, you will find that one or more polygons are not filled with white
 
 *f)*	Open the file *sub-polygons.kml* in Google Earth to make sure that all the polygons has been filled with colour. If not, continue step d to further break down the polygon.
 
-*g)*	Manually edit the *state.kml* to replace the problem polygon with sub-polygons created in step e. See the following figure. [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/replace-with-sub-polygons.png]
-
-
-
-
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+*g)*	Manually edit the *state.kml* to replace the problem polygon with sub-polygons created in step e. See the Figure [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/replace-with-sub-polygons.png Replace the Problem Polygon].
