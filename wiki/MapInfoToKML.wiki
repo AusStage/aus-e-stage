@@ -40,6 +40,7 @@ In some cases, you will find that one or more polygons are not filled with white
 *e)*	Convert the shapefile which contains several sub-polygons into a KML file (*sub-polygons.kml*) by selecting *Conversion Tools -> To KML -> Layer To KML* in the ArcToolbox. 
 
 *f)*	Open the file *sub-polygons.kml* in Google Earth to make sure that all the polygons has been filled with colour. 
+
 If not, continue *step d* to further break down the polygon.
 
 *g)*	Manually edit the *state.kml* to replace the problem polygon with sub-polygons created in *step e*. See the Figure [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/replace-with-sub-polygons.png Replace the Problem Polygon].
