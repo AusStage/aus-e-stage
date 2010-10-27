@@ -23,19 +23,19 @@ This command will extract the local government areas from the Northern Territory
 
 *3.*	Open the resulting KML file (an overlay, named *state.kml*) in Google Earth, adjust the transparency of that overlay from completely transparent to fully opaque whenever it is selected in the 3D viewer by dragging the transparency slider under the Places panel. 
 
-In some cases, you will find that one or more polygons are not filled with white color. One of the reasons is that the polygon has too many coordinates (>34,000 coordinates limit) to be displayed correctly in Google earth. The following steps can solve this problem by breaking down the polygon with too many coordinate into several sub polygons in ArcMap.
+In some cases, you will find that one or more polygons are not filled with white color. One of the reasons is that the polygon has too many coordinates (>34,000 coordinates limit) to be displayed correctly in Google earth. The following steps can solve this problem by breaking down the polygon with too many coordinate into several sub polygons in !ArcMap.
 
 
 *a)*    Examine the KML file and locate the polygons with problem, see the Figure [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/kml-By-State.png KML By State]
 
 *b)*	Extract the polygon with problem and create a KML file (*polygon.kml*) for it by adding a KML header element. Please see the Figure [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/broken-down-procedure.png Break Down Procedure]  for the overview of the broken down procedure as described in the following steps.
 
-*c)*	To edit the polygon features (break down the polygon) in ArcMap, we need an ESRI shapefile format file of that polygon. Type the following command in the FWTools Shell as mentioned in *step 2* to transform the KML file with the problem polygon into an ESRI shapefile format (*mydata.shp*). Specify the directory as part of the file path if necessary.
+*c)*	To edit the polygon features (break down the polygon) in !ArcMap, we need an ESRI shapefile format file of that polygon. Type the following command in the FWTools Shell as mentioned in *step 2* to transform the KML file with the problem polygon into an ESRI shapefile format (*mydata.shp*). Specify the directory as part of the file path if necessary.
 
        {{{ ogr2ogr -f "ESRI Shapefile"  mydata.shp polygon.kml }}}
 
 
-*d)*	Start ArcMap with a new empty map, add layers to the new map by selecting *mydata.shp*. Following the instructions about splitting polygon features on [http://webhelp.esri.com/arcgisdesktop/9.3/index.cfm?TopicName=Splitting_polygon_features ArcGIS Desktop 9.3 Help] website to break down the polygon into several sub-polygons by drawing one or more sketches.
+*d)*	Start !ArcMap with a new empty map, add layers to the new map by selecting *mydata.shp*. Following the instructions about splitting polygon features on [http://webhelp.esri.com/arcgisdesktop/9.3/index.cfm?TopicName=Splitting_polygon_features ArcGIS Desktop 9.3 Help] website to break down the polygon into several sub-polygons by drawing one or more sketches.
 
 *e)*	Convert the shapefile which contains several sub-polygons into a KML file (*sub-polygons.kml*) by selecting *Conversion Tools -> To KML -> Layer To KML* in the !ArcToolbox. 
 
