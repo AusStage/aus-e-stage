@@ -2,20 +2,27 @@
 
 == Introduction ==
 
-In order to display ABS statistical data in our mapping service, we need create map overlays in a KML format using ABS geographic information first. What we have is [http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1259.0.30.001July%202010?OpenDocument Local Government Area ASGC Ed 2010 Digital Boundaries in MapInfo Interchange Format and ESRI Shapefile Format] from the ABS website. To construct an ABS overlay which can be used in Google Earth, we need to convert a MapInfo or ESRI Shapefile format into a KML format. [http://www.gdal.org/ogr2ogr.html ogr2ogr] is used for this purpose, see the following figure. This is a command line utility used to convert and manipulate geospatial data from the [http://www.gdal.org/index.html Geospatial Data Abstraction Library]. The best way to get this utility in ready-to-use form is to download the latest [http://fwtools.maptools.org/ FWTools] kit. [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/ogr2ogr.png]
+In order to display ABS statistical data in our mapping service, we need create map overlays in a KML format using ABS geographic information first. What we have is [http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1259.0.30.001July%202010?OpenDocument Local Government Area ASGC Ed 2010 Digital Boundaries in MapInfo Interchange Format and ESRI Shapefile Format] from the ABS website. 
+
+To construct an ABS overlay which can be used in Google Earth, we need to convert a MapInfo or ESRI Shapefile format into a KML format. [http://www.gdal.org/ogr2ogr.html ogr2ogr] is used for this purpose, see the following figure. This is a command line utility used to convert and manipulate geospatial data from the [http://www.gdal.org/index.html Geospatial Data Abstraction Library]. The best way to get this utility in ready-to-use form is to download the latest [http://fwtools.maptools.org/ FWTools] kit. [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/ogr2ogr.png]
 
 
 == Construction Procedure ==
 
-1.	Download and install [http://home.gdal.org/fwtools/FWTools247.exe FWtools 2.4.7 for Windows]. Follow the instructions on page [http://fwtools.maptools.org/windows-main.html]. Open the *setfw.bat* and *openev.bat* scripts in the FWTools install directory to setup the environment variables appropriately. 
+*1.*	Download and install [http://home.gdal.org/fwtools/FWTools247.exe FWtools 2.4.7 for Windows]. Follow the instructions on page [http://fwtools.maptools.org/windows-main.html]. Open the *setfw.bat* and *openev.bat* scripts in the FWTools install directory to setup the environment variables appropriately. 
 
 To run ogr2ogr, select  *Start -> All Programs menu -> FWTools 2.4.7 -> FWTools Shell*. FWTools shell launches a DOS shell (cmd.exe) with the environment pre-initialized to use all the FWTools commands.
 
-2.	Type the following command in the Dos shell mentioned above. Specify the directory as part of the file path if necessary.
+
+*2.*	Type the following command in the Dos shell mentioned above. Specify the directory as part of the file path if necessary.
 
 {{{ogr2ogr -f "KML" -where "state_code_2010 = 7" LGA-7-NT.kml LGA10aAust.mid}}}
 
-This command will extract the local government areas from the Northern Territory into a file in the KML format. For more details please refer to the Thoughts by Techxplorer website.
+This command will extract the local government areas from the Northern Territory into a file in the KML format. For more details please refer to the [http://techxplorer.com/2010/06/08/converting-map-data-into-kml/ Thoughts by Techxplorer] website.
+
+
+
+
 
 
 
