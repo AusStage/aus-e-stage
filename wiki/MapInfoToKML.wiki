@@ -21,7 +21,13 @@ To run ogr2ogr, select  *Start -> All Programs menu -> FWTools 2.4.7 -> FWTools 
 This command will extract the local government areas from the Northern Territory into a file in the KML format. For more details please refer to the [http://techxplorer.com/2010/06/08/converting-map-data-into-kml/ Thoughts by Techxplorer] website.
 
 
-*3.*	Open the resulting KML file (an overlay, named *state.kml*) in Google Earth, adjust the transparency of that overlay from completely transparent to fully opaque whenever it is selected in the 3D viewer by dragging the transparency slider under the Places panel. In some cases, you will find that one or more polygons are not filled with white color. One of the reasons is that the polygon has too many coordinates (>34,000 coordinates limit) to be displayed correctly in Google earth. The following steps can solve this problem by breaking down the polygon with too many coordinate into several sub polygons in ArcMap.
+*3.*	Open the resulting KML file (an overlay, named *state.kml*) in Google Earth, adjust the transparency of that overlay from completely transparent to fully opaque whenever it is selected in the 3D viewer by dragging the transparency slider under the Places panel. 
+
+In some cases, you will find that one or more polygons are not filled with white color. One of the reasons is that the polygon has too many coordinates (>34,000 coordinates limit) to be displayed correctly in Google earth. The following steps can solve this problem by breaking down the polygon with too many coordinate into several sub polygons in ArcMap.
+
+
+
+
 
 
 
