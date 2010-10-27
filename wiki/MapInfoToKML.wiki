@@ -16,7 +16,7 @@ To run ogr2ogr, select  *Start -> All Programs menu -> FWTools 2.4.7 -> FWTools 
 
 *2.*	Type the following command in the Dos shell mentioned above. Specify the directory as part of the file path if necessary.
 
-{{{ogr2ogr -f "KML" -where "state_code_2010 = 7" LGA-7-NT.kml LGA10aAust.mid}}}
+  {{{ogr2ogr -f "KML" -where "state_code_2010 = 7" LGA-7-NT.kml LGA10aAust.mid}}}
 
 This command will extract the local government areas from the Northern Territory into a file in the KML format. For more details please refer to the [http://techxplorer.com/2010/06/08/converting-map-data-into-kml/ Thoughts by Techxplorer] website.
 
@@ -32,7 +32,7 @@ In some cases, you will find that one or more polygons are not filled with white
 
 *c)*	To edit the polygon features (break down the polygon) in ArcMap, we need an ESRI shapefile format file of that polygon. Type the following command in the FWTools Shell as mentioned in _step 2_ to transform the KML file with the problem polygon into an ESRI shapefile format (*mydata.shp*). Specify the directory as part of the file path if necessary.
 
-{{{ ogr2ogr -f "ESRI Shapefile"  mydata.shp polygon.kml }}}
+       {{{ ogr2ogr -f "ESRI Shapefile"  mydata.shp polygon.kml }}}
 
 
 
