@@ -28,8 +28,7 @@ In some cases, you will find that one or more polygons are not filled with white
 
 *a)*	Examine the KML file and locate the polygons with problem, see the Figure [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/kml-By-State.png KML By State]
 
-
-
+*b)*	Extract the polygon with problem and create a KML file (*polygon.kml*) for it by adding a KML header element. Please see [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/broken-down-procedure.png break down procedure Figure]for the overview of the broken down procedure as described in the following steps.
 
 
 
