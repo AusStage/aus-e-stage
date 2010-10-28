@@ -45,7 +45,7 @@ To export the entire dataset follow these steps:
    # properties-file: is the location of the properties file created in step 2
    # format-type: is one of the listed formats above
    # output-file: is the name of the output file to create (including path information)
-   {{{java -Xmx1024m -Xms512m -jar AusStageRdfExport.jar -tasktype export-network-data -properties properties-file -format format-type -output output-file}}}
+   {{{java -Xmx1024m -Xms512m -jar AusStageRdfExport.jar -task export-network-data -properties properties-file -format format-type -output output-file}}}
  # If no format is specified the default format 'RDF/XML' will be used
  # The application will take a short time to complete and the output will look like this:
 
