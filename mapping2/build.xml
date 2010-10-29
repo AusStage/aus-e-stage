@@ -450,10 +450,11 @@
 
 -->
 
-  <target name="reload" depends="clean,compile"
+<!--  <target name="reload" depends="clean,compile"
+   description="Reload application on servlet container"> -->
+
+<target name="reload" depends="compile"
    description="Reload application on servlet container">
-
-
     <!-- Experiment -->
     <!--
     <reload url="${manager.url}"
