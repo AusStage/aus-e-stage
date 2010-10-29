@@ -1225,7 +1225,8 @@ public class SearchManager {
 		//query = query.replaceAll("\\p{P}+", "");
 		
 		// rewrite the search terms
-		query = query.replace(" ", " and ");
+		query = query.replace(" ", "% and %");
+		query = "%" + query + "%";
 		
 		// return the sanitised query
 		return query;	
