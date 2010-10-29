@@ -31,8 +31,8 @@ import au.edu.ausstage.utils.*;
 public class RdfExport {
 
 	// Version information 
-	private static final String VERSION    = "1.1.1";
-	private static final String BUILD_DATE = "2010-09-27";
+	private static final String VERSION    = "1.1.2";
+	private static final String BUILD_DATE = "2010-10-29";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
@@ -71,7 +71,7 @@ public class RdfExport {
 		if(InputUtils.isValid(taskType, TASK_TYPES) == false || InputUtils.isValid(propsPath) == false) {
 			// output usage instructions
 			System.err.println("ERROR: the following parameters are expected");
-			System.err.println("-tasktype   the type of task to undertake");
+			System.err.println("-task   the type of task to undertake");
 			System.err.println("-properties the location of the properties file");
 			System.err.println("-format     (optional) the data format used in an export task");
 			System.err.println("-output     (optional) the output file to create for an export task");
