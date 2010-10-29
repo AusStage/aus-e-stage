@@ -17,10 +17,12 @@
  */
  
 // declare global variables
-var BASE_URL = "/mapping3/";
+var BASE_URL = "/mapping2/";
 var DEFAULT_SEARCH_LIMIT = "25";
 var UPDATE_DELAY = 500;
 var searching_underway_flag = false;
+
+var LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>The limit of ' + DEFAULT_SEARCH_LIMIT + ' records has been reached.<br/>Please adjust your search query if the result you are looking for is missing.</p></di>';
  
 // show / hide the menu
 $(document).ready(function(){
@@ -56,7 +58,21 @@ $(document).ready(function(){
 	$('#search [title]').tipsy({trigger: 'focus', gravity: 'n'});
 	
 	// setup the accordian
-	$("#accordion").accordion({ active: false, collapsible: true, autoHeight: false });
+	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
+	
+	// setup a handler for the start of an ajax request
+	$("#message_text").ajaxSend(function(e, xhr, settings) {
+		// determine what type of request has been made & update the message text accordingly
+		if(settings.url.indexOf("contributor", 0) != -1) {
+			$(this).text("Contributor search is underway...");
+		} else if(settings.url.indexOf("organisation", 0) != -1) {
+			$(this).text("Organisation search is underway...");
+		} else if(settings.url.indexOf("venue", 0) != -1) {
+			$(this).text("Venue search is underway...");
+		} else if(settings.url.indexOf("event", 0) != -1) {
+			$(this).text("Event search is underway...");
+		}
+	});
 	
 	// setup the search form
 	$("#search").validate({
@@ -130,6 +146,12 @@ function clearAccordian() {
 	$("#organisation_results").empty();
 	$("#venue_results").empty();
 	$("#event_results").empty();
+	
+	// reset the headings
+	$("#contributor_heading").empty().append("Contributors");
+	$("#organisation_heading").empty().append("Organisations");
+	$("#venue_heading").empty().append("Venues");
+	$("#event_heading").empty().append("Events");
 
 };
 
@@ -142,14 +164,15 @@ function updateMessages() {
 	} else {
 		setTimeout("updateMessages()", UPDATE_DELAY);
 	}
-}		
+}	
 
 // a function to build the contributor search results
 function buildContributorSearchResults(data) {
 
 	var list = "<ul>";
+	var i = 0;
 	
-	for(var i = 0; i < data.length; i++) {
+	for(i; i < data.length; i++) {
 		list += "<li>";
 		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + " " + data[i].lastName + ' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a> <span title="Events to be Mapped">' + data[i].mapEventCount + '</span> / <span title="Total Events">' + data[i].totalEventCount + "</span>"
 		list += "</li>";
@@ -158,10 +181,14 @@ function buildContributorSearchResults(data) {
 	list += "</ul>";
 	
 	$("#contributor_results").append(list);
+	
+	if(i == 25) {
+		$("#contributor_results").append(LIMIT_REACHED_MSG);
+		$("#contributor_heading").empty().append("Contributors (25+)");
+	} else {
+		$("#contributor_heading").empty().append("Contributors (" + i + ")");
+	}
 
-	console.log("got some Contributor data");
-	console.log(data);
-	console.log("end of data");
 }
 
 // a function to build the organisation search results
@@ -169,7 +196,9 @@ function buildOrganisationSearchResults(data) {
 
 	var list = "<ul>";
 	
-	for(var i = 0; i < data.length; i++) {
+	var i = 0;
+	
+	for(i; i < data.length; i++) {
 		list += "<li>";
 		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a> <span title="Events to be Mapped">' + data[i].mapEventCount + '</span> / <span title="Total Events">' + data[i].totalEventCount + "</span>";
 		list += "</li>";
@@ -178,10 +207,14 @@ function buildOrganisationSearchResults(data) {
 	list += "</ul>";
 	
 	$("#organisation_results").append(list);
+	
+	if(i == 25) {
+		$("#organisation_results").append(LIMIT_REACHED_MSG);
+		$("#organisation_heading").empty().append("Organisations (25+)");
+	} else {
+		$("#organisation_heading").empty().append("Organisations (" + i + ")");
+	}
 
-	console.log("got some Organisation data");
-	console.log(data);
-	console.log("end of data");
 }
 
 // a function to build the contributor search results
@@ -189,7 +222,9 @@ function buildVenueSearchResults(data) {
 
 	var list = "<ul>";
 	
-	for(var i = 0; i < data.length; i++) {
+	var i = 0;
+	
+	for(i; i < data.length; i++) {
 		list += "<li>";
 		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + ", " + data[i].suburb + '</a> <span title="Total Events">' + data[i].totalEventCount + "</span>";
 		list += "</li>";
@@ -199,9 +234,13 @@ function buildVenueSearchResults(data) {
 	
 	$("#venue_results").append(list);
 	
-	console.log("got some Venue data");
-	console.log(data);
-	console.log("end of data");
+	if(i == 25) {
+		$("#venue_results").append(LIMIT_REACHED_MSG);
+		$("#venue_heading").empty().append("Venues (25+)");
+	} else {
+		$("#venue_heading").empty().append("Venues (" + i + ")");
+	}
+
 }
 
 // a function to build the contributor search results
@@ -209,7 +248,9 @@ function buildEventSearchResults(data) {
 
 	var list = "<ul>";
 	
-	for(var i = 0; i < data.length; i++) {
+	var i = 0;
+	
+	for(i; i < data.length; i++) {
 		list += "<li>";
 		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a>';
 		list += "</li>";
@@ -218,10 +259,15 @@ function buildEventSearchResults(data) {
 	list += "</ul>";
 
 	$("#event_results").append(list);
-
-	console.log("got some Event data");
-	console.log(data);
-	console.log("end of data");
+	
+	if(i == 25) {
+		$("#event_results").append(LIMIT_REACHED_MSG);
+		$("#event_heading").empty().append("Events (25+)");
+	} else {
+		$("#event_heading").empty().append("Events (" + i + ")");
+	}
+	
+	// update the search underway flag
 	searching_underway_flag = false;
 }
 

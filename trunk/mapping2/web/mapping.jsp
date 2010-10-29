@@ -22,6 +22,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
+	<title>AusStage Mapping Service (Beta)</title>
 	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.5.custom.css"/>
 	<jsp:include page="analytics.jsp"/>
@@ -56,7 +57,7 @@
 									<label id="query-label" for="query">Search Terms: </label>
 								</th>
 								<td>
-									<input type="text" size="80" id="query" name="query" title="Enter a few search terms into this box"/>
+									<input type="text" size="40" id="query" name="query" title="Enter a few search terms into this box"/>
 								</td>
 							</tr>
 							<tr>
@@ -78,20 +79,26 @@
 						<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
 							<p>
 								<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-								Search is underway...
+								<span id="message_text">Search is underway...</span>
 							</p>
 						</div>
 						<br/>&nbsp;
 					</div>
 					<h3>Search Results</h3>
-					<div id="accordion">
-						<h3><a href="#">Contributors</a></h3>
+					<div class="accordion">
+						<h3><a href="#" id="contributor_heading">Contributors</a></h3>
 							<div id="contributor_results">Contributor Results</div>
-						<h3><a href="#">Organisations</a></h3>
+					</div>
+					<div class="accordion">
+						<h3><a href="#" id="organisation_heading">Organisations</a></h3>
 							<div id="organisation_results">Organisation Results</div>
-						<h3><a href="#">Venues</a></h3>
+					</div>
+					<div class="accordion">
+						<h3><a href="#" id="venue_heading">Venues</a></h3>
 							<div id="venue_results">Venue Results</div>
-						<h3><a href="#">Events</a></h3>
+					</div>
+					<div class="accordion">
+						<h3><a href="#" id="event_heading">Events</a></h3>
 							<div id="event_results">Event Results</div>
 					</div>
 				</div>
