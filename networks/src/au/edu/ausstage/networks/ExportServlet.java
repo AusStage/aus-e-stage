@@ -36,7 +36,8 @@ public class ExportServlet extends HttpServlet {
 	
 	// declare constants
 	private final String[] TASK_TYPES   = {"ego-centric-network-simple",
-	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only"};
+	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only",
+	                                       "actor-edge-list-with-dups", "actor-edge-list-no-dups", "actor-edge-list-with-dups-id-only", "actor-edge-list-no-dups-id-only"};
 	                                       
 	public final static String[] FORMAT_TYPES = {"graphml", "debug"};
 	public final static int      MIN_DEGREES  = 1;
@@ -140,6 +141,8 @@ public class ExportServlet extends HttpServlet {
 			export.getSimpleNetwork(id, formatType, degrees, "undirected", response.getWriter());
 		} else if(taskType.startsWith("full-edge-list")) {
 			export.getFullEdgeList(taskType, response.getWriter());
+		} else if(taskType.startsWith("actor-edge-list")) {
+			export.getActorEdgeList(taskType, response.getWriter());
 		}
 	
 	} // end doGet method
