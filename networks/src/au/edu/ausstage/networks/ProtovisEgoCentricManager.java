@@ -45,7 +45,7 @@ public class ProtovisEgoCentricManager {
 	/**
 	 * Constructor for this class
 	 *
-	 * @param RdfDatabase an already instantiated instance of the DataManager class
+	 * @param database an already instantiated instance of the DataManager class
 	 */
 	public ProtovisEgoCentricManager(DataManager database) {	
 		// store a reference to this DataManager for later
