@@ -41,6 +41,22 @@ A full export of the dataset in the edge list format that contains ids only.
 
 A full export of the dataset in the edge list format that does not contain duplicate relationships and that contains ids only.
 
+=== Task: actor-edge-list-with-dups ===
+
+An export of the dataset in the edge list format containing duplicate relationships between contributors with a function of "actor" or "actor and singer".
+
+=== Task: actor-edge-list-no-dups ===
+
+An export of the dataset in the edge list format that does not contain duplicate relationships between contributors with a function of "actor" or "actor and singer".
+
+=== Task: actor-edge-list-with-dups-id-only ===
+
+An export of the dataset in the edge list format that contains ids only between contributors with a function of "actor" or "actor and singer".
+
+=== Task: actor-edge-list-no-dups-id-only ===
+
+An export of the dataset in the edge list format that does not contain duplicate relationships and that contains ids only between contributors with a function of "actor" or "actor and singer".
+
 == Sample Output ==
 
 === Full edge lists ===
@@ -50,6 +66,18 @@ id \t given_name \t family_name \t id \t given_name \t family_name \n
 }}}
 
 === Full edge lists (id only)===
+
+{{{
+id \t id \n
+}}}
+
+=== Actor edge lists ===
+
+{{{
+id \t given_name \t family_name \t gender \t id \t given_name \t family_name \t gender \n
+}}}
+
+=== Actor edge lists (id only)===
 
 {{{
 id \t id \n
