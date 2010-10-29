@@ -21,7 +21,8 @@ Get Request
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task    || full-edge-list-with-dups, full-edge-list-no-dups, full-edge-list-with-dups-id-only, full-edge-list-no-dups-id-only|| No || ||
+|| task    || full-edge-list-with-dups, full-edge-list-no-dups, full-edge-list-with-dups-id-only, full-edge-list-no-dups-id-only <br/>
+actor-edge-list-with-dups, actor-edge-list-no-dups, actor-edge-list-with-dups-id-only, actor-edge-list-no-dups-id-only|| No || ||
 
 == Parameter Definitions ==
 
