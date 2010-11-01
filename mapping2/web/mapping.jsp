@@ -33,6 +33,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.06.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<!-- custom code -->
+	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 </head>
 <div id="wrap">
@@ -59,6 +60,17 @@
 								<td>
 									<input type="text" size="40" id="query" name="query" title="Enter a few search terms into this box"/>
 								</td>
+								<td rowspan="2">
+									<div id="messages">
+										<div class="ui-state-highlight ui-corner-all">
+											<p>
+												<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+												<span id="message_text">Search is underway...</span>
+											</p>
+										</div>
+										<br/>&nbsp;
+									</div>
+								</td>
 							</tr>
 							<tr>
 								<td colspan="2">
@@ -75,15 +87,6 @@
 						At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
 						that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database. 
 					</p>
-					<div id="messages">
-						<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-							<p>
-								<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-								<span id="message_text">Search is underway...</span>
-							</p>
-						</div>
-						<br/>&nbsp;
-					</div>
 					<h3>Search Results</h3>
 					<div class="accordion">
 						<h3><a href="#" id="contributor_heading">Contributors</a></h3>
@@ -100,6 +103,11 @@
 					<div class="accordion">
 						<h3><a href="#" id="event_heading">Events</a></h3>
 							<div id="event_results">Event Results</div>
+					</div>
+					<h3 style="padding-top: 10px;">Search History</h3>
+					<div class="accordion">
+						<h3><a href="#" id="search_history_heading">Previous Searches</a></h3>
+							<div><ul id="search_history"></div>
 					</div>
 				</div>
 				<div id="tabs-2">

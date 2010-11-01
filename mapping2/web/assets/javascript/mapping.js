@@ -20,7 +20,9 @@
 var BASE_URL = "/mapping2/";
 var DEFAULT_SEARCH_LIMIT = "25";
 var UPDATE_DELAY = 500;
+
 var searching_underway_flag = false;
+var search_history_log = [ ];
 
 var LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>The limit of ' + DEFAULT_SEARCH_LIMIT + ' records has been reached.<br/>Please adjust your search query if the result you are looking for is missing.</p></di>';
  
@@ -134,9 +136,48 @@ $(document).ready(function(){
 				url: url
 			});
 			
+			// add to the search history if necessary
+			if(jQuery.inArray($("#query").val(), search_history_log) == -1) {
+				$("#search_history").append('<li><a href="#" onclick="doSearch(\'' + $("#query").val() + '\'); return false;">Repeat search for: ' + $("#query").val() + '</a></li>');
+				search_history_log.push($("#query").val());
+			}
+			
 		}
 	});
+	
+	// check to see if this is a persistent link request
+	var searchParam = $.getUrlVar("search");
+	
+	if(typeof(searchParam) != "undefined") {
+		
+		// get parameters
+		var typeParam  = $.getUrlVar("type");
+		var queryParam = $.getUrlVar("query");
+		
+		// check on the parameters
+		if(typeof(typeParam) == "undefined" || typeof(queryParam) == "undefined") {
+			
+			// show a message as the query parameters are missing
+			$("#message_text").text("Error: The persistent URL for this search is incomplete, please try again");
+			$("#messages").show();
+		} else {
+			// determine what type of search to do
+			if(typeParam == "name") {
+				$("#query").val(queryParam);
+				$("#search").submit();
+			} else {
+				$("#query").val("id:" + queryParam);
+				$("#search").submit();
+			}
+		}
+	}
 });
+
+// a function to initiate a search result
+function doSearch(searchTerm) {
+	$("#query").val(searchTerm);
+	$("#search").submit();
+}
 
 // a function to clear the accordian of any existing search results
 function clearAccordian() {

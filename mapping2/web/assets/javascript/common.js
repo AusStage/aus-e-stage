@@ -20,20 +20,21 @@
  * Common functions used across more than one page in the site
  */
 
-// show / hide the menu
-$(document).ready(function(){
-	// add a click handler to the hide menu link
-	$("#hidePanel").click(function(){
-		$("#panel").animate({marginLeft:"-175px"}, 500 );
-		$("#sidebar").animate({width:"0px", opacity:0}, 400 );
-		$("#showPanel").show("normal").animate({width:"18px", opacity:1}, 200);
-		$("#main").animate({marginLeft:"30px"}, 500);
-	});
-	// add a click handler to the show menu link
-	$("#showPanel").click(function(){
-		$("#main").animate({marginLeft:"200px"}, 200);
-		$("#panel").animate({marginLeft:"0px"}, 400 );
-		$("#sidebar").animate({width:"175px", opacity:1}, 400 );
-		$("#showPanel").animate({width:"0px", opacity:0}, 600).hide("slow");
-	});
+// function to get parameters from url
+// taken from: http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
+$.extend({
+	getUrlVars: function(){
+		var vars = [], hash;
+		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		for(var i = 0; i < hashes.length; i++)
+		{
+			hash = hashes[i].split('=');
+			vars.push(hash[0]);
+			vars[hash[0]] = hash[1];
+		}
+		return vars;
+	},
+	getUrlVar: function(name){
+		return $.getUrlVars()[name];
+	}
 });
