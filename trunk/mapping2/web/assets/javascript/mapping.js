@@ -138,7 +138,8 @@ $(document).ready(function(){
 			
 			// add to the search history if necessary
 			if(jQuery.inArray($("#query").val(), search_history_log) == -1) {
-				$("#search_history").append('<li><a href="#" onclick="doSearch(\'' + $("#query").val() + '\'); return false;">Repeat search for: ' + $("#query").val() + '</a></li>');
+				$("#search_history").append('<li><a href="#" onclick="doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat the Search">Repeat search for: ' + $("#query").val() + '</a>');
+				$("#search_history").append('<a href="/' + BASE_URL + 'mapping.jsp?search=true&query="' + encodeURIComponent($("#query").val()) +'" title="Persistent Link for this Search">Persistent Link</a></li>');
 				search_history_log.push($("#query").val());
 			}
 			
