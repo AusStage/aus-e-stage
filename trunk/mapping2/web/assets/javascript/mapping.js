@@ -23,11 +23,13 @@ var UPDATE_DELAY = 500;
 
 var searching_underway_flag = false;
 var search_history_log = [ ];
-var error_conditiion = false;
+var error_condition = false;
 
 var LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>The limit of ' + DEFAULT_SEARCH_LIMIT + ' records has been reached.<br/>Please adjust your search query if the result you are looking for is missing.</p></di>';
 
-var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again and if the problem persists contact the AusStage team';
+var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again. If the problem persists contact the AusStage team.';
+
+var ID_SEARCH_TOKEN   = "id:";
  
 // show / hide the menu
 $(document).ready(function(){
@@ -96,11 +98,12 @@ $(document).ready(function(){
 					$(this).text(AJAX_ERROR_MSG.replace('-', 'the venue search'));
 				} else if(settings.url.indexOf("event", 0) != -1) {
 					$(this).text(AJAX_ERROR_MSG.replace('-', 'the event search'));
+					searching_underway_flag = false;
 				}
-				
 				error_condition = true;
 			} else {
 				$(this).text(AJAX_ERROR_MSG.replace('-', 'multiple searches'));
+				searching_underway_flag = false;
 			}
 			
 			// show the error message
@@ -108,11 +111,31 @@ $(document).ready(function(){
 		}
 	});
 	
+	// create a custom validator for validating id messages
+	jQuery.validator.addMethod("validIDSearch", function(value, element) {
+	
+		// check to see if this is an id search query
+		if(value.substr(0,3) != ID_SEARCH_TOKEN) {
+			// return true as nothing to do
+			return true;
+		} else {
+			// found the id token so we need to validate it
+			if(isNaN(value.substr(3)) == true) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}, 'An ID search must start with "id:" and be followed by a valid integer');
+	
+			
+	
 	// setup the search form
 	$("#search").validate({
 		rules: { // validation rules
 			query: {
 				required: true,
+				validIDSearch: true
 			}
 		}, submitHandler: function(form) {
 			// indicate that the search is underway
@@ -131,10 +154,19 @@ $(document).ready(function(){
 			});
 			
 			// undertake the searches in order
-			var base_search_url = BASE_URL + "search?";
+			var base_search_url = '';
+			var query           = $("#query").val();
 			
+			if(query.substr(0,3) != ID_SEARCH_TOKEN) {
+				// this is a name search
+				base_search_url = BASE_URL + "search?type=name&limit=" + DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent(query);
+			} else {
+				// this is an id search 
+				base_search_url = BASE_URL + "search?type=id&query=" + encodeURIComponent(query.substr(3).replace(/^\s\s*/, '').replace(/\s\s*$/, ''));
+			}			
+						
 			// do a contributor search
-			var url = base_search_url + "task=contributor&type=name&limit=" + DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent($("#query").val());
+			var url = base_search_url + "&task=contributor";
 			
 			// queue this request
 			ajaxQueue.add({
@@ -143,7 +175,7 @@ $(document).ready(function(){
 			});
 			
 			// do a organisation search
-			url = base_search_url + "task=organisation&type=name&limit=" + DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent($("#query").val());
+			url = base_search_url + "&task=organisation";
 			
 			// queue this request
 			ajaxQueue.add({
@@ -152,7 +184,7 @@ $(document).ready(function(){
 			});
 			
 			// do a venue search
-			url = base_search_url + "task=venue&type=name&limit=" + DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent($("#query").val());
+			url = base_search_url + "&task=venue";
 			
 			// queue this request
 			ajaxQueue.add({
@@ -160,8 +192,8 @@ $(document).ready(function(){
 				url: url
 			});
 			
-			// do a venue search
-			url = base_search_url + "task=event&type=name&limit=" + DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent($("#query").val());
+			// do an event search
+			url = base_search_url + "&task=event";
 			
 			// queue this request
 			ajaxQueue.add({
@@ -218,14 +250,12 @@ function clearAccordian() {
 	$("#organisation_heading").empty().append("Organisations");
 	$("#venue_heading").empty().append("Venues");
 	$("#event_heading").empty().append("Events");
-	
-				
+
 	// reset the error div
 	$("#error_message").hide();
 	
 	// reset the error flag
 	error_condition = false;
-
 };
 
 // a function to hide the messages div if required
