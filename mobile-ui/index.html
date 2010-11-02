@@ -7,6 +7,9 @@
         <style type="text/css" media="screen">@import "assets/jqtouch/themes/ausstage/theme.css";</style>
         <script src="assets/jqtouch/jquery.1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="assets/jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>
+          <script src="assets/jqtouch/extensions/jqt.location.js" type="application/x-javascript" charset="utf-8"></script>
+
+
         <script type="text/javascript" src="assets/javascript/chain-0.2.js" type="application/x-javascript" charset="utf-8"></script>
 
 
@@ -32,11 +35,35 @@
 		//Our main document load 
 		$(document).ready(function() {
 
-    		
-		});
+ 
+	
+	});
 
+		 function setLocDisplay(text) {
+					$('.LocInfo').empty().append(text);
+					
+                }
+				
+				
+		function findLocation(){
+		                
+                // We pass "updateLocation" a callback function,
+                // to run once we have the coordinates.
+                // We also set it to a variable, so we can know
+                // right away if it's working or not
+                var lookup = jQT.updateLocation(function(coords){
+                    if (coords) {
+                        setLocDisplay('Latitude: ' + coords.latitude + '<br />Longitude: ' + coords.longitude);
+                    } else {
+                       setLocDisplay('Device not capable of geo-location.');
+                    }
+                });
 
-		
+                if (lookup) {
+                    setDisplay('Looking up location&hellip;');
+                }		
+					
+		}
 		function getPerformanceData(performance) {
 			
 				  var host = $(location).attr('host');
@@ -60,7 +87,7 @@
 						dataType: mydataType,
 						success: function (data) {
 
-							populate(data);
+							populate(data,performance);
 						},
 						async: true 
 					}); 			
@@ -71,12 +98,20 @@
 		* This is the main call that loads the json in to the correct D
 		*
 		**/
-		function populate(data){
+		function populate(data,performance){
 			//alert("ye got here"); 
-			window.console.log(data);
-			$("#Add").item(data).chain();//load this data in the feedback 
+			//window.console.log(data);
+			//$("#Add").item(data).chain();//load this data in the feedback 
 			$("#feedback").items(data.feedback).chain();//load this data in the feedback 		
 			$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 	
+			$("input.performance").val(performance);
+			var CurrentDate = new Date();  
+			$("input.CurrentDate").val(CurrentDate.toDateString());
+			$("input.CurrentTime").val(CurrentDate.toTimeString());
+
+			
+
+
 								
 		
 		};
@@ -87,8 +122,8 @@
 		function loadFeedbackForm() {
 		
 		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
-		  var performance =   $(element).children("span.performance").text();
-		  getPerformanceData(performance);
+		  var CurrentPerformance =   $(element).children("span.performance").text();
+		  getPerformanceData(CurrentPerformance);
 
 				
 		}; 
@@ -98,8 +133,8 @@
 		function loadFeedback() {
 		
 		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
-		  var performance =   $(element).children("span.performance").text();
-		  getPerformanceData(performance);
+		  var CurrentPerformance =   $(element).children("span.performance").text();
+		  getPerformanceData(CurrentPerformance);
 
 		}; 
 		
@@ -141,25 +176,11 @@
             <div class="info">
                 <p>Intro</p>
             </div>
-            
- <form id="ajax_post" action="http://beta.ausstage.edu.au/mobile/feedback" method="GET" class="form">
-        		<h3 class="question">Question</h3>
-				<ul class="edit rounded">
-                <li><input type="text" name="performance" class="performance" >#</input></li>
-            	<li><textarea placeholder="Textarea" ></textarea></li>
-                    
-               </ul>
-            <a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" class="submit whiteButton">Submit</a>
-        </form>
-        
-      
-    </form>      	
+      	
             <ul class="rounded">
             
-            <li class="arrow"><a href="#Near">Performances near you</a> <small class="counter">1</small></li> 
-			<li class="arrow"><a href="#Current">Current Performances </a> <small class="counter">2</small></li>
-			<li class="arrow"><a href="#Search">Search</a> <small class="counter">3</small></li>
-			<li class="arrow"><a href="#Help">Help</a><small class="counter">4</small></li>
+            <li class="arrow"><a href="#Near" onClick="findLocation()">Performances near you</a> <small class="counter">1</small></li> 
+			<li class="arrow"><a href="#Search">Search</a> <small class="counter">2</small></li>
 			<li class="arrow"><a href="#About">About</a><small class="counter">4</small></li>
 
             </ul>
@@ -173,34 +194,13 @@
                 <a class="button slideup" id="infoButton" href="#about">About</a>
             </div> 
          
-         
+  		<div class="LocInfo info">
+                <p>Looking up location&hellip;</p>
+            </div>
+                     
         <ul class="rounded">
-          <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>
-         <li class="arrow"><a href="#Add"  onClick="loadFeedbackForm(event)">Be Your Self - Add <span class="performance">4</span></a>  <small class="counter">2</small></li>
-
-
-		   
-         </ul>              
-      
-</div>
-
-
-
-
- <div id="Current">
-            <div class="toolbar">
-                <h1>Current Performances</h1>
-                <a class="back" href="#">Home</a>
-                <a class="button slideup" id="infoButton" href="#about">About</a>
-            </div> 
-         
-        
-           
-           
-           
-        <ul class="rounded">
-          <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>
-         <li class="arrow"><a href="#Add"  onClick="loadFeedbackForm(event)"> Be Your Self - Add<span class="performance">4</span></a>  <small class="counter">2</small></li>  </ul>              
+          <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>		   
+        </ul>              
       
 </div>
 
@@ -212,11 +212,11 @@
                 <a class="back" href="#">Home</a>
                 <a class="button slideup" id="infoButton" href="#about">About</a>
             </div> 
-         
-         <form id="ajax_post" action="http://beta.ausstage.edu.au/mobile/feedback" method="GET" class="form">
+
+          <form id="ajax_post" action="http://beta.ausstage.edu.au/mobile/feedback" method="GET" class="form">
         		<h3 class="question">Question</h3>
 				<ul class="edit rounded">
-                <li><input type="text" name="performance" class="performance">#</input></li>
+                <li><input type="text" name="performance" class="performance" value=""></input></li>
             	<li><textarea placeholder="Textarea" ></textarea></li>
                     
                </ul>
@@ -224,7 +224,6 @@
         </form>
         
       
-    </form>
            
    
         
@@ -239,14 +238,7 @@
 
             </div>          
          </div> 
-          <div id="Help">
-            <div class="toolbar">
-                <h1>Help</h1>
-                <a class="back" href="#">Home</a>
-                <a class="button slideup" id="infoButton" href="#about">About</a>
-
-            </div>          
-         </div> 
+        
           <div id="About-Panel">
             <div class="toolbar">
                 <h1>About</h1>
@@ -281,7 +273,27 @@
             <div class="date">date</div>
             </div>
             
-            
+           <span class="performance"></span>
+
+             
+         <form id="ajax_post" action="http://beta.ausstage.edu.au/mobile/feedback" method="GET" class="form">
+        		<h3 class="question">Question</h3>
+                
+				<ul class="edit rounded">
+                	<li><input type="text" name="type" class="type" value="web" ></input></li>
+             		<li><input type="text" name="time" class="CurrentTime" value="" ></input></li>
+               		<li><input type="text" name="date" class="CurrentDate" value="" ></input></li>
+                	<li><input type="text" name="performance" class="performance" value="" ></input></li>
+            		<li><textarea placeholder=""  name-"message"></textarea></li>
+                    
+               </ul>
+            <a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" class="submit whiteButton">Submit</a>
+        </form>
+        
+      
+      
+      
+           
            <h3 class="question"></h3>
 
             <ul id="feedback">
