@@ -60,8 +60,8 @@ Both get and post requests are supported
 == Parameters ==
 
 || *Name* || *Required Value* || *Optional* || *Default* || *Example* ||
-|| type   || web              || yes        || web ||||
-|| performance  || The unique performance ID || No || ||||
+|| type   || mobile-web              || No        ||  || ||
+|| performance  || The unique performance ID || No || || ||
 || time   || the time that the message was sent || No || ||14:55:32 GMT+1100 (EST)||
 || date   || the date that the message was sent || No || ||Tue Nov 02 2010||
 || message|| the text of the feedback message || No || ||||
