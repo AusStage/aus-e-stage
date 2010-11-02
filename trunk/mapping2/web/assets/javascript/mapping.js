@@ -23,8 +23,11 @@ var UPDATE_DELAY = 500;
 
 var searching_underway_flag = false;
 var search_history_log = [ ];
+var error_conditiion = false;
 
 var LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>The limit of ' + DEFAULT_SEARCH_LIMIT + ' records has been reached.<br/>Please adjust your search query if the result you are looking for is missing.</p></di>';
+
+var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again and if the problem persists contact the AusStage team';
  
 // show / hide the menu
 $(document).ready(function(){
@@ -65,14 +68,43 @@ $(document).ready(function(){
 	// setup a handler for the start of an ajax request
 	$("#message_text").ajaxSend(function(e, xhr, settings) {
 		// determine what type of request has been made & update the message text accordingly
-		if(settings.url.indexOf("contributor", 0) != -1) {
-			$(this).text("Contributor search is underway...");
-		} else if(settings.url.indexOf("organisation", 0) != -1) {
-			$(this).text("Organisation search is underway...");
-		} else if(settings.url.indexOf("venue", 0) != -1) {
-			$(this).text("Venue search is underway...");
-		} else if(settings.url.indexOf("event", 0) != -1) {
-			$(this).text("Event search is underway...");
+		// ensure that we're only working on searches
+		if(settings.url.indexOf("search?", 0) != -1) {
+			if(settings.url.indexOf("contributor", 0) != -1) {
+				$(this).text("Contributor search is underway...");
+			} else if(settings.url.indexOf("organisation", 0) != -1) {
+				$(this).text("Organisation search is underway...");
+			} else if(settings.url.indexOf("venue", 0) != -1) {
+				$(this).text("Venue search is underway...");
+			} else if(settings.url.indexOf("event", 0) != -1) {
+				$(this).text("Event search is underway...");
+			}
+		}
+	});
+	
+	// set up handler for when an ajax request results in an error
+	$("#error_text").ajaxError(function(e, xhr, settings, exception) {
+		// determine what type of request has been made & update the message text accordingly
+		// ensure that we're only working on searches
+		if(settings.url.indexOf("search?", 0) != -1) {
+			if(error_condition == false) {
+				if(settings.url.indexOf("contributor", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the contributor search'));
+				} else if(settings.url.indexOf("organisation", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the organisation search'));
+				} else if(settings.url.indexOf("venue", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the venue search'));
+				} else if(settings.url.indexOf("event", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the event search'));
+				}
+				
+				error_condition = true;
+			} else {
+				$(this).text(AJAX_ERROR_MSG.replace('-', 'multiple searches'));
+			}
+			
+			// show the error message
+			$("#error_message").show();
 		}
 	});
 	
@@ -85,6 +117,7 @@ $(document).ready(function(){
 		}, submitHandler: function(form) {
 			// indicate that the search is underway
 			$("#messages").show();
+			$("#status_message").show();
 			
 			searching_underway_flag = true;
 			setTimeout("updateMessages()", UPDATE_DELAY);
@@ -185,6 +218,13 @@ function clearAccordian() {
 	$("#organisation_heading").empty().append("Organisations");
 	$("#venue_heading").empty().append("Venues");
 	$("#event_heading").empty().append("Events");
+	
+				
+	// reset the error div
+	$("#error_message").hide();
+	
+	// reset the error flag
+	error_condition = false;
 
 };
 
@@ -193,7 +233,11 @@ function updateMessages() {
 
 	if(searching_underway_flag != true) {
 		// indicate that the search has finished
-		$("#messages").hide();
+		if(error_condition == false) {
+			$("#messages").hide();
+		} else {
+			$("#status_message").hide();
+		}
 	} else {
 		setTimeout("updateMessages()", UPDATE_DELAY);
 	}
@@ -303,5 +347,3 @@ function buildEventSearchResults(data) {
 	// update the search underway flag
 	searching_underway_flag = false;
 }
-
-
