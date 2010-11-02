@@ -17,7 +17,7 @@
  */
  
 // declare global variables
-var BASE_URL = "/mapping3/";
+var BASE_URL = "/mapping2/";
 var DEFAULT_SEARCH_LIMIT = "25";
 var UPDATE_DELAY = 500;
 
@@ -36,6 +36,9 @@ $(document).ready(function(){
 
 	// hide the messages div
 	$("#messages").hide();
+	
+	// prevent a FOUC
+	$('html').removeClass('js');
 
 	// add a click handler to the hide menu link
 	$("#hidePanel").click(function(){
