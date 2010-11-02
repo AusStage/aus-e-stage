@@ -35,6 +35,9 @@
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
+	<script type="text/javascript">
+		$('html').addClass('js');
+	</script>
 </head>
 <div id="wrap">
 	<div id="header"><h1>AusStage Mapping Service</h1></div>

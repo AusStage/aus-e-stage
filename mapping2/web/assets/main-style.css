@@ -270,3 +270,7 @@ table.searchResults tfoot {
 .tipsy-south { background-position: bottom center; }
 .tipsy-east { background-position: right center; }
 .tipsy-west { background-position: left center; }
+
+/* prevent a FOUC */
+.js #messages {display: none;}
+
