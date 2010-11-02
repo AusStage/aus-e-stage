@@ -138,8 +138,7 @@ $(document).ready(function(){
 			
 			// add to the search history if necessary
 			if(jQuery.inArray($("#query").val(), search_history_log) == -1) {
-				$("#search_history").append('<li><a href="#" onclick="doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat the Search">Repeat search for: ' + $("#query").val() + '</a>');
-				$("#search_history").append('<a href="/' + BASE_URL + 'mapping.jsp?search=true&query="' + encodeURIComponent($("#query").val()) +'" title="Persistent Link for this Search">Persistent Link</a></li>');
+				$("#search_history").append('<li><a href="#" onclick="doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat the Search">Repeat search for: ' + $("#query").val() + '</a> / <a href="' + BASE_URL + 'mapping.jsp?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search">Persistent Link</a></li>');
 				search_history_log.push($("#query").val());
 			}
 			
@@ -152,24 +151,16 @@ $(document).ready(function(){
 	if(typeof(searchParam) != "undefined") {
 		
 		// get parameters
-		var typeParam  = $.getUrlVar("type");
 		var queryParam = $.getUrlVar("query");
 		
 		// check on the parameters
-		if(typeof(typeParam) == "undefined" || typeof(queryParam) == "undefined") {
+		if(typeof(queryParam) == "undefined") {
 			
 			// show a message as the query parameters are missing
 			$("#message_text").text("Error: The persistent URL for this search is incomplete, please try again");
 			$("#messages").show();
 		} else {
-			// determine what type of search to do
-			if(typeParam == "name") {
-				$("#query").val(queryParam);
-				$("#search").submit();
-			} else {
-				$("#query").val("id:" + queryParam);
-				$("#search").submit();
-			}
+			doSearch(queryParam);
 		}
 	}
 });
