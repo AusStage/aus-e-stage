@@ -58,17 +58,20 @@
 									<label id="query-label" for="query">Search Terms: </label>
 								</th>
 								<td>
-									<input type="text" size="40" id="query" name="query" title="Enter a few search terms into this box"/>
+									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/>
 								</td>
 								<td rowspan="2">
 									<div id="messages">
-										<div class="ui-state-highlight ui-corner-all">
+										<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message">
 											<p>
 												<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
 												<span id="message_text">Search is underway...</span>
 											</p>
 										</div>
-										<br/>&nbsp;
+										<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;" id="error_message"> 
+											<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+											<span id="error_text">Error is underway...</span>
+										</div>										
 									</div>
 								</td>
 							</tr>
@@ -104,10 +107,10 @@
 						<h3><a href="#" id="event_heading">Events</a></h3>
 							<div id="event_results">Event Results</div>
 					</div>
-					<h3 style="padding-top: 10px;">Search History</h3>
+					<h3 style="padding-top: 15px;">Search History</h3>
 					<div class="accordion">
 						<h3><a href="#" id="search_history_heading">Previous Searches</a></h3>
-							<div><ul id="search_history"></div>
+							<div><ul id="search_history"></ul></div>
 					</div>
 				</div>
 				<div id="tabs-2">
