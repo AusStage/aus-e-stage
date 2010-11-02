@@ -167,7 +167,7 @@ $(document).ready(function(){
 
 // a function to initiate a search result
 function doSearch(searchTerm) {
-	$("#query").val(searchTerm);
+	$("#query").val(decodeURIComponent(searchTerm));
 	$("#search").submit();
 }
 
