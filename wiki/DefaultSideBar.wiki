@@ -4,6 +4,8 @@
    * Working With Maps
      * [GoogleEarthImageOverlay Image Overlays in Google Earth]
      * [MapInfoToKML Converting MapInfo Data to KML]
+   * Working With Networks
+     * [NavigatingNetworksExportGraphs Exporting Graph Files]
    * Aus-e-Stage Software
      * [UsingTweetGatherer Using the Tweet Gatherer App]
    * External Data-sources
@@ -35,9 +37,10 @@
        * [MobileServiceAPILookup Lookup Information]
      * [MobileServiceInfoCardTmpl Information Card Template]
    * [NetworkService Network Service]
-     * [NavigatingNetworksSpecification Specification]
-     * [NavigatingNetworksGoals   Service Goals]
-     * [NavigatingNetworksExportGraphs Export Graph Files]
+     * Specification
+       * [NavigatingNetworksSpecification Specification]
+       * [NavigatingNetworksGoals Service Goals]
+       * [NavigatingNetworksComponentOverview  ComponentOverview]
      * [NavigatingNetworksDataset Dataset]
        * [NavigatingNetworksDatasetAPI DataSet API]
          * [NavigatingNetworksDatasetAPIlookup Lookup API]
@@ -48,7 +51,6 @@
        * [AuseStageOntology Aus-e-Stage Ontology] 
        * [NavigatingNetworksSparqlEndpoint SPARQL End Point]
        * [NavigatingNetworksSparql  Sample SPARQL Queries]
-     * [NavigatingNetworksComponentOverview  ComponentOverview]
    * [AusStageTerminator AusStage Terminator Service]
  * Other Software Under Development
    * Applications 
