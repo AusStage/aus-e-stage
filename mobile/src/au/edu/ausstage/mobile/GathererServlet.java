@@ -32,7 +32,7 @@ public class GathererServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	
 	// declare private class constants
-	private final String[] INPUT_TYPES = {"sms"};
+	private final String[] INPUT_TYPES = {"sms", "mobile-web"};
 
 	/*
 	 * initialise this instance
@@ -129,6 +129,66 @@ public class GathererServlet extends HttpServlet {
 	
 			// send some output
 			out.print(data);
+		} else if(type.equals("mobile-web") == true) {
+		
+			// get the remaining parameters
+			String performance = request.getParameter("performance");
+			String date        = request.getParameter("date");
+			String time        = request.getParameter("time");
+			String message     = request.getParameter("message");
+			
+			// check to ensure that the parameters are present
+			if(InputUtils.isValidInt(performance) == false) {
+				throw new ServletException("Missing performance parameter");
+			}
+			
+			if(InputUtils.isValid(date) == false || InputUtils.isValid(time) == false) {
+				throw new ServletException("Missing required date and / or time parameters");
+			}
+			
+			if(InputUtils.isValid(message) == false) {
+				throw new ServletException("Missing message parameter");
+			}
+			
+			// parameters pass initial validation
+			
+			// instantiate a connection to the database
+			DbManager database;
+	
+			try {
+				database = new DbManager(servletConfig.getServletContext().getInitParameter("databaseConnectionString"));
+			} catch (IllegalArgumentException ex) {
+				throw new ServletException("Unable to read the connection string parameter from the web.xml file");
+			}
+	
+			if(database.connect() == false) {
+				throw new ServletException("Unable to connect to the database");
+			}
+	
+			// declare helper variables
+			String results = null;
+			GathererManager manager = new GathererManager(database, servletConfig);
+			
+			results = manager.processMobileWeb(performance, date, time, message);
+			
+			// ouput the data
+			// set the appropriate content type
+			// check to see if this is a jsonp request
+			if(InputUtils.isValid(request.getParameter("callback")) == false) {
+				// output json mime type
+				response.setContentType("application/json; charset=UTF-8");
+			} else {
+				// output the javascript mime type
+				response.setContentType("application/javascript; charset=UTF-8");
+			}
+		
+			// output the results of the search
+			PrintWriter out = response.getWriter();
+			if(InputUtils.isValid(request.getParameter("callback")) == true) {
+				out.print(JSONPManager.wrapJSON(results, request.getParameter("callback")));
+			} else {
+				out.print(results);
+			}		
 		}
 	} // end doGet method
 	
