@@ -1,8 +1,8 @@
-#summary Investigations into the GraphML File Format
+#summary Investigations into the GraphML File Format support in Network Workbench, Visone and Gephi
 
-= Introduction =
+== Introduction ==
 
-Add your content here.
+GraphML can be used to define the topology of a graph by declaring its nodes and edges. In addition to this, application related information of simple type for the elements of the graph can be specified through the extension [http://graphml.graphdrawing.org/primer/graphml-primer.html#Attributes GraphML-Attributes]. To look into the capability of the network analysis and visualization software (Network Workbench, Visone and Gephi) in regards to their support for GraphML format – attribute in particular, a simple actors’ network in GraphML format is prepared and examined in the software mentioned above.
 
 
 = Details =
