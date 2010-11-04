@@ -400,15 +400,22 @@ public class SearchManager {
 		query = sanitiseQuery(query);
 		
 		// declare the sql variables
-		String sql = "SELECT contributorid, first_name, last_name, event_dates, COUNT(eventid), COUNT(latitude) "
-				   + "FROM (SELECT DISTINCT c.contributorid, c.first_name, c.last_name, e.eventid, v.latitude, sc.event_dates "
-				   + "      FROM contributor c, search_contributor sc, conevlink cel, events e, venue v "
-				   + "      WHERE CONTAINS(sc.combined_all, ?, 1) > 0 "
-				   + "      AND c.contributorid = sc.contributorid "
-				   + "      AND c.contributorid = cel.contributorid "
-				   + "      AND cel.eventid = e.eventid "
-				   + "      AND e.venueid = v.venueid) "
-				   + "GROUP BY contributorid, first_name, last_name, event_dates ";
+		String sql = "SELECT c.contributorid, first_name, last_name, event_dates, total_events, mapped_events, "
+				   + "       rtrim(xmlagg(xmlelement(t, preferredterm || '|')).extract ('//text()'), '|') AS functions "
+				   + "FROM (SELECT contributorid, first_name, last_name, event_dates, COUNT(eventid) AS total_events, COUNT(latitude) AS mapped_events "
+				   + "      FROM (SELECT DISTINCT c.contributorid, c.first_name, c.last_name, e.eventid, v.latitude, sc.event_dates "
+				   + "            FROM contributor c, search_contributor sc, conevlink cel, events e, venue v "
+				   + "            WHERE CONTAINS(sc.combined_all, ?, 1) > 0 "
+				   + "            AND c.contributorid = sc.contributorid "
+				   + "            AND c.contributorid = cel.contributorid "
+				   + "            AND cel.eventid = e.eventid  "
+				   + "            AND e.venueid = v.venueid)  "
+				   + "      GROUP BY contributorid, first_name, last_name, event_dates) c, "
+      			   + "		contfunctlink, "
+				   + "      contributorfunctpreferred "
+				   + "WHERE c.contributorid = contfunctlink.contributorid "
+				   + "AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid "
+				   + "GROUP BY c.contributorid, first_name, last_name, event_dates, total_events, mapped_events ";
 				   
 		// finalise the sql
 		if(sortType.equals("name") == true) {
@@ -451,7 +458,8 @@ public class SearchManager {
 				contributor.setUrl(LinksManager.getContributorLink(resultSet.getString(1)));
 				contributor.setEventDates(resultSet.getString(4));
 				contributor.setEventCount(resultSet.getString(5));
-				contributor.setMappedEventCount(resultSet.getString(6));			
+				contributor.setMappedEventCount(resultSet.getString(6));
+				contributor.setFunctions(resultSet.getString(7));			
 		
 				// add the contrbutor to the list
 				list.addContributor(contributor);
@@ -597,6 +605,7 @@ public class SearchManager {
 		
 		// declare helper variables
 		JSONArray  list = new JSONArray();
+		JSONArray  functions = new JSONArray();
 		JSONObject object = null;
 		Contributor contributor = null;
 		
@@ -616,6 +625,10 @@ public class SearchManager {
 			object.put("eventDates", contributor.getEventDates());
 			object.put("totalEventCount", new Integer(contributor.getEventCount()));
 			object.put("mapEventCount", new Integer(contributor.getMappedEventCount()));
+			
+			functions = new JSONArray();
+			functions.addAll(contributor.getFunctionsAsArrayList());
+			object.put("functions", functions);
 			
 			// add the new object to the array
 			list.add(object);		
