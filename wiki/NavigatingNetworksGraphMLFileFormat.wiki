@@ -47,6 +47,8 @@ _Note:_
 *8)	GraphML export*
        GUESS dose not support GraphML export function. Gephi adds some attributes for nodes such as size and color. Visone adds some attributes for nodes and edges such as style information.
 
+
+Table 1. GraphML capability comparison.
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/graphML-comparison-table.PNG]
 
 Based on the above observation, Visone is the best to cope with GraphML format among these three software. However, it re-assigns a new value to the Node ID and the original Node ID (contributor ID) is lost. To keep the contributor ID, we can add an extra attribute for node. Please see the following snippet in red lines. In this way, all the application related information for each node and edge can be browsed in the Attribute Manager in Visone.
