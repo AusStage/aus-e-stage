@@ -23,7 +23,7 @@ To explore how GraphML format is supported in the network analysis and visualiza
 *1)	Topology* is used to justify whether the software can display the graph (nodes and edges) correctly without considering attributes. 
       All the three software can display the graph properly. In another words, all the nodes and edges declared in the actors network can be recognized. 
 _Note:_
-      GUESS and Gephi said on their website that it support a limited set of this format (no subgraphs or hyperedges).
+      [http://guess.wikispot.org/GraphML GUESS] and [http://gephi.org/users/supported-graph-formats/graphml-format/ Gephi] said on their website that it support a limited set of this format (no subgraphs or hyperedges).
       Visone said that its native file format  is GraphML.
 
 
