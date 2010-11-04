@@ -15,6 +15,14 @@ In this actors’ network, actors are defined as nodes.  The contributor ID is d
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/topology.PNG]
 
 
+== GraphML support in Network Workbench, Visone and Gephi ==
+
+
+To explore how GraphML format is supported in the network analysis and visualization softwares such as Network Workbench (GUESS is used as visualization tool), Visone and Gephi in particular, eight categories are identified to examine their GraphML support when the actors network file is opened in these three software. They are *Topology*, *NodeID*, *Edge source & target*, *Node attribute definition*, *Node attribute value*, *Edge attribute definition*, *Edge attribute value* and *GraphML export*. The first seven categories are related with input format and how the software explains attributes and their value when the GraphML file is opened in them. The following section will explain the eight categories and how the software supports it respectively. Table 1 shows the summary of the comparation.
+
+
+
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
