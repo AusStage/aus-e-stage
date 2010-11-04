@@ -7,7 +7,8 @@ GraphML can be used to define the topology of a graph by declaring its nodes and
 
 == Actors’ Network in GraphML Format ==
 
-To illustrate the GraphML with attribute support, a sample GraphML described a simple actors’ network with 3 nodes and 2 edges is prepared. Please refer to Figure 1.
+To illustrate the GraphML with attribute support, a sample GraphML described a simple actors’ network with 3 nodes and 2 edges is prepared. Please refer to the following Figure.
+
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/graphml.PNG]
 
 
