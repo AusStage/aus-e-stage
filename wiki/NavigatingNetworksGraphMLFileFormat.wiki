@@ -11,9 +11,8 @@ To illustrate the GraphML with attribute support, a sample GraphML described a s
 
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/graphml.PNG]
 
-In this actors’ network, actors are defined as nodes.  The contributor ID is defined as node id. Each node has 3 attributes. They are *FirstName*, *LastName* and *Gender* respectively. Edge is defined from source node to target node. It represents the events two actors have worked on. Each edge has 2 attributes. They are *NumOfEvents* which represents edge weight and *DateRange*. The topology of the network is shown in the following Figure.
-
-[]
+In this actors’ network, actors are defined as nodes.  The contributor ID is defined as node id. Each node has 3 attributes. They are *!FirstName*, *LastName* and *!Gender* respectively. Edge is defined from source node to target node. It represents the events two actors have worked on. Each edge has 2 attributes. They are *NumOfEvents* which represents edge weight and *DateRange*. The topology of the network is shown in the following Figure.
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/topology.PNG]
 
 
 
