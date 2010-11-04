@@ -128,11 +128,17 @@ A search for the contributor with id 482
 URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=id&query=482
 
 {{{
-[ { "firstName" : "Geoffrey",
+[ { "eventDates" : "1970 - 2010",
+    "firstName" : "Geoffrey",
+    "functions" : [ "Actor",
+        "Director",
+        "Adaptor",
+        "Performer"
+      ],
     "id" : "482",
     "lastName" : "Rush",
-    "mapEventCount" : 75,
-    "totalEventCount" : 88,
+    "mapEventCount" : 70,
+    "totalEventCount" : 81,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=482"
   } ]
 }}}
@@ -143,77 +149,102 @@ A search for any contributors with "cate" in their name, specifying a limit of 1
 URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=name&query=cate&limit=10
 
 {{{
-[ { "firstName" : "Cate",
+[ { "eventDates" : "1980",
+    "firstName" : "Anthony",
+    "functions" : [ "Set and / or Property Maker" ],
+    "id" : "402671",
+    "lastName" : "Mascatello",
+    "mapEventCount" : 1,
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=402671"
+  },
+  { "eventDates" : "1935",
+    "firstName" : "B.W.",
+    "functions" : [ "Conductor",
+        "Musical Director"
+      ],
+    "id" : "405906",
+    "lastName" : "Caten",
+    "mapEventCount" : 1,
+    "totalEventCount" : 1,
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=405906"
+  },
+  { "eventDates" : "1989 - 2010",
+    "firstName" : "Cate",
+    "functions" : [ "Actor",
+        "Director"
+      ],
     "id" : "4921",
     "lastName" : "Blanchett",
     "mapEventCount" : 24,
     "totalEventCount" : 31,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=4921"
   },
-  { "firstName" : "Cate",
+  { "eventDates" : "1984",
+    "firstName" : "Cate",
+    "functions" : [ "Actor" ],
     "id" : "227811",
     "lastName" : "Brennan",
     "mapEventCount" : 1,
     "totalEventCount" : 1,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=227811"
   },
-  { "firstName" : "Cate",
+  { "eventDates" : "1996",
+    "firstName" : "Cate",
+    "functions" : [ "Actor" ],
     "id" : "246522",
     "lastName" : "Crowe",
     "mapEventCount" : 0,
     "totalEventCount" : 2,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=246522"
   },
-  { "firstName" : "Cate",
+  { "eventDates" : "2003",
+    "firstName" : "Cate",
+    "functions" : [ "Director" ],
     "id" : "258170",
     "lastName" : "Dunn",
     "mapEventCount" : 1,
     "totalEventCount" : 1,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=258170"
   },
-  { "firstName" : "Cate",
+  { "eventDates" : "1968 - 2008",
+    "firstName" : "Cate",
+    "functions" : [ "Producer" ],
     "id" : "245256",
     "lastName" : "Fowler",
     "mapEventCount" : 34,
     "totalEventCount" : 38,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=245256"
   },
-  { "firstName" : "Cate",
+  { "eventDates" : "2001",
+    "firstName" : "Cate",
+    "functions" : [ "Playwright" ],
     "id" : "6900",
     "lastName" : "Furey",
     "mapEventCount" : 0,
     "totalEventCount" : 1,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=6900"
   },
-  { "firstName" : "Cate",
+  { "eventDates" : "1994",
+    "firstName" : "Cate",
+    "functions" : [ "Dancer" ],
     "id" : "252341",
     "lastName" : "Handley",
     "mapEventCount" : 1,
     "totalEventCount" : 1,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=252341"
   },
-  { "firstName" : "Cate",
+  { "eventDates" : "1987",
+    "firstName" : "Cate",
+    "functions" : [ "Dramaturg" ],
     "id" : "245142",
     "lastName" : "Kennedy",
     "mapEventCount" : 1,
     "totalEventCount" : 1,
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=245142"
-  },
-  { "firstName" : "Cate",
-    "id" : "257270",
-    "lastName" : "Lay",
-    "mapEventCount" : 3,
-    "totalEventCount" : 3,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=257270"
-  },
-  { "firstName" : "Paul",
-    "id" : "420686",
-    "lastName" : "Cate",
-    "mapEventCount" : 1,
-    "totalEventCount" : 1,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=420686"
   }
 ]
+
 }}}
 
 == Venue ID Search ==
