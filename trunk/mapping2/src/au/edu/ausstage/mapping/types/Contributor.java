@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 
 /**
@@ -42,7 +43,11 @@ public class Contributor implements Comparable<Contributor>{
 	private String eventCount = null;
 	private String mappedEventCount = null;
 	private String eventDates = null;
+	private String functions = null;
 	private Set<Event> events;
+	
+	// private constants
+	private final String FUNCTION_SEPERATOR = "\\|";
 	
 	// declare public constants
 	/**
@@ -361,6 +366,38 @@ public class Contributor implements Comparable<Contributor>{
 		
 		mappedEventCount = value;
 	}
+	
+	public String getFunctions() {
+		return functions;
+	}
+	
+	public void setFunctions(String value) {
+		
+		functions = value;
+	}
+	
+	public String[] getFunctionsAsArray() {
+		
+		if(functions != null) {
+			return functions.split(FUNCTION_SEPERATOR);
+		} else {
+			return new String[0];
+		}
+	}
+	
+	public ArrayList<String> getFunctionsAsArrayList() {
+	
+		ArrayList<String> list = new ArrayList<String>();
+		String[] functions = this.getFunctionsAsArray();
+		
+		for(int i = 0; i < functions.length; i++) {
+			list.add(functions[i]);
+		}
+		
+		return list;
+	}
+		
+		
 	
 	/*
 	 * methods required for ordering in collections

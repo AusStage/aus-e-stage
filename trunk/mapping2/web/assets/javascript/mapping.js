@@ -279,18 +279,47 @@ function updateMessages() {
 // a function to build the contributor search results
 function buildContributorSearchResults(data) {
 
-	var list = "<ul>";
+	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
+	
 	var i = 0;
 	
 	for(i; i < data.length; i++) {
-		list += "<li>";
-		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + " " + data[i].lastName + ' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a> <span title="Events to be Mapped">' + data[i].mapEventCount + '</span> / <span title="Total Events">' + data[i].totalEventCount + "</span>"
-		list += "</li>";
+		
+		if(i % 2 == 1) {
+			list += '<tr class="odd">'; 
+		} else {
+			list += '<tr>'; 
+		}
+		
+		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + " " + data[i].lastName + ' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a></td>';
+		list += '<td>' + data[i].eventDates + '</td><td>';
+		
+		if(data[i].functions.length > 0) {
+			for(var x = 0; x < data[i].functions.length; x++) {
+				list += data[i].functions[x] + ', ';
+			}
+			
+			list = list.substr(0, list.length - 2);
+		} else {
+			list += "&nbsp;";
+		}
+		
+		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
+		
+		if(data[i].mapEventCount > 0) {
+			list += '<td><input type="checkbox"/></td>';
+		} else {
+			list += '<td>&nbsp;</td>';
+		}
+		
+		list += '</tr>';
 	}
 	
-	list += "</ul>";
+	list += "</table>";
 	
-	$("#contributor_results").append(list);
+	if(i > 0) {
+		$("#contributor_results").append(list);
+	}
 	
 	if(i == 25) {
 		$("#contributor_results").append(LIMIT_REACHED_MSG);
