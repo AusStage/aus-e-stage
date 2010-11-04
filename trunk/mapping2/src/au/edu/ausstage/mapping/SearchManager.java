@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.util.Set;
 import java.util.Iterator;
 import org.json.simple.*;
+import org.json.simple.parser.*;
 
 /**
  * A class used to compile the marker data which is used to build
@@ -920,6 +921,7 @@ public class SearchManager {
 			object.put("id", venue.getId());
 			object.put("name", venue.getName());
 			object.put("street", venue.getStreet());
+			object.put("state", venue.getState());
 			object.put("suburb", venue.getSuburb());
 			object.put("postcode", venue.getPostcode());
 			object.put("latitude", venue.getLatitude());
@@ -995,7 +997,7 @@ public class SearchManager {
 	private String doEventIdSearch(String query, String formatType) {
 		
 		// declare the SQL variables
-		String sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, latitude, longitude "
+		String sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid "
 				   + "FROM events, venue "
 				   + "WHERE eventid = ? "
 				   + "AND events.venueid = venue.venueid";
@@ -1004,9 +1006,9 @@ public class SearchManager {
 		String[] sqlParameters = {query};
 		
 		// declare additional helper variables
-		EventList list     = new EventList();
-		Event     event    = null;
-		JSONArray jsonList = new JSONArray();
+		EventList  list     = new EventList();
+		Event      event    = null;
+		JSONArray  jsonList = new JSONArray();
 		
 		// get the data
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
@@ -1030,9 +1032,7 @@ public class SearchManager {
 			event.setName(resultSet.getString(2));
 			event.setFirstDate(DateUtils.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
 			event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
-			event.setVenueId(resultSet.getString(6));
-			event.setLatitude(resultSet.getString(7));
-			event.setLongitude(resultSet.getString(8));
+			event.setVenue(doVenueIdSearch(resultSet.getString(6), formatType));
 			event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
 		
 			// add the event to the list
@@ -1076,7 +1076,7 @@ public class SearchManager {
 		query = sanitiseQuery(query);
 		
 		// declare the sql variables
-		String sql = "SELECT events.eventid, events.event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, latitude, longitude "
+		String sql = "SELECT events.eventid, events.event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid "
 				   + "FROM events, venue, search_event "
 				   + "WHERE CONTAINS(search_event.combined_all, ?, 1) > 0 "
 				   + "AND search_event.eventid = events.eventid "
@@ -1121,9 +1121,7 @@ public class SearchManager {
 				event.setName(resultSet.getString(2));
 				event.setFirstDate(DateUtils.buildDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
 				event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
-				event.setVenueId(resultSet.getString(6));
-				event.setLatitude(resultSet.getString(7));
-				event.setLongitude(resultSet.getString(8));
+				event.setVenue(doVenueIdSearch(resultSet.getString(6), formatType));
 				event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
 		
 				// add the venue to the list
@@ -1190,9 +1188,13 @@ public class SearchManager {
 		Iterator iterator = events.iterator();
 		
 		// declare helper variables
-		JSONArray  list   = new JSONArray();
-		JSONObject object = null;
-		Event      event  = null;
+		JSONArray  list     = new JSONArray();
+		JSONObject object   = null;
+		Event      event    = null;
+		JSONParser parser   = new JSONParser();
+		Object     obj      = null;
+		JSONArray  objArray = null;
+
 		
 		while(iterator.hasNext()) {
 		
@@ -1207,9 +1209,17 @@ public class SearchManager {
 			object.put("name", event.getName());
 			object.put("firstDate", event.getFirstDate());
 			object.put("firstDisplayDate", event.getFirstDisplayDate());
-			object.put("venueid", event.getVenueId());
-			object.put("latitude", event.getLatitude());
-			object.put("longitude", event.getLongitude());
+			
+			// reconstruct the venue from the string
+			try{
+				obj = parser.parse(event.getVenue());
+				objArray = (JSONArray)obj;
+				object.put("venue", objArray.get(0));
+			}
+			catch(ParseException pe){
+				object.put("venue", null);
+			}			
+			
 			object.put("url", event.getUrl());
 			
 			// add the new object to the array

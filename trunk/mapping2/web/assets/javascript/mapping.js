@@ -315,7 +315,7 @@ function buildContributorSearchResults(data) {
 		list += '</tr>';
 	}
 	
-	list += "</table>";
+	list += "</tbody></table>";
 	
 	if(i > 0) {
 		$("#contributor_results").append(list);
@@ -364,7 +364,7 @@ function buildOrganisationSearchResults(data) {
 		list += '</tr>';
 	}
 	
-	list += '</table>';
+	list += '</tbody></table>';
 	
 	if(i > 0) {
 		$("#organisation_results").append(list);
@@ -382,19 +382,56 @@ function buildOrganisationSearchResults(data) {
 // a function to build the contributor search results
 function buildVenueSearchResults(data) {
 
-	var list = "<ul>";
+	var list = '<table class="searchResults"><thead><tr><th>Venue Name</th><th>Address</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
 	
 	var i = 0;
 	
 	for(i; i < data.length; i++) {
-		list += "<li>";
-		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + ", " + data[i].suburb + '</a> <span title="Total Events">' + data[i].totalEventCount + "</span>";
-		list += "</li>";
+		
+		// style odd rows differently
+		if(i % 2 == 1) {
+			list += '<tr class="odd">'; 
+		} else {
+			list += '<tr>'; 
+		}
+		
+		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
+		list += '<td>';
+		
+		if(data[i].street != null) {
+			 list += data[i].street + ', ';
+		} 
+		
+		if(data[i].suburb != null) {
+			list += data[i].suburb + ', ';
+		}
+		
+		if(data[i].state != null) {
+			list += data[i].state + ', ';
+		}
+		
+		if(data[i].postcode != null) {
+			list += data[i].postcode;
+		} else {
+			list = list.substr(0, list.length - 2);
+		}
+		
+		list += '</td><td>' + data[i].totalEventCount + '</td>';
+		
+		if(data[i].latitude != null) {
+			list += '<td><input type="checkbox"/></td>';
+		} else {
+			list += '<td>&nbsp;</td>';
+		}
+		
+		list += '</tr>';
 	}
 	
-	list += "</ul>";
+	list += '</tbody></table>';
 	
-	$("#venue_results").append(list);
+	if(i > 0) {
+		$("#venue_results").append(list);
+	}
 	
 	if(i == 25) {
 		$("#venue_results").append(LIMIT_REACHED_MSG);
@@ -408,19 +445,57 @@ function buildVenueSearchResults(data) {
 // a function to build the contributor search results
 function buildEventSearchResults(data) {
 
-	var list = "<ul>";
+	var list = '<table class="searchResults"><thead><tr><th>Event Name</th><th>Venue</th><th>First Date</th><th>&nbsp;</th></tr></thead><tbody>';
 	
 	var i = 0;
 	
 	for(i; i < data.length; i++) {
-		list += "<li>";
-		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a>';
-		list += "</li>";
+	
+		// style odd rows differently
+		if(i % 2 == 1) {
+			list += '<tr class="odd">'; 
+		} else {
+			list += '<tr>'; 
+		}
+		
+		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
+		
+		list += '<td>' + data[i].venue.name + ' ';
+		
+		if(data[i].street != null) {
+			 list += data[i].venue.street + ', ';
+		} 
+		
+		if(data[i].suburb != null) {
+			list += data[i].venue.suburb + ', ';
+		}
+		
+		if(data[i].state != null) {
+			list += data[i].venue.state + ', ';
+		}
+		
+		if(data[i].postcode != null) {
+			list += data[i].venue.postcode;
+		} else {
+			list = list.substr(0, list.length - 2);
+		}
+		
+		list += '</td><td>' + data[i].firstDisplayDate + '</td>';
+		
+		if(data[i].venue.latitude != null) {
+			list += '<td><input type="checkbox"/></td>';
+		} else {
+			list += '<td>&nbsp;</td>';
+		}
+		
+		list += '</tr>';
 	}
 	
-	list += "</ul>";
+	list += '</tbody></table>';
 
-	$("#event_results").append(list);
+	if(i > 0) {
+		$("#event_results").append(list);
+	}
 	
 	if(i == 25) {
 		$("#event_results").append(LIMIT_REACHED_MSG);
