@@ -18,7 +18,7 @@ In this actors’ network, actors are defined as nodes.  The contributor ID is d
 == GraphML support in Network Workbench, Visone and Gephi ==
 
 
-To explore how GraphML format is supported in the network analysis and visualization softwares such as Network Workbench (GUESS is used as visualization tool), Visone and Gephi in particular, eight categories are identified to examine their GraphML support when the actors network file is opened in these three software. They are *Topology*, *NodeID*, *Edge source & target*, *Node attribute definition*, *Node attribute value*, *Edge attribute definition*, *Edge attribute value* and *GraphML export*. The first seven categories are related with input format and how the software explains attributes and their value when the GraphML file is opened in them. The following section will explain the eight categories and how the software supports it respectively. Table 1 shows the summary of the comparison.
+To explore how GraphML format is supported in the network analysis and visualization software such as Network Workbench (GUESS is used as visualization tool), Visone and Gephi in particular, eight categories are identified to examine their GraphML support when the actors network file is opened in these three software. They are *Topology*, *NodeID*, *Edge source & target*, *Node attribute definition*, *Node attribute value*, *Edge attribute definition*, *Edge attribute value* and *GraphML export*. The first seven categories are related with input format and how the software explains attributes and their value when the GraphML file is opened in them. The following section will explain the eight categories and how the software supports it respectively. Table 1 shows the summary of the comparison.
 
 *1)	Topology* is used to justify whether the software can display the graph (nodes and edges) correctly without considering attributes. 
       All the three software can display the graph properly. In another words, all the nodes and edges declared in the actors network can be recognized. 
@@ -47,9 +47,9 @@ _Note:_
 *8)	GraphML export*
        GUESS dose not support GraphML export function. Gephi adds some attributes for nodes such as size and color. Visone adds some attributes for nodes and edges such as style information.
 
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/graphML-comparison-table.PNG]
 
-
-
+Based on the above observation, Visone is the best to cope with GraphML format among these three software. However, it re-assigns a new value to the Node ID and the original Node ID (contributor ID) is lost. To keep the contributor ID, we can add an extra attribute for node. Please see the following snippet in red lines. In this way, all the application related information for each node and edge can be browsed in the Attribute Manager in Visone.
 
 
 
