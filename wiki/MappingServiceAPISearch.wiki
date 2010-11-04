@@ -70,7 +70,8 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=id&query
   "totalEventCount":435,
   "mapEventCount":284,
   "name":"Australian Dance Theatre",
-  "url":"http:\/\/www.ausstage.edu.au\/indexdrilldown.jsp?xcid=59&amp;f_org_id=102"
+  "url":"http:\/\/www.ausstage.edu.au\/indexdrilldown.jsp?xcid=59&amp;f_org_id=102",
+  "address":"126 Belair Road"
  }
 ]
 }}}
@@ -86,31 +87,36 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=name&que
     "mapEventCount" : 2,
     "name" : "Australian Contemporary Dance Company",
     "totalEventCount" : 2,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=9703"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=9703",
+    "address":null
   },
   { "id" : "12224",
     "mapEventCount" : 2,
     "name" : "Australian Dance Festival",
     "totalEventCount" : 2,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=12224"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=12224",
+    "address":null
   },
   { "id" : "30769",
     "mapEventCount" : 1,
     "name" : "Australian Dance Performance Institute",
     "totalEventCount" : 1,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=30769"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=30769",
+    "address":null
   },
   { "id" : "102",
     "mapEventCount" : 303,
     "name" : "Australian Dance Theatre",
     "totalEventCount" : 408,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102",
+    "address":"126 Belair Road"
   },
   { "id" : "32347",
     "mapEventCount" : 1,
     "name" : "Australian Dance Theatre Academy",
     "totalEventCount" : 1,
-    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=32347"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=32347",,
+    "address":null
   }
 ]
 }}}
