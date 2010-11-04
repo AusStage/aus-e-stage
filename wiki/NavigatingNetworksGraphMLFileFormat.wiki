@@ -5,7 +5,14 @@
 GraphML can be used to define the topology of a graph by declaring its nodes and edges. In addition to this, application related information of simple type for the elements of the graph can be specified through the extension [http://graphml.graphdrawing.org/primer/graphml-primer.html#Attributes GraphML-Attributes]. To look into the capability of the network analysis and visualization software (Network Workbench, Visone and Gephi) in regards to their support for GraphML format – attribute in particular, a simple actors’ network in GraphML format is prepared and examined in the software mentioned above.
 
 
-= Details =
+== Actors’ Network in GraphML Format ==
+
+To illustrate the GraphML with attribute support, a sample GraphML described a simple actors’ network with 3 nodes and 2 edges is prepared. Please refer to Figure 1.
+[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/graphml.PNG]
+
+
+
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
