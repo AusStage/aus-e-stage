@@ -400,15 +400,15 @@ public class SearchManager {
 		query = sanitiseQuery(query);
 		
 		// declare the sql variables
-		String sql = "SELECT contributorid, first_name, last_name, COUNT(eventid), COUNT(latitude) "
-				   + "FROM (SELECT DISTINCT c.contributorid, c.first_name, c.last_name, e.eventid, v.latitude "
+		String sql = "SELECT contributorid, first_name, last_name, event_dates, COUNT(eventid), COUNT(latitude) "
+				   + "FROM (SELECT DISTINCT c.contributorid, c.first_name, c.last_name, e.eventid, v.latitude, sc.event_dates "
 				   + "      FROM contributor c, search_contributor sc, conevlink cel, events e, venue v "
 				   + "      WHERE CONTAINS(sc.combined_all, ?, 1) > 0 "
 				   + "      AND c.contributorid = sc.contributorid "
 				   + "      AND c.contributorid = cel.contributorid "
 				   + "      AND cel.eventid = e.eventid "
 				   + "      AND e.venueid = v.venueid) "
-				   + "GROUP BY contributorid, first_name, last_name ";
+				   + "GROUP BY contributorid, first_name, last_name, event_dates ";
 				   
 		// finalise the sql
 		if(sortType.equals("name") == true) {
@@ -449,8 +449,9 @@ public class SearchManager {
 				contributor.setFirstName(resultSet.getString(2));
 				contributor.setLastName(resultSet.getString(3));
 				contributor.setUrl(LinksManager.getContributorLink(resultSet.getString(1)));
-				contributor.setEventCount(resultSet.getString(4));
-				contributor.setMappedEventCount(resultSet.getString(5));			
+				contributor.setEventDates(resultSet.getString(4));
+				contributor.setEventCount(resultSet.getString(5));
+				contributor.setMappedEventCount(resultSet.getString(6));			
 		
 				// add the contrbutor to the list
 				list.addContributor(contributor);
@@ -495,14 +496,15 @@ public class SearchManager {
 	private String doContributorIdSearch(String query, String formatType) {
 		
 		// declare the SQL variables
-		String sql = "SELECT contributorid, first_name, last_name, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
-				   + "FROM (SELECT c.contributorid, c.first_name, c.last_name, e.eventid, v.longitude "
-				   + "      FROM contributor c, conevlink cel, events e, venue v "
+		String sql = "SELECT contributorid, first_name, last_name, event_dates, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
+				   + "FROM (SELECT c.contributorid, c.first_name, c.last_name, e.eventid, v.longitude, sc.event_dates"
+				   + "      FROM contributor c, search_contributor sc, conevlink cel, events e, venue v "
 				   + "      WHERE c.contributorid = ? "
+				   + "      AND c.contributorid = sc.contributorid "
 				   + "      AND c.contributorid = cel.contributorid "
 				   + "      AND cel.eventid = e.eventid "
 				   + "      AND e.venueid = v.venueid) "
-				   + "GROUP BY contributorid, first_name, last_name";
+				   + "GROUP BY contributorid, first_name, last_name, event_dates";
 				   
 		// define the paramaters
 		String[] sqlParameters = {query};
@@ -533,8 +535,9 @@ public class SearchManager {
 			contributor.setFirstName(resultSet.getString(2));
 			contributor.setLastName(resultSet.getString(3));
 			contributor.setUrl(LinksManager.getContributorLink(resultSet.getString(1)));
-			contributor.setEventCount(resultSet.getString(4));
-			contributor.setMappedEventCount(resultSet.getString(5));		
+			contributor.setEventDates(resultSet.getString(4));
+			contributor.setEventCount(resultSet.getString(5));
+			contributor.setMappedEventCount(resultSet.getString(6));		
 		
 			// add the contrbutor to the list
 			list.addContributor(contributor);
@@ -610,6 +613,7 @@ public class SearchManager {
 			object.put("url", contributor.getUrl());
 			object.put("firstName", contributor.getFirstName());
 			object.put("lastName", contributor.getLastName());
+			object.put("eventDates", contributor.getEventDates());
 			object.put("totalEventCount", new Integer(contributor.getEventCount()));
 			object.put("mapEventCount", new Integer(contributor.getMappedEventCount()));
 			

@@ -337,7 +337,9 @@ function buildOrganisationSearchResults(data) {
 	
 	list += '</table>';
 	
-	$("#organisation_results").append(list);
+	if(i > 0) {
+		$("#organisation_results").append(list);
+	}
 	
 	if(i == 25) {
 		$("#organisation_results").append(LIMIT_REACHED_MSG);
