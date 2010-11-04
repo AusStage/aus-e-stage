@@ -41,6 +41,7 @@ public class Contributor implements Comparable<Contributor>{
 	private String url  = null;
 	private String eventCount = null;
 	private String mappedEventCount = null;
+	private String eventDates = null;
 	private Set<Event> events;
 	
 	// declare public constants
@@ -327,6 +328,18 @@ public class Contributor implements Comparable<Contributor>{
 		}
 		
 		url = value;
+	}
+	
+	public String getEventDates() {
+		return eventDates;
+	}
+	
+	public void setEventDates(String value) {
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("The value cannot be null or empty");
+		}
+		
+		eventDates = value;
 	}
 	
 	public void setEventCount(String value) {
