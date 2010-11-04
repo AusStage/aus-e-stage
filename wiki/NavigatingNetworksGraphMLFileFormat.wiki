@@ -26,6 +26,39 @@ _Note:_
       [http://guess.wikispot.org/GraphML GUESS] and [http://gephi.org/users/supported-graph-formats/graphml-format/ Gephi] said on their website that it support a limited set of this format (no subgraphs or hyperedges).
       [http://visone.info/doku.php?id=docs:index Visone] said that its native file format  is GraphML.
 
+*2)	Node ID*
+       Gephi and GUESS can preserve the ID value and assign the ID value to node label. However, Visone will re-assign a new value to the Node ID and the original Node ID (contributor ID) is lost. 
+
+*3)	Edge source & target*
+       All three software preserve the Edge source and target correctly. The edge source and target  in Visone refer to new Node IDs as mentioned in 2).
+
+*4)	Node attribute definition*
+       All three software preserve the Node attribute definition correctly. Gephi displays the Node attribute definition and its value in Data Table. Visone displays these in Attribute Manager and GUESS in Information Window.
+
+*5)	Node attribute value*
+       Node attribute values are preserved correctly in Visone and Gephi. However, no value is preserved in GUESS.
+
+*6)	Edge attribute definition*
+       All three software preserve the Edge attribute definition correctly. The definitions are displayed in correspondent windows mentioned in 4).
+
+*7)	Edge attribute value*
+       Edge attribute values are preserved correctly in Visone. No value is preserved in GUESS. Gephi can only recognize the value with the edge attribute name “weight”.
+
+*8)	GraphML export*
+       GUESS dose not support GraphML export function. Gephi adds some attributes for nodes such as size and color. Visone adds some attributes for nodes and edges such as style information.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
