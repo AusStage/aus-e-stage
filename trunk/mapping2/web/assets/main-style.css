@@ -245,15 +245,6 @@ table.searchResults tfoot {
 	font-size: 90%;
 }
 
-/* Dialog styles */
-.ui-dialog-content a {
-	color: blue!important;
-}
-
-.ui-dialog-content a:visited {
-	color: purple!important;
-}
-
 /* Styles for the tabs */
 
 .tab-container {

@@ -35,6 +35,7 @@
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
+	<!-- prevent a FOUC from the messages div -->
 	<script type="text/javascript">
 		$('html').addClass('js');
 	</script>

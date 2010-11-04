@@ -39,6 +39,7 @@ public class Organisation implements Comparable<Organisation> {
 	private String eventCount = null;
 	private String mappedEventCount = null;
 	private Set<Event> events;
+	private String address = null;
 	
 	// declare public constants
 	/**
@@ -314,6 +315,14 @@ public class Organisation implements Comparable<Organisation> {
 		}
 		
 		mappedEventCount = value;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public void setAddress(String value) {
+		address = value;
 	}
 	
 	/*

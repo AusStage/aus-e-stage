@@ -304,17 +304,38 @@ function buildContributorSearchResults(data) {
 // a function to build the organisation search results
 function buildOrganisationSearchResults(data) {
 
-	var list = "<ul>";
+	var list = '<table class="searchResults"><thead><tr><th>Organisation Name</th><th>Address</th><th>Mapped Events</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
 	
 	var i = 0;
 	
 	for(i; i < data.length; i++) {
-		list += "<li>";
-		list += '<a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a> <span title="Events to be Mapped">' + data[i].mapEventCount + '</span> / <span title="Total Events">' + data[i].totalEventCount + "</span>";
-		list += "</li>";
+	
+		if(i % 2 == 1) {
+			list += '<tr class="odd">'; 
+		} else {
+			list += '<tr>'; 
+		}
+		
+		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
+		
+		if(data[i].address != null) {
+			list += '<td>' + data[i].address + '</td>';
+		} else {
+			list += '<td>&nbsp;</td>';
+		}
+		
+		list += '<td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
+		
+		if(data[i].mapEventCount > 0) {
+			list += '<td><input type="checkbox"/></td>';
+		} else {
+			list += '<td>&nbsp;</td>';
+		}
+		
+		list += '</tr>';
 	}
 	
-	list += "</ul>";
+	list += '</table>';
 	
 	$("#organisation_results").append(list);
 	
