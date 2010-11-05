@@ -123,6 +123,56 @@
 			</div>
 		</div>
 	</div>
+	<!-- Search form div -->
+	<div id="add_search_results_div" title="Add Items to the Map">
+		<h2></h2>
+		<h3>Add items to a new layer</h3>
+		<form action="" id="add_to_map_new_layer" name="add_to_map_new_layer">
+			<table class="formTable">
+				<tbody>
+				<tr>
+					<th scope="row">
+						<label id="new-name-label" for="new_layer_name">Layer Name: </label>
+					</th>
+					<td>
+						<input type="text" size="20" id="new_layer_name" name="new_layer_name" title="Enter a brief name for this layer"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="button" name="add_new_layer_submit" id="add_new_layer_submit" value="Add to Map"/>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+		<hr/>
+		<h3>Add items to an existing layer</h3>
+		<form action="" id="add_to_map_existing_layer" name="add_to_map_existing_layer">
+			<table class="formTable">
+				<tbody>
+				<tr>
+					<th scope="row">
+						<label id="existing-name-label" for="existing_layer_name">Layer Name: </label>
+					</th>
+					<td>
+						<select name="existing_layer_name" id="existing_layer_name" size="1">
+							<option value="contributors">Contributors</option>
+							<option value="organisations">Organisations</option>
+							<option value="venues">Venues</option>
+							<option value="events">Events</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="button" name="add_existing_layer_submit" id="add_existing_layer_submit" value="Add to Map"/>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
 	<jsp:include page="footer.jsp"/>
 </div>
 </html>

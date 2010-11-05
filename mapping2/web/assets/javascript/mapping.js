@@ -30,6 +30,8 @@ var LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="ma
 var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again. If the problem persists contact the AusStage team.';
 
 var ID_SEARCH_TOKEN   = "id:";
+
+var items_to_add = [];
  
 // show / hide the menu
 $(document).ready(function(){
@@ -116,6 +118,26 @@ $(document).ready(function(){
 	
 	// setup a handler for when the user clicks on a button to add search results to the map
 	$('.addSearchResult').live('click', addToMapClickEvent);
+	
+	// setup the add to map dialog box
+	// setup the dialog box
+	$("#add_search_results_div").dialog({ 
+		autoOpen: false,
+		height: 400,
+		width: 450,
+		modal: true,
+		buttons: {
+			Cancel: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			
+		},
+		close: function() {
+			
+		}
+	});
 	
 	// create a custom validator for validating id messages
 	jQuery.validator.addMethod("validIDSearch", function(value, element) {
@@ -522,13 +544,15 @@ function addToMapClickEvent(event) {
 	var target = $(event.target);
 	if(target.attr('id') == 'addContributor') {
 		// adding contributors to a map
-		var list = []
+		items_to_add = []
 		
 		$(".searchContributor:checkbox:checked").each(function() {
-			list.push($(this).val());
+			items_to_add.push($(this).val());
 		});
 		
-		console.log(list);
+		$("#add_search_results_div h2").empty().append('Add ' + items_to_add.length + ' contributors to the map');
+		
+		$("#add_search_results_div").dialog('open');
 	}
 
 }
