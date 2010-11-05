@@ -43,5 +43,6 @@ $.extend({
 function styleButtons() {
 
 	$("button, input:submit").button();
+	$("button, input:button").button();
 
 }
