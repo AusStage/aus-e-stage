@@ -64,10 +64,10 @@ $(document).ready(function(){
 	$("#tabs").tabs();
 	
 	// style the buttons
-	$("button, input:submit").button();
+	styleButtons();
 	
 	// associate the tipsy library with the form elements
-	$('#search [title]').tipsy({trigger: 'focus', gravity: 'n'});
+	$('.tipsy_form [title]').tipsy({trigger: 'focus', gravity: 'n'});
 	
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
