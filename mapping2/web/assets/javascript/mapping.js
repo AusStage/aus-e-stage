@@ -114,6 +114,9 @@ $(document).ready(function(){
 		}
 	});
 	
+	// setup a handler for when the user clicks on a button to add search results to the map
+	$('.addSearchResult').live('click', addToMapClickEvent);
+	
 	// create a custom validator for validating id messages
 	jQuery.validator.addMethod("validIDSearch", function(value, element) {
 	
@@ -307,7 +310,7 @@ function buildContributorSearchResults(data) {
 		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].mapEventCount > 0) {
-			list += '<td><input type="checkbox"/></td>';
+			list += '<td><input type="checkbox" name="searchContributor" class="searchContributor" value="' + data[i].id + '"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -317,8 +320,12 @@ function buildContributorSearchResults(data) {
 	
 	list += "</tbody></table>";
 	
+	// add the button
+	list += '<button type="button" id="addContributor" class="addSearchResult">Add to Map</button>';
+	
 	if(i > 0) {
 		$("#contributor_results").append(list);
+		styleButtons();
 	}
 	
 	if(i == 25) {
@@ -506,4 +513,22 @@ function buildEventSearchResults(data) {
 	
 	// update the search underway flag
 	searching_underway_flag = false;
+}
+
+// function to respond to a button click
+function addToMapClickEvent(event) {
+
+	// determine which button was pressed
+	var target = $(event.target);
+	if(target.attr('id') == 'addContributor') {
+		// adding contributors to a map
+		var list = []
+		
+		$(".searchContributor:checkbox:checked").each(function() {
+			list.push($(this).val());
+		});
+		
+		console.log(list);
+	}
+
 }
