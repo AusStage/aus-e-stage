@@ -54,7 +54,7 @@
 			<div class="ui-layout-content" style="font-size:90%">
 				<div id="tabs-1">
 					<h3>Search the AusStage Database</h3>
-					<form action="/mapping/" method="get" id="search" name="search">
+					<form action="/mapping/" method="get" id="search" name="search" class="tipsy_form">
 						<table class="formTable">
 							<tbody>
 							<tr>
@@ -127,7 +127,7 @@
 	<div id="add_search_results_div" title="Add Items to the Map">
 		<h2></h2>
 		<h3>Add items to a new layer</h3>
-		<form action="" id="add_to_map_new_layer" name="add_to_map_new_layer">
+		<form action="" id="add_to_map_new_layer" name="add_to_map_new_layer" class="tipsy_form">
 			<table class="formTable">
 				<tbody>
 				<tr>
@@ -148,7 +148,7 @@
 		</form>
 		<hr/>
 		<h3>Add items to an existing layer</h3>
-		<form action="" id="add_to_map_existing_layer" name="add_to_map_existing_layer">
+		<form action="" id="add_to_map_existing_layer" name="add_to_map_existing_layer" class="tipsy_form">
 			<table class="formTable">
 				<tbody>
 				<tr>
@@ -156,7 +156,7 @@
 						<label id="existing-name-label" for="existing_layer_name">Layer Name: </label>
 					</th>
 					<td>
-						<select name="existing_layer_name" id="existing_layer_name" size="1">
+						<select name="existing_layer_name" id="existing_layer_name" size="1" title="Select one of the existing layers">
 							<option value="contributors">Contributors</option>
 							<option value="organisations">Organisations</option>
 							<option value="venues">Venues</option>
