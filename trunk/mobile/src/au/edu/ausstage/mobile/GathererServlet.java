@@ -169,7 +169,7 @@ public class GathererServlet extends HttpServlet {
 			String results = null;
 			GathererManager manager = new GathererManager(database, servletConfig);
 			
-			results = manager.processMobileWeb(performance, date, time, message);
+			results = manager.processMobileWeb(performance, date, time, message, request.getRemoteAddr());
 			
 			// ouput the data
 			// set the appropriate content type
