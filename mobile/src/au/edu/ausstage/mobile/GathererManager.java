@@ -431,10 +431,11 @@ public class GathererManager {
 	 * @param date        the date that the message was sent
 	 * @param time        the time that the message was sent
 	 * @param message     the content of the feedback message
+	 * @param remoteAddr  the remote IP address of the client
 	 *
 	 * @return            a list of feedback already recieved, same content as the FeedbackManager.getInitialFeedback() method
 	 */
-	public String processMobileWeb(String performance, String date, String time, String message) {
+	public String processMobileWeb(String performance, String date, String time, String message, String remoteAddr) {
 	
 		// check on the parameters
 		if(InputUtils.isValidInt(performance) == false || InputUtils.isValid(date) == false || InputUtils.isValid(time) == false || InputUtils.isValid(message) == false) {
@@ -492,18 +493,27 @@ public class GathererManager {
 		// change the date and time to the local time
 		LocalDateTime     localWebInputDate = messageReceived.toLocalDateTime();
 		
+		// get the hash 
+		String receivedFrom = null;
+		if(InputUtils.isValid(remoteAddr) == true) {
+			receivedFrom = HashUtils.hashValue(remoteAddr + performance);
+		} else {
+			receivedFrom = HashUtils.hashValue(Long.toHexString(Double.doubleToLongBits(Math.random())));
+		}
+		
 		// define new sql
 		sql = "INSERT INTO mob_feedback "
-			+ "(performance_id, question_id, source_type, received_date_time, short_content) "
-			+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?)";
+			+ "(performance_id, question_id, source_type, received_date_time, short_content, received_from) "
+			+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?)";
 		
 		// define new parameters	
-		sqlParameters = new String[5]; // store the parameters
+		sqlParameters = new String[6]; // store the parameters
 		sqlParameters[0] = performance;
 		sqlParameters[1] = question;
 		sqlParameters[2] = MOBILE_WEB_SOURCE_ID;
 		sqlParameters[3] = dateTimeFormat.print(localWebInputDate);
 		sqlParameters[4] = message;
+		sqlParameters[5] = receivedFrom;
 		
 		// insert the data
 		if(database.executePreparedInsertStatement(sql, sqlParameters) == false) {
