@@ -54,17 +54,3 @@ Table 1. GraphML capability comparison.
 Based on the above observation, Visone is the best to cope with GraphML format among these three software. However, it re-assigns a new value to the Node ID and the original Node ID (contributor ID) is lost. To keep the contributor ID, we can add an extra attribute for node. Please see the following snippet in red lines. In this way, all the application related information for each node and edge can be browsed in the Attribute Manager in Visone.
 
 [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/new-contributor-ID-attribute.PNG]
-
-
-
-
-
-
-
-
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
