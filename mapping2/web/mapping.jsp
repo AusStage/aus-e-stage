@@ -24,11 +24,11 @@
 	<meta charset="utf-8" />
 	<title>AusStage Mapping Service (Beta)</title>
 	<link rel="stylesheet" href="assets/main-style.css"/>
-	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.5.custom.css"/>
+	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
 	<jsp:include page="analytics.jsp"/>
 	<!-- libraries -->
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.3.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.5.custom.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.6.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-0.1.7.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.06.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
@@ -62,9 +62,11 @@
 									<label id="query-label" for="query">Search Terms: </label>
 								</th>
 								<td>
-									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/>
+									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/>
 								</td>
-								<td rowspan="2">
+							</tr>
+							<tr>
+								<td colspan="2">
 									<div id="messages">
 										<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message">
 											<p>
@@ -77,11 +79,6 @@
 											<span id="error_text">Error condition</span>
 										</div>										
 									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<input type="submit" name="submit" id="search_btn" value="Search"/>
 								</td>
 							</tr>
 							</tbody>
@@ -124,6 +121,7 @@
 		</div>
 	</div>
 	<!-- Search form div -->
+	<!--
 	<div id="add_search_results_div" title="Add Items to the Map">
 		<h2></h2>
 		<h3>Add items to a new layer</h3>
@@ -173,6 +171,7 @@
 			</table>
 		</form>
 	</div>
+	-->
 	<jsp:include page="footer.jsp"/>
 </div>
 </html>
