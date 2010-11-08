@@ -34,6 +34,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
+	<script type="text/javascript" src="assets/javascript/search.js"></script>
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 	<!-- prevent a FOUC from the messages div -->
 	<script type="text/javascript">
