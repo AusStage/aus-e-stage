@@ -40,6 +40,9 @@ public class Organisation implements Comparable<Organisation> {
 	private String mappedEventCount = null;
 	private Set<Event> events;
 	private String address = null;
+	private String suburb = null;
+	private String state = null;
+	private String postcode = null;
 	
 	// declare public constants
 	/**
@@ -323,6 +326,30 @@ public class Organisation implements Comparable<Organisation> {
 	
 	public void setAddress(String value) {
 		address = value;
+	}
+	
+	public String getSuburb() {
+		return suburb;
+	}
+	
+	public void setSuburb(String value) {
+		suburb = value;
+	}
+	
+	public String getState() {
+		return state;
+	}
+	
+	public void setState(String value) {
+		state = value;
+	}
+	
+	public String getPostcode() {
+		return postcode;
+	}
+	
+	public void setPostcode(String value) {
+		postcode = value;
 	}
 	
 	/*

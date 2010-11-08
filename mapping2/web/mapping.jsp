@@ -55,18 +55,16 @@
 				<div id="tabs-1">
 					<h3>Search the AusStage Database</h3>
 					<form action="/mapping/" method="get" id="search" name="search" class="tipsy_form">
-						<table class="formTable">
+						<table class="formTable" style="height: 60px;">
 							<tbody>
 							<tr>
-								<th scope="row">
+								<th scope="row" style="width: 10%">
 									<label id="query-label" for="query">Search Terms: </label>
 								</th>
-								<td>
+								<td style="width: 45%">
 									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/>
 								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
+								<td style="width: 45%">
 									<div id="messages">
 										<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message">
 											<p>
@@ -120,9 +118,8 @@
 			</div>
 		</div>
 	</div>
-	<!-- Search form div -->
-	<!--
-	<div id="add_search_results_div" title="Add Items to the Map">
+	<!-- add search results form div -->
+	<div id="add_search_results_div" title="Add Items to the Map" style="font-size: 90%">
 		<h2></h2>
 		<h3>Add items to a new layer</h3>
 		<form action="" id="add_to_map_new_layer" name="add_to_map_new_layer" class="tipsy_form">
@@ -171,7 +168,6 @@
 			</table>
 		</form>
 	</div>
-	-->
 	<jsp:include page="footer.jsp"/>
 </div>
 </html>
