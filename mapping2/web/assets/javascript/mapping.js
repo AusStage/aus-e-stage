@@ -15,23 +15,9 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
  */
- 
-// declare global variables
-var BASE_URL = "/mapping2/";
-var DEFAULT_SEARCH_LIMIT = "25";
-var UPDATE_DELAY = 500;
 
-var searching_underway_flag = false;
-var search_history_log = [ ];
-var error_condition = false;
-
-var LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>The limit of ' + DEFAULT_SEARCH_LIMIT + ' records has been reached.<br/>Please adjust your search query if the result you are looking for is missing.</p></di>';
-
-var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again. If the problem persists contact the AusStage team.';
-
-var ID_SEARCH_TOKEN   = "id:";
-
-var items_to_add = [];
+// declare global objects
+var searchObj = new SearchClass();
  
 // show / hide the menu
 $(document).ready(function(){
@@ -94,7 +80,7 @@ $(document).ready(function(){
 		// determine what type of request has been made & update the message text accordingly
 		// ensure that we're only working on searches
 		if(settings.url.indexOf("search?", 0) != -1) {
-			if(error_condition == false) {
+			if(searchObj.error_condition == false) {
 				if(settings.url.indexOf("contributor", 0) != -1) {
 					$(this).text(AJAX_ERROR_MSG.replace('-', 'the contributor search'));
 				} else if(settings.url.indexOf("organisation", 0) != -1) {
@@ -103,12 +89,12 @@ $(document).ready(function(){
 					$(this).text(AJAX_ERROR_MSG.replace('-', 'the venue search'));
 				} else if(settings.url.indexOf("event", 0) != -1) {
 					$(this).text(AJAX_ERROR_MSG.replace('-', 'the event search'));
-					searching_underway_flag = false;
+					searchObj.searching_underway_flag = false;
 				}
-				error_condition = true;
+				searchObj.error_condition = true;
 			} else {
 				$(this).text(AJAX_ERROR_MSG.replace('-', 'multiple searches'));
-				searching_underway_flag = false;
+				searchObj.searching_underway_flag = false;
 			}
 			
 			// show the error message
@@ -117,8 +103,8 @@ $(document).ready(function(){
 	});
 	
 	// setup a handler for when the user clicks on a button to add search results to the map
-	$('.addSearchResult').live('click', addToMapClickEvent);
-	$('.selectSearchAll').live('click', selectAllClickEvent);
+	$('.addSearchResult').live('click', searchObj.addToMapClickEvent);
+	$('.selectSearchAll').live('click', searchObj.selectAllClickEvent);
 	
 	// setup the add to map dialog box
 	// setup the dialog box
@@ -144,7 +130,7 @@ $(document).ready(function(){
 	jQuery.validator.addMethod("validIDSearch", function(value, element) {
 	
 		// check to see if this is an id search query
-		if(value.substr(0,3) != ID_SEARCH_TOKEN) {
+		if(value.substr(0,3) != searchObj.ID_SEARCH_TOKEN) {
 			// return true as nothing to do
 			return true;
 		} else {
@@ -156,9 +142,7 @@ $(document).ready(function(){
 			}
 		}
 	}, 'An ID search must start with "id:" and be followed by a valid integer');
-	
-			
-	
+
 	// setup the search form
 	$("#search").validate({
 		rules: { // validation rules
@@ -171,11 +155,11 @@ $(document).ready(function(){
 			$("#messages").show();
 			$("#status_message").show();
 			
-			searching_underway_flag = true;
-			setTimeout("updateMessages()", UPDATE_DELAY);
+			searchObj.searching_underway_flag = true;
+			setTimeout("searchObj.updateMessages()", UPDATE_DELAY);
 		
 			// clear the accordian of any past search results
-			clearAccordian();
+			searchObj.clearAccordian();
 			
 			// set up the ajax queue
 			var ajaxQueue = $.manageAjax.create("mappingAjaxQueue", {
@@ -186,9 +170,9 @@ $(document).ready(function(){
 			var base_search_url = '';
 			var query           = $("#query").val();
 			
-			if(query.substr(0,3) != ID_SEARCH_TOKEN) {
+			if(query.substr(0,3) != searchObj.ID_SEARCH_TOKEN) {
 				// this is a name search
-				base_search_url = BASE_URL + "search?type=name&limit=" + DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent(query);
+				base_search_url = BASE_URL + "search?type=name&limit=" + searchObj.DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent(query);
 			} else {
 				// this is an id search 
 				base_search_url = BASE_URL + "search?type=id&query=" + encodeURIComponent(query.substr(3).replace(/^\s\s*/, '').replace(/\s\s*$/, ''));
@@ -199,7 +183,7 @@ $(document).ready(function(){
 			
 			// queue this request
 			ajaxQueue.add({
-				success: buildContributorSearchResults,
+				success: searchObj.buildContributorResults,
 				url: url
 			});
 			
@@ -208,7 +192,7 @@ $(document).ready(function(){
 			
 			// queue this request
 			ajaxQueue.add({
-				success: buildOrganisationSearchResults,
+				success: searchObj.buildOrganisationResults,
 				url: url
 			});
 			
@@ -217,7 +201,7 @@ $(document).ready(function(){
 			
 			// queue this request
 			ajaxQueue.add({
-				success: buildVenueSearchResults,
+				success: searchObj.buildVenueResults,
 				url: url
 			});
 			
@@ -226,14 +210,14 @@ $(document).ready(function(){
 			
 			// queue this request
 			ajaxQueue.add({
-				success: buildEventSearchResults,
+				success: searchObj.buildEventResults,
 				url: url
 			});
 			
 			// add to the search history if necessary
-			if(jQuery.inArray($("#query").val(), search_history_log) == -1) {
-				$("#search_history").append('<li><a href="#" onclick="doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat the Search">Repeat search for: ' + $("#query").val() + '</a> / <a href="' + BASE_URL + 'mapping.jsp?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search">Persistent Link</a></li>');
-				search_history_log.push($("#query").val());
+			if(jQuery.inArray($("#query").val(), searchObj.search_history_log) == -1) {
+				$("#search_history").append('<li><a href="#" onclick="searchObj.doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat the Search">Repeat search for: ' + $("#query").val() + '</a> / <a href="' + BASE_URL + 'mapping.jsp?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search">Persistent Link</a></li>');
+				searchObj.search_history_log.push($("#query").val());
 			}
 			
 		}
@@ -254,333 +238,7 @@ $(document).ready(function(){
 			$("#message_text").text("Error: The persistent URL for this search is incomplete, please try again");
 			$("#messages").show();
 		} else {
-			doSearch(queryParam);
+			searchObj.doSearch(queryParam);
 		}
 	}
 });
-
-// a function to initiate a search result
-function doSearch(searchTerm) {
-	$("#query").val(decodeURIComponent(searchTerm));
-	$("#search").submit();
-}
-
-// a function to clear the accordian of any existing search results
-function clearAccordian() {
-
-	// clear each of the sections of the accordian in turn
-	$("#contributor_results").empty();
-	$("#organisation_results").empty();
-	$("#venue_results").empty();
-	$("#event_results").empty();
-	
-	// reset the headings
-	$("#contributor_heading").empty().append("Contributors");
-	$("#organisation_heading").empty().append("Organisations");
-	$("#venue_heading").empty().append("Venues");
-	$("#event_heading").empty().append("Events");
-
-	// reset the error div
-	$("#error_message").hide();
-	
-	// reset the error flag
-	error_condition = false;
-};
-
-// a function to hide the messages div if required
-function updateMessages() {
-
-	if(searching_underway_flag != true) {
-		// indicate that the search has finished
-		if(error_condition == false) {
-			$("#messages").hide();
-		} else {
-			$("#status_message").hide();
-		}
-	} else {
-		setTimeout("updateMessages()", UPDATE_DELAY);
-	}
-}	
-
-// a function to build the contributor search results
-function buildContributorSearchResults(data) {
-
-	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"</th></tr></thead><tbody>';
-	
-	var i = 0;
-	
-	for(i; i < data.length; i++) {
-		
-		if(i % 2 == 1) {
-			list += '<tr class="odd">'; 
-		} else {
-			list += '<tr>'; 
-		}
-		
-		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + " " + data[i].lastName + ' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a></td>';
-		list += '<td>' + data[i].eventDates + '</td><td>';
-		
-		if(data[i].functions.length > 0) {
-			for(var x = 0; x < data[i].functions.length; x++) {
-				list += data[i].functions[x] + ', ';
-			}
-			
-			list = list.substr(0, list.length - 2);
-		} else {
-			list += "&nbsp;";
-		}
-		
-		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
-		
-		if(data[i].mapEventCount > 0) {
-			list += '<td><input type="checkbox" name="searchContributor" class="searchContributor" value="' + data[i].id + '" title="Tick to add this contributor to the map"/></td>';
-		} else {
-			list += '<td>&nbsp;</td>';
-		}
-		
-		list += '</tr>';
-	}
-	
-	list += "</tbody></table>";
-	
-	// add the button
-	list += '<button type="button" id="addContributor" class="addSearchResult">Add to Map</button>';
-	
-	if(i > 0) {
-		$("#contributor_results").append(list);
-		styleButtons();
-	}
-	
-	if(i == 25) {
-		$("#contributor_results").append(LIMIT_REACHED_MSG);
-		$("#contributor_heading").empty().append("Contributors (25+)");
-	} else {
-		$("#contributor_heading").empty().append("Contributors (" + i + ")");
-	}
-
-}
-
-// a function to build the organisation search results
-function buildOrganisationSearchResults(data) {
-
-	var list = '<table class="searchResults"><thead><tr><th>Organisation Name</th><th>Address</th><th>Mapped Events</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
-	
-	var i = 0;
-	
-	for(i; i < data.length; i++) {
-	
-		if(i % 2 == 1) {
-			list += '<tr class="odd">'; 
-		} else {
-			list += '<tr>'; 
-		}
-		
-		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
-		
-		list += '<td>';
-		
-		if(data[i].street != null) {
-			 list += data[i].street + ', ';
-		} 
-		
-		if(data[i].suburb != null) {
-			list += data[i].suburb + ', ';
-		}
-		
-		if(data[i].state != null) {
-			list += data[i].state + ', ';
-		}
-		
-		if(data[i].postcode != null) {
-			list += data[i].postcode;
-		} else {
-			list = list.substr(0, list.length - 2);
-		}
-		
-		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
-		
-		if(data[i].mapEventCount > 0) {
-			list += '<td><input type="checkbox"/></td>';
-		} else {
-			list += '<td>&nbsp;</td>';
-		}
-		
-		list += '</tr>';
-	}
-	
-	list += '</tbody></table>';
-	
-	if(i > 0) {
-		$("#organisation_results").append(list);
-	}
-	
-	if(i == 25) {
-		$("#organisation_results").append(LIMIT_REACHED_MSG);
-		$("#organisation_heading").empty().append("Organisations (25+)");
-	} else {
-		$("#organisation_heading").empty().append("Organisations (" + i + ")");
-	}
-
-}
-
-// a function to build the contributor search results
-function buildVenueSearchResults(data) {
-
-	var list = '<table class="searchResults"><thead><tr><th>Venue Name</th><th>Address</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
-	
-	var i = 0;
-	
-	for(i; i < data.length; i++) {
-		
-		// style odd rows differently
-		if(i % 2 == 1) {
-			list += '<tr class="odd">'; 
-		} else {
-			list += '<tr>'; 
-		}
-		
-		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
-		list += '<td>';
-		
-		if(data[i].street != null) {
-			 list += data[i].street + ', ';
-		} 
-		
-		if(data[i].suburb != null) {
-			list += data[i].suburb + ', ';
-		}
-		
-		if(data[i].state != null) {
-			list += data[i].state + ', ';
-		}
-		
-		if(data[i].postcode != null) {
-			list += data[i].postcode;
-		} else {
-			list = list.substr(0, list.length - 2);
-		}
-		
-		list += '</td><td>' + data[i].totalEventCount + '</td>';
-		
-		if(data[i].latitude != null) {
-			list += '<td><input type="checkbox"/></td>';
-		} else {
-			list += '<td>&nbsp;</td>';
-		}
-		
-		list += '</tr>';
-	}
-	
-	list += '</tbody></table>';
-	
-	if(i > 0) {
-		$("#venue_results").append(list);
-	}
-	
-	if(i == 25) {
-		$("#venue_results").append(LIMIT_REACHED_MSG);
-		$("#venue_heading").empty().append("Venues (25+)");
-	} else {
-		$("#venue_heading").empty().append("Venues (" + i + ")");
-	}
-
-}
-
-// a function to build the contributor search results
-function buildEventSearchResults(data) {
-
-	var list = '<table class="searchResults"><thead><tr><th>Event Name</th><th>Venue</th><th>First Date</th><th>&nbsp;</th></tr></thead><tbody>';
-	
-	var i = 0;
-	
-	for(i; i < data.length; i++) {
-	
-		// style odd rows differently
-		if(i % 2 == 1) {
-			list += '<tr class="odd">'; 
-		} else {
-			list += '<tr>'; 
-		}
-		
-		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
-		
-		list += '<td>' + data[i].venue.name + ' ';
-				
-		if(data[i].venue.suburb != null) {
-			list += data[i].venue.suburb + ', ';
-		}
-		
-		if(data[i].venue.state != null) {
-			list += data[i].venue.state + ', ';
-		}
-		
-		if(data[i].venue.suburb != null || data[i].venue.state != null) {
-			list = list.substr(0, list.length - 2);
-		}
-		
-		list += '</td><td>' + data[i].firstDisplayDate + '</td>';
-		
-		if(data[i].venue.latitude != null) {
-			list += '<td><input type="checkbox"/></td>';
-		} else {
-			list += '<td>&nbsp;</td>';
-		}
-		
-		list += '</tr>';
-	}
-	
-	list += '</tbody></table>';
-
-	if(i > 0) {
-		$("#event_results").append(list);
-	}
-	
-	if(i == 25) {
-		$("#event_results").append(LIMIT_REACHED_MSG);
-		$("#event_heading").empty().append("Events (25+)");
-	} else {
-		$("#event_heading").empty().append("Events (" + i + ")");
-	}
-	
-	// update the search underway flag
-	searching_underway_flag = false;
-}
-
-// function to respond to a button click
-function addToMapClickEvent(event) {
-
-	// determine which button was pressed
-	var target = $(event.target);
-	if(target.attr('id') == 'addContributor') {
-		// adding contributors to a map
-		items_to_add = []
-		
-		$(".searchContributor:checkbox:checked").each(function() {
-			items_to_add.push($(this).val());
-		});
-		
-		$("#add_search_results_div h2").empty().append('Add ' + items_to_add.length + ' contributors to the map');
-		
-		$("#add_search_results_div").dialog('open');
-	}
-
-}
-
-// function to respond to a button click
-function selectAllClickEvent(event) {
-
-	// determine which checkbox was clicked
-	var target = $(event.target);
-	if(target.attr('id') == 'selectContributorSearchAll') {
-		
-		if(target.is(':checked') == false) {
-			$(".searchContributor:checkbox").each(function() {
-				$(this).attr('checked', false);
-			});
-		} else {
-			$(".searchContributor:checkbox").each(function() {
-				$(this).attr('checked', true);
-			});
-		}
-	}
-}
