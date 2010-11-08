@@ -123,10 +123,8 @@ SearchClass.prototype.buildContributorResults = function(data) {
 		list += '</tr>';
 	}
 	
-	list += "</tbody></table>";
-	
 	// add the button
-	list += '<button type="button" id="addContributor" class="addSearchResult">Add to Map</button>';
+	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button type="button" id="addContributor" class="addSearchResult">Add to Map</button></td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#contributor_results").append(list);
