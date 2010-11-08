@@ -170,10 +170,11 @@ h3 {
 	padding:5px 10px;
 	background:#aaaaaa;
 	color:#fff;
+	font-size: 90%;
 }
 #footer p {
 	margin:0;
-/*	font-size: 75%;*/
+    font-size: 75%;
     text-align: center;
 }
 
@@ -184,11 +185,6 @@ h3 {
 
 #footer a:hover {
 	text-decoration: underline;
-}
-
-* html #footer {
-	height:1px;
-/*	font-size: 90%;*/
 }
 
 /* Styles for forms */

@@ -113,15 +113,16 @@ public class SearchManager {
 		query = sanitiseQuery(query);
 		
 		// declare the sql variables
-		String sql = "SELECT organisationid, name, address, COUNT(eventid), COUNT(latitude) "
-				   + "FROM (SELECT DISTINCT o.organisationid, o.name, e.eventid, v.latitude, so.address "
-				   + "      FROM organisation o, search_organisation so, orgevlink oel, events e, venue v "
+		String sql = "SELECT organisationid, name, address, suburb, state, postcode, COUNT(eventid), COUNT(latitude)  "
+				   + "FROM (SELECT DISTINCT o.organisationid, o.name, e.eventid, v.latitude, o.address, o.suburb, s.state, o.postcode  "
+				   + "      FROM organisation o, search_organisation so, orgevlink oel, events e, venue v, states s "
 				   + "      WHERE CONTAINS(so.combined_all, ?, 1) > 0 "
 				   + "      AND so.organisationid = o.organisationid "
-				   + "      AND o.organisationid = oel.organisationid "
-				   + "      AND oel.eventid = e.eventid "
-				   + "      AND e.venueid = v.venueid) "
-				   + "GROUP BY organisationid, name, address ";
+				   + "      AND o.organisationid = oel.organisationid  "
+				   + "      AND oel.eventid = e.eventid  "
+				   + "      AND e.venueid = v.venueid "
+				   + "      AND o.state = s.stateid) "
+				   + "GROUP BY organisationid, name, address, suburb, state, postcode ";
 				   
 		// finalise the sql
 		if(sortType.equals("name") == true) {
@@ -162,8 +163,11 @@ public class SearchManager {
 				organisation.setName(resultSet.getString(2));
 				organisation.setUrl(LinksManager.getOrganisationLink(resultSet.getString(1)));
 				organisation.setAddress(resultSet.getString(3));
-				organisation.setEventCount(resultSet.getString(4));
-				organisation.setMappedEventCount(resultSet.getString(5));
+				organisation.setSuburb(resultSet.getString(4));
+				organisation.setState(resultSet.getString(5));
+				organisation.setPostcode(resultSet.getString(6));
+				organisation.setEventCount(resultSet.getString(7));
+				organisation.setMappedEventCount(resultSet.getString(8));
 		
 				// add the organisation to the list
 				list.addOrganisation(organisation);
@@ -208,14 +212,15 @@ public class SearchManager {
 	private String doOrganisationIdSearch(String query, String formatType) {
 
 		// declare the SQL variables
-		String sql = "SELECT organisationid, name, address, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
-				   + "FROM (SELECT DISTINCT o.organisationid, o.name, e.eventid, v.longitude, o.address "
-				   + "      FROM organisation o, orgevlink oel, events e, venue v "
+		String sql = "SELECT organisationid, name, address, suburb, state, postcode, COUNT(eventid), COUNT(latitude) "
+				   + "FROM (SELECT DISTINCT o.organisationid, o.name, e.eventid, v.latitude, o.address, o.suburb, s.state, o.postcode "
+				   + "      FROM organisation o, orgevlink oel, events e, venue v, states s "
 				   + "      WHERE o.organisationid = ? "
 				   + "      AND o.organisationid = oel.organisationid "
 				   + "      AND oel.eventid = e.eventid "
-				   + "      AND e.venueid = v.venueid) "
-				   + "GROUP BY organisationid, name, address";
+				   + "      AND e.venueid = v.venueid "
+   				   + "      AND o.state = s.stateid) "
+				   + "GROUP BY organisationid, name, address, suburb, state, postcode";
 				   
 		// define the paramaters
 		String[] sqlParameters = {query};
@@ -323,6 +328,9 @@ public class SearchManager {
 			object.put("url", organisation.getUrl());
 			object.put("name", organisation.getName());
 			object.put("address", organisation.getAddress());
+			object.put("suburb", organisation.getSuburb());
+			object.put("state", organisation.getState());
+			object.put("postcode", organisation.getPostcode());
 			object.put("totalEventCount", new Integer(organisation.getEventCount()));
 			object.put("mapEventCount", new Integer(organisation.getMappedEventCount()));
 			

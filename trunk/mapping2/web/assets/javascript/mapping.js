@@ -118,6 +118,7 @@ $(document).ready(function(){
 	
 	// setup a handler for when the user clicks on a button to add search results to the map
 	$('.addSearchResult').live('click', addToMapClickEvent);
+	$('.selectSearchAll').live('click', selectAllClickEvent);
 	
 	// setup the add to map dialog box
 	// setup the dialog box
@@ -304,7 +305,7 @@ function updateMessages() {
 // a function to build the contributor search results
 function buildContributorSearchResults(data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"</th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -332,7 +333,7 @@ function buildContributorSearchResults(data) {
 		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].mapEventCount > 0) {
-			list += '<td><input type="checkbox" name="searchContributor" class="searchContributor" value="' + data[i].id + '"/></td>';
+			list += '<td><input type="checkbox" name="searchContributor" class="searchContributor" value="' + data[i].id + '" title="Tick to add this contributor to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -376,13 +377,27 @@ function buildOrganisationSearchResults(data) {
 		
 		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
 		
-		if(data[i].address != null) {
-			list += '<td>' + data[i].address + '</td>';
-		} else {
-			list += '<td>&nbsp;</td>';
+		list += '<td>';
+		
+		if(data[i].street != null) {
+			 list += data[i].street + ', ';
+		} 
+		
+		if(data[i].suburb != null) {
+			list += data[i].suburb + ', ';
 		}
 		
-		list += '<td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
+		if(data[i].state != null) {
+			list += data[i].state + ', ';
+		}
+		
+		if(data[i].postcode != null) {
+			list += data[i].postcode;
+		} else {
+			list = list.substr(0, list.length - 2);
+		}
+		
+		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].mapEventCount > 0) {
 			list += '<td><input type="checkbox"/></td>';
@@ -490,22 +505,16 @@ function buildEventSearchResults(data) {
 		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
 		
 		list += '<td>' + data[i].venue.name + ' ';
-		
-		if(data[i].street != null) {
-			 list += data[i].venue.street + ', ';
-		} 
-		
-		if(data[i].suburb != null) {
+				
+		if(data[i].venue.suburb != null) {
 			list += data[i].venue.suburb + ', ';
 		}
 		
-		if(data[i].state != null) {
+		if(data[i].venue.state != null) {
 			list += data[i].venue.state + ', ';
 		}
 		
-		if(data[i].postcode != null) {
-			list += data[i].venue.postcode;
-		} else {
+		if(data[i].venue.suburb != null || data[i].venue.state != null) {
 			list = list.substr(0, list.length - 2);
 		}
 		
@@ -555,4 +564,23 @@ function addToMapClickEvent(event) {
 		$("#add_search_results_div").dialog('open');
 	}
 
+}
+
+// function to respond to a button click
+function selectAllClickEvent(event) {
+
+	// determine which checkbox was clicked
+	var target = $(event.target);
+	if(target.attr('id') == 'selectContributorSearchAll') {
+		
+		if(target.is(':checked') == false) {
+			$(".searchContributor:checkbox").each(function() {
+				$(this).attr('checked', false);
+			});
+		} else {
+			$(".searchContributor:checkbox").each(function() {
+				$(this).attr('checked', true);
+			});
+		}
+	}
 }
