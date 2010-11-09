@@ -18,9 +18,14 @@
 
 // declare global objects
 var searchObj = new SearchClass();
+var browseObj = new BrowseClass();
  
 // show / hide the menu
 $(document).ready(function(){
+
+	/*
+	 * page setup
+	 */
 
 	// hide the messages div
 	$("#messages").hide();
@@ -51,6 +56,10 @@ $(document).ready(function(){
 	
 	// style the buttons
 	styleButtons();
+	
+	/*
+	 * search functionality
+	 */
 	
 	// associate the tipsy library with the form elements
 	$('.tipsy_form [title]').tipsy({trigger: 'focus', gravity: 'n'});
@@ -253,4 +262,13 @@ $(document).ready(function(){
 			searchObj.doSearch(queryParam);
 		}
 	}
+	
+	/*
+	 * browse functionality 
+	 */
+	 browseObj.getMajorAreas();
+	 
+	 // associate a click event with the browse major area items
+	 $('.browseMajorArea').live('click', browseObj.getSuburbsClickEvent);
+	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
 });
