@@ -130,12 +130,12 @@ public class LookupInterfaceElementsManager {
 		JSONObject object = null;
 		
 		// define the sql
-		String sql = "SELECT suburb, COUNT(suburb) as venue_count, COUNT(latitude) as can_be_mapped "
+		String sql = "SELECT TRIM(suburb), COUNT(suburb) as venue_count, COUNT(latitude) as can_be_mapped "
 				   + "FROM venue "
 				   + "WHERE state = ? "
 				   + "AND suburb IS NOT NULL "
-				   + "GROUP BY suburb "
-				   + "ORDER BY suburb ";
+				   + "GROUP BY TRIM(suburb) "
+				   + "ORDER BY TRIM(suburb) ";
 		
 		String[] sqlParameters = {stateId};
 		
