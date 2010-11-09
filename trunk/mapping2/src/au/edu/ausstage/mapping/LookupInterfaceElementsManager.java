@@ -220,7 +220,7 @@ public class LookupInterfaceElementsManager {
 		String sql = "SELECT venue.venueid, venue_name, latitude, COUNT(events.eventid) "
 				   + "FROM venue, events "
 				   + "WHERE state = ? "
-				   + "AND suburb = ? "
+				   + "AND TRIM(suburb) = ? "
 				   + "AND venue.venueid = events.venueid "
 				   + "GROUP BY venue.venueid, venue_name, latitude "
 				   + "ORDER BY venue_name ";
