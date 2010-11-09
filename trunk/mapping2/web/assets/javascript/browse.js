@@ -88,11 +88,17 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 	
 	// get the list of venues and add them
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
-		var list = '';
+		var list = '<ul class="browseList">';
 		
 		for(var i = 0; i < data.length; i++) {
-			list += data[i].name + '<br/>';
+			if(data[i].mapEventCount > 0) {
+				list += '<li>' + browseObj.buildCheckbox(data[i].name, data[i].id) + ' <span class="clickable browseVenue" id="' + data[i].id + '">' + data[i].name + '</span></li>';
+			} else {
+				list += '<li style="padding-left: 25px;">' + data[i].name + '</span></li>';
+			}
 		}
+		
+		list += '</ul>';
 		
 		// replace the list of venues
 		$("#browse_venue").empty().append(list);

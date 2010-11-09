@@ -121,38 +121,9 @@
 				</div>
 				<div id="tabs-2">
 					<h2>Browse a List of Venues</h2>
-					<table class="searchResults">
-						<thead>
-							<tr>
-								<th style="width: 33%;">Major Area</th>
-								<th style="width: 34%;">Suburb</th>
-								<th style="width: 33%;">Venue</th>
-							</tr>
-						</thead>
-						<tody>
-							<tr>
-								<td id="browse_major_area">
-								</td>
-								<td id="browse_suburb">
-								</td>
-								<td id="browse_venue">
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td>
-									Add to map
-								</td>
-								<td>
-									Add to map
-								</td>
-								<td>
-									Add to map
-								</td>
-							</tr>
-						</tfoot>
-					</table>
+					<div id="browse_major_area" style="float: left; width: 33%; height: 400px; overflow: auto;"></div>
+					<div id="browse_suburb" style="float: left; width: 32%; height: 400px; overflow: auto;"></div>
+					<div id="browse_venue"  style="float: right; width: 33%; height: 400px; overflow: auto; margin-left: 10px;"></div>
 				</div>
 				<div id="tabs-3">
 					<h3>Map of the Search Results</h3>
