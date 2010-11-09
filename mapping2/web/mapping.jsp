@@ -126,7 +126,7 @@
 					<div id="browse_venue"  style="float: right; width: 33%; height: 400px; overflow: auto; margin-left: 10px;"></div>
 					<p id="browse_notes" class="hideMe">
 						<br/>
-						These are some notes on how to browse
+						Notes on how to browse will be added here
 					</p>
 				</div>
 				<div id="tabs-3">
