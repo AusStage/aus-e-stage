@@ -32,6 +32,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-0.1.7.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.06.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
@@ -50,7 +51,8 @@
 		<div id="tabs" class="tab-container">
 			<ul>
 				<li><a href="#tabs-1">Search</a></li>
-				<li><a href="#tabs-2">Map</a></li>
+				<li><a href="#tabs-2">Browse</a></li>
+				<li><a href="#tabs-3">Map</a></li>
 			</ul>
 			<div class="ui-layout-content" style="font-size:90%">
 				<div id="tabs-1">
@@ -84,11 +86,14 @@
 						</table>
 					</form>
 					<p>
-						This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
+						<span id="search_notes">This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
 						alternate names, and previous names. Please wait for the search to complete before exploring the results.
 						<br/>&nbsp;<br/>
 						At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
-						that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database. 
+						that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database.
+						<br/>&nbsp;<br/>
+						</span>
+						<span id="search_notes_toggle" class="clickable">(Hide Notes)</span>
 					</p>
 					<h3>Search Results</h3>
 					<div class="accordion">
@@ -114,6 +119,9 @@
 					</div>
 				</div>
 				<div id="tabs-2">
+					<h3>Browse Venues</h3>
+				</div>
+				<div id="tabs-3">
 					<h3>Map of the Search Results</h3>
 				</div>
 			</div>
