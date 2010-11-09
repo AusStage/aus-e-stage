@@ -30,15 +30,66 @@
             });
         
 		
-	
-	
-		//Our main document load 
+  		//Our main document load 
 		$(document).ready(function() {
-
- 
+		
+		  //alert("starting up");
+		  
 	
-	});
+		
+		});
 
+		function submitForm(){
+			
+		//	alert("submitting the form"); 
+			  window.console.log("about to submit the form");
+
+				//figure out which server we one 
+				
+				host = buildHost();
+				
+				//now do the stuff to make the host names work 
+				  if (host != 'http://beta.ausstage.edu.au')  { 
+					  host = 'http://beta.ausstage.edu.au';
+					  mydataType =  'jsonp';
+				  } else {
+					   mydataType =  'json';
+				  }
+				  
+				  
+				//now build the url  
+				 var $inputs = $('#submit-feedback:input');
+				 var values = $('#submit-feedback').serialize();
+
+				 
+				window.console.log($inputs)	;
+				window.console.log(values)	;
+
+				  
+				var source =  host + '/mobile/gatherer?' +  values;
+				window.console.log(source)	;
+				//Get the date and time; 
+					
+				var CurrentDate = new Date();  
+				var currentTime =  CurrentDate.toTimeString();
+				//Change the format of the date so that works with API
+				currentTime =  currentTime.replace(" (EST)", "", "gi");  
+				currentTime =  currentTime.replace("GMT", "", "gi");  
+
+		
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						dataType: mydataType,
+						success: function (data) {
+
+							populate(data,performance);
+						},
+						async: true 
+					}); 	
+		}
+		
+		
 		 function setLocDisplay(text) {
 					$('.LocInfo').empty().append(text);
 					
@@ -47,6 +98,7 @@
 				
 		function findLocation(){
 		                
+
                 // We pass "updateLocation" a callback function,
                 // to run once we have the coordinates.
                 // We also set it to a variable, so we can know
@@ -64,11 +116,19 @@
                 }		
 					
 		}
-		function getPerformanceData(performance) {
+		
+		function buildHost() {
 			
-				  var host = $(location).attr('host');
+			 var host = $(location).attr('host');
+			 return host;
 				  
-				  //now do the stuff to make the host names work 
+			
+		}
+		function getPerformanceData(performance) {
+				
+				host = buildHost();
+				
+				//now do the stuff to make the host names work 
 				  if (host != 'http://beta.ausstage.edu.au')  { 
 					  host = 'http://beta.ausstage.edu.au';
 					  mydataType =  'jsonp';
@@ -76,10 +136,15 @@
 					   mydataType =  'json';
 				  }
 				  
+				  
+				 
 				//now build the url  
 				var source =  host + '/mobile/feedback?task=initial&performance=' + performance  ;  //TODO code to see what server the system is running on and build this URL 
 				
 				window.console.log(source);
+				
+				
+				
 				
 				$.ajax({
 						type:   'GET',
@@ -104,15 +169,18 @@
 			//$("#Add").item(data).chain();//load this data in the feedback 
 			$("#feedback").items(data.feedback).chain();//load this data in the feedback 		
 			$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 	
+			
+			//form related items 
 			$("input.performance").val(performance);
 			var CurrentDate = new Date();  
-			$("input.CurrentDate").val(CurrentDate.toDateString());
-			$("input.CurrentTime").val(CurrentDate.toTimeString());
-
+			var currentTime =  CurrentDate.toTimeString();
+			//Change the format of the date so that works with API
+			currentTime =  currentTime.replace(" (EST)", "", "gi");  
+			currentTime =  currentTime.replace("GMT", "", "gi");  
 			
-
-
-								
+			$("input.CurrentDate").val(CurrentDate.toDateString());
+			$("input.CurrentTime").val(currentTime);
+					
 		
 		};
 		
@@ -137,6 +205,11 @@
 		  getPerformanceData(CurrentPerformance);
 
 		}; 
+		
+		
+			
+	
+		
 		
 		
 		
@@ -164,7 +237,7 @@
             }
         </style>
     </head>
-    <body>
+    <body >
        
  
          <div id="home" class="current">
@@ -205,30 +278,6 @@
 </div>
 
 
-
- <div id="Add">
-            <div class="toolbar">
-                <h1 class="event"></h1>
-                <a class="back" href="#">Home</a>
-                <a class="button slideup" id="infoButton" href="#about">About</a>
-            </div> 
-
-          <form id="ajax_post" action="http://beta.ausstage.edu.au/mobile/feedback" method="GET" class="form">
-        		<h3 class="question">Question</h3>
-				<ul class="edit rounded">
-                <li><input type="text" name="performance" class="performance" value=""></input></li>
-            	<li><textarea placeholder="Textarea" ></textarea></li>
-                    
-               </ul>
-            <a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" class="submit whiteButton">Submit</a>
-        </form>
-        
-      
-           
-   
-        
-      
-</div> 
       
           <div id="Search">
             <div class="toolbar">
@@ -276,19 +325,20 @@
            <span class="performance"></span>
 
              
-         <form id="ajax_post" action="http://beta.ausstage.edu.au/mobile/feedback" method="GET" class="form">
+         <form id="submit-feedback" action="" method="GET" class="form">
         		<h3 class="question">Question</h3>
                 
 				<ul class="edit rounded">
-                	<li><input type="text" name="type" class="type" value="web" ></input></li>
-             		<li><input type="text" name="time" class="CurrentTime" value="" ></input></li>
-               		<li><input type="text" name="date" class="CurrentDate" value="" ></input></li>
-                	<li><input type="text" name="performance" class="performance" value="" ></input></li>
-            		<li><textarea placeholder=""  name-"message"></textarea></li>
-                    
+                	<li><input type="text" name="type" class="type" value="mobile-web"></input></li>
+             		<li><input type="text" name="time" class="CurrentTime" value=""></input></li>
+               		<li><input type="text" name="date" class="CurrentDate" value=""></input></li>
+                	<li><input type="text" name="performance" class="performance" value=""></input></li>
+            		<li><textarea placeholder="" name="message"></textarea></li>
+            		<li> </li>
+
                </ul>
-            <a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" class="submit whiteButton">Submit</a>
-        </form>
+ 			<a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" onClick="submitForm()" class="whiteButton">Submit</a>
+         </form>
         
       
       
