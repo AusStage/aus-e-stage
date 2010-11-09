@@ -39,12 +39,38 @@ function SearchClass () {
 	
 	// keep a track of the items to add
 	this.items_to_add = [];
+	
+	// keep a track of the status of the notes
+	this.show_notes = true;
 }
 
 // undertake a search
 SearchClass.prototype.doSearch = function(searchTerm) {
 	$("#query").val(decodeURIComponent(searchTerm));
 	$("#search").submit();
+}
+
+// hide the search notes
+SearchClass.prototype.hideNotes = function() {
+	$("#search_notes").hide('slow');
+	$("#search_notes_toggle").empty().append("(Show Notes)");
+	searchObj.show_notes = false;
+	$.cookie('show_search_notes', 'false');
+}
+
+// show the search notes
+SearchClass.prototype.showNotes = function() {
+	$("#search_notes").show('slow');
+	$("#search_notes_toggle").empty().append("(Hide Notes)");
+	searchObj.show_notes = true;
+	$.cookie('show_search_notes', null);
+}
+
+// check to see if the cookie is set
+SearchClass.prototype.checkNoteCookie = function() {
+	if($.cookie('show_search_notes') == 'false') {
+		searchObj.hideNotes();
+	}
 }
 
 // clear the accordians related to the searching functionality

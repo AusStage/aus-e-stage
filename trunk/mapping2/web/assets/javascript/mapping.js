@@ -58,6 +58,18 @@ $(document).ready(function(){
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
 	
+	// setup the instructions toggle
+	$("#search_notes_toggle").click(function() {
+		if(searchObj.show_notes == true) {
+			searchObj.hideNotes();
+		} else {
+			searchObj.showNotes();
+		}
+	});
+	
+	// check on the status of the cookie
+	searchObj.checkNoteCookie();
+	
 	// setup a handler for the start of an ajax request
 	$("#message_text").ajaxSend(function(e, xhr, settings) {
 		// determine what type of request has been made & update the message text accordingly
