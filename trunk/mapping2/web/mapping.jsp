@@ -124,6 +124,10 @@
 					<div id="browse_major_area" style="float: left; width: 33%; height: 400px; overflow: auto;"></div>
 					<div id="browse_suburb" style="float: left; width: 32%; height: 400px; overflow: auto;"></div>
 					<div id="browse_venue"  style="float: right; width: 33%; height: 400px; overflow: auto; margin-left: 10px;"></div>
+					<p id="browse_notes" class="hideMe">
+						<br/>
+						These are some notes on how to browse
+					</p>
 				</div>
 				<div id="tabs-3">
 					<h3>Map of the Search Results</h3>

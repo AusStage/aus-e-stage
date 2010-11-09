@@ -221,7 +221,7 @@ public class LookupInterfaceElementsManager {
 				   + "FROM venue, events "
 				   + "WHERE state = ? "
 				   + "AND TRIM(suburb) = ? "
-				   + "AND venue.venueid = events.venueid "
+				   + "AND venue.venueid = events.venueid (+)"
 				   + "GROUP BY venue.venueid, venue_name, latitude "
 				   + "ORDER BY venue_name ";
 		
