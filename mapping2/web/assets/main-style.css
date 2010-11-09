@@ -25,6 +25,7 @@ html, body {
 
 a {
 	color: #4433cc;
+	text-decoration: none;
 }
 
 a:hover {
