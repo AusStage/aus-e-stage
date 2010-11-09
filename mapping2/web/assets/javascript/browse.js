@@ -29,7 +29,7 @@ BrowseClass.prototype.getMajorAreas = function() {
 	
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
 	
-		var list = '<ul class="browseList"><li>' + browseObj.buildCheckbox(data[0].name, data[0].id) + ' ' + data[0].name + '<ul class="browseList" style="padding-left: 15px;">';
+		var list = '<h3>Major Areas</h3><ul class="browseList"><li>' + browseObj.buildCheckbox(data[0].name, data[0].id) + ' ' + data[0].name + '<ul class="browseList" style="padding-left: 15px;">';
 	
 		for(var i = 1; i < 9; i++) {
 			list += '<li>' + browseObj.buildCheckbox(data[i].name, data[i].id) + ' <span class="clickable browseMajorArea" id="state_' + data[i].id + '">' + data[i].name + '</span></li>';
@@ -38,8 +38,12 @@ BrowseClass.prototype.getMajorAreas = function() {
 		list += '</ul></li>';
 		list += '<li>' + browseObj.buildCheckbox(data[9].name, data[9].id) + ' ' + data[9].name + '</li>'
 		list += '</ul>'
+		list += '<button type="button" id="browseAddToMap">Add to Map</button>';
 		
-		$("#browse_major_area").append(list);	
+		$("#browse_major_area").append(list);
+		styleButtons();
+		$("#browse_major_area").append($("#browse_notes"));
+		$("#browse_notes").removeClass("hideMe");
 	});
 }
 
@@ -61,7 +65,7 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 	
 	// get the new list of suburbs and add them
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
-		var list = '<ul class="browseList">';
+		var list = '<h3>Suburbs</h3><ul class="browseList">';
 		
 		for(var i = 0; i < data.length; i++) {
 			if(data[i].mapVenueCount > 0) {
@@ -88,7 +92,7 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 	
 	// get the list of venues and add them
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
-		var list = '<ul class="browseList">';
+		var list = '<h3>Venues</h3><ul class="browseList">';
 		
 		for(var i = 0; i < data.length; i++) {
 			if(data[i].mapEventCount > 0) {

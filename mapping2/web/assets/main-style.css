@@ -273,4 +273,5 @@ table.searchResults tfoot {
 /* prevent a FOUC */
 .js #messages {display: none;}
 .js #add_search_results_div {display: none;}
+.hideMe {display: none;}
 
