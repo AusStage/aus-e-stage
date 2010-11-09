@@ -20,12 +20,11 @@ html, body {
 	padding:0;
 	color:#333333;
 	background: #fff;
-	font-family:Helvetica, Arial, sans-serif;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
 }
 
 a {
 	color: #4433cc;
-	text-decoration: none;
 }
 
 a:hover {
@@ -230,6 +229,7 @@ table.searchResults th {
 
 table.searchResults td {
 	padding: 2px;
+	vertical-align: top;
 }
 
 tr.odd {
@@ -252,6 +252,12 @@ table.searchResults tfoot {
 /* style for things that are clickable */
 .clickable {
 	cursor: pointer;
+}
+
+/* style for browse lists */
+.browseList {
+	list-style: none;
+	padding-left: 5px;
 }
 
 /* Styles for the Tipsy Library */

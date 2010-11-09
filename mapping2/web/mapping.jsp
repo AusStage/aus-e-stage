@@ -36,6 +36,7 @@
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
+	<script type="text/javascript" src="assets/javascript/browse.js"></script>
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 	<!-- prevent a FOUC from the messages div -->
 	<script type="text/javascript">
@@ -56,8 +57,8 @@
 			</ul>
 			<div class="ui-layout-content" style="font-size:90%">
 				<div id="tabs-1">
-					<h3>Search the AusStage Database</h3>
-					<form action="/mapping/" method="get" id="search" name="search" class="tipsy_form">
+					<h2 style="margin-bottom: -5px;">Search the AusStage Database</h2>
+					<form action="/mapping/" method="get" id="search" name="search" class="tipsy_form" >
 						<table class="formTable" style="height: 60px;">
 							<tbody>
 							<tr>
@@ -85,7 +86,7 @@
 							</tbody>
 						</table>
 					</form>
-					<p>
+					<p style="margin-top: -5px;">
 						<span id="search_notes">This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
 						alternate names, and previous names. Please wait for the search to complete before exploring the results.
 						<br/>&nbsp;<br/>
@@ -119,7 +120,39 @@
 					</div>
 				</div>
 				<div id="tabs-2">
-					<h3>Browse Venues</h3>
+					<h2>Browse a List of Venues</h2>
+					<table class="searchResults">
+						<thead>
+							<tr>
+								<th style="width: 33%;">Major Area</th>
+								<th style="width: 34%;">Suburb</th>
+								<th style="width: 33%;">Venue</th>
+							</tr>
+						</thead>
+						<tody>
+							<tr>
+								<td id="browse_major_area">
+								</td>
+								<td id="browse_suburb">
+								</td>
+								<td id="browse_venue">
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>
+									Add to map
+								</td>
+								<td>
+									Add to map
+								</td>
+								<td>
+									Add to map
+								</td>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
 				<div id="tabs-3">
 					<h3>Map of the Search Results</h3>
