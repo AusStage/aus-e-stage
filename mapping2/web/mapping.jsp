@@ -121,13 +121,18 @@
 				</div>
 				<div id="tabs-2">
 					<h2>Browse a List of Venues</h2>
-					<div id="browse_major_area" style="float: left; width: 33%; height: 400px; overflow: auto;"></div>
-					<div id="browse_suburb" style="float: left; width: 32%; height: 400px; overflow: auto;"></div>
-					<div id="browse_venue"  style="float: right; width: 33%; height: 400px; overflow: auto; margin-left: 10px;"></div>
-					<p id="browse_notes" class="hideMe">
-						<br/>
-						Notes on how to browse will be added here
-					</p>
+					<div id="browse_major_area" style="float: left; width: 290px; height: 440px; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
+					<div id="browse_suburb" style="float: left; width: 300px; height: 440px; overflow: auto; margin-left: 10px;"></div>
+					<div id="browse_venue"  style="float: right; width: 325px; height: 440px; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
+					<span id="browse_notes" class="hideMe">
+						<ul>
+							<li>Click a state to see a list of suburbs</li>
+							<li>Click a suburb to see a list of venues</li>
+							<li>Select any item to add to the map</li>
+							<li>An item cannot be selected when coordinates are not available</li>
+							<li>Click the "Add to Map" button to add the selected items to the map</li>
+						</ul>
+					</span>
 				</div>
 				<div id="tabs-3">
 					<h3>Map of the Search Results</h3>

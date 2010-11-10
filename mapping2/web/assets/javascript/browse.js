@@ -15,10 +15,18 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+// define the browse tracker class
+function BrowseTrackerClass() {
+	this.majorAreas = [];
+	this.suburbs    = [];
+	this.venues     = [];
+}
 
 // define the browse class
 function BrowseClass() {
 
+	this.trackerObj = new BrowseTrackerClass();
 }
 
 // define a function to populate the major areas cell
@@ -32,11 +40,11 @@ BrowseClass.prototype.getMajorAreas = function() {
 		var list = '<h3>Major Areas</h3><ul class="browseList"><li>' + browseObj.buildCheckbox(data[0].name, data[0].id) + ' ' + data[0].name + '<ul class="browseList" style="padding-left: 15px;">';
 	
 		for(var i = 1; i < 9; i++) {
-			list += '<li>' + browseObj.buildCheckbox(data[i].name, data[i].id) + ' <span class="clickable browseMajorArea" id="state_' + data[i].id + '">' + data[i].name + '</span></li>';
+			list += '<li>' + browseObj.buildCheckbox('majorArea', data[i].id) + ' <span class="clickable browseMajorArea" id="state_' + data[i].id + '">' + data[i].name + '</span></li>';
 		}
 		
 		list += '</ul></li>';
-		list += '<li>' + browseObj.buildCheckbox(data[9].name, data[9].id) + ' ' + data[9].name + '</li>'
+		list += '<li>' + browseObj.buildCheckbox('majorArea', data[9].id) + ' ' + data[9].name + '</li>'
 		list += '</ul>'
 		list += '<button type="button" id="browseAddToMap">Add to Map</button>';
 		
@@ -45,16 +53,6 @@ BrowseClass.prototype.getMajorAreas = function() {
 		$("#browse_major_area").append($("#browse_notes"));
 		$("#browse_notes").removeClass("hideMe");
 	});
-}
-
-// define a function to build a checkbox
-BrowseClass.prototype.buildCheckbox = function(title, value, disabled) {
-	var nameAndId = title + '_' + value;
-	if(disabled == null) {
-		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '"/>';
-	} else {
-		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" disabled/>';
-	}
 }
 
 //define a function to respond to a click on one of the major areas
@@ -73,9 +71,9 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 		
 		for(var i = 0; i < data.length; i++) {
 			if(data[i].mapVenueCount > 0) {
-				list += '<li>' + browseObj.buildCheckbox(data[i].name, data[i].id) + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name) + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
 			} else {
-				list += '<li>' + browseObj.buildCheckbox(data[i].name, data[i].id, 'disabled') + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled') + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
 			}
 		}
 		
@@ -102,9 +100,9 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 		
 		for(var i = 0; i < data.length; i++) {
 			if(data[i].mapEventCount > 0) {
-				list += '<li>' + browseObj.buildCheckbox(data[i].name, data[i].id) + ' <span class="clickable browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '_' + data[i].id) + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
 			} else {
-				list += '<li>' + browseObj.buildCheckbox(data[i].name, data[i].id, 'disabled') + ' <span class="clickable browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '_' + data[i].id, 'disabled') + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
 			}
 		}
 		
@@ -115,4 +113,53 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 		
 		$('#browse_venue [title]').tipsy({trigger: 'focus', gravity: 'n'});
 	});
+}
+
+// define a function to build a checkbox
+BrowseClass.prototype.buildCheckbox = function(title, value, disabled) {
+	var nameAndId = 'browse_' + title + '_' + value;
+	if(disabled == null) {
+		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" class="browseCheckBox"/>';
+	} else {
+		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" disabled/>';
+	}
+}
+
+// define a function to respond to the click on a checkbox
+BrowseClass.prototype.checkboxClickEvent = function(event) {
+
+	// determine which checkbox was checked
+	var target = $(event.target);
+	var tokens = target.attr('id').split('_');
+	
+	if(tokens[1] == 'majorArea') {
+		if(target.is(':checked') == false) {
+			// remove this item from the list
+			var idx = jQuery.inArray(browseObj.trackerObj.suburbs, tokens[2]);
+			browseObj.trackerObj.majroAreas.splic(idx, 1);
+		} else {
+			// add this item to the list
+			browseObj.trackerObj.majorAreas.push(tokens[2]);
+		}
+	} else if(tokens[1] == 'suburb') {
+		if(target.is(':checked') == false) {
+			// remove this item from the list
+			var idx = jQuery.inArray(browseObj.trackerObj.suburbs, tokens[2] + '_' + tokens[3]);
+			browseObj.trackerObj.suburbs.splice(idx, 1);
+		} else {
+			// add this item to the list
+			browseObj.trackerObj.suburbs.push(tokens[2] + '_' + tokens[3]);
+		}
+	} else {
+		if(target.is(':checked') == false) {
+			// remove this item from the list
+			var idx = jQuery.inArray(browseObj.trackerObj.venues, tokens[2] + '_' + tokens[3] + '_' + tokens[4])
+			browseObj.trackerObj.venues.splice(idx, 1);
+		} else {
+			// add this item to the list
+			browseObj.trackerObj.venues.push(tokens[2] + '_' + tokens[3] + '_' + tokens[4]);
+		}
+	}
+	
+	console.log('browse checkbox event fired');
 }
