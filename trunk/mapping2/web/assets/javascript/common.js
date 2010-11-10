@@ -48,8 +48,6 @@ $.extend({
 
 // function to apply the correct styles to buttons
 function styleButtons() {
-
 	$("button, input:submit").button();
 	$("button, input:button").button();
-
 }
