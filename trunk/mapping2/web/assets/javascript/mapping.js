@@ -271,4 +271,5 @@ $(document).ready(function(){
 	 // associate a click event with the browse major area items
 	 $('.browseMajorArea').live('click', browseObj.getSuburbsClickEvent);
 	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
+	 $('.browseCheckBox').live('click', browseObj.checkboxClickEvent);
 });
