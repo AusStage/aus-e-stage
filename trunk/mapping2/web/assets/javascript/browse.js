@@ -49,6 +49,8 @@ BrowseClass.prototype.getMajorAreas = function() {
 		list += '<button type="button" id="browseAddToMap">Add to Map</button>';
 		
 		$("#browse_major_area").append(list);
+		$("#browse_suburb").empty().append('<h3>Suburbs</h3>');
+		$("#browse_venue").empty().append('<h3>Venues</h3>');
 		styleButtons();
 		$("#browse_major_area").append($("#browse_notes"));
 		$("#browse_notes").removeClass("hideMe");
@@ -69,10 +71,29 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
 		var list = '<h3>Suburbs</h3><ul class="browseList">';
 		
+		// build a list of suburbs
 		for(var i = 0; i < data.length; i++) {
+			// check to see if this suburb has mappable venues
 			if(data[i].mapVenueCount > 0) {
-				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name) + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+				// yes
+				// check to see if the major area for this suburb is ticked
+				if(inArray(browseObj.trackerObj.majorAreas, id) > -1) {
+					// yes
+					// build a ticked checkbox
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'checked') + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+					
+					// add this suburb to the array if required
+					if(inArray(browseObj.trackerObj.suburbs, id + '_' + data[i].name) == -1) {
+						browseObj.trackerObj.suburbs.push(id + '_' + data[i].name);
+					}
+				} else {
+					// no
+					// build a standard checkbox
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name) + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+				}
 			} else {
+				// no
+				// build a disabled checkbox
 				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled') + ' <span class="clickable browseSuburb" id="state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
 			}
 		}
@@ -116,13 +137,18 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 }
 
 // define a function to build a checkbox
-BrowseClass.prototype.buildCheckbox = function(title, value, disabled) {
+BrowseClass.prototype.buildCheckbox = function(title, value, param) {
 	var nameAndId = 'browse_' + title + '_' + value;
 	nameAndId = nameAndId.replace(/[^A-Za-z0-9_]/gi, '-');
-	if(disabled == null) {
-		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" class="browseCheckBox"/>';
+	
+	if(typeof(param) != 'undefined') {
+		if(param == 'disabled') {
+			return '<input type="checkbox" disabled/>';
+		} else if(param == 'checked') {
+			return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" class="browseCheckBox" checked/>';
+		}		
 	} else {
-		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" disabled/>';
+		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" class="browseCheckBox"/>';
 	}
 }
 
@@ -136,7 +162,7 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 	if(tokens[1] == 'majorArea') {
 		if(target.is(':checked') == false) {
 			// remove this item from the list
-			var idx = jQuery.inArray(browseObj.trackerObj.suburbs, tokens[2]);
+			var idx = inArray(browseObj.trackerObj.majorAreas, tokens[2]);
 			browseObj.trackerObj.majorAreas.splice(idx, 1);
 			
 			// remove items from the other arrays
@@ -145,11 +171,16 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.majorAreas.push(tokens[2]);
+			
+			// tick any existing checkboxes
+			$('input[name*="browse_suburb_' + tokens[2] +'"]').each(function(index) {
+				$(this).attr('checked', true);
+			});
 		}
 	} else if(tokens[1] == 'suburb') {
 		if(target.is(':checked') == false) {
 			// remove this item from the list
-			var idx = jQuery.inArray(browseObj.trackerObj.suburbs, tokens[2] + '_' + tokens[3]);
+			var idx = inArray(browseObj.trackerObj.suburbs, tokens[2] + '_' + tokens[3]);
 			browseObj.trackerObj.suburbs.splice(idx, 1);
 			
 			// remove items from the other arrays
@@ -157,19 +188,22 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.suburbs.push(tokens[2] + '_' + tokens[3]);
+			
+			// tick any existing boxes
+			$('input[name*="browse_venue_' + tokens[2] + '_' + tokens[3] +'"]').each(function(index) {
+				$(this).attr('checked', true);
+			});
 		}
 	} else {
 		if(target.is(':checked') == false) {
 			// remove this item from the list
-			var idx = jQuery.inArray(browseObj.trackerObj.venues, target.val())
+			var idx = inArray(browseObj.trackerObj.venues, target.val())
 			browseObj.trackerObj.venues.splice(idx, 1);
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.venues.push(target.val());
 		}
 	}
-	
-	console.log('browse checkbox event fired');
 }
 
 // define a function to remove all elements from the suburbs array
@@ -185,7 +219,7 @@ BrowseClass.prototype.tidySuburbCheckboxes = function(array, selector) {
 			var id = array[i].replace(/[^A-Za-z0-9_]/gi, '-');
 			
 			// untick the checkbox
-			$('input[name|="browse_suburb_' + id +'"]').each(function(index) {
+			$('input[name*="browse_suburb_' + id +'"]').each(function(index) {
 				$(this).attr('checked', false);
 			});
 			
@@ -196,6 +230,11 @@ BrowseClass.prototype.tidySuburbCheckboxes = function(array, selector) {
 			i--;
 		}
 	}
+	
+	// catch any others that may be ticked but not in the array
+	$('input[name*="browse_suburb_' + selector +'"]').each(function(index) {
+		$(this).attr('checked', false);
+	});
 }
 
 // define a function to remove all elements from the venues array
@@ -222,4 +261,9 @@ BrowseClass.prototype.tidyVenueCheckboxes = function(array, selector) {
 			i--;
 		}
 	}
+	
+	// catch any others that may be ticked but not in the array
+	$('input[name*="browse_venue_' + selector +'"]').each(function(index) {
+		$(this).attr('checked', false);
+	});
 }
