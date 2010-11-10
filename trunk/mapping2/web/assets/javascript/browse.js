@@ -140,8 +140,8 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 			browseObj.trackerObj.majorAreas.splice(idx, 1);
 			
 			// remove items from the other arrays
-			browseObj.tidyCheckboxes(browseObj.trackerObj.suburbs, tokens[1]);
-			browseObj.tidyCheckboxes(browseObj.trackerObj.venues,  tokens[1]);
+			browseObj.tidySuburbCheckboxes(browseObj.trackerObj.suburbs, tokens[2]);
+			browseObj.tidyVenueCheckboxes(browseObj.trackerObj.venues,  tokens[2]);
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.majorAreas.push(tokens[2]);
@@ -153,7 +153,7 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 			browseObj.trackerObj.suburbs.splice(idx, 1);
 			
 			// remove items from the other arrays
-			browseObj.tidyCheckboxes(browseObj.trackerObj.venues, tokens[2] + '_' + tokens[3]);
+			browseObj.tidyVenueCheckboxes(browseObj.trackerObj.venues, tokens[2] + '_' + tokens[3]);
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.suburbs.push(tokens[2] + '_' + tokens[3]);
@@ -172,8 +172,35 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 	console.log('browse checkbox event fired');
 }
 
-// define a function to remove all elements from an array based on a starts with match
-BrowseClass.prototype.tidyCheckboxes = function(array, selector) {
+// define a function to remove all elements from the suburbs array
+// and untick the checkboxes
+BrowseClass.prototype.tidySuburbCheckboxes = function(array, selector) {
+
+	// loop through the array looking for a match
+	for(var i = 0; i < array.length; i++) {
+	
+		if(array[i].substr(0, selector.length) === selector) {
+		
+			// get the checkbox id
+			var id = array[i].replace(/[^A-Za-z0-9_]/gi, '-');
+			
+			// untick the checkbox
+			$('input[name|="browse_suburb_' + id +'"]').each(function(index) {
+				$(this).attr('checked', false);
+			});
+			
+			// remove the item from the array
+			array.splice(i, 1);
+			
+			// decrement the counter
+			i--;
+		}
+	}
+}
+
+// define a function to remove all elements from the venues array
+// and untick the checkboxes
+BrowseClass.prototype.tidyVenueCheckboxes = function(array, selector) {
 
 	// loop through the array looking for a match
 	for(var i = 0; i < array.length; i++) {
