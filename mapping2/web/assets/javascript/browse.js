@@ -92,7 +92,7 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 	// build the url
 	var target = $(event.target);
 	var tokens = target.attr('id').split('_');
-	var url    = BASE_URL + "lookup?task=suburb-venue-list&id=" + tokens[1] + '_' + encodeURIComponent(tokens[3]);
+	var url    = BASE_URL + "lookup?task=suburb-venue-list&id=" + tokens[1] + '_' + encodeURIComponent(tokens[3].replace('-', ' '));
 	
 	// get the list of venues and add them
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
@@ -100,9 +100,9 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 		
 		for(var i = 0; i < data.length; i++) {
 			if(data[i].mapEventCount > 0) {
-				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '_' + data[i].id) + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id) + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
 			} else {
-				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '_' + data[i].id, 'disabled') + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'disabled') + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
 			}
 		}
 		
@@ -118,6 +118,7 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 // define a function to build a checkbox
 BrowseClass.prototype.buildCheckbox = function(title, value, disabled) {
 	var nameAndId = 'browse_' + title + '_' + value;
+	nameAndId = nameAndId.replace(/[^A-Za-z0-9_]/gi, '-');
 	if(disabled == null) {
 		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" class="browseCheckBox"/>';
 	} else {
@@ -136,7 +137,11 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 		if(target.is(':checked') == false) {
 			// remove this item from the list
 			var idx = jQuery.inArray(browseObj.trackerObj.suburbs, tokens[2]);
-			browseObj.trackerObj.majroAreas.splic(idx, 1);
+			browseObj.trackerObj.majorAreas.splice(idx, 1);
+			
+			// remove items from the other arrays
+			browseObj.tidyCheckboxes(browseObj.trackerObj.suburbs, tokens[1]);
+			browseObj.tidyCheckboxes(browseObj.trackerObj.venues,  tokens[1]);
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.majorAreas.push(tokens[2]);
@@ -146,6 +151,9 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 			// remove this item from the list
 			var idx = jQuery.inArray(browseObj.trackerObj.suburbs, tokens[2] + '_' + tokens[3]);
 			browseObj.trackerObj.suburbs.splice(idx, 1);
+			
+			// remove items from the other arrays
+			browseObj.tidyCheckboxes(browseObj.trackerObj.venues, tokens[2] + '_' + tokens[3]);
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.suburbs.push(tokens[2] + '_' + tokens[3]);
@@ -153,13 +161,38 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 	} else {
 		if(target.is(':checked') == false) {
 			// remove this item from the list
-			var idx = jQuery.inArray(browseObj.trackerObj.venues, tokens[2] + '_' + tokens[3] + '_' + tokens[4])
+			var idx = jQuery.inArray(browseObj.trackerObj.venues, target.val())
 			browseObj.trackerObj.venues.splice(idx, 1);
 		} else {
 			// add this item to the list
-			browseObj.trackerObj.venues.push(tokens[2] + '_' + tokens[3] + '_' + tokens[4]);
+			browseObj.trackerObj.venues.push(target.val());
 		}
 	}
 	
 	console.log('browse checkbox event fired');
+}
+
+// define a function to remove all elements from an array based on a starts with match
+BrowseClass.prototype.tidyCheckboxes = function(array, selector) {
+
+	// loop through the array looking for a match
+	for(var i = 0; i < array.length; i++) {
+	
+		if(array[i].substr(0, selector.length) === selector) {
+		
+			// get the checkbox id
+			var id = array[i].replace(/[^A-Za-z0-9_]/gi, '-');
+			
+			// untick the checkbox
+			$('input[name|="browse_venue_' + id +'"]').each(function(index) {
+				$(this).attr('checked', false);
+			});
+			
+			// remove the item from the array
+			array.splice(i, 1);
+			
+			// decrement the counter
+			i--;
+		}
+	}
 }

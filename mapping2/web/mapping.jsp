@@ -52,7 +52,7 @@
 		<div id="tabs" class="tab-container">
 			<ul>
 				<li><a href="#tabs-1">Search</a></li>
-				<li><a href="#tabs-2">Browse</a></li>
+				<li><a href="#tabs-2">Browse Venues</a></li>
 				<li><a href="#tabs-3">Map</a></li>
 			</ul>
 			<div class="ui-layout-content" style="font-size:90%">
@@ -124,7 +124,7 @@
 					<div id="browse_major_area" style="float: left; width: 290px; height: 440px; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
 					<div id="browse_suburb" style="float: left; width: 300px; height: 440px; overflow: auto; margin-left: 10px;"></div>
 					<div id="browse_venue"  style="float: right; width: 325px; height: 440px; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
-					<span id="browse_notes" class="hideMe">
+					<div id="browse_notes" class="hideMe">
 						<ul>
 							<li>Click a state to see a list of suburbs</li>
 							<li>Click a suburb to see a list of venues</li>
@@ -132,7 +132,7 @@
 							<li>An item cannot be selected when coordinates are not available</li>
 							<li>Click the "Add to Map" button to add the selected items to the map</li>
 						</ul>
-					</span>
+					</div>
 				</div>
 				<div id="tabs-3">
 					<h3>Map of the Search Results</h3>
