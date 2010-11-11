@@ -119,9 +119,26 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
 		var list = '<h3>Venues</h3><ul class="browseList">';
 		
+		// build a list of venues
 		for(var i = 0; i < data.length; i++) {
+			// check to see if this venue is mappable
 			if(data[i].mapEventCount > 0) {
-				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id) + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+				// yes
+				// check to see if this venue is in a suburb that is ticked
+				if(inArray(browseObj.trackerObj.suburbs, tokens[1] + '_' + tokens[3]) > -1) {
+					// yes
+					// build a ticked check box
+					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'checked') + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+					
+					// add this venue to the array if required
+					if(inArray(browseObj.trackerObj.venues, data[i].id) == -1) {
+						browseObj.trackerObj.venues.push(data[i].id);
+					}
+				} else {
+					// no
+					// build a standard checkbox
+					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id) + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+				}
 			} else {
 				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'disabled') + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
 			}
@@ -138,17 +155,18 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 
 // define a function to build a checkbox
 BrowseClass.prototype.buildCheckbox = function(title, value, param) {
-	var nameAndId = 'browse_' + title + '_' + value;
-	nameAndId = nameAndId.replace(/[^A-Za-z0-9_]/gi, '-');
-	
+
+	var n = 'browse_' + title + '_' + value;
+	var i = n.replace(/[^A-Za-z0-9_]/gi, '-');
+
 	if(typeof(param) != 'undefined') {
 		if(param == 'disabled') {
 			return '<input type="checkbox" disabled/>';
 		} else if(param == 'checked') {
-			return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" class="browseCheckBox" checked/>';
+			return '<input type="checkbox" name="' + n + '" id="' + i + '" value="' + value + '" class="browseCheckBox" checked/>';
 		}		
 	} else {
-		return '<input type="checkbox" name="' + nameAndId + '" id="' + nameAndId + '" value="' + value + '" class="browseCheckBox"/>';
+		return '<input type="checkbox" name="' + n + '" id="' + i + '" value="' + value + '" class="browseCheckBox"/>';
 	}
 }
 
@@ -175,6 +193,13 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 			// tick any existing checkboxes
 			$('input[name*="browse_suburb_' + tokens[2] +'"]').each(function(index) {
 				$(this).attr('checked', true);
+				
+				var elems    = $(this).attr('name').split('_');
+				
+				// add this suburb to the array if required
+				if(inArray(browseObj.trackerObj.suburbs, elems[2] + '_' + elems[3]) == -1) {
+					browseObj.trackerObj.suburbs.push(elems[2] + '_' + elems[3]);
+				}
 			});
 		}
 	} else if(tokens[1] == 'suburb') {
@@ -188,10 +213,17 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 		} else {
 			// add this item to the list
 			browseObj.trackerObj.suburbs.push(tokens[2] + '_' + tokens[3]);
-			
+						
 			// tick any existing boxes
 			$('input[name*="browse_venue_' + tokens[2] + '_' + tokens[3] +'"]').each(function(index) {
 				$(this).attr('checked', true);
+				
+				var elems    = $(this).attr('name').split('_');
+				
+				// add this suburb to the array if required
+				if(inArray(browseObj.trackerObj.venues, elems[2] + '_' + elems[3]) == -1) {
+					browseObj.trackerObj.venues.push(elems[2] + '_' + elems[3]);
+				}
 			});
 		}
 	} else {
