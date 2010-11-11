@@ -30,7 +30,7 @@
             });
 			
         	//Glabals
-			var gCurrentPerfomance = 4; 
+			var gCurrentPerformance;
 		
   		//Our main document load 
 		$(document).ready(function() {
@@ -56,16 +56,7 @@
 				  } else {
 					   mydataType =  'json';
 				  }
-				  
-				//now build the url  
-				 var $inputs = $('#submit-feedback:input');
-				 var values = $('#submit-feedback').serialize();
-				
-
-				window.console.log($inputs)	;
-				window.console.log(values)	;
-				  
-				var source =  host + '/mobile/gatherer?' +  values;
+				  				  
 				//window.console.log(source)	;
 	
 				//Get the date and time; 
@@ -86,20 +77,22 @@
 					 type:'mobile-web',
 					 time:currentTime,
 				 	 date:CurrentDate.toDateString(),
-					 performance:gCurrentPerfomance,
+					 performance:gCurrentPerformance,
 					 message:message	 
 				 
 				 };
 				 var values = jQuery.param(params);//encode thos
+				
+				var source =  host + '/mobile/gatherer?' +  values;
 
-				 //window.console.log(values);
+				window.console.log(values);
 				
 				$.ajax({
 						type:   'GET',
 						url: source, 
 						dataType: mydataType,
 						success: function (data) {
-						populate(data,gCurrentPerfomance);
+						populate(data,gCurrentPerformance);
 						jQT.goTo('#FeedbackDisplay');
 
 						},
@@ -142,7 +135,7 @@
 				  
 			
 		}
-		function getPerformanceData(performance) {
+		function getPerformanceData() {
 				
 				host = buildHost();
 				
@@ -157,10 +150,9 @@
 				  
 				 
 				//now build the url  
-				var source =  host + '/mobile/feedback?task=initial&performance=' + performance  ;  //TODO code to see what server the system is running on and build this URL 
+				var source =  host + '/mobile/feedback?task=initial&performance=' + gCurrentPerformance  ;  //TODO code to see what server the system is running on and build this URL 
 				
 				window.console.log(source);
-				
 				
 				
 				$.ajax({
@@ -169,7 +161,7 @@
 						dataType: mydataType,
 						success: function (data) {
 
-							populate(data,performance);
+							populate(data);
 						},
 						async: true 
 					}); 			
@@ -180,7 +172,7 @@
 		* This is the main call that loads the json in to the correct D
 		*
 		**/
-		function populate(data,performance){
+		function populate(data){
 			//alert("ye got here"); 
 			//window.console.log(data);
 			//$("#Add").item(data).chain();//load this data in the feedback 
@@ -191,17 +183,6 @@
 			$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 	
 			$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 	
 			
-			//form related items 
-			$("input.performance").val(performance);
-			var CurrentDate = new Date();  
-			var currentTime =  CurrentDate.toTimeString();
-			//Change the format of the date so that works with API
-			currentTime =  currentTime.replace(" (EST)", "", "gi");  
-			currentTime =  currentTime.replace("GMT", "", "gi");  
-			
-			$("input.CurrentDate").val(CurrentDate.toDateString());
-			$("input.CurrentTime").val(currentTime);
-					
 		
 		};
 		
@@ -212,7 +193,8 @@
 		
 		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
 		  var CurrentPerformance =   $(element).children("span.performance").text();
-		  getPerformanceData(CurrentPerformance);
+		  gCurrentPerformance = CurrentPerformance;  
+		  getPerformanceData();
 
 				
 		}; 
@@ -223,7 +205,9 @@
 		
 		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
 		  var CurrentPerformance =   $(element).children("span.performance").text();
-		  getPerformanceData(CurrentPerformance);
+		  		  gCurrentPerformance =  CurrentPerformance;  
+
+		  getPerformanceData();
 
 		}; 
 		
@@ -372,10 +356,6 @@
         		<h3 class="question">Question</h3>
                 
 				<ul class="edit rounded">
-                	<li><input type="text" name="type" class="type" value="mobile-web"></input></li>
-             		<li><input type="text" name="time" class="CurrentTime" value=""></input></li>
-               		<li><input type="text" name="date" class="CurrentDate" value=""></input></li>
-                	<li><input type="text" name="performance" class="performance" value=""></input></li>
             		<li><textarea placeholder="" name="message"></textarea></li>
             		<li> </li>
 
