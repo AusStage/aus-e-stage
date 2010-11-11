@@ -28,7 +28,9 @@
                     'assets/jqtouch//themes/jqt/img/loading.gif'
                     ]
             });
-        
+			
+        	//Glabals
+			var gCurrentPerfomance = 4; 
 		
   		//Our main document load 
 		$(document).ready(function() {
@@ -45,7 +47,6 @@
 			  window.console.log("about to submit the form");
 
 				//figure out which server we one 
-				
 				host = buildHost();
 				
 				//now do the stuff to make the host names work 
@@ -56,37 +57,54 @@
 					   mydataType =  'json';
 				  }
 				  
-				  
 				//now build the url  
 				 var $inputs = $('#submit-feedback:input');
 				 var values = $('#submit-feedback').serialize();
+				
 
-				 
 				window.console.log($inputs)	;
 				window.console.log(values)	;
-
 				  
 				var source =  host + '/mobile/gatherer?' +  values;
-				window.console.log(source)	;
+				//window.console.log(source)	;
+	
 				//Get the date and time; 
-					
-				var CurrentDate = new Date();  
+				var CurrentDate = new Date(); 
 				var currentTime =  CurrentDate.toTimeString();
 				//Change the format of the date so that works with API
 				currentTime =  currentTime.replace(" (EST)", "", "gi");  
 				currentTime =  currentTime.replace("GMT", "", "gi");  
+								
+				//bulld the  
+				
+				// get the message form the form
+				
+				var message =  $('[name=message]').val();
+				
+				 var params = {
+					 
+					 type:'mobile-web',
+					 time:currentTime,
+				 	 date:CurrentDate.toDateString(),
+					 performance:gCurrentPerfomance,
+					 message:message	 
+				 
+				 };
+				 var values = jQuery.param(params);//encode thos
 
-		
+				 //window.console.log(values);
+				
 				$.ajax({
 						type:   'GET',
 						url: source, 
 						dataType: mydataType,
 						success: function (data) {
+						populate(data,gCurrentPerfomance);
+						jQT.goTo('#FeedbackDisplay');
 
-							populate(data,performance);
 						},
 						async: true 
-					}); 	
+					});	
 		}
 		
 		
@@ -145,7 +163,6 @@
 				
 				
 				
-				
 				$.ajax({
 						type:   'GET',
 						url: source, 
@@ -167,7 +184,11 @@
 			//alert("ye got here"); 
 			//window.console.log(data);
 			//$("#Add").item(data).chain();//load this data in the feedback 
-			$("#feedback").items(data.feedback).chain();//load this data in the feedback 		
+			
+			//This is a bit of hack - would be nice to just have this once and te form is not display 
+			$(".feedback").items(data.feedback).chain();//load this data in the feedback 
+			$(".feedbackForm").items(data.feedback).chain();//load this data in the feedback 
+			$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 	
 			$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 	
 			
 			//form related items 
@@ -206,14 +227,7 @@
 
 		}; 
 		
-		
-			
 	
-		
-		
-		
-		
-		
 		
         </script>
         <style type="text/css" media="screen">
@@ -272,7 +286,9 @@
             </div>
                      
         <ul class="rounded">
-          <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>		   
+          <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>	
+           <li class="arrow"><a href="#FeedbackDisplayWithForm"  onClick="loadFeedback(event)">Be Your Self - with form <span class="performance">4</span></a> <small class="counter">1</small></li>		   
+	   
         </ul>              
       
 </div>
@@ -323,6 +339,33 @@
             </div>
             
            <span class="performance"></span>
+           <h3 class="question"></h3>
+
+            <ul class="feedback">
+                    <li><span class="content"></span></li>
+            </ul>
+         	
+         
+         </div>  
+         
+            
+            
+         <div id="FeedbackDisplayWithForm">
+            <div class="toolbar">
+                <h1 class="event"></h1>
+                <a class="back" href="#">Home</a>
+               <a class="button slideup" id="infoButton" href="#about">About</a>
+
+            </div>             
+            
+             <div class="info">
+            
+            <div class="organisation">organisation</div>
+            <div class="venue">venue</div>
+            <div class="date">date</div>
+            </div>
+            
+           <span class="performance"></span>
 
              
          <form id="submit-feedback" action="" method="GET" class="form">
@@ -341,18 +384,15 @@
          </form>
         
       
-      
-      
-           
            <h3 class="question"></h3>
 
-            <ul id="feedback">
-                    <li><a href="#details"><span class="content"></span></a></li>
+            <ul class="feedbackForm">
+                    <li><span class="content"></span></li>
             </ul>
+                  
+         </div>  
          
-         
-         
-         </div>      
+            
       
     </body>
 </html>
