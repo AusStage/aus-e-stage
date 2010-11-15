@@ -39,6 +39,11 @@ public class FileUtils {
 	 */
 	public static boolean isValidDir(String path, boolean mustNotExist) {
 	
+		// check on the parameters
+		if(InputUtils.isValid(path) == false) {
+			throw new IllegalArgumentException("The path parameter must not be null");
+		}
+	
 		// validate the parameter
 		if(InputUtils.isValid(path) == false) {
 			return false;
@@ -80,6 +85,12 @@ public class FileUtils {
 	 * @return             true if, and only if, the path is valid
 	 */
 	public static boolean doesDirExist(String path) {
+		
+		// check on the parameters
+		if(InputUtils.isValid(path) == false) {
+			throw new IllegalArgumentException("The path parameter must not be null");
+		}
+		
 		return isValidDir(path, false);
 	}
 	
@@ -92,6 +103,11 @@ public class FileUtils {
 	 * @return             true if, and only if, the path is valid
 	 */
 	public static boolean isValidFile(String path, boolean mustNotExist) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(path) == false) {
+			throw new IllegalArgumentException("The path parameter must not be null");
+		}
 	
 		// validate the parameter
 		if(InputUtils.isValid(path) == false) {
@@ -134,6 +150,12 @@ public class FileUtils {
 	 * @return             true if, and only if, the path is valid
 	 */
 	public static boolean doesFileExist(String path) {
+		
+		// check on the parameters
+		if(InputUtils.isValid(path) == false) {
+			throw new IllegalArgumentException("The path parameter must not be null");
+		}
+		
 		return isValidFile(path, false);
 	}
 	
@@ -145,6 +167,11 @@ public class FileUtils {
 	 * @return     the absolute path
 	 */
 	public static String getAbsolutePath(String path) {
+		
+		// check on the parameters
+		if(InputUtils.isValid(path) == false) {
+			throw new IllegalArgumentException("The path parameter must not be null");
+		}
 	
 		// validate the parameter
 		if(InputUtils.isValid(path) == false) {
@@ -171,6 +198,11 @@ public class FileUtils {
 	 */
 	public static String getCanonicalPath(String path) {
 	
+		// check on the parameters
+		if(InputUtils.isValid(path) == false) {
+			throw new IllegalArgumentException("The path parameter must not be null");
+		}
+	
 		// validate the parameter
 		if(InputUtils.isValid(path) == false) {
 			return null;
@@ -196,6 +228,11 @@ public class FileUtils {
 	 * @return         true, if an only if, the file is written successfully
 	 */
 	public static boolean writeNewFile(String path, String contents) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(path) == false || InputUtils.isValid(contents) == false) {
+			throw new IllegalArgumentException("Both parameters to this method are required");
+		}
 	
 		// check to ensure the path is valid
 		if(doesFileExist(path) == true) {
@@ -247,6 +284,11 @@ public class FileUtils {
 	 */
 	public static boolean renameFile(String oldName, String newName) {
 	
+		// check on the parameters
+		if(InputUtils.isValid(oldName) == false || InputUtils.isValid(newName) == false) {
+			throw new IllegalArgumentException("Both parameters to this method are required");
+		}
+	
 		// check to ensure the path is valid
 		if(doesFileExist(oldName) == false) {
 			return false;
@@ -265,6 +307,94 @@ public class FileUtils {
 		} else {
 			return false;
 		}
-	}	
+	}
+	
+	/**
+	 * A method to retrieve a list of files based on a common extension
+	 * from a given directory
+	 *
+	 * @param directory the directory to look inside for files
+	 * @param extension the file extension to look for
+	 */
+	public static String[] getFileNameListByExtension(String directory, String extension) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(directory) == false || InputUtils.isValid(extension) == false) {
+			throw new IllegalArgumentException("Both parameters to this method are required");
+		}
+		
+		if(doesDirExist(directory) == false) {
+			throw new IllegalArgumentException("Unable to locate the specified directory");
+		}
+		
+		// get the list of files
+		File dir = new File(directory);
+		File[] files = dir.listFiles(new FileExtensionFilter(extension));
+		
+		// check on what was returned
+		if(files.length == 0) {
+			return new String[0];
+		}
+		
+		// build a list of string
+		String[] fileNames = new String[files.length];
+		
+		// loop through all of the files and get the file names
+		for(int i = 0; i < files.length; i++) {
+			try {
+				fileNames[i] = files[i].getCanonicalPath();
+			} catch (java.io.IOException ex) {
+				return new String[0];
+			}
+		}		
+		
+		// return the list of file names
+		return fileNames;
+	
+	}
+
+/**
+ * A class used to filter a list of files by extension
+ */
+static class FileExtensionFilter implements FilenameFilter {
+
+	// declare helper variables
+	private String extension = null;
+	
+	/**
+	 * Constructor for this class
+	 *
+	 * @param extension the extension used to filter the list of files
+	 */
+	public FileExtensionFilter(String extension) {
+		if(InputUtils.isValid(extension) == false) {
+			throw new IllegalArgumentException("The extension parameter is required");
+		}
+		
+		this.extension = extension;	
+	 }	
+	
+	/**
+	 * Method to test if the specified file matches the predetermined
+	 * extension requirements
+	 *
+	 * @param dir the directory in which the file was found.
+	 * @param filename the name of the file
+	 *
+	 * @return true if and only if the file should be included
+	 */
+	public boolean accept(File dir, String filename) {
+	
+		if(filename != null) {
+			if(filename.endsWith(extension) == true) {
+				return true;
+			} else {
+				return false;
+			}		
+		} else {
+			return false;
+		}
+	}
+}
 	
 } // end class definition
