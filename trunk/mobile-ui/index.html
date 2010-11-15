@@ -30,16 +30,44 @@
             });
 			
         	//Glabals
-			var gCurrentPerformance;
+			var gCurrentPerformance = 0;
 		
   		//Our main document load 
-		$(document).ready(function() {
-		
-		  //alert("starting up");
-		  
-	
-		
+		$(document).ready(function() {			
+							
+			//Do have any URL variables - if so load those and then display the current performance form.    
+			if(window.location.href.indexOf('?') != -1) {
+				gCurrentPerformance =  getFirstUrlVars();
+				 getPerformanceData();	
+				jQT.goTo('#FeedbackDisplayWithForm'); 
+			}
+			
 		});
+		
+		// function to get parameters from url
+			function getFirstUrlVars()
+				{
+					
+					var pairs;
+					var pairs = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+				 	
+					window.console.log(pairs);
+					window.console.log(pairs[0].split('#')); 
+									
+					//does this first pair contain #  if does need to split this return bit for 
+					//the #is added by JQ touch
+					
+					if (pairs[0].indexOf("#") != -1) {
+		
+						var firstArray = pairs[0].split('#'); //make that into array rid of it.  
+						return firstArray[0]; 
+					
+					} else {
+						return pairs[0];//just return the first param 
+					}
+			
+		}
+		
 
 		function submitForm(){
 			
@@ -178,8 +206,20 @@
 			//$("#Add").item(data).chain();//load this data in the feedback 
 			
 			//This is a bit of hack - would be nice to just have this once and te form is not display 
-			$(".feedback").items(data.feedback).chain();//load this data in the feedback 
-			$(".feedbackForm").items(data.feedback).chain();//load this data in the feedback 
+			$(".feedback").items(data.feedback.sort(
+			function(a, b){
+		 		var dateA=new Date(a.date), dateB=new Date(b.date)
+		 		return dateB- dateA
+			}
+			)).chain();//load this data in the feedback
+			 
+			$(".feedbackForm").items(data.feedback.sort(
+			function(a, b){
+		 		var dateA=new Date(a.date), dateB=new Date(b.date)
+		 		return dateB- dateA
+			}
+			
+			)).chain();//load this data in the feedback 
 			$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 	
 			$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 	
 			
@@ -354,11 +394,8 @@
              
          <form id="submit-feedback" action="" method="GET" class="form">
         		<h3 class="question">Question</h3>
-                
 				<ul class="edit rounded">
             		<li><textarea placeholder="" name="message"></textarea></li>
-            		<li> </li>
-
                </ul>
  			<a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" onClick="submitForm()" class="whiteButton">Submit</a>
          </form>
