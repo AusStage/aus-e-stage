@@ -50,11 +50,16 @@ public class PageView implements Comparable<PageView>{
 		// store the values
 		
 		// process the date
-		String year  = date.substring(0, 4);
-		String month = date.substring(4, 6);
-		String day   = date.substring(6);
+		if(date.length() == 8) {
+			String year  = date.substring(0, 4);
+			String month = date.substring(4, 6);
+			String day   = date.substring(6);
+			
+			this.date  = year + "-" + month + "-" + day;
+		} else {
+			this.date = date;
+		}
 		
-		this.date  = year + "-" + month + "-" + day;
 		this.views = views;
 	}
 	

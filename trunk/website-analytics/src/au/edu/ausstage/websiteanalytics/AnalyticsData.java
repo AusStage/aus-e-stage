@@ -147,6 +147,70 @@ public class AnalyticsData {
 		
 		return getVisitsByDateAndPattern(tableId, startDate, endDate, urlPattern);
 	}
+	
+	/**
+	 * A method to get visits for a year, by month, matching a specific url pattern
+	 *
+	 * @param tableId    the tableId as listed by the AccountData.getUserDetails() method
+	 * @param year       the year that is of interest
+	 * @param urlPattern the URL pattern to match against
+	 *
+	 * @returns the retrieved data or null on error
+	 */
+	public PageViews getVisitsForYearByMonthAndPattern(String tableId, String year, String urlPattern) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(tableId) == false || InputUtils.isValid(year) == false || InputUtils.isValid(urlPattern) == false) {
+			throw new IllegalArgumentException("All of the parameters for this method are required");
+		}
+		
+		// reset the last Error variable
+		lastError = null;
+		
+		// declare other helper variables
+		PageViews pageViews = new PageViews();
+		String startDate = year + "-01-01";
+		String endDate   = year + "-12-31";
+		
+		try {
+		
+			// define a new Data Query object
+			DataQuery query = new DataQuery(new URL("https://www.google.com/analytics/feeds/data"));
+		
+			// set the parameters
+			query.setStartDate(startDate);
+			query.setEndDate(endDate);
+			query.setDimensions("ga:month");
+			query.setMetrics("ga:visits");
+			query.setSort("ga:month");
+			//query.setMaxResults();
+			query.setIds(tableId);
+			query.setFilters("ga:pagePath=~" + urlPattern);
+		
+			// get the data
+			DataFeed dataFeed = analyticsService.getFeed(query.getUrl(), DataFeed.class);
+			
+			// loop through and process the results
+			for (DataEntry entry : dataFeed.getEntries()) {
+				
+				// declare a new pageView variable
+				pageViews.add(new PageView(entry.stringValueOf("ga:month"), entry.longValueOf("ga:visits")));
+			}				
+
+		} catch (java.net.MalformedURLException ex) {
+			lastError = "Query URL construction error: " + ex.toString();
+			return null;
+		} catch (java.io.IOException ex) {
+			lastError = "Network error: " + ex.toString();
+			return null;
+		} catch (com.google.gdata.util.ServiceException ex) {
+			lastError = "Google Data error: " + ex.toString();
+			return null;
+		}
+		
+		// if we get this far then everything worked as expected
+		return pageViews;	
+	}
 		
 	
 	/**
