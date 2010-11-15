@@ -319,8 +319,7 @@ public class DateUtils {
 		// minify the date
 		if(date.length() != 10) {
 			date = getMinifiedDate(date, delim);
-		}
-			
+		}			
 		
 		// replace the delimiter with nothing
 		date = date.replace(delim, "");
@@ -336,6 +335,24 @@ public class DateUtils {
 		
 		return integerDate;
 	}
+	
+	/**
+	 * A method to convert a date string into an integer
+	 * Assumes the format yyyy-mm-dd where - is a delimiter
+	 * Dates are minified before conversion if required
+	 *
+	 * @param date the date to explode
+	 *
+	 * @return     an array with three elements containing the date components
+	 */
+	public static int getIntegerFromDate(String date) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(date) == false) {
+			throw new IllegalArgumentException("Error: All parameters to this method are required");
+		}
 		
+		return getIntegerFromDate(date, "-");
+	}	
 		
 } // end class definition
