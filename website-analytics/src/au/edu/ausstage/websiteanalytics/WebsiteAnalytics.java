@@ -22,6 +22,8 @@ package au.edu.ausstage.websiteanalytics;
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.websiteanalytics.types.*;
 
+// import additional java libraries
+import java.util.ArrayList;
 /**
  * Main driving class for the WebsiteAnalytics app
  */
@@ -94,53 +96,89 @@ public class WebsiteAnalytics {
 	 	String configPath = null;
 	 	
 	 	if(taskType.equals("build-reports") == true) {
-//	 		// get the path to the config files
-//		 	configPath = properties.getValue("config-dir");
-//		 	
-//		 	if(FileUtils.doesDirExist(configPath) == false) {
-//		 		System.err.println("ERROR: unable to find the config directory");
-//		 		System.exit(-1);
-//		 	}
-//		 	
-//		 	// get a list of config files
-//		 	String[] configFiles = FileUtils.getFileNameListByExtension(configPath, ".xml");
-//		 	
-//		 	if(configFiles.length == 0) {
-//		 		System.err.println("ERROR: unable to find any '.xml' files in the config directory");
-//		 		System.exit(-1);
-//		 	}
+	 		// get the path to the config files
+		 	configPath = properties.getValue("config-dir");
+		 	
+		 	if(FileUtils.doesDirExist(configPath) == false) {
+		 		System.err.println("ERROR: unable to find the config directory");
+		 		System.exit(-1);
+		 	}
+		 	
+		 	// get a list of config files
+		 	String[] configFiles = FileUtils.getFileNameListByExtension(configPath, ".xml");
+		 	
+		 	if(configFiles.length == 0) {
+		 		System.err.println("ERROR: unable to find any '.xml' files in the config directory");
+		 		System.exit(-1);
+		 	}
+		 	
+		 	// parse each of the config files
+		 	ArrayList<ReportConfig> reportConfigs = new ArrayList<ReportConfig>();
+		 	ReportConfig      reportConfig        = null;
+		 	ConfigReader      configReader        = new ConfigReader();
+		 	
+		 	for(int i = 0; i < configFiles.length; i++) {
+		 		reportConfig = configReader.parseConfigFile(configFiles[i]);
+		 		
+		 		if(reportConfig == null) {
+		 			System.err.println("ERROR: Unable to parse the config file at:\n" + configFiles[i]);
+		 			System.err.println("Details: " + configReader.getLastError());
+		 			System.exit(-1);
+		 		} else {
+		 			reportConfigs.add(reportConfig);
+		 		}
+		 	}
+		 	
+		 	//debug code
+		 	for(int i = 0; i < reportConfigs.size(); i++) {
+		 		reportConfig = reportConfigs.get(i);
+		 		
+		 		System.out.println("Report Config:");
+		 		System.out.println("  table-id:    " + reportConfig.getTableId());
+		 		System.out.println("  url-pattern: " + reportConfig.getUrlPattern());
+		 		System.out.println("  title:       " + reportConfig.getReportTitle());
+		 		System.out.println("Description:");
+		 		System.out.println("  title: " + reportConfig.getDescriptionTitle());
+		 		System.out.println("  text:  " + reportConfig.getDescription());
+		 		System.out.println("Sections: ");
+		 		System.out.println("  doCurrentMonth:  " + reportConfig.doCurrentMonthSection());
+		 		System.out.println("  doPreviousMonth: " + reportConfig.doPreviousMonthSection());
+		 		System.out.println("  doCurrentYear:   " + reportConfig.doCurrentYearSection());
+		 		System.out.println("  doPreviousYear:  " + reportConfig.doPreviousYearSection());
+		 	}
+		 	
 
-			// authenticate using the supplied credentials
-			AccountData accountData = new AccountData();
-			
-			// Keep the user informed
-			System.out.println("INFO: Attempting Authentication to Google Analytics");
-			
-			if(accountData.authenticateUser(properties.getValue("username"), properties.getValue("password")) == false) {
-				System.err.println("ERROR: An unexpected error has occured");
-				System.err.println(accountData.getLastError());
-				System.exit(-1);
-			} else {
-				System.out.println("INFO: Authentication Successful");
-			}
-			
-			// debug code
-			// instantiate the Analytics data class
-			AnalyticsData analyticsData = new AnalyticsData(accountData.getAnalyticsService());
-			
-			// visits for a period by day
-			//PageViews pageViews = analyticsData.getVisitsByDateAndPattern("ga:25792128", "2010-11-01", "2010-11-15", "^/networks/");
-			
-			// visits for a month by day
-			//PageViews pageViews  = analyticsData.getVisitsForMonthByDayAndPattern("ga:25792128", "2010", "11", "^/networks/");
-			PageViews pageViews = analyticsData.getVisitsForYearByMonthAndPattern("ga:25792128", "2010", "^/networks/");
-			
-			java.util.Set<PageView> sortedPageViews = pageViews.getSortedPageViews(PageViews.DATE_SORT);
-			PageView[] views = sortedPageViews.toArray(new PageView[0]);
-			
-			for(int i = 0; i < views.length; i++) {
-				System.out.println(views[i]);
-			}
+//			// authenticate using the supplied credentials
+//			AccountData accountData = new AccountData();
+//			
+//			// Keep the user informed
+//			System.out.println("INFO: Attempting Authentication to Google Analytics");
+//			
+//			if(accountData.authenticateUser(properties.getValue("username"), properties.getValue("password")) == false) {
+//				System.err.println("ERROR: An unexpected error has occured");
+//				System.err.println(accountData.getLastError());
+//				System.exit(-1);
+//			} else {
+//				System.out.println("INFO: Authentication Successful");
+//			}
+//			
+//			// debug code
+//			// instantiate the Analytics data class
+//			AnalyticsData analyticsData = new AnalyticsData(accountData.getAnalyticsService());
+//			
+//			// visits for a period by day
+//			//PageViews pageViews = analyticsData.getVisitsByDateAndPattern("ga:25792128", "2010-11-01", "2010-11-15", "^/networks/");
+//			
+//			// visits for a month by day
+//			//PageViews pageViews  = analyticsData.getVisitsForMonthByDayAndPattern("ga:25792128", "2010", "11", "^/networks/");
+//			PageViews pageViews = analyticsData.getVisitsForYearByMonthAndPattern("ga:25792128", "2010", "^/networks/");
+//			
+//			java.util.Set<PageView> sortedPageViews = pageViews.getSortedPageViews(PageViews.DATE_SORT);
+//			PageView[] views = sortedPageViews.toArray(new PageView[0]);
+//			
+//			for(int i = 0; i < views.length; i++) {
+//				System.out.println(views[i]);
+//			}
 		 	
 		} else if(taskType.equals("account-data") == true) {
 			// get the account data for this user

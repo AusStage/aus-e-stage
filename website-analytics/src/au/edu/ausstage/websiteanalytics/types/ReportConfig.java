@@ -29,9 +29,10 @@ public class ReportConfig {
 	/*
 	 * private class level variables
 	 */
-	private String         title                = null;
+	private String         reportTitle          = null;
 	private String         fileName             = null;
 	private StringBuilder  description          = null;
+	private String         descriptionTitle     = null;
 	private String         urlPattern           = null;
 	private String         tableId              = null;
 	private boolean        currentMonthSection  = false;
@@ -47,8 +48,8 @@ public class ReportConfig {
 	 *
 	 * @return the title of the report
 	 */
-	public String getTitle() {
-		return title;
+	public String getReportTitle() {
+		return reportTitle;
 	}
 	
 	/**
@@ -56,12 +57,34 @@ public class ReportConfig {
 	 *
 	 * @param value the new value
 	 */
-	public void setTitle(String value) {
+	public void setReportTitle(String value) {
 		if(InputUtils.isValid(value) == false) {
 			throw new IllegalArgumentException("The new value must be a valid non zero length string");
 		}
 		
-		title = value;
+		reportTitle = value;
+	}
+	
+	/**
+	 * get the title of the description section
+	 *
+	 * @return the title of the description section
+	 */
+	public String getDescriptionTitle() {
+		return descriptionTitle;
+	}
+	
+	/**
+	 * Set the title to a new value
+	 *
+	 * @param value the new value
+	 */
+	public void setDescriptionTitle(String value) {
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("The new value must be a valid non zero length string");
+		}
+		
+		descriptionTitle = value;
 	}
 	
 	/**
@@ -92,7 +115,7 @@ public class ReportConfig {
 	 * @return the description for the report
 	 */
 	public String getDescription() {
-		return description.toString();
+		return description.toString().trim();
 	}
 	
 	/**
@@ -115,8 +138,11 @@ public class ReportConfig {
 	 * @param start the index of the start of the characters in the index
 	 * @param end   the index of the end of the characters in the index
 	 */
-	public void appendCharacters(CharSequence s, int start, int end) {
-		description.append(s, start, start + end);
+	public void appendCharacters(char[] c, int start, int end) {
+		if(description == null) {
+			description = new StringBuilder();
+		}
+		description.append(c, start, end);
 	}
 	
 	/**
