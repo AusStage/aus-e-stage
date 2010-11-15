@@ -62,7 +62,7 @@ public class AnalyticsData {
 	}
 	
 	/**
-	 * A method to get vists for a period matching a specific url pattern
+	 * A method to get vists for a period, by day, matching a specific url pattern
 	 *
 	 * @param tableId    the tableId as listed by the AccountData.getUserDetails() method
 	 * @param startDate  the start of the period. Assumes the format yyyy-mm-dd where - is a delimiter
@@ -123,6 +123,31 @@ public class AnalyticsData {
 		// if we get this far then everything worked as expected
 		return pageViews;	
 	}
+	
+	/**
+	 * A method to get vists for a month, by day, matching a specific url pattern
+	 *
+	 * @param tableId    the tableId as listed by the AccountData.getUserDetails() method
+	 * @param year       the year that is of interest
+	 * @param month      the month that is of interest
+	 * @param urlPattern the URL pattern to match against
+	 *
+	 * @returns the retrieved data or null on error
+	 */
+	public PageViews getVisitsForMonthByDayAndPattern(String tableId, String year, String month, String urlPattern) {
+		
+		// check on the parameters
+		if(InputUtils.isValid(tableId) == false || InputUtils.isValid(year) == false || InputUtils.isValid(month) == false || InputUtils.isValid(urlPattern) == false) {
+			throw new IllegalArgumentException("All of the parameters for this method are required");
+		}
+		
+		// determine the start and end years
+		String startDate = year + "-" + month + "-01";
+		String endDate   = year + "-" + month + "-" + DateUtils.getLastDay(year, month);
+		
+		return getVisitsByDateAndPattern(tableId, startDate, endDate, urlPattern);
+	}
+		
 	
 	/**
 	 * A method to get the error message if an error occures
