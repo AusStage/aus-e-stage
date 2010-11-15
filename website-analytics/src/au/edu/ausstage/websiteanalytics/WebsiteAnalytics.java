@@ -132,7 +132,8 @@ public class WebsiteAnalytics {
 			//PageViews pageViews = analyticsData.getVisitsByDateAndPattern("ga:25792128", "2010-11-01", "2010-11-15", "^/networks/");
 			
 			// visits for a month by day
-			PageViews pageViews  = analyticsData.getVisitsForMonthByDayAndPattern("ga:25792128", "2010", "11", "^/networks/");
+			//PageViews pageViews  = analyticsData.getVisitsForMonthByDayAndPattern("ga:25792128", "2010", "11", "^/networks/");
+			PageViews pageViews = analyticsData.getVisitsForYearByMonthAndPattern("ga:25792128", "2010", "^/networks/");
 			
 			java.util.Set<PageView> sortedPageViews = pageViews.getSortedPageViews(PageViews.DATE_SORT);
 			PageView[] views = sortedPageViews.toArray(new PageView[0]);
