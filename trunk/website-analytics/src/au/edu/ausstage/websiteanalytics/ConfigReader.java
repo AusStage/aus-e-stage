@@ -33,12 +33,34 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class ConfigReader {
 
+	// declare class level variables
+	private SAXParserFactory factory   = null;
+	private SAXParser        saxParser = null;
+	private ConfigXMLHandler handler   = null;
+	private String           lastError = null;
+	
+	/**
+	 * Constructor for this class
+	 */
+	public ConfigReader() {
+		// declare the SAX related variables
+		try {
+			factory = SAXParserFactory.newInstance();
+			saxParser = factory.newSAXParser();
+		}catch (javax.xml.parsers.ParserConfigurationException ex) {
+			throw new RuntimeException("Unable to configure the SAX related classes: " + ex.toString());
+		} catch (org.xml.sax.SAXException ex) {
+			throw new RuntimeException("Unable to configure the SAX related classes: " + ex.toString());
+		}
+	}
+		
+
 	/**
 	 * A method to parse a config file
 	 *
 	 * @param configFilePath the path to the config file
 	 */
-	public void parseConfigFile(String configFilePath) {
+	public ReportConfig parseConfigFile(String configFilePath) {
 	
 		// check on the parameters
 		if(InputUtils.isValid(configFilePath) == false) {
@@ -47,7 +69,43 @@ public class ConfigReader {
 		
 		if(FileUtils.doesFileExist(configFilePath) == false) {
 			throw new IllegalArgumentException("The file specified by the configFilePath parameter cannot be found");
-		}	
+		}
+		
+		// make sure we have the full path to the config file
+		configFilePath = FileUtils.getCanonicalPath(configFilePath);
+		
+		// declare a new ReportConfig variable
+		ReportConfig reportConfig = new ReportConfig();
+		
+		// parse the XML file
+		try {
+		
+			// re declare our own handler
+			handler = new ConfigXMLHandler(reportConfig);
+		
+			saxParser.parse(configFilePath, handler);
+			
+			
+		} catch (org.xml.sax.SAXException ex) {
+			lastError = ex.toString();
+			return null;
+		}catch (java.io.IOException ex) {
+			//debug code
+			lastError = ex.toString();
+			return null;
+		}
+	
+		// if we get this far everything went OK
+		return reportConfig;
+	}
+	
+	/**
+	 * A method to get the error message if an error occures
+	 *
+	 * @return the string of the last error message
+	 */
+	public String getLastError() {
+		return lastError;
 	}
 	
 	/**
@@ -55,12 +113,50 @@ public class ConfigReader {
 	 */
 	private class ConfigXMLHandler extends DefaultHandler {
 	
+		// declare private class level variables
+		boolean      isDescription  = false;
+		ReportConfig reportConfig   = null;
+		
+		/**
+		 * Constructor for this class
+		 *
+		 * @param config an empty ReportConfig variable that will be populated with items from the XML
+		 */
+		public ConfigXMLHandler(ReportConfig config) {
+			reportConfig = config;
+		}
+	
 		/**
 		 * Override the default startElement method
 		 */
 		public void startElement(String uri, String localName, String qName, Attributes atts) {
-	
 			
+			// determine which tag we're starting to parse
+			if(qName.equals("config") == true) {
+				// get the configuration parameters
+				reportConfig.setTableId(atts.getValue("table-id"));
+				reportConfig.setUrlPattern(atts.getValue("url-pattern"));
+				reportConfig.setReportTitle(atts.getValue("title"));
+			} else if(qName.equals("description") == true) {
+				// get the title for the description section
+				reportConfig.setDescriptionTitle(atts.getValue("title"));
+				
+				// set the isDescription flag
+				isDescription = true;
+			} else if(qName.equals("section") == true) {
+				// determine which section this represent
+				String tmp = atts.getValue("type");
+				
+				if(tmp.equals("current-month") == true) {
+					reportConfig.setCurrentMonthFlag(true);
+				} else if(tmp.equals("previous-month") == true) {
+					reportConfig.setPreviousMonthFlag(true);
+				} else if(tmp.equals("current-year") == true) {
+					reportConfig.setCurrentYearFlag(true);
+				} else if(tmp.equals("previous-year") == true) {
+					reportConfig.setPreviousYearFlag(true);
+				}
+			}			
 		}
 		
 		/**
@@ -68,6 +164,23 @@ public class ConfigReader {
 		 */
 		public void characters(char[] ch, int start, int length) {
 		
+			// process the characters if this is the description tag
+			if(isDescription == true) {
+				reportConfig.appendCharacters(ch, start, length);
+			}
+		
+		}
+		
+		/**
+		 * Override the default endElement method
+		 */
+		public void endElement(String uri, String localName, String qName, Attributes atts) {
+			
+			// determine which tag we're ending on
+			if(qName.equals("description") == true) {
+				// set the isDescription flag
+				isDescription = false;
+			}
 		}
 	}
 }
