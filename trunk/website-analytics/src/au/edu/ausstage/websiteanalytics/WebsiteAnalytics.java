@@ -20,6 +20,7 @@ package au.edu.ausstage.websiteanalytics;
 
 // import additional ausstage packages
 import au.edu.ausstage.utils.*;
+import au.edu.ausstage.websiteanalytics.types.*;
 
 /**
  * Main driving class for the WebsiteAnalytics app
@@ -28,7 +29,7 @@ public class WebsiteAnalytics {
 
 	// Version information 
 	public  static final String VERSION    = "1.0.0";
-	private static final String BUILD_DATE = "2010-11-11";
+	private static final String BUILD_DATE = "2010-11-15";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/WebsiteAnalytics";
 	public  static final String APP_NAME   = "AusStage Website Analytics";
 	
@@ -93,21 +94,49 @@ public class WebsiteAnalytics {
 	 	String configPath = null;
 	 	
 	 	if(taskType.equals("build-reports") == true) {
-	 		// get the path to the config files
-		 	configPath = properties.getValue("config-dir");
+//	 		// get the path to the config files
+//		 	configPath = properties.getValue("config-dir");
+//		 	
+//		 	if(FileUtils.doesDirExist(configPath) == false) {
+//		 		System.err.println("ERROR: unable to find the config directory");
+//		 		System.exit(-1);
+//		 	}
+//		 	
+//		 	// get a list of config files
+//		 	String[] configFiles = FileUtils.getFileNameListByExtension(configPath, ".xml");
+//		 	
+//		 	if(configFiles.length == 0) {
+//		 		System.err.println("ERROR: unable to find any '.xml' files in the config directory");
+//		 		System.exit(-1);
+//		 	}
+
+			// authenticate using the supplied credentials
+			AccountData accountData = new AccountData();
+			
+			// Keep the user informed
+			System.out.println("INFO: Attempting Authentication to Google Analytics");
+			
+			if(accountData.authenticateUser(properties.getValue("username"), properties.getValue("password")) == false) {
+				System.err.println("ERROR: An unexpected error has occured");
+				System.err.println(accountData.getLastError());
+				System.exit(-1);
+			} else {
+				System.out.println("INFO: Authentication Successful");
+			}
+			
+			// debug code
+			// instantiate the Analytics data class
+			AnalyticsData analyticsData = new AnalyticsData(accountData.getAnalyticsService());
+			
+			PageViews pageViews = analyticsData.getVisitsByDateAndPattern("ga:25792128", "2010-11-01", "2010-11-15", "^/networks/");
+			
+			java.util.Set<PageView> sortedPageViews = pageViews.getSortedPageViews(PageViews.DATE_SORT);
+			PageView[] views = sortedPageViews.toArray(new PageView[0]);
+			
+			for(int i = 0; i < views.length; i++) {
+				System.out.println(views[i]);
+			}
 		 	
-		 	if(FileUtils.doesDirExist(configPath) == false) {
-		 		System.err.println("ERROR: unable to find the config directory");
-		 		System.exit(-1);
-		 	}
-		 	
-		 	// get a list of config files
-		 	String[] configFiles = FileUtils.getFileNameListByExtension(configPath, ".xml");
-		 	
-		 	if(configFiles.length == 0) {
-		 		System.err.println("ERROR: unable to find any '.xml' files in the config directory");
-		 		System.exit(-1);
-		 	}
 		} else if(taskType.equals("account-data") == true) {
 			// get the account data for this user
 			AccountData data = new AccountData();
@@ -133,7 +162,6 @@ public class WebsiteAnalytics {
 			} else {
 				System.out.println(userDetails);
 			}
-		}
-	
+		}	
 	}
 }
