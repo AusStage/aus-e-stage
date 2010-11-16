@@ -1,22 +1,22 @@
 <!--
- * This file is part of the Aus-e-Stage Beta Root Website
+ * This file is part of the AusStage Mapping Service
  *
- * The Aus-e-Stage Beta Root Website is free software: you can 
- * redistribute it and/or modify it under the terms of the GNU General 
- * Public License as published by the Free Software Foundation, either 
- * version 3 of the License, or (at your option) any later version.
+ * The AusStage Mapping Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * The Aus-e-Stage Beta Root Website is distributed in the hope 
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the 
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
- * See the GNU General Public License for more details.
+ * The AusStage Mapping Service is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the Aus-e-Stage Beta Root Website.  
+ * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<project name="Aus-e-Stage Beta Root Website" default="compile" basedir=".">
+<project name="AusStage Mapping Service" default="compile" basedir=".">
 
 
 
@@ -95,12 +95,20 @@
 
 -->
 
+  
   <property name="build.home"    value="${basedir}/build"/>
-  <property name="catalina.home" value="/usr/share/tomcat6"/>
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/dist/docs"/>
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
+  <property name="lib.home"      value="${basedir}/lib"/>
+  
+  <!-- Update these via a build.properties file -->
+  <property name="app.name"      value=""/>
+  <property name="app.path"      value=""/>
+  <property name="app.version"   value=""/>
+  <property name="catalina.home" value=""/>
+  <property name="manager.url"   value=""/>
 
 
 <!-- ==================== External Dependencies =========================== -->
@@ -118,7 +126,7 @@
   Because we will automatically include all of the Java classes that Tomcat 6
   exposes to web applications, we will not need to explicitly list any of those
   dependencies.  You only need to worry about external dependencies for JAR
-  files that you are going to include inside your "/WEB-INF/lib" directory
+  files that you are going to include inside your "/WEB-INF/lib" directory.
 
 -->
 
@@ -142,12 +150,10 @@
 -->
 
   <path id="compile.classpath">
-
-    <!-- Include all JAR files that will be included in /WEB-INF/lib -->
-    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-<!--
-    <pathelement location="${foo.jar}"/>
--->
+  	
+  	<fileset dir="${lib.home}">
+		<include name="*.jar"/>
+	</fileset>
 
     <!-- Include all elements that Tomcat exposes to applications -->
     <fileset dir="${catalina.home}/bin">
@@ -263,7 +269,7 @@
       includeAntRuntime="false"
          optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
-        <compilerarg value="-Xlint:unchecked"/> 
+        <compilerarg value="-Xlint:unchecked"/>
     </javac>
 
     <!-- Copy application resources -->
@@ -299,19 +305,6 @@
     <copy    todir="${dist.home}/docs">
       <fileset dir="${docs.home}"/>
     </copy>
-
-    <!-- Create application JAR file -->
-    <jar jarfile="${dist.home}/${app.name}.war"
-         basedir="${build.home}"/>
-
-    <!-- Copy additional files to ${dist.home} as necessary -->
-
-  </target>
-  
-  <!-- build a binary distribution without create the java doc -->
-  
-    <target name="dist2" depends="compile"
-   description="Create binary distribution">
 
     <!-- Create application JAR file -->
     <jar jarfile="${dist.home}/${app.name}.war"
@@ -431,10 +424,12 @@
     <!-- Copy external dependencies as required -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
     <mkdir  dir="${build.home}/WEB-INF/lib"/>
-<!--
-    <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
--->
-	
+
+	<copy todir="${build.home}/WEB-INF/lib">
+    	<fileset dir="${lib.home}">
+			<include name="*.jar"/>
+		</fileset>
+	</copy>
 
   </target>
 
@@ -455,10 +450,11 @@
 
 -->
 
-  <target name="reload" depends="compile"
+<!--  <target name="reload" depends="clean,compile"
+   description="Reload application on servlet container"> -->
+
+<target name="reload" depends="compile"
    description="Reload application on servlet container">
-
-
     <!-- Experiment -->
     <!--
     <reload url="${manager.url}"
