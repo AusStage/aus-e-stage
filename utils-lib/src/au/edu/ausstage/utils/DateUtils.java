@@ -20,6 +20,7 @@ package au.edu.ausstage.utils;
 
 // import additional libraries
 import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.text.DateFormat;
 
 /**
@@ -144,6 +145,24 @@ public class DateUtils {
 		return formatter.format(calendar.getTime());
 	 
 	} // end getCurrentDate method
+	
+	/**
+	 * A method to get the current date as an array of components
+	 * 0 = year, 1 = month, 2 = day
+	 *
+	 * @return an array of strings representing the current date
+	 */
+	public static String[] getCurrentDateAsArray() {
+	
+		GregorianCalendar calendar = new GregorianCalendar();
+		String[] fields = new String[3];
+		
+		fields[0] = Integer.toString(calendar.get(Calendar.YEAR));
+		fields[1] = String.format("%02d", calendar.get(Calendar.MONTH));
+		fields[2] = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+		
+		return fields;	
+	}
 	
 	/**
 	 * A method to get the last day of a month
