@@ -47,8 +47,7 @@ public class AnalyticsServlet extends HttpServlet {
 	StreamResult       result;		// object to receive output of transformation
 	
 	// declare other private variables
-	String htmlOutput;
-	
+	String htmlOutput;	
 
 	/**
 	 * initialise this servlet
