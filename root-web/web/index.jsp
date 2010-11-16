@@ -29,7 +29,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
-	<!--<script type="text/javascript" src="assets/javascript/libraries/jquery.bgiframe.min.js"></script>-->
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.06.js"></script>
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="assets/javascript/main.js"></script>
 	<style type="text/css" media="screen">
@@ -101,7 +101,9 @@
 					<ul>
 						<li><a href="#analytics-1">Data Exchange Service</a></li>
 						<li><a href="#analytics-2">Mapping Service</a></li>
-						<!--<li><a href="#analytics-3">Networks Service</a></li>-->
+						<li><a href="#analytics-3">Networks Service</a></li>
+						<li><a href="#analytics-4">Mobile Service</a></li>
+						<li><a href="#analytics-5">AusStage Website</a></li>
 					</ul>
 					<div id="analytics-1">
 						<p style="text-align: center;">
@@ -121,7 +123,6 @@
 							If you continue to see this message after 5 seconds please contact us.
 						</p>
 					</div>
-					<!--
 					<div id="analytics-3">
 						<p style="text-align: center;">
 							<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
@@ -131,7 +132,24 @@
 							If you continue to see this message after 5 seconds please contact us.
 						</p>
 					</div>
-					-->
+					<div id="analytics-4">
+						<p style="text-align: center;">
+							<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+							<br/>Loading analytics report...
+						</p>
+						<p style="text-align: center;">
+							If you continue to see this message after 5 seconds please contact us.
+						</p>
+					</div>
+					<div id="analytics-5">
+						<p style="text-align: center;">
+							<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+							<br/>Loading analytics report...
+						</p>
+						<p style="text-align: center;">
+							If you continue to see this message after 5 seconds please contact us.
+						</p>
+					</div>
 				</div>
 			</div>
 			<div id="tabs-4">
