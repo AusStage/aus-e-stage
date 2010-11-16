@@ -42,9 +42,6 @@ google.load("feeds", "1");
 // load the delicious feed
 google.setOnLoadCallback(load_delicious);
 
-// load the zotero feed
-google.setOnLoadCallback(load_zotero);
-
 // load the delicious rss feed
 function load_delicious() {
 
@@ -64,41 +61,82 @@ function load_delicious() {
 	feedControl.draw(document.getElementById("delicious_feed"));
 }
 
-//https://api.zotero.org/groups/12290/items
-
-// load the delicious rss feed
-function load_zotero() {
-
-	// empty the delicious feed div
-	$("#zotero_feed").empty();
-
-	// Create a feed control
-	var feedControl = new google.feeds.FeedControl();
-	
-	// add the feed url
-	feedControl.addFeed("https://api.zotero.org/groups/12290/items/top", "");
-	
-	// set the number of items to display
-	feedControl.setNumEntries(10);
-
-	// Draw it.
-	feedControl.draw(document.getElementById("zotero_feed"));
-}
-
 // get the Exchange Service Analytics
 $(document).ready(function() {
-	
-	// get the exchange data analytics information
-	$.get("analytics?type=exchange", function(html) {
-		$("#analytics-1").empty();
-		$("#analytics-1").append(html);
+
+	// set up the ajax queue
+	var ajaxQueue = $.manageAjax.create("RootWebAjaxQueue", {
+		queue: true
 	});
 	
-	window.setTimeout(function() {
-	// get the exchange data analytics information
-		$.get("analytics?type=mapping", function(html) {
-			$("#analytics-2").empty();
-			$("#analytics-2").append(html);
-		});
-	}, 1000);
+	// build the request
+	var url = "analytics?report-file=exchange-analytics.xml";
+	
+	// queue this request
+	ajaxQueue.add({
+		success: exchangeAnalytics,
+		url: url
+	});
+	
+	// build the request
+	url = "analytics?report-file=mapping-service.xml";
+	
+	// queue this request
+	ajaxQueue.add({
+		success: mappingAnalytics,
+		url: url
+	});
+	
+	// build the request
+	url = "analytics?report-file=networks-service.xml";
+	
+	// queue this request
+	ajaxQueue.add({
+		success: networksAnalytics,
+		url: url
+	});
+	
+	// build the request
+	url = "analytics?report-file=mobile-service.xml";
+	
+	// queue this request
+	ajaxQueue.add({
+		success: mobileAnalytics,
+		url: url
+	});
+	
+	// build the request
+	url = "analytics?report-file=ausstage-website.xml";
+	
+	// queue this request
+	ajaxQueue.add({
+		success: ausstageAnalytics,
+		url: url
+	});
+	
 });
+
+// function to add the content to the page
+function exchangeAnalytics(data) {
+	$("#analytics-1").empty().append(data);
+}
+
+// function to add the content to the page
+function mappingAnalytics(data) {
+	$("#analytics-2").empty().append(data);
+}
+
+// function to add the content to the page
+function networksAnalytics(data) {
+	$("#analytics-3").empty().append(data);
+}
+
+// function to add the content to the page
+function mobileAnalytics(data) {
+	$("#analytics-4").empty().append(data);
+}
+
+// function to add the content to the page
+function ausstageAnalytics(data) {
+	$("#analytics-5").empty().append(data);
+}

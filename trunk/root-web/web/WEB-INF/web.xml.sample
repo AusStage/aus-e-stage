@@ -61,7 +61,7 @@
     <context-param>
     	<param-name>reportDirectory</param-name>
     	<param-value></param-value>
-    </contenxt-param>
+    </context-param>
    <!-- Add Custom mime-types -->
     <mime-mapping>
 		<extension>kml</extension>
