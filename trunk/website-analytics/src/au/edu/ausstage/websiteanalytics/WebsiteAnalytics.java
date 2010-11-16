@@ -36,7 +36,7 @@ public class WebsiteAnalytics {
 	public  static final String APP_NAME   = "AusStage Website Analytics";
 	
 	// private helper constants
-	private static final String[] REQD_PROPERTIES = {"config-dir", "username", "password"};
+	private static final String[] REQD_PROPERTIES = {"config-dir", "username", "password", "output-dir"};
 	private static final String[] TASK_TYPES      = {"account-data", "build-reports"};
 	
 	/**
@@ -122,49 +122,45 @@ public class WebsiteAnalytics {
 		 		
 		 		if(reportConfig == null) {
 		 			System.err.println("ERROR: Unable to parse the config file at:\n" + configFiles[i]);
-		 			System.err.println("Details: " + configReader.getLastError());
+		 			System.err.println(configReader.getLastError());
 		 			System.exit(-1);
 		 		} else {
+		 			// determine the file name for the generated report
+		 			reportConfig.setFileName(FileUtils.getFileName(configFiles[i]));
+		 			
+		 			// add the config to the list
 		 			reportConfigs.add(reportConfig);
 		 		}
 		 	}
 		 	
-		 	//debug code
-		 	for(int i = 0; i < reportConfigs.size(); i++) {
-		 		reportConfig = reportConfigs.get(i);
-		 		
-		 		System.out.println("Report Config:");
-		 		System.out.println("  table-id:    " + reportConfig.getTableId());
-		 		System.out.println("  url-pattern: " + reportConfig.getUrlPattern());
-		 		System.out.println("  title:       " + reportConfig.getReportTitle());
-		 		System.out.println("Description:");
-		 		System.out.println("  title: " + reportConfig.getDescriptionTitle());
-		 		System.out.println("  text:  " + reportConfig.getDescription());
-		 		System.out.println("Sections: ");
-		 		System.out.println("  doCurrentMonth:  " + reportConfig.doCurrentMonthSection());
-		 		System.out.println("  doPreviousMonth: " + reportConfig.doPreviousMonthSection());
-		 		System.out.println("  doCurrentYear:   " + reportConfig.doCurrentYearSection());
-		 		System.out.println("  doPreviousYear:  " + reportConfig.doPreviousYearSection());
-		 	}
-		 	
+			// authenticate using the supplied credentials
+			AccountData accountData = new AccountData();
+			
+			// Keep the user informed
+			System.out.println("INFO: Attempting Authentication to Google Analytics");
+			
+			if(accountData.authenticateUser(properties.getValue("username"), properties.getValue("password")) == false) {
+				System.err.println("ERROR: An unexpected error has occured");
+				System.err.println("      " + accountData.getLastError());
+				System.exit(-1);
+			} else {
+				System.out.println("INFO: Authentication Successful");
+			}
 
-//			// authenticate using the supplied credentials
-//			AccountData accountData = new AccountData();
-//			
-//			// Keep the user informed
-//			System.out.println("INFO: Attempting Authentication to Google Analytics");
-//			
-//			if(accountData.authenticateUser(properties.getValue("username"), properties.getValue("password")) == false) {
-//				System.err.println("ERROR: An unexpected error has occured");
-//				System.err.println(accountData.getLastError());
-//				System.exit(-1);
-//			} else {
-//				System.out.println("INFO: Authentication Successful");
-//			}
-//			
-//			// debug code
-//			// instantiate the Analytics data class
-//			AnalyticsData analyticsData = new AnalyticsData(accountData.getAnalyticsService());
+			// instantiate the AnalyticsData class
+			AnalyticsData analyticsData = new AnalyticsData(accountData.getAnalyticsService());
+			
+			// instantiate a ReportGenerate class
+			ReportGenerator reports = new ReportGenerator(analyticsData, properties.getValue("output-dir"));
+			
+			for(int i = 0; i < reportConfigs.size(); i++) {
+				if(reports.doReport(reportConfigs.get(i)) == false) {
+					System.err.println("ERROR: failed to generate the '" + reportConfigs.get(i).getReportTitle() + "' report");
+					System.err.println("      " + reports.getLastError());
+				} else {
+					System.out.println("INFO: Successfully generated the '" + reportConfigs.get(i).getReportTitle() + "' report");
+				}
+			}
 //			
 //			// visits for a period by day
 //			//PageViews pageViews = analyticsData.getVisitsByDateAndPattern("ga:25792128", "2010-11-01", "2010-11-15", "^/networks/");
