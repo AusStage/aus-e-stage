@@ -59,17 +59,9 @@
     <!-- XML and XSLT paths -->
     <!-- IMPORTANT: specify a fully qualified path! -->
     <context-param>
-        <param-name>analyticsXslt</param-name>
-        <param-value></param-value>
-    </context-param>
-   <context-param>
-        <param-name>exchangeAnalyticsXml</param-name>
-        <param-value></param-value>
-    </context-param>
-    <context-param>
-        <param-name>mappingAnalyticsXml</param-name>
-        <param-value></param-value>
-    </context-param>
+    	<param-name>reportDirectory</param-name>
+    	<param-value></param-value>
+    </contenxt-param>
    <!-- Add Custom mime-types -->
     <mime-mapping>
 		<extension>kml</extension>
