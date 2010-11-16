@@ -83,11 +83,11 @@ public class DateUtils {
 	 *
 	 * @return      a string containing the name of the month
 	 */
-	private static String lookupMonth(String month) {
+	public static String lookupMonth(String month) {
 	 
 		// check on the month parameter
-	 	if(month == null || month.equals("")) {
-	 		return "";
+	 	if(InputUtils.isValid(month) == false) {
+	 		return null;
 	 	}
 	 
 	 	// prepare the month
@@ -102,6 +102,32 @@ public class DateUtils {
 	 	int i = Integer.parseInt(month);
 	 	
 	 	switch (i) {
+	 		case 1:  return "January";
+	 		case 2:  return "February";
+	 		case 3:  return "March";
+	 		case 4:  return "April";
+	 		case 5:  return "May";
+	 		case 6:  return "June";
+	 		case 7:  return "July";
+	 		case 8:  return "August";
+	 		case 9:  return "September";
+	 		case 10: return "October";
+	 		case 11: return "November";
+	 		case 12: return "December";
+	 		default: return "";
+	 		}
+	} // end lookupMonth method
+	
+	/**
+	 * A method used to lookup the name of a month based on its number
+	 *
+	 * @param month the month as a digit
+	 *
+	 * @return      a string containing the name of the month
+	 */
+	public static String lookupMonth(int month) {
+	 	
+	 	switch (month) {
 	 		case 1:  return "January";
 	 		case 2:  return "February";
 	 		case 3:  return "March";
@@ -158,7 +184,7 @@ public class DateUtils {
 		String[] fields = new String[3];
 		
 		fields[0] = Integer.toString(calendar.get(Calendar.YEAR));
-		fields[1] = String.format("%02d", calendar.get(Calendar.MONTH));
+		fields[1] = String.format("%02d", calendar.get(Calendar.MONTH) + 1);
 		fields[2] = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
 		
 		return fields;	
