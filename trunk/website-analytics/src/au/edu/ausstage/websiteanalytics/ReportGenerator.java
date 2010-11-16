@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the AAusStage Website Analytics app.  
+ * along with the AusStage Website Analytics app.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -40,6 +40,10 @@ public class ReportGenerator {
 	private AnalyticsData analyticsData   = null;
 	private String        lastError       = null;
 	private String        outputDirectory = null;
+	
+	// declare private class level constants
+	private String CHART_WIDTH  = "700";
+	private String CHART_HEIGHT = "125"; 
 
 	/**
 	 * Constructor for this class
@@ -222,9 +226,9 @@ public class ReportGenerator {
 			parentElement.appendChild(element);
 			
 			element = xmlDoc.createElement("chart");
-			element.setAttribute("height", "125");
-			element.setAttribute("width", "700");
-			element.setAttribute("href", "currentMonth");
+			element.setAttribute("height", CHART_HEIGHT);
+			element.setAttribute("width", CHART_WIDTH);
+			element.setAttribute("href", buildChartUrl(currentMonth, "Visits by Day for " + DateUtils.lookupMonth(dateFields[1]) + " " + dateFields[0], "month"));
 			parentElement.appendChild(element);
 			
 			rootElement.appendChild(parentElement);
@@ -245,9 +249,9 @@ public class ReportGenerator {
 			parentElement.appendChild(element);
 			
 			element = xmlDoc.createElement("chart");
-			element.setAttribute("height", "125");
-			element.setAttribute("width", "700");
-			element.setAttribute("href", "previousMonth");
+			element.setAttribute("height", CHART_HEIGHT);
+			element.setAttribute("width", CHART_WIDTH);
+			element.setAttribute("href", buildChartUrl(previousMonth, "Visits by Day for " + DateUtils.lookupMonth(Integer.parseInt(dateFields[1]) - 1) + " " + dateFields[0], "month"));
 			parentElement.appendChild(element);
 			
 			rootElement.appendChild(parentElement);
@@ -268,9 +272,9 @@ public class ReportGenerator {
 			parentElement.appendChild(element);
 			
 			element = xmlDoc.createElement("chart");
-			element.setAttribute("height", "125");
-			element.setAttribute("width", "700");
-			element.setAttribute("href", "currentYear");
+			element.setAttribute("height", CHART_HEIGHT);
+			element.setAttribute("width", CHART_WIDTH);
+			element.setAttribute("href", buildChartUrl(currentYear, "Visits by Month for " + dateFields[0], "year"));
 			parentElement.appendChild(element);
 			
 			rootElement.appendChild(parentElement);
@@ -291,9 +295,9 @@ public class ReportGenerator {
 			parentElement.appendChild(element);
 			
 			element = xmlDoc.createElement("chart");
-			element.setAttribute("height", "125");
-			element.setAttribute("width", "700");
-			element.setAttribute("href", "previousYear");
+			element.setAttribute("height", CHART_HEIGHT);
+			element.setAttribute("width", CHART_WIDTH);
+			element.setAttribute("href", buildChartUrl(previousYear, "Visits by Month for " + (Integer.parseInt(dateFields[0]) - 1), "year"));
 			parentElement.appendChild(element);
 			
 			rootElement.appendChild(parentElement);
@@ -334,6 +338,48 @@ public class ReportGenerator {
 	
 		// if we get this far, everything went ok
 		return true;		
+	}
+	
+	/**
+	 * A method to build the URL for a chart
+	 *
+	 * @param pageViews a pageViews object containing valid PageView objects
+	 * @param title     the title of the chart
+	 * @param scale     the scale of this chart
+	 *
+	 * @return          the URL for the chart
+	 */
+	private String buildChartUrl(PageViews pageViews, String title, String scale) {
+	
+		// sort the PageView objects
+		java.util.Set<PageView> sortedPageViews = pageViews.getSortedPageViews(PageViews.DATE_SORT);
+		PageView[] views = sortedPageViews.toArray(new PageView[0]);
+		
+		// build a list of values and labels
+		String[] values   = new String[views.length];
+		String[] labels   = new String[views.length];
+		Long     maxViews = new Long("-1");
+		
+		for(int i = 0; i < views.length; i++) {
+			labels[i] = views[i].getDate();			
+			values[i] = Long.toString(views[i].getViews());
+			
+			if(views[i].getViews() > maxViews) {
+				maxViews = views[i].getViews();
+			}
+		}
+		
+		// process the labels
+		if(scale.equals("month") == true) {
+			for(int i = 0; i < labels.length; i++) {
+				labels[i] = DateUtils.getExplodedDate(labels[i], "-")[2];
+			}
+		} 
+				
+		// build the list of chart values
+		String chartValues = GoogleChartManager.simpleEncode(values, maxViews.intValue());
+		return GoogleChartManager.buildBarChart(CHART_WIDTH, CHART_HEIGHT, chartValues, title, Integer.toString(maxViews.intValue()), labels);
+	
 	}
 	
 	/**
