@@ -32,15 +32,15 @@ import java.util.*;
 public class GoogleChartManager {
 
 	// declare class level variables
-	private final String URL_START = "http://chart.apis.google.com/chart?";   // base URL
+	private static final String URL_START = "http://chart.apis.google.com/chart?";   // base URL
 	
 	// bar charts
-	private final String BARCHART_DEFAULT_PARAMS = "cht=bvs&chbh=a&chxt=x,y"; // auto resize the size of the bars and show x and y labels
-	private final String BARCHART_SERIES_COLOUR = "&chco=77A1CA";             // default bar chart colour	
+	private static final String BARCHART_DEFAULT_PARAMS = "cht=bvs&chbh=a&chxt=x,y"; // auto resize the size of the bars and show x and y labels
+	private static final String BARCHART_SERIES_COLOUR = "&chco=77A1CA";             // default bar chart colour	
 	
 	// pie charts
-	private final String PIE_CHART_DEFAULT_PARAMS = "&cht=p3";
-	private final String PIE_CHART_COLOURS        = "&chco=A1CA77|77A1CA|A177CA|CAA177";
+	private static final String PIE_CHART_DEFAULT_PARAMS = "&cht=p3";
+	private static final String PIE_CHART_COLOURS        = "&chco=A1CA77|77A1CA|A177CA|CAA177";
 	
 
 	/**
@@ -54,7 +54,7 @@ public class GoogleChartManager {
 	 * @param maxValue the maximum value in the dataset
 	 * @return       a string containing the encoded data
 	 */
-	public String simpleEncode(String[] values, int maxValue) {
+	public static String simpleEncode(String[] values, int maxValue) {
 	
 		// define helper variables
 		final String simpleEncoding = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -101,10 +101,10 @@ public class GoogleChartManager {
 	 * 
 	 * @return  the URL for the bar chart
 	 */
-	public String buildBarChart(String width, String height, String data, String title, String yMax, String[] xLabels) {
+	public static String buildBarChart(String width, String height, String data, String title, String yMax, String[] xLabels) {
 		
 		// start url with appropriate defaults
-		StringBuilder url = new StringBuilder(this.URL_START + this.BARCHART_DEFAULT_PARAMS + this.BARCHART_SERIES_COLOUR);
+		StringBuilder url = new StringBuilder(URL_START + BARCHART_DEFAULT_PARAMS + BARCHART_SERIES_COLOUR);
 		
 		// add the chart size
 		url.append("&chs=" + width + "x" + height);
@@ -146,7 +146,7 @@ public class GoogleChartManager {
 	 * 
 	 * @return  the URL for the bar chart
 	 */
-	public String buildBarChart(String width, String height, String data, String title, String yMax) {
+	public static String buildBarChart(String width, String height, String data, String title, String yMax) {
 	
 		// declare helper variables
 		String[] xLabels = new String[data.length() - 2];
@@ -156,7 +156,7 @@ public class GoogleChartManager {
 			xLabels[i] = String.format("%02d", i + 1);
 		}
 	
-		return this.buildBarChart(width, height, data, title, yMax, xLabels);	
+		return buildBarChart(width, height, data, title, yMax, xLabels);	
 	} // end buildBarChart method
 	
 	/**
@@ -167,10 +167,10 @@ public class GoogleChartManager {
 	 * @param data    the data to build the chart with
 	 * @param title   the chart title
 	 */
-	public String buildPieChart(String width, String height, String data, String title, String[] labels) {
+	public static String buildPieChart(String width, String height, String data, String title, String[] labels) {
 	
 		// start url with appropriate defaults
-		StringBuilder url = new StringBuilder(this.URL_START + this.PIE_CHART_DEFAULT_PARAMS + this.PIE_CHART_COLOURS);
+		StringBuilder url = new StringBuilder(URL_START + PIE_CHART_DEFAULT_PARAMS + PIE_CHART_COLOURS);
 		
 		// add the chart size
 		url.append("&chs=" + width + "x" + height);
