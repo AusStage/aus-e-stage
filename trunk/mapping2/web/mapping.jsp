@@ -121,23 +121,23 @@
 				</div>
 				<div id="tabs-2">
 					<h2>Browse a List of Venues</h2>
-					<div id="browse_header" style="height: 30px;">
-						<div style="float:left; width: 290px; height: 100%; padding-right: 10px;">
+					<div id="browse_header" style="height: 30px; width=100%">
+						<div style="float:left; width: 33%; height: 100%; padding-right: 10px;">
 							<h3 style="text-align: center">Countries and States</h3>
 						</div>
-						<div style="float:left; width: 300px; height: 100%; margin-left: 10px;">
+						<div style="float:left; width: 33%; height: 100%; margin-left: 10px;">
 							<h3 style="text-align: center">Suburbs</h3>
 						</div>
-						<div style="float: right; width: 325px; height: 100%; padding-left: 10px;">
+						<div style="float: right; width: 34%; height: 100%; padding-left: 10px;">
 							<h3 style="text-align: center">Venues</h3>
 						</div>
 					</div>
 					<div id="browse_content" style="height: 380px;">
-						<div id="browse_major_area" style="float: left; width: 290px; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
-						<div id="browse_suburb" style="float: left; width: 300px; height: 100%; overflow: auto; margin-left: 10px;"></div>
-						<div id="browse_venue"  style="float: right; width: 325px; height: 100%; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
+						<div id="browse_major_area" style="float: left; width: 33%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
+						<div id="browse_suburb" style="float: left; width: 33%; height: 100%; overflow: auto; margin-left: 10px;"></div>
+						<div id="browse_venue"  style="float: right; width: 34%; height: 100%; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
 					</div>
-					<div id="browse_footer" style="height:30px; width=100%; padding-top: 10px;">
+					<div id="browse_footer" style="height:30px; width=100%;">
 						<div style="float:right">
 							<input type="button" id="browse_btn" value="Add To Map"/>
 						</div>
