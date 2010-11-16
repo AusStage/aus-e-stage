@@ -352,11 +352,22 @@ public class FileUtils {
 		return fileNames;
 	
 	}
+	
+	/**
+	 * Get the name of the file from a given pathname
+	 *
+	 * @param path the path to the file
+	 */
+	public static String getFileName(String path) {
+		
+		File file = new File(path);
+		return file.getName();
+	}
 
 /**
  * A class used to filter a list of files by extension
  */
-static class FileExtensionFilter implements FilenameFilter {
+static private class FileExtensionFilter implements FilenameFilter {
 
 	// declare helper variables
 	private String extension = null;
