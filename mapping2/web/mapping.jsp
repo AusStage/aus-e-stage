@@ -121,17 +121,26 @@
 				</div>
 				<div id="tabs-2">
 					<h2>Browse a List of Venues</h2>
-					<div id="browse_major_area" style="float: left; width: 290px; height: 440px; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
-					<div id="browse_suburb" style="float: left; width: 300px; height: 440px; overflow: auto; margin-left: 10px;"></div>
-					<div id="browse_venue"  style="float: right; width: 325px; height: 440px; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
-					<div id="browse_notes" class="hideMe">
-						<ul>
-							<li>Click a state to see a list of suburbs</li>
-							<li>Click a suburb to see a list of venues</li>
-							<li>Select any item to add to the map</li>
-							<li>An item cannot be selected when coordinates are not available</li>
-							<li>Click the "Add to Map" button to add the selected items to the map</li>
-						</ul>
+					<div id="browse_header" style="height: 30px;">
+						<div style="float:left; width: 290px; height: 100%; padding-right: 10px;">
+							<h3 style="text-align: center">Countries and States</h3>
+						</div>
+						<div style="float:left; width: 300px; height: 100%; margin-left: 10px;">
+							<h3 style="text-align: center">Suburbs</h3>
+						</div>
+						<div style="float: right; width: 325px; height: 100%; padding-left: 10px;">
+							<h3 style="text-align: center">Venues</h3>
+						</div>
+					</div>
+					<div id="browse_content" style="height: 380px;">
+						<div id="browse_major_area" style="float: left; width: 290px; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
+						<div id="browse_suburb" style="float: left; width: 300px; height: 100%; overflow: auto; margin-left: 10px;"></div>
+						<div id="browse_venue"  style="float: right; width: 325px; height: 100%; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
+					</div>
+					<div id="browse_footer" style="height:30px; width=100%; padding-top: 10px;">
+						<div style="float:right">
+							<input type="button" id="browse_btn" value="Add To Map"/>
+						</div>
 					</div>
 				</div>
 				<div id="tabs-3">

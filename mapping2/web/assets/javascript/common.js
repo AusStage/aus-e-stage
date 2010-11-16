@@ -19,7 +19,7 @@
 /**
  * Common global variables used across more than one page in the site
  */
-var BASE_URL = "/mapping3/";
+var BASE_URL = "/mapping2/";
 var UPDATE_DELAY = 500;
 var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again. If the problem persists contact the AusStage team.'; 
  
