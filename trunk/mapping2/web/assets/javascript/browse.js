@@ -61,6 +61,12 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 		var parentId  = parentArea.attr('id').replace('browse_majorArea_', '');
 	}
 	
+	// remove the highlight if necessary
+	$('#browse_major_area span').removeClass('ui-state-highlight ui-corner-all browseHighlight');
+	
+	// highlight this item
+	target.addClass('ui-state-highlight ui-corner-all browseHighlight');
+	
 	// get the new list of suburbs and add them
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
 		var list = '<ul class="browseList">';
@@ -113,6 +119,11 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 	
 	var tokensFromName = target.attr('name').split('_');
 	var url = BASE_URL + "lookup?task=suburb-venue-list&id=" + encodeURIComponent(tokensFromName[2] + '_' + tokensFromName[4]);
+	
+	$('#browse_suburb span').removeClass('ui-state-highlight ui-corner-all browseHighlight');
+	
+	// highlight this item
+	target.addClass('ui-state-highlight ui-corner-all browseHighlight');
 	
 	
 	// get the list of venues and add them
