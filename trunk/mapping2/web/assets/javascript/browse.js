@@ -74,17 +74,17 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 				if(id == parentId) {
 					// yes
 					// build a standard checkbox
-					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'checked') + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'checked') + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
 				} else {
 					// no
 					// build a standard checkbox
-					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name) + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name) + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
 				}				
 				
 			} else {
 				// no
 				// build a disabled checkbox
-				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled') + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled') + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
 			}
 		}
 		
@@ -104,8 +104,6 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 	var target = $(event.target);
 	var tokens = target.attr('id').split('_');
 	var id     = tokens[2] + '_' + tokens[4];
-	var url    = BASE_URL + "lookup?task=suburb-venue-list&id=" + encodeURIComponent(id.replace('-', ' '));
-	
 	var parentArea = $('#browse_suburb_' + tokens[2] + '_' + tokens[4]);
 	var parentId = null;
 	
@@ -113,8 +111,9 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 		var parentId  = parentArea.attr('id').replace('browse_suburb_', '');
 	}
 	
-	//debug code
-	console.log(tokens);
+	var tokensFromName = target.attr('name').split('_');
+	var url = BASE_URL + "lookup?task=suburb-venue-list&id=" + encodeURIComponent(tokensFromName[2] + '_' + tokensFromName[4]);
+	
 	
 	// get the list of venues and add them
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
@@ -181,7 +180,6 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 	} else if(tokens[1] == 'suburb') {
 	
 		// fire off the click event for the suburb
-		console.log(tokens);
 		$('#browse_state_' + tokens[2] + '_suburb_' + tokens[3]).click();
 		
 	}
