@@ -1,0 +1,36 @@
+#summary AusStage Website Analytics
+
+= AusStage Website Analytics =
+
+The AusStage Website Analytics app automatically queries the [http://www.google.com/analytics Google Analytics] service and creates reports that are displayed on the main [http://beta.ausstage.edu.au/ Aus-e-Stage project website] under the "Analytics" tab. 
+
+These reports can contain up to four different sections:
+
+ # Visits for the current month, by day
+ # Visits for the previous month, by day
+ # Visits for the current year, by month
+ # Visits for the previous year, by month
+
+Other metrics could be added to the reports by modifying the Web Site Analytics application. 
+
+= Report Configuration Template = 
+
+Reports are configured using a simple XML based file that is based on the following template:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<website-analytics>
+  <config table-id="" url-pattern="" title=""/>
+  <description title="">
+    <![CDATA[
+      
+    ]]>
+  </description>
+  <sections>
+    <section type="current-month"/>
+    <section type="previous-month"/>
+    <section type="current-year"/>
+    <section type="previous-year"/>
+  </sections>
+</website-analytics>
+}}}
