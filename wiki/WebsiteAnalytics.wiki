@@ -1,6 +1,6 @@
 #summary AusStage Website Analytics
 
-= AusStage Website Analytics =
+= !AusStage Website Analytics =
 
 The AusStage Website Analytics app automatically queries the [http://www.google.com/analytics Google Analytics] service and creates reports that are displayed on the main [http://beta.ausstage.edu.au/ Aus-e-Stage project website] under the "Analytics" tab. 
 
@@ -17,6 +17,8 @@ Other metrics could be added to the reports by modifying the Web Site Analytics 
 
 Reports are configured using a simple XML based file that is based on the following template:
 
+== Report Configuration XML ==
+
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 <website-analytics>
@@ -31,6 +33,50 @@ Reports are configured using a simple XML based file that is based on the follow
     <section type="previous-month"/>
     <section type="current-year"/>
     <section type="previous-year"/>
+  </sections>
+</website-analytics>
+}}}
+
+== XML Field Descriptions ==
+
+|| *Element Name*    || *Description*                   || *Attribute Name* || *Description* ||
+|| website-analytics || root element                    ||                  ||               ||
+|| config            || items that configure the report ||                  ||               ||
+||                   ||                                 || table-id         || the identifier of the table containing data in the Google Analytics system ||
+||                   ||                                 || url-pattern      || a regular expression of a pattern to match against to find pages that are of interest ||
+||                   ||                                 || title            || the title of the report ||
+|| description       || the description for this report ||                  ||                         || 
+||                   ||                                 || title            || the title for the description section ||
+|| sections          || list of sections that are to be included in the report || || ||
+|| section           || a section to be added to the report || || ||
+||                   ||                                 || type || the type of section ||
+
+=== Valid Section Types ===
+
+|| *Section Type* || *Description* || 
+|| current-month  || visits to pages matching the url-pattern for the current month  ||
+|| previous-month || visits to pages matching the url-pattern for the previous month ||
+|| current-year   || visits to pages matching the url-pattern for the current year   ||
+|| current-month  || visits to pages matching the url-pattern for the previous year  ||
+
+== Sample Configuration ==
+
+Below is a sample configuration file for the [MappingService AusStage Mapping Service]
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<website-analytics>
+  <config table-id="private-table-id" url-pattern="^/mapping/" title="Visits to the AusStage Mapping Service"/>
+  <description title="About These Analytics">
+    <![CDATA[
+      <p>Description goes here</p>
+    ]]>
+  </description>
+  <sections>
+    <section type="current-month"/>
+    <section type="previous-month"/>
+    <section type="current-year"/>
+    <!--<section type="previous-year"/>-->
   </sections>
 </website-analytics>
 }}}
