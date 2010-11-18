@@ -128,6 +128,28 @@ URL: http://beta.ausstage.edu.au/mapping3/lookup?task=state-list
   },
   { "id" : 999,
     "name" : "International"
+  },
+  { "id" : "999-240",
+    "name" : "America"
+  },
+  { "id" : "999-13",
+    "name" : "Austria"
+  },
+  { "id" : "999-20",
+    "name" : "Belgium"
+  },
+  { "id" : "999-29",
+    "name" : "Brazil"
+  },
+  { "id" : "999-36",
+    "name" : "Canada"
+  },
+  ...
+  { "id" : "999-220",
+    "name" : "Venezuela"
+  },
+  { "id" : "999-231",
+    "name" : "Wales"
   }
 ]
 }}}
