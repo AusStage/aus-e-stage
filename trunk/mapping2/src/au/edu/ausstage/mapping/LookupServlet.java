@@ -75,8 +75,12 @@ public class LookupServlet extends HttpServlet {
 		if(taskType.equals("state-list") == false && taskType.equals("map-colour-list") == false) {
 			// this is a lookup task that requires the id
 			if(taskType.equals("suburb-list") == true) {
-				if(InputUtils.isValid(id, VALID_STATES) == false) {
-					throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
+				if(InputUtils.isValid(id) == false) {
+					throw new IllegalArgumentException("Missing id parameter");
+				} else if(id.startsWith("999-") == false) {
+					if(InputUtils.isValid(id, LookupServlet.VALID_STATES) == false) {
+						throw new IllegalArgumentException("Invalid parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES) + " or a country code starting with '999-'");
+					}
 				}
 			} else if(taskType.equals("suburb-venue-list") == true) {
 				if(InputUtils.isValid(id) == false) {
@@ -88,8 +92,10 @@ public class LookupServlet extends HttpServlet {
 					if(tmp.length > 2) {
 						throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
 					} else {
-						if(InputUtils.isValid(tmp[0], VALID_STATES) == false) {
-							throw new ServletException("Invalid state code. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
+						if(tmp[0].startsWith("999-") == false) {
+							if(InputUtils.isValid(tmp[0], LookupServlet.VALID_STATES) == false) {
+								throw new IllegalArgumentException("Invalid parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES) + " or a country code starting with '999-'");
+							}
 						}
 					}
 				}

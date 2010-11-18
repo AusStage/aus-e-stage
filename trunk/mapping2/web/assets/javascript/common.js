@@ -51,13 +51,3 @@ function styleButtons() {
 	$("button, input:submit").button();
 	$("button, input:button").button();
 }
-
-function inArray(array, elem) {
-	for ( var i = 0, length = array.length; i < length; i++ ) {
-		if ( array[i] == elem ) {
-		return i;
-		}
-	}
-	
-	return -1;
-}
