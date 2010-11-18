@@ -35,7 +35,7 @@ A list of objects that can be used to construct UI elements that allow the user 
 
 === suburb-list ===
 
-A list of objects that can be used to construct UI elements that allow the user to select one of the suburbs that are located in the state as identified by the id parameter.
+A list of objects that can be used to construct UI elements that allow the user to select one of the suburbs that are located in the state or country as identified by the id parameter.
 
 === suburb-venue-list ===
 
