@@ -1,6 +1,6 @@
 #summary AusStage Website Analytics
 
-= !AusStage Website Analytics =
+<h1> !AusStage Website Analytics </h1>
 
 The AusStage Website Analytics app automatically queries the [http://www.google.com/analytics Google Analytics] service and creates reports that are displayed on the main [http://beta.ausstage.edu.au/ Aus-e-Stage project website] under the "Analytics" tab. 
 
@@ -12,6 +12,37 @@ These reports can contain up to four different sections:
  # Visits for the previous year, by month
 
 Other metrics could be added to the reports by modifying the Web Site Analytics application. 
+
+<wiki:toc max_depth="3" />
+
+= Website Analytics Properties File =
+
+The Website Analytics program is configured using a properties file. This file must contain the following fields
+
+|| *Field Name* || *Description* ||
+|| config-dir   || directory containing report configuration template files ||
+|| username     || the username used to access the Google Analytics service ||
+|| password     || the password used to access the Google Analytics service ||
+|| output-dir   || the directory where the generated report files will be written ||
+
+== Sample Properties File ==
+
+{{{
+# properties for the WebsiteAnalytics app
+#
+# directory containing the report configurations
+config-dir = /path/to/config/files/
+# username used to access the google analytics service
+username = google-account
+# password used to access the google analytics service
+password = password
+# directory where the report files will be written
+output-dir = /path/to/output/directory/
+}}}
+
+= Using the Website Analytics Application =
+
+The Website Analytics application is installed on the AusStage production server in the standard aus-e-stage directory. The application is set to run once a week every Monday morning. It can be run manually by logging into the server via SSH and executing the run.sh script in the main website-analytics directory
 
 = Report Configuration Template = 
 
