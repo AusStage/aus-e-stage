@@ -105,10 +105,74 @@ public class LookupInterfaceElementsManager {
 		object.put("name", "International");
 		list.add(object);
 		
+		// get a list of countries
+		list.addAll(getCountryList());
+		
 		// return the JSON data
 		return list.toString();		
 		
 	} // end the getStateList method
+	
+	/**
+	 * A private method to get the list of countries
+	 *
+	 * @return a list of country objects
+	 */
+	@SuppressWarnings("unchecked")
+	private JSONArray getCountryList() {
+	
+		// declare helper variables
+		JSONArray list    = new JSONArray();
+		JSONObject object = null;
+	
+		// define the sql
+		String sql = "SELECT DISTINCT c.countryid, c.countryname "
+				   + "FROM country c, venue v "
+				   + "WHERE c.countryid = v.countryid "
+				   + "AND c.countryid <> 12 "
+				   + "ORDER BY c.countryname ";
+				   
+		// get the data
+		DbObjects results = database.executeStatement(sql);
+		
+		// check to see that data was returned
+		if(results == null) {
+			// return an empty JSON Array
+			return list;
+		}
+		
+		// build the result data
+		ResultSet resultSet = results.getResultSet();
+		
+		try {
+		
+			// loop through the dataset
+			while(resultSet.next() == true) {
+			
+				// declare a new object
+				object = new JSONObject();
+				
+				// add the data
+				object.put("id", "999-" + resultSet.getString(1));
+				object.put("name", resultSet.getString(2));
+				
+				// add the object to the list
+				list.add(object);			
+			}
+		
+		} catch (java.sql.SQLException ex) {
+			// return an empty JSON Array
+			return list;
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// return the data
+		return list;	
+	}
 	
 	/**
 	 * A method to lookup all of the suburbs given a particular state identifier
@@ -121,21 +185,42 @@ public class LookupInterfaceElementsManager {
 	public String getSuburbList(String stateId) {
 	
 		// double check the parameters
-		if(InputUtils.isValid(stateId, LookupServlet.VALID_STATES) == false) {
-			throw new IllegalArgumentException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+		if(InputUtils.isValid(stateId) == false) {
+			throw new IllegalArgumentException("Missing id parameter");
+		} else if(stateId.startsWith("999-") == false) {
+			if(InputUtils.isValid(stateId, LookupServlet.VALID_STATES) == false) {
+				throw new IllegalArgumentException("Invalid parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES) + " or a country code starting with '999-'");
+			}
 		}
 		
 		// declare helper variables
-		JSONArray list    = new JSONArray();
+		JSONArray  list   = new JSONArray();
 		JSONObject object = null;
+		String     sql    = null;
 		
 		// define the sql
-		String sql = "SELECT TRIM(suburb), COUNT(suburb) as venue_count, COUNT(latitude) as can_be_mapped "
-				   + "FROM venue "
-				   + "WHERE state = ? "
-				   + "AND suburb IS NOT NULL "
-				   + "GROUP BY TRIM(suburb) "
-				   + "ORDER BY TRIM(suburb) ";
+		if(stateId.startsWith("999-") == false) {
+			
+			// define the sql
+			sql = "SELECT TRIM(suburb), COUNT(suburb) as venue_count, COUNT(latitude) as can_be_mapped "
+				+ "FROM venue "
+				+ "WHERE state = ? "
+				+ "AND suburb IS NOT NULL "
+				+ "GROUP BY TRIM(suburb) "
+				+ "ORDER BY TRIM(suburb) ";
+				
+		} else {
+			
+			// define the sql
+			sql = "SELECT TRIM(suburb), COUNT(suburb) as venue_count, COUNT(latitude) as can_be_mapped "
+				+ "FROM venue "
+				+ "WHERE countryid = ? "
+				+ "AND suburb IS NOT NULL "
+				+ "GROUP BY TRIM(suburb) " 
+				+ "ORDER BY TRIM(suburb) ";
+				
+			stateId = stateId.split("-")[1];
+		}
 		
 		String[] sqlParameters = {stateId};
 		
@@ -206,8 +291,10 @@ public class LookupInterfaceElementsManager {
 			if(sqlParameters.length > 2) {
 				throw new IllegalArgumentException("The suburbName parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
 			} else {
-				if(InputUtils.isValid(sqlParameters[0], LookupServlet.VALID_STATES) == false) {
-					throw new IllegalArgumentException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+				if(sqlParameters[0].startsWith("999-") == false) {
+					if(InputUtils.isValid(sqlParameters[0], LookupServlet.VALID_STATES) == false) {
+						throw new IllegalArgumentException("Invalid parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES) + " or a country code starting with '999-'");
+					}
 				}
 			}
 		}
@@ -215,15 +302,33 @@ public class LookupInterfaceElementsManager {
 		// declare helper variables
 		JSONArray list    = new JSONArray();
 		JSONObject object = null;
+		String     sql    = null;
 		
 		// define the sql
-		String sql = "SELECT venue.venueid, venue_name, latitude, COUNT(events.eventid) "
-				   + "FROM venue, events "
-				   + "WHERE state = ? "
-				   + "AND TRIM(suburb) = ? "
-				   + "AND venue.venueid = events.venueid (+)"
-				   + "GROUP BY venue.venueid, venue_name, latitude "
-				   + "ORDER BY venue_name ";
+		if(sqlParameters[0].startsWith("999-") == false) {
+		
+			// define the sql
+			sql = "SELECT venue.venueid, venue_name, latitude, COUNT(events.eventid) "
+				+ "FROM venue, events "
+				+ "WHERE state = ? "
+				+ "AND TRIM(suburb) = ? "
+				+ "AND venue.venueid = events.venueid (+)"
+				+ "GROUP BY venue.venueid, venue_name, latitude "
+				+ "ORDER BY venue_name ";
+				
+		} else {
+		
+			// define the sql
+			sql = "SELECT venue.venueid, venue_name, latitude, COUNT(events.eventid) "
+				+ "FROM venue, events "
+				+ "WHERE countryid = ? "
+				+ "AND TRIM(suburb) = ? "
+				+ "AND venue.venueid = events.venueid (+) "
+				+ "GROUP BY venue.venueid, venue_name, latitude "
+				+ "ORDER BY venue_name ";
+				
+			sqlParameters[0] = sqlParameters[0].split("-")[1];
+		}
 		
 		// get the data
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);

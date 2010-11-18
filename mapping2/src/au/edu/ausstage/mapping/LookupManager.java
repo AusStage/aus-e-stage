@@ -67,8 +67,12 @@ public class LookupManager {
 	 */
 	public String getSuburbList(String stateId) {
 	
-		if(InputUtils.isValid(stateId, LookupServlet.VALID_STATES) == false) {
-			throw new IllegalArgumentException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+		if(InputUtils.isValid(stateId) == false) {
+			throw new IllegalArgumentException("Missing id parameter");
+		} else if(stateId.startsWith("999-") == false) {
+			if(InputUtils.isValid(stateId, LookupServlet.VALID_STATES) == false) {
+				throw new IllegalArgumentException("Invalid parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES) + " or a country code starting with '999-'");
+			}
 		}
 	
 		// get the required sub manager
@@ -98,8 +102,10 @@ public class LookupManager {
 			if(tmp.length > 2) {
 				throw new IllegalArgumentException("The suburbName parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
 			} else {
-				if(InputUtils.isValid(tmp[0], LookupServlet.VALID_STATES) == false) {
-					throw new IllegalArgumentException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+				if(tmp[0].startsWith("999-") == false) {
+					if(InputUtils.isValid(tmp[0], LookupServlet.VALID_STATES) == false) {
+						throw new IllegalArgumentException("Invalid parameter. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES) + " or a country code starting with '999-'");
+					}
 				}
 			}
 		}

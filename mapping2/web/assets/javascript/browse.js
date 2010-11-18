@@ -36,8 +36,13 @@ BrowseClass.prototype.getMajorAreas = function() {
 		}
 		
 		list += '</ul></li>';
-		list += '<li>' + browseObj.buildCheckbox('majorArea', data[9].id) + ' ' + data[9].name + '</li>'
-		list += '</ul>'
+		list += '<li>' + browseObj.buildCheckbox('majorArea', data[9].id) + ' ' + data[9].name + '<ul class="browseList" style="padding-left: 15px;">';
+		
+		for(var i = 10; i < data.length; i++) {
+			list += '<li>' + browseObj.buildCheckbox('majorArea', data[i].id) + ' <span class="clickable browseMajorArea" id="browse_state_' + data[i].id + '">' + data[i].name + '</span></li>';
+		}
+		
+		list += '</ul></li></ul>'
 		
 		$("#browse_major_area").append(list);
 		styleButtons();
