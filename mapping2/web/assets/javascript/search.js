@@ -122,8 +122,8 @@ SearchClass.prototype.buildContributorResults = function(data) {
 			list += '<tr>'; 
 		}
 		
-		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + " " + data[i].lastName + ' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a></td>';
-		list += '<td>' + data[i].eventDates + '</td><td>';
+		list += '<td class="nowrap"><a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + " " + data[i].lastName + ' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a></td>';
+		list += '<td class="nowrap">' + data[i].eventDates + '</td><td>';
 		
 		if(data[i].functions.length > 0) {
 			for(var x = 0; x < data[i].functions.length; x++) {
@@ -321,7 +321,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 			list = list.substr(0, list.length - 2);
 		}
 		
-		list += '</td><td>' + data[i].firstDisplayDate + '</td>';
+		list += '</td><td class="nowrap">' + data[i].firstDisplayDate + '</td>';
 		
 		if(data[i].venue.latitude != null) {
 			list += '<td><input type="checkbox"/></td>';
