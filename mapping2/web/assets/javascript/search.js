@@ -16,14 +16,24 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+// define a search tracker class
+function SearchTrackerClass() {
+
+	// keep a track of search terms for ease of comparison
+	this.history_log = [];
+	
+	// keep a track of the search result counts
+	this.contributor_count  = 0;
+	this.organisation_count = 0;
+	this.venue_count        = 0;
+	this.event_count        = 0;
+}
+
 // define the search class
 function SearchClass () {
 	
 	// define a flag to indicate if a search is underway
 	this.searching_underway_flag = false;
-	
-	// keep a log of past searches
-	this.search_history_log = [ ];
 	
 	// determine if an error has occured
 	this.error_condition = false;
@@ -37,8 +47,9 @@ function SearchClass () {
 	// define the tocken used to identify an ID search
 	this.ID_SEARCH_TOKEN   = "id:";
 	
-	// keep a track of the items to add
-	this.items_to_add = [];
+	// keep track of various search related stuff
+	this.trackerObj = new SearchTrackerClass();
+	
 }
 
 // undertake a search
@@ -160,6 +171,9 @@ SearchClass.prototype.buildContributorResults = function(data) {
 	} else {
 		$("#contributor_heading").empty().append("Contributors (" + i + ")");
 	}
+	
+	// keep track of the number of search results
+	searchObj.trackerObj.contributor_count = i;
 
 }
 
@@ -223,6 +237,9 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 	} else {
 		$("#organisation_heading").empty().append("Organisations (" + i + ")");
 	}
+	
+	// keep track of the number of search results
+	searchObj.trackerObj.organisation_count = i;
 
 }
 
@@ -286,6 +303,9 @@ SearchClass.prototype.buildVenueResults = function (data) {
 	} else {
 		$("#venue_heading").empty().append("Venues (" + i + ")");
 	}
+	
+	// keep track of the number of search results
+	searchObj.trackerObj.venue_count = i;
 
 }
 
@@ -347,28 +367,41 @@ SearchClass.prototype.buildEventResults = function (data) {
 	
 	// update the search underway flag
 	searchObj.searching_underway_flag = false;
+	
+	// keep track of the number of search results
+	searchObj.trackerObj.event_count = i;
+	
+	// add to the search history if necessary
+	if(jQuery.inArray($("#query").val(), searchObj.trackerObj.history_log) == -1) {
+	
+		// add the new query
+		searchObj.trackerObj.history_log.push($("#query").val());
+		
+		var row;
+		
+		if(searchObj.trackerObj.history_log.length % 2 == 1) {
+			row = '<tr class="odd">'; 
+		} else {
+			row = '<tr>';
+		}
+	
+		// buld the new table row
+		row += '<td><a href="#" onclick="searchObj.doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat this Search" class="use-tipsy">' + $("#query").val() + '</a></td>';
+		row += '<td><a href="' + BASE_URL + 'mapping.jsp?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search" class="use-tipsy">link</a></td>';
+		row += '<td><span class="use-tipsy" title="Contributors"> ' + searchObj.trackerObj.contributor_count + ' </span>/<span class="use-tipsy" title="Organisations"> ' + searchObj.trackerObj.organisation_count + ' </span>/<span class="use-tipsy" title="Venues"> ' + searchObj.trackerObj.venue_count + ' </span>/<span class="use-tipsy" title="Events"> ' + searchObj.trackerObj.event_count + '</span></td></tr>';
+		
+		// insert the new row in the table
+		$(row).insertAfter('#search_history');
+		
+		$('.use-tipsy').tipsy({trigger: 'focus', gravity: 'n'});
+		
+	}
 }
 
 // define a method of the search class to respond to the click event
 // of the add to map button
 SearchClass.prototype.addToMapClickEvent = function(event) {
 
-	// reset the list of items
-	searchObj.items_to_add = [];
-
-	// determine which button was pressed
-	var target = $(event.target);
-	if(target.attr('id') == 'addContributor') {
-		// adding contributors to a map
-		
-		$(".searchContributor:checkbox:checked").each(function() {
-			searchObj.items_to_add.push($(this).val());
-		});
-		
-		$("#add_search_results_div h2").empty().append('Add ' + searchObj.items_to_add.length + ' contributors to the map');
-		
-		$("#add_search_results_div").dialog('open');
-	}
 
 }
 
