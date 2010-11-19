@@ -84,6 +84,8 @@ public class SearchServlet extends HttpServlet {
 		// check on the id parameter
 		if(InputUtils.isValid(query) == false) {
 			throw new ServletException("Missing or invalid query parameter.");
+		} else if(query.length() < 5) {
+			throw new ServletException("The query parameter must be at most 5 characters long");
 		}
 		
 		if(searchType.equals("id") == true) {
