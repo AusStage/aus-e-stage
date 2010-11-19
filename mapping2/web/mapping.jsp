@@ -62,7 +62,7 @@
 						<table class="formTable" style="height: 60px;">
 							<tbody>
 							<tr>
-								<th scope="row" style="width: 10%">
+								<th scope="row" style="width: 200px;">
 									<label id="query-label" for="query">Search Terms: </label>
 								</th>
 								<td style="width: 45%">
@@ -81,6 +81,13 @@
 											<span id="error_text">Error condition</span>
 										</div>										
 									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" id="validate_errors" style="text-align: left">
+								</td>
+								<td colspand="2">
+									&nbsp;
 								</td>
 							</tr>
 							</tbody>

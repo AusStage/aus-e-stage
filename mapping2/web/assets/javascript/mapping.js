@@ -162,9 +162,20 @@ $(document).ready(function(){
 		rules: { // validation rules
 			query: {
 				required: true,
-				validIDSearch: true
+				validIDSearch: true,
+				minlength: 5,
 			}
-		}, submitHandler: function(form) {
+		},
+		errorLabelContainer: '#validate_errors',
+		wrapper: "",
+		messages: {
+			query: {
+				required: "Please enter a few search terms",
+				validIDSearch: 'An ID search must start with "id:" and be followed by a valid integer',
+				minlength: "A search query must be 5 characters or more in length"
+			}
+		},
+		submitHandler: function(form) {
 			// indicate that the search is underway
 			$("#messages").show();
 			$("#status_message").show();
