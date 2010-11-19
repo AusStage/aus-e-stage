@@ -67,17 +67,28 @@ $(document).ready(function(){
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
 	
-	// setup the instructions toggle
-	$("#search_notes_toggle").click(function() {
-		if(searchObj.show_notes == true) {
-			searchObj.hideNotes();
-		} else {
-			searchObj.showNotes();
+	// setup the help dialog
+	$("#help_search_div").dialog({ 
+		autoOpen: false,
+		height: 400,
+		width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			
+		},
+		close: function() {
+			
 		}
 	});
 	
-	// check on the status of the cookie
-	searchObj.checkNoteCookie();
+	$("#show_search_help").click(function() {
+		$("#help_search_div").dialog('open');
+	});
 	
 	// setup a handler for the start of an ajax request
 	$("#message_text").ajaxSend(function(e, xhr, settings) {
@@ -124,28 +135,7 @@ $(document).ready(function(){
 	});
 	
 	// setup a handler for when the user clicks on a button to add search results to the map
-	$('.addSearchResult').live('click', searchObj.addToMapClickEvent);
 	$('.selectSearchAll').live('click', searchObj.selectAllClickEvent);
-	
-	// setup the add to map dialog box
-	// setup the dialog box
-	$("#add_search_results_div").dialog({ 
-		autoOpen: false,
-		height: 400,
-		width: 450,
-		modal: true,
-		buttons: {
-			Cancel: function() {
-				$(this).dialog('close');
-			}
-		},
-		open: function() {
-			
-		},
-		close: function() {
-			
-		}
-	});
 	
 	// create a custom validator for validating id messages
 	jQuery.validator.addMethod("validIDSearch", function(value, element) {
