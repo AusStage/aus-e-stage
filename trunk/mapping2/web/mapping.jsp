@@ -66,7 +66,7 @@
 									<label id="query-label" for="query">Search Terms: </label>
 								</th>
 								<td style="width: 45%">
-									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/> <span id="show_search_help" class="ui-icon ui-icon-help clickable" style="display: inline-block;"></span>
+									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/> <span id="show_search_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" title="Search Help"></span>
 								</td>
 								<td style="width: 45%">
 									<div id="messages">
@@ -106,7 +106,15 @@
 					<h3 style="padding-top: 15px;">Search History</h3>
 					<div class="accordion">
 						<h3><a href="#" id="search_history_heading">Previous Searches</a></h3>
-							<div><ul id="search_history"></ul></div>
+						<table class="searchResults">
+							<thead>
+								<tr>
+									<th>Query</th><th>Persistent Link</th><th>Results</th>
+								</tr>
+							</thead>
+							<tbody id="search_history">
+							</tbody>
+						</table>
 					</div>
 				</div>
 				<div id="tabs-2">

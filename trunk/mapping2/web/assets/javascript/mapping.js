@@ -64,6 +64,9 @@ $(document).ready(function(){
 	// associate the tipsy library with the form elements
 	$('.tipsy_form [title]').tipsy({trigger: 'focus', gravity: 'n'});
 	
+	// associate tipsy with the span element
+	$('.use-tipsy').tipsy({live: true});
+	
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
 	
@@ -224,12 +227,6 @@ $(document).ready(function(){
 				success: searchObj.buildEventResults,
 				url: url
 			});
-			
-			// add to the search history if necessary
-			if(jQuery.inArray($("#query").val(), searchObj.search_history_log) == -1) {
-				$("#search_history").append('<li><a href="#" onclick="searchObj.doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat the Search">Repeat search for: ' + $("#query").val() + '</a> / <a href="' + BASE_URL + 'mapping.jsp?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search">Persistent Link</a></li>');
-				searchObj.search_history_log.push($("#query").val());
-			}
 			
 		}
 	});
