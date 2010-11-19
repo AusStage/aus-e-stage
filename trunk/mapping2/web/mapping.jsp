@@ -52,7 +52,7 @@
 		<div id="tabs" class="tab-container">
 			<ul>
 				<li><a href="#tabs-1">Search</a></li>
-				<li><a href="#tabs-2">Browse Venues</a></li>
+				<li><a href="#tabs-2">Venues</a></li>
 				<li><a href="#tabs-3">Map</a></li>
 			</ul>
 			<div class="ui-layout-content" style="font-size:90%">
@@ -66,7 +66,7 @@
 									<label id="query-label" for="query">Search Terms: </label>
 								</th>
 								<td style="width: 45%">
-									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/>
+									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/> <span id="show_search_help" class="ui-icon ui-icon-help clickable" style="display: inline-block;"></span>
 								</td>
 								<td style="width: 45%">
 									<div id="messages">
@@ -86,16 +86,6 @@
 							</tbody>
 						</table>
 					</form>
-					<p style="margin-top: -5px;">
-						<span id="search_notes">This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
-						alternate names, and previous names. Please wait for the search to complete before exploring the results.
-						<br/>&nbsp;<br/>
-						At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
-						that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database.
-						<br/>&nbsp;<br/>
-						</span>
-						<span id="search_notes_toggle" class="clickable">(Hide Notes)</span>
-					</p>
 					<h3>Search Results</h3>
 					<div class="accordion">
 						<h3><a href="#" id="contributor_heading">Contributors</a></h3>
@@ -150,54 +140,14 @@
 		</div>
 	</div>
 	<!-- add search results form div -->
-	<div id="add_search_results_div" title="Add Items to the Map" style="font-size: 90%">
-		<h2></h2>
-		<h3>Add items to a new layer</h3>
-		<form action="" id="add_to_map_new_layer" name="add_to_map_new_layer" class="tipsy_form">
-			<table class="formTable">
-				<tbody>
-				<tr>
-					<th scope="row">
-						<label id="new-name-label" for="new_layer_name">Layer Name: </label>
-					</th>
-					<td>
-						<input type="text" size="20" id="new_layer_name" name="new_layer_name" title="Enter a brief name for this layer"/>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<input type="button" name="add_new_layer_submit" id="add_new_layer_submit" value="Add to Map"/>
-					</td>
-				</tr>
-				</tbody>
-			</table>
-		</form>
-		<hr/>
-		<h3>Add items to an existing layer</h3>
-		<form action="" id="add_to_map_existing_layer" name="add_to_map_existing_layer" class="tipsy_form">
-			<table class="formTable">
-				<tbody>
-				<tr>
-					<th scope="row">
-						<label id="existing-name-label" for="existing_layer_name">Layer Name: </label>
-					</th>
-					<td>
-						<select name="existing_layer_name" id="existing_layer_name" size="1" title="Select one of the existing layers">
-							<option value="contributors">Contributors</option>
-							<option value="organisations">Organisations</option>
-							<option value="venues">Venues</option>
-							<option value="events">Events</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<input type="button" name="add_existing_layer_submit" id="add_existing_layer_submit" value="Add to Map"/>
-					</td>
-				</tr>
-				</tbody>
-			</table>
-		</form>
+	<div id="help_search_div" title="Help on Searching" style="font-size: 90%">
+		<p>
+			This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
+			alternate names, and previous names. Please wait for the search to complete before exploring the results.
+			<br/>&nbsp;<br/>
+			At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
+			that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database.			
+		</p>
 	</div>
 	<jsp:include page="footer.jsp"/>
 </div>

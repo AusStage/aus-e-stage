@@ -39,9 +39,6 @@ function SearchClass () {
 	
 	// keep a track of the items to add
 	this.items_to_add = [];
-	
-	// keep a track of the status of the notes
-	this.show_notes = true;
 }
 
 // undertake a search
