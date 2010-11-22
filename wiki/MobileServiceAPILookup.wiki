@@ -14,16 +14,16 @@ http://beta.ausstage.edu.au/mobile/lookup?
 
 HTTP get request
 
-== Lookup System Properties ==
+= Lookup System Properties =
 
-=== Parameters ===
+== Parameters ==
 
 || *Name* || *Required Value* || *Optional* || *Default* ||
 || task   || system-property || No || ||
 || id     || feedback-source-types || No || ||
 || callback || function name to use for a JSONP request || Yes || ||
 
-==== feedback-source-types ====
+=== feedback-source-types ===
 
 Retrieves a list of valid source types for feedback.
 
