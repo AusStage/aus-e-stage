@@ -142,6 +142,13 @@
 						jQT.goTo('#FeedbackDisplay');
 
 						},
+						error:function (xhr, ajaxOptions, thrownError){
+                    	//alert(xhr.status);
+                    	//alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+					
 						async: true 
 					});	
 		}
@@ -206,10 +213,26 @@
 						url: source, 
 						dataType: mydataType,
 						success: function (data) {
+							
+							//check to make sure we do have some data
+							if(data.event == '') {
+								jQT.goTo('#Error');
 
+							};
+								
 							populate(data);
+							window.console.log(data);
 						},
-						async: true 
+					
+					error:function (xhr, ajaxOptions, thrownError){
+                    	//alert(xhr.status);
+                    	//alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+				
+				
+					async: true 
 					}); 			
 
 		}; 
@@ -426,6 +449,27 @@
             </ul>
                   
          </div>  
+         
+         
+           <div id="Error">
+            <div class="toolbar">
+                <h1>Error</h1>
+               <a class="button slideup" id="infoButton" href="#about">About</a>
+
+            </div>             
+            
+             <div class="info">
+            
+            	Something has gone wrong, that performance has cann't be found. Try going back the home page. 
+                 
+ 			<a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#home"  class="whiteButton">Home</a>
+                
+                
+            </div>
+       
+                  
+         </div>  
+         
          
             
       
