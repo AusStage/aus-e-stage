@@ -35,6 +35,7 @@
        * [MobileServiceAPIGatherer Input Gatherer]
        * [MobileServiceAPILiveFeedback Live Feedback]
        * [MobileServiceAPILookup Lookup Information]
+       * [MobileServiceAPIInterface Mobile Interface]
      * [MobileServiceInfoCardTmpl Information Card Template]
    * [NetworkService Network Service]
      * Specification
