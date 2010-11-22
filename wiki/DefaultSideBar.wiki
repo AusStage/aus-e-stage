@@ -20,7 +20,7 @@
        * [MappingServiceAPIMarkers Marker Data]
        * [MappingServiceAPISearch Search API]
        * [MappingServiceAPILookup Lookup API]
-       * [MappingserviceAPIEvents Events API]
+       * [MappingServiceAPIEvents Events API]
        * [MappingServiceAPIInterface Mobile Interface]
      * [MappingServiceFeedback Mapping Service Feedback]
        * [Alpha1 Alpha 1]
