@@ -43,16 +43,16 @@ Retrieves a list of valid source types for feedback.
 ]
 }}}
 
-== Lookup Data Fields ==
+= Lookup Data Fields =
 
-=== Parameters ===
+== Parameters ==
 
 || *Name* || *Required Value* || *Optional* || *Default* ||
 || task   || performance, question || No || ||
 || id     || unique id || No || || 
 || callback || function name to use for a JSONP request || Yes || ||
 
-==== performance ====
+=== performance ===
 An object describing a performance
 
 {{{
@@ -81,9 +81,9 @@ An object describing a question used to solicit feedback
 }
 }}}
 
-== DRAFT Location Lookup Data Fields DRAFT  ==
+= DRAFT Location Lookup Data Fields DRAFT  =
 
-=== Parameters ===
+== Parameters ==
 
 || *Name* || *Required Value* || *Optional* || *Default* ||
 || task   ||location || No || ||
