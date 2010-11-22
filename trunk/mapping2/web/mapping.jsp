@@ -125,7 +125,7 @@
 					</div>
 				</div>
 				<div id="tabs-2">
-					<h2>Browse a List of Venues</h2>
+					<h2>Browse Areas to Find Venues</h2>
 					<div id="browse_header" style="height: 30px; width=100%">
 						<div style="float:left; width: 28%; height: 100%; padding-right: 10px;">
 							<h3 style="text-align: center">Countries and States</h3>
@@ -144,7 +144,7 @@
 					</div>
 					<div id="browse_footer" style="height:30px; width=100%;">
 						<div style="float:right; padding-top: 15px;">
-							<input type="button" id="browse_btn" value="Add To Map"/>
+							<input type="button" id="browse_btn" value="Add To Map"/><button class="viewMapButton">View Map</button><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>
 						</div>
 					</div>
 				</div>
@@ -165,12 +165,19 @@
 		</p>
 	</div>
 	<div id="help_add_view_div" title="Help on Adding Items and Viewing the Map" style="font-size: 90%">
+		<h3>Adding items to the map</h3>
 		<p>
 			Click the 'Add to Map' button to add the currently selected items to the map. The map will not be displayed automatically. 
-			<br/>&nbsp;<br/>
+		</p>
+		<h3>Viewing the Map</h3>
+		<p>
 			Click the 'View Map' button to view the map and display all of the items added to it using the 'Add to Map' button. Any selected items that have not been added to map using the 'Add to Map' button will not be displayed.
 			<br/>&nbsp;<br/>
 			Alternatively click the 'Map' tab at the top of the page.
+		</p>
+		<h3>Browsing Areas to Find Venues</h3>
+		<p>
+			Click on an item to see a list of items at the next level, tick the box to select all items at lower levels
 		</p>
 	</div>
 	<jsp:include page="footer.jsp"/>
