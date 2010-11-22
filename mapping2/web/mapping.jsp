@@ -154,7 +154,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- add search results form div -->
+	<!-- search results help div -->
 	<div id="help_search_div" title="Help on Searching" style="font-size: 90%">
 		<p>
 			This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
@@ -162,6 +162,15 @@
 			<br/>&nbsp;<br/>
 			At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
 			that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database.			
+		</p>
+	</div>
+	<div id="help_add_view_div" title="Help on Adding Items and Viewing the Map" style="font-size: 90%">
+		<p>
+			Click the 'Add to Map' button to add the currently selected items to the map. The map will not be displayed automatically. 
+			<br/>&nbsp;<br/>
+			Click the 'View Map' button to view the map and display all of the items added to it using the 'Add to Map' button. Any selected items that have not been added to map using the 'Add to Map' button will not be displayed.
+			<br/>&nbsp;<br/>
+			Alternatively click the 'Map' tab at the top of the page.
 		</p>
 	</div>
 	<jsp:include page="footer.jsp"/>
