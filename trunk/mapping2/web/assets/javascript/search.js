@@ -158,7 +158,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddContributors" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button></td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddContributors" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#contributor_results").append(list);
@@ -226,7 +226,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddOrganisations" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button></td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddOrganisations" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#organisation_results").append(list);
@@ -295,7 +295,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddVenues" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button></td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddVenues" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#venue_results").append(list);
@@ -358,7 +358,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddEvents" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button></td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddEvents" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 
 	if(i > 0) {
 		$("#event_results").append(list);

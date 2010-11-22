@@ -22,6 +22,8 @@
 var BASE_URL = "/mapping2/";
 var UPDATE_DELAY = 500;
 var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again. If the problem persists contact the AusStage team.'; 
+
+var ADD_VIEW_BTN_HELP = '<span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>';
  
 /**
  * Common functions used across more than one page in the site
@@ -51,3 +53,31 @@ function styleButtons() {
 	$("button, input:submit").button();
 	$("button, input:button").button();
 }
+
+// setup one of the help dialogs
+$(document).ready(function() {
+
+	$("#help_add_view_div").dialog({ 
+		autoOpen: false,
+		height: 400,
+		width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			
+		},
+		close: function() {
+			
+		}
+	});
+
+	// associate the show_add_view_help div with the help icon
+	$('.show_add_view_help').live('click', function () {
+
+		$('#help_add_view_div').dialog('open');
+	});
+});

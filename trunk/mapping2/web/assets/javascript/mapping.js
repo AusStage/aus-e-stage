@@ -70,7 +70,7 @@ $(document).ready(function(){
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
 	
-	// setup the help dialog
+	// setup one of the help dialogs
 	$("#help_search_div").dialog({ 
 		autoOpen: false,
 		height: 400,
