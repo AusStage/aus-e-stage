@@ -59,8 +59,8 @@ $(document).ready(function() {
 
 	$("#help_add_view_div").dialog({ 
 		autoOpen: false,
-		height: 400,
-		width: 450,
+		height: 450,
+		width: 470,
 		modal: true,
 		buttons: {
 			Close: function() {

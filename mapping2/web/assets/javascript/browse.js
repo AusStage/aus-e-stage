@@ -85,18 +85,22 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 				if(id == parentId) {
 					// yes
 					// build a standard checkbox
-					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'checked') + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'checked'); 
 				} else {
 					// no
 					// build a standard checkbox
-					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name) + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name);
 				}				
 				
 			} else {
 				// no
 				// build a disabled checkbox
-				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled') + ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled');
 			}
+			
+			// add the spans 
+			list += '<span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + ' ';
+			list += '(' + data[i].venueCount + ')</span></li>'; // + ' / ' + data[i].mapVenueCount + ')</span></li>';
 		}
 		
 		list += '</ul>';
@@ -188,7 +192,7 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 	var target = $(event.target);
 	var tokens = target.attr('id').split('_');
 	
-	if(tokens[1] == 'majorArea') {
+	if(tokens[1] == 'majorArea' && tokens[2] != '999') {
 		
 		// fire off the click event for the state
 		$('#browse_state_' + tokens[2]).click();
@@ -198,5 +202,44 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 		// fire off the click event for the suburb
 		$('#browse_state_' + tokens[2] + '_suburb_' + tokens[3]).click();
 		
+	} else if(tokens[1] == 'Australia') {
+		if(target.is(':checked') == true) { 
+			// tick all of the australian states
+			for(var i = 1; i < 9; i++) {
+				$('#browse_majorArea_' + i).attr('checked', true);
+			}
+			
+			$('#browse_suburb').empty();
+			$('#browse_venue').empty();
+			$('#browse_major_area span').removeClass('ui-state-highlight ui-corner-all browseHighlight');
+			
+		
+		} else {
+			// untick all of the australian states
+			for(var i = 1; i < 9; i++) {
+				$('#browse_majorArea_' + i).attr('checked', false);
+			}
+			
+			$('#browse_suburb').empty();
+			$('#browse_venue').empty();
+			$('#browse_major_area span').removeClass('ui-state-highlight ui-corner-all browseHighlight');
+		}
+	} else if(tokens[1] == 'majorArea' && tokens[2] == '999') {
+		if(target.is(':checked') == true) { 
+			// tick all of the countries
+			$('input[name^="browse_majorArea_999-"]').attr('checked', true);
+			
+			$('#browse_suburb').empty();
+			$('#browse_venue').empty();
+			$('#browse_major_area span').removeClass('ui-state-highlight ui-corner-all browseHighlight');
+			
+		} else {
+			// untick all of the countries
+			$('input[name^="browse_majorArea_999-"]').attr('checked', false);
+			
+			$('#browse_suburb').empty();
+			$('#browse_venue').empty();
+			$('#browse_major_area span').removeClass('ui-state-highlight ui-corner-all browseHighlight');
+		}
 	}
 }
