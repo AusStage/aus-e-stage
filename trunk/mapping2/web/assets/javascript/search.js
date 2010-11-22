@@ -121,7 +121,7 @@ SearchClass.prototype.updateMessages = function() {
 //define a method of the search class to build the contributor search results
 SearchClass.prototype.buildContributorResults = function(data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"</th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -180,7 +180,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 // define a method of the search class to build the organisation search results
 SearchClass.prototype.buildOrganisationResults = function(data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Organisation Name</th><th>Address</th><th>Mapped Events</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Organisation Name</th><th>Address</th><th>Mapped Events</th><th>Total Events</th><th><input type="checkbox" name="selectOrganisationSearchAll" id="selectOrganisationSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -217,7 +217,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].mapEventCount > 0) {
-			list += '<td><input type="checkbox"/></td>';
+			list += '<td><input type="checkbox" name="searchOrganisation" class="searchOrganisation" value="' + data[i].id + '" title="Tick to add this organisation to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -230,6 +230,8 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 	
 	if(i > 0) {
 		$("#organisation_results").append(list);
+		styleButtons();
+		
 	}
 	
 	if(i == 25) {
@@ -247,7 +249,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 // define a method of the search class to build the venue search results
 SearchClass.prototype.buildVenueResults = function (data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Venue Name</th><th>Address</th><th>Total Events</th><th>&nbsp;</th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Venue Name</th><th>Address</th><th>Total Events</th><th><input type="checkbox" name="selectVenueSearchAll" id="selectVenueSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -284,7 +286,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 		list += '</td><td>' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].latitude != null) {
-			list += '<td><input type="checkbox"/></td>';
+			list += '<td><input type="checkbox" name="searchVenue" class="searchVenue" value="' + data[i].id + '" title="Tick to add this venue to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -297,6 +299,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 	
 	if(i > 0) {
 		$("#venue_results").append(list);
+		styleButtons();
 	}
 	
 	if(i == 25) {
@@ -314,7 +317,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 // define a method of the search class to build the event search results
 SearchClass.prototype.buildEventResults = function (data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Event Name</th><th>Venue</th><th>First Date</th><th>&nbsp;</th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Event Name</th><th>Venue</th><th>First Date</th><th><input type="checkbox" name="selectEventSearchAll" id="selectEventSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -346,7 +349,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 		list += '</td><td class="nowrap">' + data[i].firstDisplayDate + '</td>';
 		
 		if(data[i].venue.latitude != null) {
-			list += '<td><input type="checkbox"/></td>';
+			list += '<td><input type="checkbox" name="searchEvent" class="searchEvent" value="' + data[i].id + '" title="Tick to add this event to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -359,6 +362,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 
 	if(i > 0) {
 		$("#event_results").append(list);
+		styleButtons();
 	}
 	
 	if(i == 25) {
@@ -422,6 +426,39 @@ SearchClass.prototype.selectAllClickEvent = function(event) {
 			});
 		} else {
 			$(".searchContributor:checkbox").each(function() {
+				$(this).attr('checked', true);
+			});
+		}
+	} else if(target.attr('id') == 'selectOrganisationSearchAll') {
+		
+		if(target.is(':checked') == false) {
+			$(".searchOrganisation:checkbox").each(function() {
+				$(this).attr('checked', false);
+			});
+		} else {
+			$(".searchOrganisation:checkbox").each(function() {
+				$(this).attr('checked', true);
+			});
+		}
+	} else if(target.attr('id') == 'selectVenueSearchAll') {
+		
+		if(target.is(':checked') == false) {
+			$(".searchVenue:checkbox").each(function() {
+				$(this).attr('checked', false);
+			});
+		} else {
+			$(".searchVenue:checkbox").each(function() {
+				$(this).attr('checked', true);
+			});
+		}
+	} else if(target.attr('id') == 'selectEventSearchAll') {
+		
+		if(target.is(':checked') == false) {
+			$(".searchEvent:checkbox").each(function() {
+				$(this).attr('checked', false);
+			});
+		} else {
+			$(".searchEvent:checkbox").each(function() {
 				$(this).attr('checked', true);
 			});
 		}

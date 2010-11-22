@@ -96,19 +96,19 @@
 					<h3>Search Results</h3>
 					<div class="accordion">
 						<h3><a href="#" id="contributor_heading">Contributors</a></h3>
-							<div id="contributor_results">Contributor Results</div>
+							<div id="contributor_results"></div>
 					</div>
 					<div class="accordion">
 						<h3><a href="#" id="organisation_heading">Organisations</a></h3>
-							<div id="organisation_results">Organisation Results</div>
+							<div id="organisation_results"></div>
 					</div>
 					<div class="accordion">
 						<h3><a href="#" id="venue_heading">Venues</a></h3>
-							<div id="venue_results">Venue Results</div>
+							<div id="venue_results"></div>
 					</div>
 					<div class="accordion">
 						<h3><a href="#" id="event_heading">Events</a></h3>
-							<div id="event_results">Event Results</div>
+							<div id="event_results"></div>
 					</div>
 					<h3 style="padding-top: 15px;">Search History</h3>
 					<div class="accordion">
