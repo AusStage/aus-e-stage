@@ -21,7 +21,6 @@
        * [MappingServiceAPISearch Search API]
        * [MappingServiceAPILookup Lookup API]
        * [MappingServiceAPIEvents Events API]
-       * [MappingServiceAPIInterface Mobile Interface]
      * [MappingServiceFeedback Mapping Service Feedback]
        * [Alpha1 Alpha 1]
        * [Alpha2 Alpha 2]
