@@ -1,0 +1,247 @@
+#summary Mapping Service API - Event Lookup
+
+<h1>Event API</h1>
+
+Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
+
+The Event API exposes methods that can be used to retrieve details of events that occurred at a venue for use in populating [http://code.google.com/apis/maps/documentation/javascript/reference.html#InfoWindow infoWindows] on a map.
+
+_Note: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
+
+<wiki:toc max_depth="3" />
+
+= Base URL =
+
+http://beta.ausstage.edu.au/mapping3/events?
+
+Combining the base URL with the parameters outlined below constructs a call to the API.
+
+= Parameters =
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| task   || organisation, contributor, venue || No || ||
+|| id     || unique identifier use with the task || No || ||
+|| venue  || specify the unique identifier of the venue when undertaking an organisation or contributor lookup || yes || ||
+|| format || json || Yes || json ||
+|| callback || function name to use for a JSONP request || Yes || ||
+
+== task ==
+The type of search task to undertake for example a search for events that occurred at a venue, or the events associated with an organisation that occurred at the specified venue.
+
+=== organisation ==
+
+A list of events that occurred at a venue associated with the specified organisation
+
+=== contributor ===
+
+A list of events that occurred at a venue associated with the specified contributor
+
+=== venue ===
+
+A list of events that have occurred at the specified venue
+
+== id ==
+
+The unique identifier of for a record matching the type specified by the task parameter
+
+== venue ==
+
+The unique identifier of a venue when undertaking a lookup for events associated with an organisation or contributor
+
+=== format ===
+The type of data format used to prepare the search results. At the time of writing only [http://en.wikipedia.org/wiki/JSON JSON] is a supported format
+
+== callback ==
+The name of the callback function used when a request is made for JSONP encoded data
+
+= Sample Output =
+
+== Events at a Venue ==
+
+Retrieve details of events that occurred at venue with id: 815
+
+URL: http://beta.ausstage.edu.au/mapping3/events?task=venue&id=815
+
+{{{
+{ "events" : [ { "firstDate" : "13 October 2010",
+        "id" : "85146",
+        "name" : "When The Rain Stops Falling",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=85146"
+      },
+      { "firstDate" : "09 June 2010",
+        "id" : "83901",
+        "name" : "Waiting for Godot",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=83901"
+      },
+      { "firstDate" : "11 March 2010",
+        "id" : "83038",
+        "name" : "Ngurrumilmarrmiriyu (Wrong Skin)",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=83038"
+      },
+      { "firstDate" : "03 March 2010",
+        "id" : "82956",
+        "name" : "The Walworth Farce",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=82956"
+      },
+      { "firstDate" : "19 February 2010",
+        "id" : "82957",
+        "name" : "Be Your Self",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=82957"
+      },
+      { "firstDate" : "07 January 2010",
+        "id" : "82802",
+        "name" : "Avenue Q",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=82802"
+      },
+...
+      { "firstDate" : "01 January 1941",
+        "id" : "69862",
+        "name" : "Cinderella / Will Mahony / The Naughty Nineties",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=69862"
+      }
+    ],
+  "id" : "815",
+  "latitude" : "-34.92832",
+  "longitude" : "138.597007",
+  "name" : "Her Majesty's Theatre",
+  "postcode" : "5000",
+  "street" : "58 Grote Street",
+  "suburb" : "Adelaide",
+  "totalEventCount" : 314,
+  "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
+}
+}}}
+
+== Events that include an organisation at a venue ==
+
+Events that include the contributor with id 102 at the venue identified by the id 815
+
+URL: http://beta.ausstage.edu.au/mapping3/events?task=organisation&id=102&venue=815
+
+{{{
+{ "organisation" : { "id" : "102",
+      "mapEventCount" : 303,
+      "name" : "Australian Dance Theatre",
+      "totalEventCount" : 408,
+      "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102"
+    },
+   "events" : [ { "firstDate" : "19 February 2010",
+        "id" : "82957",
+        "name" : "Be Your Self",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=82957"
+      },
+      { "firstDate" : "02 August 2007",
+        "id" : "70172",
+        "name" : "Devolution",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=70172"
+      },
+      { "firstDate" : "01 March 2006",
+        "id" : "70137",
+        "name" : "Devolution",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=70137"
+      },
+      { "firstDate" : "01 March 2004",
+        "id" : "33086",
+        "name" : "Held",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=33086"
+      },
+...
+      { "firstDate" : "11 May 1971",
+        "id" : "29830",
+        "name" : "Three Faces of Noon / Bird Wants to Fly / Song of a Withered Tree and the Sun / Landscape / Night Spell / Serendipity 66 / Hex / Sun and Moon / Homage to Botticelli",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=29830"
+      }
+    ],
+  "id" : "815",
+  "latitude" : "-34.92832",
+  "longitude" : "138.597007",
+  "name" : "Her Majesty's Theatre",
+  "postcode" : "5000",
+  "street" : "58 Grote Street",
+  "suburb" : "Adelaide",
+  "totalEventCount" : 314,
+  "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
+}
+}}}
+
+== Events that include a contributor at a venue ==
+
+Events that include the contributor with id: 482 at the venue with id: 36
+
+URL: http://beta.ausstage.edu.au/mapping3/events?task=contributor&id=482&venue=36
+
+{{{
+{ "contributor" : { "firstName" : "Geoffrey",
+      "id" : "482",
+      "lastName" : "Rush",
+      "mapEventCount" : 75,
+      "totalEventCount" : 88,
+      "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_contrib_id=482"
+    },
+  "events" : [ { "firstDate" : "04 December 2010",
+        "id" : "84282",
+        "name" : "The Diary of a Madman",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=84282"
+      },
+      { "firstDate" : "09 June 2007",
+        "id" : "70849",
+        "name" : "Exit the King",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=70849"
+      },
+      { "firstDate" : "27 August 1996",
+        "id" : "28359",
+        "name" : "The Alchemist",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=28359"
+      },
+      { "firstDate" : "23 June 1994",
+        "id" : "24903",
+        "name" : "Hamlet",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=24903"
+      },
+      { "firstDate" : "14 November 1992",
+        "id" : "17376",
+        "name" : "Frogs",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=17376"
+      },
+      { "firstDate" : "17 June 1992",
+        "id" : "16320",
+        "name" : "Popular Mechanicals 1 and 2",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=16320"
+      },
+      { "firstDate" : "21 November 1989",
+        "id" : "2018",
+        "name" : "The Wolf's Banquet",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=2018"
+      },
+      { "firstDate" : "25 July 1989",
+        "id" : "1875",
+        "name" : "Gogol",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=1875"
+      },
+      { "firstDate" : "24 September 1988",
+        "id" : "1486",
+        "name" : "Les Enfants du Paradis",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=1486"
+      },
+      { "firstDate" : "19 November 1987",
+        "id" : "371",
+        "name" : "The Popular Mechanicals",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=371"
+      },
+      { "firstDate" : "05 February 1987",
+        "id" : "123",
+        "name" : "On Parliament Hill",
+        "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=123"
+      }
+    ],
+  "id" : "36",
+  "latitude" : "-33.889072",
+  "longitude" : "151.209136",
+  "name" : "Belvoir Street Theatre",
+  "postcode" : "2010",
+  "street" : "25 Belvoir Street",
+  "suburb" : "Surry Hills",
+  "totalEventCount" : 303,
+  "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=36"
+}
+}}}
