@@ -61,9 +61,6 @@ $(document).ready(function(){
 	 * search functionality
 	 */
 	
-	// associate the tipsy library with the form elements
-	$('.tipsy_form [title]').tipsy({trigger: 'focus', gravity: 'n'});
-	
 	// associate tipsy with the span element
 	$('.use-tipsy').tipsy({live: true});
 	
@@ -163,20 +160,28 @@ $(document).ready(function(){
 			query: {
 				required: true,
 				validIDSearch: true,
-				minlength: 5,
+				minlength: searchObj.MIN_QUERY_LENGTH,
 			}
 		},
-		errorLabelContainer: '#validate_errors',
+		errorContainer: '#error_message',
+		errorLabelContainer: '#error_text',
 		wrapper: "",
+		showErrors: function(errorMap, errorList) {
+			this.defaultShowErrors();
+			$("#status_message").hide();
+			$("#messages").show();
+			$("#error_message").show();
+		},
 		messages: {
 			query: {
 				required: "Please enter a few search terms",
 				validIDSearch: 'An ID search must start with "id:" and be followed by a valid integer',
-				minlength: "A search query must be 5 characters or more in length"
+				minlength: 'A search query must be ' + searchObj.MIN_QUERY_LENGTH + ' characters or more in length'
 			}
 		},
 		submitHandler: function(form) {
 			// indicate that the search is underway
+			$("#error_message").hide();
 			$("#messages").show();
 			$("#status_message").show();
 			

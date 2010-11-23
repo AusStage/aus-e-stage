@@ -44,8 +44,11 @@ function SearchClass () {
 	// declare a constant for use when the search limit has been reached
 	this.LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>The limit of ' + this.DEFAULT_SEARCH_LIMIT + ' records has been reached.<br/>Please adjust your search query if the result you are looking for is missing.</p></di>';
 	
-	// define the tocken used to identify an ID search
+	// define the token used to identify an ID search
 	this.ID_SEARCH_TOKEN   = "id:";
+	
+	// define the minimum query size
+	this.MIN_QUERY_LENGTH = 4;
 	
 	// keep track of various search related stuff
 	this.trackerObj = new SearchTrackerClass();
@@ -121,7 +124,7 @@ SearchClass.prototype.updateMessages = function() {
 //define a method of the search class to build the contributor search results
 SearchClass.prototype.buildContributorResults = function(data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Name</th><th>Event Dates</th><th>Functions</th><th>Mapped Events</th><th>Total Events</th><th style="text-align: center"><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -146,10 +149,10 @@ SearchClass.prototype.buildContributorResults = function(data) {
 			list += "&nbsp;";
 		}
 		
-		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
+		list += '</td><td class="alignRight">' + data[i].mapEventCount + '</td><td class="alignRight">' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].mapEventCount > 0) {
-			list += '<td><input type="checkbox" name="searchContributor" class="searchContributor" value="' + data[i].id + '" title="Tick to add this contributor to the map"/></td>';
+			list += '<td style="text-align: center"><input type="checkbox" name="searchContributor" class="searchContributor" value="' + data[i].id + '" title="Tick to add this contributor to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -158,7 +161,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddContributors" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="5">&nbsp;</td><td style="text-align: right"><button id="searchAddContributors" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#contributor_results").append(list);
@@ -180,7 +183,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 // define a method of the search class to build the organisation search results
 SearchClass.prototype.buildOrganisationResults = function(data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Organisation Name</th><th>Address</th><th>Mapped Events</th><th>Total Events</th><th><input type="checkbox" name="selectOrganisationSearchAll" id="selectOrganisationSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Organisation Name</th><th>Address</th><th>Mapped Events</th><th>Total Events</th><th style="text-align: center"><input type="checkbox" name="selectOrganisationSearchAll" id="selectOrganisationSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -206,18 +209,14 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 		
 		if(data[i].state != null) {
 			list += data[i].state + ', ';
-		}
-		
-		if(data[i].postcode != null) {
-			list += data[i].postcode;
 		} else {
 			list = list.substr(0, list.length - 2);
 		}
 		
-		list += '</td><td>' + data[i].mapEventCount + '</td><td>' + data[i].totalEventCount + '</td>';
+		list += '</td><td class="alignRight">' + data[i].mapEventCount + '</td><td class="alignRight">' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].mapEventCount > 0) {
-			list += '<td><input type="checkbox" name="searchOrganisation" class="searchOrganisation" value="' + data[i].id + '" title="Tick to add this organisation to the map"/></td>';
+			list += '<td style="text-align: center"><input type="checkbox" name="searchOrganisation" class="searchOrganisation" value="' + data[i].id + '" title="Tick to add this organisation to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -226,7 +225,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddOrganisations" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="4">&nbsp;</td><td style="text-align: right"><button id="searchAddOrganisations" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#organisation_results").append(list);
@@ -249,7 +248,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 // define a method of the search class to build the venue search results
 SearchClass.prototype.buildVenueResults = function (data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Venue Name</th><th>Address</th><th>Total Events</th><th><input type="checkbox" name="selectVenueSearchAll" id="selectVenueSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Venue Name</th><th>Address</th><th>Total Events</th><th style="text-align: center"><input type="checkbox" name="selectVenueSearchAll" id="selectVenueSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -275,18 +274,14 @@ SearchClass.prototype.buildVenueResults = function (data) {
 		
 		if(data[i].state != null) {
 			list += data[i].state + ', ';
-		}
-		
-		if(data[i].postcode != null) {
-			list += data[i].postcode;
 		} else {
 			list = list.substr(0, list.length - 2);
 		}
 		
-		list += '</td><td>' + data[i].totalEventCount + '</td>';
+		list += '</td><td class="alignRight">' + data[i].totalEventCount + '</td>';
 		
 		if(data[i].latitude != null) {
-			list += '<td><input type="checkbox" name="searchVenue" class="searchVenue" value="' + data[i].id + '" title="Tick to add this venue to the map"/></td>';
+			list += '<td style="text-align: center"><input type="checkbox" name="searchVenue" class="searchVenue" value="' + data[i].id + '" title="Tick to add this venue to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -295,7 +290,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddVenues" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="3">&nbsp;</td><td style="text-align: right"><button id="searchAddVenues" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#venue_results").append(list);
@@ -317,7 +312,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 // define a method of the search class to build the event search results
 SearchClass.prototype.buildEventResults = function (data) {
 
-	var list = '<table class="searchResults"><thead><tr><th>Event Name</th><th>Venue</th><th>First Date</th><th><input type="checkbox" name="selectEventSearchAll" id="selectEventSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th>Event Name</th><th>Venue</th><th>First Date</th><th style="text-align: center"><input type="checkbox" name="selectEventSearchAll" id="selectEventSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -346,10 +341,10 @@ SearchClass.prototype.buildEventResults = function (data) {
 			list = list.substr(0, list.length - 2);
 		}
 		
-		list += '</td><td class="nowrap">' + data[i].firstDisplayDate + '</td>';
+		list += '</td><td class="nowrap, alignRight">' + data[i].firstDisplayDate + '</td>';
 		
 		if(data[i].venue.latitude != null) {
-			list += '<td><input type="checkbox" name="searchEvent" class="searchEvent" value="' + data[i].id + '" title="Tick to add this event to the map"/></td>';
+			list += '<td style="text-align: center"><input type="checkbox" name="searchEvent" class="searchEvent" value="' + data[i].id + '" title="Tick to add this event to the map"/></td>';
 		} else {
 			list += '<td>&nbsp;</td>';
 		}
@@ -358,7 +353,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" style="text-align: right"><button id="searchAddEvents" class="addSearchResult">Add to Map</button><button class="viewMapButton">View Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="3">&nbsp;</td><td style="text-align: right"><button id="searchAddEvents" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 
 	if(i > 0) {
 		$("#event_results").append(list);
