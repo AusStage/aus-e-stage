@@ -100,7 +100,7 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 			
 			// add the spans 
 			list += '<span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + ' ';
-			list += '(' + data[i].venueCount + ')</span></li>'; // + ' / ' + data[i].mapVenueCount + ')</span></li>';
+			list += '(' + data[i].mapVenueCount  + ' / ' + data[i].venueCount + ')</span></li>';
 		}
 		
 		list += '</ul>';
@@ -108,7 +108,8 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 		// replace the list of suburbs
 		$("#browse_suburb").empty().append(list);
 		
-		$('#browse_suburb [title]').tipsy({trigger: 'focus', gravity: 'n'});
+		//$('.browseSuburb').tipsy({trigger: 'focus', gravity: 'n', delayIn: 1000, delayOut: 0});
+		$('.browseSuburb').tipsy({gravity: 'n', delayIn: 1000, delayOut: 0});
 	});
 }
 
@@ -148,15 +149,18 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 				if(parentId == id) {
 					// yes
 					// build a ticked checkbox
-					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'checked') + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'checked');
 				} else {
 					// no
 					// build an unticked checbox
-					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id) + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id);
 				}
 			} else {
-				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'disabled') + ' <span class="browseVenue" id="' + data[i].id + '" title="Total Events: ' + data[i].eventCount + ' / Mapped Events: ' + data[i].mapEventCount + '">' + data[i].name + '</span></li>';
+				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'disabled');
 			}
+			
+			// add the span
+			list += ' <span class="browseVenue">' + data[i].name + ' (' + data[i].eventCount + ')</span></li>';
 		}
 		
 		list += '</ul>';
@@ -164,7 +168,6 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 		// replace the list of venues
 		$("#browse_venue").empty().append(list);
 		
-		$('#browse_venue [title]').tipsy({trigger: 'focus', gravity: 'n'});
 	});
 }
 

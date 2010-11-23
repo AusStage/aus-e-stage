@@ -21,7 +21,7 @@
  */
 var BASE_URL = "/mapping2/";
 var UPDATE_DELAY = 500;
-var AJAX_ERROR_MSG    = 'An unexpected error occured during -, please try again. If the problem persists contact the AusStage team.'; 
+var AJAX_ERROR_MSG    = 'An unexpected error occurred during -, please try again. If the problem persists contact the AusStage team.'; 
 
 var ADD_VIEW_BTN_HELP = '<span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>';
  
@@ -59,8 +59,8 @@ $(document).ready(function() {
 
 	$("#help_add_view_div").dialog({ 
 		autoOpen: false,
-		height: 450,
-		width: 470,
+		height: 400,
+		width: 450,
 		modal: true,
 		buttons: {
 			Close: function() {

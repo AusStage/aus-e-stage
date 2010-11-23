@@ -58,36 +58,26 @@
 			<div class="ui-layout-content" style="font-size:90%">
 				<div id="tabs-1">
 					<h2 style="margin-bottom: -5px;">Search the AusStage Database</h2>
-					<form action="/mapping/" method="get" id="search" name="search" class="tipsy_form" >
+					<form action="/mapping/" method="get" id="search" name="search">
 						<table class="formTable" style="height: 60px;">
 							<tbody>
 							<tr>
-								<th scope="row" style="width: 200px;">
-									<label id="query-label" for="query">Search Terms: </label>
-								</th>
-								<td style="width: 45%">
+								<td style="width: 50%">
 									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/> <span id="show_search_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" title="Search Help"></span>
 								</td>
-								<td style="width: 45%">
+								<td style="width: 40%">
 									<div id="messages">
 										<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message">
 											<p>
 												<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-												<span id="message_text">Search is underway...</span>
+												<span id="message_text"></span>
 											</p>
 										</div>
 										<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;" id="error_message"> 
 											<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-											<span id="error_text">Error condition</span>
+											<span id="error_text"></span>
 										</div>										
 									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2" id="validate_errors" style="text-align: left">
-								</td>
-								<td colspand="2">
-									&nbsp;
 								</td>
 							</tr>
 							</tbody>
@@ -128,13 +118,13 @@
 					<h2>Browse Areas to Find Venues</h2>
 					<div id="browse_header" style="height: 30px; width=100%">
 						<div style="float:left; width: 28%; height: 100%; padding-right: 10px;">
-							<h3 style="text-align: center">Countries and States</h3>
+							<h3>Countries and States</h3>
 						</div>
 						<div style="float:left; width: 33%; height: 100%; margin-left: 10px;">
-							<h3 style="text-align: center">Suburbs</h3>
+							<h3>Suburbs</h3>
 						</div>
 						<div style="float: right; width: 34%; height: 100%; padding-left: 10px;">
-							<h3 style="text-align: center">Venues</h3>
+							<h3>Venues</h3>
 						</div>
 					</div>
 					<div id="browse_content" style="height: 380px;">
@@ -144,7 +134,7 @@
 					</div>
 					<div id="browse_footer" style="height:30px; width=100%;">
 						<div style="float:right; padding-top: 15px;">
-							<input type="button" id="browse_btn" value="Add To Map"/><button class="viewMapButton">View Map</button><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>
+							<input type="button" id="browse_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>
 						</div>
 					</div>
 				</div>
@@ -167,16 +157,14 @@
 	<div id="help_add_view_div" title="Help on Adding Items and Viewing the Map" style="font-size: 90%">
 		<h3>Adding items to the map</h3>
 		<p>
-			Click the 'Add to Map' button to add the currently selected items to the map. The map will not be displayed automatically. 
-		</p>
-		<h3>Viewing the Map</h3>
-		<p>
-			Click the 'View Map' button to view the map and display all of the items added to it using the 'Add to Map' button. Any selected items that have not been added to map using the 'Add to Map' button will not be displayed.
+			Click the 'Add to Map' button to add the currently selected items to the map. The map will be displayed automatically.
 			<br/>&nbsp;<br/>
-			Alternatively click the 'Map' tab at the top of the page.
+			Alternatively to view the map click the 'Map' tab at the top of the page.
 		</p>
 		<h3>Browsing Areas to Find Venues</h3>
 		<p>
+			Click on the 'Venues' tab if you have not already done so.
+			<br/>&nbsp;<br/>
 			Click on an item to see a list of items at the next level, tick the box to select all items at lower levels
 		</p>
 	</div>
