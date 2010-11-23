@@ -226,7 +226,6 @@ table.searchResults {
 table.searchResults th {
 	border: 1px solid #aaaaaa;
 	padding: 2px 5px 2px 5px;
-	text-align: left;
 	color: #000;
 	white-space: nowrap;
 }
@@ -250,6 +249,10 @@ td.nowrap {
 }
 
 td.alignRight {
+	text-align: right;
+}
+
+th.alignRight {
 	text-align: right;
 }
 

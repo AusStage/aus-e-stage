@@ -99,8 +99,9 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 			}
 			
 			// add the spans 
-			list += '<span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + ' ';
-			list += '(' + data[i].mapVenueCount  + ' / ' + data[i].venueCount + ')</span></li>';
+			//list += '<span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + ' ';
+			list += '<span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '">' + data[i].name + ' ';
+			list += '(' + data[i].mapVenueCount  + '/' + data[i].venueCount + ')</span></li>';
 		}
 		
 		list += '</ul>';
@@ -108,7 +109,7 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 		// replace the list of suburbs
 		$("#browse_suburb").empty().append(list);
 		
-		$('.browseSuburb').tipsy({gravity: 'n', delayIn: 1000, delayOut: 0});
+		//$('.browseSuburb').tipsy({gravity: 'n', delayIn: 1000, delayOut: 0});
 	});
 }
 
