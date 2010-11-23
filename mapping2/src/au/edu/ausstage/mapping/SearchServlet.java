@@ -39,6 +39,7 @@ public class SearchServlet extends HttpServlet {
 	public static final int      DEFAULT_LIMIT = 5;
 	public static final int      MIN_LIMIT     = 5;
 	public static final int      MAX_LIMIT     = 25;
+	public static final int      MIN_QUERY_LENGTH = 4;
 	
 	/*
 	 * initialise this instance
@@ -84,8 +85,8 @@ public class SearchServlet extends HttpServlet {
 		// check on the id parameter
 		if(InputUtils.isValid(query) == false) {
 			throw new ServletException("Missing or invalid query parameter.");
-		} else if(query.length() < 5) {
-			throw new ServletException("The query parameter must be at most 5 characters long");
+		} else if(query.length() < MIN_QUERY_LENGTH) {
+			throw new ServletException("The query parameter must be at least " + MIN_QUERY_LENGTH + " characters long");
 		}
 		
 		if(searchType.equals("id") == true) {
