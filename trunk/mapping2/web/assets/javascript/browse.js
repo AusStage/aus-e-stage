@@ -108,7 +108,6 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 		// replace the list of suburbs
 		$("#browse_suburb").empty().append(list);
 		
-		//$('.browseSuburb').tipsy({trigger: 'focus', gravity: 'n', delayIn: 1000, delayOut: 0});
 		$('.browseSuburb').tipsy({gravity: 'n', delayIn: 1000, delayOut: 0});
 	});
 }
