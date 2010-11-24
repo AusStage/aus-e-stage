@@ -57,7 +57,7 @@ function MappingClass() {
 							"darwin":    {lat: -12.45, lng: 130.83, zoom: 14},
 							"international": {lat: -25.947028, lng: 133.209639, zoom: 2},
 							"australia":     {lat: -25.947028, lng: 133.209639, zoom: 4},
-							"default":       {lat: -25.947028, lng: 133.209639, zoom: 4}
+							"unknown":       {lat: -25.947028, lng: 133.209639, zoom: 4}
 						 };               
 
 }
@@ -66,8 +66,8 @@ function MappingClass() {
 MappingClass.prototype.initMap = function() {
 
 	// initialise the map
-	mappingObj.options = {zoom:   mappingObj.commonLocales.default.zoom,
-					 	  center: new google.maps.LatLng(mappingObj.commonLocales.default.lat, mappingObj.commonLocales.default.lng)
+	mappingObj.options = {zoom:   mappingObj.commonLocales.unknown.zoom,
+					 	  center: new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)
 				         };	
 	
 	mappingObj.map = new google.maps.Map(document.getElementById("map_div"), mappingObj.options);
