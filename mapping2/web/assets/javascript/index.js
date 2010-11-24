@@ -280,6 +280,7 @@ $(document).ready(function(){
 	 $('.browseMajorArea').live('click', browseObj.getSuburbsClickEvent);
 	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
 	 $('.browseCheckBox').live('click', browseObj.checkboxClickEvent);
+	 $('#browse_add_btn').click(browseObj.addToMap);
 	 
 	 /*
 	  * map functionality
