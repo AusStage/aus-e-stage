@@ -33,10 +33,12 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.06.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.3&amp;sensor=false"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
 	<script type="text/javascript" src="assets/javascript/browse.js"></script>
+	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 	<script type="text/javascript" src="assets/javascript/index.js"></script>
 	<!-- prevent a FOUC from the messages div -->
 	<script type="text/javascript">
@@ -139,7 +141,9 @@
 					</div>
 				</div>
 				<div id="tabs-3">
-					<h3>Map of the Search Results</h3>
+					<h3>Map of the Selected Items</h3>
+					<div id="map_div" style="height: 440px; width: 100%">
+					</div>
 				</div>
 			</div>
 		</div>

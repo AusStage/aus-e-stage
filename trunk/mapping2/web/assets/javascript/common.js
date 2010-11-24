@@ -24,6 +24,11 @@ var UPDATE_DELAY = 500;
 var AJAX_ERROR_MSG    = 'An unexpected error occurred during -, please try again. If the problem persists contact the AusStage team.'; 
 
 var ADD_VIEW_BTN_HELP = '<span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>';
+
+// declare global objects
+var searchObj  = null;
+var browseObj  = null;
+var mappingObj = null;
  
 /**
  * Common functions used across more than one page in the site
