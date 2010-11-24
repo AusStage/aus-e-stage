@@ -112,7 +112,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	// set up handler for when an ajax request results in an error
+	// set up handler for when an ajax request results in an error for searching
 	$("#error_text").ajaxError(function(e, xhr, settings, exception) {
 		// determine what type of request has been made & update the message text accordingly
 		// ensure that we're only working on searches
@@ -281,6 +281,19 @@ $(document).ready(function(){
 	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
 	 $('.browseCheckBox').live('click', browseObj.checkboxClickEvent);
 	 $('#browse_add_btn').click(browseObj.addToMap);
+	 
+	 // set up handler for when an ajax request results in an error for searching
+	 $("#browse_messages").ajaxError(function(e, xhr, settings, exception) {
+	 	// determine what type of request has been made & update the message text accordingly
+		// ensure that we're only working on browse activities
+		if(settings.url.indexOf("lookup?task=state-list", 0) != -1) {
+			$(this).empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' + AJAX_ERROR_MSG.replace('-', 'the request for Country and State data') + '</p></div>');
+		} else if(settings.url.indexOf("lookup?task=suburb-list", 0) != -1) {
+			$(this).empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' + AJAX_ERROR_MSG.replace('-', 'the request for suburb data') + '</p></div>');
+		} else if(settings.url.indexOf("lookup?task=suburb-venue-list", 0) != -1) {
+			$(this).empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' + AJAX_ERROR_MSG.replace('-', 'the request for venue data') + '</p></div>');
+		}
+	});
 	 
 	 /*
 	  * map functionality
