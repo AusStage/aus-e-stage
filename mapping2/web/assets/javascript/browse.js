@@ -191,6 +191,9 @@ BrowseClass.prototype.buildCheckbox = function(title, value, param, selector) {
 // define a function to respond to the click on a checkbox
 BrowseClass.prototype.checkboxClickEvent = function(event) {
 
+	// get rid of any error / status messages
+	$('#browse_messages').empty()
+
 	// determine which checkbox was checked
 	var target = $(event.target);
 	var tokens = target.attr('id').split('_');
@@ -350,7 +353,7 @@ BrowseClass.prototype.addToMap = function() {
 
 
 	// adjust the suburbs and majorAreas arrays as required
-	if(allSuburbs == true) {
+	if(allSuburbs == true && venues.suburbs.length > 0) {
 		// get the state code
 		idx = venues.suburbs[0];
 		idx = idx.split("_")[0];
@@ -370,20 +373,23 @@ BrowseClass.prototype.addToMap = function() {
 		venues.suburbs = [];		
 			
 	} else {
-		// take out the majorArea entry
-		idx = venues.suburbs[0];
-		idx = idx.split("_")[0];
+	
+		if(venues.suburbs.length > 0) {
+			// take out the majorArea entry
+			idx = venues.suburbs[0];
+			idx = idx.split("_")[0];
 		
-		idx = $.inArray(idx, venues.majorAreas);
-		if(idx != -1) {
-			venues.majorAreas.splice(idx, 1);
+			idx = $.inArray(idx, venues.majorAreas);
+			if(idx != -1) {
+				venues.majorAreas.splice(idx, 1);
+			}
+		
+			// tick this major area
+			idx = venues.suburbs[0];
+			idx = idx.split("_");
+		
+			$('#browse_majorArea_' + idx).attr('checked', false);
 		}
-		
-		// tick this major area
-		idx = venues.suburbs[0];
-		idx = idx.split("_");
-		
-		$('#browse_majorArea_' + idx).attr('checked', false);
 	}
 	
 	// adjust the majorAreas list to take into account the Australia checkbox
@@ -421,10 +427,12 @@ BrowseClass.prototype.addToMap = function() {
 		}
 	}
 	
-	
-	// debug code
-	console.log(venues.majorAreas);
-	console.log(venues.suburbs);
-	console.log(venues.venues);
-	console.log(allVenues);
+	if(venues.majorAreas.length > 0 || venues.suburbs.length > 0 || venues.venues.length > 0) {
+		// add these venues to the map
+		// inform the user
+		$('#browse_messages').empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>Adding selected items to the map. Please wait...</p></div>');
+	} else {
+		// inform the user
+		$('#browse_messages').empty().append('<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;" id="error_message"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> No items selected, nothing added to the map</p></div>');
+	}
 }

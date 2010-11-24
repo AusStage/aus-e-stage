@@ -78,6 +78,7 @@
 										<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;" id="error_message"> 
 											<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
 											<span id="error_text"></span>
+											</p>
 										</div>										
 									</div>
 								</td>
@@ -134,7 +135,8 @@
 						<div id="browse_suburb" style="float: left; width: 33%; height: 100%; overflow: auto; margin-left: 10px;"></div>
 						<div id="browse_venue"  style="float: right; width: 34%; height: 100%; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
 					</div>
-					<div id="browse_footer" style="height:30px; width=100%;">
+					<div id="browse_footer" style="height:50px; width=100%;">
+						<div style="float:left; padding-top: 15px;" id="browse_messages"></div>
 						<div style="float:right; padding-top: 15px;">
 							<input type="button" id="browse_add_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>
 						</div>
