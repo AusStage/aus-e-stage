@@ -136,7 +136,7 @@
 					</div>
 					<div id="browse_footer" style="height:30px; width=100%;">
 						<div style="float:right; padding-top: 15px;">
-							<input type="button" id="browse_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>
+							<input type="button" id="browse_add_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>
 						</div>
 					</div>
 				</div>

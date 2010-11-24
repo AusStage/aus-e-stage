@@ -29,17 +29,17 @@ BrowseClass.prototype.getMajorAreas = function() {
 	
 	$.get(url, function(data, textStatus, XMLHttpRequest) {
 	
-		var list = '<ul class="browseList"><li>' + browseObj.buildCheckbox(data[0].name, data[0].id) + ' ' + data[0].name + '<ul class="browseList" style="padding-left: 15px;">';
+		var list = '<ul class="browseList"><li>' + browseObj.buildCheckbox(data[0].name, data[0].id, null, 'browseMajorAreaTickBox') + ' ' + data[0].name + '<ul class="browseList" style="padding-left: 15px;">';
 	
 		for(var i = 1; i < 9; i++) {
-			list += '<li>' + browseObj.buildCheckbox('majorArea', data[i].id) + ' <span class="clickable browseMajorArea" id="browse_state_' + data[i].id + '">' + data[i].name + '</span></li>';
+			list += '<li>' + browseObj.buildCheckbox('majorArea', data[i].id, null, 'browseMajorAreaTickBox') + ' <span class="clickable browseMajorArea" id="browse_state_' + data[i].id + '">' + data[i].name + '</span></li>';
 		}
 		
 		list += '</ul></li>';
-		list += '<li>' + browseObj.buildCheckbox('majorArea', data[9].id) + ' ' + data[9].name + '<ul class="browseList" style="padding-left: 15px;">';
+		list += '<li>' + browseObj.buildCheckbox('majorArea', data[9].id, null, 'browseMajorAreaTickBox') + ' ' + data[9].name + '<ul class="browseList" style="padding-left: 15px;">';
 		
 		for(var i = 10; i < data.length; i++) {
-			list += '<li>' + browseObj.buildCheckbox('majorArea', data[i].id) + ' <span class="clickable browseMajorArea" id="browse_state_' + data[i].id + '">' + data[i].name + '</span></li>';
+			list += '<li>' + browseObj.buildCheckbox('majorArea', data[i].id, null, 'browseMajorAreaTickBox') + ' <span class="clickable browseMajorArea" id="browse_state_' + data[i].id + '">' + data[i].name + '</span></li>';
 		}
 		
 		list += '</ul></li></ul>'
@@ -85,17 +85,17 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 				if(id == parentId) {
 					// yes
 					// build a standard checkbox
-					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'checked'); 
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'checked', 'browseSuburbTickBox'); 
 				} else {
 					// no
 					// build a standard checkbox
-					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name);
+					list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, null, 'browseSuburbTickBox');
 				}				
 				
 			} else {
 				// no
 				// build a disabled checkbox
-				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled');
+				list += '<li>' + browseObj.buildCheckbox('suburb', id + '_' + data[i].name, 'disabled', null);
 			}
 			
 			// add the spans 
@@ -149,14 +149,14 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 				if(parentId == id) {
 					// yes
 					// build a ticked checkbox
-					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'checked');
+					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[2] + '_' + tokens[4] +'-' + data[i].id, 'checked', 'browseVenueTickBox');
 				} else {
 					// no
 					// build an unticked checbox
-					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id);
+					list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[2] + '_' + tokens[4] +'-' + data[i].id, null, 'browseVenueTickBox');
 				}
 			} else {
-				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[3] + '-' + data[i].id, 'disabled');
+				list += '<li>' + browseObj.buildCheckbox('venue', tokens[1] + '_' + tokens[2] + '_' + tokens[4] +'-' + data[i].id, 'disabled', null);
 			}
 			
 			// add the span
@@ -172,19 +172,19 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 }
 
 // define a function to build a checkbox
-BrowseClass.prototype.buildCheckbox = function(title, value, param) {
+BrowseClass.prototype.buildCheckbox = function(title, value, param, selector) {
 
 	var n = 'browse_' + title + '_' + value;
 	var i = n.replace(/[^A-Za-z0-9_]/gi, '-');
 
-	if(typeof(param) != 'undefined') {
+	if(typeof(param) != 'undefined' && param != null) {
 		if(param == 'disabled') {
 			return '<input type="checkbox" disabled/>';
 		} else if(param == 'checked') {
-			return '<input type="checkbox" name="' + n + '" id="' + i + '" value="' + value + '" class="browseCheckBox" checked/>';
+			return '<input type="checkbox" name="' + n + '" id="' + i + '" value="' + value + '" class="browseCheckBox ' + selector + '" checked/>';
 		}		
 	} else {
-		return '<input type="checkbox" name="' + n + '" id="' + i + '" value="' + value + '" class="browseCheckBox"/>';
+		return '<input type="checkbox" name="' + n + '" id="' + i + '" value="' + value + '" class="browseCheckBox ' + selector + '""/>';
 	}
 }
 
@@ -245,4 +245,162 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 			$('#browse_major_area span').removeClass('ui-state-highlight ui-corner-all browseHighlight');
 		}
 	}
+}
+
+// define a function to add venues to the map
+BrowseClass.prototype.addToMap = function() {
+
+	// declare helper variables
+	var venues = {majorAreas: [], suburbs: [], venues: []};
+	var allStates    = true;
+	var allCountries = true;
+	var allSuburbs   = true;
+	var allVenues    = true;
+	
+	// determine what majorAreas have been ticked
+	$('.browseMajorAreaTickBox').each(function() {
+	
+		// convert this to a JQuery object
+		target = $(this);
+		
+		//determine if the box is ticked or not
+		if(target.is(':checked') == true) {
+			venues.majorAreas.push(target.val());
+		} else {
+			if(target.val() > 0 && target.val() < 10) {
+				allStates = false;
+			} else if(target.val().indexOf('999-') == 0) {
+				allCountries = false;
+			}
+		}
+	});
+	
+	// determine what suburbs have been ticked
+	$('.browseSuburbTickBox').each(function() {
+	
+		// convert this to a JQuery object
+		target = $(this);
+		
+		// determine if this box is ticked or not
+		if(target.is(':checked') == true) {
+			venues.suburbs.push(target.val());
+		} else {
+			allSuburbs = false;
+		}
+	});
+	
+	// determine what venues have been ticked
+	$('.browseVenueTickBox').each(function() {
+		
+		// convert this to a JQuery object
+		target = $(this);
+		
+		// determine if this box is ticked or not
+		if(target.is(':checked') == true) {
+			venues.venues.push(target.val());
+		} else {
+			allVenues = false;
+		}
+	});
+		
+	// adjust the majorAreas list to take into account the Australia checkbox
+	if(allStates == true) {	
+		for(var i = 1; i < 9; i++) {
+			idx = $.inArray(''+ i, venues.majorAreas);
+			if(idx != -1) {
+				venues.majorAreas.splice(idx, 1);
+			}
+		}
+				
+	} else {
+		idx = $.inArray("99", venues.majorAreas);
+		if(idx != -1) {
+			venues.majorAreas.splice(idx, 1);
+		}
+	}
+	
+	// adjust the majorAreas list to take into account the International checkbox	
+	if(allCountries == true) {
+		// take out any of the country check boxes
+		tmp = []
+		for(var i = 0; i < venues.majorAreas.length; i++) {
+			if(venues.majorAreas[i].indexOf('999-') == -1) {
+				tmp.push(venues.majorAreas[i]);
+			}
+		}
+		
+		venues.majorAreas = tmp;
+	} else {
+		// take out the international checkbox
+		idx = $.inArray("999", venues.majorAreas);
+		if(idx != -1) {
+			venues.majorAreas.splice(idx, 1);
+		}
+	}
+	
+	/*
+	// adjust the suburbs and majorAreas arrays as required
+	if(allSuburbs == true) {
+		// get the state code
+		idx = venues.suburbs[0];
+		idx = idx.split("_")[0];
+		
+		// take out all of the suburbs
+		venues.suburbs = [];
+		
+		// check to see if the state code is in the list
+		if($.inArray(idx, venues.majorAreas) == -1) {
+			venues.majorAreas.push(idx);
+		}
+			
+	} else {
+		// take out the majorArea entry
+		idx = venues.suburbs[0];
+		idx = idx.split("_")[0];
+		
+		idx = $.inArray(idx, venues.majorAreas);
+		if(idx != -1) {
+			venues.majorAreas.splice(idx, 1);
+		}
+	}
+	*/
+	
+	// adjust the venues and suburbs arrays
+	if(allVenues == true) {
+	
+		// make sure the suburb is in the list
+		idx = venues.venues[0];
+		idx = idx.split("_");
+		idx = idx[1] + '_' + idx[2];
+		idx = idx.split("-");
+		idx = idx[0];
+		
+		tmp = $.inArray(idx, venues.suburbs);
+		if(tmp == -1) {
+			venues.suburbs.push(idx);
+		}
+		
+		// reset all of the venues
+		venues.venues = [];
+	
+	} else {
+	
+		// take out the state identifier from the list
+		idx = venues.venues[0];
+		idx = idx.split("_");
+		idx = idx[1] + '_' + idx[2];
+		idx = idx.split("-");
+		idx = idx[0];
+		
+		idx = $.inArray(idx, venues.suburbs);
+		if(idx != -1) {
+			venues.suburbs.splice(idx, 1);
+		}
+	}
+	
+	// debug code
+	console.log(venues.majorAreas);
+	console.log(venues.suburbs);
+	console.log(venues.venues);
+	console.log(allVenues);
 }
