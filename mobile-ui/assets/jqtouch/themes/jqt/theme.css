@@ -524,4 +524,13 @@ ul.metal li.arrow a small {
     padding-right: 15px;
     line-height: 17px;
 }
+
+li .performance {
+	display:none;
+}
+
+li input.performance {
+	display:none;
+}
+
 /* @end */
