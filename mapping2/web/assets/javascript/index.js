@@ -16,12 +16,15 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-// declare global objects
-var searchObj = new SearchClass();
-var browseObj = new BrowseClass();
+
  
 // show / hide the menu
 $(document).ready(function(){
+
+	// initialise global objects
+	searchObj = new SearchClass();
+	browseObj = new BrowseClass();
+	mappingObj = new MappingClass();
 
 	/*
 	 * page setup
@@ -29,6 +32,8 @@ $(document).ready(function(){
 
 	// hide the messages div
 	$("#messages").hide();
+	$("#status_message").hide();
+	$("#error_message").hide();
 	
 	// prevent a FOUC
 	$('html').removeClass('js');
@@ -275,4 +280,21 @@ $(document).ready(function(){
 	 $('.browseMajorArea').live('click', browseObj.getSuburbsClickEvent);
 	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
 	 $('.browseCheckBox').live('click', browseObj.checkboxClickEvent);
+	 
+	 /*
+	  * map functionality
+	  */
+	 //TODO add map initialision / resize code here
+	$('#tabs').bind('tabsshow', function(event, ui) {
+		if (ui.panel.id == "tabs-3") {
+			console.log("Map tab was shown");
+			if(mappingObj.map == null) {
+				// initalise the map
+				mappingObj.initMap();
+			} else {
+				// update the map
+				mappingObj.updateMap();
+			}
+		}
+	});
 });
