@@ -82,5 +82,5 @@ MappingClass.prototype.initMap = function() {
 
 // function to update the map
 MappingClass.prototype.updateMap = function() {
-	console.log("an update of the map has been requested");
+	//console.log("an update of the map has been requested");
 }

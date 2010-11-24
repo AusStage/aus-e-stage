@@ -287,7 +287,6 @@ $(document).ready(function(){
 	 //TODO add map initialision / resize code here
 	$('#tabs').bind('tabsshow', function(event, ui) {
 		if (ui.panel.id == "tabs-3") {
-			console.log("Map tab was shown");
 			if(mappingObj.map == null) {
 				// initalise the map
 				mappingObj.initMap();
