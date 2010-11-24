@@ -37,7 +37,7 @@
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
 	<script type="text/javascript" src="assets/javascript/browse.js"></script>
-	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
+	<script type="text/javascript" src="assets/javascript/index.js"></script>
 	<!-- prevent a FOUC from the messages div -->
 	<script type="text/javascript">
 		$('html').addClass('js');
