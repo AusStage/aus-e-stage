@@ -302,7 +302,90 @@ BrowseClass.prototype.addToMap = function() {
 			allVenues = false;
 		}
 	});
+	
+	// adjust the venues and suburbs arrays
+	if(allVenues == true && venues.venues.length > 0) {
+	
+		// make sure the suburb is in the list
+		idx = venues.venues[0];
+		idx = idx.split("_");
+		idx = idx[1] + '_' + idx[2];
+		idx = idx.split("-");
+		idx = idx[0];
 		
+		tmp = $.inArray(idx, venues.suburbs);
+		if(tmp == -1) {
+			venues.suburbs.push(idx);
+		}
+		
+		// reset all of the venues
+		venues.venues = [];
+		
+		// tick this suburb
+		idx = 'browse_suburb_' + idx
+		idx = '#' + idx.replace(/[^A-Za-z0-9_]/gi, '-')
+		$(idx).attr('checked', true);
+	
+	} else {
+	
+		if(venues.venues.length > 0) {
+			// take out the state identifier from the list
+			idx = venues.venues[0];
+			idx = idx.split("_");
+			idx = idx[1] + '_' + idx[2];
+			idx = idx.split("-");
+			idx = idx[0];
+		
+			idx = $.inArray(idx, venues.suburbs);
+			if(idx != -1) {
+				venues.suburbs.splice(idx, 1);
+			}
+		
+			// untick this suburb
+			idx = 'browse_suburb_' + idx
+			idx = '#' + idx.replace(/[^A-Za-z0-9_]/gi, '-')
+			$(idx).attr('checked', false);
+		}
+	}
+
+
+	// adjust the suburbs and majorAreas arrays as required
+	if(allSuburbs == true) {
+		// get the state code
+		idx = venues.suburbs[0];
+		idx = idx.split("_")[0];
+		
+		// check to see if the state code is in the list
+		if($.inArray(idx, venues.majorAreas) == -1) {
+			venues.majorAreas.push(idx);
+		}
+		
+		// tick this major area
+		idx = venues.suburbs[0];
+		idx = idx.split("_");
+		
+		$('#browse_majorArea_' + idx).attr('checked', true);
+		
+		// take out all of the suburbs
+		venues.suburbs = [];		
+			
+	} else {
+		// take out the majorArea entry
+		idx = venues.suburbs[0];
+		idx = idx.split("_")[0];
+		
+		idx = $.inArray(idx, venues.majorAreas);
+		if(idx != -1) {
+			venues.majorAreas.splice(idx, 1);
+		}
+		
+		// tick this major area
+		idx = venues.suburbs[0];
+		idx = idx.split("_");
+		
+		$('#browse_majorArea_' + idx).attr('checked', false);
+	}
+	
 	// adjust the majorAreas list to take into account the Australia checkbox
 	if(allStates == true) {	
 		for(var i = 1; i < 9; i++) {
@@ -338,65 +421,6 @@ BrowseClass.prototype.addToMap = function() {
 		}
 	}
 	
-	/*
-	// adjust the suburbs and majorAreas arrays as required
-	if(allSuburbs == true) {
-		// get the state code
-		idx = venues.suburbs[0];
-		idx = idx.split("_")[0];
-		
-		// take out all of the suburbs
-		venues.suburbs = [];
-		
-		// check to see if the state code is in the list
-		if($.inArray(idx, venues.majorAreas) == -1) {
-			venues.majorAreas.push(idx);
-		}
-			
-	} else {
-		// take out the majorArea entry
-		idx = venues.suburbs[0];
-		idx = idx.split("_")[0];
-		
-		idx = $.inArray(idx, venues.majorAreas);
-		if(idx != -1) {
-			venues.majorAreas.splice(idx, 1);
-		}
-	}
-	*/
-	
-	// adjust the venues and suburbs arrays
-	if(allVenues == true) {
-	
-		// make sure the suburb is in the list
-		idx = venues.venues[0];
-		idx = idx.split("_");
-		idx = idx[1] + '_' + idx[2];
-		idx = idx.split("-");
-		idx = idx[0];
-		
-		tmp = $.inArray(idx, venues.suburbs);
-		if(tmp == -1) {
-			venues.suburbs.push(idx);
-		}
-		
-		// reset all of the venues
-		venues.venues = [];
-	
-	} else {
-	
-		// take out the state identifier from the list
-		idx = venues.venues[0];
-		idx = idx.split("_");
-		idx = idx[1] + '_' + idx[2];
-		idx = idx.split("-");
-		idx = idx[0];
-		
-		idx = $.inArray(idx, venues.suburbs);
-		if(idx != -1) {
-			venues.suburbs.splice(idx, 1);
-		}
-	}
 	
 	// debug code
 	console.log(venues.majorAreas);
