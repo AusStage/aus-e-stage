@@ -19,6 +19,9 @@
 // define the browse class
 function BrowseClass() {
 
+	// a variable to store marker data as it is retrieved
+	this.markerData = [];
+
 }
 
 // define a function to populate the major areas cell
@@ -254,7 +257,7 @@ BrowseClass.prototype.checkboxClickEvent = function(event) {
 BrowseClass.prototype.addToMap = function() {
 
 	// declare helper variables
-	var venues = {majorAreas: [], suburbs: [], venues: []};
+	var venues       = {majorAreas: [], suburbs: [], venues: []};
 	var allStates    = true;
 	var allCountries = true;
 	var allSuburbs   = true;
@@ -427,12 +430,72 @@ BrowseClass.prototype.addToMap = function() {
 		}
 	}
 	
+	// adjust the list of venues
+	for(var i = 0; i < venues.venues.length; i++) {
+		venues.venues[i] = venues.venues[i].split('-')[1];
+	}
+	
+	// reset the marker data variable
+	browseObj.markerData = [];
+	
 	if(venues.majorAreas.length > 0 || venues.suburbs.length > 0 || venues.venues.length > 0) {
 		// add these venues to the map
 		// inform the user
 		$('#browse_messages').empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>Adding selected items to the map. Please wait...</p></div>');
+		
+		var ajaxQueue = $.manageAjax.create("mappingBrowseAjaxQueue", {
+			queue: true
+		});
+				
+		// get the data for any major areas
+		for(var i = 0; i < venues.majorAreas.length; i++) {
+		
+			// build the url
+			var url  = BASE_URL + 'markers?&type=state&id=' + venues.majorAreas[i];
+			
+			ajaxQueue.add({
+				success: browseObj.processAjaxData,
+				url: url
+			});
+		}
+		
+		// get the data for any suburbs areas
+		for(var i = 0; i < venues.suburbs.length; i++) {
+		
+			// build the url
+			var url  = BASE_URL + 'markers?&type=suburb&id=' + venues.suburbs[i];
+			
+			ajaxQueue.add({
+				success: browseObj.processAjaxData,
+				url: url
+			});
+		}
+		
+		for(var i = 0; i < venues.venues.length; i++) {
+		
+			// build the url
+			var url  = BASE_URL + 'markers?&type=venue&id=' + venues.venues[i];
+			
+			ajaxQueue.add({
+				success: browseObj.processAjaxData,
+				url: url
+			});
+		}
+			
+			
+				
+		
+		
 	} else {
 		// inform the user
 		$('#browse_messages').empty().append('<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;" id="error_message"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> No items selected, nothing added to the map</p></div>');
 	}
+}
+
+BrowseClass.prototype.processAjaxData = function(data) {
+
+	browseObj.markerData = browseObj.markerData.concat(data);
+	console.log('got more data');
+	console.log(browseObj.markerData.length);
+	//console.log(browseObj.markerData);
 }

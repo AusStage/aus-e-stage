@@ -22,8 +22,8 @@
 $(document).ready(function(){
 
 	// initialise global objects
-	searchObj = new SearchClass();
-	browseObj = new BrowseClass();
+	searchObj  = new SearchClass();
+	browseObj  = new BrowseClass();
 	mappingObj = new MappingClass();
 
 	/*
@@ -197,7 +197,7 @@ $(document).ready(function(){
 			searchObj.clearAccordian();
 			
 			// set up the ajax queue
-			var ajaxQueue = $.manageAjax.create("mappingAjaxQueue", {
+			var ajaxQueue = $.manageAjax.create("mappingSearchAjaxQueue", {
 				queue: true
 			});
 			
@@ -293,6 +293,11 @@ $(document).ready(function(){
 		} else if(settings.url.indexOf("lookup?task=suburb-venue-list", 0) != -1) {
 			$(this).empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' + AJAX_ERROR_MSG.replace('-', 'the request for venue data') + '</p></div>');
 		}
+	});
+	
+	// set up a handler for when the ajax calls finish
+	$("#browse_messages").bind('mappingBrowseAjaxQueue' + 'AjaxStop', function() {
+		console.log('all ajax requests finished');
 	});
 	 
 	 /*
