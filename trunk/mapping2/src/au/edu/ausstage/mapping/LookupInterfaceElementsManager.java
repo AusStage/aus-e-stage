@@ -353,7 +353,7 @@ public class LookupInterfaceElementsManager {
 				// add the data
 				object.put("id", resultSet.getString(1));
 				object.put("name", resultSet.getString(2));
-				object.put("venueUrl", LinksManager.getVenueLink(resultSet.getString(1)));
+				object.put("url", LinksManager.getVenueLink(resultSet.getString(1)));
 				object.put("eventCount", resultSet.getString(4));
 				
 				if(resultSet.getString(3) == null) {
