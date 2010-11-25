@@ -32,9 +32,23 @@
         	//Glabals
 			var gCurrentPerformance = 0;
 		
+		  var _gaq = _gaq || [];
+		   _gaq.push(['_setAccount', 'UA-3158456-14']);
+		
+		
+		
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		  
+  
   		//Our main document load 
 		$(document).ready(function() {			
-							
+			
+		
+			  			
 			//Do have any URL variables - if so load those and then display the current performance form.    
 			if(window.location.href.indexOf('?') != -1) {
 				
@@ -43,6 +57,8 @@
 				for (var i = 0; i < performanceVariables.length; i++) {
 					if (getUrlVars()[ performanceVariables[i]]) {
 						gCurrentPerformance = getUrlVars()[ performanceVariables[i]];
+					    _gaq.push(['_trackPageview', 'DirectLinkToForm/?performance=' + gCurrentPerformance ]);
+
 						getPerformanceData();	
 						jQT.goTo('#FeedbackDisplayWithForm');
 					}
@@ -91,7 +107,9 @@
 			
 		//	alert("submitting the form"); 
 			  window.console.log("about to submit the form");
-
+			   
+			   _gaq.push(['_trackPageview', 'FormSubmitted/?performance=' + gCurrentPerformance ]);
+			   
 				//figure out which server we one 
 				host = buildHost();
 				
@@ -138,13 +156,14 @@
 						url: source, 
 						dataType: mydataType,
 						success: function (data) {
-						populate(data,gCurrentPerformance);
-						jQT.goTo('#FeedbackDisplay');
+							
+								getPerformanceData();	
+								jQT.goTo('#FeedbackDisplay');
 
 						},
 						error:function (xhr, ajaxOptions, thrownError){
-                    	//alert(xhr.status);
-                    	//alert(thrownError);
+                    	alert(xhr.status);
+                    	alert(thrownError);
 						jQT.goTo('#Error');
 
                 	},
@@ -161,7 +180,9 @@
 				
 				
 		function findLocation(){
-		                
+		        
+				 _gaq.push(['_trackPageview', 'PerformancesNearBy']);
+        
 
                 // We pass "updateLocation" a callback function,
                 // to run once we have the coordinates.
@@ -176,7 +197,7 @@
                 });
 
                 if (lookup) {
-                    setDisplay('Looking up location&hellip;');
+                    setLocDisplay('Looking up location&hellip;');
                 }		
 					
 		}
@@ -190,6 +211,9 @@
 		}
 		function getPerformanceData() {
 				
+				_gaq.push(['_trackPageview', 'LoadingPerformanceData/?performance=' + gCurrentPerformance]);
+
+
 				host = buildHost();
 				
 				//now do the stuff to make the host names work 
@@ -286,7 +310,7 @@
 		
 		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
 		  var CurrentPerformance =   $(element).children("span.performance").text();
-		  		  gCurrentPerformance =  CurrentPerformance;  
+		  gCurrentPerformance =  CurrentPerformance;  
 
 		  getPerformanceData();
 
@@ -336,6 +360,8 @@
 			<li class="arrow"><a href="#About">About</a><small class="counter">4</small></li>
 
             </ul>
+            
+             <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Home']);</script>
         </div>
 
 
@@ -351,8 +377,7 @@
             </div>
                      
         <ul class="rounded">
-          <li class="arrow"><a href="#FeedbackDisplay"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>	
-           <li class="arrow"><a href="#FeedbackDisplayWithForm"  onClick="loadFeedback(event)">Be Your Self - with form <span class="performance">4</span></a> <small class="counter">1</small></li>		   
+           <li class="arrow"><a href="#FeedbackDisplayWithForm"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>		   
 	   
         </ul>              
       
@@ -366,7 +391,9 @@
                 <a class="back" href="#">Home</a>
                                 <a class="button slideup" id="infoButton" href="#about">About</a>
 
-            </div>          
+            </div>  
+             <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Search']);</script>
+        
          </div> 
         
           <div id="About-Panel">
@@ -375,7 +402,8 @@
                 <a class="back" href="#">Home</a>
                <a class="button slideup" id="infoButton" href="#about">About</a>
 
-            </div>          
+            </div>  
+
          </div>        
          
           <div id="about" class="selectable">
@@ -384,6 +412,9 @@
                 About this service. 
                 
                 <p><br /><br /><a href="#" class="grayButton goback">Close</a></p>
+                
+             <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'About-Panel']);</script>
+
         </div>
    
      
@@ -391,7 +422,7 @@
 	 <div id="FeedbackDisplay">
             <div class="toolbar">
                 <h1 class="event"></h1>
-                <a class="back" href="#">Home</a>
+                <a class="back" href="#">Back</a>
                <a class="button slideup" id="infoButton" href="#about">About</a>
 
             </div>             
@@ -466,7 +497,8 @@
                 
                 
             </div>
-       
+                  <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Error']);</script>
+
                   
          </div>  
          
