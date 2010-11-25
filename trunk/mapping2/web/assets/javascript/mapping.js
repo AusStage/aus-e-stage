@@ -39,26 +39,33 @@ function MappingClass() {
 					
 	// variable to keep track of common areas
 	this.commonLocales = {
-							"sa":  {lat: -32,        lng: 135.763333, zoom: 6},
-							"wa":  {lat: -25.328055, lng: 122.298333, zoom: 5},
-							"nsw": {lat: -32.163333, lng: 147.016666, zoom: 6},
-							"qld": {lat: -22.486944, lng: 144.431666, zoom: 5},
-							"tas": {lat: -42.021388, lng: 146.593333, zoom: 7},
-							"vic": {lat: -36.854166, lng: 144.281111, zoom: 6},
-							"act": {lat: -35.49,     lng: 149.001388, zoom: 9},
-							"nt":  {lat: -19.383333, lng: 133.357777, zoom: 6},
-							"adelaide":  {lat: -34.93, lng: 138.60, zoom: 14},
-							"perth":     {lat: -31.95, lng: 115.85, zoom: 14},
-							"sydney":    {lat: -33.87, lng: 151.20, zoom: 14},
-							"brisbane":  {lat: -27.47, lng: 153.02, zoom: 14},
-							"hobart":    {lat: -42.88, lng: 147.32, zoom: 14},
-							"melbourne": {lat: -37.82, lng: 144.97, zoom: 14},
-							"canberra":  {lat: -35.30, lng: 149.13, zoom: 14},
-							"darwin":    {lat: -12.45, lng: 130.83, zoom: 14},
-							"international": {lat: -25.947028, lng: 133.209639, zoom: 2},
-							"australia":     {lat: -25.947028, lng: 133.209639, zoom: 4},
-							"unknown":       {lat: -25.947028, lng: 133.209639, zoom: 4}
-						 };               
+							sa:  {lat: -32,        lng: 135.763333, zoom: 6},
+							wa:  {lat: -25.328055, lng: 122.298333, zoom: 5},
+							nsw: {lat: -32.163333, lng: 147.016666, zoom: 6},
+							qld: {lat: -22.486944, lng: 144.431666, zoom: 5},
+							tas: {lat: -42.021388, lng: 146.593333, zoom: 7},
+							vic: {lat: -36.854166, lng: 144.281111, zoom: 6},
+							act: {lat: -35.49,     lng: 149.001388, zoom: 9},
+							nt:  {lat: -19.383333, lng: 133.357777, zoom: 6},
+							adelaide:  {lat: -34.93, lng: 138.60, zoom: 14},
+							perth:     {lat: -31.95, lng: 115.85, zoom: 14},
+							sydney:    {lat: -33.87, lng: 151.20, zoom: 14},
+							brisbane:  {lat: -27.47, lng: 153.02, zoom: 14},
+							hobart:    {lat: -42.88, lng: 147.32, zoom: 14},
+							melbourne: {lat: -37.82, lng: 144.97, zoom: 14},
+							canberra:  {lat: -35.30, lng: 149.13, zoom: 14},
+							darwin:    {lat: -12.45, lng: 130.83, zoom: 14},
+							international: {lat: -25.947028, lng: 133.209639, zoom: 2},
+							australia:     {lat: -25.947028, lng: 133.209639, zoom: 4},
+							unknown:       {lat: -25.947028, lng: 133.209639, zoom: 4}
+						 };
+						 
+	// variable to store details of the markers
+	this.markerData = {contributors:  {hashes: [], objects: []}, 
+					   organisations: {hashes: [], objects: []}, 
+					   venues:        {hashes: [], objects: []}, 
+					   events:        {hashes: [], objects: []}
+					  };              
 
 }
 
