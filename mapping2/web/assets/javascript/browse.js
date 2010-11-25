@@ -103,7 +103,7 @@ BrowseClass.prototype.getSuburbsClickEvent = function(event) {
 			
 			// add the spans 
 			//list += '<span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '" title="Total Venues: ' + data[i].venueCount + ' / Mapped Venues: ' + data[i].mapVenueCount + '">' + data[i].name + ' ';
-			list += '<span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '">' + data[i].name + ' ';
+			list += ' <span class="clickable browseSuburb" id="browse_state_' + id + '_suburb_' + data[i].name.replace(/[^A-Za-z0-9_]/gi, '-') + '" name="browse_state_' + id + '_suburb_' + data[i].name + '">' + data[i].name + ' ';
 			list += '(' + data[i].mapVenueCount  + '/' + data[i].venueCount + ')</span></li>';
 		}
 		
@@ -163,7 +163,7 @@ BrowseClass.prototype.getVenuesClickEvent = function(event) {
 			}
 			
 			// add the span
-			list += ' <span class="browseVenue">' + data[i].name + ' (' + data[i].eventCount + ')</span></li>';
+			list += ' <span class="browseVenue"><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + ' (' + data[i].eventCount + ')</a></span></li>';
 		}
 		
 		list += '</ul>';
