@@ -206,50 +206,50 @@ URL: http://beta.ausstage.edu.au/mapping3/lookup?task=suburb-venue-list&id=1_Ade
     "id" : "3793",
     "mapEventCount" : "1",
     "name" : "109 South Terrace",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3793"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3793"
   },
   { "eventCount" : "15",
     "id" : "4817",
     "mapEventCount" : "15",
     "name" : "1st Site Club",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4817"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4817"
   },
   { "eventCount" : "1",
     "id" : "3990",
     "mapEventCount" : "1",
     "name" : "256 Rundle Street",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3990"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3990"
   },
   { "eventCount" : "1",
     "id" : "10592",
     "mapEventCount" : "1",
     "name" : "39a Rundle Street",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10592"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10592"
   },
   { "eventCount" : "3",
     "id" : "10436",
     "mapEventCount" : "3",
     "name" : "AIT Arts (Acting Studio)",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10436"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=10436"
   },
   { "eventCount" : "25",
     "id" : "4193",
     "mapEventCount" : "25",
     "name" : "AMP Theatre",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4193"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=4193"
   },
 ...
   { "eventCount" : "2",
     "id" : "2994",
     "mapEventCount" : "2",
     "name" : "Wyatt Hall",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2994"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=2994"
   },
   { "eventCount" : "3",
     "id" : "3917",
     "mapEventCount" : "3",
     "name" : "X Space",
-    "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3917"
+    "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3917"
   }
 ]
 }}}
