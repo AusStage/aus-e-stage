@@ -481,10 +481,6 @@ BrowseClass.prototype.addToMap = function() {
 				url: url
 			});
 		}
-			
-			
-				
-		
 		
 	} else {
 		// inform the user
@@ -492,10 +488,13 @@ BrowseClass.prototype.addToMap = function() {
 	}
 }
 
+// function to process the results of the ajax marker data lookups
 BrowseClass.prototype.processAjaxData = function(data) {
-
 	browseObj.markerData = browseObj.markerData.concat(data);
-	console.log('got more data');
-	console.log(browseObj.markerData.length);
-	//console.log(browseObj.markerData);
+}
+
+// function to add the data to the map
+BrowseClass.prototype.addDataToMap = function() {
+	mappingObj.addVenueBrowseData(browseObj.markerData);
+	$('#browse_messages').empty();
 }
