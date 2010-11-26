@@ -296,23 +296,16 @@ $(document).ready(function(){
 	});
 	
 	// set up a handler for when the ajax calls finish
-	$("#browse_messages").bind('mappingBrowseAjaxQueue' + 'AjaxStop', function() {
-		console.log('all ajax requests finished');
-	});
+	$("#browse_messages").bind('mappingBrowseAjaxQueue' + 'AjaxStop', browseObj.addDataToMap);
 	 
 	 /*
 	  * map functionality
 	  */
 	 //TODO add map initialision / resize code here
 	$('#tabs').bind('tabsshow', function(event, ui) {
-		if (ui.panel.id == "tabs-3") {
-			if(mappingObj.map == null) {
-				// initalise the map
-				mappingObj.initMap();
-			} else {
-				// update the map
-				mappingObj.updateMap();
-			}
+		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
+			// update the map
+			mappingObj.updateMap();
 		}
 	});
 });

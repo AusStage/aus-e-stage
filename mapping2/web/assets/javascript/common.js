@@ -29,7 +29,8 @@ var ADD_VIEW_BTN_HELP = '<span class="ui-icon ui-icon-help clickable use-tipsy s
 var searchObj    = null;
 var browseObj    = null;
 var mappingObj   = null;
-var mapCoordData = [];
+
+var mapIcons = { venue: BASE_URL + 'assets/images/venue-icon.png'}
  
 /**
  * Common functions used across more than one page in the site

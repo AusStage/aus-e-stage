@@ -65,7 +65,10 @@ function MappingClass() {
 					   organisations: {hashes: [], objects: []}, 
 					   venues:        {hashes: [], objects: []}, 
 					   events:        {hashes: [], objects: []}
-					  };              
+					  }; 
+					  
+	// variable to keep track of the markers on the map
+	this.mapMarkers = [];             
 
 }
 
@@ -89,5 +92,89 @@ MappingClass.prototype.initMap = function() {
 
 // function to update the map
 MappingClass.prototype.updateMap = function() {
-	//console.log("an update of the map has been requested");
+
+	// do we need to reset or initialise the map
+	if(mappingObj.map == null) {
+		// initialise the map
+		mappingObj.initMap();
+	} else {
+		// reset the map
+	
+		// remove any existing markers
+		for(var i = 0; i < mappingObj.mapMarkers.length; i++) {
+			// remove the marker from the map
+			mappingObj.mapMarkers[i].setMap(null);
+		
+			// null this object
+			mappingObj.mapMarkers[i] = null;
+		}
+	
+		// reset the array
+		mappingObj.mapMarkers = [];
+	}
+	
+	// add the markers to the map
+	// TODO add other marker types
+	var venues = mappingObj.markerData.venues;
+	
+	for(var i = 0; i < venues.hashes.length; i++) {
+	
+		// build the title
+		var title = venues.objects[i].name + ', ';
+		
+		if(venues.objects[i].street != null) {
+			 title += venues.objects[i].street + ', ';
+		} 
+		
+		if(venues.objects[i].suburb != null) {
+			title += venues.objects[i].suburb;
+		} else {
+			title = title.substr(0, title.length - 2);
+		}
+		
+		var marker = new google.maps.Marker({  
+			position: new google.maps.LatLng(venues.objects[i].latitude, venues.objects[i].longitude),
+			title:    title,
+			icon:     mapIcons.venue,
+			map:      mappingObj.map  
+		});
+		
+		mappingObj.mapMarkers.push(marker);
+	}	
+}
+
+// function to update the list of venues with data from the browse interface
+MappingClass.prototype.addVenueBrowseData = function(data) {
+
+	// declare helper variables
+	var hash = null;
+
+	// loop through the data
+	for(var i = 0; i < data.length; i++) {
+	
+		// compute a hash
+		hash = mappingObj.computeLatLngHash(data[i].latitude, data[i].longitude, data[i].id);
+		
+		// check to see if we have this venue already
+		if($.inArray(hash, mappingObj.markerData.venues.hashes) == -1) {
+			mappingObj.markerData.venues.hashes.push(hash);
+			mappingObj.markerData.venues.objects.push(data[i]);
+		}		
+	}
+	
+	// update the map
+	//mappingObj.updateMap();
+	
+	// switch to the map tab
+	$('#tabs').tabs('select', 2);
+}
+
+// compute a LatLng hash
+MappingClass.prototype.computeLatLngHash = function(latitude, longitude, id) {
+
+	var lat = parseFloat(latitude);
+	var lng = parseFloat(longitude);
+	var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
+	latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","") + id;
+	return latlngHash;
 }
