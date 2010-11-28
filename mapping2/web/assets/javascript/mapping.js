@@ -15,6 +15,14 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+// define a MarkerData class
+function MarkerData() {
+	this.contributors  = [];
+	this.organisations = [];
+	this.venues        = [];
+	this.events        = [];
+}
 
 // define our mapping class
 function MappingClass() {
@@ -61,11 +69,7 @@ function MappingClass() {
 						 };
 						 
 	// variable to store details of the markers
-	this.markerData = {contributors:  {hashes: [], objects: []}, 
-					   organisations: {hashes: [], objects: []}, 
-					   venues:        {hashes: [], objects: []}, 
-					   events:        {hashes: [], objects: []}
-					  }; 
+	this.markerData = {hashes: [], objects: []};
 					  
 	// variable to keep track of the markers on the map
 	this.mapMarkers = [];             
@@ -113,34 +117,46 @@ MappingClass.prototype.updateMap = function() {
 		mappingObj.mapMarkers = [];
 	}
 	
+	// declare helper variables
+	var title = null;
+	
 	// add the markers to the map
 	// TODO add other marker types
-	var venues = mappingObj.markerData.venues;
+	var objects = mappingObj.markerData.objects;
 	
-	for(var i = 0; i < venues.hashes.length; i++) {
+	for(var i = 0; i < objects.length; i++) {
 	
-		// build the title
-		var title = venues.objects[i].name + ', ';
+		// get the venues
+		var venues = objects[i].venues;
 		
-		if(venues.objects[i].street != null) {
-			 title += venues.objects[i].street + ', ';
-		} 
+		for(var x = 0; x < venues.length; x++) {
+	
+			// build the title
+			var title = venues[x].name + ', ';
 		
-		if(venues.objects[i].suburb != null) {
-			title += venues.objects[i].suburb;
-		} else {
-			title = title.substr(0, title.length - 2);
+			if(venues[x].street != null) {
+				 title += venues[x].street + ', ';
+			} 
+		
+			if(venues[x].suburb != null) {
+				title += venues[x].suburb;
+			} else {
+				title = title.substr(0, title.length - 2);
+			}
+		
+			var marker = new google.maps.Marker({  
+				position: new google.maps.LatLng(venues[x].latitude, venues[x].longitude),
+				title:    title,
+				icon:     mapIcons.venue,
+				map:      mappingObj.map  
+			});
+		
+			mappingObj.mapMarkers.push(marker);
 		}
-		
-		var marker = new google.maps.Marker({  
-			position: new google.maps.LatLng(venues.objects[i].latitude, venues.objects[i].longitude),
-			title:    title,
-			icon:     mapIcons.venue,
-			map:      mappingObj.map  
-		});
-		
-		mappingObj.mapMarkers.push(marker);
-	}	
+	}
+	
+	//debug code
+	console.log(mappingObj.mapMarkers.length);
 }
 
 // function to update the list of venues with data from the browse interface
@@ -148,33 +164,41 @@ MappingClass.prototype.addVenueBrowseData = function(data) {
 
 	// declare helper variables
 	var hash = null;
+	var idx  = null;
+	var obj  = null;
 
 	// loop through the data
 	for(var i = 0; i < data.length; i++) {
 	
 		// compute a hash
-		hash = mappingObj.computeLatLngHash(data[i].latitude, data[i].longitude, data[i].id);
+		hash = mappingObj.computeLatLngHash(data[i].latitude, data[i].longitude);
 		
 		// check to see if we have this venue already
-		if($.inArray(hash, mappingObj.markerData.venues.hashes) == -1) {
-			mappingObj.markerData.venues.hashes.push(hash);
-			mappingObj.markerData.venues.objects.push(data[i]);
-		}		
+		idx = $.inArray(hash, mappingObj.markerData.hashes);
+		if(idx == -1) {
+			// not seen this lat / lng before
+			obj = new MarkerData();
+			obj.venues.push(data[i]);
+			
+			mappingObj.markerData.hashes.push(hash);
+			mappingObj.markerData.objects.push(obj);
+		} else {
+			// have seen this lat / lng before
+			obj = mappingObj.markerData.objects[idx];
+			obj.venues.push(data[i]);		
+		}
 	}
 	
-	// update the map
-	//mappingObj.updateMap();
-	
-	// switch to the map tab
+	// switch to the map tab including an update
 	$('#tabs').tabs('select', 2);
 }
 
 // compute a LatLng hash
-MappingClass.prototype.computeLatLngHash = function(latitude, longitude, id) {
+MappingClass.prototype.computeLatLngHash = function(latitude, longitude) {
 
 	var lat = parseFloat(latitude);
 	var lng = parseFloat(longitude);
 	var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
-	latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","") + id;
+	latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
 	return latlngHash;
 }
