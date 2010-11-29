@@ -34,6 +34,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.3&amp;sensor=false"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/markerwithlabel-1.0.1.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
@@ -120,20 +121,20 @@
 				<div id="tabs-2">
 					<h2>Browse Areas to Find Venues</h2>
 					<div id="browse_header" style="height: 30px; width=100%">
-						<div style="float:left; width: 28%; height: 100%; padding-right: 10px;">
+						<div style="float:left; width: 26%; height: 100%; padding-right: 10px;">
 							<h3>Countries and States</h3>
 						</div>
-						<div style="float:left; width: 33%; height: 100%; margin-left: 10px;">
+						<div style="float:left; width: 32%; height: 100%; margin-left: 10px;">
 							<h3>Suburbs</h3>
 						</div>
-						<div style="float: right; width: 34%; height: 100%; padding-left: 10px;">
+						<div style="float: right; width: 37%; height: 100%; padding-left: 10px;">
 							<h3>Venues</h3>
 						</div>
 					</div>
 					<div id="browse_content" style="height: 380px;">
-						<div id="browse_major_area" style="float: left; width: 28%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
-						<div id="browse_suburb" style="float: left; width: 33%; height: 100%; overflow: auto; margin-left: 10px;"></div>
-						<div id="browse_venue"  style="float: right; width: 34%; height: 100%; overflow: auto; border-left: 1px solid #000; padding-left: 10px;"></div>
+						<div id="browse_major_area" style="float: left; width: 26%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
+						<div id="browse_suburb" style="float: left; width: 32%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
+						<div id="browse_venue"  style="float: right; width: 37%; height: 100%; overflow: auto; padding-left: -10px;"></div>
 					</div>
 					<div id="browse_footer" style="height:50px; width=100%;">
 						<div style="float:left; padding-top: 15px;" id="browse_messages"></div>

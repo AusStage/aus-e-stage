@@ -139,7 +139,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 		if(data[i].mapEventCount > 0) {
 			list += '<td style="text-align: center"><input type="checkbox" name="searchContributor" class="searchContributor" value="' + data[i].id + '" title="Tick to add this contributor to the map"/></td>';
 		} else {
-			list += '<td>&nbsp;</td>';
+			list += '<td style="text-align: center"><input type="checkbox" disabled/></td>';
 		}
 		
 		list += '<td class="nowrap"><a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + " " + data[i].lastName + ' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a></td>';
@@ -198,7 +198,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 		if(data[i].mapEventCount > 0) {
 			list += '<td style="text-align: center"><input type="checkbox" name="searchOrganisation" class="searchOrganisation" value="' + data[i].id + '" title="Tick to add this organisation to the map"/></td>';
 		} else {
-			list += '<td>&nbsp;</td>';
+			list += '<td style="text-align: center"><input type="checkbox" disabled/></td>';
 		}
 		
 		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
@@ -264,7 +264,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 		if(data[i].latitude != null) {
 			list += '<td style="text-align: center"><input type="checkbox" name="searchVenue" class="searchVenue" value="' + data[i].id + '" title="Tick to add this venue to the map"/></td>';
 		} else {
-			list += '<td>&nbsp;</td>';
+			list += '<td style="text-align: center"><input type="checkbox" disabled/></td>';
 		}
 		
 		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
@@ -328,7 +328,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 		if(data[i].venue.latitude != null) {
 			list += '<td style="text-align: center"><input type="checkbox" name="searchEvent" class="searchEvent" value="' + data[i].id + '" title="Tick to add this event to the map"/></td>';
 		} else {
-			list += '<td>&nbsp;</td>';
+			list += '<td style="text-align: center"><input type="checkbox" disabled/></td>';
 		}
 		
 		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
