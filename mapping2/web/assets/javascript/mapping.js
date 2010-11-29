@@ -129,6 +129,22 @@ MappingClass.prototype.updateMap = function() {
 		// get the venues
 		var venues = objects[i].venues;
 		
+		// create a marker with a label
+		var marker = new MarkerWithLabel({
+			position:     new google.maps.LatLng(venues[0].latitude, venues[0].longitude),
+			map:          mappingObj.map,
+			draggable:    false,
+			labelContent: '<table class="mapIcon"><tr><td><img src="' + mapIconography.venue +'"/></td></tr><tr><td>' + venues.length + '</td></tr></table>',
+			//labelContent:   '<div><div style="width: 25px; height: 32px"><img src="' + mapIconography.venue +'"/></div></div>',
+			labelClass:   'mapIcon',
+			labelAnchor:  new google.maps.Point(13, 58),
+			icon:         mapIconography.pointer
+		});
+		
+		mappingObj.mapMarkers.push(marker);
+		
+		/*
+		
 		for(var x = 0; x < venues.length; x++) {
 	
 			// build the title
@@ -143,20 +159,19 @@ MappingClass.prototype.updateMap = function() {
 			} else {
 				title = title.substr(0, title.length - 2);
 			}
-		
+			
 			var marker = new google.maps.Marker({  
 				position: new google.maps.LatLng(venues[x].latitude, venues[x].longitude),
 				title:    title,
 				icon:     mapIcons.venue,
 				map:      mappingObj.map  
 			});
-		
-			mappingObj.mapMarkers.push(marker);
 		}
+		*/
 	}
 	
 	//debug code
-	console.log(mappingObj.mapMarkers.length);
+	//console.log(mappingObj.mapMarkers.length);
 }
 
 // function to update the list of venues with data from the browse interface
