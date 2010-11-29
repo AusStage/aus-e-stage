@@ -34,15 +34,11 @@ function MappingClass() {
 	this.options = null;
 	
 	// variable to keep track of the map style
-	this.mapStyle = [ 
-						{featureType: "poi.park", elementType: "all", stylers:[ {invert_lightness: true}, {visibility: "simplified"}, {lightness: 40},{hue: "#ccff00"}, {saturation: -79}]},
-						{featureType: "water", elementType: "all", stylers: [ { hue: "#00ffdd" },{visibility: "simplified"},{lightness: 95} ] } ,
-						{featureType: "landscape", elementType: "all", stylers:[ {lightness: -30},{hue: "#ccff00"},  {saturation: -79}]},
-						{featureType: "road.highway", elementType: "all", stylers:[{visibility: "simplified"}, {lightness: 40},{hue: "#c0c0c0"}, {saturation: -79}, {gamma: 0.44}]},
-						{featureType: "road.arterial", elementType: "all", stylers:[{visibility: "simplified"}, {lightness: 40},{hue: "#c0c0c0"}, {saturation: -79}, {gamma: 0.44}]},
-						{featureType: "road.local", elementType: "all", stylers:[ {visibility: "simplified"}, {lightness: 40},{hue: "#c0c0c0"}, {saturation: -79}, {gamma: 0.44}]},
-						{featureType: "administrative", elementType: "all", stylers:[{visibility: "off"}, { hue: "#0099ff"},{lightness: 82},{ visibility: "off"}]},
-						{featureType: "poi", elementType: "all", stylers:[ {visibility: "off"}]} 
+	this.mapStyle = [{ featureType: "all",   elementType: "all", stylers: [ { lightness: 0 }, { saturation: 0 },{ visibility: "off" } ] },
+					 { featureType: "water", elementType: "geometry", stylers: [ { visibility: "on" }, { lightness: 60 }, { saturation: -24 } ] },
+					 { featureType: "landscape", elementType: "geometry", stylers: [ { lightness: 0 }, { saturation: -100 }, { visibility: "on" } ]},
+					 { featureType: "road", elementType: "geometry", stylers: [ { visibility: "on" }, { saturation: -100 }, { lightness: 70 }]},
+					 { featureType: "transit", elementType: "geometry", stylers: [ { saturation: -100 }, { lightness: 100 }]}
 					];
 					
 	// variable to keep track of common areas
