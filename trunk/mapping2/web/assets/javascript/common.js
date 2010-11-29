@@ -30,11 +30,11 @@ var searchObj    = null;
 var browseObj    = null;
 var mappingObj   = null;
 
-var mapIcons = { venue: BASE_URL + 'assets/images/venue-icon.png'}
-
-var mapIconography = { pointer: BASE_URL + 'assets/images/map-iconography-pointer.png',
-					   lozenge: BASE_URL + 'assets/images/map-iconography-lozenge.png',
-					   venue:   BASE_URL + 'assets/images/map-iconography-venue.png'
+var mapIconography = { pointer:    BASE_URL + 'assets/images/map-iconography-pointer.png',
+					   lozenge:    BASE_URL + 'assets/images/map-iconography-lozenge.png',
+					   venue:      BASE_URL + 'assets/images/map-iconography-venue.png',
+					   iconWidth:  '24',
+					   iconHeight: '32'
 					 };
  
 /**
