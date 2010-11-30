@@ -1,0 +1,219 @@
+/*
+ * This file is part of the AusStage Mapping Service
+ *
+ * The AusStage Mapping Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The AusStage Mapping Service is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* primary structure styles */
+
+* {
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+	font-size: 95%;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+}
+
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -2em;
+	overflow: hidden;
+}
+
+.footer, .push {
+	clear: both;
+	height: 2em;
+}
+
+.tab-container {
+	width: 100%;
+	height: 100%;
+}
+
+/* specific styles for the header */
+.header {
+	height: 64px;
+	padding:0px;
+	background-image: url('images/ausstagehomebrand.gif');
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+.header h1 {
+	color: #eeeeee;
+	text-align: right;
+	font-weight: normal;
+	padding-top: 24px;
+	padding-right: 10px;
+}
+
+/* ui tabs styles to fix layout issue */
+.fix-ui-tabs {
+	height: 40px;
+}
+
+/* specific styles for the footer */
+.footer  {
+	color:#fff;
+	font-size: 90%;
+	margin-top: 10px;
+	padding-top: 3px;
+}
+
+.footer p {
+	margin: 0;
+    text-align: center;
+}
+
+.footer a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.footer a:hover {
+	text-decoration: underline;
+}
+
+/* specific styles for the sidebar */
+.sidebar {
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px
+	overflow: hidden;
+	width: 150px;
+	padding-bottom: 32767px;
+	margin-bottom: -32767px;
+}
+
+.sidebar ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+.sidebar ul a {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.sidebar a:hover {
+	text-decoration: underline;
+}
+
+/* specific styles for the main content div */
+.main {
+	margin-left: 160px;
+	min-height: 100%;
+}
+
+/* Styles for forms */
+table.formTable {
+	border-width: 0px;
+	border-spacing: 3px;
+	border-collapse: separate;
+}
+
+table.formTable th {
+	text-align: left;
+
+}
+
+table.formTable th label {
+	text-align: left;
+
+}
+
+/* Styles for tables */
+table.searchResults {
+	background-color: #fff;
+	text-align: left;
+	border: 1px solid #aaaaaa;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table.searchResults th {
+	border: 1px solid #aaaaaa;
+	padding: 2px 5px 2px 5px;
+	color: #000;
+	white-space: nowrap;
+}
+
+table.searchResults td {
+	vertical-align: top;
+	padding: 2px 5px 2px 5px;
+}
+
+tr.odd {
+	background-color: #eeeeee;
+}
+
+table.searchResults tfoot {
+	border: 1px solid #aaaaaa;
+}
+
+td.nowrap {
+	white-space: nowrap;
+}
+
+td.alignRight {
+	text-align: right;
+}
+
+th.alignRight {
+	text-align: right;
+}
+
+/* style for things that are clickable */
+.clickable {
+	cursor: pointer;
+}
+
+/* style for browse lists */
+.browseList {
+	list-style: none;
+	padding-left: 5px;
+}
+
+.browseHighlight {
+	width: 85%;
+	display: inline-block;
+}
+
+
+/* Styles for the Tipsy Library */
+.tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }
+.tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
+.tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+.tipsy-arrow { position: absolute; background: url('images/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
+.tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
+.tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
+.tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
+.tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
+.tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
+.tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
+.tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
+.tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+
+/* prevent a FOUC */
+.js #messages {display: none;}
+.js #add_search_results_div {display: none;}
+.hideMe {display: none;}
+
