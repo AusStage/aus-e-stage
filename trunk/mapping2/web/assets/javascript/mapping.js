@@ -34,11 +34,11 @@ function MappingClass() {
 	this.options = null;
 	
 	// variable to keep track of the map style
-	this.mapStyle = [{ featureType: "all",   elementType: "all", stylers: [ { lightness: 0 }, { saturation: 0 },{ visibility: "off" } ] },
-					 { featureType: "water", elementType: "geometry", stylers: [ { visibility: "on" }, { lightness: 60 }, { saturation: -24 } ] },
-					 { featureType: "landscape", elementType: "geometry", stylers: [ { lightness: 0 }, { saturation: -100 }, { visibility: "on" } ]},
-					 { featureType: "road", elementType: "geometry", stylers: [ { visibility: "on" }, { saturation: -100 }, { lightness: 70 }]},
-					 { featureType: "transit", elementType: "geometry", stylers: [ { saturation: -100 }, { lightness: 100 }]}
+	this.mapStyle = [ { featureType: "all", elementType: "all", stylers: [ { visibility: "off" } ]},
+					  { featureType: "water", elementType: "geometry", stylers: [ { visibility: "on" }, { lightness: 40 }, { saturation: 0 } ] },
+					  { featureType: "landscape", elementType: "geometry", stylers: [ { visibility: "on" }, { saturation: -100 } ]},
+					  { featureType: "road", elementType: "geometry", stylers: [ { visibility: "on" }, { saturation: -100 }, { lightness: 40 } ] },
+					  { featureType: "transit", elementType: "geometry", stylers: [ { saturation: -100 }, { lightness: 40 } ] }
 					];
 					
 	// variable to keep track of common areas
