@@ -1,8 +1,33 @@
 #summary Information About the AusStage Colour Scheme
 
-The following !AusStage colour scheme should be used for all continuing web development. The colours are defined in the following 4 files:
+The following !AusStage colour scheme should be used for all continuing web development. The colours are defined in the following 5 files:
 
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-pallete.html AusStage Colour Pallette] <br/> a simple HTML file listing all of the colours
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colours.css AusStage Colours - Foreground CSS] <br/>  a CSS file that can be used to colour HTML elements, for example the colour of text
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css AusStage Colours - Background CSS] <br/> a CSS file that be used to colour the background of HTML element, for example the background of a table cell
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/jquery-ui-1.8.6.custom.css AusStage Colours - JQuery UI] <br/> a CSS file that defines the AusStage colours for use with the JQuery UI library. (Developed using version 1.8.6 of the library]
+* AusStage Colour Palette *
+
+A HTML version of the colour palette that can be used to view the different colours 
+
+[http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-pallete.html Download Link]
+
+* AusStage Colours - Foreground CSS * 
+
+A CSS version of the colour palette which defines styles that can be applied to HTML elements, such as the colour of text
+
+[http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colours.css Download Link]
+
+* AusStage Colours - Background CSS * 
+
+A CSS version of the colour palette which defines styles that can be applied to the background of HTML elements, such as the background colour of a table cell
+
+[http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css Download Link]
+
+* AusStage Colours - jQuery UI *
+
+A version of the CSS used with the [http://jqueryui.com/ jQuery UI] library that uses AusStage colours. (Developed using version 1.8.6 of the library)
+
+[http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/jquery-ui-1.8.6.custom.css Download Link]
+
+* AusStage Colours - KML Styles *
+
+A version of the colour palette based on the CSS version that uses style elements as used in [http://en.wikipedia.org/wiki/Keyhole_Markup_Language KML files], such as maps intended for use in [http://www.google.com/earth/index.html Google Earth]
+
+Download Link not available at this time
