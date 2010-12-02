@@ -156,8 +156,16 @@
 						url: source, 
 						dataType: mydataType,
 						success: function (data) {
-							
-								getPerformanceData();	
+												
+							$(".feedback").items(data.feedback.sort(
+								function(a, b){
+									var dateA=new Date(a.date), dateB=new Date(b.date)
+									return dateB- dateA
+								}
+								)).chain();//load this data in the feedback
+								 
+								$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 
+									
 								jQT.goTo('#FeedbackDisplay');
 
 						},
@@ -237,14 +245,15 @@
 						url: source, 
 						dataType: mydataType,
 						success: function (data) {
+							$(".feedbackForm").items(data.feedback.sort(
+							function(a, b){
+								var dateA=new Date(a.date), dateB=new Date(b.date)
+								return dateB- dateA
+							}
+							)).chain();//load this data in the feedback 
+						
+							$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 							populate(data);
 							
-							//check to make sure we do have some data
-							if(data.event == '') {
-								jQT.goTo('#Error');
-
-							};
-								
-							populate(data);
 							window.console.log(data);
 						},
 					
@@ -261,38 +270,7 @@
 
 		}; 
 		
-		/*
-		* This is the main call that loads the json in to the correct D
-		*
-		**/
-		function populate(data){
-			//alert("ye got here"); 
-			//window.console.log(data);
-			//$("#Add").item(data).chain();//load this data in the feedback 
-			
-			//This is a bit of hack - would be nice to just have this once and te form is not display 
-			$(".feedback").items(data.feedback.sort(
-			function(a, b){
-		 		var dateA=new Date(a.date), dateB=new Date(b.date)
-		 		return dateB- dateA
-			}
-			)).chain();//load this data in the feedback
-			 
-			$(".feedbackForm").items(data.feedback.sort(
-			function(a, b){
-		 		var dateA=new Date(a.date), dateB=new Date(b.date)
-		 		return dateB- dateA
-			}
-			
-			)).chain();//load this data in the feedback 
-			$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 	
-			$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 	
-			
-		
-		};
-		
-	
-		
+				
 		
 		function loadFeedbackForm() {
 		
