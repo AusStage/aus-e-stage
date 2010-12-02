@@ -2,31 +2,31 @@
 
 The following !AusStage colour scheme should be used for all continuing web development. The colours are defined in the following 5 files:
 
-* AusStage Colour Palette *
+* !AusStage Colour Palette *
 
 A HTML version of the colour palette that can be used to view the different colours 
 
 [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-pallete.html Download Link]
 
-* AusStage Colours - Foreground CSS * 
+* !AusStage Colours - Foreground CSS * 
 
 A CSS version of the colour palette which defines styles that can be applied to HTML elements, such as the colour of text
 
 [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colours.css Download Link]
 
-* AusStage Colours - Background CSS * 
+* !AusStage Colours - Background CSS * 
 
 A CSS version of the colour palette which defines styles that can be applied to the background of HTML elements, such as the background colour of a table cell
 
 [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css Download Link]
 
-* AusStage Colours - jQuery UI *
+* !AusStage Colours - jQuery UI *
 
 A version of the CSS used with the [http://jqueryui.com/ jQuery UI] library that uses AusStage colours. (Developed using version 1.8.6 of the library)
 
 [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/jquery-ui-1.8.6.custom.css Download Link]
 
-* AusStage Colours - KML Styles *
+* !AusStage Colours - KML Styles *
 
 A version of the colour palette based on the CSS version that uses style elements as used in [http://en.wikipedia.org/wiki/Keyhole_Markup_Language KML files], such as maps intended for use in [http://www.google.com/earth/index.html Google Earth]
 
