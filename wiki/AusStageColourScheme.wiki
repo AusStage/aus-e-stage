@@ -2,7 +2,7 @@
 
 The following !AusStage colour scheme should be used for all continuing web development. The colours are defined in the following 4 files:
 
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-pallete.html AusStage Colour Pallette] a simple HTML file listing all of the colours
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colours.css AusStage Colours - Foreground CSS] a CSS file that can be used to colour HTML elements, for example the colour of text
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css AusStage Colours - Background CSS] a CSS file that be used to colour the background of HTML element, for example the background of a table cell
- # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/jquery-ui-1.8.6.custom.css AusStage Colours - JQuery UI] a CSS file that defines the AusStage colours for use with the JQuery UI library. (Developed using version 1.8.6 of the library]
+ # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-pallete.html AusStage Colour Pallette] <br/> a simple HTML file listing all of the colours
+ # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colours.css AusStage Colours - Foreground CSS] <br/>  a CSS file that can be used to colour HTML elements, for example the colour of text
+ # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css AusStage Colours - Background CSS] <br/> a CSS file that be used to colour the background of HTML element, for example the background of a table cell
+ # [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/jquery-ui-1.8.6.custom.css AusStage Colours - JQuery UI] <br/> a CSS file that defines the AusStage colours for use with the JQuery UI library. (Developed using version 1.8.6 of the library]
