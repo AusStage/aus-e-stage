@@ -22,7 +22,7 @@ A CSS version of the colour palette which defines styles that can be applied to 
 
 * !AusStage Colours - jQuery UI *
 
-A version of the CSS used with the [http://jqueryui.com/ jQuery UI] library that uses AusStage colours. (Developed using version 1.8.6 of the library)
+A version of the CSS used with the [http://jqueryui.com/ jQuery UI] library that uses !AusStage colours. (Developed using version 1.8.6 of the library)
 
 [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/jquery-ui-1.8.6.custom.css Download Link]
 
