@@ -1,0 +1,2201 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+body
+	{background-color:#FFF;
+	color:#000;
+	font-family:arial,sans-serif}
+div.swatch
+	{float:left;
+	width:280px;
+	margin:0 20px 20px 0}
+div.outer
+	{float:left;
+	border:1px solid #CCC;
+	padding:1px}
+div.shadow
+	{padding:1px}
+h1
+	{font-size:26px;
+	font-weight:normal;
+	padding-bottom:5px;
+	margin-bottom:28px;
+	border-bottom:1px solid #CCC}
+div.color
+	{width:80px;
+	height:80px;
+	padding:0;
+	margin:0}
+div.caption
+	{float:left;
+	color:#555;
+	font-size:12px;
+	line-height:16px;
+	margin:0 0 0 10px}
+h2
+	{margin:0 0 4px 0;
+	padding:0 0 2px 0;
+	width:260px;
+	font-size:24px;
+	font-weight:normal}
+h3
+	{margin:0 0 4px 0;
+	padding:0 0 2px 0;
+	width:160px;
+	font-size:13px;
+	font-weight:bold;
+	border-bottom:1px solid #E6E6E6}
+-->
+</style>
+</head>
+<body>
+<h1>AusStage Color Chart</h1>
+<p>Version 0.3, prepared by Jonathan Bollen, 3 December 2010. References: <a href="redir.aspx?C=68203f78c688445382bc94adf245fa57&amp;URL=http%3a%2f%2fcode.google.com%2fp%2fgoogle-maps-icons%2fwiki%2fColorPalette" target="_blank">
+Google Map Icons</a> | <a href="redir.aspx?C=68203f78c688445382bc94adf245fa57&amp;URL=http%3a%2f%2fcolorbrewer2.org%2f" target="_blank">
+ColorBrewer</a> | <a href="redir.aspx?C=68203f78c688445382bc94adf245fa57&amp;URL=http%3a%2f%2fwww.colourlovers.com%2f" target="_blank">
+Colour Lovers</a> | <a href="redir.aspx?C=68203f78c688445382bc94adf245fa57&amp;URL=http%3a%2f%2fwww.colorschemer.com%2f" target="_blank">
+ColorSchemer</a> | <a href="redir.aspx?C=68203f78c688445382bc94adf245fa57&amp;URL=http%3a%2f%2fcolororacle.cartography.ch%2f" target="_blank">
+Color Oracle</a></p>
+<h2>Icon Set 14</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #38857d; background-color:#45a49a">
+<div class="color" style="background-color:#4eb8ad"></div>
+</div>
+</div>
+<div class="caption">
+<h3>1</h3>
+HEX: #4eb8ad<br>
+RGB: 78, 184, 173</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001a12; background-color:#003927">
+<div class="color" style="background-color:#004d35"></div>
+</div>
+</div>
+<div class="caption">
+<h3>2</h3>
+HEX: #004d35<br>
+RGB: 0, 77, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #4c9235; background-color:#5bb140">
+<div class="color" style="background-color:#66c547"></div>
+</div>
+</div>
+<div class="caption">
+<h3>3</h3>
+HEX: #66c547<br>
+RGB: 102, 197, 71</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc9a19; background-color:#ebb21d">
+<div class="color" style="background-color:#ffc11f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>4</h3>
+HEX: #ffc11f<br>
+RGB: 255, 193, 31</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc6e1b; background-color:#eb7f1f">
+<div class="color" style="background-color:#ff8a22"></div>
+</div>
+</div>
+<div class="caption">
+<h3>5</h3>
+HEX: #ff8a22<br>
+RGB: 255, 138, 34</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c03739; background-color:#df4042">
+<div class="color" style="background-color:#f34648"></div>
+</div>
+</div>
+<div class="caption">
+<h3>6</h3>
+HEX: #f34648<br>
+RGB: 243, 70, 72</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #650606; background-color:#840808">
+<div class="color" style="background-color:#980909"></div>
+</div>
+</div>
+<div class="caption">
+<h3>7</h3>
+HEX: #980909<br>
+RGB: 152, 9, 9</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #8f4285; background-color:#ae50a2">
+<div class="color" style="background-color:#c259b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>8</h3>
+HEX: #c259b5<br>
+RGB: 194, 89, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #653885; background-color:#7c45a4">
+<div class="color" style="background-color:#8c4eb8"></div>
+</div>
+</div>
+<div class="caption">
+<h3>9</h3>
+HEX: #8c4eb8<br>
+RGB: 140, 78, 184</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2b59a4; background-color:#336ac3">
+<div class="color" style="background-color:#3875d7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>10</h3>
+HEX: #3875d7<br>
+RGB: 56, 117, 215</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001499; background-color:#0018b8">
+<div class="color" style="background-color:#001bcc"></div>
+</div>
+</div>
+<div class="caption">
+<h3>11</h3>
+HEX: #001bcc<br>
+RGB: 0, 27, 204</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #000000; background-color:#000000">
+<div class="color" style="background-color:#141414"></div>
+</div>
+</div>
+<div class="caption">
+<h3>12</h3>
+HEX: #141414<br>
+RGB: 20, 20, 20</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #6a4c36; background-color:#896146">
+<div class="color" style="background-color:#9d7050"></div>
+</div>
+</div>
+<div class="caption">
+<h3>13</h3>
+HEX: #9d7050<br>
+RGB: 157, 112, 80</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #636363; background-color:#828282">
+<div class="color" style="background-color:#969696"></div>
+</div>
+</div>
+<div class="caption">
+<h3>14</h3>
+HEX: #969696<br>
+RGB: 150, 150, 150</div>
+</div>
+<h2>Icon Cycle 24</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #1c4d8a; background-color:#235ea8">
+<div class="color" style="background-color:#276abd"></div>
+</div>
+</div>
+<div class="caption">
+<h3>15</h3>
+HEX: #276abd<br>
+RGB: 39, 106, 189</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2a6882; background-color:#3480a0">
+<div class="color" style="background-color:#3b91b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>16</h3>
+HEX: #3b91b5<br>
+RGB: 59, 145, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #38857d; background-color:#45a49a">
+<div class="color" style="background-color:#4eb8ad"></div>
+</div>
+</div>
+<div class="caption">
+<h3>17</h3>
+HEX: #4eb8ad<br>
+RGB: 78, 184, 173</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #184f45; background-color:#216e5f">
+<div class="color" style="background-color:#278271"></div>
+</div>
+</div>
+<div class="caption">
+<h3>18</h3>
+HEX: #278271<br>
+RGB: 39, 130, 113</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001a12; background-color:#003927">
+<div class="color" style="background-color:#004d35"></div>
+</div>
+</div>
+<div class="caption">
+<h3>19</h3>
+HEX: #004d35<br>
+RGB: 0, 77, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #205627; background-color:#2b7535">
+<div class="color" style="background-color:#33893e"></div>
+</div>
+</div>
+<div class="caption">
+<h3>20</h3>
+HEX: #33893e<br>
+RGB: 51, 137, 62</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #4c9235; background-color:#5bb140">
+<div class="color" style="background-color:#66c547"></div>
+</div>
+</div>
+<div class="caption">
+<h3>21</h3>
+HEX: #66c547<br>
+RGB: 102, 197, 71</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #849026; background-color:#a0af2e">
+<div class="color" style="background-color:#b3c333"></div>
+</div>
+</div>
+<div class="caption">
+<h3>22</h3>
+HEX: #b3c333<br>
+RGB: 179, 195, 51</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #ccb30c; background-color:#ebce0e">
+<div class="color" style="background-color:#ffe010"></div>
+</div>
+</div>
+<div class="caption">
+<h3>23</h3>
+HEX: #ffe010<br>
+RGB: 255, 224, 16</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc9a19; background-color:#ebb21d">
+<div class="color" style="background-color:#ffc11f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>24</h3>
+HEX: #ffc11f<br>
+RGB: 255, 193, 31</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc841a; background-color:#eb981e">
+<div class="color" style="background-color:#ffa521"></div>
+</div>
+</div>
+<div class="caption">
+<h3>25</h3>
+HEX: #ffa521<br>
+RGB: 255, 165, 33</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc6e1b; background-color:#eb7f1f">
+<div class="color" style="background-color:#ff8a22"></div>
+</div>
+</div>
+<div class="caption">
+<h3>26</h3>
+HEX: #ff8a22<br>
+RGB: 255, 138, 34</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c6532a; background-color:#e55f31">
+<div class="color" style="background-color:#f96835"></div>
+</div>
+</div>
+<div class="caption">
+<h3>27</h3>
+HEX: #f96835<br>
+RGB: 249, 104, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c03739; background-color:#df4042">
+<div class="color" style="background-color:#f34648"></div>
+</div>
+</div>
+<div class="caption">
+<h3>28</h3>
+HEX: #f34648<br>
+RGB: 243, 70, 72</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #921d1e; background-color:#b12324">
+<div class="color" style="background-color:#c52829"></div>
+</div>
+</div>
+<div class="caption">
+<h3>29</h3>
+HEX: #c52829<br>
+RGB: 197, 40, 41</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #650606; background-color:#840808">
+<div class="color" style="background-color:#980909"></div>
+</div>
+</div>
+<div class="caption">
+<h3>30</h3>
+HEX: #980909<br>
+RGB: 152, 9, 9</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7a2343; background-color:#992b54">
+<div class="color" style="background-color:#ad315f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>31</h3>
+HEX: #ad315f<br>
+RGB: 173, 49, 95</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #8f4285; background-color:#ae50a2">
+<div class="color" style="background-color:#c259b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>32</h3>
+HEX: #c259b5<br>
+RGB: 194, 89, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #783c84; background-color:#944aa2">
+<div class="color" style="background-color:#a754b7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>33</h3>
+HEX: #a754b7<br>
+RGB: 167, 84, 183</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #653885; background-color:#7c45a4">
+<div class="color" style="background-color:#8c4eb8"></div>
+</div>
+</div>
+<div class="caption">
+<h3>34</h3>
+HEX: #8c4eb8<br>
+RGB: 140, 78, 184</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #494994; background-color:#5858b3">
+<div class="color" style="background-color:#6262c7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>35</h3>
+HEX: #6262c7<br>
+RGB: 98, 98, 199</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2b59a4; background-color:#336ac3">
+<div class="color" style="background-color:#3875d7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>36</h3>
+HEX: #3875d7<br>
+RGB: 56, 117, 215</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #15369e; background-color:#1941bd">
+<div class="color" style="background-color:#1c48d1"></div>
+</div>
+</div>
+<div class="caption">
+<h3>37</h3>
+HEX: #1c48d1<br>
+RGB: 28, 72, 209</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001499; background-color:#0018b8">
+<div class="color" style="background-color:#001bcc"></div>
+</div>
+</div>
+<div class="caption">
+<h3>38</h3>
+HEX: #001bcc<br>
+RGB: 0, 27, 204</div>
+</div>
+<h2>Icon Cycle 48</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #1c4d8a; background-color:#235ea8">
+<div class="color" style="background-color:#276abd"></div>
+</div>
+</div>
+<div class="caption">
+<h3>39</h3>
+HEX: #276abd<br>
+RGB: 39, 106, 189</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #235b86; background-color:#2b6fa4">
+<div class="color" style="background-color:#317db9"></div>
+</div>
+</div>
+<div class="caption">
+<h3>40</h3>
+HEX: #317db9<br>
+RGB: 49, 125, 185</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2a6882; background-color:#3480a0">
+<div class="color" style="background-color:#3b91b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>41</h3>
+HEX: #3b91b5<br>
+RGB: 59, 145, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #31757e; background-color:#3c919c">
+<div class="color" style="background-color:#44a4b1"></div>
+</div>
+</div>
+<div class="caption">
+<h3>42</h3>
+HEX: #44a4b1<br>
+RGB: 68, 164, 177</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #38857d; background-color:#45a49a">
+<div class="color" style="background-color:#4eb8ad"></div>
+</div>
+</div>
+<div class="caption">
+<h3>43</h3>
+HEX: #4eb8ad<br>
+RGB: 78, 184, 173</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #286a61; background-color:#33897c">
+<div class="color" style="background-color:#3b9d8f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>44</h3>
+HEX: #3b9d8f<br>
+RGB: 59, 157, 143</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #184f45; background-color:#216e5f">
+<div class="color" style="background-color:#278271"></div>
+</div>
+</div>
+<div class="caption">
+<h3>45</h3>
+HEX: #278271<br>
+RGB: 39, 130, 113</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #0a352a; background-color:#105343">
+<div class="color" style="background-color:#146853"></div>
+</div>
+</div>
+<div class="caption">
+<h3>46</h3>
+HEX: #146853<br>
+RGB: 20, 104, 83</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001a12; background-color:#003927">
+<div class="color" style="background-color:#004d35"></div>
+</div>
+</div>
+<div class="caption">
+<h3>47</h3>
+HEX: #004d35<br>
+RGB: 0, 77, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #0d381e; background-color:#15572f">
+<div class="color" style="background-color:#1a6b3a"></div>
+</div>
+</div>
+<div class="caption">
+<h3>48</h3>
+HEX: #1a6b3a<br>
+RGB: 26, 107, 58</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #205627; background-color:#2b7535">
+<div class="color" style="background-color:#33893e"></div>
+</div>
+</div>
+<div class="caption">
+<h3>49</h3>
+HEX: #33893e<br>
+RGB: 51, 137, 62</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #35742e; background-color:#43933a">
+<div class="color" style="background-color:#4da743"></div>
+</div>
+</div>
+<div class="caption">
+<h3>50</h3>
+HEX: #4da743<br>
+RGB: 77, 167, 67</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #4c9235; background-color:#5bb140">
+<div class="color" style="background-color:#66c547"></div>
+</div>
+</div>
+<div class="caption">
+<h3>51</h3>
+HEX: #66c547<br>
+RGB: 102, 197, 71</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #68912d; background-color:#7eb037">
+<div class="color" style="background-color:#8cc43d"></div>
+</div>
+</div>
+<div class="caption">
+<h3>52</h3>
+HEX: #8cc43d<br>
+RGB: 140, 196, 61</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #849026; background-color:#a0af2e">
+<div class="color" style="background-color:#b3c333"></div>
+</div>
+</div>
+<div class="caption">
+<h3>53</h3>
+HEX: #b3c333<br>
+RGB: 179, 195, 51</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #a6a019; background-color:#c4be1e">
+<div class="color" style="background-color:#d9d121"></div>
+</div>
+</div>
+<div class="caption">
+<h3>54</h3>
+HEX: #d9d121<br>
+RGB: 217, 209, 33</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #ccb30c; background-color:#ebce0e">
+<div class="color" style="background-color:#ffe010"></div>
+</div>
+</div>
+<div class="caption">
+<h3>55</h3>
+HEX: #ffe010<br>
+RGB: 255, 224, 16</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cca713; background-color:#ebc015">
+<div class="color" style="background-color:#ffd117"></div>
+</div>
+</div>
+<div class="caption">
+<h3>56</h3>
+HEX: #ffd117<br>
+RGB: 255, 209, 23</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc9a19; background-color:#ebb21d">
+<div class="color" style="background-color:#ffc11f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>57</h3>
+HEX: #ffc11f<br>
+RGB: 255, 193, 31</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc8f19; background-color:#eba51d">
+<div class="color" style="background-color:#ffb320"></div>
+</div>
+</div>
+<div class="caption">
+<h3>58</h3>
+HEX: #ffb320<br>
+RGB: 255, 179, 32</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc841a; background-color:#eb981e">
+<div class="color" style="background-color:#ffa521"></div>
+</div>
+</div>
+<div class="caption">
+<h3>59</h3>
+HEX: #ffa521<br>
+RGB: 255, 165, 33</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc791b; background-color:#eb8c1f">
+<div class="color" style="background-color:#ff9821"></div>
+</div>
+</div>
+<div class="caption">
+<h3>60</h3>
+HEX: #ff9821<br>
+RGB: 255, 152, 33</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc6e1b; background-color:#eb7f1f">
+<div class="color" style="background-color:#ff8a22"></div>
+</div>
+</div>
+<div class="caption">
+<h3>61</h3>
+HEX: #ff8a22<br>
+RGB: 255, 138, 34</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c96123; background-color:#e86f28">
+<div class="color" style="background-color:#fc792c"></div>
+</div>
+</div>
+<div class="caption">
+<h3>62</h3>
+HEX: #fc792c<br>
+RGB: 252, 121, 44</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c6532a; background-color:#e55f31">
+<div class="color" style="background-color:#f96835"></div>
+</div>
+</div>
+<div class="caption">
+<h3>63</h3>
+HEX: #f96835<br>
+RGB: 249, 104, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c34532; background-color:#e25039">
+<div class="color" style="background-color:#f6573f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>64</h3>
+HEX: #f6573f<br>
+RGB: 246, 87, 63</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c03739; background-color:#df4042">
+<div class="color" style="background-color:#f34648"></div>
+</div>
+</div>
+<div class="caption">
+<h3>65</h3>
+HEX: #f34648<br>
+RGB: 243, 70, 72</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #a92a2b; background-color:#c83233">
+<div class="color" style="background-color:#dc3738"></div>
+</div>
+</div>
+<div class="caption">
+<h3>66</h3>
+HEX: #dc3738<br>
+RGB: 220, 55, 56</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #921d1e; background-color:#b12324">
+<div class="color" style="background-color:#c52829"></div>
+</div>
+</div>
+<div class="caption">
+<h3>67</h3>
+HEX: #c52829<br>
+RGB: 197, 40, 41</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7c1111; background-color:#9a1515">
+<div class="color" style="background-color:#af1819"></div>
+</div>
+</div>
+<div class="caption">
+<h3>68</h3>
+HEX: #af1819<br>
+RGB: 175, 24, 25</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #650606; background-color:#840808">
+<div class="color" style="background-color:#980909"></div>
+</div>
+</div>
+<div class="caption">
+<h3>69</h3>
+HEX: #980909<br>
+RGB: 152, 9, 9</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #701424; background-color:#8e192d">
+<div class="color" style="background-color:#a31d34"></div>
+</div>
+</div>
+<div class="caption">
+<h3>70</h3>
+HEX: #a31d34<br>
+RGB: 163, 29, 52</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7a2343; background-color:#992b54">
+<div class="color" style="background-color:#ad315f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>71</h3>
+HEX: #ad315f<br>
+RGB: 173, 49, 95</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #843264; background-color:#a33d7b">
+<div class="color" style="background-color:#b7458a"></div>
+</div>
+</div>
+<div class="caption">
+<h3>72</h3>
+HEX: #b7458a<br>
+RGB: 183, 69, 138</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #8f4285; background-color:#ae50a2">
+<div class="color" style="background-color:#c259b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>73</h3>
+HEX: #c259b5<br>
+RGB: 194, 89, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #823e83; background-color:#a04da1">
+<div class="color" style="background-color:#b556b6"></div>
+</div>
+</div>
+<div class="caption">
+<h3>74</h3>
+HEX: #b556b6<br>
+RGB: 181, 86, 182</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #783c84; background-color:#944aa2">
+<div class="color" style="background-color:#a754b7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>75</h3>
+HEX: #a754b7<br>
+RGB: 167, 84, 183</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #6f3a84; background-color:#8848a3">
+<div class="color" style="background-color:#9951b7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>76</h3>
+HEX: #9951b7<br>
+RGB: 153, 81, 183</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #653885; background-color:#7c45a4">
+<div class="color" style="background-color:#8c4eb8"></div>
+</div>
+</div>
+<div class="caption">
+<h3>77</h3>
+HEX: #8c4eb8<br>
+RGB: 140, 78, 184</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #57408d; background-color:#6a4eab">
+<div class="color" style="background-color:#7758c0"></div>
+</div>
+</div>
+<div class="caption">
+<h3>78</h3>
+HEX: #7758c0<br>
+RGB: 119, 88, 192</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #494994; background-color:#5858b3">
+<div class="color" style="background-color:#6262c7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>79</h3>
+HEX: #6262c7<br>
+RGB: 98, 98, 199</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #3a519c; background-color:#4561bb">
+<div class="color" style="background-color:#4d6bcf"></div>
+</div>
+</div>
+<div class="caption">
+<h3>80</h3>
+HEX: #4d6bcf<br>
+RGB: 77, 107, 207</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2b59a4; background-color:#336ac3">
+<div class="color" style="background-color:#3875d7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>81</h3>
+HEX: #3875d7<br>
+RGB: 56, 117, 215</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2048a1; background-color:#2655c0">
+<div class="color" style="background-color:#2a5fd4"></div>
+</div>
+</div>
+<div class="caption">
+<h3>82</h3>
+HEX: #2a5fd4<br>
+RGB: 42, 95, 212</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #15369e; background-color:#1941bd">
+<div class="color" style="background-color:#1c48d1"></div>
+</div>
+</div>
+<div class="caption">
+<h3>83</h3>
+HEX: #1c48d1<br>
+RGB: 28, 72, 209</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #0b259c; background-color:#0d2dba">
+<div class="color" style="background-color:#0e31cf"></div>
+</div>
+</div>
+<div class="caption">
+<h3>84</h3>
+HEX: #0e31cf<br>
+RGB: 14, 49, 207</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001499; background-color:#0018b8">
+<div class="color" style="background-color:#001bcc"></div>
+</div>
+</div>
+<div class="caption">
+<h3>85</h3>
+HEX: #001bcc<br>
+RGB: 0, 27, 204</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #0e3191; background-color:#113bb0">
+<div class="color" style="background-color:#1442c4"></div>
+</div>
+</div>
+<div class="caption">
+<h3>86</h3>
+HEX: #1442c4<br>
+RGB: 20, 66, 196</div>
+</div>
+<h2>Blues 10</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #8a9dbc; background-color:#a0b7db">
+<div class="color" style="background-color:#afc8ef"></div>
+</div>
+</div>
+<div class="caption">
+<h3>87</h3>
+HEX: #afc8ef<br>
+RGB: 175, 200, 239</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #6a86b4; background-color:#7c9dd3">
+<div class="color" style="background-color:#88ace7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>88</h3>
+HEX: #88ace7<br>
+RGB: 136, 172, 231</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #4a70ac; background-color:#5783cb">
+<div class="color" style="background-color:#6091df"></div>
+</div>
+</div>
+<div class="caption">
+<h3>89</h3>
+HEX: #6091df<br>
+RGB: 96, 145, 223</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2b59a4; background-color:#336ac3">
+<div class="color" style="background-color:#3875d7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>90</h3>
+HEX: #3875d7<br>
+RGB: 56, 117, 215</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #1c42a0; background-color:#224fbf">
+<div class="color" style="background-color:#2557d3"></div>
+</div>
+</div>
+<div class="caption">
+<h3>91</h3>
+HEX: #2557d3<br>
+RGB: 37, 87, 211</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #0e2b9d; background-color:#1133bb">
+<div class="color" style="background-color:#1339d0"></div>
+</div>
+</div>
+<div class="caption">
+<h3>92</h3>
+HEX: #1339d0<br>
+RGB: 19, 57, 208</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001499; background-color:#0018b8">
+<div class="color" style="background-color:#001bcc"></div>
+</div>
+</div>
+<div class="caption">
+<h3>93</h3>
+HEX: #001bcc<br>
+RGB: 0, 27, 204</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #021879; background-color:#021e97">
+<div class="color" style="background-color:#0322ac"></div>
+</div>
+</div>
+<div class="caption">
+<h3>94</h3>
+HEX: #0322ac<br>
+RGB: 3, 34, 172</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #031a58; background-color:#052377">
+<div class="color" style="background-color:#05298b"></div>
+</div>
+</div>
+<div class="caption">
+<h3>95</h3>
+HEX: #05298b<br>
+RGB: 5, 41, 139</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #041938; background-color:#062757">
+<div class="color" style="background-color:#08306b"></div>
+</div>
+</div>
+<div class="caption">
+<h3>96</h3>
+HEX: #08306b<br>
+RGB: 8, 48, 107</div>
+</div>
+<h2>Blues 5</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #5a7bb0; background-color:#6990cf">
+<div class="color" style="background-color:#749ee3"></div>
+</div>
+</div>
+<div class="caption">
+<h3>97</h3>
+HEX: #749ee3<br>
+RGB: 116, 158, 227</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2b59a4; background-color:#336ac3">
+<div class="color" style="background-color:#3875d7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>98</h3>
+HEX: #3875d7<br>
+RGB: 56, 117, 215</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #15369e; background-color:#1941bd">
+<div class="color" style="background-color:#1c48d1"></div>
+</div>
+</div>
+<div class="caption">
+<h3>99</h3>
+HEX: #1c48d1<br>
+RGB: 28, 72, 209</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001499; background-color:#0018b8">
+<div class="color" style="background-color:#001bcc"></div>
+</div>
+</div>
+<div class="caption">
+<h3>100</h3>
+HEX: #001bcc<br>
+RGB: 0, 27, 204</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #041938; background-color:#062757">
+<div class="color" style="background-color:#08306b"></div>
+</div>
+</div>
+<div class="caption">
+<h3>101</h3>
+HEX: #08306b<br>
+RGB: 8, 48, 107</div>
+</div>
+<h2>Greens 10</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #97b58d; background-color:#b1d3a5">
+<div class="color" style="background-color:#c2e8b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>102</h3>
+HEX: #c2e8b5<br>
+RGB: 194, 232, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7da96f; background-color:#94c883">
+<div class="color" style="background-color:#a3dc91"></div>
+</div>
+</div>
+<div class="caption">
+<h3>103</h3>
+HEX: #a3dc91<br>
+RGB: 163, 220, 145</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #649e51; background-color:#78bc61">
+<div class="color" style="background-color:#85d16c"></div>
+</div>
+</div>
+<div class="caption">
+<h3>104</h3>
+HEX: #85d16c<br>
+RGB: 133, 209, 108</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #4c9235; background-color:#5bb140">
+<div class="color" style="background-color:#66c547"></div>
+</div>
+</div>
+<div class="caption">
+<h3>105</h3>
+HEX: #66c547<br>
+RGB: 102, 197, 71</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #3a7a30; background-color:#48993b">
+<div class="color" style="background-color:#52ad43"></div>
+</div>
+</div>
+<div class="caption">
+<h3>106</h3>
+HEX: #52ad43<br>
+RGB: 82, 173, 67</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #28622a; background-color:#358137">
+<div class="color" style="background-color:#3d9540"></div>
+</div>
+</div>
+<div class="caption">
+<h3>107</h3>
+HEX: #3d9540<br>
+RGB: 61, 149, 64</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #184a24; background-color:#226932">
+<div class="color" style="background-color:#297d3c"></div>
+</div>
+</div>
+<div class="caption">
+<h3>108</h3>
+HEX: #297d3c<br>
+RGB: 41, 125, 60</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #0a321c; background-color:#10512d">
+<div class="color" style="background-color:#146539"></div>
+</div>
+</div>
+<div class="caption">
+<h3>109</h3>
+HEX: #146539<br>
+RGB: 20, 101, 57</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001a12; background-color:#003927">
+<div class="color" style="background-color:#004d35"></div>
+</div>
+</div>
+<div class="caption">
+<h3>110</h3>
+HEX: #004d35<br>
+RGB: 0, 77, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001107; background-color:#003013">
+<div class="color" style="background-color:#00441b"></div>
+</div>
+</div>
+<div class="caption">
+<h3>111</h3>
+HEX: #00441b<br>
+RGB: 0, 68, 27</div>
+</div>
+<h2>Greens 5</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7da96f; background-color:#94c883">
+<div class="color" style="background-color:#a3dc91"></div>
+</div>
+</div>
+<div class="caption">
+<h3>112</h3>
+HEX: #a3dc91<br>
+RGB: 163, 220, 145</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #4c9235; background-color:#5bb140">
+<div class="color" style="background-color:#66c547"></div>
+</div>
+</div>
+<div class="caption">
+<h3>113</h3>
+HEX: #66c547<br>
+RGB: 102, 197, 71</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #28622a; background-color:#358137">
+<div class="color" style="background-color:#3d9540"></div>
+</div>
+</div>
+<div class="caption">
+<h3>114</h3>
+HEX: #3d9540<br>
+RGB: 61, 149, 64</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #0a321c; background-color:#10512d">
+<div class="color" style="background-color:#146539"></div>
+</div>
+</div>
+<div class="caption">
+<h3>115</h3>
+HEX: #146539<br>
+RGB: 20, 101, 57</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001a12; background-color:#003927">
+<div class="color" style="background-color:#004d35"></div>
+</div>
+</div>
+<div class="caption">
+<h3>116</h3>
+HEX: #004d35<br>
+RGB: 0, 77, 53</div>
+</div>
+<h2>Reds 10</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #caaeae; background-color:#e9c8c8">
+<div class="color" style="background-color:#fddada"></div>
+</div>
+</div>
+<div class="caption">
+<h3>117</h3>
+HEX: #fddada<br>
+RGB: 253, 218, 218</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c79091; background-color:#e6a6a7">
+<div class="color" style="background-color:#fab5b6"></div>
+</div>
+</div>
+<div class="caption">
+<h3>118</h3>
+HEX: #fab5b6<br>
+RGB: 250, 181, 182</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c57273; background-color:#e38485">
+<div class="color" style="background-color:#f89091"></div>
+</div>
+</div>
+<div class="caption">
+<h3>119</h3>
+HEX: #f89091<br>
+RGB: 248, 144, 145</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c25556; background-color:#e16264">
+<div class="color" style="background-color:#f56b6d"></div>
+</div>
+</div>
+<div class="caption">
+<h3>120</h3>
+HEX: #f56b6d<br>
+RGB: 245, 107, 109</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c03739; background-color:#df4042">
+<div class="color" style="background-color:#f34648"></div>
+</div>
+</div>
+<div class="caption">
+<h3>121</h3>
+HEX: #f34648<br>
+RGB: 243, 70, 72</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #ae2d2e; background-color:#cc3536">
+<div class="color" style="background-color:#e13a3b"></div>
+</div>
+</div>
+<div class="caption">
+<h3>122</h3>
+HEX: #e13a3b<br>
+RGB: 225, 58, 59</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #9c2223; background-color:#ba292a">
+<div class="color" style="background-color:#cf2e2f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>123</h3>
+HEX: #cf2e2f<br>
+RGB: 207, 46, 47</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #770f0f; background-color:#961213">
+<div class="color" style="background-color:#aa1516"></div>
+</div>
+</div>
+<div class="caption">
+<h3>124</h3>
+HEX: #aa1516<br>
+RGB: 170, 21, 22</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #650606; background-color:#840808">
+<div class="color" style="background-color:#980909"></div>
+</div>
+</div>
+<div class="caption">
+<h3>125</h3>
+HEX: #980909<br>
+RGB: 152, 9, 9</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #340007; background-color:#53000a">
+<div class="color" style="background-color:#67000d"></div>
+</div>
+</div>
+<div class="caption">
+<h3>126</h3>
+HEX: #67000d<br>
+RGB: 103, 0, 13</div>
+</div>
+<h2>Reds 5</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c57273; background-color:#e38485">
+<div class="color" style="background-color:#f89091"></div>
+</div>
+</div>
+<div class="caption">
+<h3>127</h3>
+HEX: #f89091<br>
+RGB: 248, 144, 145</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c03739; background-color:#df4042">
+<div class="color" style="background-color:#f34648"></div>
+</div>
+</div>
+<div class="caption">
+<h3>128</h3>
+HEX: #f34648<br>
+RGB: 243, 70, 72</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #9c2223; background-color:#ba292a">
+<div class="color" style="background-color:#cf2e2f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>129</h3>
+HEX: #cf2e2f<br>
+RGB: 207, 46, 47</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #650606; background-color:#840808">
+<div class="color" style="background-color:#980909"></div>
+</div>
+</div>
+<div class="caption">
+<h3>130</h3>
+HEX: #980909<br>
+RGB: 152, 9, 9</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #340007; background-color:#53000a">
+<div class="color" style="background-color:#67000d"></div>
+</div>
+</div>
+<div class="caption">
+<h3>131</h3>
+HEX: #67000d<br>
+RGB: 103, 0, 13</div>
+</div>
+<h2>Oranges 10</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #ccae60; background-color:#ebc86f">
+<div class="color" style="background-color:#ffda79"></div>
+</div>
+</div>
+<div class="caption">
+<h3>132</h3>
+HEX: #ffda79<br>
+RGB: 255, 218, 121</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cca43d; background-color:#ebbd46">
+<div class="color" style="background-color:#ffcd4c"></div>
+</div>
+</div>
+<div class="caption">
+<h3>133</h3>
+HEX: #ffcd4c<br>
+RGB: 255, 205, 76</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc9a19; background-color:#ebb21d">
+<div class="color" style="background-color:#ffc11f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>134</h3>
+HEX: #ffc11f<br>
+RGB: 255, 193, 31</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc9219; background-color:#eba71d">
+<div class="color" style="background-color:#ffb620"></div>
+</div>
+</div>
+<div class="caption">
+<h3>135</h3>
+HEX: #ffb620<br>
+RGB: 255, 182, 32</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc891a; background-color:#eb9d1e">
+<div class="color" style="background-color:#ffab20"></div>
+</div>
+</div>
+<div class="caption">
+<h3>136</h3>
+HEX: #ffab20<br>
+RGB: 255, 171, 32</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc801a; background-color:#eb931e">
+<div class="color" style="background-color:#ffa021"></div>
+</div>
+</div>
+<div class="caption">
+<h3>137</h3>
+HEX: #ffa021<br>
+RGB: 255, 160, 33</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc771b; background-color:#eb891f">
+<div class="color" style="background-color:#ff9521"></div>
+</div>
+</div>
+<div class="caption">
+<h3>138</h3>
+HEX: #ff9521<br>
+RGB: 255, 149, 33</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc6e1b; background-color:#eb7f1f">
+<div class="color" style="background-color:#ff8a22"></div>
+</div>
+</div>
+<div class="caption">
+<h3>139</h3>
+HEX: #ff8a22<br>
+RGB: 255, 138, 34</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c6532a; background-color:#e55f31">
+<div class="color" style="background-color:#f96835"></div>
+</div>
+</div>
+<div class="caption">
+<h3>140</h3>
+HEX: #f96835<br>
+RGB: 249, 104, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #a63701; background-color:#c54101">
+<div class="color" style="background-color:#d94801"></div>
+</div>
+</div>
+<div class="caption">
+<h3>141</h3>
+HEX: #d94801<br>
+RGB: 217, 72, 1</div>
+</div>
+<h2>Oranges 5</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cca94f; background-color:#ebc35a">
+<div class="color" style="background-color:#ffd462"></div>
+</div>
+</div>
+<div class="caption">
+<h3>142</h3>
+HEX: #ffd462<br>
+RGB: 255, 212, 98</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc9a19; background-color:#ebb21d">
+<div class="color" style="background-color:#ffc11f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>143</h3>
+HEX: #ffc11f<br>
+RGB: 255, 193, 31</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cc6e1b; background-color:#eb7f1f">
+<div class="color" style="background-color:#ff8a22"></div>
+</div>
+</div>
+<div class="caption">
+<h3>144</h3>
+HEX: #ff8a22<br>
+RGB: 255, 138, 34</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c6532a; background-color:#e55f31">
+<div class="color" style="background-color:#f96835"></div>
+</div>
+</div>
+<div class="caption">
+<h3>145</h3>
+HEX: #f96835<br>
+RGB: 249, 104, 53</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #a63701; background-color:#c54101">
+<div class="color" style="background-color:#d94801"></div>
+</div>
+</div>
+<div class="caption">
+<h3>146</h3>
+HEX: #d94801<br>
+RGB: 217, 72, 1</div>
+</div>
+<h2>Purples 10</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #b493b0; background-color:#d2accd">
+<div class="color" style="background-color:#e7bde1"></div>
+</div>
+</div>
+<div class="caption">
+<h3>147</h3>
+HEX: #e7bde1<br>
+RGB: 231, 189, 225</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #a777a1; background-color:#c68dbf">
+<div class="color" style="background-color:#da9bd3"></div>
+</div>
+</div>
+<div class="caption">
+<h3>148</h3>
+HEX: #da9bd3<br>
+RGB: 218, 155, 211</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #9b5c93; background-color:#ba6eb0">
+<div class="color" style="background-color:#ce7ac4"></div>
+</div>
+</div>
+<div class="caption">
+<h3>149</h3>
+HEX: #ce7ac4<br>
+RGB: 206, 122, 196</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #8f4285; background-color:#ae50a2">
+<div class="color" style="background-color:#c259b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>150</h3>
+HEX: #c259b5<br>
+RGB: 194, 89, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7f3d83; background-color:#9c4ca2">
+<div class="color" style="background-color:#b055b6"></div>
+</div>
+</div>
+<div class="caption">
+<h3>151</h3>
+HEX: #b055b6<br>
+RGB: 176, 85, 182</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #723b84; background-color:#8c49a3">
+<div class="color" style="background-color:#9e52b7"></div>
+</div>
+</div>
+<div class="caption">
+<h3>152</h3>
+HEX: #9e52b7<br>
+RGB: 158, 82, 183</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #653885; background-color:#7c45a4">
+<div class="color" style="background-color:#8c4eb8"></div>
+</div>
+</div>
+<div class="caption">
+<h3>153</h3>
+HEX: #8c4eb8<br>
+RGB: 140, 78, 184</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #4f2471; background-color:#642e90">
+<div class="color" style="background-color:#7234a4"></div>
+</div>
+</div>
+<div class="caption">
+<h3>154</h3>
+HEX: #7234a4<br>
+RGB: 114, 52, 164</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #39115e; background-color:#4c167c">
+<div class="color" style="background-color:#591a91"></div>
+</div>
+</div>
+<div class="caption">
+<h3>155</h3>
+HEX: #591a91<br>
+RGB: 89, 26, 145</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #25004a; background-color:#350069">
+<div class="color" style="background-color:#3f007d"></div>
+</div>
+</div>
+<div class="caption">
+<h3>156</h3>
+HEX: #3f007d<br>
+RGB: 63, 0, 125</div>
+</div>
+<h2>Purples 5</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #a777a1; background-color:#c68dbf">
+<div class="color" style="background-color:#da9bd3"></div>
+</div>
+</div>
+<div class="caption">
+<h3>157</h3>
+HEX: #da9bd3<br>
+RGB: 218, 155, 211</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #9b5c93; background-color:#ba6eb0">
+<div class="color" style="background-color:#ce7ac4"></div>
+</div>
+</div>
+<div class="caption">
+<h3>158</h3>
+HEX: #ce7ac4<br>
+RGB: 206, 122, 196</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7f3d83; background-color:#9c4ca2">
+<div class="color" style="background-color:#b055b6"></div>
+</div>
+</div>
+<div class="caption">
+<h3>159</h3>
+HEX: #b055b6<br>
+RGB: 176, 85, 182</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #653885; background-color:#7c45a4">
+<div class="color" style="background-color:#8c4eb8"></div>
+</div>
+</div>
+<div class="caption">
+<h3>160</h3>
+HEX: #8c4eb8<br>
+RGB: 140, 78, 184</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #39115e; background-color:#4c167c">
+<div class="color" style="background-color:#591a91"></div>
+</div>
+</div>
+<div class="caption">
+<h3>161</h3>
+HEX: #591a91<br>
+RGB: 89, 26, 145</div>
+</div>
+<h2>Metallics 10</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #929292; background-color:#b0b0b0">
+<div class="color" style="background-color:#c5c5c5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>162</h3>
+HEX: #c5c5c5<br>
+RGB: 197, 197, 197</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #828282; background-color:#a1a1a1">
+<div class="color" style="background-color:#b5b5b5"></div>
+</div>
+</div>
+<div class="caption">
+<h3>163</h3>
+HEX: #b5b5b5<br>
+RGB: 181, 181, 181</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #737373; background-color:#919191">
+<div class="color" style="background-color:#a6a6a6"></div>
+</div>
+</div>
+<div class="caption">
+<h3>164</h3>
+HEX: #a6a6a6<br>
+RGB: 166, 166, 166</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #636363; background-color:#828282">
+<div class="color" style="background-color:#969696"></div>
+</div>
+</div>
+<div class="caption">
+<h3>165</h3>
+HEX: #969696<br>
+RGB: 150, 150, 150</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #655b54; background-color:#84776e">
+<div class="color" style="background-color:#98897f"></div>
+</div>
+</div>
+<div class="caption">
+<h3>166</h3>
+HEX: #98897f<br>
+RGB: 152, 137, 127</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #685445; background-color:#866c5a">
+<div class="color" style="background-color:#9b7d67"></div>
+</div>
+</div>
+<div class="caption">
+<h3>167</h3>
+HEX: #9b7d67<br>
+RGB: 155, 125, 103</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #6a4c36; background-color:#896146">
+<div class="color" style="background-color:#9d7050"></div>
+</div>
+</div>
+<div class="caption">
+<h3>168</h3>
+HEX: #9d7050<br>
+RGB: 157, 112, 80</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #563e2d; background-color:#74543c">
+<div class="color" style="background-color:#896247"></div>
+</div>
+</div>
+<div class="caption">
+<h3>169</h3>
+HEX: #896247<br>
+RGB: 137, 98, 71</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #413023; background-color:#604633">
+<div class="color" style="background-color:#74553e"></div>
+</div>
+</div>
+<div class="caption">
+<h3>170</h3>
+HEX: #74553e<br>
+RGB: 116, 85, 62</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2d2119; background-color:#4c382a">
+<div class="color" style="background-color:#604735"></div>
+</div>
+</div>
+<div class="caption">
+<h3>171</h3>
+HEX: #604735<br>
+RGB: 96, 71, 53</div>
+</div>
+<h2>Monochrome 12</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cccccc; background-color:#ebebeb">
+<div class="color" style="background-color:#ffffff"></div>
+</div>
+</div>
+<div class="caption">
+<h3>172</h3>
+HEX: #ffffff<br>
+RGB: 255, 255, 255</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #c9c9c9; background-color:#e8e8e8">
+<div class="color" style="background-color:#fcfcfc"></div>
+</div>
+</div>
+<div class="caption">
+<h3>173</h3>
+HEX: #fcfcfc<br>
+RGB: 252, 252, 252</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #afafaf; background-color:#cecece">
+<div class="color" style="background-color:#e2e2e2"></div>
+</div>
+</div>
+<div class="caption">
+<h3>174</h3>
+HEX: #e2e2e2<br>
+RGB: 226, 226, 226</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #959595; background-color:#b4b4b4">
+<div class="color" style="background-color:#c8c8c8"></div>
+</div>
+</div>
+<div class="caption">
+<h3>175</h3>
+HEX: #c8c8c8<br>
+RGB: 200, 200, 200</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #7c7c7c; background-color:#9a9a9a">
+<div class="color" style="background-color:#afafaf"></div>
+</div>
+</div>
+<div class="caption">
+<h3>176</h3>
+HEX: #afafaf<br>
+RGB: 175, 175, 175</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #626262; background-color:#808080">
+<div class="color" style="background-color:#959595"></div>
+</div>
+</div>
+<div class="caption">
+<h3>177</h3>
+HEX: #959595<br>
+RGB: 149, 149, 149</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #484848; background-color:#676767">
+<div class="color" style="background-color:#7b7b7b"></div>
+</div>
+</div>
+<div class="caption">
+<h3>178</h3>
+HEX: #7b7b7b<br>
+RGB: 123, 123, 123</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #2e2e2e; background-color:#4d4d4d">
+<div class="color" style="background-color:#616161"></div>
+</div>
+</div>
+<div class="caption">
+<h3>179</h3>
+HEX: #616161<br>
+RGB: 97, 97, 97</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #151515; background-color:#333333">
+<div class="color" style="background-color:#484848"></div>
+</div>
+</div>
+<div class="caption">
+<h3>180</h3>
+HEX: #484848<br>
+RGB: 72, 72, 72</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #000000; background-color:#191919">
+<div class="color" style="background-color:#2e2e2e"></div>
+</div>
+</div>
+<div class="caption">
+<h3>181</h3>
+HEX: #2e2e2e<br>
+RGB: 46, 46, 46</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #000000; background-color:#000000">
+<div class="color" style="background-color:#141414"></div>
+</div>
+</div>
+<div class="caption">
+<h3>182</h3>
+HEX: #141414<br>
+RGB: 20, 20, 20</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #000000; background-color:#000000">
+<div class="color" style="background-color:#000000"></div>
+</div>
+</div>
+<div class="caption">
+<h3>183</h3>
+HEX: #000000<br>
+RGB: 0, 0, 0</div>
+</div>
+<h2>Interface 10</h2>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cccccc; background-color:#ebebeb">
+<div class="color" style="background-color:#ffffff"></div>
+</div>
+</div>
+<div class="caption">
+<h3>184</h3>
+HEX: #ffffff<br>
+RGB: 255, 255, 255</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #bbbbbb; background-color:#dadada">
+<div class="color" style="background-color:#eeeeee"></div>
+</div>
+</div>
+<div class="caption">
+<h3>185</h3>
+HEX: #eeeeee<br>
+RGB: 238, 238, 238</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #777777; background-color:#969696">
+<div class="color" style="background-color:#aaaaaa"></div>
+</div>
+</div>
+<div class="caption">
+<h3>186</h3>
+HEX: #aaaaaa<br>
+RGB: 170, 170, 170</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #000000; background-color:#1f1f1f">
+<div class="color" style="background-color:#333333"></div>
+</div>
+</div>
+<div class="caption">
+<h3>187</h3>
+HEX: #333333<br>
+RGB: 51, 51, 51</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #000000; background-color:#000000">
+<div class="color" style="background-color:#000000"></div>
+</div>
+</div>
+<div class="caption">
+<h3>188</h3>
+HEX: #000000<br>
+RGB: 0, 0, 0</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #001499; background-color:#0018b8">
+<div class="color" style="background-color:#001bcc"></div>
+</div>
+</div>
+<div class="caption">
+<h3>189</h3>
+HEX: #001bcc<br>
+RGB: 0, 27, 204</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #cbc187; background-color:#eade9b">
+<div class="color" style="background-color:#fef1a9"></div>
+</div>
+</div>
+<div class="caption">
+<h3>190</h3>
+HEX: #fef1a9<br>
+RGB: 254, 241, 169</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #ccb225; background-color:#ebcc2a">
+<div class="color" style="background-color:#ffde2e"></div>
+</div>
+</div>
+<div class="caption">
+<h3>191</h3>
+HEX: #ffde2e<br>
+RGB: 255, 222, 46</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #a73939; background-color:#c64444">
+<div class="color" style="background-color:#da4b4b"></div>
+</div>
+</div>
+<div class="caption">
+<h3>192</h3>
+HEX: #da4b4b<br>
+RGB: 218, 75, 75</div>
+</div>
+<div class="swatch">
+<div class="outer">
+<div class="shadow" style="border:1px solid #6b0303; background-color:#8a0404">
+<div class="color" style="background-color:#9e0505"></div>
+</div>
+</div>
+<div class="caption">
+<h3>193</h3>
+HEX: #9e0505<br>
+RGB: 158, 5, 5</div>
+</div>
+</body>
+</html>
