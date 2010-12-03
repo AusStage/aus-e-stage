@@ -46,6 +46,16 @@ html, body {
 	height: 100%;
 }
 
+#tabs {
+	height: 100%;
+	width:  100%;
+}
+
+.ui-tabs .ui-tabs-hide {
+    position: absolute;
+    left: -10000px;
+}
+
 /* specific styles for the header */
 .header {
 	height: 64px;
