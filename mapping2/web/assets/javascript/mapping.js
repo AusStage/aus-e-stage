@@ -70,8 +70,9 @@ function MappingClass() {
 	// variable to keep track of the markers on the map
 	this.mapMarkers = [];      
 	
-	// variable to hold a height constant for adding to the computed height of the components
-	this.HEIGHT_BUFFER_CONSTANT = 55;       
+	// variables to hold a height / width constant for use in computing the height / width of the map
+	this.HEIGHT_BUFFER_CONSTANT = 55;
+	this.WIDTH_BUFFER_CONSTANT  = 55;	    
 
 }
 
@@ -236,5 +237,32 @@ MappingClass.prototype.computeMapHeight = function() {
 	height = wrapper - (header + tabHeader + pushElem + footer + mappingObj.HEIGHT_BUFFER_CONSTANT);
 	
 	return Math.floor(height);
+}
+
+// compute the width of the map
+MappingClass.prototype.computeMapWidth = function() {
+
+	// start the width calculations
+	var width = 0;
+	
+	// get the width of various elements
+	var wrapper = $('.wrapper').width();
+	var sidebar = $('.sidebar').width();
+	
+	width = wrapper - (sidebar + mappingObj.WIDTH_BUFFER_CONSTANT);
+	
+	return Math.floor(width);
+}
+
+// a function to resize the map
+MappingClass.prototype.resizeMap = function() {
+
+	var mapDiv = $(mappingObj.map.getDiv());			
+	mapDiv.height(mappingObj.computeMapHeight());
+	mapDiv.width(mappingObj.computeMapWidth());
+	
+	var center = mappingObj.map.getCenter(); 
+	google.maps.event.trigger(mappingObj.map, 'resize');
+	mappingObj.map.setCenter(center); 
 
 }
