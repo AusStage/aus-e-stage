@@ -292,17 +292,7 @@ $(document).ready(function(){
 	$('#tabs').bind('tabsshow', function(event, ui) {
 		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
 			// update the map
-			var mapDiv = $(mappingObj.map.getDiv());
-			//parent = mapDiv.parent();
-			var parent = $('.wrapper');
-			newHeight = parent.height();
-			newWidth  = parent.width();
-			//mapDiv.height(Math.floor(newHeight));
-			mapDiv.width(Math.floor(newWidth));
-			
-			mapDiv.height(mappingObj.computeMapHeight());
-			
-			google.maps.event.trigger(mappingObj.map, 'resize');
+			mappingObj.resizeMap();
 		}
 	});
 });
