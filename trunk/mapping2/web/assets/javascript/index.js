@@ -294,11 +294,13 @@ $(document).ready(function(){
 			// update the map
 			var mapDiv = $(mappingObj.map.getDiv());
 			//parent = mapDiv.parent();
-			parent = $('.wrapper');
+			var parent = $('.wrapper');
 			newHeight = parent.height();
 			newWidth  = parent.width();
-			mapDiv.height(Math.floor(newHeight));
+			//mapDiv.height(Math.floor(newHeight));
 			mapDiv.width(Math.floor(newWidth));
+			
+			mapDiv.height(mappingObj.computeMapHeight());
 			
 			google.maps.event.trigger(mappingObj.map, 'resize');
 		}

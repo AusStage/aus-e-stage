@@ -50,22 +50,22 @@
 </head>
 <body>
 <div class="wrapper">
-	<div class="header b-185"><h1>AusStage Mapping Service</h1></div>
-	<div class="sidebar b-186 f-188">
+	<div class="header b-187"><h1>AusStage Mapping Service</h1></div>
+	<div class="sidebar b-186 f-184">
 		<h2>Main Menu</h2>
 		<ul>
 			<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
 			<li><a href="/mapping2/" title="Networks Service Homepage">Mapping Homepage</a></li>
 		</ul>
 	</div>
-	<div class="main b-188 f-185">
+	<div class="main b-184 f-187">
 		<div id="tabs" class="tab-container">
 			<ul class="fix-ui-tabs">
 				<li><a href="#tabs-1">Search</a></li>
 				<li><a href="#tabs-2">Venues</a></li>
 				<li><a href="#tabs-3">Map</a></li>
 			</ul>
-			<div class="ui-layout-content" style="font-size:90%">
+			<div>
 				<div id="tabs-1">
 					<h2 style="margin-bottom: -5px;">Search the AusStage Database</h2>
 					<form action="/mapping/" method="get" id="search" name="search">

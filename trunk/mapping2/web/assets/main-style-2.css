@@ -36,9 +36,14 @@ html, body {
 	overflow: hidden;
 }
 
-.footer, .push {
+.footer {
 	clear: both;
 	height: 2em;
+}
+
+.push {
+	clear:both;
+	height: 1px;
 }
 
 .tab-container {
