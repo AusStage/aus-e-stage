@@ -261,8 +261,7 @@ MappingClass.prototype.resizeMap = function() {
 	mapDiv.height(mappingObj.computeMapHeight());
 	mapDiv.width(mappingObj.computeMapWidth());
 	
-	var center = mappingObj.map.getCenter(); 
 	google.maps.event.trigger(mappingObj.map, 'resize');
-	mappingObj.map.setCenter(center); 
+	mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
 
 }

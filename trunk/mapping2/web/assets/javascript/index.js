@@ -295,4 +295,9 @@ $(document).ready(function(){
 			mappingObj.resizeMap();
 		}
 	});
+	
+	$(window).resize(function() {
+		mappingObj.resizeMap();
+		console.log('resize event fired');
+	});
 });
