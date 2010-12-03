@@ -32,7 +32,7 @@ A version of the colour palette based on the CSS version that uses style element
 
 Download Link not available at this time
 
-==Using the !AusStage Colour Scheme, Version 3==
+==Using the !AusStage Colour Scheme==
 
 This scheme defines the colours that are used by !AusStage. The scheme arranges 193 colours into 16 sets. Three sets address multiple hues from the colour spectrum. Ten sets provide single hues for quantitative displays, and a further three sets support other interface needs. The colours are numbered consecutively from 1 to 193. These numbers are used in code to call colours from the scheme. 
 
