@@ -1,11 +1,10 @@
 
 body {
-    background: #000;
+    background:#282828;
     color: #ddd;
 }
 
 body > * {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#333), to(#5e5e65));
 }
 h1, h2 {
     font: bold 18px Helvetica;
@@ -19,8 +18,11 @@ h1, h2 {
     border-bottom: 1px solid #000;
     padding: 10px;
     height: 45px;
-    background: url(img/toolbar.png) #000000 repeat-x;
     position: relative;
+	
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#565656), to(#3c3c3c), color-stop(0,#565656));
+
+
 }
 .black-translucent .toolbar {
 	margin-top: 20px;
@@ -68,8 +70,14 @@ body.landscape .toolbar > h1 {
     background: none;
     -webkit-border-image: url(img/button.png) 0 5 0 5;
 }
+
+#refreshButton {
+    right: 80px;
+	 width: 50px;
+}
+
 .blueButton {
-    -webkit-border-image: url(img/blueButton.png) 0 5 0 5;
+    -webkit-background: url(img/blueButton.png) 0 5 0 5;
     border-width: 0 5px;
 }
 .back {
@@ -94,7 +102,7 @@ body.landscape .toolbar > h1 {
     font-weight: bold;
 }
 .whiteButton,
-.grayButton {
+.grayButton, .greenButton {
     display: block;
     border-width: 0 12px;
     padding: 10px;
@@ -108,6 +116,15 @@ body.landscape .toolbar > h1 {
     -webkit-border-image: url(img/whiteButton.png) 0 12 0 12;
     text-shadow: rgba(255, 255, 255, 0.7) 0 1px 0;
 }
+
+.greenButton {
+    -webkit-border-image: url(img/button.png) 0 5 0 5;
+	
+	color:#FFF;
+	width:80%;
+	margin:auto;
+}
+
 .grayButton {
     -webkit-border-image: url(img/grayButton.png) 0 12 0 12;
     color: #FFFFFF;
@@ -126,6 +143,7 @@ ul {
 }
 ul.rounded {
     -webkit-border-radius: 8px;
+ 	border: 2px solid #666;
     -webkit-box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
 }
 ul.rounded li:first-child, ul.rounded li:first-child a {
@@ -146,11 +164,32 @@ ul li {
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142));
     overflow: hidden;
 }
+
+
+ul li.form {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#FFFFFF));
+	color:#000;
+}
+
+ul li.form textarea{
+	color:#000;
+}
+
+
+
 ul li.arrow {
     background-image: url(img/chevron.png), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142));
     background-position: right center;
     background-repeat: no-repeat;
 }
+
+
+
+ul li.arrow .performance {
+	display:none;
+}
+
+
 ul li.forward {
     background-image: url(img/chevron_circle.png), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142));
     background-position: right center;
@@ -380,16 +419,26 @@ ul.individual li a {
 /* @end */
 /* @group Info */
 .info {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ccc), to(#aaa), color-stop(.6,#CCCCCC));
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ccd5c3), to(#fafafa), color-stop(0,#ccd5c3));
     font-size: 12px;
     line-height: 16px;
-    text-align: center;
     text-shadow: rgba(255,255,255,.8) 0 1px 0;
     color: #444;
     padding: 15px;
     border-top: 1px solid rgba(255,255,255,.2);
-    font-weight: bold;
 }
+
+.round {
+	
+	margin: 15px 10px 17px 10px;
+	padding: 15px;	
+    -webkit-border-radius: 8px;
+ 	border: 2px solid #666;
+    -webkit-box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
+	
+}
+
+
 /* @end */
 /* @group Edge to edge */
 ul.edgetoedge {
@@ -398,9 +447,9 @@ ul.edgetoedge {
     padding: 0;
 }
 ul.edgetoedge li {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1e1f21), to(#272729));
-    border-bottom: 2px solid #000;
-    border-top: 1px solid #4a4b4d;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#282828), to(#282828));
+    border-bottom: 2px solid #CCC;
+    border-top: 1px solid #CCC
     font-size: 20px;
     margin-bottom: -1px;
 }
@@ -527,6 +576,17 @@ ul.metal li.arrow a small {
     line-height: 17px;
 }
 
+ul li {
+    color: #666;
+    border-top: 1px solid #333;
+    border-bottom: #555858;
+    list-style-type: none;
+    padding: 10px 10px 10px 10px;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142));
+    overflow: hidden;
+}
+
+
 li .performance {
 	display:none;
 }
@@ -535,4 +595,48 @@ li input.performance {
 	display:none;
 }
 
+
+.feedback-about {
+	font-size:.8em;
+}
+
+.feedbackForm li .content {
+	color:white;
+}
+
+.info .organisation  {
+	font-size:20px;
+	
+}
+
+h3.question {
+ 	padding-left:15px;
+ 	padding-top:5px;
+ 	padding-bottom:15px;
+
+}
+
+#home .info {
+    background-image: url('img/people.png'), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ccd5c3), to(#fafafa), color-stop(0,#ccd5c3));
+	background-repeat:no-repeat;
+	background-position:bottom left;
+	height:90px;
+	
+	padding-left:200px;
+}
+	
+	           #about {
+                padding: 20px 20px 40px;
+                font-size: 13px;
+                background: #161618;
+            }
+            #about p {
+                margin-bottom: 8px;
+            }
+            #about a {
+                color: #fff;
+                font-weight: bold;
+            }
+			
+			
 /* @end */
