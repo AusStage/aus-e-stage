@@ -1,6 +1,6 @@
 #summary Information About the AusStage Colour Scheme
 
-= AusStage Colour Scheme = 
+= !AusStage Colour Scheme = 
 
 The !AusStage colour scheme should be used for all continuing web development. The colours are defined in the following 5 files:
 
