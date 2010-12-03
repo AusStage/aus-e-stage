@@ -1,22 +1,24 @@
 #summary Information About the AusStage Colour Scheme
 
-The following !AusStage colour scheme should be used for all continuing web development. The colours are defined in the following 5 files:
+= AusStage Colour Scheme = 
 
-* !AusStage Colour Palette *
+The !AusStage colour scheme should be used for all continuing web development. The colours are defined in the following 5 files:
 
-A HTML version of the colour palette that can be used to view the different colours 
+* !AusStage Colour Scheme *
 
-[http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-pallete.html Download Link]
+A HTML version of the colour scheme for ease of reference, that can be used to view the different colours 
+
+[http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-scheme.html Download Link]
 
 * !AusStage Colours - Foreground CSS * 
 
-A CSS version of the colour palette which defines styles that can be applied to HTML elements, such as the colour of text
+A CSS version of the colour scheme which defines styles that can be applied to HTML elements, such as the colour of text
 
 [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colours.css Download Link]
 
 * !AusStage Colours - Background CSS * 
 
-A CSS version of the colour palette which defines styles that can be applied to the background of HTML elements, such as the background colour of a table cell
+A CSS version of the colour scheme which defines styles that can be applied to the background of HTML elements, such as the background colour of a table cell
 
 [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css Download Link]
 
@@ -32,16 +34,16 @@ A version of the colour palette based on the CSS version that uses style element
 
 Download Link not available at this time
 
-==Using the !AusStage Colour Scheme==
+==Using the Colour Scheme==
 
 The scheme defines the colours that are used by !AusStage. The scheme arranges 193 colours into 16 sets. Three sets address multiple hues from the colour spectrum. Ten sets provide single hues for quantitative displays, and a further three sets support other interface needs. The colours are numbered consecutively from 1 to 193. These numbers are used in code to call colours from the scheme. 
 
-===Spectrum sets - multiple hues===
+===Spectrum Sets - Multiple Hues===
 
 Three sets provide selections from across the colour spectrum. These are used where colours represent different entities. For example, different contributors can be represented colours of different hue.
 
 *Icon Set 14* - defines 14 base colours, with light and dark pairs of green, orange, red, purple and blue, and teal, gold, silver and black. These 14 colours provide a basis for all subsequent sets. 
-They are derived from the colour palette used by [http://code.google.com/p/google-maps-icons/wiki/ColorPalette Google Maps Icons]
+They are derived from the colour palette used by the [http://code.google.com/p/google-maps-icons/wiki/ColorPalette Google Maps Icons]
 
 *Icon Cycle 24* - defines 24 colours which cycle through the colour spectrum. The 24 colours are derived from a selection of 11 colours from Icon Set 14, with intermediate colours inserted, to make up 24.
 
@@ -57,11 +59,11 @@ Five hues - blue, red, green, orange, purple - come in sets of 10 shades and 5 s
 
 For mapping, colour associations with !AusStage entities are proposed as follows, and suggested practice is to follow these associations in other visualisations.
 
-  *Events - Blues
-  *Contributors - Greens
-  *Organisations - Reds
-  *Venues - Oranges
-  *Works - Purples
+  * Events - Blues
+  * Contributors - Greens
+  * Organisations - Reds
+  * Venues - Oranges
+  * Works - Purples
 
 ===Interface sets===
 
@@ -79,11 +81,11 @@ The numbers and their arrangement within the scheme are fixed. The project manag
 
 ===References===
 
-This colour scheme builds on work undertaken for !AusStage by Mary Moore. It was developed using ColourSchemer Studio, version 2.0.1 (http://www.colorschemer.com/). ColourSchemer Studio supports cultivation of colour palettes, calculation of intermediate colours, and export to html, css and other formats. 
+This colour scheme builds on work undertaken for !AusStage by Mary Moore. It was developed using [http://www.colorschemer.com/ ColourSchemer Studio], version 2.0.1. ColourSchemer Studio supports cultivation of colour palettes, calculation of intermediate colours, and export to html, css and other formats. The ColourSchemer source file is [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-scheme-colourschemer-studio.cs available for download]. 
 
 Other services referred to in the development include:
 
-  *[http://code.google.com/p/google-maps-icons/wiki/ColorPalette Google Maps Icons]
-  *[http://colorbrewer2.org/ Color Brewer 2]
-  *[http://www.colourlovers.com/ Colour Lovers] 
-  *[http://colororacle.cartography.ch/ Color Oracle]
+  * [http://code.google.com/p/google-maps-icons/wiki/ColorPalette Google Maps Icons]
+  * [http://colorbrewer2.org/ Color Brewer 2]
+  * [http://www.colourlovers.com/ Colour Lovers] 
+  * [http://colororacle.cartography.ch/ Color Oracle]
