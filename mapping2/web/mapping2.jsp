@@ -152,7 +152,7 @@
 				</div>
 				<div id="tabs-3">
 					<h3>Map of the Selected Items</h3>
-					<div id="map_div" style="width: 100%; height: 100%">
+					<div id="map_div">
 					</div>
 				</div>
 			</div>
