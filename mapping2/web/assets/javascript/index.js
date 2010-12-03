@@ -25,6 +25,8 @@ $(document).ready(function(){
 	searchObj  = new SearchClass();
 	browseObj  = new BrowseClass();
 	mappingObj = new MappingClass();
+	
+	mappingObj.updateMap();
 
 	/*
 	 * page setup
@@ -37,27 +39,13 @@ $(document).ready(function(){
 	
 	// prevent a FOUC
 	$('html').removeClass('js');
-
-	// add a click handler to the hide menu link
-	$("#hidePanel").click(function(){
-		$("#panel").animate({marginLeft:"-175px"}, 500 );
-		$("#sidebar").animate({width:"0px", opacity:0}, 400 );
-		$("#showPanel").show("normal").animate({width:"18px", opacity:1}, 200);
-		$("#main").animate({marginLeft:"30px"}, 500);
-		$("#tabs").animate({width:"100%"});
-	});
-	
-	// add a click handler to the show menu link
-	$("#showPanel").click(function(){
-		$("#main").animate({marginLeft:"200px"}, 200);
-		$("#tabs").animate({width:"100%"});
-		$("#panel").animate({marginLeft:"0px"}, 400 );
-		$("#sidebar").animate({width:"175px", opacity:1}, 400 );
-		$("#showPanel").animate({width:"0px", opacity:0}, 600).hide("slow");
-	});
 	
 	// setup the tabs
-	$("#tabs").tabs();
+	$("#tabs").tabs({'show': function(event, ui) {
+		$(ui.panel).attr('style', 'width:100%; height:100%');
+		google.maps.event.trigger(mappingObj.map, 'resize');
+		return true;
+	}});
 	
 	// style the buttons
 	styleButtons();
@@ -301,11 +289,18 @@ $(document).ready(function(){
 	 /*
 	  * map functionality
 	  */
-	 //TODO add map initialision / resize code here
 	$('#tabs').bind('tabsshow', function(event, ui) {
 		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
 			// update the map
-			mappingObj.updateMap();
+			var mapDiv = $(mappingObj.map.getDiv());
+			//parent = mapDiv.parent();
+			parent = $('.wrapper');
+			newHeight = parent.height();
+			newWidth  = parent.width();
+			mapDiv.height(Math.floor(newHeight));
+			mapDiv.width(Math.floor(newWidth));
+			
+			google.maps.event.trigger(mappingObj.map, 'resize');
 		}
 	});
 });

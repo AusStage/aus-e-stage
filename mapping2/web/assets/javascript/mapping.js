@@ -88,6 +88,7 @@ MappingClass.prototype.initMap = function() {
 	
 	mappingObj.map.mapTypes.set('ausstage', ausstageStyle);
 	mappingObj.map.setMapTypeId('ausstage');
+
 }
 
 // function to update the map
@@ -97,6 +98,7 @@ MappingClass.prototype.updateMap = function() {
 	if(mappingObj.map == null) {
 		// initialise the map
 		mappingObj.initMap();
+		google.maps.event.trigger(mappingObj.map, 'resize')
 	} else {
 		// reset the map
 	
