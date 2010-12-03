@@ -68,7 +68,10 @@ function MappingClass() {
 	this.markerData = {hashes: [], objects: []};
 					  
 	// variable to keep track of the markers on the map
-	this.mapMarkers = [];             
+	this.mapMarkers = [];      
+	
+	// variable to hold a height constant for adding to the computed height of the components
+	this.HEIGHT_BUFFER_CONSTANT = 55;       
 
 }
 
@@ -214,4 +217,24 @@ MappingClass.prototype.computeLatLngHash = function(latitude, longitude) {
 	var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
 	latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
 	return latlngHash;
+}
+
+// compute the height of the map
+MappingClass.prototype.computeMapHeight = function() {
+
+	// start the height calculations
+	//var height = mappingObj.HEIGHT_CONSTANT;
+	var height = 0;
+	
+	// get the height of various elements
+	var wrapper   = $('.wrapper').height();
+	var header    = $('.header').height();
+	var tabHeader = $('.fix-ui-tabs').height();
+	var pushElem  = $('.push').height();
+	var footer    = $('.footer').height();
+	
+	height = wrapper - (header + tabHeader + pushElem + footer + mappingObj.HEIGHT_BUFFER_CONSTANT);
+	
+	return Math.floor(height);
+
 }
