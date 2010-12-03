@@ -81,7 +81,7 @@ The numbers and their arrangement within the scheme are fixed. The project manag
 
 ===References===
 
-This colour scheme builds on work undertaken for !AusStage by Mary Moore. It was developed using [http://www.colorschemer.com/ ColourSchemer Studio], version 2.0.1. ColourSchemer Studio supports cultivation of colour palettes, calculation of intermediate colours, and export to html, css and other formats. The ColourSchemer source file is [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-scheme-colourschemer-studio.cs available for download]. 
+This colour scheme builds on work undertaken for !AusStage by Mary Moore. It was developed using [http://www.colorschemer.com/ ColourSchemer Studio], version 2.0.1. !ColourSchemer Studio supports cultivation of colour palettes, calculation of intermediate colours, and export to html, css and other formats. The !ColourSchemer source file is [http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-scheme-colourschemer-studio.cs available for download]. 
 
 Other services referred to in the development include:
 
