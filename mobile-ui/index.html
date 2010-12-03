@@ -15,17 +15,17 @@
 
         <script type="text/javascript" charset="utf-8">
             var jQT = new $.jQTouch({
-                icon: 'jqtouch.png',
+                icon: 'assets/jqtouch/themes/ausstage/img/icon.png',
                 addGlossToIcon: false,
-                startupScreen: 'jqt_startup.png',
+                startupScreen: 'assets/jqtouch/themes/ausstage/img/startup.png',
                 statusBar: 'black',
                 preloadImages: [
-                    'assets/jqtouch/themes/jqt/img/back_button.png',
-                    'assets/jqtouch/themes/jqt/img/back_button_clicked.png',
-                    'assets/jqtouch/themes/jqt/img/button_clicked.png',
-                    'assets/jqtouch/themes/jqt/img/grayButton.png',
-                    'assets/jqtouch/themes/jqt/img/whiteButton.png',
-                    'assets/jqtouch//themes/jqt/img/loading.gif'
+                    'assets/jqtouch/themes/ausstage/img/back_button.png',
+                    'assets/jqtouch/themes/ausstage/img/back_button_clicked.png',
+                    'assets/jqtouch/themes/ausstage/img/button_clicked.png',
+                    'assets/jqtouch/themes/ausstage/img/grayButton.png',
+                    'assets/jqtouch/themes/ausstage/img/greenButton.png',
+                    'assets/jqtouch//themes/ausstage/img/loading.gif'
                     ]
             });
 			
@@ -33,7 +33,7 @@
 			var gCurrentPerformance = 0;
 		
 		  var _gaq = _gaq || [];
-		   _gaq.push(['_setAccount', 'UA-3158456-14']);
+		   _gaq.push(['_setAccount', 'UA-10089663-2']);
 		
 		
 		
@@ -151,22 +151,25 @@
 
 				window.console.log(values);
 				
+				//remove what is currently is being shown 
+				$(".feedback").items('remove').chain();//load this data in the feedback
+				$(".feedbackForm").items('remove').chain();//load this data in the feedback 
+				
 				$.ajax({
 						type:   'GET',
 						url: source, 
+						cache: false,
 						dataType: mydataType,
 						success: function (data) {
-												
-							$(".feedback").items(data.feedback.sort(
-								function(a, b){
-									var dateA=new Date(a.date), dateB=new Date(b.date)
-									return dateB- dateA
-								}
-								)).chain();//load this data in the feedback
-								 
-								$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 
-									
-								jQT.goTo('#FeedbackDisplay');
+							window.console.log(data);
+
+							//$(".feedback").items('remove').chain();//load this data in the feedback
+							
+							$(".feedback").items('replace',data.feedback.reverse()).chain();//load this data in the feedback
+							$(".feedbackForm").items('replace',data.feedback).chain();//load this data in the feedback 
+							
+							$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 
+							//	jQT.goTo('#FeedbackDisplayWithForm');
 
 						},
 						error:function (xhr, ajaxOptions, thrownError){
@@ -239,18 +242,19 @@
 				
 				window.console.log(source);
 				
+				$(".feedback").items('remove').chain();//load this data in the feedback
+				$(".feedbackForm").items('remove').chain();//load this data in the feedback 
+				
 				
 				$.ajax({
 						type:   'GET',
 						url: source, 
 						dataType: mydataType,
+						cache: false,
 						success: function (data) {
-							$(".feedbackForm").items(data.feedback.sort(
-							function(a, b){
-								var dateA=new Date(a.date), dateB=new Date(b.date)
-								return dateB- dateA
-							}
-							)).chain();//load this data in the feedback 
+							
+							$(".feedbackForm").items('replace',data.feedback.reverse()).chain();//BUG - this doesn't always refresh  
+							$(".feedback").items('replace',data.feedback).chain();//load this data in the feedback
 						
 							$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 							populate(data);
 							
@@ -301,41 +305,26 @@
             body.fullscreen #home .info {
                 display: none;
             }
-            #about {
-                padding: 100px 10px 40px;
-                text-shadow: rgba(255, 255, 255, 0.3) 0px -1px 0;
-                font-size: 13px;
-                text-align: center;
-                background: #161618;
-            }
-            #about p {
-                margin-bottom: 8px;
-            }
-            #about a {
-                color: #fff;
-                font-weight: bold;
-                text-decoration: none;
-            }
+ 
         </style>
     </head>
     <body >
-       
  
          <div id="home" class="current">
             <div class="toolbar">
+            	<img src="assets/jqtouch/themes/ausstage/img/logo.png" />
                 <h1>AusStage</h1>
-                <a class="button slideup" id="infoButton" href="#about">About</a>
+                <a class="button slideup" id="infoButton" href="#About-Panel">About</a>
             </div>
             
-            <div class="info">
+            <div class="info round">
                 <p>Intro</p>
             </div>
       	
             <ul class="rounded">
             
-            <li class="arrow"><a href="#Near" onClick="findLocation()">Performances near you</a> <small class="counter">1</small></li> 
-			<li class="arrow"><a href="#Search">Search</a> <small class="counter">2</small></li>
-			<li class="arrow"><a href="#About">About</a><small class="counter">4</small></li>
+            <li class="arrow"><a href="#Near" onClick="findLocation()">Performances near you</a> </li> 
+			<li class="arrow"><a href="#About">About</a> </li>
 
             </ul>
             
@@ -346,30 +335,45 @@
  <div id="Near">
             <div class="toolbar">
                 <h1>Performances near you</h1>
-                <a class="back" href="#">Home</a>
-                <a class="button slideup" id="infoButton" href="#about">About</a>
+                <a class="back" href="#">Back</a>
+                <a class="button slideup" id="infoButton" href="#About">About</a>
             </div> 
          
-  		<div class="LocInfo info">
+  		<div class="LocInfo info round">
                 <p>Looking up location&hellip;</p>
             </div>
                      
         <ul class="rounded">
-           <li class="arrow"><a href="#FeedbackDisplayWithForm"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a> <small class="counter">1</small></li>		   
-	   
+           <li class="arrow">
+           <a href="#FeedbackDisplayWithForm"  onClick="loadFeedback(event)">Be Your Self <span class="performance">4</span></a>
+            </li>		   
         </ul>              
       
 </div>
 
 
       
-          <div id="Search">
+          <div id="About">
             <div class="toolbar">
-                <h1>Search</h1>
-                <a class="back" href="#">Home</a>
-                                <a class="button slideup" id="infoButton" href="#about">About</a>
+                <h1>About</h1>
+                <a class="back" href="#">Back</a>
+                 <a class="button" id="infoButton" href="#about">About</a>
 
             </div>  
+            
+              <div id="about" class="selectable">
+            <p>AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to AusStage, search and retrieve information about, company and performer histories, maps, tours and, links to related material, all at <a href="http://www.ausstage.edu.au.">www.ausstage.edu.au.</a> For free.</p>
+            <p>AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies know what you thought of the production you're seeing right now. You can use your phone to send a text message or, if you're a tweeter you can use Twitter or, if you'd like to jump on the web and use the mobile web site you could do that too.</p>
+            <p>Don't worry – AusStage doesn't record or store ANY IDENTIFYING INFORMATION about you. In fact, it doesn't even record the phone number or Twitter account you've used to respond so there's no way that they, or the company whose show you're talking about, can tell who you are, let alone contact you.</p>
+            <p>Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn't like.</p>
+            <p>This project is being led by Flinders University alongside the companies and artists who you are seeing tonight. It has been funded by the National e-Research Architecture Taskforce (NeAT).</p>
+            <p>If you do decide that you'd like to have your say about what you see tonight your standard costs for SMS and network access apply. If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study. As mentioned your participation is voluntary, you will NOT be identified in any results and your response will be stored confidentially (however,please note that sending information via mobile devices is inherently insecure).</p>
+            <p>This research project has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892). For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on human.researchethics@flinders.edu.au.</p>
+            <p>Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to <a href="mailto:jonathan.bollen@flinders.edu.au">jonathan.bollen@flinders.edu.au</a></p>
+                            <p><br /><br /><a href="#" class="grayButton goback">Close</a></p>
+                </div>            
+                            
+                            
              <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Search']);</script>
         
          </div> 
@@ -377,23 +381,27 @@
           <div id="About-Panel">
             <div class="toolbar">
                 <h1>About</h1>
-                <a class="back" href="#">Home</a>
+                <a class="back" href="#">Back</a>
                <a class="button slideup" id="infoButton" href="#about">About</a>
 
             </div>  
 
          </div>        
          
-          <div id="about" class="selectable">
-               	
-                <!--TODO add some about information to here-->
-                About this service. 
-                
-                <p><br /><br /><a href="#" class="grayButton goback">Close</a></p>
-                
-             <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'About-Panel']);</script>
-
-        </div>
+         <div id="about" class="selectable">
+            <p>AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to AusStage, search and retrieve information about, company and performer histories, maps, tours and, links to related material, all at <a href="http://www.ausstage.edu.au.">www.ausstage.edu.au.</a> For free.</p>
+            <p>AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies know what you thought of the production you're seeing right now. You can use your phone to send a text message or, if you're a tweeter you can use Twitter or, if you'd like to jump on the web and use the mobile web site you could do that too.</p>
+            <p>Don't worry – AusStage doesn't record or store ANY IDENTIFYING INFORMATION about you. In fact, it doesn't even record the phone number or Twitter account you've used to respond so there's no way that they, or the company whose show you're talking about, can tell who you are, let alone contact you.</p>
+            <p>Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn't like.</p>
+            <p>This project is being led by Flinders University alongside the companies and artists who you are seeing tonight. It has been funded by the National e-Research Architecture Taskforce (NeAT).</p>
+            <p>If you do decide that you'd like to have your say about what you see tonight your standard costs for SMS and network access apply. If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study. As mentioned your participation is voluntary, you will NOT be identified in any results and your response will be stored confidentially (however,please note that sending information via mobile devices is inherently insecure).</p>
+            <p>This research project has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892). For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on human.researchethics@flinders.edu.au.</p>
+            <p>Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to <a href="mailto:jonathan.bollen@flinders.edu.au">jonathan.bollen@flinders.edu.au</a></p>
+                           <p><br /><br /><a href="#" class="grayButton goback">Close</a></p>
+               </div>             
+                         <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'About-Panel']);</script>
+            
+                    </div>
    
      
                            
@@ -416,7 +424,13 @@
            <h3 class="question"></h3>
 
             <ul class="feedback">
-                    <li><span class="content"></span></li>
+                    <li>
+                        <span class="content"></span>
+                        <span class="date"></span>
+                        <span class="time"></span>
+                        <span class="type"></span><
+
+                    /li>
             </ul>
          	
          
@@ -426,17 +440,20 @@
             
          <div id="FeedbackDisplayWithForm">
             <div class="toolbar">
+            
+
                 <h1 class="event"></h1>
-                <a class="back" href="#">Home</a>
+                <a class="button" id="refreshButton"  href="#FeedbackDisplayWithForm"  onClick="getPerformanceData()">Refresh</a>
+                <a class="back" href="#">Back</a>
                <a class="button slideup" id="infoButton" href="#about">About</a>
 
             </div>             
             
-             <div class="info">
+             <div class="info round">
             
-            <div class="organisation">organisation</div>
-            <div class="venue">venue</div>
-            <div class="date">date</div>
+            <div class="organisation">Loading</div>
+            <span class="venue"></span>
+            <span class="date"></span>
             </div>
             
            <span class="performance"></span>
@@ -444,17 +461,27 @@
              
          <form id="submit-feedback" action="" method="GET" class="form">
         		<h3 class="question">Question</h3>
-				<ul class="edit rounded">
-            		<li><textarea placeholder="" name="message"></textarea></li>
+				<ul class="rounded" >
+            		<li class="form"><textarea placeholder="" name="message"></textarea></li>
                </ul>
- 			<a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#" onClick="submitForm()" class="whiteButton">Submit</a>
+
+ 			<a  href="#" onClick="submitForm()" class="greenButton">Submit</a>
          </form>
         
       
            <h3 class="question"></h3>
 
-            <ul class="feedbackForm">
-                    <li><span class="content"></span></li>
+            <ul class="feedbackForm edgetoedge">
+                    <li>
+                    
+                        <div class="content">Loading .... </div>
+                        <span class="feedback-about">
+                            <span class="date"></span>
+                            <span class="time"></span>
+                            . Via <span class="type"></span>
+                        </span>
+                    
+                    </li>
             </ul>
                   
          </div>  
