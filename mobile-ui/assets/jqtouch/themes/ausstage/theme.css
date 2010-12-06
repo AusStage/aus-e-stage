@@ -604,9 +604,11 @@ li input.performance {
 	color:white;
 }
 
-.info .organisation  {
+#refreshButton {
+	width:30px;
+}
+.info .event {
 	font-size:20px;
-	
 }
 
 h3.question {
