@@ -8,7 +8,7 @@
         <script src="assets/jqtouch/jquery.1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="assets/jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>
           <script src="assets/jqtouch/extensions/jqt.location.js" type="application/x-javascript" charset="utf-8"></script>
-
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
         <script type="text/javascript" src="assets/javascript/chain-0.2.js" type="application/x-javascript" charset="utf-8"></script>
 
@@ -218,7 +218,6 @@
 		function findLocation(){
 		        
 				 _gaq.push(['_trackPageview', 'PerformancesNearBy']);
-        
 
                 // We pass "updateLocation" a callback function,
                 // to run once we have the coordinates.
@@ -226,7 +225,10 @@
                 // right away if it's working or not
                 var lookup = jQT.updateLocation(function(coords){
                     if (coords) {
-                        setLocDisplay('Latitude: ' + coords.latitude + '<br />Longitude: ' + coords.longitude);
+						convertLatLongToPlace(coords.latitude,  coords.longitude);
+						//convertLatLongToPlace(-42.8880971, 147.32766);
+
+				
                     } else {
                        setLocDisplay('Device not capable of geo-location.');
                     }
@@ -236,8 +238,28 @@
                     setLocDisplay('Looking up location&hellip;');
                 }		
 					
+					
+					
 		}
 		
+		
+		function convertLatLongToPlace(lat, lng) {
+    		geocoder = new google.maps.Geocoder();
+			var latlng = new google.maps.LatLng(lat, lng);
+
+			geocoder.geocode({'latLng': latlng}, function(results, status) {
+			  if (status == google.maps.GeocoderStatus.OK) {
+				if (results[1]) {
+				 setLocDisplay('Your location is ' + results[1].formatted_address);
+
+				}
+			  } else {
+				alert("Geocoder failed due to: " + status);
+			  }
+ 		   });
+	
+		}
+	
 		function buildHost() {
 			
 			 var host = $(location).attr('host');
