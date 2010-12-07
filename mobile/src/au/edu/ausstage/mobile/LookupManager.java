@@ -255,5 +255,58 @@ public class LookupManager {
 		return object.toString();
 	
 	} // end getPerformanceDetails method
+	
+	/**
+	 * A method to get a list of performances at venues within a specified distance
+	 *
+	 * @param latitude  a latitude coordinate in decimal notation
+	 * @param longitude a longitude coordinate in decimal notation
+	 * @param distance  the distance to add in metres
+	 *
+	 * @return          a string containing the details of any found performances
+	 */
+	@SuppressWarnings("unchecked")
+	public String getPerformanceByLocation(String latitude, String longitude, String distance) {
+	
+		// first round of validation
+		if(InputUtils.isValid(latitude) == false || InputUtils.isValid(longitude) == false || InputUtils.isValid(distance) == false) {
+			throw new IllegalArgumentException("Missing parameters, expect lat, lng and distance");
+		} else {
+			// second round validation
+			if(CoordinateManager.isValidLatitude(Float.valueOf(latitude)) == false) {
+				throw new IllegalArgumentException("The value of the latitude parameter did not pass validation as defined by the CoordinateManager class");
+			}
+			
+			if(CoordinateManager.isValidLongitude(Float.valueOf(longitude)) == false) {
+				throw new IllegalArgumentException("The value of the longitude parameter did not pass validation as defined by the CoordinateManager class");
+			}
+			
+			if(InputUtils.isValidInt(distance) == false) {
+				throw new IllegalArgumentException("The value of the distance parameter must be a valid integer");
+			}
+		}
+		
+		// convert the values to their required formats
+		float lat  = Float.valueOf(latitude);
+		float lng  = Float.valueOf(longitude);
+		int   dist = Integer.valueOf(distance);
+		
+		// get the bounding box hashMap
+		java.util.HashMap<String, Coordinate> boundingBox = CoordinateManager.getBoundingBox(lat, lng, dist);
+		
+		// debug code
+		//NE,SE,SW,NW)
+		String data = "";
+		data += "Lat Const: " + CoordinateManager.latitudeConstant() + "\n";
+		data += "Lng Const: " + CoordinateManager.longitudeConstant(lat) + "\n";
+		data += "NE: " + boundingBox.get("NE").toString() + "\n";
+		data += "SE: " + boundingBox.get("SE").toString() + "\n";
+		data += "SW: " + boundingBox.get("SW").toString() + "\n";
+		data += "NW: " + boundingBox.get("NW").toString() + "\n";
+		data += "N:  " + CoordinateManager.addDistanceNorth(lat, lng, dist) + "\n";
+		data += "S:  " + CoordinateManager.addDistanceSouth(lat, lng, dist);
+		
+		return data;
+	}
 
 } // end class definition
