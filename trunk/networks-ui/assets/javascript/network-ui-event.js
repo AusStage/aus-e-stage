@@ -1,7 +1,7 @@
 /*
 things to fix.
 
-ZOOM
+
 
 - contributor info panel :  role
 
@@ -10,8 +10,9 @@ ZOOM
 - proper 2nd degree network
 - arc diagram
 - css
-- window resize.
-- 
+- window resize. - not playing nice with pan and zoom.
+- pan and zoom not playing nice either.
+
 
 
 
@@ -33,8 +34,8 @@ var timeLine;
 var yAxis;
 
 /* sizing. */
-var w = 995,
-    h = 450;  	//height of the focus panel
+var w = $(window).width() - 220,
+	h = $(window).height() - 112;  	//height of the focus panel
     
 /* constants */    
 var EDGE = "edge";
@@ -45,7 +46,7 @@ var centreNode = -1;	//holds the index for the central node. Set on prepareData(
 var contributorCount = -1;
 
 /* appearance variables */
-var panelColor = "white";
+var panelColor = "yellow";
 
 var thickLine = 3;
 var thinLine = 1.5;
@@ -112,6 +113,9 @@ var edgeId = -1;			//stored the ID of the selected EDGE
 var edgeIndex = -1;			//stores the INDEX of the selected contributor - specific to the selected edge.
 var nodeIndex = -1;			//stores the INDEX of the selected NODE	
 
+//DATA STORAGE VARIABLES
+var beforeCount = 0;
+var afterCount = 0;
 
 
 
@@ -124,10 +128,11 @@ var nodeIndex = -1;			//stores the INDEX of the selected NODE
 $(document).ready(function() {
 	// style the buttons
 	$("button, input:submit").button();
-		
+	
+	
+	//deal with window resizing	
 	$(window).resize(function() {
-	  console.log($(window).width());
-	  vis.render();
+	  windowResized();
 	});
 		
 		
@@ -354,8 +359,8 @@ END STRUCTURE OF EDGES==========================================================
 
 
 function prepareData(){
-	var beforeCount = 0;
-	var afterCount = 0;
+	beforeCount = 0;
+	afterCount = 0;
 	var isBefore = true;
 	
 	//get link degree for nodes. And set contrib_id array with associated contributors
@@ -438,58 +443,7 @@ function prepareData(){
 	//very simple layout system. Assuming nodes are in order, alternate up and down on the baseline, expanding to the central node
 	// then contract.
 	 
-	var step;
-	if (beforeCount > afterCount){
-			step = (h/2)/beforeCount;
-	}
-	else step = (h/2)/afterCount;
-	
-	var alternate = 0;
-	var before = true;
-	var afterIndex = 0;
-	
-	for(i = 0;i<events.nodes.length; i ++){
-
-		if (events.nodes[i].central){
-			events.nodes[i].bottom = h/2;
-			events.nodes[i].left = timeLine(events.nodes[i].startDate);
-			before = false;
-		}
-	
-		if (before){
-			switch (alternate){
-				case 0: events.nodes[i].bottom = h/2 - (step*i);
-						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
-	        			alternate = 1;
-	        			break;
-	        				
-				case 1: events.nodes[i].bottom = h/2 + (step*i);
-						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
-	    				alternate = 0; 
-						break;
-			}	
-		}
-	    
-		if (!before){
-			switch (alternate){
-				case 0: events.nodes[i].bottom = h/2 - (step*afterIndex);
-						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
-		        		alternate = 1;
-		        		afterIndex++;
-		        		break;
-		        				
-				case 1: events.nodes[i].bottom = h/2 + (step*afterIndex);
-						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
-		    			alternate = 0;
-		    			afterIndex++; 
-						break;
-			}	
-		}
-
-	}
-	
-	
-	
+	layout();
 	
 	//////////////////
 	//get count of duplicate lines AND add x and y position of source and target nodes. 
@@ -595,7 +549,8 @@ function showGraph(targetDiv){
 	/* Focus panel */
 		 focus = vis.add(pv.Panel)
 		.overflow("hidden")
-    	.height(h)
+    	.height(function() {return h})
+    	.width(function(){return w})
     	.fillStyle("rgba(255,255,255,0.1)")
     	.event("mousemove", pv.Behavior.point())
     	.event("mousedown", pv.Behavior.pan())
@@ -714,11 +669,97 @@ function transform() {
   end = timeLine.invert(t.x + end * t.k);			
   
   timeLine.domain(start, end);			//alter the domain
-  
+
   vis.render();
 
 }
 
+
+//this function is called when the browser window is resized. 
+//
+function windowResized(){
+	  
+	  //reset the width and height
+	  w = $(window).width() - 220;
+	  h = $(window).height() - 112;
+	  
+	  //reset the timeline range accordingly
+	  timeLine.range(50,w-50);
+	  
+	  //reset the positioning of nodes accordingly.
+	  for (var i = 0; i< events.nodes.length; i++){
+		  events.nodes[i].left = timeLine(events.nodes[i].startDate);	
+	  }
+
+	  layout();
+	  	  
+	  //reset the position of links accordingly.
+	  for(var i = 0; i < events.edges.length; i++){
+	  
+	  //get the source and target x and y values and store in the edge data.
+	  	events.edges[i].targetInfo.left = events.nodes[events.edges[i].target].left;
+		events.edges[i].sourceInfo.left = events.nodes[events.edges[i].source].left;
+	  	events.edges[i].targetInfo.bottom = events.nodes[events.edges[i].target].bottom;
+		events.edges[i].sourceInfo.bottom = events.nodes[events.edges[i].source].bottom;	  		  	
+	  }
+
+	  
+	  vis.render();	
+}
+
+//layout function determines the layout of nodes in the grid.
+function layout(){
+
+	var step;
+	if (beforeCount > afterCount){
+			step = (h/2)/beforeCount;
+	}
+	else step = (h/2)/afterCount;
+	
+	var alternate = 0;
+	var before = true;
+	var afterIndex = 0;
+	
+	for(i = 0;i<events.nodes.length; i ++){
+
+		if (events.nodes[i].central){
+			events.nodes[i].bottom = h/2;
+			events.nodes[i].left = timeLine(events.nodes[i].startDate);
+			before = false;
+		}
+	
+		if (before){
+			switch (alternate){
+				case 0: events.nodes[i].bottom = h/2 - (step*i);
+						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
+	        			alternate = 1;
+	        			break;
+	        				
+				case 1: events.nodes[i].bottom = h/2 + (step*i);
+						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
+	    				alternate = 0; 
+						break;
+			}	
+		}
+	    
+		if (!before){
+			switch (alternate){
+				case 0: events.nodes[i].bottom = h/2 - (step*afterIndex);
+						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
+		        		alternate = 1;
+		        		afterIndex++;
+		        		break;
+		        				
+				case 1: events.nodes[i].bottom = h/2 + (step*afterIndex);
+						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
+		    			alternate = 0;
+		    			afterIndex++; 
+						break;
+			}	
+		}
+
+	}	
+}
 
 //drag functionality
 function dragNode(d, p){
