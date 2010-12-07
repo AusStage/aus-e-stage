@@ -86,8 +86,9 @@ public class CoordinateManager {
 	 *
 	 * @return a double representing the latitude constant
 	 */
-	private static double latitudeConstant() {
-		return EARTH_DIAMETER * Math.PI / Float.valueOf("360");
+	public static double latitudeConstant() {
+		return EARTH_DIAMETER * (Math.PI / Float.valueOf("360"));
+		//return EARTH_DIAMETER * (Float.valueOf("3.14") / Float.valueOf("360"));
 	}
 	
 	/**
@@ -97,9 +98,10 @@ public class CoordinateManager {
 	 *
 	 * @return a double representing the longitude constant
 	 */
-	private static double longitudeConstant(float latitude) {
+	public static double longitudeConstant(float latitude) {
 	
-		return EARTH_DIAMETER * Math.PI * Math.cos(latitude) / Float.valueOf("360");
+		//return Math.abs( Math.cos(Math.abs(latitude)));
+		return EARTH_DIAMETER * Math.PI * Math.abs(Math.cos(Math.abs(latitude))) / Float.valueOf("360");
 	
 	}
 	
@@ -120,7 +122,7 @@ public class CoordinateManager {
 		}
 		
 		// convert the distance from metres to kilometers
-		float kilometers = distance / 1000;	
+		float kilometers = distance / new Float(1000);	
 		
 		// calculate the new latitude
 		double newLat = latitude + (kilometers / latitudeConstant());
@@ -146,7 +148,7 @@ public class CoordinateManager {
 		}
 		
 		// convert the distance from metres to kilometers
-		float kilometers = distance / 1000;	
+		float kilometers = distance / new Float(1000);
 		
 		// calculate the new latitude
 		double newLat = latitude - (kilometers / latitudeConstant());
@@ -181,7 +183,7 @@ public class CoordinateManager {
 	}
 	
 	/**
-	 * A method to add distance in an easterly direction to a coordinate
+	 * A method to add distance in an westerly direction to a coordinate
 	 *
 	 * @param latitude  a latitude coordinate in decimal notation
 	 * @param longitude a longitude coordinate in decimal notation
@@ -203,5 +205,43 @@ public class CoordinateManager {
 		double newLng = longitude - (distance / longitudeConstant(latitude));
 		
 		return new Coordinate(latitude, new Float(newLng).floatValue());	
+	}
+	
+	/**
+	 * A method to build four coordinates representing a bounding box given a start coordinate and a distance
+	 *
+	 * @param latitude  a latitude coordinate in decimal notation
+	 * @param longitude a longitude coordinate in decimal notation
+	 * @param distance  the distance to add in metres
+	 *
+	 * @return          a hashMap representing the bounding box (NE,SE,SW,NW)
+	 */
+	public static java.util.HashMap<String, Coordinate> getBoundingBox(float latitude, float longitude, int distance) {
+	
+		// check on the parameters
+		if(isValidLatitude(latitude) == false || isValidLongitude(longitude) == false || distance <= 0) {
+			throw new IllegalArgumentException("All parameters are required and must be valid");
+		}
+		
+		// convert the distance from metres to kilometers
+		float kilometers = distance / 1000;	
+		
+		// declare helper variables
+		java.util.HashMap<String, Coordinate> boundingBox = new java.util.HashMap<String, Coordinate>();
+		
+		// calculate the coordinates
+		Coordinate north = addDistanceNorth(latitude, longitude, distance);
+		Coordinate south = addDistanceSouth(latitude, longitude, distance);
+		Coordinate east  = addDistanceEast(latitude, longitude, distance);
+		Coordinate west  = addDistanceWest(latitude, longitude, distance);
+		
+		// build the bounding box object
+		boundingBox.put("NE", new Coordinate(north.getLatitude(), east.getLongitude()));
+		boundingBox.put("SE", new Coordinate(south.getLatitude(), east.getLongitude()));
+		boundingBox.put("SW", new Coordinate(south.getLatitude(), west.getLongitude()));
+		boundingBox.put("NW", new Coordinate(north.getLatitude(), west.getLongitude()));
+		
+		// return the bounding box object
+		return boundingBox;	
 	}
 }
