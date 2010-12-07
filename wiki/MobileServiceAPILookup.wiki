@@ -85,11 +85,11 @@ An object describing a question used to solicit feedback
 
 == Parameters ==
 
-|| *Name* || *Required Value* || *Optional* || *Default* ||
-|| task   ||location || No || ||
-|| lat     || Latitude as a float || No || || 
-|| lng     || Longitude as a float || No || || 
-|| radius     || Metres as an int || No || || 
+|| *Name*   || *Required Value*     || *Optional* || *Default* ||
+|| task     || location             || No || ||
+|| lat      || Latitude as a float  || No || || 
+|| lng      || Longitude as a float || No || || 
+|| distance || Metres as an int     || No || || 
 || callback || function name to use for a JSONP request || Yes || ||
 
 == Result data   ==
