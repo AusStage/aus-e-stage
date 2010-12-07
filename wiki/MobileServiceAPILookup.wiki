@@ -88,7 +88,7 @@ An object describing a question used to solicit feedback
 || *Name* || *Required Value* || *Optional* || *Default* ||
 || task   ||location || No || ||
 || lat     || Latitude as a float || No || || 
-|| long     || Longitude as a float || No || || 
+|| lng     || Longitude as a float || No || || 
 || radius     || Metres as an int || No || || 
 || callback || function name to use for a JSONP request || Yes || ||
 
