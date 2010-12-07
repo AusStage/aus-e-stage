@@ -36,7 +36,7 @@ public class LookupServlet extends HttpServlet {
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES        = {"system-property", "performance", "validate", "question"};
+	private final String[] TASK_TYPES        = {"system-property", "performance", "validate", "question", "location"};
 	private final String[] FORMAT_TYPES      = {"json"};
 	private final String[] PROPERTY_ID_TYPES = {"feedback-source-types"};
 	private final String[] VALIDATION_TYPES  = {"performance", "question"};
@@ -65,6 +65,9 @@ public class LookupServlet extends HttpServlet {
 		String taskType       = request.getParameter("task");
 		String id             = request.getParameter("id");
 		String formatType     = request.getParameter("format");
+		String latitude       = request.getParameter("lat");
+		String longitude      = request.getParameter("lng");
+		String distance       = request.getParameter("distance");		
 		String validationType = null;
 		
 		// check on the taskType parameter
@@ -98,6 +101,25 @@ public class LookupServlet extends HttpServlet {
 					} else {
 						throw new ServletException("Question parameter is expected to be a valid integer");
 					}
+				}
+			}
+		} else if(taskType.equals("location") == true) {
+			// this is a location request
+			// first round of validation
+			if(InputUtils.isValid(latitude) == false || InputUtils.isValid(longitude) == false || InputUtils.isValid(distance) == false) {
+				throw new ServletException("Missing parameters, expect lat, lng and distance");
+			} else {
+				// second round validation
+				if(CoordinateManager.isValidLatitude(Float.valueOf(latitude)) == false) {
+					throw new ServletException("The value of the latitude parameter did not pass validation as defined by the CoordinateManager class");
+				}
+				
+				if(CoordinateManager.isValidLongitude(Float.valueOf(longitude)) == false) {
+					throw new ServletException("The value of the longitude parameter did not pass validation as defined by the CoordinateManager class");
+				}
+				
+				if(InputUtils.isValidInt(distance) == false) {
+					throw new ServletException("The value of the distance parameter must be a valid integer");
 				}
 			}
 		} else {
@@ -160,6 +182,8 @@ public class LookupServlet extends HttpServlet {
 					results = "false";
 				}
 			}
+		} else if(taskType.equals("location") == true) {
+			results = lookup.getPerformanceByLocation(latitude, longitude, distance);
 		}
 		
 		
