@@ -89,7 +89,7 @@ An object describing a question used to solicit feedback
 || task   ||location || No || ||
 || lat     || Latitude as a float || No || || 
 || long     || Longitude as a float || No || || 
-|| radius     || Metres as a int || No || || 
+|| radius     || Metres as an int || No || || 
 || callback || function name to use for a JSONP request || Yes || ||
 
 == Result data   ==
