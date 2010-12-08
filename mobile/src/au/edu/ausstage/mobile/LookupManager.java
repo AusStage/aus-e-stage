@@ -311,7 +311,7 @@ public class LookupManager {
 				   + "AND TO_NUMBER(REGEXP_REPLACE(v.longitude, '[^0-9\\.\\-]+', '')) > TO_NUMBER(?) "
 				   + "AND v.venueid = e.venueid "
 				   + "AND e.eventid = mp.event_id "
-				   + "AND TO_DATE(start_date_time, 'DD-MON-YYYY') > TO_DATE(sysdate, 'DD-MON-YYYY')";
+				   + "AND TO_DATE(start_date_time, 'DD-MON-YYYY') >= TO_DATE(sysdate, 'DD-MON-YYYY')";
 				   
 		// define the sql parameters
 		String[] sqlParameters = new String[4];
