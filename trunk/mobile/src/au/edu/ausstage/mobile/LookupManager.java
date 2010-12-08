@@ -332,9 +332,6 @@ public class LookupManager {
 				// get the json for this performance
 				json = getPerformanceDetails(resultSet.getString(1), "json");
 				
-				//debug code
-				System.out.println("##got a performance#" + json);
-				
 				// convert the json into an object
 				obj = (JSONObject) parser.parse(json);
 				
