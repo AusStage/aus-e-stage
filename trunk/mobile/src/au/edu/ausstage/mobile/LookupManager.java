@@ -24,6 +24,7 @@ import au.edu.ausstage.utils.*;
 // import additional java packages / classes
 import java.sql.ResultSet;
 import org.json.simple.*;
+import org.json.simple.parser.*;
 
 /**
  * A class to manage the lookup of information
@@ -291,22 +292,65 @@ public class LookupManager {
 		float lng  = Float.valueOf(longitude);
 		int   dist = Integer.valueOf(distance);
 		
+		// declare helper variables
+		JSONArray  list   = new JSONArray();
+		JSONObject obj    = new JSONObject();
+		JSONParser parser = new JSONParser();
+		String     json   = null;
+		Float      value  = null;
+		
 		// get the bounding box hashMap
 		java.util.HashMap<String, Coordinate> boundingBox = CoordinateManager.getBoundingBox(lat, lng, dist);
 		
-		// debug code
-		//NE,SE,SW,NW)
-		String data = "";
-		data += "Lat Const: " + CoordinateManager.latitudeConstant() + "\n";
-		data += "Lng Const: " + CoordinateManager.longitudeConstant(lat) + "\n";
-		data += "NE: " + boundingBox.get("NE").toString() + "\n";
-		data += "SE: " + boundingBox.get("SE").toString() + "\n";
-		data += "SW: " + boundingBox.get("SW").toString() + "\n";
-		data += "NW: " + boundingBox.get("NW").toString() + "\n";
-		data += "N:  " + CoordinateManager.addDistanceNorth(lat, lng, dist) + "\n";
-		data += "S:  " + CoordinateManager.addDistanceSouth(lat, lng, dist);
+		// define the sql
+		String sql = "SELECT mp.performance_id "
+				   + "FROM venue v, events e, mob_performances mp "
+				   + "WHERE TO_NUMBER(REGEXP_REPLACE(v.latitude, '[^0-9\\.\\-]+', '')) < TO_NUMBER(?) "
+				   + "AND TO_NUMBER(REGEXP_REPLACE(v.latitude, '[^0-9\\.\\-]+', '')) > TO_NUMBER(?) "
+				   + "AND TO_NUMBER(REGEXP_REPLACE(v.longitude, '[^0-9\\.\\-]+', '')) < TO_NUMBER(?) "
+				   + "AND TO_NUMBER(REGEXP_REPLACE(v.longitude, '[^0-9\\.\\-]+', '')) > TO_NUMBER(?) "
+				   + "AND v.venueid = e.venueid "
+				   + "AND e.eventid = mp.event_id "
+				   + "AND TO_DATE(start_date_time, 'DD-MON-YYYY') > TO_DATE(sysdate, 'DD-MON-YYYY')";
+				   
+		// define the sql parameters
+		String[] sqlParameters = new String[4];
 		
-		return data;
+		sqlParameters[0] = boundingBox.get("NE").getLatitudeAsString();
+		sqlParameters[1] = boundingBox.get("SE").getLatitudeAsString();
+		sqlParameters[2] = boundingBox.get("NE").getLongitudeAsString();
+		sqlParameters[3] = boundingBox.get("SW").getLongitudeAsString();
+		
+		// execute the sql
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		ResultSet resultSet = results.getResultSet();
+		
+		//loop through the resultSet
+		try {
+			if(resultSet.next() == true) {
+			
+				// get the json for this performance
+				json = getPerformanceDetails(resultSet.getString(1), "json");
+				
+				//debug code
+				System.out.println("##got a performance#" + json);
+				
+				// convert the json into an object
+				obj = (JSONObject) parser.parse(json);
+				
+				// add the object to the array
+				list.add(obj);				
+				
+			} else {
+				return new JSONArray().toString();
+			}
+		} catch(java.sql.SQLException ex) {
+			return new JSONArray().toString();
+		} catch(org.json.simple.parser.ParseException ex) {
+			return new JSONArray().toString();
+		}
+		
+		return list.toString();
 	}
 
 } // end class definition
