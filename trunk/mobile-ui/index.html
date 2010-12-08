@@ -214,18 +214,98 @@
 					
                 }
 				
+		function findPerformances(latitude,longitude) {
+			
+			///http://beta.ausstage.edu.au/mobile/lookup?task=location&lat=-35.02470743224244&lng=138.572359085083&distance=1000
+			
+			//now do the stuff to make the host names work 
+			
+				host = buildHost();
+
+				  if (host != 'http://beta.ausstage.edu.au')  { 
+					  host = 'http://beta.ausstage.edu.au';
+					  mydataType =  'jsonp';
+				  } else {
+					   mydataType =  'json';
+				  }
+				  
+				  
+				  var params = {
+					 
+					 task:'location',
+					 lat:latitude,
+					 lng:longitude,
+					 distance:4000, // BUG - this maybe no large enought
+				 };
+				 
+				 var values = jQuery.param(params);//encode thos
 				
+				var source =  host + '/mobile/lookup?' +  values;				
+				window.console.log(source);
+								
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						dataType: mydataType,
+						cache: false,
+						success: function (data) {
+							
+						window.console.log(data);
+
+							// add the list of feedback
+							for(var i = 0; i < data.length; i++) {
+								//window.console.log(data);
+								item = data[i];	
+
+								$(".performances").append('<li class="arrow">' +
+
+										'<a href="#FeedbackDisplayWithForm"' + 
+										 'onClick="loadFeedbackForm(event)">' +
+											item.event +										 
+											'<span class="performance">' +
+											item.id +
+											'</span>' +
+										 '</a>' 										
+								+'</li>');
+								
+								i++;
+							}
+				
+											//window.console.log(data);
+						},
+					
+					error:function (xhr, ajaxOptions, thrownError){
+                    	//alert(xhr.status);
+                    	//alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+				
+				
+					async: true 
+					}); 
+					
+				  
+			window.console.log('');
+			window.console.log(latitude);
+			window.console.log(longitude);
+	
+		}
+		
 		function findLocation(){
-		        
 				 _gaq.push(['_trackPageview', 'PerformancesNearBy']);
 
                 // We pass "updateLocation" a callback function,
                 // to run once we have the coordinates.
                 // We also set it to a variable, so we can know
                 // right away if it's working or not
+				
+				//findPerformances(-35.02470743224244, 138.572359085083);
+				
                 var lookup = jQT.updateLocation(function(coords){
                     if (coords) {
 						convertLatLongToPlace(coords.latitude,  coords.longitude);
+						findPerformances(coords.latitude,  coords.longitude);
 						//convertLatLongToPlace(-42.8880971, 147.32766);
 
 				
@@ -413,12 +493,13 @@
   		<div class="LocInfo info round">
                 <p>Looking up location&hellip;</p>
             </div>
-                     
-        <ul class="rounded">
-           <li class="arrow">
-           <a href="#FeedbackDisplayWithForm"  onClick="loadFeedbackForm(event)">Be Your Self <span class="performance">4</span></a>
-            </li>		   
-        </ul>              
+        
+           <ul class="performances rounded">
+
+            </ul>
+         	
+            
+     
       
 </div>
 
