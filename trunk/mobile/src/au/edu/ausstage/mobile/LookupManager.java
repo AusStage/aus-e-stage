@@ -311,7 +311,8 @@ public class LookupManager {
 				   + "AND TO_NUMBER(REGEXP_REPLACE(v.longitude, '[^0-9\\.\\-]+', '')) > TO_NUMBER(?) "
 				   + "AND v.venueid = e.venueid "
 				   + "AND e.eventid = mp.event_id "
-				   + "AND TO_DATE(start_date_time, 'DD-MON-YYYY') >= TO_DATE(sysdate, 'DD-MON-YYYY')";
+				   + "AND TO_DATE(start_date_time, 'DD-MON-YYYY') >= TO_DATE(sysdate, 'DD-MON-YYYY') "
+				   + "ORDER BY start_date_time";
 				   
 		// define the sql parameters
 		String[] sqlParameters = new String[4];
@@ -327,7 +328,7 @@ public class LookupManager {
 		
 		//loop through the resultSet
 		try {
-			if(resultSet.next() == true) {
+			while(resultSet.next() == true) {
 			
 				// get the json for this performance
 				json = getPerformanceDetails(resultSet.getString(1), "json");
@@ -338,9 +339,7 @@ public class LookupManager {
 				// add the object to the array
 				list.add(obj);				
 				
-			} else {
-				return new JSONArray().toString();
-			}
+			} 
 		} catch(java.sql.SQLException ex) {
 			return new JSONArray().toString();
 		} catch(org.json.simple.parser.ParseException ex) {
