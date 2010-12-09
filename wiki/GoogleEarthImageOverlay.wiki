@@ -54,15 +54,20 @@ Select the image overlay that you want to export in the *Places* panel, right cl
 A KMZ archive is a collection of files used to create a single KML presentation. It includes all the local files that are referenced in the .kml file. In our case, it includes the image file and kml file for the overlay. Moreover, the data in a KMZ archive is compressed, so the archive is smaller than the original collection of files. Before you edit a KMZ archive, you have to change the file name from *.kmz to *.zip and unzip it.
 
 
-== Setting a TimeSpan for the overlay  ==
+== Setting a !TimeSpan for the overlay  ==
 
-An overlay in KML can have time data associated with it which can restrict the visibility of the data to a given time period or point in time. The time slider in the Google Earth controls which parts of the data are visible. *!TimeSpan* object can specify a <begin> and <end> time for a given overlay that transition instantly from one to the next.
+An overlay in KML can have time data associated with it which can restrict the visibility of the data to a given time period or point in time. The time slider in the Google Earth controls which parts of the data are visible. *!TimeSpan* object can specify a _begin_ and _end_ time for a given overlay that transition instantly from one to the next.
 
 To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add the following snippet in the KML file created in the above procedure.
 
 {{{ 
+      <name>Canberra 1933</name>
+[
+{
       <TimeSpan>
 	<begin>1990</begin>
 	<end>2000</end>
       </TimeSpan>
+]
+}
 }}}
