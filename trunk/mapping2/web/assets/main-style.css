@@ -15,177 +15,135 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
+
+/* primary structure styles */
+
+* {
+	margin: 0;
+}
+
 html, body {
-	margin:0;
-	padding:0;
-	color:#333333;
-	background: #fff;
-	font-family: Helvetica, Verdana, Arial, sans-serif;
+	height: 100%;
 	font-size: 95%;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
 }
 
-a {
-	color: #4433cc;
-	text-decoration: none;
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -2em;
+	overflow: hidden;
 }
 
-a:hover {
-	text-decoration: underline;
+.footer {
+	clear: both;
+	height: 2em;
 }
 
-#wrap {
-	width:1200px;
-	margin:0 auto;
-	background: #aaaaaa;
+.push {
+	clear:both;
+	height: 1px;
 }
-#header {
+
+.tab-container {
+	width: 100%;
+	height: 100%;
+}
+
+#tabs {
+	height: 100%;
+	width:  100%;
+}
+
+/* specific styles for the header */
+.header {
 	height: 64px;
 	padding:0px;
-	background: #333333;
 	background-image: url('images/ausstagehomebrand.gif');
 	background-repeat: no-repeat;
 	background-position: top left;
 }
-#header h1 {
+
+.header h1 {
 	color: #eeeeee;
 	text-align: right;
-/*	font-size: 110%;*/
 	font-weight: normal;
 	padding-top: 24px;
 	padding-right: 10px;
 }
 
-h1 {
-    margin:0;
+/* ui tabs styles to fix layout issue */
+.fix-ui-tabs {
+	height: 40px;
 }
 
-#nav {
-	padding:5px 10px;
-	background:#333333;
-/*	font-size: 90%;*/
-
-}
-#nav ul {
-	margin:0;
-	padding:0;
-	list-style:none;
-}
-#nav li {
-	display:inline;
-	margin:0;
-	padding:0;
-/*	font-size: 90%;*/
-}
-
-#nav a {
-	color: #fff;
-}
-
-#main {
-	margin-left:200px;
-	background:#ffffff;
-/*	font-size: 90%;*/
-    color: #333333;
-	min-height: 550px;
-	padding: 5px;
-}
-h2 {
-	margin:0 0 1em;
-/*	font-size: 110%;*/
-	
-}
-
-h3 {
-	margin:0 0 1em;
-	font-size: 110%;
-	
-}
-
-/* styles for the sidebar */
-#sidebar {
-	float: left;
-	font-size:90%;
-	width: 174px;
-	padding-right:10px;
-	background-color: #aaaaaa;
-	overflow: hidden;
-}
-
-#sidebar ul {
-	margin:0;
-	padding:0;
-	list-style:none;
-}
-
-#sidebar ul a {
-	color: #fff;
-	/*font-size: 90%;*/
-	text-decoration: none;
-}
-
-#sidebar a:hover {
-	text-decoration: underline;
-}
-
-#sidebar h3 {
-	color: #fff;
-	margin-bottom: 0px;
-	padding-bottom: 0px;
-}
-
-#showPanel { 
-	position:inherit; 
-	z-index:2; 
-	left:0; 
-	float:left; 
-	padding-top:40px; 
-	display:none; 
-	width:0px; 
-	height:100px;
-	cursor:pointer;
-
-}
-
-#showPanel span {
-	display:block; 
-	font-size: 150%;
-	height:30px; 
-	margin-top:20px; 
-	/*padding:0px 0px 10px 10px;*/
-	width:10px; 
-	background: #aaaaaa;
-	color: #fff;
-}
-
-#panel {
-	padding-left: 10px;
-}
-
-#hidepanel {
-	color: #fff;
-}
-
-/* styles for the footer */
-#footer {
-	clear:both;
-	padding:5px 10px;
-	background:#aaaaaa;
+/* specific styles for the footer */
+.footer  {
 	color:#fff;
 	font-size: 90%;
+	margin-top: 10px;
+	padding-top: 3px;
 }
-#footer p {
-	margin:0;
-    font-size: 75%;
+
+.footer p {
+	margin: 0;
     text-align: center;
 }
 
-#footer a {
+.footer a {
 	color: #fff;
 	text-decoration: none;
 }
 
-#footer a:hover {
+.footer a:hover {
 	text-decoration: underline;
+}
+
+/* specific styles for the sidebar */
+.sidebar {
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px
+	overflow: hidden;
+	width: 150px;
+	padding-bottom: 32767px;
+	margin-bottom: -32767px;
+}
+
+.sidebar ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+.sidebar ul a {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.sidebar a:hover {
+	text-decoration: underline;
+}
+
+/* specific styles for messages with the search box */
+.search-status-messages {
+	min-height: 30px; 
+	padding-top: 10px;
+	padding-right: .7em;
+}
+
+.status-icon {
+	float: left; 
+	margin-right: .3em;
+	margin-left:  .5em;
+}
+
+/* specific styles for the main content div */
+.main {
+	margin-left: 160px;
+	min-height: 100%;
 }
 
 /* Styles for forms */
@@ -203,17 +161,7 @@ table.formTable th {
 table.formTable th label {
 	text-align: left;
 
-}	
-
-/* Styles for Validation Errors */
-/*
-label.error { 
-	float: none; 
-	color: black; 
-	padding-left: .5em; 
-	vertical-align: top; 
-} 
-*/
+}
 
 /* Styles for tables */
 table.searchResults {
@@ -242,7 +190,6 @@ tr.odd {
 
 table.searchResults tfoot {
 	border: 1px solid #aaaaaa;
-/*	font-size: 90%;*/
 }
 
 td.nowrap {
@@ -255,14 +202,6 @@ td.alignRight {
 
 th.alignRight {
 	text-align: right;
-}
-
-/* Styles for the tabs */
-
-.tab-container {
-	min-height: 545px;
-	min-width: 990px;
-	display: inline-block;
 }
 
 /* style for things that are clickable */
@@ -279,23 +218,6 @@ th.alignRight {
 .browseHighlight {
 	width: 85%;
 	display: inline-block;
-}
-
-/* style for the inconography */
-
-.mapIcon table {
-
-	background-color: #fff;
-	text-align: left;
-	border-style: none;
-	border-collapse: collapse;
-	table-layout: fixed;
-}
-
-
-.mapIcon td {
-	text-align: center;
-	font-size: 7px;
 }
 
 
