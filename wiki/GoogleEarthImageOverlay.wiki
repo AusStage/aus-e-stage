@@ -62,7 +62,7 @@ To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add 
 
 
 
-<font color="red">
+<font color="#980909">
 {{{ 
     <TimeSpan>
         <begin>1990</begin>
