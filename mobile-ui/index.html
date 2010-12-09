@@ -251,23 +251,26 @@
 						success: function (data) {
 							
 						window.console.log(data);
+						$(".feedbackForm").empty();
 
 							// add the list of feedback
 							for(var i = 0; i < data.length; i++) {
 								//window.console.log(data);
 								item = data[i];	
-
 								$(".performances").append('<li class="arrow">' +
-
+										//'<div class="performances">' +
 										'<a href="#FeedbackDisplayWithForm"' + 
-										 'onClick="loadFeedbackForm(event)">' +
-											item.event +										 
-											'<span class="performance">' +
+										 'onClick="loadFeedbackForm(event)"><div class="event">' +
+											item.event + '</span><br \><span class="startDateTime">' + item.startDateTime +										 
+											'</span><span class="performance">' +
 											item.id +
-											'</span>' +
-										 '</a>' 										
-								+'</li>');
-								
+											'</span>' +			
+										'</div>' + 
+										 '<span class="organisation"> ' + item.organisation  + ', </span>' +
+              						     '<span class="venue">' + item.venue +' </span>' +
+										'</a>' +
+									  //'</div>' +
+								  '</li>');
 								i++;
 							}
 				
@@ -286,10 +289,6 @@
 					}); 
 					
 				  
-			window.console.log('');
-			window.console.log(latitude);
-			window.console.log(longitude);
-	
 		}
 		
 		function findLocation(){
@@ -514,14 +513,25 @@
             </div>  
             
               <div id="about" class="selectable">
-            <p>AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to AusStage, search and retrieve information about, company and performer histories, maps, tours and, links to related material, all at <a href="http://www.ausstage.edu.au.">www.ausstage.edu.au.</a> For free.</p>
-            <p>AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies know what you thought of the production you're seeing right now. You can use your phone to send a text message or, if you're a tweeter you can use Twitter or, if you'd like to jump on the web and use the mobile web site you could do that too.</p>
-            <p>Don't worry – AusStage doesn't record or store ANY IDENTIFYING INFORMATION about you. In fact, it doesn't even record the phone number or Twitter account you've used to respond so there's no way that they, or the company whose show you're talking about, can tell who you are, let alone contact you.</p>
-            <p>Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn't like.</p>
-            <p>This project is being led by Flinders University alongside the companies and artists who you are seeing tonight. It has been funded by the National e-Research Architecture Taskforce (NeAT).</p>
-            <p>If you do decide that you'd like to have your say about what you see tonight your standard costs for SMS and network access apply. If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study. As mentioned your participation is voluntary, you will NOT be identified in any results and your response will be stored confidentially (however,please note that sending information via mobile devices is inherently insecure).</p>
-            <p>This research project has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892). For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on human.researchethics@flinders.edu.au.</p>
-            <p>Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to <a href="mailto:jonathan.bollen@flinders.edu.au">jonathan.bollen@flinders.edu.au</a></p>
+                            <h3>What is AusStage? </h3>
+                <p>AusStage documents the performing arts in Australia.<br />
+                  Future generations, researchers and contemporary audiences can log on to AusStage to search and retrieve information about:</p>
+                <ul>
+                  <li>company and performer histories,</li>
+                  <li>maps and tours, and </li>
+                  <li> links to relatedresources. </li>
+                </ul>
+                <p>For more information please go to: http://<a href="www.ausstage.edu.au">www.ausstage.edu.au</a>.</p>
+                <h3>We Need Your Help</h3>
+                <p> AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies <strong>know what you thought of the production you are seeing right now</strong>.</p>
+                <p>You can use your phone to send a<strong> text message</strong> or, if you're a tweeter you can use <strong>Twitter</strong> or, if you'd like to <strong>jump on the web</strong> and use the mobile web site you could do that too.<br />
+                </p>
+                <p><strong>Don't worry – AusStage does NOT record or store ANY IDENTIFYING INFORMATION about you.<br />
+                  </strong></p>
+                <p>In fact, it doesn't even record the phone number or Twitter account you've used to respond so there is no way that they, or the company whose show you're talking about, can tell who you are, let alone contact you. Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn't like.<br />
+                  This project is being led by Flinders University alongside the companies and artists who you are seeing in this performance. It has been funded by the National eResearch Architecture Taskforce (NeAT).<br />
+                  If you do decide that you'd like to have your say about what you see in this performance standard costs for SMS and network access apply. If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study. As mentioned your participation is voluntary, you will NOT be identified in any results and your response will be stored confidentially (however, please note that sending information via mobile devices is inherently insecure).</p>
+
                             <p><br /><br /><a href="#" class="grayButton goback">Back</a></p>
                 </div>            
                             
