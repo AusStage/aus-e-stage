@@ -58,13 +58,19 @@ A KMZ archive is a collection of files used to create a single KML presentation.
 
 An overlay in KML can have time data associated with it which can restrict the visibility of the data to a given time period or point in time. The time slider in the Google Earth controls which parts of the data are visible. *!TimeSpan* object can specify a _begin_ and _end_ time for a given overlay that transition instantly from one to the next.
 
-To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add the following snippet in the KML file created in the above procedure.
+To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add the following red snippets in the KML file created in the above procedure.
 
 {{{
-      <name>Canberra 1933</name>
-
-      <TimeSpan>
-	<begin>1990</begin>
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<GroundOverlay>
+    <name>Australia in 1990 - 2000</name>
+}}}   
+<font color="red">
+{{{ 
+    <TimeSpan>
+        <begin>1990</begin>
 	<end>2000</end>
-      </TimeSpan>
+    </TimeSpan>
 }}}
+</font>
