@@ -25,8 +25,6 @@ $(document).ready(function(){
 	searchObj  = new SearchClass();
 	browseObj  = new BrowseClass();
 	mappingObj = new MappingClass();
-	
-	mappingObj.updateMap();
 
 	/*
 	 * page setup
@@ -41,11 +39,7 @@ $(document).ready(function(){
 	$('html').removeClass('js');
 	
 	// setup the tabs
-	$("#tabs").tabs({'show': function(event, ui) {
-		$(ui.panel).attr('style', 'width:100%; height:100%');
-		google.maps.event.trigger(mappingObj.map, 'resize');
-		return true;
-	}});
+	$("#tabs").tabs();
 	
 	// style the buttons
 	styleButtons();
@@ -160,10 +154,19 @@ $(document).ready(function(){
 		errorLabelContainer: '#error_text',
 		wrapper: "",
 		showErrors: function(errorMap, errorList) {
-			this.defaultShowErrors();
-			$("#status_message").hide();
-			$("#messages").show();
-			$("#error_message").show();
+			if(errorList.length > 0) {
+				this.defaultShowErrors();
+				$("#status_message").hide();
+				$("#messages").show();
+				$("#error_message").show();
+			} else {
+				$("#messages").hide();
+				$("#error_message").hide();
+			}
+		},
+		success: function(label) {
+			$("#messages").hide();
+			$("#error_message").hide();
 		},
 		messages: {
 			query: {
@@ -252,7 +255,8 @@ $(document).ready(function(){
 		if(typeof(queryParam) == "undefined") {
 			
 			// show a message as the query parameters are missing
-			$("#message_text").text("Error: The persistent URL for this search is incomplete, please try again");
+			$("#error_text").text("Error: The persistent URL for this search is incomplete, please try again");
+			$("#error_message").show();
 			$("#messages").show();
 		} else {
 			searchObj.doSearch(queryParam);

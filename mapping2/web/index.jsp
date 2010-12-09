@@ -23,7 +23,7 @@
 <head>
 	<meta charset="utf-8" />
 	<title>AusStage Mapping Service (Beta)</title>
-	<link rel="stylesheet" href="assets/main-style-2.css"/>
+	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css"/>
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
@@ -77,14 +77,14 @@
 								</td>
 								<td style="width: 40%">
 									<div id="messages">
-										<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message">
+										<div class="ui-state-highlight ui-corner-all search-status-messages" id="status_message">
 											<p>
-												<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+												<span class="ui-icon ui-icon-info status-icon"></span>
 												<span id="message_text"></span>
 											</p>
 										</div>
-										<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;" id="error_message"> 
-											<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+										<div class="ui-state-error ui-corner-all search-status-messages" id="error_message"> 
+											<p><span class="ui-icon ui-icon-alert status-icon"></span> 
 											<span id="error_text"></span>
 											</p>
 										</div>										
