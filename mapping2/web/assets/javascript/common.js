@@ -89,7 +89,39 @@ $(document).ready(function() {
 
 	// associate the show_add_view_help div with the help icon
 	$('.show_add_view_help').live('click', function () {
-
 		$('#help_add_view_div').dialog('open');
 	});
+	
+	// setup one of the help dialogs
+	$("#help_search_div").dialog({ 
+		autoOpen: false,
+		height: 400,
+		width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			
+		},
+		close: function() {
+			
+		}
+	});
+	
+	$("#show_search_help").click(function() {
+		$("#help_search_div").dialog('open');
+	});
 });
+
+// define a function to build an error message box
+function buildErrorMsgBox(text) {
+	return '<div class="ui-state-error ui-corner-all search-status-messages"><p><span class="ui-icon ui-icon-info status-icon"></span>' + AJAX_ERROR_MSG.replace('-', text) + '</p></div>';
+}
+
+// define a function to build an info message box
+function buildInfoMsgBox(text) {
+	return '<div class="ui-state-highlight ui-corner-all search-status-messages" id="status_message"><p><span class="ui-icon ui-icon-info status-icon"></span>' + text + '</p></div>';
+}

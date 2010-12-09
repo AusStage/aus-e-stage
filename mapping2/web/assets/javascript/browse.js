@@ -484,7 +484,7 @@ BrowseClass.prototype.addToMap = function() {
 		
 	} else {
 		// inform the user
-		$('#browse_messages').empty().append('<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;" id="error_message"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> No items selected, nothing added to the map</p></div>');
+		$('#browse_messages').empty().append(buildInfoMsgBox('No items selected, nothing added to the map'));
 	}
 }
 

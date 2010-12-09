@@ -54,29 +54,6 @@ $(document).ready(function(){
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
 	
-	// setup one of the help dialogs
-	$("#help_search_div").dialog({ 
-		autoOpen: false,
-		height: 400,
-		width: 450,
-		modal: true,
-		buttons: {
-			Close: function() {
-				$(this).dialog('close');
-			}
-		},
-		open: function() {
-			
-		},
-		close: function() {
-			
-		}
-	});
-	
-	$("#show_search_help").click(function() {
-		$("#help_search_div").dialog('open');
-	});
-	
 	// setup a handler for the start of an ajax request
 	$("#message_text").ajaxSend(function(e, xhr, settings) {
 		// determine what type of request has been made & update the message text accordingly
@@ -279,25 +256,25 @@ $(document).ready(function(){
 	 	// determine what type of request has been made & update the message text accordingly
 		// ensure that we're only working on browse activities
 		if(settings.url.indexOf("lookup?task=state-list", 0) != -1) {
-			$(this).empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' + AJAX_ERROR_MSG.replace('-', 'the request for Country and State data') + '</p></div>');
+			$(this).empty().append(buildErrorMsgBox('the request for Country and State data'));
 		} else if(settings.url.indexOf("lookup?task=suburb-list", 0) != -1) {
-			$(this).empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' + AJAX_ERROR_MSG.replace('-', 'the request for suburb data') + '</p></div>');
+			$(this).empty().append(buildErrorMsgBox('the request for suburb data'));
 		} else if(settings.url.indexOf("lookup?task=suburb-venue-list", 0) != -1) {
-			$(this).empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' + AJAX_ERROR_MSG.replace('-', 'the request for venue data') + '</p></div>');
+			$(this).empty().append(buildErrorMsgBox('the request for venue data'));
 		}
 	});
 	
 	// set up a handler for when the ajax calls finish
 	$("#browse_messages").bind('mappingBrowseAjaxQueue' + 'AjaxStop', browseObj.addDataToMap);
 	 
-	 /*
-	  * map functionality
-	  */
+	/*
+	 * map functionality
+	 */
 	// resize the map when the tab is shown
 	$('#tabs').bind('tabsshow', function(event, ui) {
 		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
 			// update the map
-			mappingObj.resizeMap();
+			mappingObj.updateMap();
 		}
 	});
 	
