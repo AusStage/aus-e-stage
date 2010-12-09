@@ -289,6 +289,7 @@ $(document).ready(function(){
 	 /*
 	  * map functionality
 	  */
+	// resize the map when the tab is shown
 	$('#tabs').bind('tabsshow', function(event, ui) {
 		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
 			// update the map
@@ -296,8 +297,8 @@ $(document).ready(function(){
 		}
 	});
 	
+	// resize the map when the window is resized
 	$(window).resize(function() {
 		mappingObj.resizeMap();
-		console.log('resize event fired');
 	});
 });
