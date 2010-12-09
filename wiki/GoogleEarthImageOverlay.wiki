@@ -51,7 +51,7 @@ Try to position the viewer so that it corresponds in viewing altitude to the ove
 
 Select the image overlay that you want to export in the *Places* panel, right click and select *Save Place As...* in the pop up window. The *Save file* window will open for you to specify the file name, select KML or KMZ as *Save as type* and select a folder on your computer where the file should be saved.
 
-A KMZ archive is a collection of files used to create a single KML presentation. It includes all the local files that are referenced in the .kml file. In our case, it includes the image file and kml file for the overlay. Moreover, the data in a KMZ archive is compressed, so the archive is smaller than the original collection of files. Before you edit a KMZ archive, you have to change the file name from *.kmz* to *.zip* and unzip it.
+A KMZ archive is a collection of files used to create a single KML presentation. It includes all the local files that are referenced in the .kml file. In our case, it includes the image file and kml file for the overlay. Moreover, the data in a KMZ archive is compressed, so the archive is smaller than the original collection of files. Before you edit a KMZ archive, you have to change the file name from *.kmz* to *.zip* and unzip it. For more information, please refer to [http://code.google.com/apis/kml/documentation/kmzarchives.html http://code.google.com/apis/kml/documentation/kmzarchives.html]
 
 
 == Setting a !TimeSpan for the overlay  ==
