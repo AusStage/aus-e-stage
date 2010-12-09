@@ -102,7 +102,7 @@ MappingClass.prototype.updateMap = function() {
 	if(mappingObj.map == null) {
 		// initialise the map
 		mappingObj.initMap();
-		google.maps.event.trigger(mappingObj.map, 'resize')
+		mappingObj.resizeMap();
 	} else {
 		// reset the map
 	
@@ -257,11 +257,12 @@ MappingClass.prototype.computeMapWidth = function() {
 // a function to resize the map
 MappingClass.prototype.resizeMap = function() {
 
-	var mapDiv = $(mappingObj.map.getDiv());			
-	mapDiv.height(mappingObj.computeMapHeight());
-	mapDiv.width(mappingObj.computeMapWidth());
+	if(mappingObj.map != null) {
+		var mapDiv = $(mappingObj.map.getDiv());
+		mapDiv.height(mappingObj.computeMapHeight());
+		mapDiv.width(mappingObj.computeMapWidth());
 	
-	google.maps.event.trigger(mappingObj.map, 'resize');
-	mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
-
+		google.maps.event.trigger(mappingObj.map, 'resize');
+		mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
+	}
 }
