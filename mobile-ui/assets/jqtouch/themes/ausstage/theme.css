@@ -577,13 +577,13 @@ ul.metal li.arrow a small {
 }
 
 ul li {
-    color: #666;
-    border-top: 1px solid #333;
-    border-bottom: #555858;
-    list-style-type: none;
-    padding: 10px 10px 10px 10px;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142));
-    overflow: hidden;
+	color: #999;
+	border-top: 1px solid #333;
+	border-bottom: #555858;
+	list-style-type: none;
+	padding: 10px 10px 10px 10px;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142));
+	overflow: hidden;
 }
 
 
@@ -619,13 +619,42 @@ h3.question {
 }
 
 #home .info {
-    background-image: url('img/people.png'), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ccd5c3), to(#fafafa), color-stop(0,#ccd5c3));
+    background-image: url('img/arms.png'), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ccd5c3), to(#fafafa), color-stop(0,#ccd5c3));
 	background-repeat:no-repeat;
 	background-position:bottom left;
 	height:90px;
 	
 	padding-left:200px;
 }
+	
+
+ul.performances .event {
+	font-size:1.1em;
+
+}
+
+ul.performances .startDateTime {
+		font-size:.8em;
+		color:#CCC;
+		font-weight:normal;
+}
+
+	
+ul.performances .venue ,ul.performances .organisation {
+	font-size:.7em;
+	color:#CCC;
+	font-weight:normal;
+
+
+}
+
+
+
+
+
+
+	
+
 	
 	           #about {
                 padding: 20px 20px 40px;
