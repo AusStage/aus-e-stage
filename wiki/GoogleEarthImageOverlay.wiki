@@ -60,11 +60,11 @@ An overlay in KML can have time data associated with it which can restrict the v
 
 To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add the following snippet in the KML file created in the above procedure.
 
-
+{{{
       <name>Canberra 1933</name>
-{{red|
+
       <TimeSpan>
 	<begin>1990</begin>
 	<end>2000</end>
       </TimeSpan>
-}}
+}}}
