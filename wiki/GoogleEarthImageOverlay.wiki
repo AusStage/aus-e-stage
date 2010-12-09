@@ -62,12 +62,10 @@ To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add 
 
 {{{ 
       <name>Canberra 1933</name>
-[
-{
+{{red|
       <TimeSpan>
 	<begin>1990</begin>
 	<end>2000</end>
       </TimeSpan>
-}
-]
+}}
 }}}
