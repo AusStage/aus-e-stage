@@ -60,12 +60,7 @@ An overlay in KML can have time data associated with it which can restrict the v
 
 To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add the following red snippets in the KML file created in the above procedure.
 
-{{{
-<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
-<GroundOverlay>
-    <name>Australia in 1990 - 2000</name>
-}}}   
+
 
 <font color="red">
 {{{ 
