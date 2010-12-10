@@ -129,7 +129,7 @@
 				//Change the format of the date so that works with API
 				currentTime =  currentTime.replace(" (EST)", "", "gi");  
 				currentTime =  currentTime.replace("GMT", "", "gi");  
-								
+				currentTime =  currentTime.replace(" (CST)", "", "gi");  
 				//bulld the  
 				
 				// get the message form the form
@@ -140,7 +140,9 @@
 					 
 					 type:'mobile-web',
 					 time:currentTime,
-				 	 date:CurrentDate.toDateString(),
+				 	 //time:'14:55:32 +1100',
+					 //date:'Tue Nov 02 2010',
+					 date:CurrentDate.toDateString(),
 					 performance:gCurrentPerformance,
 					 message:message	 
 				 
@@ -149,7 +151,7 @@
 				
 				var source =  host + '/mobile/gatherer?' +  values;
 
-				window.console.log(values);
+				window.console.log(source);
 				
 				//remove what is currently is being shown 
 				$(".feedback").items('remove').chain();//load this data in the feedback
