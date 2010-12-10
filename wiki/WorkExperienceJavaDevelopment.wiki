@@ -20,7 +20,7 @@ The classes and other code produced as part of this specification must:
  # XML *must* be formatted for readability using a [http://techxplorer.com/2010/05/20/indenting-xml-output-in-java/ technique like this]
  # All code produced will be released under the terms of version 3 of the [http://www.gnu.org/licenses/gpl.html GNU General Public License] and as such care should be taken in copying code or methodologies
 
-= !AusStage CSS Processing =
+= !AusStage CSS Processing Classes =
 
 The first task is the development of a class that can be used to process the [AusStageColourScheme AusStage Colour Scheme] CSS into a variety of different formats. 
 
@@ -178,3 +178,15 @@ The application must use the [WorkExperienceJavaDevelopment#CSS_Processing_Class
 All parameters must be validated using the classes and methods outlined in the [WorkExperienceJavaDevelopment#General_Development_Guidelines General Development Guidelines].
 
 An example of the way the application should be structured is available in the [http://aus-e-stage.googlecode.com/svn/trunk/website-analytics/src/au/edu/ausstage/websiteanalytics/WebsiteAnalytics.java WebsiteAnalytics class]
+
+= GraphML Manager Class =
+
+The [NetworkService Navigating Networks Service] is required to export data in a variety of different formats. One of the main formats that will be used is [http://graphml.graphdrawing.org/ GraphML]. !GraphML is a XML based format and the class will need to provide methods to:
+
+ # Create a !GraphML document
+ # Define options for the !GraphML document
+ # Add metadata elements to the document
+ # Add nodes and edges to the document
+ # Add metadata, from the list of elements added to the document, to nodes and edges
+
+
