@@ -295,3 +295,9 @@ public void addAttributeToNode(Element node, String id, String value) {
 }
 
 }}}
+
+== GraphML Manager Test Class ==
+
+A simple command line driven application is required to test the [WorkExperienceJavaDevelopment#GraphML_Manager_Class GraphML Manager] class. 
+
+This application will use the WorkExperienceJavaDevelopment#GraphML_Manager_Class GraphML Manager] class to create a simple GrahML file, including adding nodes edges and attributes and write the XML out to a file. 
