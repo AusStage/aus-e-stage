@@ -181,17 +181,18 @@ An example of the way the application should be structured is available in the [
 
 = GraphML Manager Classes =
 
-The [NetworkService Navigating Networks Service] is required to export data in a variety of different formats. One of the main formats that will be used is [http://graphml.graphdrawing.org/ GraphML]. !GraphML is a XML based format and the class will need to provide methods to:
-
- # Create a !GraphML document
- # Define options for the !GraphML document
- # Add metadata elements to the document
- # Add nodes and edges to the document
- # Add metadata, from the list of elements added to the document, to nodes and edges
+The [NetworkService Navigating Networks Service] is required to export data in a variety of different formats. One of the main formats that will be used is [http://graphml.graphdrawing.org/ GraphML]. !GraphML is a XML based format use for representing networks. 
 
 == GraphML Manager Class ==
 
-The class must define public methods that provide the functionality outlined in the previous section. Example methods include, but are not limited to, the following:
+The class *must* provide methods that will:
+
+ # Create a !GraphML document
+ # Add attribute definitions to the document
+ # Add nodes and edges to the document
+ # Add attributes to nodes and edges
+
+Example methods include, but are not limited to, the following:
 
 {{{
 /**
