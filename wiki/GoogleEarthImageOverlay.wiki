@@ -60,4 +60,32 @@ An overlay in KML can have time data associated with it which can restrict the v
 
 To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add the following red snippets in the KML file created in the above procedure. For more information about !TimeSpan, please refer to [http://code.google.com/apis/kml/documentation/time.html http://code.google.com/apis/kml/documentation/time.html].
 
-[http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/overlayKML.PNG]
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" 
+     xmlns:kml="http://www.opengis.net/kml/2.2">
+
+<GroundOverlay>
+	<name>Australia 1990 - 2000 </name>
+
+	<TimeSpan>
+        <begin>1990</begin>
+        <end>2000</end>
+      </TimeSpan>
+
+	<Icon>
+		<href>au_1990_2000.PNG</href>		
+	</Icon>
+
+	<LatLonBox>
+		<north>3.611860048781208</north>
+		<south>-54.94562083452288</south>
+		<east>187.1711290053903</east>
+		<west>94.29433524529206</west>
+		<rotation>2.068405396262002</rotation>
+	</LatLonBox>
+</GroundOverlay>
+</kml>
+
+
+}}}
