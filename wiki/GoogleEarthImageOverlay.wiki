@@ -69,9 +69,9 @@ To set a !TimeSpan (from 1990 to 2000, for example) for an overlay, you can add 
 	<name>Australia 1990 - 2000 </name>
 
 	<TimeSpan>
-        <begin>1990</begin>
-        <end>2000</end>
-      </TimeSpan>
+           <begin>1990</begin>
+           <end>2000</end>
+        </TimeSpan>
 
 	<Icon>
 		<href>au_1990_2000.PNG</href>		
