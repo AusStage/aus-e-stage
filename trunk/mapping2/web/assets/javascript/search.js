@@ -42,7 +42,7 @@ function SearchClass () {
 	this.DEFAULT_SEARCH_LIMIT = "25";
 	
 	// declare a constant for use when the search limit has been reached
-	this.LIMIT_REACHED_MSG = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>The limit of ' + this.DEFAULT_SEARCH_LIMIT + ' records has been reached.<br/>Please adjust your search query if the result you are looking for is missing.</p></di>';
+	this.LIMIT_REACHED_MSG = '&nbsp;' + buildInfoMsgBox('The limit of ' + this.DEFAULT_SEARCH_LIMIT + ' records has been reached. Please adjust your search query if the result you are looking for is missing.');
 	
 	// define the token used to identify an ID search
 	this.ID_SEARCH_TOKEN   = "id:";
@@ -55,33 +55,212 @@ function SearchClass () {
 	
 }
 
+// initialise the search related elements
+SearchClass.prototype.init = function() {
+
+	// hide the messages div
+	$("#search_messages").hide();
+	$("#search_status_message").hide();
+	$("#search_error_message").hide();
+
+	// setup a handler for the start of an ajax request
+	$("#search_message_text").ajaxSend(function(e, xhr, settings) {
+		// determine what type of request has been made & update the message text accordingly
+		// ensure that we're only working on searches
+		if(settings.url.indexOf("search?", 0) != -1) {
+			if(settings.url.indexOf("contributor", 0) != -1) {
+				$(this).text("Contributor search is underway...");
+			} else if(settings.url.indexOf("organisation", 0) != -1) {
+				$(this).text("Organisation search is underway...");
+			} else if(settings.url.indexOf("venue", 0) != -1) {
+				$(this).text("Venue search is underway...");
+			} else if(settings.url.indexOf("event", 0) != -1) {
+				$(this).text("Event search is underway...");
+			}
+		}
+	});
+	
+	// set up handler for when an ajax request results in an error for searching
+	$("#search_error_text").ajaxError(function(e, xhr, settings, exception) {
+		// determine what type of request has been made & update the message text accordingly
+		// ensure that we're only working on searches
+		if(settings.url.indexOf("search?", 0) != -1) {
+			if(searchObj.error_condition == false) {
+				if(settings.url.indexOf("contributor", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the contributor search'));
+				} else if(settings.url.indexOf("organisation", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the organisation search'));
+				} else if(settings.url.indexOf("venue", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the venue search'));
+				} else if(settings.url.indexOf("event", 0) != -1) {
+					$(this).text(AJAX_ERROR_MSG.replace('-', 'the event search'));
+					searchObj.searching_underway_flag = false;
+				}
+				searchObj.error_condition = true;
+			} else {
+				$(this).text(AJAX_ERROR_MSG.replace('-', 'multiple searches'));
+				searchObj.searching_underway_flag = false;
+			}
+			
+			// show the error message
+			$("#search_error_message").show();
+		}
+	});
+	
+	// setup a handler for when the user clicks on a button to add search results to the map
+	$('.selectSearchAll').live('click', searchObj.selectAllClickEvent);
+	
+	// create a custom validator for validating id messages
+	jQuery.validator.addMethod("validIDSearch", function(value, element) {
+	
+		// check to see if this is an id search query
+		if(value.substr(0,3) != searchObj.ID_SEARCH_TOKEN) {
+			// return true as nothing to do
+			return true;
+		} else {
+			// found the id token so we need to validate it
+			if(isNaN(value.substr(3)) == true) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}, 'An ID search must start with "id:" and be followed by a valid integer');
+
+	// setup the search form
+	$("#search").validate({
+		rules: { // validation rules
+			query: {
+				required: true,
+				validIDSearch: true,
+				minlength: searchObj.MIN_QUERY_LENGTH,
+			}
+		},
+		errorContainer: '#search_error_message',
+		errorLabelContainer: '#search_error_text',
+		wrapper: "",
+		showErrors: function(errorMap, errorList) {
+			if(errorList.length > 0) {
+				this.defaultShowErrors();
+				$("#search_status_message").hide();
+				$("#search_messages").show();
+				$("#search_error_message").show();
+			} else {
+				$("#search_messages").hide();
+				$("#search_error_message").hide();
+			}
+		},
+		success: function(label) {
+			$("#search_messages").hide();
+			$("#search_error_message").hide();
+		},
+		messages: {
+			query: {
+				required: "Please enter a few search terms",
+				validIDSearch: 'An ID search must start with "id:" and be followed by a valid integer',
+				minlength: 'A search query must be ' + searchObj.MIN_QUERY_LENGTH + ' characters or more in length'
+			}
+		},
+		submitHandler: function(form) {
+			// indicate that the search is underway
+			$("#search_error_message").hide();
+			$("#search_messages").show();
+			$("#search_status_message").show();
+			
+			searchObj.searching_underway_flag = true;
+			setTimeout("searchObj.updateMessages()", UPDATE_DELAY);
+		
+			// clear the accordian of any past search results
+			searchObj.clearAccordian();
+			
+			// set up the ajax queue
+			var ajaxQueue = $.manageAjax.create("mappingSearchAjaxQueue", {
+				queue: true
+			});
+			
+			// undertake the searches in order
+			var base_search_url = '';
+			var query           = $("#query").val();
+			
+			if(query.substr(0,3) != searchObj.ID_SEARCH_TOKEN) {
+				// this is a name search
+				base_search_url = BASE_URL + "search?type=name&limit=" + searchObj.DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent(query);
+			} else {
+				// this is an id search 
+				base_search_url = BASE_URL + "search?type=id&query=" + encodeURIComponent(query.substr(3).replace(/^\s\s*/, '').replace(/\s\s*$/, ''));
+			}			
+						
+			// do a contributor search
+			var url = base_search_url + "&task=contributor";
+			
+			// queue this request
+			ajaxQueue.add({
+				success: searchObj.buildContributorResults,
+				url: url
+			});
+			
+			// do a organisation search
+			url = base_search_url + "&task=organisation";
+			
+			// queue this request
+			ajaxQueue.add({
+				success: searchObj.buildOrganisationResults,
+				url: url
+			});
+			
+			// do a venue search
+			url = base_search_url + "&task=venue";
+			
+			// queue this request
+			ajaxQueue.add({
+				success: searchObj.buildVenueResults,
+				url: url
+			});
+			
+			// do an event search
+			url = base_search_url + "&task=event";
+			
+			// queue this request
+			ajaxQueue.add({
+				success: searchObj.buildEventResults,
+				url: url
+			});
+			
+		}
+	});
+
+}
+
+// check to see if we need to do a search from a link
+SearchClass.prototype.doSearchFromLink = function() {
+
+	// check to see if this is a persistent link request
+	var searchParam = $.getUrlVar("search");
+	
+	if(typeof(searchParam) != "undefined") {
+		
+		// get parameters
+		var queryParam = $.getUrlVar("query");
+		
+		// check on the parameters
+		if(typeof(queryParam) == "undefined") {
+			
+			// show a message as the query parameters are missing
+			$("#search_error_text").text("Error: The persistent URL for this search is incomplete, please try again");
+			$("#search_error_message").show();
+			$("#search_messages").show();
+		} else {
+			searchObj.doSearch(queryParam);
+		}
+	}
+
+
+}
+
 // undertake a search
 SearchClass.prototype.doSearch = function(searchTerm) {
 	$("#query").val(decodeURIComponent(searchTerm));
 	$("#search").submit();
-}
-
-// hide the search notes
-SearchClass.prototype.hideNotes = function() {
-	$("#search_notes").hide('slow');
-	$("#search_notes_toggle").empty().append("(Show Notes)");
-	searchObj.show_notes = false;
-	$.cookie('show_search_notes', 'false');
-}
-
-// show the search notes
-SearchClass.prototype.showNotes = function() {
-	$("#search_notes").show('slow');
-	$("#search_notes_toggle").empty().append("(Hide Notes)");
-	searchObj.show_notes = true;
-	$.cookie('show_search_notes', null);
-}
-
-// check to see if the cookie is set
-SearchClass.prototype.checkNoteCookie = function() {
-	if($.cookie('show_search_notes') == 'false') {
-		searchObj.hideNotes();
-	}
 }
 
 // clear the accordians related to the searching functionality
@@ -112,9 +291,9 @@ SearchClass.prototype.updateMessages = function() {
 	if(searchObj.searching_underway_flag != true) {
 		// indicate that the search has finished
 		if(error_condition == false) {
-			$("#messages").hide();
+			$("#search_messages").hide();
 		} else {
-			$("#status_message").hide();
+			$("#search_status_message").hide();
 		}
 	} else {
 		setTimeout("searchObj.updateMessages()", UPDATE_DELAY);
@@ -407,7 +586,7 @@ SearchClass.prototype.addToMapClickEvent = function(event) {
 
 }
 
-// define a method of the search class to respnd to the click event
+// define a method of the search class to respond to the click event
 // of the select all check box
 SearchClass.prototype.selectAllClickEvent = function(event) {
 

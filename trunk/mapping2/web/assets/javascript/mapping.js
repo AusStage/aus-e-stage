@@ -76,6 +76,23 @@ function MappingClass() {
 
 }
 
+// define a function to initialise the mapping page elements
+MappingClass.prototype.init = function() {
+
+	// resize the map when the tab is shown
+	$('#tabs').bind('tabsshow', function(event, ui) {
+		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
+			// update the map
+			mappingObj.updateMap();
+		}
+	});
+	
+	// resize the map when the window is resized
+	$(window).resize(function() {
+		mappingObj.resizeMap();
+	});
+}
+
 // function to initialise the map
 MappingClass.prototype.initMap = function() {
 

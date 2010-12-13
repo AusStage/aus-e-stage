@@ -24,6 +24,35 @@ function BrowseClass() {
 
 }
 
+// define a function to intialise the browse elements
+BrowseClass.prototype.init = function() {
+
+	 browseObj.getMajorAreas();
+	 
+	 // associate a click event with the browse major area items
+	 $('.browseMajorArea').live('click', browseObj.getSuburbsClickEvent);
+	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
+	 $('.browseCheckBox').live('click', browseObj.checkboxClickEvent);
+	 $('#browse_add_btn').click(browseObj.addToMap);
+	 
+	 // set up handler for when an ajax request results in an error for searching
+	 $("#browse_messages").ajaxError(function(e, xhr, settings, exception) {
+	 	// determine what type of request has been made & update the message text accordingly
+		// ensure that we're only working on browse activities
+		if(settings.url.indexOf("lookup?task=state-list", 0) != -1) {
+			$(this).empty().append(buildErrorMsgBox('the request for Country and State data'));
+		} else if(settings.url.indexOf("lookup?task=suburb-list", 0) != -1) {
+			$(this).empty().append(buildErrorMsgBox('the request for suburb data'));
+		} else if(settings.url.indexOf("lookup?task=suburb-venue-list", 0) != -1) {
+			$(this).empty().append(buildErrorMsgBox('the request for venue data'));
+		}
+	});
+	
+	// set up a handler for when the ajax calls finish
+	$("#browse_messages").bind('mappingBrowseAjaxQueue' + 'AjaxStop', browseObj.addDataToMap);
+
+}
+
 // define a function to populate the major areas cell
 BrowseClass.prototype.getMajorAreas = function() {
 
