@@ -39,7 +39,7 @@ An overview of the way SMS messages are integrated with AusStage is [http://tech
 
 A diagram providing an overview of the workflow involved in processing SMS messages is [http://aus-e-stage.googlecode.com/svn-history/trunk/wiki-assets/incoming-sms-workflow.png also available].
 
-= DRAFT Adding an web message DRAFT =
+= Adding Feedback from the Mobile Web =
 
 An web message can be submitted for processing using the following API
 
@@ -62,8 +62,6 @@ Both get and post requests are supported
 || *Name* || *Required Value* || *Optional* || *Default* || *Example* ||
 || type   || mobile-web              || No        ||  || ||
 || performance  || The unique performance ID || No || || ||
-|| time   || the time that the message was sent || No || ||14:55:32 +1100||
-|| date   || the date that the message was sent || No || ||Tue Nov 02 2010||
 || message|| the text of the feedback message || No || ||||
 
 == Result data   ==
