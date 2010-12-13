@@ -29,11 +29,6 @@ $(document).ready(function(){
 	/*
 	 * page setup
 	 */
-
-	// hide the messages div
-	$("#messages").hide();
-	$("#status_message").hide();
-	$("#error_message").hide();
 	
 	// prevent a FOUC
 	$('html').removeClass('js');
@@ -44,242 +39,22 @@ $(document).ready(function(){
 	// style the buttons
 	styleButtons();
 	
-	/*
-	 * search functionality
-	 */
-	
 	// associate tipsy with the span element
 	$('.use-tipsy').tipsy({live: true});
 	
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
 	
-	// setup a handler for the start of an ajax request
-	$("#message_text").ajaxSend(function(e, xhr, settings) {
-		// determine what type of request has been made & update the message text accordingly
-		// ensure that we're only working on searches
-		if(settings.url.indexOf("search?", 0) != -1) {
-			if(settings.url.indexOf("contributor", 0) != -1) {
-				$(this).text("Contributor search is underway...");
-			} else if(settings.url.indexOf("organisation", 0) != -1) {
-				$(this).text("Organisation search is underway...");
-			} else if(settings.url.indexOf("venue", 0) != -1) {
-				$(this).text("Venue search is underway...");
-			} else if(settings.url.indexOf("event", 0) != -1) {
-				$(this).text("Event search is underway...");
-			}
-		}
-	});
+	// initialise the search page elements
+	searchObj.init();	
 	
-	// set up handler for when an ajax request results in an error for searching
-	$("#error_text").ajaxError(function(e, xhr, settings, exception) {
-		// determine what type of request has been made & update the message text accordingly
-		// ensure that we're only working on searches
-		if(settings.url.indexOf("search?", 0) != -1) {
-			if(searchObj.error_condition == false) {
-				if(settings.url.indexOf("contributor", 0) != -1) {
-					$(this).text(AJAX_ERROR_MSG.replace('-', 'the contributor search'));
-				} else if(settings.url.indexOf("organisation", 0) != -1) {
-					$(this).text(AJAX_ERROR_MSG.replace('-', 'the organisation search'));
-				} else if(settings.url.indexOf("venue", 0) != -1) {
-					$(this).text(AJAX_ERROR_MSG.replace('-', 'the venue search'));
-				} else if(settings.url.indexOf("event", 0) != -1) {
-					$(this).text(AJAX_ERROR_MSG.replace('-', 'the event search'));
-					searchObj.searching_underway_flag = false;
-				}
-				searchObj.error_condition = true;
-			} else {
-				$(this).text(AJAX_ERROR_MSG.replace('-', 'multiple searches'));
-				searchObj.searching_underway_flag = false;
-			}
-			
-			// show the error message
-			$("#error_message").show();
-		}
-	});
+	// check to see if this is a persistent link search
+	searchObj.doSearchFromLink();
 	
-	// setup a handler for when the user clicks on a button to add search results to the map
-	$('.selectSearchAll').live('click', searchObj.selectAllClickEvent);
+	// initialise the browse page elements
+	browseObj.init();
 	
-	// create a custom validator for validating id messages
-	jQuery.validator.addMethod("validIDSearch", function(value, element) {
-	
-		// check to see if this is an id search query
-		if(value.substr(0,3) != searchObj.ID_SEARCH_TOKEN) {
-			// return true as nothing to do
-			return true;
-		} else {
-			// found the id token so we need to validate it
-			if(isNaN(value.substr(3)) == true) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	}, 'An ID search must start with "id:" and be followed by a valid integer');
-
-	// setup the search form
-	$("#search").validate({
-		rules: { // validation rules
-			query: {
-				required: true,
-				validIDSearch: true,
-				minlength: searchObj.MIN_QUERY_LENGTH,
-			}
-		},
-		errorContainer: '#error_message',
-		errorLabelContainer: '#error_text',
-		wrapper: "",
-		showErrors: function(errorMap, errorList) {
-			if(errorList.length > 0) {
-				this.defaultShowErrors();
-				$("#status_message").hide();
-				$("#messages").show();
-				$("#error_message").show();
-			} else {
-				$("#messages").hide();
-				$("#error_message").hide();
-			}
-		},
-		success: function(label) {
-			$("#messages").hide();
-			$("#error_message").hide();
-		},
-		messages: {
-			query: {
-				required: "Please enter a few search terms",
-				validIDSearch: 'An ID search must start with "id:" and be followed by a valid integer',
-				minlength: 'A search query must be ' + searchObj.MIN_QUERY_LENGTH + ' characters or more in length'
-			}
-		},
-		submitHandler: function(form) {
-			// indicate that the search is underway
-			$("#error_message").hide();
-			$("#messages").show();
-			$("#status_message").show();
-			
-			searchObj.searching_underway_flag = true;
-			setTimeout("searchObj.updateMessages()", UPDATE_DELAY);
+	// initialise the mapping page elements
+	mappingObj.init();
 		
-			// clear the accordian of any past search results
-			searchObj.clearAccordian();
-			
-			// set up the ajax queue
-			var ajaxQueue = $.manageAjax.create("mappingSearchAjaxQueue", {
-				queue: true
-			});
-			
-			// undertake the searches in order
-			var base_search_url = '';
-			var query           = $("#query").val();
-			
-			if(query.substr(0,3) != searchObj.ID_SEARCH_TOKEN) {
-				// this is a name search
-				base_search_url = BASE_URL + "search?type=name&limit=" + searchObj.DEFAULT_SEARCH_LIMIT + "&query=" + encodeURIComponent(query);
-			} else {
-				// this is an id search 
-				base_search_url = BASE_URL + "search?type=id&query=" + encodeURIComponent(query.substr(3).replace(/^\s\s*/, '').replace(/\s\s*$/, ''));
-			}			
-						
-			// do a contributor search
-			var url = base_search_url + "&task=contributor";
-			
-			// queue this request
-			ajaxQueue.add({
-				success: searchObj.buildContributorResults,
-				url: url
-			});
-			
-			// do a organisation search
-			url = base_search_url + "&task=organisation";
-			
-			// queue this request
-			ajaxQueue.add({
-				success: searchObj.buildOrganisationResults,
-				url: url
-			});
-			
-			// do a venue search
-			url = base_search_url + "&task=venue";
-			
-			// queue this request
-			ajaxQueue.add({
-				success: searchObj.buildVenueResults,
-				url: url
-			});
-			
-			// do an event search
-			url = base_search_url + "&task=event";
-			
-			// queue this request
-			ajaxQueue.add({
-				success: searchObj.buildEventResults,
-				url: url
-			});
-			
-		}
-	});
-	
-	// check to see if this is a persistent link request
-	var searchParam = $.getUrlVar("search");
-	
-	if(typeof(searchParam) != "undefined") {
-		
-		// get parameters
-		var queryParam = $.getUrlVar("query");
-		
-		// check on the parameters
-		if(typeof(queryParam) == "undefined") {
-			
-			// show a message as the query parameters are missing
-			$("#error_text").text("Error: The persistent URL for this search is incomplete, please try again");
-			$("#error_message").show();
-			$("#messages").show();
-		} else {
-			searchObj.doSearch(queryParam);
-		}
-	}
-	
-	/*
-	 * browse functionality 
-	 */
-	 browseObj.getMajorAreas();
-	 
-	 // associate a click event with the browse major area items
-	 $('.browseMajorArea').live('click', browseObj.getSuburbsClickEvent);
-	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
-	 $('.browseCheckBox').live('click', browseObj.checkboxClickEvent);
-	 $('#browse_add_btn').click(browseObj.addToMap);
-	 
-	 // set up handler for when an ajax request results in an error for searching
-	 $("#browse_messages").ajaxError(function(e, xhr, settings, exception) {
-	 	// determine what type of request has been made & update the message text accordingly
-		// ensure that we're only working on browse activities
-		if(settings.url.indexOf("lookup?task=state-list", 0) != -1) {
-			$(this).empty().append(buildErrorMsgBox('the request for Country and State data'));
-		} else if(settings.url.indexOf("lookup?task=suburb-list", 0) != -1) {
-			$(this).empty().append(buildErrorMsgBox('the request for suburb data'));
-		} else if(settings.url.indexOf("lookup?task=suburb-venue-list", 0) != -1) {
-			$(this).empty().append(buildErrorMsgBox('the request for venue data'));
-		}
-	});
-	
-	// set up a handler for when the ajax calls finish
-	$("#browse_messages").bind('mappingBrowseAjaxQueue' + 'AjaxStop', browseObj.addDataToMap);
-	 
-	/*
-	 * map functionality
-	 */
-	// resize the map when the tab is shown
-	$('#tabs').bind('tabsshow', function(event, ui) {
-		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
-			// update the map
-			mappingObj.updateMap();
-		}
-	});
-	
-	// resize the map when the window is resized
-	$(window).resize(function() {
-		mappingObj.resizeMap();
-	});
 });

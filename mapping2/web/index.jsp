@@ -76,16 +76,16 @@
 									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/> <span id="show_search_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" title="Search Help"></span>
 								</td>
 								<td style="width: 40%">
-									<div id="messages">
-										<div class="ui-state-highlight ui-corner-all search-status-messages" id="status_message">
+									<div id="search_messages" class="js">
+										<div class="ui-state-highlight ui-corner-all search-status-messages" id="search_status_message">
 											<p>
 												<span class="ui-icon ui-icon-info status-icon"></span>
-												<span id="message_text"></span>
+												<span id="search_message_text"></span>
 											</p>
 										</div>
-										<div class="ui-state-error ui-corner-all search-status-messages" id="error_message"> 
+										<div class="ui-state-error ui-corner-all search-status-messages" id="search_error_message"> 
 											<p><span class="ui-icon ui-icon-alert status-icon"></span> 
-											<span id="error_text"></span>
+											<span id="search_error_text"></span>
 											</p>
 										</div>										
 									</div>
