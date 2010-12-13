@@ -133,17 +133,11 @@ public class GathererServlet extends HttpServlet {
 		
 			// get the remaining parameters
 			String performance = request.getParameter("performance");
-			String date        = request.getParameter("date");
-			String time        = request.getParameter("time");
 			String message     = request.getParameter("message");
 			
 			// check to ensure that the parameters are present
 			if(InputUtils.isValidInt(performance) == false) {
 				throw new ServletException("Missing performance parameter");
-			}
-			
-			if(InputUtils.isValid(date) == false || InputUtils.isValid(time) == false) {
-				throw new ServletException("Missing required date and / or time parameters");
 			}
 			
 			if(InputUtils.isValid(message) == false) {
@@ -169,7 +163,7 @@ public class GathererServlet extends HttpServlet {
 			String results = null;
 			GathererManager manager = new GathererManager(database, servletConfig);
 			
-			results = manager.processMobileWeb(performance, date, time, message, request.getRemoteAddr());
+			results = manager.processMobileWeb(performance, message, request.getRemoteAddr());
 			
 			// ouput the data
 			// set the appropriate content type

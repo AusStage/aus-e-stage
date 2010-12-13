@@ -435,10 +435,10 @@ public class GathererManager {
 	 *
 	 * @return            a list of feedback already recieved, same content as the FeedbackManager.getInitialFeedback() method
 	 */
-	public String processMobileWeb(String performance, String date, String time, String message, String remoteAddr) {
+	public String processMobileWeb(String performance, String message, String remoteAddr) {
 	
 		// check on the parameters
-		if(InputUtils.isValidInt(performance) == false || InputUtils.isValid(date) == false || InputUtils.isValid(time) == false || InputUtils.isValid(message) == false) {
+		if(InputUtils.isValidInt(performance) == false || InputUtils.isValid(message) == false) {
 			throw new IllegalArgumentException("All parameters are required to be valid");
 		}
 		
@@ -459,7 +459,7 @@ public class GathererManager {
 		
 		// check on what is returned
 		if(results == null) {
-			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to lookup performance information\n" + buildMobileWebExceptionReport(performance, date, time, message));
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Unable to lookup performance information\n" + buildMobileWebExceptionReport(performance, DateUtils.getCurrentDateAndTime(), message));
 			return jsonArray.toString();
 		}
 		
@@ -468,7 +468,7 @@ public class GathererManager {
 	
 		// check to see that data was returned
 		if(results == null) {
-			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: No matching performance found\n" + buildMobileWebExceptionReport(performance, date, time, message));
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: No matching performance found\n" + buildMobileWebExceptionReport(performance, DateUtils.getCurrentDateAndTime(), message));
 			return jsonArray.toString();
 		}
 		
@@ -477,7 +477,7 @@ public class GathererManager {
 			resultSet.next();
 			question = resultSet.getString(2);
 		}catch (java.sql.SQLException ex) {
-			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: SQL Error caused by looking up performance information\n" + buildMobileWebExceptionReport(performance, date, time, message));
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: SQL Error caused by looking up performance information\n" + buildMobileWebExceptionReport(performance, DateUtils.getCurrentDateAndTime(), message));
 			return jsonArray.toString();
 		}
 		
@@ -485,13 +485,6 @@ public class GathererManager {
 		resultSet = null;
 		results.tidyUp();
 		results   = null;
-		
-		// build the date and time object
-		DateTimeFormatter mobileWebInputFormat = DateTimeFormat.forPattern("E MMM dd yyyy HH:mm:ss Z");
-		DateTime          messageReceived      = mobileWebInputFormat.parseDateTime(date + " " + time);
-		
-		// change the date and time to the local time
-		LocalDateTime     localWebInputDate = messageReceived.toLocalDateTime();
 		
 		// get the hash 
 		String receivedFrom = null;
@@ -503,21 +496,20 @@ public class GathererManager {
 		
 		// define new sql
 		sql = "INSERT INTO mob_feedback "
-			+ "(performance_id, question_id, source_type, received_date_time, short_content, received_from) "
-			+ "VALUES (?,?,?, TO_DATE(?, '" + DB_DATE_TIME_FORMAT + "'),?,?)";
+			+ "(performance_id, question_id, source_type, short_content, received_from) "
+			+ "VALUES (?,?,?,?,?)";
 		
 		// define new parameters	
-		sqlParameters = new String[6]; // store the parameters
+		sqlParameters = new String[5]; // store the parameters
 		sqlParameters[0] = performance;
 		sqlParameters[1] = question;
 		sqlParameters[2] = MOBILE_WEB_SOURCE_ID;
-		sqlParameters[3] = dateTimeFormat.print(localWebInputDate);
-		sqlParameters[4] = message;
-		sqlParameters[5] = receivedFrom;
+		sqlParameters[3] = message;
+		sqlParameters[4] = receivedFrom;
 		
 		// insert the data
 		if(database.executePreparedInsertStatement(sql, sqlParameters) == false) {
-			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Error inserting feedback \n" + buildMobileWebExceptionReport(performance, date, time, message));
+			emailManager.sendSimpleMessage(EMAIL_SUBJECT, EMAIL_MESSAGE + "\nDetails: Error inserting feedback \n" + buildMobileWebExceptionReport(performance, DateUtils.getCurrentDateAndTime(), message));
 			return jsonArray.toString();
 		}
 		
@@ -536,12 +528,11 @@ public class GathererManager {
 	 * 
 	 * @return            the text of the exception report
 	 */
-	private String buildMobileWebExceptionReport(String performance, String date, String time, String message) {
+	private String buildMobileWebExceptionReport(String performance, String date, String message) {
 	
 		StringBuilder builder = new StringBuilder("\n******************************************\n");
 		builder.append("Performance ID" + performance + "\n");
-		builder.append("Date: " + date + "\n");
-		builder.append("Time: " + time + "\n");
+		builder.append("Date / Time: " + date + "\n");
 		builder.append("Message: " + message + "\n");
 		
 		return builder.toString();
