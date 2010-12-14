@@ -155,16 +155,15 @@ To compile and package the website:
 
 *Note:* The username and password for uploading a new webapp can be obtained by contacting the !AusStage Project Manager.
 
+*Note:* When a webapp is undeployed it is deleted from the server and is unavailable to all users until the replacement webapp is successfully deployed. 
+
 To upload a new version of the compiled webapp follow this procedure:
 
  # Enter the following URL into the address bar of your browser
    http://beta.ausstage.edu.au/manager/html
  # When prompted enter the appropriate username and password
  # Click the _Undeply_ link to the right of the name of the webapp you wish to replace
-   *Note:* At this point the webapp is now unavailable to all users
  # Click the _Browse_ button under the _WAR file to deploy_ heading at the bottom of the page
  # Browse and select the war file created as the result of the [UpdateTomcatWebapp#Compiling_and_Packaging_the_Webapp]
  # Click the _Deploy_ button
  # Ensure the webapp successfully deployed by clicking the link in the _Path_ column of the table to the left of the webapp name and interacting with the webapp
-
-
