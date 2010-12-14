@@ -1,11 +1,6 @@
 _Details of the Navigating Networks Testing Feedback_
 
-= Introduction =
-
 The Navigating Networks service is being developed in stages.  As a result testing feedback is being incrementally gathered, reviewed and updated.  
-
-
-= Details =
 
 The most recent round of Navigating Networks Alpha Testing Feedback is tabled in the document at:  
 
