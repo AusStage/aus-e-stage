@@ -6,8 +6,9 @@
      * [MapInfoToKML Converting MapInfo Data to KML]
    * Working With Networks
      * [NavigatingNetworksExportGraphs Exporting Graph Files]
-   * Aus-e-Stage Software
+   * Aus-e-Stage Software / Webapps
      * [UsingTweetGatherer Using the Tweet Gatherer App]
+     * [UpdateTomcatWebapp Updating an Aus-e-Stage Webapp]
    * External Data-sources
      * [SourcingAbsData Sourcing data from the ABS]
    * Project Management Tasks
