@@ -54,6 +54,7 @@
        * [NavigatingNetworksSparqlEndpoint SPARQL End Point]
        * [NavigatingNetworksSparql  Sample SPARQL Queries]
      * [NavigatingNetworksGraphMLFileFormat GraphML File Format]
+     * [NavigatingNetworksServiceFeedback Networks Service Feedback]
    * [AusStageTerminator AusStage Terminator Service]
  * Other Software Under Development
    * Applications 
