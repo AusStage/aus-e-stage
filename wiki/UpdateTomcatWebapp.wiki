@@ -164,6 +164,6 @@ To upload a new version of the compiled webapp follow this procedure:
  # When prompted enter the appropriate username and password
  # Click the _Undeply_ link to the right of the name of the webapp you wish to replace
  # Click the _Browse_ button under the _WAR file to deploy_ heading at the bottom of the page
- # Browse and select the war file created as the result of the [UpdateTomcatWebapp#Compiling_and_Packaging_the_Webapp]
+ # Browse and select the war file created as the result of the [UpdateTomcatWebapp#Compiling_and_Packaging_the_Webapp Compiling and Packaging procedure]
  # Click the _Deploy_ button
  # Ensure the webapp successfully deployed by clicking the link in the _Path_ column of the table to the left of the webapp name and interacting with the webapp
