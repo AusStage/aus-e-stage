@@ -9,9 +9,12 @@ things to fix.
 
 - proper 2nd degree network
 - arc diagram
-- css
+
 - window resize. - not playing nice with pan and zoom.
 - pan and zoom not playing nice either.
+
+LOOK AT - if PAN then Zoom, everything recentres
+			if PAN then RESIZE everything moves incorrectly.
 
 
 
@@ -46,14 +49,15 @@ var centreNode = -1;	//holds the index for the central node. Set on prepareData(
 var contributorCount = -1;
 
 /* appearance variables */
-var panelColor = "yellow";
+var panelColor = "white";
 
 var thickLine = 3;
 var thinLine = 1.5;
 
 var hoverEdge = "rgba(105, 105, 105, 0.5)";			//slate grey
+var hoverText = "rgba(105, 105, 105, 0.5)";			//slate grey
 
-var selectedEdge = "rgba(46,46,46,0.7)";			//dark grey
+var selectedEdge = "rgba(0,0,255,1)";				//blue
 var selectedNode = "rgba(0,0,255,1)";				//blue
 var selectedNodeBorder = "rgba(0,0,255,1)";  		//blue
 var selectedText = "rgba(0,0,255,1)";				//blue
@@ -108,10 +112,15 @@ var nodeIndexPoint = -1;	//stores the index of the node that the mouse is curren
 
 
 //CLICK VARIABLES
+var dragIndicator = false;	//set to true if dragged, to nullify onClick processing. Set to false after onClick processing
 var currentFocus;			//set ON CLICK. EDGE or NODE
 var edgeId = -1;			//stored the ID of the selected EDGE
 var edgeIndex = -1;			//stores the INDEX of the selected contributor - specific to the selected edge.
 var nodeIndex = -1;			//stores the INDEX of the selected NODE	
+
+//SHOW LABEL VARIABLES
+var showContributors = false;	//set to true if related checkbox is checked. Will display all contributor labels
+var showEvents = false;			//set to true if related checkbox is checked. Will display all event labels
 
 //DATA STORAGE VARIABLES
 var beforeCount = 0;
@@ -135,12 +144,13 @@ $(document).ready(function() {
 	  windowResized();
 	});
 		
-		
+	//hide the interaction elements		
 	//hide the date range
 	$("select#startDate").hide();
 	$("select#endDate").hide();
 	$("#date_range_div").hide();
-	
+	//hide the show labels checkboxes
+	$("#display_labels_div").hide();
 	//hide the faceted browsing button
 	$("#faceted_browsing_btn_div").hide();
 	//hide the faceted browsing
@@ -198,6 +208,8 @@ $(document).ready(function() {
 	//set up network button    
 	$("#network_btn").click(function() {
 		showGraph("protovis");	
+		windowResized();		
+		showInteraction();
      	return false;
     });
     
@@ -234,10 +246,39 @@ $(document).ready(function() {
 	
 	});
     
+    //set up label on/off checkboxes for contributor and event names
+    $("input[name=showContributors]").click(function() { 
+
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showContributors]").is(":checked")){
+			showContributors = true;	
+    	}
+    	else showContributors = false;
+    	vis.render();
+	}); 
+
+    $("input[name=showEvents]").click(function() { 
+
+		//if checked, then set showEvents to true, else set to false;
+    	if($("input[name=showEvents]").is(":checked")){
+    		showEvents = true;	
+    	}
+    	else showEvents = false;
+    	vis.render();
+	}); 
+	
+	
+	
+    
 });
 
 
+//function to show hidden interaction elements
+function showInteraction(){
+	
+		$("#display_labels_div").show();	
 
+}
 
 
 
@@ -366,7 +407,7 @@ function prepareData(){
 	//get link degree for nodes. And set contrib_id array with associated contributors
 	for(i = 0; i < events.nodes.length; i ++){
 		
-		//calculate number of nodes before and after the central node
+		//calculate number of nodes before and after the central node - used for layout method
 		if(!isBefore){
 			afterCount++;
 		}
@@ -377,8 +418,8 @@ function prepareData(){
 		if (isBefore){
 		beforeCount++;
 		}
-		///////////////////
 		
+		// calculate node statistics, link degree, linking contributors, neighboring nodes
 		events.nodes[i].linkDegreeTarget = 0;
 		events.nodes[i].linkDegreeSource = 0;
 		events.nodes[i].contributor_id = [];
@@ -435,15 +476,8 @@ function prepareData(){
 	/*create the scale for the x and y axis*/
 	timeLine = pv.Scale.linear(startDate, endDate).range(50,w-50);
 	yAxis = pv.Scale.linear(0, events.nodes.length).range(0,h-50);
-
-	
-	
-		
-	//set the x and y positions for nodes.
-	//very simple layout system. Assuming nodes are in order, alternate up and down on the baseline, expanding to the central node
-	// then contract.
 	 
-	layout();
+	layout(); //layou system for nodes
 	
 	//////////////////
 	//get count of duplicate lines AND add x and y position of source and target nodes. 
@@ -491,12 +525,14 @@ function prepareData(){
 
 		//get the source and target x and y values and store in the edge data.
 		events.edges[i].targetInfo = {left:events.nodes[events.edges[i].target].left,
-									  bottom:events.nodes[events.edges[i].target].bottom, 
+									  toLeft:events.nodes[events.edges[i].source].left,		
+									  bottom:events.nodes[events.edges[i].target].bottom, 									  
 									  toBottom:events.nodes[events.edges[i].source].bottom,
 									  edgeInfo:{id:events.edges[i].id, count:events.edges[i].count, source:events.edges[i].source,
 									  target:events.edges[i].target, name:"", index:events.edges[i].index}
 									  };
 		events.edges[i].sourceInfo = {left:events.nodes[events.edges[i].source].left,
+									  toLeft:events.nodes[events.edges[i].target].left,
 									  bottom:events.nodes[events.edges[i].source].bottom,
 									  toBottom:events.nodes[events.edges[i].target].bottom,									  
 									  edgeInfo:{id:events.edges[i].id, count:events.edges[i].count, source:events.edges[i].source,
@@ -601,8 +637,18 @@ function showGraph(targetDiv){
 	  							 				return focus;})    	    	  							 			  	
 	  							 										 
 			.add(pv.Label)
- 				.bottom(function(d) { return d.bottom+ ((d.toBottom - d.bottom)/2)})
-				.left(events.edges[i].sourceInfo.left + ((events.edges[i].targetInfo.left - events.edges[i].sourceInfo.left)/2))
+ 				.bottom(function(d) { if (d.edgeInfo.count == 1){ 
+ 									  	return d.bottom+ ((d.toBottom - d.bottom)/2)
+ 									  } else{
+											if(isEven(d.edgeInfo.count)){
+								return d.bottom + ((d.toBottom - d.bottom)/2)+((((d.edgeInfo.count)/2)*9)* Math.pow(this.scale, -0.75))
+											} else {
+								return d.bottom + ((d.toBottom - d.bottom)/2)-((((d.edgeInfo.count-1)/2)*9)* Math.pow(this.scale, -0.75))
+											}  	
+ 									  }
+ 					})
+ 					
+				.left(function(d) { return d.left + ((d.toLeft - d.left)/2)})
 				.textStyle(function(d){return getEdgeTextStyle(d.edgeInfo)})
 				.visible(function(d) {return isVisible(d.edgeInfo, EDGE, this)})
 				.text(function(d) {return d.edgeInfo.name})														
@@ -657,57 +703,14 @@ function showGraph(targetDiv){
 */
 //methods to determine appearance of the graph
 
-//transformation methods. To alter the domain of the scales on pan and zoom
-//transform - for panning and zoom only
-function transform() {
-	
-  var t = this.transform().invert();  	//get mouse position and scale 
-  var start = timeLine(startDate);	//convert startDate to scale and add mouse position
-  var end = timeLine(endDate);		//convert endDate to scale and add mouse position
-  
-  start = timeLine.invert(t.x + start *t.k);		//convert back to date (x position + domain * scale magnitude)
-  end = timeLine.invert(t.x + end * t.k);			
-  
-  timeLine.domain(start, end);			//alter the domain
-
-  vis.render();
-
-}
-
-
-//this function is called when the browser window is resized. 
-//
-function windowResized(){
-	  
-	  //reset the width and height
-	  w = $(window).width() - 220;
-	  h = $(window).height() - 112;
-	  
-	  //reset the timeline range accordingly
-	  timeLine.range(50,w-50);
-	  
-	  //reset the positioning of nodes accordingly.
-	  for (var i = 0; i< events.nodes.length; i++){
-		  events.nodes[i].left = timeLine(events.nodes[i].startDate);	
-	  }
-
-	  layout();
-	  	  
-	  //reset the position of links accordingly.
-	  for(var i = 0; i < events.edges.length; i++){
-	  
-	  //get the source and target x and y values and store in the edge data.
-	  	events.edges[i].targetInfo.left = events.nodes[events.edges[i].target].left;
-		events.edges[i].sourceInfo.left = events.nodes[events.edges[i].source].left;
-	  	events.edges[i].targetInfo.bottom = events.nodes[events.edges[i].target].bottom;
-		events.edges[i].sourceInfo.bottom = events.nodes[events.edges[i].source].bottom;	  		  	
-	  }
-
-	  
-	  vis.render();	
-}
 
 //layout function determines the layout of nodes in the grid.
+//set the x and y positions for nodes.
+//very simple layout system. Assuming nodes are in order, alternate up and down on the baseline, 
+//expanding to the central node then contract.
+
+
+//NEED TO - alter layout, position should also take into account link degree, and move towards the centre based on how linked it is.
 function layout(){
 
 	var step;
@@ -718,7 +721,7 @@ function layout(){
 	
 	var alternate = 0;
 	var before = true;
-	var afterIndex = 0;
+	var afterIndex = 2;
 	
 	for(i = 0;i<events.nodes.length; i ++){
 
@@ -742,47 +745,24 @@ function layout(){
 			}	
 		}
 	    
-		if (!before){
+		if (!before && (!events.nodes[i].central)){
 			switch (alternate){
-				case 0: events.nodes[i].bottom = h/2 - (step*afterIndex);
+				case 0: events.nodes[i].bottom = h/2 - (step*(i-afterIndex));
 						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
 		        		alternate = 1;
-		        		afterIndex++;
+		        		afterIndex = afterIndex + 2;
 		        		break;
 		        				
 				case 1: events.nodes[i].bottom = h/2 + (step*afterIndex);
 						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
 		    			alternate = 0;
-		    			afterIndex++; 
+		        		afterIndex = afterIndex + 2;
 						break;
 			}	
 		}
 
 	}	
 }
-
-//drag functionality
-function dragNode(d, p){
-	
-	var y = focus.mouse().y;		//get mouse positions
-	d.bottom = h-y;				//update the node position
-
-	for(var i = 0; i < events.edges.length; i++){
-		if (events.edges[i].source == p.index){
-			events.edges[i].sourceInfo.bottom = d.bottom;
-			events.edges[i].targetInfo.toBottom = d.bottom;
-			
-		}
-		if (events.edges[i].target == p.index){
-			events.edges[i].targetInfo.bottom = d.bottom;
-			events.edges[i].sourceInfo.toBottom = d.bottom;
-			
-		}
-		
-	}	
-	vis.render();
-}
-
 
 
 // determine line width of edges
@@ -839,6 +819,11 @@ function getEdgeTextStyle(d){
 	if (d.source == nodeIndex || d.target == nodeIndex){
 		return relatedText;
 	}
+	
+	if (d.id == edgeIdPoint){
+		return relatedText;
+	}
+
 			
 //	else
 	return unselectedText;
@@ -851,7 +836,7 @@ function getNodeFill(d, p){
 
 	//if selected contributor passes through this node
 	if(contains(d.contributor_id, edgeId)){
-		return selectedNode;
+		return relatedNode;
 	}
 
 	//if this node is selected
@@ -861,7 +846,7 @@ function getNodeFill(d, p){
 		
 	//if this node is related
 	if (contains(d.neighbors, nodeIndex)){	
-		return relatedNodeBorder;
+		return relatedNode;
 	}
 
 	return unselectedNode;	
@@ -874,7 +859,7 @@ function getNodeStroke(d, p){
 	
 	//if selected contributor passes through this node
 	if(contains(d.contributor_id, edgeId)){
-		return selectedNodeBorder;	
+		return relatedNodeBorder;	
 	}
 	
 	//if this node is selected
@@ -897,7 +882,7 @@ function getNodeTextStyle(d, p){
 	
 	//if selected contributor passes through this node
 	if(contains(d.contributor_id, edgeId)){
-		return selectedText;	
+		return relatedText;	
 	}
 	
 	//if this node is selected
@@ -921,6 +906,8 @@ function isVisible(d, what, p){
 	//for edges
 	if (what == EDGE){
 		
+		if (showContributors){return true;}
+		
 		if(d.index == edgeIndexPoint){	//if current edge index == index of the object being pointed at.
 			return true;	
 		}
@@ -933,6 +920,8 @@ function isVisible(d, what, p){
 	
 	//for Nodes
 	if (what == NODE){	
+		
+		if (showEvents){return true;}
 		
 		if (p.index == nodeIndexPoint){	//if current node index == index of object selected.
 			return true;
@@ -957,31 +946,124 @@ function isVisible(d, what, p){
 ==========================================================
 */
 //methods for graph interaction
-
+//click functionality
 function onClick(d, what, p){
-	switch (what){
-	case CLEAR: 
-		currentFocus = "";
-	    edgeId = -1;
-	    edgeIndex = -1;
-		nodeIndex = -1;		
-		break;
+	if(!dragIndicator){
+		switch (what){
+		case CLEAR: 
+			currentFocus = "";
+		    edgeId = -1;
+		    edgeIndex = -1;
+			nodeIndex = -1;		
+			break;
 		
-	case EDGE: 
-		currentFocus = EDGE;
-	    edgeId = d.edgeInfo.id;
-	    edgeIndex = d.edgeInfo.index;
-		nodeIndex = -1;		
-		break;
+		case EDGE: 
+			currentFocus = EDGE;
+		    edgeId = d.edgeInfo.id;
+		    edgeIndex = d.edgeInfo.index;
+			nodeIndex = -1;		
+			break;
 		
-	case NODE: 
-		currentFocus = NODE;
-		edgeId = -1;
-		edgeIndex = -1;
-	    nodeIndex = p.index;
-		break;
+		case NODE: 
+			currentFocus = NODE;
+			edgeId = -1;
+			edgeIndex = -1;
+	   	 nodeIndex = p.index;
+			break;
+		}
+		
+		displayPanelInfo(what);	
 	}
-	displayPanelInfo(what);
+	dragIndicator = false;	
+
+}
+
+
+//drag functionality
+function dragNode(d, p){
+	
+	var y = focus.mouse().y;		//get mouse positions
+	d.bottom = h-y;				//update the node position
+
+	for(var i = 0; i < events.edges.length; i++){
+		if (events.edges[i].source == p.index){
+			events.edges[i].sourceInfo.bottom = d.bottom;
+			events.edges[i].targetInfo.toBottom = d.bottom;
+			
+		}
+		if (events.edges[i].target == p.index){
+			events.edges[i].targetInfo.bottom = d.bottom;
+			events.edges[i].sourceInfo.toBottom = d.bottom;
+			
+		}
+		
+	}	
+	vis.render();
+}
+
+//this function is called when the browser window is resized. 
+//
+function windowResized(){
+	
+	   var t = focus.transform().invert();  	//get mouse position and scale 	
+		  
+	  //reset the width and height
+	  w = $(window).width() - 220;
+	  h = $(window).height() - 112;
+	  
+	  //reset the timeline range accordingly
+	  timeLine.range(50,w-50);
+	  
+	  //reset the positioning of nodes accordingly.
+	  for (var i = 0; i< events.nodes.length; i++){
+		  events.nodes[i].left = t.x + timeLine(events.nodes[i].startDate) * t.k ;	
+	  }
+
+
+
+
+	//  layout();
+	  	  
+	  //reset the position of links accordingly.
+	  for(var i = 0; i < events.edges.length; i++){
+	  
+	  //get the source and target x and y values and store in the edge data.
+	  	events.edges[i].targetInfo.left = events.nodes[events.edges[i].target].left;
+	  	events.edges[i].targetInfo.toLeft = events.nodes[events.edges[i].source].left;	  	
+		events.edges[i].sourceInfo.left = events.nodes[events.edges[i].source].left;
+		events.edges[i].sourceInfo.toLeft = events.nodes[events.edges[i].target].left;		
+	 	events.edges[i].targetInfo.bottom = events.nodes[events.edges[i].target].bottom;
+		events.edges[i].sourceInfo.bottom = events.nodes[events.edges[i].source].bottom;	  		  	
+	  }
+
+	  vis.render();
+	
+}
+
+//transformation methods. To alter the domain of the scales on pan and zoom
+//transform - for panning and zoom only
+function transform() {
+
+  var t = focus.transform().invert();  	//get mouse position and scale 
+  var start = timeLine(startDate);	//convert startDate to scale 
+  var end = timeLine(endDate);		//convert endDate to scale 
+  
+  var yStart = 0;
+  var yEnd = h-50;
+
+  dragIndicator = true;				//small hack - make sure that if dragged, the onClick function isn't processed as well.
+  
+  start = timeLine.invert(t.x + start *t.k);		//convert back to date (x position + domain * scale magnitude)
+  end = timeLine.invert(t.x + end * t.k);			
+  
+  tStart = yAxis.invert(t.y + yStart * t.k);
+  tEnd = yAxis.invert(t.y + yEnd * t.k);
+  
+  timeLine.domain(start, end);			//alter the domain
+  yAxis.domain(yStart, yEnd);
+
+  vis.render();
+
 }
 
 
