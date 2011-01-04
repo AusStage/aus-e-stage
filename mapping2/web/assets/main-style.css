@@ -96,6 +96,12 @@ html, body {
 	text-decoration: none;
 }
 
+.footer a:visited {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
 .footer a:hover {
 	text-decoration: underline;
 }
@@ -117,7 +123,13 @@ html, body {
 	list-style:none;
 }
 
-.sidebar ul a {
+.sidebar a {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.sidebar a:visited {
 	/* same colour as f-188 */
 	color: #ffffff;
 	text-decoration: none;
@@ -125,6 +137,31 @@ html, body {
 
 .sidebar a:hover {
 	text-decoration: underline;
+}
+
+/* style anchor tags */
+a {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+a:visited {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+a:hover {
+	/* same colour as f-189 */
+	text-decoration: underline;
+	color: #001bcc;
+}
+
+/* specific styles for the main content div */
+.main {
+	margin-left: 160px;
+	min-height: 100%;
 }
 
 /* specific styles for messages with the search box */
@@ -140,11 +177,6 @@ html, body {
 	margin-left:  .5em;
 }
 
-/* specific styles for the main content div */
-.main {
-	margin-left: 160px;
-	min-height: 100%;
-}
 
 /* Styles for forms */
 table.formTable {
