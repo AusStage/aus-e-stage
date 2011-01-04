@@ -127,26 +127,28 @@
 				</div>
 				<div id="tabs-2">
 					<h2>Browse Areas to Find Venues</h2>
-					<div id="browse_header" style="height: 30px; width=100%">
-						<div style="float:left; width: 26%; height: 100%; padding-right: 10px;">
-							<h3>Countries and States</h3>
+					<div style="max-width: 990px">
+						<div id="browse_header" style="height: 30px; width=100%">
+							<div style="float:left; width: 26%; height: 100%; padding-right: 10px;">
+								<h3>Countries and States</h3>
+							</div>
+							<div style="float:left; width: 32%; height: 100%; margin-left: 10px;">
+								<h3>Suburbs</h3>
+							</div>
+							<div style="float: right; width: 37%; height: 100%; padding-left: 10px;">
+								<h3>Venues</h3>
+							</div>
 						</div>
-						<div style="float:left; width: 32%; height: 100%; margin-left: 10px;">
-							<h3>Suburbs</h3>
+						<div id="browse_content" style="height: 380px;">
+							<div id="browse_major_area" style="float: left; width: 26%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
+							<div id="browse_suburb" style="float: left; width: 32%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
+							<div id="browse_venue"  style="float: right; width: 37%; height: 100%; overflow: auto; padding-left: -10px;"></div>
 						</div>
-						<div style="float: right; width: 37%; height: 100%; padding-left: 10px;">
-							<h3>Venues</h3>
-						</div>
-					</div>
-					<div id="browse_content" style="height: 380px;">
-						<div id="browse_major_area" style="float: left; width: 26%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
-						<div id="browse_suburb" style="float: left; width: 32%; height: 100%; overflow: auto; border-right: 1px solid #000; padding-right: 10px;"></div>
-						<div id="browse_venue"  style="float: right; width: 37%; height: 100%; overflow: auto; padding-left: -10px;"></div>
-					</div>
-					<div id="browse_footer" style="height:50px; width=100%;">
-						<div style="float:left; padding-top: 15px;" id="browse_messages"></div>
-						<div style="float:right; padding-top: 15px;">
-							<input type="button" id="browse_add_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>
+						<div id="browse_footer" style="height:50px; width=100%;">
+							<div style="float:left; padding-top: 15px;" id="browse_messages"></div>
+							<div style="float:right; padding-top: 15px;">
+								<input type="button" id="browse_add_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add to Map Help"></span>
+							</div>
 						</div>
 					</div>
 				</div>
