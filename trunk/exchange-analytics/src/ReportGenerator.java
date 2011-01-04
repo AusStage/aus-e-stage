@@ -245,6 +245,7 @@ public class ReportGenerator {
 				monthString = "12";
 				
 				// go back one year
+				yearString = this.getCurrentYear();
 				yearInt    = Integer.parseInt(yearString) - 1;
 				yearString = Integer.toString(yearInt);
 			} else {
