@@ -4,6 +4,7 @@
    * Working With Maps
      * [GoogleEarthImageOverlay Image Overlays in Google Earth]
      * [MapInfoToKML Converting MapInfo Data to KML]
+     * [GoogleEarthABSOverlay Preparing an ABS Map Overlay]
    * Working With Networks
      * [NavigatingNetworksExportGraphs Exporting Graph Files]
    * Aus-e-Stage Software / Webapps
