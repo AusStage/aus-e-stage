@@ -29,7 +29,7 @@ $(document).ready(function(){
 	/*
 	 * page setup
 	 */
-	
+	 	
 	// prevent a FOUC
 	$('html').removeClass('js');
 	
@@ -56,5 +56,7 @@ $(document).ready(function(){
 	
 	// initialise the mapping page elements
 	mappingObj.init();
-		
+	
+	// set up the menu hide / show functionality
+	$('.peekaboo').click(resizeSidebar);
 });
