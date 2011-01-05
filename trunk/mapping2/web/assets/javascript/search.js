@@ -303,7 +303,7 @@ SearchClass.prototype.updateMessages = function() {
 //define a method of the search class to build the contributor search results
 SearchClass.prototype.buildContributorResults = function(data) {
 
-	var list = '<table class="searchResults"><thead><tr><th style="text-align: center"><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th><th>Name</th><th>Event Dates</th><th>Functions</th><th class="alignRight">Mapped Events</th><th class="alignRight">Total Events</th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th style="text-align: center"><input type="checkbox" name="selectContributorSearchAll" id="selectContributorSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th><th>Name</th><th>Event Dates</th><th>Functions</th><th class="alignRight numeric">Mapped Events</th><th class="alignRight numeric">Total Events</th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -334,7 +334,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 			list += "&nbsp;";
 		}
 		
-		list += '</td><td class="alignRight">' + data[i].mapEventCount + '</td><td class="alignRight">' + data[i].totalEventCount + '</td>';
+		list += '</td><td class="alignRight numeric">' + data[i].mapEventCount + '</td><td class="alignRight numeric">' + data[i].totalEventCount + '</td>';
 		
 		list += '</tr>';
 	}
@@ -362,7 +362,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 // define a method of the search class to build the organisation search results
 SearchClass.prototype.buildOrganisationResults = function(data) {
 
-	var list = '<table class="searchResults"><thead><tr><th style="text-align: center"><input type="checkbox" name="selectOrganisationSearchAll" id="selectOrganisationSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th><th>Organisation Name</th><th>Address</th><th class="alignRight">Mapped Events</th><th class="alignRight">Total Events</th></tr></thead><tbody>';
+	var list = '<table class="searchResults"><thead><tr><th style="text-align: center"><input type="checkbox" name="selectOrganisationSearchAll" id="selectOrganisationSearchAll" class="selectSearchAll" title="Tick / Un-Tick all"/></th><th>Organisation Name</th><th>Address</th><th class="alignRight numeric">Mapped Events</th><th class="alignRight numeric">Total Events</th></tr></thead><tbody>';
 	
 	var i = 0;
 	
@@ -398,7 +398,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 			list = list.substr(0, list.length - 2);
 		}
 		
-		list += '</td><td class="alignRight">' + data[i].mapEventCount + '</td><td class="alignRight">' + data[i].totalEventCount + '</td>';
+		list += '</td><td class="alignRight numeric">' + data[i].mapEventCount + '</td><td class="alignRight numeric">' + data[i].totalEventCount + '</td>';
 		
 		list += '</tr>';
 	}
@@ -463,7 +463,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 			list = list.substr(0, list.length - 2);
 		}
 		
-		list += '</td><td class="alignRight">' + data[i].totalEventCount + '</td>';
+		list += '</td><td class="alignRight numeric">' + data[i].totalEventCount + '</td>';
 		
 		list += '</tr>';
 	}
