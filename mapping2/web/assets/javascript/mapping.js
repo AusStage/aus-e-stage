@@ -148,49 +148,51 @@ MappingClass.prototype.updateMap = function() {
 		// get the venues
 		var venues = objects[i].venues;
 		
+		// build the iconography
+		var iconography = mappingObj.buildIconography(venues);
+		
 		// create a marker with a label
 		var marker = new MarkerWithLabel({
 			position:     new google.maps.LatLng(venues[0].latitude, venues[0].longitude),
 			map:          mappingObj.map,
 			draggable:    false,
-			labelContent: '<table class="mapIcon"><tr><td><img src="' + mapIconography.venue +'"/></td></tr><tr><td>' + venues.length + '</td></tr></table>',
-			//labelContent:   '<div><div style="width: 25px; height: 32px"><img src="' + mapIconography.venue +'"/></div></div>',
-			labelClass:   'mapIcon',
-			labelAnchor:  new google.maps.Point(13, 58),
+			labelContent: iconography,
+			labelClass:   'mapIconContainer',
+			labelAnchor:  new google.maps.Point(16, 68),
 			icon:         mapIconography.pointer
 		});
 		
 		mappingObj.mapMarkers.push(marker);
-		
-		/*
-		
-		for(var x = 0; x < venues.length; x++) {
+	}
+}
+
+// function to build the table for the iconography layout
+MappingClass.prototype.buildIconography = function(venues) {
+
+	// determine the colour to use 
+	var cellColour;
 	
-			// build the title
-			var title = venues[x].name + ', ';
-		
-			if(venues[x].street != null) {
-				 title += venues[x].street + ', ';
-			} 
-		
-			if(venues[x].suburb != null) {
-				title += venues[x].suburb;
-			} else {
-				title = title.substr(0, title.length - 2);
-			}
-			
-			var marker = new google.maps.Marker({  
-				position: new google.maps.LatLng(venues[x].latitude, venues[x].longitude),
-				title:    title,
-				icon:     mapIcons.venue,
-				map:      mappingObj.map  
-			});
-		}
-		*/
+	if(venues.length == 1) {
+		cellColour = mapIconography.venueColours[0];
+	} else if (venues.length > 1 && venues.length < 6) {
+		cellColour = mapIconography.venueColours[1];
+	} else if (venues.length > 5 && venues.length < 16) {
+		cellColour = mapIconography.venueColours[2];
+	} else if (venues.length > 15 && venues.length < 31) {
+		cellColour = mapIconography.venueColours[3];
+	} else {
+		cellColour = mapIconography.venueColours[4];
 	}
 	
-	//debug code
-	//console.log(mappingObj.mapMarkers.length);
+	// build the table for venue data	
+	var table =  '<table class="mapIcon"><tr><td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.venue +'"/></td></tr>';
+	    table += '<tr><td class="mapIconNum b-184">' + venues.length + '</td></tr>';
+	    
+	// return the completed table
+	table += '</table>';
+	
+	return table;
+	
 }
 
 // function to update the list of venues with data from the browse interface
@@ -281,5 +283,7 @@ MappingClass.prototype.resizeMap = function() {
 	
 		google.maps.event.trigger(mappingObj.map, 'resize');
 		mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
+	} else {
+		mappingObj.initMap();
 	}
 }

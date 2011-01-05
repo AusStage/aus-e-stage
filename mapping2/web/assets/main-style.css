@@ -245,6 +245,14 @@ th.alignRight {
 	text-align: right;
 }
 
+td.numeric {
+	width: 120px;
+}
+
+th.numeric {
+	width: 120px;
+}
+
 /* style for things that are clickable */
 .clickable {
 	cursor: pointer;
@@ -261,6 +269,18 @@ th.alignRight {
 	display: inline-block;
 }
 
+/* styles for the map iconography */
+
+.mapIcon {
+	border-width: 0px;
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+.mapIconNum {
+	text-align: center;
+	font-size: 60%;
+}
 
 /* Styles for the Tipsy Library */
 .tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }

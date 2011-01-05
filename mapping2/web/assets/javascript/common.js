@@ -31,11 +31,11 @@ var browseObj    = null;
 var mappingObj   = null;
 var sidebarState = 0;
 
-var mapIconography = { pointer:    BASE_URL + 'assets/images/map-iconography-pointer.png',
-					   lozenge:    BASE_URL + 'assets/images/map-iconography-lozenge.png',
-					   venue:      BASE_URL + 'assets/images/map-iconography-venue.png',
-					   iconWidth:  '24',
-					   iconHeight: '32'
+var mapIconography = { pointer:    BASE_URL + 'assets/images/iconography/pointer.png',
+					   venue:      BASE_URL + 'assets/images/iconography/venue-arch.png',
+					   iconWidth:  '32',
+					   iconHeight: '32',
+					   venueColours: ['b-142', 'b-143', 'b-144', 'b-145', 'b-146']
 					 };
  
 /**
