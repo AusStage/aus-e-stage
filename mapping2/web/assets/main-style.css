@@ -136,7 +136,12 @@ html, body {
 }
 
 .sidebar a:hover {
+	color: #ffffff;
 	text-decoration: underline;
+}
+
+.peekaboo-big {
+	font-size: 150%;
 }
 
 /* style anchor tags */
@@ -162,6 +167,10 @@ a:hover {
 .main {
 	margin-left: 160px;
 	min-height: 100%;
+}
+
+.main-big {
+	margin-left: 25px;
 }
 
 /* specific styles for messages with the search box */

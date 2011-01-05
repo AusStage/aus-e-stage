@@ -25,10 +25,11 @@ var AJAX_ERROR_MSG    = 'An unexpected error occurred during -, please try again
 
 var ADD_VIEW_BTN_HELP = '<span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add / View Map Help"></span>';
 
-// declare global objects
+// declare global objects / variables
 var searchObj    = null;
 var browseObj    = null;
 var mappingObj   = null;
+var sidebarState = 0;
 
 var mapIconography = { pointer:    BASE_URL + 'assets/images/map-iconography-pointer.png',
 					   lozenge:    BASE_URL + 'assets/images/map-iconography-lozenge.png',
@@ -124,4 +125,30 @@ function buildErrorMsgBox(text) {
 // define a function to build an info message box
 function buildInfoMsgBox(text) {
 	return '<div class="ui-state-highlight ui-corner-all search-status-messages" id="status_message"><p><span class="ui-icon ui-icon-info status-icon"></span>' + text + '</p></div>';
+}
+
+// define a function to resize the sidebar
+function resizeSidebar() {
+	if(sidebarState == 0) {
+		// hide the sidebar 
+		$('.peekaboo-tohide').hide();
+		$('.peekaboo').html('&raquo;');
+		$('.peekaboo').addClass('peekaboo-big');
+		$('.sidebar').animate({width: 15}, 'slow', function() {
+			$('.main').addClass('main-big');		
+		});
+		sidebarState = 1;
+	} else {
+		// show the sidebar
+		$('.sidebar').animate({width: 150}, 'slow', function() {
+			$('.peekaboo-tohide').show();
+			$('.peekaboo').removeClass('peekaboo-big');
+			$('.peekaboo').text('Hide Menu');
+		});
+		$('.main').removeClass('main-big');
+		sidebarState = 0;
+	}
+	
+	// resize the map
+	mappingObj.resizeMap();
 }

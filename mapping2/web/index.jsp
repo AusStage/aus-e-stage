@@ -52,10 +52,15 @@
 <div class="wrapper">
 	<div class="header b-187"><h1>AusStage Mapping Service</h1></div>
 	<div class="sidebar b-186 f-184">
-		<h2>Main Menu</h2>
+		<div class="peekaboo-tohide">
+			<h2>Main Menu</h2>
+			<ul>
+				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
+				<li><a href="/mapping2/" title="Networks Service Homepage">Mapping Homepage</a></li>
+			</ul>
+		</div>
 		<ul>
-			<li><a href="http://www.ausstage.edu.au">AusStage Website</a></li>
-			<li><a href="/mapping2/" title="Networks Service Homepage">Mapping Homepage</a></li>
+			<li class="peekaboo clickable">Hide Menu</li>
 		</ul>
 	</div>
 	<div class="main b-184 f-187">
