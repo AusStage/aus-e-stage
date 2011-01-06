@@ -282,8 +282,20 @@ MappingClass.prototype.resizeMap = function() {
 		mapDiv.width(mappingObj.computeMapWidth());
 	
 		google.maps.event.trigger(mappingObj.map, 'resize');
-		mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
+		//mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
 	} else {
 		mappingObj.initMap();
 	}
+}
+
+// a function to build the map iconography table
+MappingClass.prototype.buildIconography = function() {
+
+	// build the venue iconography row
+	var row = '<th scope="row">Venues</th>';
+	for(var i = 0; i < mapIconography.venueColours.length; i++) {
+		row += '<td class="' + mapIconography.venueColours[i] + '"><img src="' + mapIconography.venue +'"/></td>';
+	}
+	$('#map_iconography_venues').empty().append(row);
+
 }
