@@ -12,7 +12,7 @@ _Note: During development of the service revisions the API will use a temporary 
 
 = Base URL =
 
-http://beta.ausstage.edu.au/mapping3/events?
+http://beta.ausstage.edu.au/mapping2/events?
 
 Combining the base URL with the parameters outlined below constructs a call to the API.
 
@@ -60,7 +60,7 @@ The name of the callback function used when a request is made for JSONP encoded 
 
 Retrieve details of events that occurred at venue with id: 815
 
-URL: http://beta.ausstage.edu.au/mapping3/events?task=venue&id=815
+URL: http://beta.ausstage.edu.au/mapping2/events?task=venue&id=815
 
 {{{
 { "events" : [ { "firstDate" : "13 October 2010",
@@ -116,7 +116,7 @@ URL: http://beta.ausstage.edu.au/mapping3/events?task=venue&id=815
 
 Events that include the contributor with id 102 at the venue identified by the id 815
 
-URL: http://beta.ausstage.edu.au/mapping3/events?task=organisation&id=102&venue=815
+URL: http://beta.ausstage.edu.au/mapping2/events?task=organisation&id=102&venue=815
 
 {{{
 { "organisation" : { "id" : "102",
@@ -168,7 +168,7 @@ URL: http://beta.ausstage.edu.au/mapping3/events?task=organisation&id=102&venue=
 
 Events that include the contributor with id: 482 at the venue with id: 36
 
-URL: http://beta.ausstage.edu.au/mapping3/events?task=contributor&id=482&venue=36
+URL: http://beta.ausstage.edu.au/mapping2/events?task=contributor&id=482&venue=36
 
 {{{
 { "contributor" : { "firstName" : "Geoffrey",
