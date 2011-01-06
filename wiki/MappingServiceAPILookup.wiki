@@ -12,7 +12,7 @@ _Note 1: During development of the service revisions the API will use a temporar
 
 = Base URL =
 
-http://beta.ausstage.edu.au/mapping3/lookup?
+http://beta.ausstage.edu.au/mapping2/lookup?
 
 Combining the base URL with the parameters outlined below constructs a call to the API.
 
@@ -96,7 +96,7 @@ The name of the callback function used when a request is made for JSONP encoded 
 
 Retrieve a list of state objects.
 
-URL: http://beta.ausstage.edu.au/mapping3/lookup?task=state-list
+URL: http://beta.ausstage.edu.au/mapping2/lookup?task=state-list
 
 {{{
 [ { "id" : 99,
@@ -158,7 +158,7 @@ URL: http://beta.ausstage.edu.au/mapping3/lookup?task=state-list
 
 Retrieve a list of suburb objects.
 
-URL: http://beta.ausstage.edu.au/mapping3/lookup?task=suburb-list&id=1
+URL: http://beta.ausstage.edu.au/mapping2/lookup?task=suburb-list&id=1
 
 The field "mapVenueCount" indicates the number of venues that can be put on a map. The field "venueCount" indicates the number of venues in the suburb
 
@@ -199,7 +199,7 @@ The field "mapVenueCount" indicates the number of venues that can be put on a ma
 
 Retrieve a list of venues in Adelaide, SA:
 
-URL: http://beta.ausstage.edu.au/mapping3/lookup?task=suburb-venue-list&id=1_Adelaide
+URL: http://beta.ausstage.edu.au/mapping2/lookup?task=suburb-venue-list&id=1_Adelaide
 
 {{{
 [ { "eventCount" : "1",
@@ -258,7 +258,7 @@ URL: http://beta.ausstage.edu.au/mapping3/lookup?task=suburb-venue-list&id=1_Ade
 
 Lookup information on the organisation with id: 102
 
-URL: http://beta.ausstage.edu.au/mapping3/lookup?task=organisation&id=102
+URL: http://beta.ausstage.edu.au/mapping2/lookup?task=organisation&id=102
 
 {{{
 [ { "id" : "102",
@@ -273,7 +273,7 @@ URL: http://beta.ausstage.edu.au/mapping3/lookup?task=organisation&id=102
 
 Lookup information on the contributor with id: 482
 
-http://beta.ausstage.edu.au/mapping3/lookup?task=contributor&id=482
+http://beta.ausstage.edu.au/mapping2/lookup?task=contributor&id=482
 
 [ { "firstName" : "Geoffrey",
     "id" : "482",
@@ -287,7 +287,7 @@ http://beta.ausstage.edu.au/mapping3/lookup?task=contributor&id=482
 
 Lookup information on the venue with id: 815
 
-URL: http://beta.ausstage.edu.au/mapping3/lookup?task=venue&id=815
+URL: http://beta.ausstage.edu.au/mapping2/lookup?task=venue&id=815
 
 {{{
 [ { "id" : "815",
@@ -306,7 +306,7 @@ URL: http://beta.ausstage.edu.au/mapping3/lookup?task=venue&id=815
 
 Lookup information on the colour palette to be used for UI elements on the map
 
-URL: http://beta.ausstage.edu.au/mapping3/lookup?task=map-colour-list
+URL: http://beta.ausstage.edu.au/mapping2/lookup?task=map-colour-list
 
 {{{
 [ "#75b4e2",
