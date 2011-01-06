@@ -291,11 +291,29 @@ MappingClass.prototype.resizeMap = function() {
 // a function to build the map iconography table
 MappingClass.prototype.buildIconography = function() {
 
-	// build the venue iconography row
-	var row = '<th scope="row">Venues</th>';
+	// build each row in turn
+	var row = '<th scope="row">Contributors</th>';
+	for(var i = 0; i < mapIconography.contributorColours.length; i++) {
+		row += '<td class="' + mapIconography.contributorColours[i] + '"><img src="' + mapIconography.contributor +'"/></td>';
+	}
+	$('#map_iconography_contributors').empty().append(row);
+	
+	row = '<th scope="row">Organisations</th>';
+	for(var i = 0; i < mapIconography.organisationColours.length; i++) {
+		row += '<td class="' + mapIconography.organisationColours[i] + '"><img src="' + mapIconography.organisation +'"/></td>';
+	}
+	$('#map_iconography_organisations').empty().append(row);
+
+	row = '<th scope="row">Venues</th>';
 	for(var i = 0; i < mapIconography.venueColours.length; i++) {
 		row += '<td class="' + mapIconography.venueColours[i] + '"><img src="' + mapIconography.venue +'"/></td>';
 	}
 	$('#map_iconography_venues').empty().append(row);
+	
+	row = '<th scope="row">Events</th>';
+	for(var i = 0; i < mapIconography.eventColours.length; i++) {
+		row += '<td class="' + mapIconography.eventColours[i] + '"><img src="' + mapIconography.event +'"/></td>';
+	}
+	$('#map_iconography_events').empty().append(row);
 
 }

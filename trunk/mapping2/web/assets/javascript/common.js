@@ -31,11 +31,17 @@ var browseObj    = null;
 var mappingObj   = null;
 var sidebarState = 0;
 
-var mapIconography = { pointer:    BASE_URL + 'assets/images/iconography/pointer.png',
-					   venue:      BASE_URL + 'assets/images/iconography/venue-arch.png',
-					   iconWidth:  '32',
-					   iconHeight: '32',
-					   venueColours: ['b-142', 'b-143', 'b-144', 'b-145', 'b-146']
+var mapIconography = { pointer:      BASE_URL + 'assets/images/iconography/pointer.png',
+					   contributor:  BASE_URL + 'assets/images/iconography/contributor.png',
+					   organisation: BASE_URL + 'assets/images/iconography/organisation.png',
+					   venue:        BASE_URL + 'assets/images/iconography/venue-arch.png',
+					   event:        BASE_URL + 'assets/images/iconography/event.png',
+					   iconWidth:    '32',
+					   iconHeight:   '32',
+					   contributorColours:  ['b-112', 'b-113', 'b-114', 'b-115', 'b-116'],
+					   organisationColours: ['b-127', 'b-128', 'b-129', 'b-130', 'b-131'],
+					   venueColours:        ['b-142', 'b-143', 'b-144', 'b-145', 'b-146'],
+					   eventColours:        ['b-97', 'b-98', 'b-99', 'b-100', 'b-101']
 					 };
  
 /**
@@ -158,11 +164,11 @@ function resizeSidebar() {
 			$('.peekaboo-tohide').show();
 			$('.peekaboo').removeClass('peekaboo-big');
 			$('.peekaboo').text('Hide Menu');
+			$('.main').removeClass('main-big');
 	
 			// resize the map
 			mappingObj.resizeMap();
 		});
-		$('.main').removeClass('main-big');
 		sidebarState = 0;
 	}
 }

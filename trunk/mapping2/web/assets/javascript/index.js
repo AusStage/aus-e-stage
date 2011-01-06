@@ -63,8 +63,8 @@ $(document).ready(function(){
 	// set up the iconography help dialog
 	$("#help_map_icons_div").dialog({ 
 		autoOpen: false,
-		height: 400,
-		width: 520,
+		height: 450,
+		width: 550,
 		modal: true,
 		buttons: {
 			Close: function() {
