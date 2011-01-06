@@ -304,6 +304,7 @@ table.mapIconHelpTbl th {
 	color: #000;
 	white-space: nowrap;
 	width: 66px;
+	text-align: center;
 }
 
 table.mapIconHelpTbl td {

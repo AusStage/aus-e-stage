@@ -199,9 +199,10 @@
 	<h3>Understanding the Map Iconography</h3>
 	<p>
 		Map iconography refers to the way in which information is displayed on a map using icons. The AusStage mapping service uses a number of icons to display information on a map. 
-		An icons colour indicates the number records associated with the location.
 		<br/>&nbsp;<br/>
-		The iconography used in AusStage maps is as follows:
+		The colour of an icon indicates the number records associated with the location.
+		<br/>&nbsp;<br/>
+		The iconography and colours used in AusStage maps is as follows:
 		<br/>&nbsp;<br/>
 	</p>
 	<table id="map_iconography_table" class="mapIconHelpTbl">
@@ -212,7 +213,7 @@
 				<th class="nowrap">2 - 5</th>
 				<th class="nowrap">6 - 15</th>
 				<th class="nowrap">16 - 30</th>
-				<th class="nowrap">&gt; 30</th>
+				<th class="nowrap">31+</th>
 			</tr>
 		</thead>
 		<tbody>
