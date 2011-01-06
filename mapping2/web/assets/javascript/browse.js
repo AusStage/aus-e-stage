@@ -470,7 +470,7 @@ BrowseClass.prototype.addToMap = function() {
 	if(venues.majorAreas.length > 0 || venues.suburbs.length > 0 || venues.venues.length > 0) {
 		// add these venues to the map
 		// inform the user
-		$('#browse_messages').empty().append('<div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;" id="status_message"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>Adding selected items to the map. Please wait...</p></div>');
+		$('#browse_messages').empty().append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
 		
 		var ajaxQueue = $.manageAjax.create("mappingBrowseAjaxQueue", {
 			queue: true
