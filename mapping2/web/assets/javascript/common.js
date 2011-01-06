@@ -67,7 +67,7 @@ function styleButtons() {
 	$("button, input:button").button();
 }
 
-// setup one of the help dialogs
+// setup the help dialogs
 $(document).ready(function() {
 
 	$("#help_add_view_div").dialog({ 
@@ -93,7 +93,6 @@ $(document).ready(function() {
 		$('#help_add_view_div').dialog('open');
 	});
 	
-	// setup one of the help dialogs
 	$("#help_search_div").dialog({ 
 		autoOpen: false,
 		height: 400,
@@ -117,6 +116,18 @@ $(document).ready(function() {
 	});
 });
 
+// add functionality to clickable things
+$(document).ready(function() {
+	$('.clickable').hover(
+		function() {
+			$(this).addClass('clickable-hover');
+		}, 
+		function() {
+			$(this).removeClass('clickable-hover');
+		}
+	);
+});
+
 // define a function to build an error message box
 function buildErrorMsgBox(text) {
 	return '<div class="ui-state-error ui-corner-all search-status-messages"><p><span class="ui-icon ui-icon-info status-icon"></span>' + AJAX_ERROR_MSG.replace('-', text) + '</p></div>';
@@ -135,7 +146,10 @@ function resizeSidebar() {
 		$('.peekaboo').html('&raquo;');
 		$('.peekaboo').addClass('peekaboo-big');
 		$('.sidebar').animate({width: 15}, 'slow', function() {
-			$('.main').addClass('main-big');		
+			$('.main').addClass('main-big');
+			
+			// resize the map
+			mappingObj.resizeMap();
 		});
 		sidebarState = 1;
 	} else {
@@ -144,11 +158,11 @@ function resizeSidebar() {
 			$('.peekaboo-tohide').show();
 			$('.peekaboo').removeClass('peekaboo-big');
 			$('.peekaboo').text('Hide Menu');
+	
+			// resize the map
+			mappingObj.resizeMap();
 		});
 		$('.main').removeClass('main-big');
 		sidebarState = 0;
 	}
-	
-	// resize the map
-	mappingObj.resizeMap();
 }

@@ -258,6 +258,10 @@ th.numeric {
 	cursor: pointer;
 }
 
+.clickable-hover {
+	text-decoration: underline;
+}
+
 /* style for browse lists */
 .browseList {
 	list-style: none;
@@ -281,6 +285,31 @@ th.numeric {
 	text-align: center;
 	font-size: 60%;
 }
+
+.mapIconImg {
+	width: 33px;
+	height: 33px;
+}
+
+table.mapIconHelpTbl {
+	background-color: #fff;
+	text-align: left;
+	border: 1px solid #aaaaaa;
+	border-collapse: collapse;
+}
+
+table.mapIconHelpTbl th {
+	border: 1px solid #aaaaaa;
+	padding: 2px 5px 2px 5px;
+	color: #000;
+	white-space: nowrap;
+	width: 66px;
+}
+
+table.mapIconHelpTbl td {
+	text-align: center;
+}
+
 
 /* Styles for the Tipsy Library */
 .tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }

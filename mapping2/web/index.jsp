@@ -57,6 +57,7 @@
 			<ul>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
 				<li><a href="/mapping2/" title="Networks Service Homepage">Mapping Homepage</a></li>
+				<li class="map-icon-help clickable">Map Iconography</li>
 			</ul>
 		</div>
 		<ul>
@@ -171,6 +172,7 @@
 <jsp:include page="footer.jsp"/>
 <!-- help divs -->
 <div id="help_search_div" title="Help on Searching" style="font-size: 90%">
+	<h3>Searching the AusStage database</h3>
 	<p>
 		This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
 		alternate names, and previous names. Please wait for the search to complete before exploring the results.
@@ -192,6 +194,38 @@
 		<br/>&nbsp;<br/>
 		Click on an item to see a list of items at the next level, tick the box to select all items at lower levels
 	</p>
+</div>
+<div id="help_map_icons_div" title="Help on Map Iconography" style="font-size: 90%">
+	<h3>Understanding the Map Iconography</h3>
+	<p>
+		Map iconography refers to the way in which information is displayed on a map using icons. The AusStage mapping service uses a number of icons to display information on a map. 
+		An icons colour indicates the number records associated with the location.
+		<br/>&nbsp;<br/>
+		The iconography used in AusStage maps is as follows:
+		<br/>&nbsp;<br/>
+	</p>
+	<table id="map_iconography_table" class="mapIconHelpTbl">
+		<thead>
+			<tr>
+				<th class="nowrap">&nbsp;</th>
+				<th class="nowrap">1 record</th>
+				<th class="nowrap">2 - 5</th>
+				<th class="nowrap">6 - 15</th>
+				<th class="nowrap">16 - 30</th>
+				<th class="nowrap">&gt; 30</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr id="map_iconography_contributors">
+			</tr>
+			<tr id="map_iconography_organisations">
+			</tr>
+			<tr id="map_iconography_venues">
+			</tr>
+			<tr id="map_iconography_events">
+			</tr>
+		</tbody>
+	</table>
 </div>
 </body>
 </html>

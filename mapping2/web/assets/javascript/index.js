@@ -59,4 +59,28 @@ $(document).ready(function(){
 	
 	// set up the menu hide / show functionality
 	$('.peekaboo').click(resizeSidebar);
+	
+	// set up the iconography help dialog
+	$("#help_map_icons_div").dialog({ 
+		autoOpen: false,
+		height: 400,
+		width: 520,
+		modal: true,
+		buttons: {
+			Close: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			// build the legend table rows
+			mappingObj.buildIconography();			
+		},
+		close: function() {
+			
+		}
+	});
+	
+	$('.map-icon-help').click(function() {
+		$('#help_map_icons_div').dialog('open');
+	});
 });
