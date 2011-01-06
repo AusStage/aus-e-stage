@@ -27,9 +27,6 @@ function SearchTrackerClass() {
 	this.organisation_count = 0;
 	this.venue_count        = 0;
 	this.event_count        = 0;
-	
-	// a variable to store marker data as it is retrieved
-	this.markerData = [];
 }
 
 // define the search class
@@ -58,6 +55,9 @@ function SearchClass () {
 	
 	// keep track of what data we're adding to the map
 	this.add_data_type = '';
+	
+	// a variable to store marker data as it is retrieved
+	this.markerData = [];
 	
 }
 
@@ -695,7 +695,7 @@ SearchClass.prototype.addResultsClickEvent = function(event) {
 
 // function to process the results of the ajax marker data lookups
 SearchClass.prototype.processAjaxData = function(data) {
-	searchObj.markerData = browseObj.markerData.concat(data);
+	searchObj.markerData = searchObj.markerData.concat(data);
 }
 
 // function to add the data to the map

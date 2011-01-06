@@ -199,9 +199,11 @@ MappingClass.prototype.buildIconography = function(venues) {
 MappingClass.prototype.addVenueBrowseData = function(data) {
 
 	// declare helper variables
-	var hash = null;
-	var idx  = null;
-	var obj  = null;
+	var hash  = null;
+	var idx   = null;
+	var obj   = null;
+	var id    = null;
+	var found = false;
 
 	// loop through the data
 	for(var i = 0; i < data.length; i++) {
@@ -220,8 +222,21 @@ MappingClass.prototype.addVenueBrowseData = function(data) {
 			mappingObj.markerData.objects.push(obj);
 		} else {
 			// have seen this lat / lng before
+			// check to see if the venue is already added
 			obj = mappingObj.markerData.objects[idx];
-			obj.venues.push(data[i]);		
+			id = data[i].id;
+			found = false;
+			
+			for(var x = 0; x < obj.venues.length; x++) {
+				if(id == obj.venues[x].id) {
+					found = true;
+					x = obj.venues.length + 1;
+				}
+			} 
+			
+			if(found == false) {
+				obj.venues.push(data[i]);	
+			}	
 		}
 	}
 	
