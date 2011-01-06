@@ -12,7 +12,7 @@ _Note: During development of the service revisions the API will use a temporary 
 
 = Base URL =
 
-http://beta.ausstage.edu.au/mapping3/markers?
+http://beta.ausstage.edu.au/mapping2/markers?
 
 Combining the base URL with the parameters outlined below constructs a call to the API.
 
@@ -68,7 +68,7 @@ The name of the callback function used when a request is made for JSONP encoded 
 
 Retrieve markers for all venues in SA:
 
-URL: http://beta.ausstage.edu.au/mapping3/markers?type=state&id=1
+URL: http://beta.ausstage.edu.au/mapping2/markers?type=state&id=1
 
 {{{
 [ { "id" : "184",
@@ -106,7 +106,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=state&id=1
 
 Retrieve markers for all venues in Adelaide, SA:
 
-URL: http://beta.ausstage.edu.au/mapping3/markers?type=suburb&id=1_Adelaide
+URL: http://beta.ausstage.edu.au/mapping2/markers?type=suburb&id=1_Adelaide
 
 {{{
 [ { "id" : "184",
@@ -144,7 +144,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=suburb&id=1_Adelaide
 
 Retrieve a marker for "Her Majesty's Theatre" in Adelaide
 
-URL: http://beta.ausstage.edu.au/mapping3/markers?type=venue&id=815
+URL: http://beta.ausstage.edu.au/mapping2/markers?type=venue&id=815
 
 {{{
 [ { "id" : "815",
@@ -162,7 +162,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=venue&id=815
 
 Retrieve markers for venues where an event occurred involving the [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_org_id=102 Australian Dance Theatre]
 
-URL: http://beta.ausstage.edu.au/mapping3/markers?type=organisation&id=102
+URL: http://beta.ausstage.edu.au/mapping2/markers?type=organisation&id=102
 
 {{{
 [ { "id" : 102,
@@ -202,7 +202,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=organisation&id=102
 == contributor ==
 Retrieve markers for venues where an event occurred involving [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=482 Geoffrey Rush]
 
-URL: http://beta.ausstage.edu.au/mapping3/markers?type=contributor&id=482
+URL: http://beta.ausstage.edu.au/mapping2/markers?type=contributor&id=482
 
 {{{
 [ { "id" : 482,
@@ -241,7 +241,7 @@ URL: http://beta.ausstage.edu.au/mapping3/markers?type=contributor&id=482
 == multiple contributors ==
 Retrieve markers for venues where an event occurred involving [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=482 Geoffrey Rush] or [http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=4921 Cate Blanchett]
 
-URL: http://beta.ausstage.edu.au/mapping3/markers?type=contributor&id=482,4921
+URL: http://beta.ausstage.edu.au/mapping2/markers?type=contributor&id=482,4921
 
 {{{
 [ { "id" : 4921,
