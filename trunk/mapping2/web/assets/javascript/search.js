@@ -27,6 +27,9 @@ function SearchTrackerClass() {
 	this.organisation_count = 0;
 	this.venue_count        = 0;
 	this.event_count        = 0;
+	
+	// a variable to store marker data as it is retrieved
+	this.markerData = [];
 }
 
 // define the search class
@@ -52,6 +55,9 @@ function SearchClass () {
 	
 	// keep track of various search related stuff
 	this.trackerObj = new SearchTrackerClass();
+	
+	// keep track of what data we're adding to the map
+	this.add_data_type = '';
 	
 }
 
@@ -228,6 +234,9 @@ SearchClass.prototype.init = function() {
 			
 		}
 	});
+	
+	// set up a handler for when the ajax calls finish
+	$("#search").bind('mappingSearchGatherDataAjaxQueue' + 'AjaxStop', searchObj.addDataToMap);
 
 }
 
@@ -469,7 +478,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="4" style="text-align: right"><button id="searchAddVenues" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="4" style="text-align: right"><div id="searchAddVenueError" style="float: left"></div><button id="searchAddVenues" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#venue_results").append(list);
@@ -580,13 +589,6 @@ SearchClass.prototype.buildEventResults = function (data) {
 }
 
 // define a method of the search class to respond to the click event
-// of the add to map button
-SearchClass.prototype.addToMapClickEvent = function(event) {
-
-
-}
-
-// define a method of the search class to respond to the click event
 // of the select all check box
 SearchClass.prototype.selectAllClickEvent = function(event) {
 
@@ -636,5 +638,70 @@ SearchClass.prototype.selectAllClickEvent = function(event) {
 				$(this).attr('checked', true);
 			});
 		}
+	}
+}
+
+// define a function to add search results to the map dependent on which button was clicked
+SearchClass.prototype.addResultsClickEvent = function(event) {
+
+	// determine which button was clicked
+	var target = $(event.target);
+	var id     = target.attr('id');
+	
+	if(id == 'searchAddVenues') {
+		
+		// clear away any existing error messages
+		$("#searchAddVenueError").empty();
+	
+		// the add venues button was clicked
+		// get any of the selected venues
+		var venues = [];
+		
+		$('.searchVenue:checkbox').each(function() {
+			if($(this).attr('checked') == true) {
+				venues.push($(this).val());
+			}
+		});
+		
+		if(venues.length == 0) {
+			$("#searchAddVenueError").append(buildInfoMsgBox('No items selected, nothing added to the map'));
+		} else {
+			// add things to the map
+			$("#searchAddVenueError").append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+			searchObj.add_data_type = 'venue';
+			
+			// create a queue
+			var ajaxQueue = $.manageAjax.create("mappingSearchGatherDataAjaxQueue", {
+				queue: true
+			});
+			
+			// search for the data on each of the venues in turn
+			for(var i = 0; i < venues.length; i++) {
+		
+				// build the url
+				var url  = BASE_URL + 'markers?&type=venue&id=' + venues[i];
+			
+				ajaxQueue.add({
+					success: searchObj.processAjaxData,
+					url: url
+				});
+			}
+		}
+		
+	} else {
+		// unknown button was clicked
+	}
+}
+
+// function to process the results of the ajax marker data lookups
+SearchClass.prototype.processAjaxData = function(data) {
+	searchObj.markerData = browseObj.markerData.concat(data);
+}
+
+// function to add the data to the map
+SearchClass.prototype.addDataToMap = function() {
+	if(searchObj.add_data_type == 'venue') {
+		mappingObj.addVenueBrowseData(searchObj.markerData);
+		$("#searchAddVenueError").empty();
 	}
 }

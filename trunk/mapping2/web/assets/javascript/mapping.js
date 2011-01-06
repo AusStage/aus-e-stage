@@ -289,7 +289,7 @@ MappingClass.prototype.resizeMap = function() {
 }
 
 // a function to build the map iconography table
-MappingClass.prototype.buildIconography = function() {
+MappingClass.prototype.buildIconographyHelp = function() {
 
 	// build each row in turn
 	var row = '<th scope="row">Contributors</th>';
@@ -315,5 +315,4 @@ MappingClass.prototype.buildIconography = function() {
 		row += '<td class="' + mapIconography.eventColours[i] + '"><img src="' + mapIconography.event +'"/></td>';
 	}
 	$('#map_iconography_events').empty().append(row);
-
 }
