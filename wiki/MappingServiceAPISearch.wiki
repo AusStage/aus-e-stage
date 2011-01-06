@@ -14,7 +14,7 @@ _Note 2: The search interface provided by the mapping service is designed to be 
 
 = Base URL =
 
-http://beta.ausstage.edu.au/mapping3/search?
+http://beta.ausstage.edu.au/mapping2/search?
 
 Combining the base URL with the parameters outlined below constructs a call to the API.
 
@@ -61,7 +61,7 @@ The search result is formatted as a JSON array with zero, one, or more result ob
 
 Conduct a search for the organisation with id 102
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=id&query=102
+URL: http://beta.ausstage.edu.au/mapping2/search?task=organisation&type=id&query=102
 
 {{{
 [
@@ -80,7 +80,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=id&query
 
 Conduct a search for organisations that contain the words "australian" and "dance" in their name using the default record limit
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=name&query=australian+dance
+URL: http://beta.ausstage.edu.au/mapping2/search?task=organisation&type=name&query=australian+dance
 
 {{{
 [ { "id" : "9703",
@@ -125,7 +125,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=organisation&type=name&que
 
 A search for the contributor with id 482
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=id&query=482
+URL: http://beta.ausstage.edu.au/mapping2/search?task=contributor&type=id&query=482
 
 {{{
 [ { "eventDates" : "1970 - 2010",
@@ -146,7 +146,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=id&query=
 == Contributor Name Search ==
 A search for any contributors with "cate" in their name, specifying a limit of 10 records returned
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=name&query=cate&limit=10
+URL: http://beta.ausstage.edu.au/mapping2/search?task=contributor&type=name&query=cate&limit=10
 
 {{{
 [ { "eventDates" : "1980",
@@ -251,7 +251,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=contributor&type=name&quer
 
 A search for the venue with id 815
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=id&query=815
+URL: http://beta.ausstage.edu.au/mapping2/search?task=venue&type=id&query=815
 
 {{{
 [ { "id" : "815",
@@ -270,7 +270,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=id&query=815
 
 A search for any venue with the words "her" and "majesty's" and "theatre" specifying the maximum record limit
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=name&query=her+majesty%27s+theatre&limit=25
+URL: http://beta.ausstage.edu.au/mapping2/search?task=venue&type=name&query=her+majesty%27s+theatre&limit=25
 
 {{{
 [ { "id" : "11093",
@@ -459,7 +459,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=venue&type=name&query=her+
 == Event ID Search ==
 Conduct a search for the event with the id 71254
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=event&type=id&query=71254
+URL: http://beta.ausstage.edu.au/mapping2/search?task=event&type=id&query=71254
 
 {{{
 [ { "firstDate" : "2007-06-17",
@@ -477,7 +477,7 @@ URL: http://beta.ausstage.edu.au/mapping3/search?task=event&type=id&query=71254
 
 Conduct a search for events with the words "shane" and "warne" in the event name
 
-URL: http://beta.ausstage.edu.au/mapping3/search?task=event&type=name&query=shane+warne
+URL: http://beta.ausstage.edu.au/mapping2/search?task=event&type=name&query=shane+warne
 
 {{{
 [ { "firstDate" : "2008-03-21",
