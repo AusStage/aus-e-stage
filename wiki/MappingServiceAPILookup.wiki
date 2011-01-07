@@ -297,25 +297,3 @@ URL: http://beta.ausstage.edu.au/mapping2/lookup?task=venue&id=815
     "url" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=815"
   } ]
 }}}
-
-== map-colour-list ==
-
-Lookup information on the colour palette to be used for UI elements on the map
-
-URL: http://beta.ausstage.edu.au/mapping2/lookup?task=map-colour-list
-
-{{{
-[ "#75b4e2",
-  "#0058a7",
-  "#00344e",
-  "#59c3ec",
-  "#004f5a",
-  "#005675",
-  "#008694",
-  "#315b69",
-  "#006883",
-...
-  "#4e532e",
-  "#668293"
-]
-}}}
