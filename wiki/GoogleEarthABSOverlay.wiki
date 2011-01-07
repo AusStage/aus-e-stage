@@ -139,9 +139,9 @@ When Google earth renders this KML, the value 40070 will replace the entity `$[L
 
 Before applying above mentioned techniques, we need modify the KML (LGA.kml) that got in the MapInfo To KML procedure. An XSL style sheet (place_mark.xsl) is written to make the KML ready to be styled. It includes the following functions:
 
-*Extract name for each Placemark.
-*Set `<styleURL id=”sharedStyle”>` for each Placemark
-*Prepare `<Data>` / `<Value>` for each Placemark
+1) Extract name for each Placemark.
+2) Set `<styleURL id=”sharedStyle”>` for each Placemark
+3) Prepare `<Data>` / `<Value>` for each Placemark
 
 
 
