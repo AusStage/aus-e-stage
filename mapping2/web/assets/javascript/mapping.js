@@ -250,6 +250,23 @@ MappingClass.prototype.buildIconography = function(data) {
 		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.venue +'"/></td>';
 	}
 	
+	if(data.events.length > 0) {
+		// we need to add a venue icon
+		if(data.events.length == 1) {
+			cellColour = mapIconography.eventColours[0];
+		} else if (data.events.length > 1 && data.events.length < 6) {
+			cellColour = mapIconography.eventColours[1];
+		} else if (data.events.length > 5 && data.events.length < 16) {
+			cellColour = mapIconography.eventColours[2];
+		} else if (data.events.length > 15 &&data.events.length < 31) {
+			cellColour = mapIconography.eventColours[3];
+		} else {
+			cellColour = mapIconography.eventColours[4];
+		}
+		
+		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.event +'"/></td>';
+	}
+	
 	// start to build the table for venue data	
 	var table =  '<table class="mapIcon"><tr>' + cells + '</tr>';
 	cells = '';
@@ -264,6 +281,10 @@ MappingClass.prototype.buildIconography = function(data) {
 	
 	if(data.venues.length > 0) {
 		cells += '<td class="mapIconNum b-184">' + data.venues.length + '</td>';
+	}
+	
+	if(data.events.length > 0) {
+		cells += '<td class="mapIconNum b-184">' + data.events.length + '</td>';
 	}
 	
 	table += '<tr>' + cells + '</tr>';
@@ -431,7 +452,7 @@ MappingClass.prototype.addOrganisationData = function(data) {
 				id    = organisation.id;
 				found = false;
 				
-				for(var y = 0; y < obj.contributors.length; y++) {
+				for(var y = 0; y < obj.organisations.length; y++) {
 					if(id == obj.organisations[y].id) {
 						found = true;
 						y = obj.organisations.length + 1;
@@ -440,6 +461,68 @@ MappingClass.prototype.addOrganisationData = function(data) {
 				
 				if(found == false) {
 					obj.organisations.push(organisation);
+				}
+			}
+		}
+	}
+	
+	// switch to the map tab including an update
+	$('#tabs').tabs('select', 2);
+}
+
+// function to update the list of contributors with data from the search interface
+MappingClass.prototype.addEventData = function(data) {
+
+	// declare helper variables
+	var hash  = null;
+	var idx   = null;
+	var obj   = null;
+	var id    = null;
+	var found = false;
+	var event = null;
+	var venues = null;
+
+	// loop through the data
+	for(var i = 0; i < data.length; i++) {
+	
+		// get the contributor information and list of venes
+		event  = data[i].extra[0];
+		venues = data[i].venues;
+		
+		// loop through the list of venues
+		for(var x = 0; x < venues.length; x++) {
+			
+			// compute a hash
+			hash = mappingObj.computeLatLngHash(venues[x].latitude, venues[x].longitude);
+			
+			// check to see if we have this venue already
+			idx = $.inArray(hash, mappingObj.markerData.hashes);
+			
+			if(idx == -1) {
+				// not see this lat / lng before
+				obj = new MarkerData();
+				obj.events.push(event);
+				obj.latitude  = venues[x].latitude;
+				obj.longitude = venues[x].longitude
+				
+				mappingObj.markerData.hashes.push(hash);
+				mappingObj.markerData.objects.push(obj);
+			} else {
+				// have seen this lat / lng before
+				// check to see if the contributor has already been added
+				obj   = mappingObj.markerData.objects[idx];
+				id    = event.id;
+				found = false;
+				
+				for(var y = 0; y < obj.events.length; y++) {
+					if(id == obj.events[y].id) {
+						found = true;
+						y = obj.events.length + 1;
+					}
+				}
+				
+				if(found == false) {
+					obj.events.push(organisation);
 				}
 			}
 		}
