@@ -43,7 +43,7 @@ Descriptive balloons, so-called infowindows are attached to Placemarks in Google
 9       <link rel="stylesheet" type="text/css" href="style/infowindow-style.css" /> 
 10      </head>
 11      <body>
-12        <b>$[LGA_NAME_2010]</b>
+12        <b>$[LGA_NAME]</b>
 13        <table class="infowindow">
 14 
 15         <tr class="odd">
