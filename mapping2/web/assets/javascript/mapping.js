@@ -185,6 +185,9 @@ MappingClass.prototype.updateMap = function() {
 		
 		mappingObj.mapMarkers.push(marker);
 	}
+	
+	// finalise the map updates
+	mappingObj.resizeMap();
 }
 
 // function to build the table for the iconography layout
