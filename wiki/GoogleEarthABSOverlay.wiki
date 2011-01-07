@@ -68,6 +68,10 @@ Descriptive balloons, so-called infowindows are attached to Placemarks in Google
 
 As we can see from above KML excerpt, `<text>` element (line 6) contains the content displayed in the balloon. HTML code can be embedded inside it through the CDATA brackets (line 7). Therefore the content in `<text>` element can also be styled using external Cascading Style Sheets (CSS) through `<link>` element (line 9). In the above example, we use an external CSS file (style/infowindow-style.css) to format the table in HTML. For more details about `<BalloonStyle>`, please refer to [http://code.google.com/apis/kml/documentation/kmlreference.html#balloonstyle KML reference].
 
+== Entity Replacement ==
+
+You may notice that there are two entities in the above `<text>` element. One is $[State_Code], the other is $[LGA_Code]. These two entities refer to correspondent <Data name=”State_Code”> and <Data name=”LGA_Code”> elements in the <ExtendedData> of KML excerpt 1 or as shown in the following snippet. The contents of <value> elements will substitute those entities in the balloon. Google Earth supports such kind of entity replacement of certain extended data elements within the `<text>` element of `<BalloonStyle>`.
+
 
 
 
