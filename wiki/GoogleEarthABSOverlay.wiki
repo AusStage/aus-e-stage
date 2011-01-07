@@ -96,7 +96,7 @@ After analysing the URLs of ABS regional profile for Local Government Area (LGA)
 {{{http://www.abs.gov.au/ausstats/abs@nrp.nsf/lookup/LGA}}}*`$[LGA_Code]`*
 {{{Main+Features12005-2009}}}
 
-When Google earth renders this KML, the value 40070 will replace the entity `$[LGA_Code]`. Since the #sharedStyle in KML excerpt 2 is attached to every Placemark using `<styleURL>` element and each Placemark represents one LGA, we can get the ABS profile URL for each LGA by replacing the `$[LGA_Code]` with the content of correspondent <value> element.
+When Google earth renders this KML, the value 40070 will replace the entity `$[LGA_Code]`. Since the #sharedStyle in KML excerpt 2 is attached to every Placemark using `<styleURL>` element and each Placemark represents one LGA, we can get the ABS profile URL for each LGA by replacing the `$[LGA_Code]` with the content of correspondent `<value>` element.
 
 
 
