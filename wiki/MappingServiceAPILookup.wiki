@@ -53,10 +53,6 @@ The details for a contributor
 
 The details for a venue
 
-== map-colour-list ==
-
-A list of common colours that can be used for styling elements in a map, such as trajectory etc.
-
 == id ==
 
 The unique identifier used to lookup the data as identified by the task parameter
