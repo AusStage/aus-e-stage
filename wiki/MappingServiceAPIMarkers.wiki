@@ -19,7 +19,7 @@ Combining the base URL with the parameters outlined below constructs a call to t
 = Parameters =
 
 || *Name*   || *Possible Values* || *Optional* || *Default* ||
-|| type     || state, suburb, venue, organisation, contributor || No || ||
+|| type     || state, suburb, venue, organisation, contributor, event || No || ||
 || id       || Unique contributor or organisation id || No || ||
 || callback || function name to use for a JSONP request || Yes || || 
 
@@ -53,7 +53,7 @@ For example:
 
 1_Adelaide
 
-=== id for contributors, organisations and venues ===
+=== id for contributors, organisations, venues and events ===
 
 For all other task types the id parameter is a comma separated list of unique identifiers.
 
