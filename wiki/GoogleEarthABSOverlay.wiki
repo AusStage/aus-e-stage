@@ -35,10 +35,10 @@ Descriptive balloons, so-called infowindows are attached to Placemarks in Google
 <style id=”sharedStyle”>
   <BalloonStyle>
   <!-- specific to BalloonStyle -->
-  <bgColor>ffffffff</bgColor>            <!-- kml:color -->
-  <textColor>ff000000</textColor>        <!-- kml:color --> 
-  <text>		                  <!-- string -->
-  <![CDATA[<html>
+    <bgColor>ffffffff</bgColor>            <!-- kml:color -->
+    <textColor>ff000000</textColor>        <!-- kml:color --> 
+    <text>		                  <!-- string -->
+    <![CDATA[<html>
     <head>
       <link rel="stylesheet" type="text/css" href="style/infowindow-style.css" /> 
     </head>
@@ -57,8 +57,8 @@ Descriptive balloons, so-called infowindows are attached to Placemarks in Google
         </tr>
       </table>
     </body>
-   </html>]]>
-  </text>
+    </html>]]>
+    </text>
  </BalloonStyle>
 </style>
 }}}
