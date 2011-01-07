@@ -99,8 +99,9 @@ After analysing the URLs of ABS regional profile for Local Government Area (LGA)
 When Google earth renders this KML, the value 40070 will replace the entity `$[LGA_Code]`. Since the #sharedStyle in KML excerpt 2 is attached to every Placemark using `<styleURL>` element and each Placemark represents one LGA, we can get the ABS profile URL for each LGA by replacing the `$[LGA_Code]` with the content of correspondent `<value>` element.
 
 
+== Highlighted polygon when mouseover ==
 
-
+`<StyleMap>` maps between two different styles through `<key>`/`<styleUrl>` pairs. It is used to provide normal and highlighted styles for a placemark (polygon in our case). When user mouses over a polygon, the highlighted style appears. To realize highlighted version, different fill colors can be set in `<PolyStyle>`. In the following KML excerpt, two styles (Highlight and Normal) are defined using `<Style>` element. They are linked through `<StyleMap>` element. 
 
 
 
