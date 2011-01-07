@@ -7,7 +7,7 @@ In [http://code.google.com/p/aus-e-stage/wiki/MapInfoToKML MapInfo To KML] artic
 
 == Adding Custom Data ==
 
-`<ExtendedData>` element in KML provides the mechanism to associate untyped name/value pairs with a given feature (e.g. Placemark). In the following KML excerpt, State_Code and LGA_Code are attached to the Placemark through `<Data>` and `<value>` pairs. 
+`<ExtendedData>` element in KML provides the mechanism to associate untyped name/value pairs with a given feature (e.g. Placemark). In the following KML excerpt, *State_Code* and *LGA_Code* are attached to the Placemark through `<Data>` and `<value>` pairs. 
 
 
 
