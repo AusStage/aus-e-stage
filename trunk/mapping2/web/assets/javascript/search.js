@@ -57,8 +57,7 @@ function SearchClass () {
 	this.add_data_type = '';
 	
 	// a variable to store marker data as it is retrieved
-	this.markerData = [];
-	
+	this.markerData = [];	
 }
 
 // initialise the search related elements
@@ -237,6 +236,9 @@ SearchClass.prototype.init = function() {
 	
 	// set up a handler for when the ajax calls finish
 	$("#search").bind('mappingSearchGatherDataAjaxQueue' + 'AjaxStop', searchObj.addDataToMap);
+	
+	// setup the add search result buttons
+	$('.addSearchResult').live('click', searchObj.addResultsClickEvent);
 
 }
 
@@ -349,7 +351,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" class="alignRight"><button id="searchAddContributors" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="6" class="alignRight"><div id="searchAddContributorError" style="float: left"></div><button id="searchAddContributors" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#contributor_results").append(list);
@@ -647,13 +649,13 @@ SearchClass.prototype.addResultsClickEvent = function(event) {
 	// determine which button was clicked
 	var target = $(event.target);
 	var id     = target.attr('id');
+	searchObj.markerData = [];
 	
 	if(id == 'searchAddVenues') {
 		
 		// clear away any existing error messages
 		$("#searchAddVenueError").empty();
-	
-		// the add venues button was clicked
+		
 		// get any of the selected venues
 		var venues = [];
 		
@@ -688,6 +690,47 @@ SearchClass.prototype.addResultsClickEvent = function(event) {
 			}
 		}
 		
+	} else if(id == 'searchAddContributors') {
+	
+		// clear away any existing error messages
+		$("#searchAddContributorError").empty();
+		
+		// get any of the selected contributors
+		var contributors = [];
+		
+		$('.searchContributor:checkbox').each(function() {
+			if($(this).attr('checked') == true) {
+				contributors.push($(this).val());
+			}
+		});
+		
+		if(contributors.length == 0) {
+			$("#searchAddContributorError").append(buildInfoMsgBox('No items selected, nothing added to the map'));
+			
+		} else {
+			// add things to the map
+			$("#searchAddContributorError").append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+			searchObj.add_data_type = 'contributor';
+			
+			// create a queue
+			var ajaxQueue = $.manageAjax.create("mappingSearchGatherDataAjaxQueue", {
+				queue: true
+			});
+			
+			// search for the data on each of the venues in turn
+			for(var i = 0; i < contributors.length; i++) {
+		
+				// build the url
+				var url  = BASE_URL + 'markers?&type=contributor&id=' + contributors[i];
+			
+				ajaxQueue.add({
+					success: searchObj.processAjaxData,
+					url: url
+				});
+			}
+		}
+	
+	
 	} else {
 		// unknown button was clicked
 	}
@@ -703,5 +746,8 @@ SearchClass.prototype.addDataToMap = function() {
 	if(searchObj.add_data_type == 'venue') {
 		mappingObj.addVenueBrowseData(searchObj.markerData);
 		$("#searchAddVenueError").empty();
+	} else if(searchObj.add_data_type == 'contributor') {
+		mappingObj.addContributorData(searchObj.markerData);
+		$('#searchAddContributorError').empty();
 	}
 }

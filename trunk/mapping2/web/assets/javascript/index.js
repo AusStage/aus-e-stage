@@ -83,7 +83,4 @@ $(document).ready(function(){
 	$('.map-icon-help').click(function() {
 		$('#help_map_icons_div').dialog('open');
 	});
-	
-	// setup the add search result buttons
-	$('.addSearchResult').live('click', searchObj.addResultsClickEvent);
 });

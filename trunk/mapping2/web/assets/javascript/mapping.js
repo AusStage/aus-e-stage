@@ -244,6 +244,67 @@ MappingClass.prototype.addVenueBrowseData = function(data) {
 	$('#tabs').tabs('select', 2);
 }
 
+// function to update the list of contributors with data from the search interface
+MappingClass.prototype.addContributorData = function(data) {
+
+	// declare helper variables
+	var hash  = null;
+	var idx   = null;
+	var obj   = null;
+	var id    = null;
+	var found = false;
+	var contributor = null;
+	var venues      = null;
+
+	// loop through the data
+	for(var i = 0; i < data.length; i++) {
+	
+		// get the contributor information and list of venes
+		contributor = data[i].extra[0];
+		venues      = data[i].venues;
+		
+		// loop through the list of venues
+		for(var x = 0; x < venues.length; x++) {
+			
+			// compute a hash
+			hash = mappingObj.computeLatLngHash(venues[x].latitude, venues[x].longitude);
+			
+			// check to see if we have this venue already
+			idx = $.inArray(hash, mappingObj.markerData.hashes);
+			
+			if(idx == -1) {
+				// not see this lat / lng before
+				obj = new MarkerData();
+				obj.contributors.push(contributor);
+				
+				mappingObj.markerData.hashes.push(hash);
+				mappingObj.markerData.objects.push(obj);
+			} else {
+				// have seen this lat / lng before
+				// check to see if the contributor has already been added
+				obj   = mappingObj.markerData.objects[idx];
+				id    = contributor.id;
+				found = false;
+				
+				for(var y = 0; y < obj.contributors.length; y++) {
+					if(id == obj.contributors[y].id) {
+						found = true;
+						y = obj.contributors.length + 1;
+					}
+				}
+				
+				if(found == false) {
+					obj.contributors.push(contributor);
+				}
+			}
+		}
+	}
+	
+	// switch to the map tab including an update
+	$('#tabs').tabs('select', 2);
+}
+
+
 // compute a LatLng hash
 MappingClass.prototype.computeLatLngHash = function(latitude, longitude) {
 
