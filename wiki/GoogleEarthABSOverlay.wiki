@@ -25,7 +25,7 @@ In [http://code.google.com/p/aus-e-stage/wiki/MapInfoToKML MapInfo To KML] artic
 
 }}}
 
-       *KML excerpt 1*
+       KML excerpt 1
 
 
 
