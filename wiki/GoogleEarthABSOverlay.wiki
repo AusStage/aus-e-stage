@@ -143,4 +143,72 @@ Before applying above mentioned techniques, we need modify the KML (LGA.kml) tha
  * Set `<styleURL id=”sharedStyle”>` for each Placemark
  * Prepare `<Data>` / `<Value>` for each Placemark
 
-After applying the XSL transformation we get dest.kml. Then we can copy the `<StyleMap id=”sharedStyle”>` in KML excerpt 3 and paste it to the `<Document>` element of dest.kml. It is worth to note that the id of `<StyleMap>` and `<styleURL>` should be same. The HTML and CSS in `<text>` element of `<BalloonStyle>` are designed in advance with suitable editors. The following snippet is the final KML skeleton.
+After applying the XSL transformation we get dest.kml. Then we can copy the `<StyleMap id=”sharedStyle”>` in KML excerpt 3 and paste it to the `<Document>` element of dest.kml. It is worth to note that the id (sharedStyle) of `<StyleMap>` and `<styleURL>` elements should be same. The HTML and CSS in `<text>` element of `<BalloonStyle>` are designed in advance with suitable editors. The following snippet is the final KML skeleton.
+
+{{{
+<kml xmlns="http://www.opengis.net/kml/2.2">
+   <Document>
+      <open>1</open>
+
+      <Style id="Highlight">
+         <PolyStyle/> <!--  Set highlighted color here     -->
+         <BalloonStyle>
+           <text><![CDATA[
+             <html>
+               <head>
+                <link rel="stylesheet" type="text/css" href="style/infowindow-style.css" /> 
+               </head>
+               <body> 
+                     <!--  The content of infowindow.    -->
+               </body>
+             </html>]]>
+           </text>
+         </BalloonStyle>
+      </Style>
+
+      <Style id="Normal">
+         <PolyStyle/>
+         <BalloonStyle/> <!--  Same as above  -->
+      </Style>
+      
+      <StyleMap id="sharedStyle">
+         <Pair>
+            <key>normal</key>
+            <styleUrl>#Normal</styleUrl>
+         </Pair>
+      
+         <Pair>
+            <key>highlight</key>
+            <styleUrl>#Highlight</styleUrl>
+         </Pair>
+      </StyleMap>
+
+      <Folder>
+         <name>South Australia</name>
+         <open>1</open>
+         <Placemark>
+            <name>Adelaide (C)</name>
+            <styleUrl>#sharedStyle</styleUrl>
+            <ExtendedData>
+               <Data name="STATE_CODE">
+                  <value>4</value>
+               </Data>
+      
+               <Data name="LGA_CODE">
+                  <value>40070</value>
+               </Data>
+      
+               <Data name="LGA_NAME">
+                  <value>Adelaide (C)</value>
+               </Data>
+            </ExtendedData>
+            <Polygon/> <!--   coordinates  are here -->
+       </Placemark>
+	……
+       <Placemark/>
+   </Folder>
+ </Document>
+</kml>
+}}}
+
+
