@@ -22,6 +22,8 @@ function MarkerData() {
 	this.organisations = [];
 	this.venues        = [];
 	this.events        = [];
+	this.latitude      = null;
+	this.longitude     = null;
 }
 
 // define our mapping class
@@ -144,16 +146,13 @@ MappingClass.prototype.updateMap = function() {
 	var objects = mappingObj.markerData.objects;
 	
 	for(var i = 0; i < objects.length; i++) {
-	
-		// get the venues
-		var venues = objects[i].venues;
 		
 		// build the iconography
-		var iconography = mappingObj.buildIconography(venues);
+		var iconography = mappingObj.buildIconography(objects[i]);
 		
 		// create a marker with a label
 		var marker = new MarkerWithLabel({
-			position:     new google.maps.LatLng(venues[0].latitude, venues[0].longitude),
+			position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
 			map:          mappingObj.map,
 			draggable:    false,
 			labelContent: iconography,
@@ -167,32 +166,66 @@ MappingClass.prototype.updateMap = function() {
 }
 
 // function to build the table for the iconography layout
-MappingClass.prototype.buildIconography = function(venues) {
+MappingClass.prototype.buildIconography = function(data) {
 
 	// determine the colour to use 
 	var cellColour;
 	
-	if(venues.length == 1) {
-		cellColour = mapIconography.venueColours[0];
-	} else if (venues.length > 1 && venues.length < 6) {
-		cellColour = mapIconography.venueColours[1];
-	} else if (venues.length > 5 && venues.length < 16) {
-		cellColour = mapIconography.venueColours[2];
-	} else if (venues.length > 15 && venues.length < 31) {
-		cellColour = mapIconography.venueColours[3];
-	} else {
-		cellColour = mapIconography.venueColours[4];
+	// build the table cells
+	var cells = '';
+	
+	if(data.contributors.length > 0) {
+		// we need to add a contributor icon
+		if(data.contributors.length == 1) {
+			cellColour = mapIconography.contributorColours[0];
+		} else if (data.contributors.length > 1 && data.contributors.length < 6) {
+			cellColour = mapIconography.contributorColours[1];
+		} else if (data.contributors.length > 5 && data.contributors.length < 16) {
+			cellColour = mapIconography.contributorColours[2];
+		} else if (data.contributors.length > 15 && data.contributors.length < 31) {
+			cellColour = mapIconography.contributorColours[3];
+		} else {
+			cellColour = mapIconography.contributorColours[4];
+		}
+		
+		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.contributor +'"/></td>';
 	}
 	
-	// build the table for venue data	
-	var table =  '<table class="mapIcon"><tr><td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.venue +'"/></td></tr>';
-	    table += '<tr><td class="mapIconNum b-184">' + venues.length + '</td></tr>';
+	if(data.venues.length > 0) {
+		// we need to add a venue icon
+		if(data.venues.length == 1) {
+			cellColour = mapIconography.venueColours[0];
+		} else if (data.venues.length > 1 && data.venues.length < 6) {
+			cellColour = mapIconography.venueColours[1];
+		} else if (data.venues.length > 5 && data.venues.length < 16) {
+			cellColour = mapIconography.venueColours[2];
+		} else if (data.venues.length > 15 && data.venues.length < 31) {
+			cellColour = mapIconography.venueColours[3];
+		} else {
+			cellColour = mapIconography.venueColours[4];
+		}
+		
+		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.venue +'"/></td>';
+	}
+	
+	// start to build the table for venue data	
+	var table =  '<table class="mapIcon"><tr>' + cells + '</tr>';
+	cells = '';
+	
+	if(data.contributors.length > 0) {
+		cells += '<td class="mapIconNum b-184">' + data.contributors.length + '</td>';
+	}
+	
+	if(data.venues.length > 0) {
+		cells += '<td class="mapIconNum b-184">' + data.venues.length + '</td>';
+	}
+	
+	table += '<tr>' + cells + '</tr>';
 	    
 	// return the completed table
 	table += '</table>';
 	
-	return table;
-	
+	return table;	
 }
 
 // function to update the list of venues with data from the browse interface
@@ -217,6 +250,8 @@ MappingClass.prototype.addVenueBrowseData = function(data) {
 			// not seen this lat / lng before
 			obj = new MarkerData();
 			obj.venues.push(data[i]);
+			obj.latitude  = data[i].latitude;
+			obj.longitude = data[i].longitude
 			
 			mappingObj.markerData.hashes.push(hash);
 			mappingObj.markerData.objects.push(obj);
@@ -276,6 +311,8 @@ MappingClass.prototype.addContributorData = function(data) {
 				// not see this lat / lng before
 				obj = new MarkerData();
 				obj.contributors.push(contributor);
+				obj.latitude  = venues[x].latitude;
+				obj.longitude = venues[x].longitude
 				
 				mappingObj.markerData.hashes.push(hash);
 				mappingObj.markerData.objects.push(obj);
