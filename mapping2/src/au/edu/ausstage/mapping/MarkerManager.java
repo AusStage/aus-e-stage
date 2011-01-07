@@ -467,7 +467,7 @@ public class MarkerManager {
 		}		
 		
 		// return the list
-		return buildVenueListMapJSONArray(venueListMap).toString();
+		return buildVenueListMapJSONArray(venueListMap, "contributor").toString();
 	}
 	
 	/**
@@ -563,7 +563,69 @@ public class MarkerManager {
 		}
 		
 		return list;	
-	}	 
+	}
+	
+	/**
+	 * A private method to take a venueListMap and convert it into a JSONArray of objects
+	 *
+	 * @param venueListMap the venue list map to process
+	 * @param extraData    a field to indicate the additional data is required
+	 *
+	 * @return             the JSONArray representing the map
+	 */
+	@SuppressWarnings("unchecked") 
+	private JSONArray buildVenueListMapJSONArray(HashMap<Integer, VenueList> venueListMap, String extraData) {
+	
+		if(extraData == null) {
+			return buildVenueListMapJSONArray(venueListMap);
+		} else {
+			// declare helper variables
+			Collection keys     = venueListMap.keySet();
+			Iterator   iterator = keys.iterator();
+		
+			JSONArray list = new JSONArray();
+			JSONObject object;
+			Integer index;
+		
+			VenueList  venues = null;
+			Venue      venue  = null;
+			
+			LookupManager lookup     = new LookupManager(database);
+			String        lookupData = null;
+			Object        obj        = null;
+		
+			// loop through the map
+		
+			while(iterator.hasNext()) {
+			
+				// get the index
+				index = (Integer)iterator.next();
+			
+				// get the venue list
+				venues = (VenueList)venueListMap.get(index);
+			
+				// create a new object
+				object = new JSONObject();
+			
+				// add the index and the venues
+				object.put("id", index);
+				
+				// get the extra data
+				if(extraData.equals("contributor") == true) {
+					lookupData = lookup.getContributor(Integer.toString(index));
+				}
+				
+				obj = JSONValue.parse(lookupData);
+				object.put("extra", (JSONArray)obj);
+				object.put("venues", venueListToJsonArray(venues));
+			
+				// add this object to the list
+				list.add(object);
+			}
+		
+			return list;
+		}	
+	} 
 	
 	/**
 	 * A private method to build a venueList given a resultSet
