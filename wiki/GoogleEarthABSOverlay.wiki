@@ -125,6 +125,7 @@ When Google earth renders this KML, the value 40070 will replace the entity `$[L
          <key>normal</key>
          <styleUrl>#Normal</styleUrl>
       </Pair>
+
       <Pair>
          <key>highlight</key>
          <styleUrl>#Highlight</styleUrl>
