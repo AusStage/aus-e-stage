@@ -74,7 +74,11 @@ function MappingClass() {
 	
 	// variables to hold a height / width constant for use in computing the height / width of the map
 	this.HEIGHT_BUFFER_CONSTANT = 55;
-	this.WIDTH_BUFFER_CONSTANT  = 55;	    
+	this.WIDTH_BUFFER_CONSTANT  = 55;
+	
+	// variables to hold the x / y offset constants for computing the placement pointer on a marker
+	this.POINTER_X_OFFSET = 16;
+	this.POINTER_Y_OFFSET = 68;  
 
 }
 
@@ -142,13 +146,31 @@ MappingClass.prototype.updateMap = function() {
 	var title = null;
 	
 	// add the markers to the map
-	// TODO add other marker types
 	var objects = mappingObj.markerData.objects;
 	
 	for(var i = 0; i < objects.length; i++) {
 		
 		// build the iconography
 		var iconography = mappingObj.buildIconography(objects[i]);
+		
+		// calculate the pointer offset
+		var offset = 0;
+		
+		if(objects[i].contributors.length > 0) {
+			offset++;
+		}
+		
+		if(objects[i].organisations.length > 0) {
+			offset++;
+		}
+		
+		if(objects[i].venues.length > 0) {
+			offset++;
+		}
+		
+		if(objects[i].events.length > 0) {
+			offset++;
+		}
 		
 		// create a marker with a label
 		var marker = new MarkerWithLabel({
@@ -157,7 +179,7 @@ MappingClass.prototype.updateMap = function() {
 			draggable:    false,
 			labelContent: iconography,
 			labelClass:   'mapIconContainer',
-			labelAnchor:  new google.maps.Point(16, 68),
+			labelAnchor:  new google.maps.Point(mappingObj.POINTER_X_OFFSET * offset, mappingObj.POINTER_Y_OFFSET),
 			icon:         mapIconography.pointer
 		});
 		
