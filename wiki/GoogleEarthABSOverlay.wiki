@@ -70,7 +70,7 @@ As we can see from above KML excerpt, `<text>` element (line 6) contains the con
 
 == Entity Replacement ==
 
-You may notice that there are two entities in the above `<text>` element. One is $[State_Code], the other is $[LGA_Code]. These two entities refer to correspondent <Data name=”State_Code”> and <Data name=”LGA_Code”> elements in the <ExtendedData> of KML excerpt 1 or as shown in the following snippet. The contents of <value> elements will substitute those entities in the balloon. Google Earth supports such kind of entity replacement of certain extended data elements within the `<text>` element of `<BalloonStyle>`.
+You may notice that there are two entities in the above `<text>` element. One is `$[State_Code]`, the other is `$[LGA_Code]`. These two entities refer to correspondent <Data name=”State_Code”> and <Data name=”LGA_Code”> elements in the <ExtendedData> of KML excerpt 1 or as shown in the following snippet. The contents of <value> elements will substitute those entities in the balloon. Google Earth supports such kind of entity replacement of certain extended data elements within the `<text>` element of `<BalloonStyle>`.
 
 
 
