@@ -27,6 +27,10 @@ In [http://code.google.com/p/aus-e-stage/wiki/MapInfoToKML MapInfo To KML] artic
 
         `<KML excerpt 1>`
 
+== Balloon Style ==
+
+Descriptive balloons, so-called infowindows are attached to Placemarks in Google Earth and displayed when clicked. By default, a balloon in Google Earth only displays placemark `<name>`, `<description>` element and links for driving direction. `<BalloonStyle>` element provides a mechanism to customise the balloon such as background color, text color etc. as shown in the following KML excerpt. 
+
 
 
 
