@@ -111,13 +111,15 @@ When Google earth renders this KML, the value 40070 will replace the entity `$[L
       </PolyStyle>
       <BalloonStyle/><!-- style of infowindow (HTML, CSS), refer to KML excerpt 2 -->
 </Style>
- <Style id="Normal">
+
+<Style id="Normal">
       <PolyStyle>
          <color>cf10e0ff</color>
          <fill>true</fill>
       </PolyStyle>
       <BalloonStyle/> <!--  style of infowindow (HTML, CSS), refer to KML excerpt 2 -->
-  </Style>
+</Style>
+
 <StyleMap id="sharedStyle">
       <Pair>
          <key>normal</key>
@@ -127,7 +129,7 @@ When Google earth renders this KML, the value 40070 will replace the entity `$[L
          <key>highlight</key>
          <styleUrl>#Highlight</styleUrl>
       </Pair>
- </StyleMap>
+</StyleMap>
 }}}
        
          `<KML excerpt 3>`
