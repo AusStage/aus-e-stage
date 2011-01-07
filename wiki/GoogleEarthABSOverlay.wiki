@@ -13,12 +13,15 @@ In [http://code.google.com/p/aus-e-stage/wiki/MapInfoToKML MapInfo To KML] artic
          <name>Adelaide (C)</name>
          <styleUrl>#sharedStyle</styleUrl>
          <ExtendedData>
+
             <Data name="State_Code">
                <value>4</value>
             </Data>
+
             <Data name="LGA_Code">
                <value>40070</value>
             </Data>
+
          </ExtendedData>
         <Polygon>…..</Polygon>
     </Placemark>
