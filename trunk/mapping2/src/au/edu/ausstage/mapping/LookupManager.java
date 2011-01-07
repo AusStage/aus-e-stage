@@ -175,31 +175,21 @@ public class LookupManager {
 	}
 	
 	/**
-	 * A method to return the list of colours that can be used for 
-	 * elements displayed on a map
+	 * A method to lookup the details of an event
 	 *
-	 * @param xmlFilePath the path to the XML file that specifies the colours
-	 * 
-	 * @return a JSON encoded array of colour attributes
-	 */	
-	@SuppressWarnings("unchecked")	
-	public static String getMapElementColourList(String xmlFilePath) {
-	
-		// double check on the parameter
-		if(InputUtils.isValid(xmlFilePath) == false) {
-			throw new IllegalArgumentException("The xmlFilePath parameter is required");
+	 * @param id the unique identifier of the venue
+	 *
+	 * @return a JSON encoded string containing the data
+	 */
+	public String getEvent(String id) {
+	// validate the input
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter is required to be a valid integer");
 		}
 		
-		ColourManager colours = new ColourManager(xmlFilePath);
+		SearchManager search = new SearchManager(database);
 		
-		if(colours.parseXML() == false) {
-			return new JSONArray().toString();
-		}
-		
-		// get the list of colours
-		JSONArray list = new JSONArray();
-		list.addAll(colours.getColourListForWeb());
-		return list.toString();
+		return search.doEventSearch("id", id, null, null, null);
 	}
 	
 } // end class definition

@@ -36,7 +36,7 @@ public class LookupServlet extends HttpServlet {
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list", "organisation", "contributor", "venue", "map-colour-list"};
+	private final String[] TASK_TYPES         = {"state-list", "suburb-list", "suburb-venue-list", "organisation", "contributor", "venue"};
 	private final String[] FORMAT_TYPES       = {"json"};
 	public static final String[] VALID_STATES = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
@@ -117,29 +117,22 @@ public class LookupServlet extends HttpServlet {
 		}
 		
 		String results = null;
-		LookupManager lookup = null;
 		
-		// see if this is just a request for the colour list
-		if(taskType.equals("map-colour-list") == true) {
-			results = LookupManager.getMapElementColourList(servletConfig.getServletContext().getInitParameter("colourXMLFilePath"));
-		} else {
-		
-			// instantiate a connection to the database
-			DbManager database;
-		
-			try {
-				database = new DbManager(servletConfig.getServletContext().getInitParameter("databaseConnectionString"));
-			} catch (IllegalArgumentException ex) {
-				throw new ServletException("Unable to read the connection string parameter from the web.xml file");
-			}
-		
-			if(database.connect() == false) {
-				throw new ServletException("Unable to connect to the database");
-			}
-		
-			// instantiate a lookup object
-			lookup = new LookupManager(database);
+		// instantiate a connection to the database
+		DbManager database;
+	
+		try {
+			database = new DbManager(servletConfig.getServletContext().getInitParameter("databaseConnectionString"));
+		} catch (IllegalArgumentException ex) {
+			throw new ServletException("Unable to read the connection string parameter from the web.xml file");
 		}
+	
+		if(database.connect() == false) {
+			throw new ServletException("Unable to connect to the database");
+		}
+		
+		// instantiate a lookup object
+		LookupManager lookup = new LookupManager(database);
 		
 		// determine what to lookup
 		if(taskType.equals("state-list") == true) {

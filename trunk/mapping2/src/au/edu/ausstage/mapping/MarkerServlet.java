@@ -32,7 +32,7 @@ public class MarkerServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	
 	// declare private class constants
-	private final String[] MARKER_TYPES = {"state", "suburb", "venue", "organisation", "contributor"};
+	private final String[] MARKER_TYPES = {"state", "suburb", "venue", "organisation", "contributor", "event"};
 	public static final String[] VALID_STATES = {"1", "2", "3", "4", "5", "6", "7", "8", "99", "999"};
 
 	/*
@@ -130,6 +130,8 @@ public class MarkerServlet extends HttpServlet {
 			results = manager.getOrganisationMarkers(id);
 		} else if(type.equals("contributor") == true) {
 			results = manager.getContributorMarkers(id);
+		} else if(type.equals("event") == true) {
+			results = manager.getEventMarkers(id);
 		}
 		
 		// ouput the data
