@@ -5,7 +5,11 @@
 In [http://code.google.com/p/aus-e-stage/wiki/MapInfoToKML MapInfo To KML] article, we introduced the procedure to construct map overlays in a KML format using ABS geographic information. The popup infowindow of the map overlay includes the information about State Code, Local Government Code and Local Government Name. In this article, we will introduce how to add more information on the infowindow such as ABS Regional Profile URL, how to style infowindow using !BalloonStyle template, HTML and CSS and how to highlight polygons.
 
 
-= Details =
+== Adding Custom Data ==
+
+`<ExtendedData>` element in KML provides the mechanism to associate untyped name/value pairs with a given feature (e.g. Placemark). In the following KML excerpt, State_Code and LGA_Code are attached to the Placemark through `<Data>` and `<value>` pairs. 
+
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
