@@ -66,7 +66,7 @@ Descriptive balloons, so-called infowindows are attached to Placemarks in Google
       `<KML excerpt 2>`
 
 
-As we can see from above KML excerpt, `<text>` element contains the content displayed in the balloon. HTML code can be embedded inside it through the CDATA brackets. Therefore the content in `<text>` element can also be styled using external Cascading Style Sheets (CSS) through `<link>` element. In the above example, we use an external CSS file (style/infowindow-style.css) to format the table in HTML. For more details about `<BalloonStyle>`, please refer to KML reference.
+As we can see from above KML excerpt, `<text>` element contains the content displayed in the balloon. HTML code can be embedded inside it through the CDATA brackets. Therefore the content in `<text>` element can also be styled using external Cascading Style Sheets (CSS) through `<link>` element. In the above example, we use an external CSS file (style/infowindow-style.css) to format the table in HTML. For more details about `<BalloonStyle>`, please refer to [http://code.google.com/apis/kml/documentation/kmlreference.html#balloonstyle KML reference].
 
 
 
