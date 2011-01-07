@@ -143,11 +143,6 @@ Before applying above mentioned techniques, we need modify the KML (LGA.kml) tha
  * Set `<styleURL id=”sharedStyle”>` for each Placemark
  * Prepare `<Data>` / `<Value>` for each Placemark
 
+After applying the XSL transformation we get dest.kml. Then we can copy the <StyleMap id=”sharedStyle”> in KML excerpt 3 and paste it to the `<Document>` element of dest.kml. It is worth to note that the id of `<StyleMap>` and `<styleURL>` should be same. The HTML and CSS in `<text>` element of <BalloonStyle> are designed in advance with suitable editors. The following snippet is the final KML skeleton.
 
 
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
