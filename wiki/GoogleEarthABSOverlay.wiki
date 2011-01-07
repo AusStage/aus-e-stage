@@ -57,13 +57,14 @@ Descriptive balloons, so-called infowindows are attached to Placemarks in Google
         </tr>
       </table>
     </body>
-  </html>]]>
-   </text>
+   </html>]]>
+  </text>
  </BalloonStyle>
 </style>
-
-
 }}}
+
+
+
 
 
 
