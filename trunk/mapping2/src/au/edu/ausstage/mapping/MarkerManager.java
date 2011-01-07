@@ -369,7 +369,7 @@ public class MarkerManager {
 		}		
 		
 		// return the list
-		return buildVenueListMapJSONArray(venueListMap).toString();
+		return buildVenueListMapJSONArray(venueListMap, "organisation").toString();
 	}
 	
 	/**
@@ -613,10 +613,14 @@ public class MarkerManager {
 				// get the extra data
 				if(extraData.equals("contributor") == true) {
 					lookupData = lookup.getContributor(Integer.toString(index));
+					obj = JSONValue.parse(lookupData);
+					object.put("extra", (JSONArray)obj);
+				} else if(extraData.equals("organisation") == true) {
+					lookupData = lookup.getOrganisation(Integer.toString(index));
+					obj = JSONValue.parse(lookupData);
+					object.put("extra", (JSONArray)obj);
 				}
 				
-				obj = JSONValue.parse(lookupData);
-				object.put("extra", (JSONArray)obj);
 				object.put("venues", venueListToJsonArray(venues));
 			
 				// add this object to the list

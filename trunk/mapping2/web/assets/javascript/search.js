@@ -415,7 +415,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="5" style="text-align: right"><button id="searchAddOrganisations" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="5" style="text-align: right"><div id="searchAddOrganisationError" style="float: left"></div><button id="searchAddOrganisations" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#organisation_results").append(list);
@@ -728,8 +728,47 @@ SearchClass.prototype.addResultsClickEvent = function(event) {
 					url: url
 				});
 			}
-		}
+		}	
 	
+	} else if(id == 'searchAddOrganisations') {
+	
+		// clear away any existing error messages
+		$("#searchAddOrganisationError").empty();
+		
+		// get any of the selected contributors
+		var organisations = [];
+		
+		$('.searchOrganisation:checkbox').each(function() {
+			if($(this).attr('checked') == true) {
+				organisations.push($(this).val());
+			}
+		});
+		
+		if(organisations.length == 0) {
+			$("#searchAddOrganisationError").append(buildInfoMsgBox('No items selected, nothing added to the map'));
+			
+		} else {
+			// add things to the map
+			$("#searchAddOrganisationError").append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+			searchObj.add_data_type = 'organisation';
+			
+			// create a queue
+			var ajaxQueue = $.manageAjax.create("mappingSearchGatherDataAjaxQueue", {
+				queue: true
+			});
+			
+			// search for the data on each of the venues in turn
+			for(var i = 0; i < organisations.length; i++) {
+		
+				// build the url
+				var url  = BASE_URL + 'markers?&type=organisation&id=' + organisations[i];
+			
+				ajaxQueue.add({
+					success: searchObj.processAjaxData,
+					url: url
+				});
+			}
+		}
 	
 	} else {
 		// unknown button was clicked
@@ -749,5 +788,8 @@ SearchClass.prototype.addDataToMap = function() {
 	} else if(searchObj.add_data_type == 'contributor') {
 		mappingObj.addContributorData(searchObj.markerData);
 		$('#searchAddContributorError').empty();
+	} else if(searchObj.add_data_type == 'organisation') {
+		mappingObj.addOrganisationData(searchObj.markerData);
+		$('#searchAddOrganisationError').empty();
 	}
 }

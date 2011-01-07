@@ -252,8 +252,11 @@ public class SearchManager {
 			organisation.setName(resultSet.getString(2));
 			organisation.setUrl(LinksManager.getOrganisationLink(resultSet.getString(1)));
 			organisation.setAddress(resultSet.getString(3));
-			organisation.setEventCount(resultSet.getString(4));
-			organisation.setMappedEventCount(resultSet.getString(5));			
+			organisation.setSuburb(resultSet.getString(4));
+			organisation.setState(resultSet.getString(5));
+			organisation.setPostcode(resultSet.getString(6));
+			organisation.setEventCount(resultSet.getString(7));
+			organisation.setMappedEventCount(resultSet.getString(8));			
 		
 			// add the organisation to the list
 			list.addOrganisation(organisation);
