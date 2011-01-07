@@ -88,12 +88,8 @@ You may notice that there are two entities in the above `<text>` element. One is
 
 After analysing the URLs of ABS regional profile for Local Government Area (LGA), we found that only LGA_Code part is different, other parts are the same. For example, in the following URL, 
 
-{{{
-http://www.abs.gov.au/ausstats/abs@nrp.nsf/lookup/LGA
-}}}*40070*
-{{{
-Main+Features12005-2009
-}}},
+{{{http://www.abs.gov.au/ausstats/abs@nrp.nsf/lookup/LGA}}}*40070*
+{{{Main+Features12005-2009}}},
 
 40070 is the LGA Code which is different for each LGA. The parts before 40070 which is `http://www.abs.gov.au/ausstats/abs@nrp.nsf/lookup/LGA` and after it which is Main+Features12005-2009 are fixed. So we can use entity *`$[LGA_Code]`* to replace that part as shown in the following URL.
 `http://www.abs.gov.au/ausstats/abs@nrp.nsf/lookup/LGA*$[LGA_Code]*Main+Features12005-2009`
