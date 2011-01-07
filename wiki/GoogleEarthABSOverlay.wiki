@@ -36,31 +36,31 @@ Descriptive balloons, so-called infowindows are attached to Placemarks in Google
 2   <BalloonStyle>
 3   <!-- specific to BalloonStyle -->
 4     <bgColor>ffffffff</bgColor>            <!-- kml:color -->
-    <textColor>ff000000</textColor>        <!-- kml:color --> 
-    <text>		                  <!-- string -->
-    <![CDATA[<html>
-    <head>
-      <link rel="stylesheet" type="text/css" href="style/infowindow-style.css" /> 
-    </head>
-    <body>
-      <b>$[LGA_NAME_2010]</b>
-      <table class="infowindow">
-
-        <tr class="odd">
-          <td class="label">State Code</td>
-          <td class="text">$[State_Code]</td>
-        </tr>
-
-        <tr class="even">
-          <td class="label">Link</td>
-          <td class="text"><a href="http://www.abs.gov.au/ausstats/abs@nrp.nsf/lookup/LGA$[LGA_Code]Main+Features12005-2009">ABS Profile</a></td>
-        </tr>
-      </table>
-    </body>
-    </html>]]>
-    </text>
- </BalloonStyle>
-</style>
+5     <textColor>ff000000</textColor>        <!-- kml:color --> 
+6     <text>		                  <!-- string -->
+7     <![CDATA[<html>
+8     <head>
+9       <link rel="stylesheet" type="text/css" href="style/infowindow-style.css" /> 
+10      </head>
+11      <body>
+12        <b>$[LGA_NAME_2010]</b>
+13        <table class="infowindow">
+14 
+15         <tr class="odd">
+16           <td class="label">State Code</td>
+17           <td class="text">$[State_Code]</td>
+18         </tr>
+19
+20         <tr class="even">
+21           <td class="label">Link</td>
+22           <td class="text"><a href="http://www.abs.gov.au/ausstats/abs@nrp.nsf/lookup/LGA$[LGA_Code]Main+Features12005-2009">ABS Profile</a></td>
+23         </tr>
+24       </table>
+25     </body>
+26     </html>]]>
+27     </text>
+28  </BalloonStyle>
+29 </style>
 }}}
     
       `<KML excerpt 2>`
