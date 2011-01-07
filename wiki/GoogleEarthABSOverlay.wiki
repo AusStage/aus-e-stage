@@ -7,7 +7,7 @@ In [http://code.google.com/p/aus-e-stage/wiki/MapInfoToKML MapInfo To KML] artic
 
 == Adding Custom Data ==
 
-`<ExtendedData>` element in KML provides the mechanism to associate untyped name/value pairs with a given feature (e.g. Placemark). In the following KML excerpt, *!State_Code* and *LGA_Code* are attached to the Placemark through `<Data>` and `<value>` pairs. 
+`<ExtendedData>` element in KML provides the mechanism to associate untyped name/value pairs with a given feature (e.g. Placemark). In the following KML excerpt, *!State_Code* and *LGA_Code* are attached to the Placemark through `<Data>` and `<value>` pairs. For more details about mechanisms to add custom data, please refer to [http://code.google.com/apis/kml/documentation/extendeddata.html Google web site].
 {{{
     <Placemark>
          <name>Adelaide (C)</name>
@@ -24,6 +24,11 @@ In [http://code.google.com/p/aus-e-stage/wiki/MapInfoToKML MapInfo To KML] artic
     </Placemark>
 
 }}}
+
+       *KML excerpt 1*
+
+
+
 
 
 Add your content here.  Format your content with:
