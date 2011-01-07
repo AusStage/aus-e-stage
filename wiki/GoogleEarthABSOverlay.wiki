@@ -202,7 +202,7 @@ After applying the XSL transformation we get dest.kml. Then we can copy the `<St
                   <value>Adelaide (C)</value>
                </Data>
             </ExtendedData>
-            <Polygon/> <!--   coordinates  are here -->
+            <Polygon/> <!--   coordinates are here -->
        </Placemark>
 	……
        <Placemark/>
@@ -210,5 +210,3 @@ After applying the XSL transformation we get dest.kml. Then we can copy the `<St
  </Document>
 </kml>
 }}}
-
-
