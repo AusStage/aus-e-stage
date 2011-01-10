@@ -78,7 +78,13 @@ function MappingClass() {
 	
 	// variables to hold the x / y offset constants for computing the placement pointer on a marker
 	this.POINTER_X_OFFSET = 16;
-	this.POINTER_Y_OFFSET = 68;  
+	this.POINTER_Y_OFFSET = 68;
+	
+	// variables to hold the colours of individual contributors
+	this.contributorColours  = {ids: [], colours: []};
+	
+	// variables to hold the colours of individual organisations
+	this.organisationColours = {ids: [], colours:[]};
 
 }
 
@@ -597,13 +603,15 @@ MappingClass.prototype.buildIconographyHelp = function() {
 
 	// build each row in turn
 	var row = '<th scope="row">Contributors</th>';
-	for(var i = 0; i < mapIconography.contributorColours.length; i++) {
+	row += '<td style="border: 1px solid #aaaaaa;">Individual<br/>Colour</td>';
+	for(var i = 1; i < mapIconography.contributorColours.length; i++) {
 		row += '<td class="' + mapIconography.contributorColours[i] + '"><img src="' + mapIconography.contributor +'"/></td>';
 	}
 	$('#map_iconography_contributors').empty().append(row);
 	
 	row = '<th scope="row">Organisations</th>';
-	for(var i = 0; i < mapIconography.organisationColours.length; i++) {
+	row += '<td style="border: 1px solid #aaaaaa;">Individual<br/>Colour</td>';
+	for(var i = 1; i < mapIconography.organisationColours.length; i++) {
 		row += '<td class="' + mapIconography.organisationColours[i] + '"><img src="' + mapIconography.organisation +'"/></td>';
 	}
 	$('#map_iconography_organisations').empty().append(row);
@@ -619,4 +627,31 @@ MappingClass.prototype.buildIconographyHelp = function() {
 		row += '<td class="' + mapIconography.eventColours[i] + '"><img src="' + mapIconography.event +'"/></td>';
 	}
 	$('#map_iconography_events').empty().append(row);
+	
+	// build the individual colour pallette
+	var row = '';
+	var rows = '';
+	
+	var startColour  = 39;
+	var endColour    = 86;
+	var cellCount    = 1;
+	var maxCellCount = 12;
+	
+	for(var i = startColour; i <= endColour; i++) {
+	
+		if(cellCount == 1) {
+			row = '<tr><td class="b-' + i + ' mapIconImg2">&nbsp;</td>';
+		} else if(cellCount == maxCellCount) {
+			row += '</tr>';
+			rows += row;
+			row = '';
+			cellCount = 0;
+		} else {
+			row += '<td class="b-' + i + ' mapIconImg2">&nbsp;</td>';
+		}
+		
+		cellCount++;
+	}
+	
+	$("#map_iconography_individual_colours").empty().append(rows);
 }

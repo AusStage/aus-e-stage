@@ -291,6 +291,12 @@ th.numeric {
 	height: 33px;
 }
 
+.mapIconImg2 {
+	width: 33px;
+	height: 33px;
+	border: 2px solid #fff;
+}
+
 table.mapIconHelpTbl {
 	background-color: #fff;
 	text-align: left;
