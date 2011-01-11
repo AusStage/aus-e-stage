@@ -1051,6 +1051,8 @@ public class SearchManager {
 		
 		} catch (java.sql.SQLException ex) {
 			// return an empty JSON Array
+			//debug code
+			System.out.println("####");
 			return jsonList.toString();
 		}
 		 

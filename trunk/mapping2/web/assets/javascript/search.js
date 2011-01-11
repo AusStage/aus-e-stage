@@ -679,7 +679,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			for(var i = 0; i < venues.length; i++) {
 		
 				// build the url
-				var url  = BASE_URL + 'markers?&type=venue&id=' + venues[i];
+				var url  = BASE_URL + 'markers?type=venue&id=' + venues[i];
 			
 				ajaxQueue.add({
 					success: searchObj.processAjaxData,
@@ -719,7 +719,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			for(var i = 0; i < contributors.length; i++) {
 		
 				// build the url
-				var url  = BASE_URL + 'markers?&type=contributor&id=' + contributors[i];
+				var url  = BASE_URL + 'markers?type=contributor&id=' + contributors[i];
 			
 				ajaxQueue.add({
 					success: searchObj.processAjaxData,
@@ -759,7 +759,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			for(var i = 0; i < organisations.length; i++) {
 		
 				// build the url
-				var url  = BASE_URL + 'markers?&type=organisation&id=' + organisations[i];
+				var url  = BASE_URL + 'markers?type=organisation&id=' + organisations[i];
 			
 				ajaxQueue.add({
 					success: searchObj.processAjaxData,
@@ -799,7 +799,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			for(var i = 0; i < events.length; i++) {
 		
 				// build the url
-				var url  = BASE_URL + 'markers?&type=event&id=' + events[i];
+				var url  = BASE_URL + 'markers?type=event&id=' + events[i];
 			
 				ajaxQueue.add({
 					success: searchObj.processAjaxData,
