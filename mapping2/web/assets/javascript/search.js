@@ -646,6 +646,8 @@ SearchClass.prototype.selectAllClickEvent = function(event) {
 // define a function to add search results to the map dependent on which button was clicked
 SearchClass.prototype.addResultsClick = function(event) {
 
+	searchObj.markerData = [];
+
 	// determine which button was clicked
 	var id = this.id;
 	
