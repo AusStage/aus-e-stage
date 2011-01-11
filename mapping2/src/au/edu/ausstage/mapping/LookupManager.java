@@ -182,7 +182,8 @@ public class LookupManager {
 	 * @return a JSON encoded string containing the data
 	 */
 	public String getEvent(String id) {
-	// validate the input
+	
+		// validate the input
 		if(InputUtils.isValidInt(id) == false) {
 			throw new IllegalArgumentException("The id parameter is required to be a valid integer");
 		}

@@ -560,7 +560,7 @@ public class MarkerManager {
 		}		
 		
 		// return the list
-		return buildVenueListMapJSONArray(venueListMap, "contributor").toString();
+		return buildVenueListMapJSONArray(venueListMap, "event").toString();
 	}
 	
 	/**
