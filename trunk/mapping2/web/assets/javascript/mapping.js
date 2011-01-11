@@ -564,7 +564,7 @@ MappingClass.prototype.addEventData = function(data) {
 				}
 				
 				if(found == false) {
-					obj.events.push(organisation);
+					obj.events.push(event);
 				}
 			}
 		}
