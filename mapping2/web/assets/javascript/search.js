@@ -238,7 +238,7 @@ SearchClass.prototype.init = function() {
 	$("#search").bind('mappingSearchGatherDataAjaxQueue' + 'AjaxStop', searchObj.addDataToMap);
 	
 	// setup the add search result buttons
-	$('.addSearchResult').live('click', searchObj.addResultsClickEvent);
+	$('.addSearchResult').live('click', searchObj.addResultsClick);
 
 }
 
@@ -644,12 +644,10 @@ SearchClass.prototype.selectAllClickEvent = function(event) {
 }
 
 // define a function to add search results to the map dependent on which button was clicked
-SearchClass.prototype.addResultsClickEvent = function(event) {
+SearchClass.prototype.addResultsClick = function(event) {
 
 	// determine which button was clicked
-	var target = $(event.target);
-	var id     = target.attr('id');
-	searchObj.markerData = [];
+	var id = this.id;
 	
 	if(id == 'searchAddVenues') {
 		
