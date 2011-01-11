@@ -333,7 +333,6 @@ table.mapIconHelpTbl td {
 .tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
 
 /* prevent a FOUC */
-.js #messages {display: none;}
-.js #add_search_results_div {display: none;}
+.js {display: none;}
 .hideMe {display: none;}
 

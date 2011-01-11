@@ -208,7 +208,10 @@ MappingClass.prototype.buildIconography = function(data) {
 	if(data.contributors.length > 0) {
 		// we need to add a contributor icon
 		if(data.contributors.length == 1) {
-			cellColour = mapIconography.contributorColours[0];
+			//cellColour = mapIconography.contributorColours[0];
+			var obj = data.contributors[0];
+			var idx = $.inArray(obj.id, mappingObj.contributorColours.ids);
+			cellColour = mappingObj.contributorColours.colours[idx];
 		} else if (data.contributors.length > 1 && data.contributors.length < 6) {
 			cellColour = mapIconography.contributorColours[1];
 		} else if (data.contributors.length > 5 && data.contributors.length < 16) {
@@ -225,7 +228,10 @@ MappingClass.prototype.buildIconography = function(data) {
 	if(data.organisations.length > 0) {
 		// we need to add a venue icon
 		if(data.organisations.length == 1) {
-			cellColour = mapIconography.organisationColours[0];
+			//cellColour = mapIconography.organisationColours[0];
+			var obj = data.organisations[0];
+			var idx = $.inArray(obj.id, mappingObj.organisationColours.ids);
+			cellColour = mappingObj.organisationColours.colours[idx];
 		} else if (data.organisations.length > 1 && data.organisations.length < 6) {
 			cellColour = mapIconography.organisationColours[1];
 		} else if (data.organisations.length > 5 && data.organisations.length < 16) {
@@ -371,6 +377,21 @@ MappingClass.prototype.addContributorData = function(data) {
 		contributor = data[i].extra[0];
 		venues      = data[i].venues;
 		
+		// have we assigned a colour to this contributor before?
+		idx = $.inArray(contributor.id, mappingObj.contributorColours.ids);
+		
+		if(idx == -1) {
+			// no we haven't
+			var count = mappingObj.contributorColours.ids.length;
+			
+			while(count > mapIconography.individualContributors.length) {
+				count = count - mapIconography.individualContributors.length;
+			}
+			
+			mappingObj.contributorColours.ids.push(contributor.id);
+			mappingObj.contributorColours.colours.push(mapIconography.individualContributors[count]);
+		}
+		
 		// loop through the list of venues
 		for(var x = 0; x < venues.length; x++) {
 			
@@ -381,7 +402,7 @@ MappingClass.prototype.addContributorData = function(data) {
 			idx = $.inArray(hash, mappingObj.markerData.hashes);
 			
 			if(idx == -1) {
-				// not see this lat / lng before
+				// not seen this lat / lng before
 				obj = new MarkerData();
 				obj.contributors.push(contributor);
 				obj.latitude  = venues[x].latitude;
@@ -432,6 +453,21 @@ MappingClass.prototype.addOrganisationData = function(data) {
 		// get the contributor information and list of venes
 		organisation = data[i].extra[0];
 		venues       = data[i].venues;
+		
+		// have we assigned a colour to this contributor before?
+		idx = $.inArray(organisation.id, mappingObj.organisationColours.ids);
+		
+		if(idx == -1) {
+			// no we haven't
+			var count = mappingObj.organisationColours.ids.length;
+			
+			while(count > mapIconography.individualOrganisations.length) {
+				count = count - mapIconography.individualOrganisations.length;
+			}
+			
+			mappingObj.organisationColours.ids.push(organisation.id);
+			mappingObj.organisationColours.colours.push(mapIconography.individualOrganisations[count]);
+		}
 		
 		// loop through the list of venues
 		for(var x = 0; x < venues.length; x++) {
