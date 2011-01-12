@@ -23,7 +23,8 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.filter.js"></script>	
 	<script type="text/javascript" src="assets/javascript/libraries/exclusivecheck.jquery.min.js"></script>		
 		
-    <script type="text/javascript" src="assets/javascript/networkExampleBasic.js"></script> 
+	<script type="text/javascript" src="assets/javascript/networkExampleBasic.js"></script>
+        <!--<script type="text/javascript" src="assets/javascript/test.js"></script>  -->
 	<!-- helper files -->
     <script type="text/javascript" src="assets/javascript/network-ui-event.js"></script>   
 
@@ -32,6 +33,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.filter.css" />	
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
 	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/tabs-accordion.css" />	
     
     <!-- Google Analytics Script -->
 <script type="text/javascript">
@@ -52,6 +54,10 @@
 </head>
 
 <body>
+
+<!--hidden container, used to measure the visual length of a string. Used to create the background for contributor labels-->
+<span id="ruler"></span>
+
 <div id="wrap">
 
 
@@ -71,20 +77,38 @@
 	  	  	  </form>
 		</div>
 
+
+
+
+
+
 		<div id="network_details_div">
-			<ul id="selected_details">
-			</ul>
 	
-			<ul id="network_details">
-			</ul>
+			<!--Legend/ info window for the network -->
+			<div class="accordion">
+				<h2><a href="#" id="selected_object"></a></h2>
+				<div class="pane" id="related_objects"></div>
+			</div>
 		</div>
+		<div id="network_properties_div">
+			<!--Network properties will always display. -->						
+			<div class="accordion">
+				<h2><a href="#" id="network_properties_header">Network Properties</a></h2>
+				<div class="pane" id="network_properties" >
+				</div>
+			</div>
+		</div>		
+
+
+							
 		<br>
+		
 		<div id="display_labels_div">
 			<input type="checkbox" name="showContributors" class="checkbox" id="show_contrib_check" />
 			<label for="showContributors">Show contributor names</label>
-			
+			<br>
 			<input type="checkbox" name="showEvents" class="checkbox" id="show_event_check" />
-			<label for="showEventss">Show event names</label>
+			<label for="showEvents">Show event names</label>
 
 		</div>
 		<br>
@@ -108,33 +132,7 @@
 
 
 		<div id="advanced_search_div">
-			<div id="date_range_div" align=right>
 
-				<form name="dateRanges">
-					<table width = 100%>
-						<tr>
-							<td colspan=2>
-							<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
-							<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
-							<select name="startDate" id="startDate">
-							</select>
-							<select name="endDate" id="endDate">
-							</select>	
-							</td>
-						</tr>
-						<tr>
-						<!-- little hack to space out the information nicer. Hopefully I'll find a better way to do this.-->
-						<td colspan=2>&nbsp</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td><input type="submit" name="submit" class="button" id="refresh_date_btn" value="Refresh" /></td>
-						</tr>					
-
-					</table>												
-				</form>
-			</div>
-			
 			<div id="faceted_browsing_div" Title="Faceted Browsing">
 				<form id = "faceted_browsing">
 				<!--faceted browsing options go here -->
