@@ -78,7 +78,7 @@ function MappingClass() {
 	
 	// variables to hold the x / y offset constants for computing the placement pointer on a marker
 	this.POINTER_X_OFFSET = 16;
-	this.POINTER_Y_OFFSET = 68;
+	this.POINTER_Y_OFFSET = 60;
 	
 	// variables to hold the colours of individual contributors
 	this.contributorColours  = {ids: [], colours: []};
@@ -242,7 +242,7 @@ MappingClass.prototype.buildIconography = function(data) {
 			cellColour = mapIconography.organisationColours[4];
 		}
 		
-		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.organisation +'"/></td>';
+		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.organisation +'" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
 	}
 	
 	if(data.venues.length > 0) {
