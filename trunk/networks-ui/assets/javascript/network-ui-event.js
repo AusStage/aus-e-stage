@@ -1,23 +1,10 @@
 /*
 things to fix.
 
+to do -
+										
 
-
-- contributor info panel :  role
-
-- event info panel : add - full list of contributors (color coded if not in the graph)
-
-- proper 2nd degree network
-- arc diagram
-
-- window resize. - not playing nice with pan and zoom.
-- pan and zoom not playing nice either.
-
-LOOK AT - if PAN then Zoom, everything recentres
-			if PAN then RESIZE everything moves incorrectly.
-
-
-
+3. window resize/ pan and zoom - revisit the logic. May need to tidy and start again. is not performing all that well.
 
 
 */
@@ -37,8 +24,10 @@ var timeLine;
 var yAxis;
 
 /* sizing. */
-var w = $(window).width() - 220,
+var w = $(window).width() - 230,
 	h = $(window).height() - 112;  	//height of the focus panel
+
+var yh = h;
     
 /* constants */    
 var EDGE = "edge";
@@ -53,6 +42,10 @@ var panelColor = "white";
 
 var thickLine = 3;
 var thinLine = 1.5;
+
+var fontHeight = 9;
+var largeFont = "8 pt sans-serif";
+var smallFont = "6 pt sans-serif";
 
 var hoverEdge = "rgba(105, 105, 105, 0.5)";			//slate grey
 var hoverText = "rgba(105, 105, 105, 0.5)";			//slate grey
@@ -96,9 +89,6 @@ var highlightNode = "blue";
 var highlightNodeBorder = "blue";
 var highlightText = "blue";
 
-//DATE RANGE
-var outOfDateEdge = "rgba(170,170,170,0.05)";
-var outOfDateNode = "rgba(170,170,170,0.1)";
     
 //-------------------END COLOR SCHEME  
 
@@ -130,29 +120,38 @@ var afterCount = 0;
 
 
 
-/*page setup operations
-==================================================
-*/
-//setup 
+/*PAGE SETUP OPERATIONS
+=======================================================================================================================
+=======================================================================================================================*/
+
+
 $(document).ready(function() {
+	$("#ruler").hide();
+
+	//set up accordion legend and hide it
+	$(function() {
+		$( ".accordion" ).accordion({collapsible: true,
+									 clearStyle: true,
+									 active: false});
+	});
+
+	$("#network_details_div").hide();
+	$("#network_properties_div").hide();	
+	
 	// style the buttons
 	$("button, input:submit").button();
-	
-	
+		
 	//deal with window resizing	
 	$(window).resize(function() {
 	  windowResized();
 	});
-		
-	//hide the interaction elements		
-	//hide the date range
-	$("select#startDate").hide();
-	$("select#endDate").hide();
-	$("#date_range_div").hide();
+			
 	//hide the show labels checkboxes
 	$("#display_labels_div").hide();
+	
 	//hide the faceted browsing button
 	$("#faceted_browsing_btn_div").hide();
+	
 	//hide the faceted browsing
 	$("#faceted_browsing_div").hide();
 	
@@ -213,11 +212,6 @@ $(document).ready(function() {
      	return false;
     });
     
-    //set up refresh button
-    $("#refresh_date_btn").click(function() {
-	    return false;
-    });
-
     //set up browsing button
     $("#faceted_browsing_btn").click(function() {
 	    return false;
@@ -266,10 +260,7 @@ $(document).ready(function() {
     	else showEvents = false;
     	vis.render();
 	}); 
-	
-	
-	
-    
+	    
 });
 
 
@@ -277,14 +268,16 @@ $(document).ready(function() {
 function showInteraction(){
 	
 		$("#display_labels_div").show();	
+		$("#network_properties_div").show();	
 
 }
 
 
 
 /*helper functions. Perform basic functions used regularly
-==========================================================
-*/
+====================================================================================================================
+====================================================================================================================*/
+
 //quick function to check if an array contains a property	
 function contains(a, obj){
 	for(var i = 0; i < a.length; i++) {
@@ -295,6 +288,16 @@ function contains(a, obj){
   	return false;
 }
 
+
+//text measurememnt function to allow for solid backgrounds on labels.
+function measureText(pText) {
+
+ $("#ruler").empty(); 
+ $("#ruler").append(pText);
+ return $("#ruler").width();
+ 
+}
+
 //NOT REQUIRED - AT PRESENT
 //get angle of a line given two x and y points.
 /*function getAngle(source, target){
@@ -302,7 +305,6 @@ function contains(a, obj){
 	return ((Math.atan2(target.bottom - source.bottom, target.left - source.left))/(2*Math.PI))*360;
 
 }
-
 
 //using the angle, determine which axis should be modified for parallel lines
 function chooseAxis(angle){
@@ -352,6 +354,7 @@ events.nodes
 	
 			.left				//x position
 			.bottom				//y position
+			.bottomPlaceholder	//hack to allow window resizing. Performs as startDate in the positioning of nodes
 			.linkDegreeTarget	//count of all links that have this node as target
 			.linkDegreeSource	//count of all links that have this node as source					
 			.contributor_id [] 	//generated array of all contributors associated with this event. within this network
@@ -475,11 +478,11 @@ function prepareData(){
 
 	/*create the scale for the x and y axis*/
 	timeLine = pv.Scale.linear(startDate, endDate).range(50,w-50);
-	yAxis = pv.Scale.linear(0, events.nodes.length).range(0,h-50);
+	yAxis = pv.Scale.linear(0, yh).range(0,h);
 	 
-	layout(); //layou system for nodes
+	layout(); //layout system for nodes
 	
-	//////////////////
+
 	//get count of duplicate lines AND add x and y position of source and target nodes. 
 	var tempArray = [];
 	//loop through the edges.
@@ -548,14 +551,13 @@ function prepareData(){
 
 
 
-/* display functions. Update/alter or load the graph
-==========================================================
-*/
+/* DISPLAY FUNCTIONS - UPDATE/ALTER or LOAD THE GRAPH
+====================================================================================================================
+====================================================================================================================*/
 
 function showGraph(targetDiv){
 
-
-	
+	//format the retrieved data so it can be graphed
 	prepareData();
 
 	/* Root panel. */
@@ -563,9 +565,6 @@ function showGraph(targetDiv){
 	   .width(function(){return w})
  	   .height(function(){return h})
  	   .bottom(20)
- 	   //.left(30)
- 	   //.right(20)
- 	   //.top(5)
  	   .fillStyle(panelColor)
 ;
 
@@ -577,7 +576,6 @@ function showGraph(targetDiv){
 			.anchor("bottom").add(pv.Label)
 	    	.text(timeLine.tickFormat);
 
-	/* Y-axis ticks. */
 	vis.add(pv.Rule)
 	    .bottom(0)
 	    .strokeStyle("#aaa");
@@ -602,13 +600,11 @@ function showGraph(targetDiv){
 	/* ===================================== */
 	for (i=0;i<events.edges.length;i++){
 		
-		//var angle =	getAngle(events.edges[i].sourceInfo, events.edges[i].targetInfo);
-		
 		focus.add(pv.Line)
 	        .strokeStyle(function(d){return getEdgeStyle(d.edgeInfo)})
 	        .lineWidth(function(d){return getLineWidth(d.edgeInfo)}) 
 			.data([events.edges[i].sourceInfo, events.edges[i].targetInfo])
-			.bottom(function(d){
+			.bottom(function(d){ 
 				if (d.edgeInfo.count == 1)  
 					{return d.bottom} 
 				else { 
@@ -634,10 +630,10 @@ function showGraph(targetDiv){
 			.event("mouseout", function(d) {	edgeIndexPoint = -1;
 												edgeIdPoint = -1;
 												pointingAt = "";
-	  							 				return focus;})    	    	  							 			  	
-	  							 										 
-			.add(pv.Label)
- 				.bottom(function(d) { if (d.edgeInfo.count == 1){ 
+	  							 				return focus;})   
+	  		/****************/  						 										    
+	  		.add(pv.Bar)
+	  			.bottom(function(d) { if (d.edgeInfo.count == 1){ 
  									  	return d.bottom+ ((d.toBottom - d.bottom)/2)
  									  } else{
 											if(isEven(d.edgeInfo.count)){
@@ -649,7 +645,43 @@ function showGraph(targetDiv){
  					})
  					
 				.left(function(d) { return d.left + ((d.toLeft - d.left)/2)})
-				.textStyle(function(d){return getEdgeTextStyle(d.edgeInfo)})
+				.width(function(d){ return measureText(d.edgeInfo.name)* Math.pow(this.scale,-0.75)})
+				.height(function(){ return fontHeight* Math.pow(this.scale,-0.75)})
+				.fillStyle(function(d){return getEdgeTextStyle(d.edgeInfo)})
+				.strokeStyle(function(d){return getEdgeTextStyle(d.edgeInfo)})
+				.visible(function(d) {return isVisible(d.edgeInfo, EDGE, this)})
+				.event("click", function(d) {onClick(d, EDGE, this); 
+											 return focus;})
+				.event("mouseover", function(d) {	edgeIndexPoint = d.edgeInfo.index;
+													edgeIdPoint = d.edgeInfo.id;
+													pointingAt = EDGE;
+	  								 				return focus;})    	    
+
+				.event("mouseout", function(d) {	edgeIndexPoint = -1;
+													edgeIdPoint = -1;
+													pointingAt = "";
+	  								 				return focus;})   
+										 
+	  		 	//add the label to the box
+	  			.anchor() 
+				.add(pv.Label)
+
+/* 				.bottom(function(d) {if (d.edgeInfo.count == 1){ 
+ 									  	return d.bottom+ ((d.toBottom - d.bottom)/2)
+ 									  } else{
+											if(isEven(d.edgeInfo.count)){
+								return d.bottom + ((d.toBottom - d.bottom)/2)+((((d.edgeInfo.count)/2)*9)* Math.pow(this.scale, -0.75))
+											} else {
+								return d.bottom + ((d.toBottom - d.bottom)/2)-((((d.edgeInfo.count-1)/2)*9)* Math.pow(this.scale, -0.75))
+											}  	
+ 									  }
+ 					})
+ 					
+				.left(function(d) { return d.left + ((d.toLeft - d.left)/2)}) */
+				
+				.textStyle("white")
+				//.textStyle(function(d){return getEdgeTextStyle(d.edgeInfo)})
+				.font(function(d){return getFont(d.edgeInfo, EDGE, this)})
 				.visible(function(d) {return isVisible(d.edgeInfo, EDGE, this)})
 				.text(function(d) {return d.edgeInfo.name})														
 			;
@@ -665,8 +697,8 @@ function showGraph(targetDiv){
 		.data(events.nodes)
 		.fillStyle(function(d) {return getNodeFill(d, this)})
 		.strokeStyle(function(d) {return getNodeStroke(d, this)})
-//		.size(function(d){return (((d.linkDegreeSource + d.linkDegreeTarget) * 10)+30) * Math.pow(this.scale, -1.5)})		
-		.size(function(d){return Math.pow(((d.linkDegreeSource + d.linkDegreeTarget)*2), 2)+30})	
+		.lineWidth(function(d) {return getNodeLineWidth(d, this)})	
+		.size(function(d){return Math.pow(((d.linkDegreeSource + d.linkDegreeTarget)*2), 2)* Math.pow(this.scale, -2) })	
 		.left(function (d){ return d.left})
 		.bottom(function(d){ return d.bottom})
 	    
@@ -687,6 +719,7 @@ function showGraph(targetDiv){
 	  							 			  
 		.anchor("top").add(pv.Label)
 			.text(function(d){ return d.nodeName})
+			.font(function(d){ return getFont(d, NODE, this)})
 			.textStyle(function(d){return getNodeTextStyle(d, this)})
 			.visible(function(d){return isVisible(d, NODE, this)});
    
@@ -709,8 +742,13 @@ function showGraph(targetDiv){
 //very simple layout system. Assuming nodes are in order, alternate up and down on the baseline, 
 //expanding to the central node then contract.
 
-
-//NEED TO - alter layout, position should also take into account link degree, and move towards the centre based on how linked it is.
+/*
+NEW LAYOUT POSSIBILITY
+- as is, BUT
+if nodelinkdegree > previous, 
+		.bottom = step*new variable
+		new variable ++
+*/
 function layout(){
 
 	var step;
@@ -722,23 +760,46 @@ function layout(){
 	var alternate = 0;
 	var before = true;
 	var afterIndex = 2;
+	var linkDegree = 0;
+	var x = 1;
 	
 	for(i = 0;i<events.nodes.length; i ++){
-
+		
+		
 		if (events.nodes[i].central){
+			events.nodes[i].bottomPlaceholder = h/2;
 			events.nodes[i].bottom = h/2;
+			
 			events.nodes[i].left = timeLine(events.nodes[i].startDate);
 			before = false;
 		}
 	
 		if (before){
 			switch (alternate){
-				case 0: events.nodes[i].bottom = h/2 - (step*i);
-						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
-	        			alternate = 1;
+				case 0: 
+						if(linkDegree < events.nodes[i].linkDegreeSource+events.nodes[i].linkDegreeTarget){
+							events.nodes[i].bottom = h/2 - (step*x);
+							events.nodes[i].bottomPlaceholder = h/2 - (step*x);							
+							x++;
+						}
+						else{
+							events.nodes[i].bottom = h/2 - (step*i);
+							events.nodes[i].bottomPlaceholder = h/2 - (step*i);							
+						}
+							events.nodes[i].left = timeLine(events.nodes[i].startDate); 
+	        				alternate = 1;
 	        			break;
 	        				
-				case 1: events.nodes[i].bottom = h/2 + (step*i);
+				case 1: 
+						if(linkDegree < events.nodes[i].linkDegreeSource+events.nodes[i].linkDegreeTarget){
+							events.nodes[i].bottom = h/2 + (step*x);
+							events.nodes[i].bottomPlaceholder = h/2 + (step*x);							
+							x++;
+						}
+						else{
+							events.nodes[i].bottom = h/2 + (step*i);
+							events.nodes[i].bottomPlaceholder = h/2 + (step*i);							
+						}
 						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
 	    				alternate = 0; 
 						break;
@@ -747,20 +808,40 @@ function layout(){
 	    
 		if (!before && (!events.nodes[i].central)){
 			switch (alternate){
-				case 0: events.nodes[i].bottom = h/2 - (step*(i-afterIndex));
+				case 0: 
+						if(linkDegree < events.nodes[i].linkDegreeSource+events.nodes[i].linkDegreeTarget){
+							events.nodes[i].bottom = h/2 - (step*(x-afterIndex));
+							events.nodes[i].bottomPlaceholder = h/2 - (step*(x-afterIndex));							
+							x++;
+						}
+						else{						
+							events.nodes[i].bottom = h/2 - (step*(i-afterIndex));
+							events.nodes[i].bottomPlaceholder = h/2 - (step*(i-afterIndex));							
+						}
 						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
 		        		alternate = 1;
 		        		afterIndex = afterIndex + 2;
 		        		break;
 		        				
-				case 1: events.nodes[i].bottom = h/2 + (step*afterIndex);
+				case 1: 
+						if(linkDegree < events.nodes[i].linkDegreeSource+events.nodes[i].linkDegreeTarget){
+							events.nodes[i].bottom = h/2 + (step*(x-afterIndex));
+							events.nodes[i].bottomPlaceholder = h/2 + (step*(x-afterIndex));							
+							x++;
+						}
+						else{				
+							events.nodes[i].bottom = h/2 + (step*(i-afterIndex));
+							events.nodes[i].bottomPlaceholder = h/2 + (step*(i-afterIndex));							
+						}
 						events.nodes[i].left = timeLine(events.nodes[i].startDate); 
 		    			alternate = 0;
 		        		afterIndex = afterIndex + 2;
 						break;
 			}	
 		}
-
+		
+		linkDegree = events.nodes[i].linkDegreeTarget + events.nodes[i].linkDegreeSource;
+		
 	}	
 }
 
@@ -819,10 +900,6 @@ function getEdgeTextStyle(d){
 	if (d.source == nodeIndex || d.target == nodeIndex){
 		return relatedText;
 	}
-	
-	if (d.id == edgeIdPoint){
-		return relatedText;
-	}
 
 			
 //	else
@@ -876,6 +953,22 @@ function getNodeStroke(d, p){
 	
 }
 
+//determine the NODE outline width
+function getNodeLineWidth(d, p){
+	
+	if (p.index == nodeIndexPoint){	//if current node index == index of object selected.
+		return thickLine;
+	}
+	if (p.index == nodeIndex){		//if current node index == index of object selected
+		return thickLine;
+	}
+	if (contains(d.contributor_id, edgeId)){	//if selected contributor has passed through this node
+		return thickLine;
+	}
+	else return thinLine;
+
+	
+}
 
 //function to determine NODE outline
 function getNodeTextStyle(d, p){
@@ -905,6 +998,7 @@ function isVisible(d, what, p){
 	
 	//for edges
 	if (what == EDGE){
+		if (d.name == ""){return false;}
 		
 		if (showContributors){return true;}
 		
@@ -938,6 +1032,45 @@ function isVisible(d, what, p){
 	
 	return false;
 	 
+}
+
+
+function getFont(d, what, p){
+	
+	//for edges
+	if (what == EDGE){
+		
+		if(d.index == edgeIndexPoint){	//if current edge index == index of the object being pointed at.
+			return largeFont;	
+		}
+		
+		if(d.index == edgeIndex){	//if current edge index == index of object selected.
+			return largeFont;
+		}
+		else
+			return smallFont;		
+	}
+	
+	//for Nodes
+	if (what == NODE){	
+				
+		if (p.index == nodeIndexPoint){	//if current node index == index of object selected.
+			return largeFont;
+		}
+		if (p.index == nodeIndex){		//if current node index == index of object selected
+			return largeFont;
+		}
+		if (contains(d.contributor_id, edgeId)){	//if selected contributor has passed through this node
+			return largeFont;
+		}
+		else 
+			return smallFont;
+	}	    
+	else
+	
+	return smallFont;
+
+
 }
 
 
@@ -983,7 +1116,8 @@ function onClick(d, what, p){
 function dragNode(d, p){
 	
 	var y = focus.mouse().y;		//get mouse positions
-	d.bottom = h-y;				//update the node position
+	d.bottom = h-y;					//update the node position
+	d.bottomPlaceholder = h-y;		//update the placeholder for window resizing
 
 	for(var i = 0; i < events.edges.length; i++){
 		if (events.edges[i].source == p.index){
@@ -1008,21 +1142,22 @@ function windowResized(){
 	   var t = focus.transform().invert();  	//get mouse position and scale 	
 		  
 	  //reset the width and height
-	  w = $(window).width() - 220;
+	  w = $(window).width() - 230;
 	  h = $(window).height() - 112;
 	  
 	  //reset the timeline range accordingly
 	  timeLine.range(50,w-50);
+	  yAxis.range(0, h);
+
 	  
 	  //reset the positioning of nodes accordingly.
 	  for (var i = 0; i< events.nodes.length; i++){
 		  events.nodes[i].left = t.x + timeLine(events.nodes[i].startDate) * t.k ;	
+		 
+		  events.nodes[i].bottom = -t.y + yAxis(events.nodes[i].bottomPlaceholder) * t.k;	
+		 
 	  }
 
-
-
-
-	//  layout();
 	  	  
 	  //reset the position of links accordingly.
 	  for(var i = 0; i < events.edges.length; i++){
@@ -1033,7 +1168,9 @@ function windowResized(){
 		events.edges[i].sourceInfo.left = events.nodes[events.edges[i].source].left;
 		events.edges[i].sourceInfo.toLeft = events.nodes[events.edges[i].target].left;		
 	 	events.edges[i].targetInfo.bottom = events.nodes[events.edges[i].target].bottom;
+	 	events.edges[i].targetInfo.toBottom = events.nodes[events.edges[i].source].bottom;
 		events.edges[i].sourceInfo.bottom = events.nodes[events.edges[i].source].bottom;	  		  	
+		events.edges[i].sourceInfo.toBottom = events.nodes[events.edges[i].target].bottom;	  		  	
 	  }
 
 	  vis.render();
@@ -1045,25 +1182,41 @@ function windowResized(){
 function transform() {
 
   var t = focus.transform().invert();  	//get mouse position and scale 
+ 
+  var start = timeLine(startDate);	//convert startDate to scale 
+  
+  var end = timeLine(endDate);		//convert endDate to scale 
+  
+  dragIndicator = true;				//small hack - make sure that if dragged, the onClick function isn't processed as well.
+  
+  start = timeLine.invert(t.x + start *t.k);		//convert back to date (x position + domain * scale magnitude)
+  end = timeLine.invert(t.x + end * t.k);			
+
+  timeLine.domain(start, end);			//alter the domain
+  	
+  vis.render();
+
+/*
+  var t = focus.transform().invert();  	//get mouse position and scale 
   var start = timeLine(startDate);	//convert startDate to scale 
   var end = timeLine(endDate);		//convert endDate to scale 
   
-  var yStart = 0;
-  var yEnd = h-50;
+  var yStart = yAxis(0);
+  var yEnd = yAxis(yh);
 
   dragIndicator = true;				//small hack - make sure that if dragged, the onClick function isn't processed as well.
   
   start = timeLine.invert(t.x + start *t.k);		//convert back to date (x position + domain * scale magnitude)
   end = timeLine.invert(t.x + end * t.k);			
-  
-  tStart = yAxis.invert(t.y + yStart * t.k);
-  tEnd = yAxis.invert(t.y + yEnd * t.k);
-  
+
+  yStart = yAxis.invert(-t.y + yStart *t.k);		//convert back to date (x position + domain * scale magnitude)
+  yEnd = yAxis.invert(-t.y + yEnd * t.k);			
+    
   timeLine.domain(start, end);			//alter the domain
-  yAxis.domain(yStart, yEnd);
-
+  yAxis.domain(yStart, yEnd);			//alter the domain  
+	
   vis.render();
-
+*/
 }
 
 
@@ -1077,16 +1230,16 @@ function displayNetworkProperties(){
 		var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 		
 
 	
-	    var html = 	"<br><table style=\"border-bottom: grey 1px solid; border-top:grey 1px solid;\" >"+
-	    			"<tr><td colspan=2> <h3> Network Properties </h3></td> </tr>"+
-	  				"<tr><td valign=top><b> Centre:</b><br> "+    				
-						events.nodes[centreNode].nodeName+" ("+events.nodes[centreNode].id+")"+
-    				"</a></td></tr>"+
-    				"<tr><td><b>Events:</b></td><td> "+events.nodes.length+"</td></tr>"+					
-					"<tr><td><b>Contributors:</b> </td><td>"+contributorCount+"</td></tr>";
+	    var html = 	"<table>"+
+	  				"<tr class=\"d0\"><td valign=top><b> Centre:</b></td><td>"+
+	  				"<a href=" + eventUrl +""+ events.nodes[centreNode].id+" target=\"_blank\">"+	
+	  				events.nodes[centreNode].nodeName+" ("+events.nodes[centreNode].id+")<br>"+
+    				"</a> "+events.nodes[centreNode].venue+"</td></tr>"+
+    				"<tr class=\"d1\"><td><b>Events:</b></td><td> "+events.nodes.length+"</td></tr>"+					
+					"<tr class=\"d0\"><td><b>Contributors:</b> </td><td>"+contributorCount+"</td></tr></table>";
     ;				
- 		$("#network_details").empty();
-		$("#network_details").append(html);
+ 		$("#network_properties").empty();
+		$("#network_properties").append(html);
 	
 		
 		
@@ -1099,53 +1252,64 @@ function displayPanelInfo(what){
 	
 	var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 
 	var contributorUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id="
-	var html = "<br><table style=\"border-bottom: grey 1px solid; border-top:grey 1px solid;\" >";
+	var titleHtml = ""
+	var html = "<table width=100%>";
 	var dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
+	var tableClass = "";
 	
 	var contributorList = "";
 	var eventList = [];
 	
 	//clear the info panel
-	$("#selected_details").empty();
+	$("#selected_object").empty();
+	$("#related_objects").empty();
 	
-	if (what == CLEAR){html = " ";}
+	if (what == CLEAR){	html = " ";
+						$("#network_details_div").hide();
+	}else{
+		$("#network_details_div").show();
+	}
+			
 	
-	//***************
+	//***************/
 	//NODE
 	if (what == NODE){
+
+		//set the title to the event.
+		titleHtml = events.nodes[nodeIndex].nodeName+" <p>"+
+    				events.nodes[nodeIndex].venue+" "+			//venue
+    				dateFormat(events.nodes[nodeIndex].startDate)+"</p>";
 		
+		//create the list of contributors
 		for(i = 0; i < events.nodes[nodeIndex].contributor_name.length; i++){
-			contributorList += "<a href=" + contributorUrl +""+ events.nodes[nodeIndex].contributor_id[i]+" target=\"_blank\">"+
-								events.nodes[nodeIndex].contributor_name[i] +" ("+events.nodes[nodeIndex].contributor_id[i]+")</a><br>" 	
+			if(isEven(i)) tableClass = "d0";
+			 else tableClass = "d1";
+			contributorList += "<tr class=\""+tableClass+"\"><td><a href=" + contributorUrl +""+ events.nodes[nodeIndex].contributor_id[i]+" target=\"_blank\">"+
+								events.nodes[nodeIndex].contributor_name[i] +"</a>"+
+								"<p>"+"Role Not Yet Supported"+"</p></td></tr>" 	
 		}
 	  
-		html += "<tr><td colspan=2>"+ 
-    			"<a href="+eventUrl+""+events.nodes[nodeIndex].id+" target=\"_blank\"><b>"+
-    			events.nodes[nodeIndex].nodeName+"</b></a>"+
-    			"</td></tr>"+																//name of event link to ausstage
-    			"<tr><td><b>Venue:</b> "+events.nodes[nodeIndex].venue+"</td></tr>"+			//venue
-    			"<tr><td valign=top>"+
-    			"<b>First Date: </b>"+												//list of contributors as link
-    			dateFormat(events.nodes[nodeIndex].startDate)+"</td></tr>"+
-    			"<tr><td valign=top>"+
-    			"<b>Contributors (in network): </b><br>"+												//list of contributors as link
-    			contributorList+"</td></tr>"+
-    			"</table>";	  
+		html += contributorList+
+    			"</table><br>";	  
 	}
-	
-	
-	//***************
+
+	//***************/
 	//EDGE
 	if (what == EDGE){
-		
 	
-	var x = 0;
+		titleHtml = events.edges[edgeIndex].name+" <p>"+
+    				events.edges[edgeIndex].role+			
+					"</p>";		
 	
-			//create the list of events
-				for(i = 0; i < events.nodes.length; i++){
+		var x = 0;
+	
+		//create the list of events
+			for(i = 0; i < events.nodes.length; i++){
 					if (contains(events.nodes[i].contributor_id, edgeId)){
 						eventList[x] = {event:"<a href=" + eventUrl +""+ events.nodes[i].id+" target=\"_blank\">"+
-										events.nodes[i].nodeName+" ("+events.nodes[i].id+")</a><br>"
+										events.nodes[i].nodeName+"</a><p>"+
+										events.nodes[i].venue+" "+
+										dateFormat(events.nodes[i].startDate)+"</p>"
 						, startDate:events.nodes[i].startDate};
 						x++;
 					}
@@ -1154,20 +1318,18 @@ function displayPanelInfo(what){
 				eventList.sort(function(a, b){return a.startDate - b.startDate})		
 				
 		//create the html to display the info.
-		html += "<tr><td colspan=2>"+ 
-    			"<a href="+contributorUrl+""+edgeId+" target=\"_blank\"><b>"+
-    			events.edges[edgeIndex].name + " (" + events.edges[edgeIndex].id+ ") " +	 "</b></a>"+
-    			"</td></tr>"+																//name of event link to ausstage
-    			"<tr><td valign=top>"+
-    			"<b>Events (in network): </b><br>";
     	for( i = 0;i<eventList.length; i++ ){
-    		html += eventList[i].event
+    		if(isEven(i)) tableClass = "d0";
+			else tableClass = "d1";
+			
+    		html += "<tr class=\""+tableClass+"\"><td>"+eventList[i].event+"</td></tr>"
     	}
     	
-    	html+= "</td></tr></table>";
+    	html+= "</table><br>";
 		
 	}
-
-	$("#selected_details").append(html);    		
+	
+	$("#selected_object").append(titleHtml);    		
+	$("#related_objects").append(html);    		
 
 }
