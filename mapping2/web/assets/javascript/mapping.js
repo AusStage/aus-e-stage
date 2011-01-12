@@ -718,7 +718,45 @@ MappingClass.prototype.addMarkerClickEvent = function() {
 // respond to click events on icons
 MappingClass.prototype.iconClick = function(event) {
 
+	// split the id of this icon into it's component parts
+	var tokens = this.id.split('-');
+	
+	// get the markerData object for this location
+	var idx = $.inArray(tokens[2], mappingObj.markerData.hashes);
+	var data = mappingObj.markerData.objects[idx];
+	
+	// determine what type of icon this is
+	if(tokens[1] == 'contributor') {
+		// this is a contributor icon
+	} else if(tokens[1] == 'organisation') {
+		// this is a organisation icon
+	} else if(tokens[1] == 'venue') {
+		// this is a venue icon
+		var ids = '';
+		for(var i = 0; i < data.venues.length; i++) {
+			ids += data.venues[i].id + ",";
+		}
+		
+		ids = ids.substring(0, ids.length - 1);
+
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(data.latitude, data.longitude),
+			map:      mappingObj.map,
+			visible:  false
+		});
+		
+		var content = '<div class="infoWindowContent">' + buildInfoMsgBox('Loading venue information, please wait...') + '</div>';
+		
+		var infoWindow = new google.maps.InfoWindow({
+			content: content
+		});
+		
+		infoWindow.open(mappingObj.map, marker);
+	} else {
+		// this is a event icon
+	}
+
 	//debug code
-	console.log("###" + this.id);
+	console.log(ids);
 
 }
