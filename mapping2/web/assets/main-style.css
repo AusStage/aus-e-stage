@@ -279,6 +279,8 @@ th.numeric {
 	border-width: 0px;
 	border-spacing: 0px;
 	border-collapse: collapse;
+	padding: 0px;
+	margin: 0px;
 }
 
 .mapIconNum {
@@ -287,8 +289,16 @@ th.numeric {
 }
 
 .mapIconImg {
-	width: 33px;
-	height: 33px;
+	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.mapIconImg img {
+	display: block;
+	padding: 0px;
+	margin: 0px;
 }
 
 .mapIconImg2 {
