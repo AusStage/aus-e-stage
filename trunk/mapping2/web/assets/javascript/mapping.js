@@ -121,6 +121,9 @@ MappingClass.prototype.initMap = function() {
 	
 	mappingObj.map.mapTypes.set('ausstage', ausstageStyle);
 	mappingObj.map.setMapTypeId('ausstage');
+	
+	// add a function to the idle event to ensure markers get events added to them
+	google.maps.event.addListener(mappingObj.map, 'idle', mappingObj.addMarkerClickEvent);
 
 }
 
@@ -222,7 +225,7 @@ MappingClass.prototype.buildIconography = function(data) {
 			cellColour = mapIconography.contributorColours[4];
 		}
 		
-		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.contributor +'"/></td>';
+		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-contributor-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.contributor + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
 	}
 	
 	if(data.organisations.length > 0) {
@@ -242,7 +245,7 @@ MappingClass.prototype.buildIconography = function(data) {
 			cellColour = mapIconography.organisationColours[4];
 		}
 		
-		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.organisation +'" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
+		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-organisation-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
 	}
 	
 	if(data.venues.length > 0) {
@@ -259,7 +262,7 @@ MappingClass.prototype.buildIconography = function(data) {
 			cellColour = mapIconography.venueColours[4];
 		}
 		
-		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.venue +'"/></td>';
+		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-venue-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
 	}
 	
 	if(data.events.length > 0) {
@@ -276,7 +279,7 @@ MappingClass.prototype.buildIconography = function(data) {
 			cellColour = mapIconography.eventColours[4];
 		}
 		
-		cells += '<td class="' + cellColour + ' mapIconImg"><img src="' + mapIconography.event +'"/></td>';
+		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-event-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
 	}
 	
 	// start to build the table for venue data	
@@ -582,6 +585,7 @@ MappingClass.prototype.computeLatLngHash = function(latitude, longitude) {
 	var lng = parseFloat(longitude);
 	var latlngHash = (lat.toFixed(6) + "" + lng.toFixed(6));
 	latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
+	latlngHash     = latlngHash.replace(".","").replace(",", "").replace("-","");
 	return latlngHash;
 }
 
@@ -628,6 +632,11 @@ MappingClass.prototype.resizeMap = function() {
 		mapDiv.width(mappingObj.computeMapWidth());
 	
 		google.maps.event.trigger(mappingObj.map, 'resize');
+		
+		// manually trigger an idle event
+		var zoom = mappingObj.map.getZoom();
+		mappingObj.map.setZoom(zoom - 1);
+		mappingObj.map.setZoom(zoom);
 		//mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
 	} else {
 		mappingObj.initMap();
@@ -690,4 +699,26 @@ MappingClass.prototype.buildIconographyHelp = function() {
 	}
 	
 	$("#map_iconography_individual_colours").empty().append(rows);
+}
+
+// define a function to add the click event to the marker components 
+MappingClass.prototype.addMarkerClickEvent = function() {
+
+	// get all of the individual icons by class
+	$('.mapIconImgImg').each(function() {
+		var icon = $(this);
+		
+		if(icon.hasClass('mapIconImgImgEvnt') == false) {
+			icon.click(mappingObj.iconClick);
+			icon.addClass('mapIconImgImgEvnt');
+		}
+	});
+}
+
+// respond to click events on icons
+MappingClass.prototype.iconClick = function(event) {
+
+	//debug code
+	console.log("###" + this.id);
+
 }
