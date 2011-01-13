@@ -148,12 +148,13 @@ public class MarkerManager {
 		sqlParameters[1] = sqlParameters[1].toLowerCase();
 		
 		// build the SQL
-		String sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				   + "FROM venue v, states s "
+		String sql = "SELECT DISTINCT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+				   + "FROM venue v, states s, events e "
 				   + "WHERE v.state = ? "
 				   + "AND LOWER(v.suburb) = ? "
-				   + "AND v.state = s.stateid "
-				   + "AND latitude IS NOT NULL ";
+				   + "AND v.state = s.stateid  "
+				   + "AND v.venueid = e.venueid "
+				   + "AND latitude IS NOT NULL  ";
 		
 		// get the data
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
