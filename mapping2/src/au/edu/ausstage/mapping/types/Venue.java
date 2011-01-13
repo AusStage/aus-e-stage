@@ -39,6 +39,7 @@ public class Venue implements Comparable<Venue>{
 	private String suburb = null;
 	private String state = null;
 	private String postcode = null;
+	private String country = null;
 	private String latitude = null;
 	private String longitude = null;
 	private String url = null;
@@ -98,7 +99,7 @@ public class Venue implements Comparable<Venue>{
 	 * @param longitude the longitude for this venue
 	 * @param url       the URL for this venue in AusStage
 	 */
-	public Venue(String id, String name, String suburb, String state, String postcode, String latitude, String longitude, String url) {
+	public Venue(String id, String name, String suburb, String state, String postcode, String country, String latitude, String longitude, String url) {
 		
 		// check the parameters
 		if(InputUtils.isValid(id) == false || InputUtils.isValid(name) == false || InputUtils.isValid(state) == false) {
@@ -118,6 +119,7 @@ public class Venue implements Comparable<Venue>{
 		this.suburb    = suburb;
 		this.state     = state;
 		this.postcode  = postcode;
+		this.country   = country;
 		this.latitude  = latitude;
 		this.longitude = longitude;
 		this.url       = url;
@@ -476,6 +478,14 @@ public class Venue implements Comparable<Venue>{
 	
 	public void setPostcode(String value) {
 		postcode = value;
+	}
+	
+	public String getCountry() {
+		return country;
+	}
+	
+	public void setCountry(String value) {
+		country = value;
 	}
 	
 	public String getLatitude() {
