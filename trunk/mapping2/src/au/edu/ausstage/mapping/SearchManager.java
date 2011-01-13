@@ -816,13 +816,14 @@ public class SearchManager {
 	private String doVenueIdSearch(String query, String formatType) {
 		
 		// declare the SQL variables
-		String sql = "SELECT venueid, venue_name, street, suburb, state, postcode, latitude, longitude, COUNT(eventid) "
-				   + "FROM (SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, e.eventid "
-				   + "      FROM venue v, states s, events e "
+		String sql = "SELECT venueid, venue_name, street, suburb, state, postcode, countryname, latitude, longitude, COUNT(eventid) "
+				   + "FROM (SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, c.countryname, v.latitude, v.longitude, e.eventid  "
+				   + "      FROM venue v, states s, events e, country c "
 				   + "      WHERE v.venueid = ? "
 				   + "      AND v.state = s.stateid "
+				   + "      AND v.countryid = c.countryid "
 				   + "      AND v.venueid = e.venueid) "
-				   + "GROUP BY venueid, venue_name, street, suburb, state, postcode, latitude, longitude";
+				   + "GROUP BY venueid, venue_name, street, suburb, state, postcode, countryname, latitude, longitude";
 				   
 		// define the paramaters
 		String[] sqlParameters = {query};
@@ -855,9 +856,10 @@ public class SearchManager {
 			venue.setSuburb(resultSet.getString(4));
 			venue.setState(resultSet.getString(5));
 			venue.setPostcode(resultSet.getString(6));
-			venue.setLatitude(resultSet.getString(7));
-			venue.setLongitude(resultSet.getString(8));
-			venue.setEventCount(resultSet.getString(9));
+			venue.setCountry(resultSet.getString(7));
+			venue.setLatitude(resultSet.getString(8));
+			venue.setLongitude(resultSet.getString(9));
+			venue.setEventCount(resultSet.getString(10));
 			venue.setUrl(LinksManager.getVenueLink(resultSet.getString(1)));
 		
 			// add the venue to the list
@@ -935,6 +937,7 @@ public class SearchManager {
 			object.put("state", venue.getState());
 			object.put("suburb", venue.getSuburb());
 			object.put("postcode", venue.getPostcode());
+			object.put("country", venue.getCountry());
 			object.put("latitude", venue.getLatitude());
 			object.put("longitude", venue.getLongitude());
 			object.put("url", venue.getUrl());
