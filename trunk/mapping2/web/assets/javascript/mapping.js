@@ -772,7 +772,7 @@ MappingClass.prototype.iconClick = function(event) {
 		for(var i = 0; i < data.venues.length; i++) {
 	
 			// build the url
-			var url  = BASE_URL + 'lookup?task=venue&id=' + data.venues[i].id;
+			var url  = BASE_URL + 'events?task=venue&id=' + data.venues[i].id;
 		
 			ajaxQueue.add({
 				success: mappingObj.processInfoWindowData,
@@ -797,12 +797,44 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	
 	// build the content
 	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
+	
+		var data = mappingObj.infoWindowData[i];
+		
+		// start the div
+		content += '<div class="infowindow-accordion">';
+		content += '<h3><a href="#">' + data.name + '</a><br/>';
+		content += '<a href="' + data.url +'" target="_ausstage">' + data.street + ', ' + data.suburb;
+		
+		// add the state or country name
+		if(data.country == 'Australia') {
+			content += ', ' + data.state;
+		} else {
+			content += ', ' + data.country;
+		}
+		
+		// finalise the header
+		content += '</a></h3>'
+		
+		// add a list of events
+		content += '<p>Events to go here</p>';
+		
+		// finalise the venue content
+		content += '</div>';
+	}
+	
+/*	
+	// build the content
+	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
 		var obj = mappingObj.infoWindowData[i];
 		
 		content += obj.id + '<br/>';
 	}
+*/
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
+	
+	// setup the accordians
+	$(".infowindow-accordion").accordion({collapsible:true, active:false, autoHeight: false });
 
 }
