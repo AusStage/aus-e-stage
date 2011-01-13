@@ -85,6 +85,9 @@ function MappingClass() {
 	
 	// variables to hold the colours of individual organisations
 	this.organisationColours = {ids: [], colours:[]};
+	
+	// variable to hold data use to populate infoWindows
+	this.infoWindowData = [];
 
 }
 
@@ -103,6 +106,9 @@ MappingClass.prototype.init = function() {
 	$(window).resize(function() {
 		mappingObj.resizeMap();
 	});
+	
+	//mappingMapGatherVenueInfo
+	$("#tabs-3").bind('mappingMapGatherVenueInfo' + 'AjaxStop', mappingObj.buildVenueInfoWindow);
 }
 
 // function to initialise the map
@@ -725,6 +731,9 @@ MappingClass.prototype.iconClick = function(event) {
 	var idx = $.inArray(tokens[2], mappingObj.markerData.hashes);
 	var data = mappingObj.markerData.objects[idx];
 	
+	// reset the infoWindowData variable
+	mappingObj.infoWindowData = [];
+	
 	// determine what type of icon this is
 	if(tokens[1] == 'contributor') {
 		// this is a contributor icon
@@ -732,31 +741,64 @@ MappingClass.prototype.iconClick = function(event) {
 		// this is a organisation icon
 	} else if(tokens[1] == 'venue') {
 		// this is a venue icon
-		var ids = '';
-		for(var i = 0; i < data.venues.length; i++) {
-			ids += data.venues[i].id + ",";
-		}
 		
-		ids = ids.substring(0, ids.length - 1);
+		// create a queue
+		var ajaxQueue = $.manageAjax.create("mappingMapGatherVenueInfo", {
+			queue: true
+		});
 
+		// define a basic marker			
 		var marker = new google.maps.Marker({
 			position: new google.maps.LatLng(data.latitude, data.longitude),
 			map:      mappingObj.map,
 			visible:  false
 		});
 		
+		// define placeholder content		
 		var content = '<div class="infoWindowContent">' + buildInfoMsgBox('Loading venue information, please wait...') + '</div>';
 		
+		// build and so the infoWindow
 		var infoWindow = new google.maps.InfoWindow({
 			content: content
 		});
 		
 		infoWindow.open(mappingObj.map, marker);
+		
+		// use the queue to get the data
+		for(var i = 0; i < data.venues.length; i++) {
+	
+			// build the url
+			var url  = BASE_URL + 'lookup?task=venue&id=' + data.venues[i].id;
+		
+			ajaxQueue.add({
+				success: mappingObj.processInfoWindowData,
+				url: url
+			});
+		}
 	} else {
 		// this is a event icon
 	}
+}
 
-	//debug code
-	console.log(ids);
+// function to process the results of the ajax infoWindow data lookups
+MappingClass.prototype.processInfoWindowData = function(data) {
+	mappingObj.infoWindowData = mappingObj.infoWindowData.concat(data);
+}
+
+// function to buld the infoWindow for venues
+MappingClass.prototype.buildVenueInfoWindow = function() {
+
+	// define a variable to store the infoWindow content
+	var content = '';
+	
+	// build the content
+	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
+		var obj = mappingObj.infoWindowData[i];
+		
+		content += obj.id + '<br/>';
+	}
+	
+	// replace the content of the infoWindow
+	$('.infoWindowContent').empty().append(content);
 
 }
