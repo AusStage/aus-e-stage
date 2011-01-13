@@ -88,6 +88,9 @@ function MappingClass() {
 	
 	// variable to hold data use to populate infoWindows
 	this.infoWindowData = [];
+	
+	// variable to store pointer to current infoWindow
+	this.infoWindowReference = null;
 
 }
 
@@ -733,6 +736,7 @@ MappingClass.prototype.iconClick = function(event) {
 	
 	// reset the infoWindowData variable
 	mappingObj.infoWindowData = [];
+	mappingObj.infoWindowReference = null;
 	
 	// determine what type of icon this is
 	if(tokens[1] == 'contributor') {
@@ -758,11 +762,11 @@ MappingClass.prototype.iconClick = function(event) {
 		var content = '<div class="infoWindowContent">' + buildInfoMsgBox('Loading venue information, please wait...') + '</div>';
 		
 		// build and so the infoWindow
-		var infoWindow = new google.maps.InfoWindow({
+		mappingObj.infoWindowReference = new google.maps.InfoWindow({
 			content: content
 		});
 		
-		infoWindow.open(mappingObj.map, marker);
+		mappingObj.infoWindowReference.open(mappingObj.map, marker);
 		
 		// use the queue to get the data
 		for(var i = 0; i < data.venues.length; i++) {
@@ -799,6 +803,6 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	}
 	
 	// replace the content of the infoWindow
-	$('.infoWindowContent').empty().append(content);
+	mappingObj.infoWindowReference.setContent(content);
 
 }
