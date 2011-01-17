@@ -327,6 +327,44 @@ table.mapIconHelpTbl td {
 	text-align: center;
 }
 
+/* Styles for infoWindows */
+
+.infoWindowContent {
+	width: 500px;
+	height: 450px;
+}
+
+
+.infoWindowLinkContainer {
+	margin-left: 0px !important;
+	/*margin-left: 0px;*/
+}
+
+.infoWindowLinkContainer a {
+	cursor: pointer;
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+	background: #fff;
+	border: 0px;
+}
+
+.infoWindowLinkContainer a:visited {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+	background: #fff;
+	border: 0px;
+}
+
+.infoWindowLinkContainer a:hover {
+	/* same colour as f-189 */
+	text-decoration: underline;
+	color: #001bcc;
+	border: 0px;
+}
+
+
 
 /* Styles for the Tipsy Library */
 .tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }

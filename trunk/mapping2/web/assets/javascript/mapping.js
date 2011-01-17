@@ -793,48 +793,25 @@ MappingClass.prototype.processInfoWindowData = function(data) {
 MappingClass.prototype.buildVenueInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
-	var content = '';
+	var content = '<div class="infoWindowContent">';
 	
 	// build the content
 	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
 	
 		var data = mappingObj.infoWindowData[i];
 		
-		// start the div
-		content += '<div class="infowindow-accordion">';
-		content += '<h3><a href="#">' + data.name + '</a><br/>';
-		content += '<a href="' + data.url +'" target="_ausstage">' + data.street + ', ' + data.suburb;
-		
-		// add the state or country name
-		if(data.country == 'Australia') {
-			content += ', ' + data.state;
-		} else {
-			content += ', ' + data.country;
+		// add the events
+		for(var x = 0; x < data.events.length; x++) {
+			
 		}
 		
-		// finalise the header
-		content += '</a></h3>'
-		
-		// add a list of events
-		content += '<p>Events to go here</p>';
-		
-		// finalise the venue content
-		content += '</div>';
+		// finish this node in the tree
 	}
 	
-/*	
-	// build the content
-	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
-		var obj = mappingObj.infoWindowData[i];
-		
-		content += obj.id + '<br/>';
-	}
-*/
+	// finish the content
+	content += '</div>';
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
 	
-	// setup the accordians
-	$(".infowindow-accordion").accordion({collapsible:true, active:false, autoHeight: false });
-
 }
