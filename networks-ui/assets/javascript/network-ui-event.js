@@ -214,8 +214,8 @@ function showGraph(targetDiv){
 	// Use an invisible panel to capture pan & zoom events. 
 	vis.add(pv.Panel)
     	.events("all")
-	    .event("mousedown", pv.Behavior.pan())
-	    .event("mousewheel", pv.Behavior.zoom(0.4))
+	    .event("mousedown", pv.Behavior.pan().bound(1))
+	    .event("mousewheel", pv.Behavior.zoom(0.4).bound(1))
     	.event("pan", transform)
 	    .event("zoom", transform)
 	    .event("click", function(d) {onClick(null, CLEAR, null); return focus;})
@@ -318,11 +318,10 @@ function showGraph(targetDiv){
 
 // pan and zoom handler 
 function transform() {
-	var t = this.transform().invert();
 	
-	xAxis.domain(xAxis.invert(t.x + xAxis(startDate) *t.k),xAxis.invert(t.x + xAxis(endDate) * t.k));				
-	yAxis.domain(yAxis.invert(t.y + yAxis(0) *t.k), yAxis.invert(t.y + yAxis(events.nodes.length) * t.k));					
-
+	var t = this.transform().invert();
+		xAxis.domain(xAxis.invert(t.x + xAxis(startDate) *t.k),xAxis.invert(t.x + xAxis(endDate) * t.k));				
+		yAxis.domain(yAxis.invert(t.y + yAxis(0) *t.k), yAxis.invert(t.y + yAxis(events.nodes.length) * t.k));
 	vis.render();
 }
 
