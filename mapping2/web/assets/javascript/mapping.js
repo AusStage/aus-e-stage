@@ -794,22 +794,54 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
+	var header  = '<div class="infoWindowContentHeader"><ul>';
+	var list    = '<div class="infoWindowContentList">';
 	
 	// build the content
 	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
 	
 		var data = mappingObj.infoWindowData[i];
 		
+		// add the venue to the header
+		header += '<li>' + data.name + '</li>';
+		
+		// add the venue content
+		list += '<p class="infowWindowListHeader"><span class="infoWindowListTitle">' + data.name + '</span><br/>';
+		
+		// add the link
+		list += '<a href="' + data.url + '" target="_ausstage">';
+		
+		// output the address
+		if(data.country == 'Australia') {
+			list += data.street + ', ' + data.suburb + ', ' + data.state;
+		} else {
+			list += data.street + ', ' + data.suburb + ', ' + data.country;
+		}
+		
+		// finalise the link and start of the content
+		list += '</a></p><ul>';
+		
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
+		
+			list += '<li><a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate + '</li>';
 			
 		}
 		
-		// finish this node in the tree
+		// finalise the list of events
+		list += '</ul>';
+		
 	}
 	
 	// finish the content
-	content += '</div>';
+	header += '</ul></div>';
+	list   += '</div>';
+	
+	if(mappingObj.infoWindowData.length > 1) {
+		content += header + list + '</div>';
+	} else {
+		content += list + '</div>';
+	}
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
