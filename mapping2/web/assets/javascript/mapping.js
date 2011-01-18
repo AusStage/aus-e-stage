@@ -110,8 +110,14 @@ MappingClass.prototype.init = function() {
 		mappingObj.resizeMap();
 	});
 	
-	//mappingMapGatherVenueInfo
+	// bind to the ajax stop event so we know we've got the data
 	$("#tabs-3").bind('mappingMapGatherVenueInfo' + 'AjaxStop', mappingObj.buildVenueInfoWindow);
+	
+	// setup the live bind for scrolling in infoWindows
+	$('.infoWindowHeaderItem').live('click', mappingObj.scrollInfoWindow);
+	
+	// setup the live bind for scrolling to the top of infoWindows
+	$('.infoWindowToTop').live('click', mappingObj.scrollInfoWindowToTop);
 }
 
 // function to initialise the map
@@ -803,10 +809,14 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		var data = mappingObj.infoWindowData[i];
 		
 		// add the venue to the header
-		header += '<li>' + data.name + '</li>';
+		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name + '</li>';
 		
 		// add the venue content
-		list += '<p class="infowWindowListHeader"><span class="infoWindowListTitle">' + data.name + '</span><br/>';
+		if(i > 0) {
+			list += '<p class="infowWindowListHeader" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle">' + data.name + '</span> <span class="infoWindowToTop clickable">[top]</span><br/>';
+		} else {
+			list += '<p class="infowWindowListHeader" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle">' + data.name + '</span><br/>';
+		}
 		
 		// add the link
 		list += '<a href="' + data.url + '" target="_ausstage">';
@@ -824,7 +834,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
 		
-			list += '<li><a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate + '</li>';
+			list += '<li><a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate.replace(' ', '&nbsp;'); + '</li>';
 			
 		}
 		
@@ -845,5 +855,18 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
+}
+
+// function to scroll the info window
+MappingClass.prototype.scrollInfoWindow = function() {
+
+	var id = this.id.split('-');
 	
+	$('.infoWindowContent').parent().scrollTo($('#infoWindowScrollTo-' + id[1]), {duration:1000});
+}
+
+// function to scroll the info window
+MappingClass.prototype.scrollInfoWindowToTop = function() {
+	
+	$('.infoWindowContent').parent().scrollTo($('.infoWindowContentHeader'), {duration:1000});
 }

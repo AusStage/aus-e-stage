@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-1.4.2.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/markerwithlabel-1.1.js"></script>
 	<!-- custom code -->
