@@ -13,4 +13,4 @@ Details of the API are in the following pages:
  * [MappingServiceAPIMarkers Marker Data API] - retrieve data used to build markers
  * [MappingServiceAPISearch Search API] - search for organisations / contributors etc.
  * [MappingServiceAPILookup Lookup API] - lookup various data elements in the system
- * [MappingserviceAPIEvents Events API] - lookup details of events at Venues to use in populating infoWindows
+ * [MappingServiceAPIEvents Events API] - lookup details of events at Venues to use in populating infoWindows
