@@ -124,18 +124,6 @@ $(document).ready(function() {
 	});
 });
 
-// add functionality to clickable things
-//$(document).ready(function() {
-//	$('.clickable').hover(
-//		function() {
-//			$(this).addClass('clickable-hover');
-//		}, 
-//		function() {
-//			$(this).removeClass('clickable-hover');
-//		}
-//	);
-//});
-
 $('.clickable').live('mouseenter', function() {
 	$(this).addClass('clickable-hover');
 });
@@ -192,5 +180,17 @@ function sortVenueArray(a, b) {
 		return -1;
 	} else {
 		return 1;
+	}
+}
+
+// define a function used to sort an array of venue objects on name
+function sortEventArray(a, b) {
+
+	if(a.firstDate == b.firstDate) {	
+		return 0;
+	} else if(a.firstDate < b.firstDate) {
+		return 1;
+	} else {
+		return -1;
 	}
 }
