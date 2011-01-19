@@ -91,6 +91,9 @@ function MappingClass() {
 	
 	// variable to store pointer to current infoWindow
 	this.infoWindowReference = null;
+	
+	// variable to hold default max width for infoWindows
+	this.INFO_WINDOW_MAX_WIDTH = 500;
 
 }
 
@@ -773,8 +776,8 @@ MappingClass.prototype.iconClick = function(event) {
 		
 		// build and so the infoWindow
 		mappingObj.infoWindowReference = new google.maps.InfoWindow({
-			content: content,
-			maxWidth: 500
+			content:  content,
+			maxWidth: mappingObj.INFO_WINDOW_MAX_WIDTH
 		});
 		
 		mappingObj.infoWindowReference.open(mappingObj.map, marker);
@@ -792,6 +795,32 @@ MappingClass.prototype.iconClick = function(event) {
 		}
 	} else {
 		// this is a event icon
+		
+		// create a queue
+		var ajaxQueue = $.manageAjax.create("mappingMapGatherEventInfo", {
+			queue: true
+		});
+
+		// define a basic marker			
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(data.latitude, data.longitude),
+			map:      mappingObj.map,
+			visible:  false
+		});
+		
+		// define placeholder content		
+		var content = '<div class="infoWindowContent">' + buildInfoMsgBox('Loading event information, please wait...') + '</div>';
+		
+		// build and so the infoWindow
+		mappingObj.infoWindowReference = new google.maps.InfoWindow({
+			content:  content,
+			maxWidth: mappingObj.INFO_WINDOW_MAX_WIDTH
+		});
+		
+		mappingObj.infoWindowReference.open(mappingObj.map, marker);
+		
+		// build the event data for the infoWindow
+		mappingObj.buildEventInfoWindow(data.events);
 	}
 }
 
@@ -841,7 +870,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
 		
-			list += '<li><a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate.replace(' ', '&nbsp;'); + '</li>';
+			list += '<li><a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
 			
 		}
 		
@@ -862,6 +891,41 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
+}
+
+// function to buld the infoWindow for venues
+MappingClass.prototype.buildEventInfoWindow = function(data) {
+
+	// define a variable to store the infoWindow content
+	var list    = '<div class="infoWindowContent"><div class="infoWindowContentList">';
+	
+	// sort the array
+	data.sort(sortEventArray);
+	
+	// build the content
+	for(var i = 0; i < data.length; i++) {
+	
+		var event = data[i];
+		
+		list += '<li><a href="' + event.url + '" target="_ausstage">' + event.name + '</a><br/>' + event.venue.name;
+		
+		// output the address
+		if(event.venue.country == 'Australia') {
+			list += ', ' + event.venue.street + ', ' + event.venue.suburb + ', ' + event.venue.state;
+		} else {
+			list += ', ' + event.venue.street + ', ' + event.venue.suburb + ', ' + event.venue.country;
+		}
+		
+		// output the date
+		list += ', ' + event.firstDisplayDate.replace(/\s/g, '&nbsp;') + '</li>';
+	}
+	
+			
+	// finalise the list of events
+	list += '</ul></div></div>';
+	
+	// replace the content of the infoWindow
+	mappingObj.infoWindowReference.setContent(list);
 }
 
 // function to scroll the info window
