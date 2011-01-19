@@ -65,6 +65,11 @@ public class DateUtils {
 	public static String buildDisplayDate(String year, String month, String day) {
 	
 		if(year != null) {
+		
+			// trim leading zeros from the day
+			if(day != null && day.startsWith("0") == true) {
+				day = day.substring(1);
+			}
 		 
 		 	String date = day + " " + lookupMonth(month) + " " + year;
 		 	date = date.replace("null","");
