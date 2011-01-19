@@ -769,7 +769,8 @@ MappingClass.prototype.iconClick = function(event) {
 		
 		// build and so the infoWindow
 		mappingObj.infoWindowReference = new google.maps.InfoWindow({
-			content: content
+			content: content,
+			maxWidth: 500
 		});
 		
 		mappingObj.infoWindowReference.open(mappingObj.map, marker);
@@ -800,8 +801,11 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
-	var header  = '<div class="infoWindowContentHeader"><ul>';
+	var header  = '<div class="infoWindowContentHeader b-185"><ul class="infoWindowContentHeaderItems">';
 	var list    = '<div class="infoWindowContentList">';
+	
+	// sort the array
+	mappingObj.infoWindowData.sort(sortVenueArray);
 	
 	// build the content
 	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
@@ -811,15 +815,14 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the venue to the header
 		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name + '</li>';
 		
+		list += '<p class="infowWindowListHeader" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a></span>';
+		
 		// add the venue content
 		if(i > 0) {
-			list += '<p class="infowWindowListHeader" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle">' + data.name + '</span> <span class="infoWindowToTop clickable">[top]</span><br/>';
+			list +=  ' <span class="infoWindowToTop clickable">[top]</span><br/>';
 		} else {
-			list += '<p class="infowWindowListHeader" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle">' + data.name + '</span><br/>';
+			list += '<br/>';
 		}
-		
-		// add the link
-		list += '<a href="' + data.url + '" target="_ausstage">';
 		
 		// output the address
 		if(data.country == 'Australia') {
@@ -829,7 +832,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		}
 		
 		// finalise the link and start of the content
-		list += '</a></p><ul>';
+		list += '</p><ul>';
 		
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
@@ -862,11 +865,11 @@ MappingClass.prototype.scrollInfoWindow = function() {
 
 	var id = this.id.split('-');
 	
-	$('.infoWindowContent').parent().scrollTo($('#infoWindowScrollTo-' + id[1]), {duration:1000});
+	$('.infoWindowContent').parent().parent().scrollTo($('#infoWindowScrollTo-' + id[1]), {duration:1000});
 }
 
 // function to scroll the info window
 MappingClass.prototype.scrollInfoWindowToTop = function() {
 	
-	$('.infoWindowContent').parent().scrollTo($('.infoWindowContentHeader'), {duration:1000});
+	$('.infoWindowContent').parent().parent().scrollTo($('.infoWindowContentHeader'), {duration:1000});
 }
