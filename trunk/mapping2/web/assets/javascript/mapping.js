@@ -742,7 +742,11 @@ MappingClass.prototype.iconClick = function(event) {
 	
 	// reset the infoWindowData variable
 	mappingObj.infoWindowData = [];
-	mappingObj.infoWindowReference = null;
+	
+	if(mappingObj.infoWindowReference != null) {
+		mappingObj.infoWindowReference.close();
+		mappingObj.infoWindowReference = null;
+	}
 	
 	// determine what type of icon this is
 	if(tokens[1] == 'contributor') {
