@@ -125,15 +125,23 @@ $(document).ready(function() {
 });
 
 // add functionality to clickable things
-$(document).ready(function() {
-	$('.clickable').hover(
-		function() {
-			$(this).addClass('clickable-hover');
-		}, 
-		function() {
-			$(this).removeClass('clickable-hover');
-		}
-	);
+//$(document).ready(function() {
+//	$('.clickable').hover(
+//		function() {
+//			$(this).addClass('clickable-hover');
+//		}, 
+//		function() {
+//			$(this).removeClass('clickable-hover');
+//		}
+//	);
+//});
+
+$('.clickable').live('mouseenter', function() {
+	$(this).addClass('clickable-hover');
+});
+
+$('.clickable').live('mouseleave', function() {
+	$(this).removeClass('clickable-hover');
 });
 
 // define a function to build an error message box
@@ -172,5 +180,17 @@ function resizeSidebar() {
 			mappingObj.resizeMap();
 		});
 		sidebarState = 0;
+	}
+}
+
+// define a function used to sort an array of venue objects on name
+function sortVenueArray(a, b) {
+
+	if(a.name == b.name) {	
+		return 0;
+	} else if(a.name < b.name) {
+		return -1;
+	} else {
+		return 1;
 	}
 }
