@@ -329,7 +329,6 @@ table.mapIconHelpTbl td {
 
 /* Styles for infoWindows */
 
-
 .infoWindowLinkContainer {
 	margin-left: 0px !important;
 	/*margin-left: 0px;*/
@@ -361,10 +360,11 @@ table.mapIconHelpTbl td {
 
 .infoWindowContentHeaderItems {
 	list-style: none;
-	padding-left: 0px;
+	padding-left: 5px;
 }
 
 .infoWindowContentHeader {
+	padding-top: 5px;
 	padding-bottom: 5px;
 }
 
@@ -381,6 +381,18 @@ table.mapIconHelpTbl td {
 	padding-left: 0px;
 }
 
+.infowWindowListHeader {
+	padding-left: 5px;
+	padding-bottom: 2px;
+}
+
+.infoWindowListTitle a {
+	color: #fff;
+}
+
+.infoWindowEventList {
+	padding-left: 5px;
+}
 
 
 /* Styles for the Tipsy Library */

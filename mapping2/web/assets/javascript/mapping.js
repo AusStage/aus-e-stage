@@ -834,7 +834,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
-	var header  = '<div class="infoWindowContentHeader b-185"><ul class="infoWindowContentHeaderItems">';
+	var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
 	var list    = '<div class="infoWindowContentList">';
 	
 	// sort the array
@@ -848,7 +848,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the venue to the header
 		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name + '</li>';
 		
-		list += '<p class="infowWindowListHeader" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a></span>';
+		list += '<p class="infowWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a></span>';
 		
 		// add the venue content
 		if(i > 0) {
@@ -870,7 +870,13 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
 		
-			list += '<li><a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+			if(x % 2 == 1) {
+				list += '<li class="b-185">';
+			} else {
+				list += '<li>';
+			}
+		
+			list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
 			
 		}
 		
@@ -907,7 +913,13 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 	
 		var event = data[i];
 		
-		list += '<li><a href="' + event.url + '" target="_ausstage">' + event.name + '</a><br/>' + event.venue.name;
+		if(i % 2 == 1) {
+			list += '<li class="b-185">';
+		} else {
+			list += '<li>';
+		}
+		
+		list += '<a href="' + event.url + '" target="_ausstage">' + event.name + '</a><br/>' + event.venue.name;
 		
 		// output the address
 		if(event.venue.country == 'Australia') {
