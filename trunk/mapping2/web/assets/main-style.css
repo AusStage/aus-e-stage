@@ -329,6 +329,10 @@ table.mapIconHelpTbl td {
 
 /* Styles for infoWindows */
 
+.infoWindowContent {
+	margin-top: 10px;
+}
+
 .infoWindowLinkContainer {
 	margin-left: 0px !important;
 	/*margin-left: 0px;*/

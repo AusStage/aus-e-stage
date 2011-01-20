@@ -171,6 +171,24 @@ function resizeSidebar() {
 	}
 }
 
+// define a function used to sort an array of contributor objects on name
+function sortContributorArray(a, b) {
+
+	if(a.contributor.lastName == b.contributor.lastName) {
+		if((a.contributor.lastName + a.contributor.firstName) == (a.contributor.lastName + a.contributor.firstName)) {
+			return 0;
+		} else if((a.contributor.lastName + a.contributor.firstName) < (a.contributor.lastName + a.contributor.firstName)) {
+			return -1;
+		} else {
+			return 1;
+		}
+	} else if(a.contributor.lastName < b.contributor.lastName) {
+		return -1;
+	} else {
+		return 1;
+	}
+}
+
 // define a function used to sort an array of venue objects on name
 function sortVenueArray(a, b) {
 
