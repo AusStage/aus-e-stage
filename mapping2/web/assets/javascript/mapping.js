@@ -903,7 +903,7 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 			list += data.contributor.functions[y] + ', ';
 		}
 		
-		if(data.contributor.functions.length != 1) {
+		if(data.contributor.functions.length != 0) {
 			list = list.substr(0, list.length -2);
 		}
 		
