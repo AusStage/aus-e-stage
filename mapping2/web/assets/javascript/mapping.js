@@ -115,6 +115,7 @@ MappingClass.prototype.init = function() {
 	
 	// bind to the ajax stop event so we know we've got the data
 	$("#tabs-3").bind('mappingMapGatherVenueInfo' + 'AjaxStop', mappingObj.buildVenueInfoWindow);
+	$("#tabs-3").bind('mappingMapGatherContributorInfo' + 'AjaxStop', mappingObj.buildContributorInfoWindow);
 	
 	// setup the live bind for scrolling in infoWindows
 	$('.infoWindowHeaderItem').live('click', mappingObj.scrollInfoWindow);
@@ -390,6 +391,7 @@ MappingClass.prototype.addContributorData = function(data) {
 	var found = false;
 	var contributor = null;
 	var venues      = null;
+	var objCopy     = null;
 
 	// loop through the data
 	for(var i = 0; i < data.length; i++) {
@@ -425,7 +427,12 @@ MappingClass.prototype.addContributorData = function(data) {
 			if(idx == -1) {
 				// not seen this lat / lng before
 				obj = new MarkerData();
-				obj.contributors.push(contributor);
+				
+				// make a copy of this contributor and add a venue
+				objCopy = jQuery.extend(true, {}, contributor);
+				objCopy.venue = venues[x].id;
+				
+				obj.contributors.push(objCopy);
 				obj.latitude  = venues[x].latitude;
 				obj.longitude = venues[x].longitude
 				
@@ -446,7 +453,10 @@ MappingClass.prototype.addContributorData = function(data) {
 				}
 				
 				if(found == false) {
-					obj.contributors.push(contributor);
+					// make a copy of this contributor and add a venue
+					objCopy = jQuery.extend(true, {}, contributor);
+					objCopy.venue = venues[x].id;				
+					obj.contributors.push(objCopy);
 				}
 			}
 		}
@@ -754,6 +764,43 @@ MappingClass.prototype.iconClick = function(event) {
 	// determine what type of icon this is
 	if(tokens[1] == 'contributor') {
 		// this is a contributor icon
+		
+		// create a queue
+		var ajaxQueue = $.manageAjax.create("mappingMapGatherContributorInfo", {
+			queue: true
+		});
+
+		// define a basic marker			
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(data.latitude, data.longitude),
+			map:      mappingObj.map,
+			visible:  false
+		});
+		
+		// define placeholder content		
+		var content = '<div class="infoWindowContent">' + buildInfoMsgBox('Loading contributor information, please wait...') + '</div>';
+		
+		// build and so the infoWindow
+		mappingObj.infoWindowReference = new google.maps.InfoWindow({
+			content:  content,
+			maxWidth: mappingObj.INFO_WINDOW_MAX_WIDTH
+		});
+		
+		mappingObj.infoWindowReference.open(mappingObj.map, marker);
+		
+		// use the queue to get the data
+		for(var i = 0; i < data.contributors.length; i++) {
+	
+			// build the url
+			var url  = BASE_URL + 'events?task=contributor&id=' + data.contributors[i].id +'&venue=' + data.contributors[i].venue;
+		
+			ajaxQueue.add({
+				success: mappingObj.processInfoWindowData,
+				url: url
+			});
+		}
+		
+		
 	} else if(tokens[1] == 'organisation') {
 		// this is a organisation icon
 	} else if(tokens[1] == 'venue') {
@@ -794,12 +841,7 @@ MappingClass.prototype.iconClick = function(event) {
 			});
 		}
 	} else {
-		// this is a event icon
-		
-		// create a queue
-		var ajaxQueue = $.manageAjax.create("mappingMapGatherEventInfo", {
-			queue: true
-		});
+		// this is an event icon
 
 		// define a basic marker			
 		var marker = new google.maps.Marker({
@@ -827,6 +869,79 @@ MappingClass.prototype.iconClick = function(event) {
 // function to process the results of the ajax infoWindow data lookups
 MappingClass.prototype.processInfoWindowData = function(data) {
 	mappingObj.infoWindowData = mappingObj.infoWindowData.concat(data);
+}
+
+// funtion to build the infoWindow for contributors
+MappingClass.prototype.buildContributorInfoWindow = function() {
+
+	// define a variable to store the infoWindow content
+	var content = '<div class="infoWindowContent">';
+	var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
+	var list    = '<div class="infoWindowContentList">';
+	
+	// sort the array
+	mappingObj.infoWindowData.sort(sortContributorArray);
+	
+	// build the content
+	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
+	
+		var data = mappingObj.infoWindowData[i];
+		
+		// add the venue to the header
+		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.contributor.id + '">' + data.contributor.firstName + ' ' + data.contributor.lastName + '</li>';
+		
+		list += '<p class="infowWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.contributor.id + '"><span class="infoWindowListTitle"><a href="' + data.contributor.url + '" target="_ausstage">' + data.contributor.firstName + ' ' + data.contributor.lastName + '</a></span>';
+		
+		if(i > 0) {
+			list +=  ' <span class="infoWindowToTop clickable">[top]</span><br/>';
+		} else {
+			list += '<br/>';
+		}
+		
+		// add the functions
+		for(var y = 0; y < data.contributor.functions.length; y++ ){
+			list += data.contributor.functions[y] + ', ';
+		}
+		
+		if(data.contributor.functions.length != 1) {
+			list = list.substr(0, list.length -2);
+		}
+		
+		// finalise the link and start of the content
+		list += '</p><ul class="infoWindowEventList">';
+		
+		// add the events
+		for(var x = 0; x < data.events.length; x++) {
+		
+			if(x % 2 == 1) {
+				list += '<li class="b-185">';
+			} else {
+				list += '<li>';
+			}
+		
+			list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ';
+			list += data.name + ', ' + mappingObj.buildAddress(data.street, data.suburb, data.state, data.country);
+			list += ', ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+			
+		}
+		
+		// finalise the list of events
+		list += '</ul>';
+		
+	}
+	
+	// finish the content
+	header += '</ul></div>';
+	list   += '</div>';
+	
+	if(mappingObj.infoWindowData.length > 1) {
+		content += header + list + '</div>';
+	} else {
+		content += list + '</div>';
+	}
+	
+	// replace the content of the infoWindow
+	mappingObj.infoWindowReference.setContent(content);
 }
 
 // function to buld the infoWindow for venues
@@ -857,12 +972,8 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 			list += '<br/>';
 		}
 		
-		// output the address
-		if(data.country == 'Australia') {
-			list += data.street + ', ' + data.suburb + ', ' + data.state;
-		} else {
-			list += data.street + ', ' + data.suburb + ', ' + data.country;
-		}
+		// add the address
+		list += mappingObj.buildAddress(data.street, data.suburb, data.state, data.country);
 		
 		// finalise the link and start of the content
 		list += '</p><ul class="infoWindowEventList">';
@@ -921,12 +1032,7 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 		
 		list += '<a href="' + event.url + '" target="_ausstage">' + event.name + '</a><br/>' + event.venue.name;
 		
-		// output the address
-		if(event.venue.country == 'Australia') {
-			list += ', ' + event.venue.street + ', ' + event.venue.suburb + ', ' + event.venue.state;
-		} else {
-			list += ', ' + event.venue.street + ', ' + event.venue.suburb + ', ' + event.venue.country;
-		}
+		list += ', ' + mappingObj.buildAddress(event.venue.street, event.venue.suburb, event.venue.state, event.venue.country);
 		
 		// output the date
 		list += ', ' + event.firstDisplayDate.replace(/\s/g, '&nbsp;') + '</li>';
@@ -939,6 +1045,47 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(list);
 }
+
+// function to build and return an address
+MappingClass.prototype.buildAddress = function(street, suburb, state, country) {
+
+	var address = '';
+
+	if(country == 'Australia') {
+		if(street != null) {
+			address += street + ', ';
+		}
+		
+		if(suburb != null) {
+			address += suburb + ', ';
+		}
+		
+		if(state != null) {
+			address += state;
+		} else {
+			address = address.substr(0, address.length - 2);
+		}
+		
+		return address;
+	} else {
+		if(street != null) {
+			address += street + ', ';
+		}
+		
+		if(suburb != null) {
+			address += suburb + ', ';
+		}
+		
+		if(country != null) {
+			address += country;
+		} else {
+			address = address.substr(0, address.length - 2);
+		}
+		
+		return address;
+	}
+}
+
 
 // function to scroll the info window
 MappingClass.prototype.scrollInfoWindow = function() {
