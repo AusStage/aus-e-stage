@@ -376,6 +376,11 @@ table.mapIconHelpTbl td {
 	text-decoration: underline;
 }
 
+.infoWindowEventList {
+	list-style: none;
+	padding-left: 0px;
+}
+
 
 
 /* Styles for the Tipsy Library */

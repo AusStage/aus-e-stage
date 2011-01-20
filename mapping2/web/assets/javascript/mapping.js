@@ -865,7 +865,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		}
 		
 		// finalise the link and start of the content
-		list += '</p><ul>';
+		list += '</p><ul class="infoWindowEventList">';
 		
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
@@ -897,7 +897,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 MappingClass.prototype.buildEventInfoWindow = function(data) {
 
 	// define a variable to store the infoWindow content
-	var list    = '<div class="infoWindowContent"><div class="infoWindowContentList"><ul>';
+	var list    = '<div class="infoWindowContent"><div class="infoWindowContentList"><ul class="infoWindowEventList">';
 	
 	// sort the array
 	data.sort(sortEventArray);
