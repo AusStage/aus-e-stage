@@ -516,15 +516,22 @@ public class SearchManager {
 	private String doContributorIdSearch(String query, String formatType) {
 		
 		// declare the SQL variables
-		String sql = "SELECT contributorid, first_name, last_name, event_dates, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
-				   + "FROM (SELECT c.contributorid, c.first_name, c.last_name, e.eventid, v.longitude, sc.event_dates"
-				   + "      FROM contributor c, search_contributor sc, conevlink cel, events e, venue v "
-				   + "      WHERE c.contributorid = ? "
-				   + "      AND c.contributorid = sc.contributorid "
-				   + "      AND c.contributorid = cel.contributorid "
-				   + "      AND cel.eventid = e.eventid "
-				   + "      AND e.venueid = v.venueid) "
-				   + "GROUP BY contributorid, first_name, last_name, event_dates";
+		String sql = "SELECT c.contributorid, first_name, last_name, event_dates, event_count, mapped_events, "
+				   + "       rtrim(xmlagg(xmlelement(t, preferredterm || '|')).extract ('//text()'), '|') AS functions "
+				   + "FROM (SELECT contributorid, first_name, last_name, event_dates, COUNT(eventid) as event_count, COUNT(longitude) as mapped_events "
+				   + "      FROM (SELECT c.contributorid, c.first_name, c.last_name, e.eventid, v.longitude, sc.event_dates "
+				   + "            FROM contributor c, search_contributor sc, conevlink cel, events e, venue v "
+				   + "            WHERE c.contributorid = ? "
+				   + "            AND c.contributorid = sc.contributorid "
+				   + "            AND c.contributorid = cel.contributorid "
+				   + "            AND cel.eventid = e.eventid "
+				   + "            AND e.venueid = v.venueid) "
+				   + "      GROUP BY contributorid, first_name, last_name, event_dates) c, "
+				   + "      contfunctlink, "
+				   + "      contributorfunctpreferred "
+				   + "WHERE c.contributorid = contfunctlink.contributorid "
+				   + "AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid "
+				   + "GROUP BY c.contributorid, first_name, last_name, event_dates, event_count, mapped_events";
 				   
 		// define the paramaters
 		String[] sqlParameters = {query};
@@ -557,7 +564,8 @@ public class SearchManager {
 			contributor.setUrl(LinksManager.getContributorLink(resultSet.getString(1)));
 			contributor.setEventDates(resultSet.getString(4));
 			contributor.setEventCount(resultSet.getString(5));
-			contributor.setMappedEventCount(resultSet.getString(6));		
+			contributor.setMappedEventCount(resultSet.getString(6));
+			contributor.setFunctions(resultSet.getString(7));		
 		
 			// add the contrbutor to the list
 			list.addContributor(contributor);
