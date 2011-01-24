@@ -40,8 +40,8 @@ public class PageViewsComparator implements java.util.Comparator<PageView> {
 		 * have to use more than just the name as so many venues have the same name :(
 		 */
 		 
-		Integer firstValue  = first.getViews();
-		Integer secondValue = second.getViews();
+		Long firstValue  = first.getViews();
+		Long secondValue = second.getViews();
 		
 		if(firstValue == secondValue) {
 			secondValue = secondValue + 1;

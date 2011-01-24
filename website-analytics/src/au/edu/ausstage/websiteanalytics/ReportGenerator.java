@@ -251,7 +251,13 @@ public class ReportGenerator {
 			element = xmlDoc.createElement("chart");
 			element.setAttribute("height", CHART_HEIGHT);
 			element.setAttribute("width", CHART_WIDTH);
-			element.setAttribute("href", buildChartUrl(previousMonth, "Visits by Day for " + DateUtils.lookupMonth(Integer.parseInt(dateFields[1]) - 1) + " " + dateFields[0], "month"));
+			
+			if((Integer.parseInt(dateFields[1]) - 1) != 0) {
+				element.setAttribute("href", buildChartUrl(previousMonth, "Visits by Day for " + DateUtils.lookupMonth(Integer.parseInt(dateFields[1]) - 1) + " " + dateFields[0], "month"));
+			} else {
+				element.setAttribute("href", buildChartUrl(previousMonth, "Visits by Day for " + DateUtils.lookupMonth(Integer.parseInt("12")) + " " + (Integer.parseInt(dateFields[0]) - 1), "month"));
+			}
+			
 			parentElement.appendChild(element);
 			
 			rootElement.appendChild(parentElement);
