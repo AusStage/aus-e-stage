@@ -69,7 +69,7 @@ public class AnalyticsData {
 	 * @param endDate    the end of the period. Assumes the format yyyy-mm-dd where - is a delimiter
 	 * @param urlPattern the URL pattern to match against
 	 *
-	 * @returns the retrieved data or null on error
+	 * @return the retrieved data or null on error
 	 */
 	public PageViews getVisitsByDateAndPattern(String tableId, String startDate, String endDate, String urlPattern) {
 	
@@ -132,7 +132,7 @@ public class AnalyticsData {
 	 * @param month      the month that is of interest
 	 * @param urlPattern the URL pattern to match against
 	 *
-	 * @returns the retrieved data or null on error
+	 * @return the retrieved data or null on error
 	 */
 	public PageViews getVisitsForMonthByDayAndPattern(String tableId, String year, String month, String urlPattern) {
 		
@@ -155,7 +155,7 @@ public class AnalyticsData {
 	 * @param year       the year that is of interest
 	 * @param urlPattern the URL pattern to match against
 	 *
-	 * @returns the retrieved data or null on error
+	 * @return the retrieved data or null on error
 	 */
 	public PageViews getVisitsForYearByMonthAndPattern(String tableId, String year, String urlPattern) {
 	
