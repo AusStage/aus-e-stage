@@ -134,7 +134,7 @@ public class ReportConfig {
 	/**
 	 * Append a character sequence to the string
 	 *
-	 * @param s     the character sequence
+	 * @param c     the character sequence
 	 * @param start the index of the start of the characters in the index
 	 * @param end   the index of the end of the characters in the index
 	 */
@@ -201,7 +201,7 @@ public class ReportConfig {
 	/**
 	 * Determine if a current month section is required
 	 *
-	 * @param true, if an only if, the current month flag has been set to true
+	 * @return true if an only if, the current month flag has been set to true
 	 */
 	public boolean doCurrentMonthSection() {
 		return currentMonthSection;
@@ -219,7 +219,7 @@ public class ReportConfig {
 	/**
 	 * Determine if a previous month section is required
 	 *
-	 * @param true, if an only if, the current month flag has been set to true
+	 * @return true if an only if, the current month flag has been set to true
 	 */
 	public boolean doPreviousMonthSection() {
 		return previousMonthSection;
@@ -237,7 +237,7 @@ public class ReportConfig {
 	/**
 	 * Determine if a current year section is required
 	 *
-	 * @param true, if an only if, the current month flag has been set to true
+	 * @return true if an only if, the current month flag has been set to true
 	 */
 	public boolean doCurrentYearSection() {
 		return currentYearSection;
@@ -255,7 +255,7 @@ public class ReportConfig {
 	/**
 	 * Determine if a previous year section is required
 	 *
-	 * @param true, if an only if, the current month flag has been set to true
+	 * @return true if an only if, the current month flag has been set to true
 	 */
 	public boolean doPreviousYearSection() {
 		return previousYearSection;

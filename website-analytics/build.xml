@@ -83,7 +83,7 @@
 	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
 
 		<mkdir dir="${docs.dir}"/>
-			<javadoc sourcepath="${src.dir}" destdir="${docs.dir}" packagenames="au.edu.ausstage.websiteanalytics">
+			<javadoc sourcepath="${src.dir}" destdir="${docs.dir}" packagenames="au.edu.ausstage.websiteanalytics.*">
 			<classpath refid="classpath"/>
 		</javadoc>
 

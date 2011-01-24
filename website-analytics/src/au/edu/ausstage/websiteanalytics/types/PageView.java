@@ -100,7 +100,7 @@ public class PageView implements Comparable<PageView>{
 	/**
 	 * A method to set the number of views
 	 *
-	 * @param value, the new value
+	 * @param value the new value
 	 */
 	public void setViews(Long value) {
 		if(views == null) {
