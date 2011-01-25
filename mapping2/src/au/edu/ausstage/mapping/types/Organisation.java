@@ -43,6 +43,7 @@ public class Organisation implements Comparable<Organisation> {
 	private String suburb = null;
 	private String state = null;
 	private String postcode = null;
+	private String country = null;
 	
 	// declare public constants
 	/**
@@ -350,6 +351,18 @@ public class Organisation implements Comparable<Organisation> {
 	
 	public void setPostcode(String value) {
 		postcode = value;
+	}
+	
+	public String getCountry() {
+		return country;
+	}
+	
+	public void setCountry(String value) {
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("The value parameter must be a valid string");
+		}
+		
+		country = value;
 	}
 	
 	/*
