@@ -189,6 +189,18 @@ function sortContributorArray(a, b) {
 	}
 }
 
+// define a function used to sort an array of organisation objects on name
+function sortOrganisationArray(a, b) {
+
+	if(a.organisation.name == b.organisation.name) {
+		return 0;
+	} else if(a.organisation.name < b.organisation.name) {
+		return -1;
+	} else {
+		return 1;
+	}
+}
+
 // define a function used to sort an array of venue objects on name
 function sortVenueArray(a, b) {
 
