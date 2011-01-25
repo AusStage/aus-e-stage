@@ -386,9 +386,10 @@ table.mapIconHelpTbl td {
 }
 
 .infoWindowListHeader {
-	min-height: 40px;
+	min-height: 45px;
 	padding-left: 5px;
-	padding-bottom: 2px;
+	padding-bottom: 5px;
+	display: block;
 }
 
 .infoWindowListTitle a {
@@ -397,7 +398,8 @@ table.mapIconHelpTbl td {
 
 .infoWindowListTitle {
 	float: left;
-	margin-top: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .infoWindowEventList {
@@ -409,8 +411,7 @@ table.mapIconHelpTbl td {
 	width: 32px;
 	height: 32px;
 	float: left;
-	margin-right: 5px;
-	margin-top: 5px;
+	margin: 5px 5px 5px 5px;
 }
 
 
