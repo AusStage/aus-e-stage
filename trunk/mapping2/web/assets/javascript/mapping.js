@@ -116,6 +116,7 @@ MappingClass.prototype.init = function() {
 	// bind to the ajax stop event so we know we've got the data
 	$("#tabs-3").bind('mappingMapGatherVenueInfo' + 'AjaxStop', mappingObj.buildVenueInfoWindow);
 	$("#tabs-3").bind('mappingMapGatherContributorInfo' + 'AjaxStop', mappingObj.buildContributorInfoWindow);
+	$("#tabs-3").bind('mappingMapGatherOrganisationInfo' + 'AjaxStop', mappingObj.buildOrganisationInfoWindow);
 	
 	// setup the live bind for scrolling in infoWindows
 	$('.infoWindowHeaderItem').live('click', mappingObj.scrollInfoWindow);
@@ -476,7 +477,8 @@ MappingClass.prototype.addOrganisationData = function(data) {
 	var id    = null;
 	var found = false;
 	var organisation = null;
-	var venues      = null;
+	var venues       = null;
+	var objCopy      = null;
 
 	// loop through the data
 	for(var i = 0; i < data.length; i++) {
@@ -512,7 +514,12 @@ MappingClass.prototype.addOrganisationData = function(data) {
 			if(idx == -1) {
 				// not see this lat / lng before
 				obj = new MarkerData();
-				obj.organisations.push(organisation);
+				
+				// make a copy of this contributor and add a venue
+				objCopy = jQuery.extend(true, {}, organisation);
+				objCopy.venue = venues[x].id;
+				
+				obj.organisations.push(objCopy);
 				obj.latitude  = venues[x].latitude;
 				obj.longitude = venues[x].longitude
 				
@@ -520,7 +527,7 @@ MappingClass.prototype.addOrganisationData = function(data) {
 				mappingObj.markerData.objects.push(obj);
 			} else {
 				// have seen this lat / lng before
-				// check to see if the contributor has already been added
+				// check to see if the organisation has already been added
 				obj   = mappingObj.markerData.objects[idx];
 				id    = organisation.id;
 				found = false;
@@ -533,7 +540,11 @@ MappingClass.prototype.addOrganisationData = function(data) {
 				}
 				
 				if(found == false) {
-					obj.organisations.push(organisation);
+					// make a copy of this contributor and add a venue
+					objCopy = jQuery.extend(true, {}, organisation);
+					objCopy.venue = venues[x].id;
+				
+					obj.organisations.push(objCopy);
 				}
 			}
 		}
@@ -803,6 +814,42 @@ MappingClass.prototype.iconClick = function(event) {
 		
 	} else if(tokens[1] == 'organisation') {
 		// this is a organisation icon
+		
+		// create a queue
+		var ajaxQueue = $.manageAjax.create("mappingMapGatherOrganisationInfo", {
+			queue: true
+		});
+
+		// define a basic marker			
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(data.latitude, data.longitude),
+			map:      mappingObj.map,
+			visible:  false
+		});
+		
+		// define placeholder content		
+		var content = '<div class="infoWindowContent">' + buildInfoMsgBox('Loading organisation information, please wait...') + '</div>';
+		
+		// build and so the infoWindow
+		mappingObj.infoWindowReference = new google.maps.InfoWindow({
+			content:  content,
+			maxWidth: mappingObj.INFO_WINDOW_MAX_WIDTH
+		});
+		
+		mappingObj.infoWindowReference.open(mappingObj.map, marker);
+		
+		// use the queue to get the data
+		for(var i = 0; i < data.organisations.length; i++) {
+	
+			// build the url
+			var url  = BASE_URL + 'events?task=organisation&id=' + data.organisations[i].id +'&venue=' + data.organisations[i].venue;
+		
+			ajaxQueue.add({
+				success: mappingObj.processInfoWindowData,
+				url: url
+			});
+		}
+		
 	} else if(tokens[1] == 'venue') {
 		// this is a venue icon
 		
@@ -915,6 +962,82 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 		if(data.contributor.functions.length != 0) {
 			list = list.substr(0, list.length -2);
 		}
+		
+		// finalise the link and start of the content
+		list += '</span></p><ul class="infoWindowEventList">';
+		
+		// add the events
+		for(var x = 0; x < data.events.length; x++) {
+		
+			if(x % 2 == 1) {
+				list += '<li class="b-185">';
+			} else {
+				list += '<li>';
+			}
+		
+			list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ';
+			list += data.name + ', ' + mappingObj.buildAddressAlt(data.suburb, data.state, data.country);
+			list += ', ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+			
+		}
+		
+		// finalise the list of events
+		list += '</ul>';
+		
+	}
+	
+	// finish the content
+	header += '</ul></div>';
+	list   += '</div>';
+	
+	if(mappingObj.infoWindowData.length > 1) {
+		content += header + list + '</div>';
+	} else {
+		content += list + '</div>';
+	}
+	
+	// replace the content of the infoWindow
+	mappingObj.infoWindowReference.setContent(content);
+}
+
+// funtion to build the infoWindow for contributors
+MappingClass.prototype.buildOrganisationInfoWindow = function() {
+
+	// define a variable to store the infoWindow content
+	var content = '<div class="infoWindowContent">';
+	var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
+	var list    = '<div class="infoWindowContentList">';
+	var idx     = null;
+	var colour  = null;
+	
+	// sort the array
+	mappingObj.infoWindowData.sort(sortOrganisationArray);
+	
+	// build the content
+	for(var i = 0; i < mappingObj.infoWindowData.length; i++) {
+	
+		var data = mappingObj.infoWindowData[i];
+		
+		// add the venue to the header
+		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.organisation.id + '">' + data.organisation.name + '</li>';
+		
+		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.organisation.id + '">';
+		
+		idx = $.inArray(data.organisation.id, mappingObj.organisationColours.ids);
+		colour = mappingObj.organisationColours.colours[idx];
+		
+		list += '<span class="infoWindowListIcon ' + colour + '"><img src="'+ mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
+		
+		list += '<span class="infoWindowListTitle"><a href="' + data.organisation.url + '" target="_ausstage">' + data.organisation.name + '</a>';
+		
+		if(i > 0) {
+			list +=  ' <span class="infoWindowToTop clickable">[top]</span><br/>';
+		} else {
+			list += '<br/>';
+		}
+		
+		// add the address
+		list += mappingObj.buildAddressAlt(data.organisation.suburb, data.organisation.state, data.organisation.country);
 		
 		// finalise the link and start of the content
 		list += '</span></p><ul class="infoWindowEventList">';
