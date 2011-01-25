@@ -972,7 +972,9 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the venue to the header
 		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name + '</li>';
 		
-		list += '<p class="infowWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.id + '"><span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a></span>';
+		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.id + '">';
+		list += '<span class="infoWindowListIcon ' + mapIconography.venueColours[0] + '"><img src="'+ mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
+		list += '<span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a>';
 		
 		// add the venue content
 		if(i > 0) {
@@ -982,7 +984,7 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		}
 		
 		// add the address
-		list += mappingObj.buildAddress(data.street, data.suburb, data.state, data.country);
+		list += mappingObj.buildAddress(data.street, data.suburb, data.state, data.country) + '</span>';
 		
 		// finalise the link and start of the content
 		list += '</p><ul class="infoWindowEventList">';
