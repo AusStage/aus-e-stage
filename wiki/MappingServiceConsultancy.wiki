@@ -1,0 +1,5 @@
+#summary Results of the consultancy work conducted with USyd
+
+In September to December 2010 members of the Aus-e-Stage team worked with representatives of the [http://acl.arts.usyd.edu.au/ Archaeological Computing Laboratory, University of Sydney] who consulted on a variety of issues to do with the [MappingService Mapping Service]. 
+
+The results of the consultancy are documented in a PDF document that is [http://aus-e-stage.googlecode.com/svn-history/r1578/trunk/wiki-assets/AusStageMappingConsultancy_Sept_-_Dec_2010_FINAL.pdf available for download].
