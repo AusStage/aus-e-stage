@@ -130,13 +130,21 @@ MappingClass.prototype.initMap = function() {
 
 	// initialise the map
 	mappingObj.options = {zoom:   mappingObj.commonLocales.unknown.zoom,
-					 	  center: new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)
+					 	  center: new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng),
+					 	  mapTypeControl: true,
+						  mapTypeControlOptions: {
+						    mapTypeIds: [google.maps.MapTypeId.ROADMAP, 
+						    			 google.maps.MapTypeId.SATELLITE, 
+						    			 google.maps.MapTypeId.HYBRID, 
+						    			 google.maps.MapTypeId.TERRAIN, 
+						    			 'ausstage']
+						  }
 				         };	
 	
 	mappingObj.map = new google.maps.Map(document.getElementById("map_div"), mappingObj.options);
 	
 	// style the map
-	var styledMapOptions = {map: mappingObj.map, name: "ausstage-style"};
+	var styledMapOptions = {map: mappingObj.map, name: "AusStage"};
 	var ausstageStyle    = new google.maps.StyledMapType(mappingObj.mapStyle, styledMapOptions);
 	
 	mappingObj.map.mapTypes.set('ausstage', ausstageStyle);
