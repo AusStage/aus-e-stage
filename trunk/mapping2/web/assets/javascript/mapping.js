@@ -1142,6 +1142,14 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
+	
+	// add a function to the domready event to adjust the infoWindow
+	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
+		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
+		var height = $('.infoWindowContent').parent().parent().height();
+		height = height - 15;
+		$('.infoWindowContent').parent().parent().height(height);
+	});
 }
 
 // function to buld the infoWindow for venues
@@ -1164,7 +1172,7 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 			list += '<li>';
 		}
 		
-		list += '<a href="' + event.url + '" target="_ausstage">' + event.name + '</a><br/>' + event.venue.name;
+		list += '<a href="' + event.url + '" target="_ausstage">' + event.name + '</a> ' + event.venue.name;
 		
 		list += ', ' + mappingObj.buildAddressAlt(event.venue.suburb, event.venue.state, event.venue.country);
 		
@@ -1178,6 +1186,7 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(list);
+	
 }
 
 // function to build and return an address
