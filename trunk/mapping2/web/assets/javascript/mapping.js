@@ -123,6 +123,7 @@ MappingClass.prototype.init = function() {
 	
 	// setup the live bind for scrolling to the top of infoWindows
 	$('.infoWindowToTop').live('click', mappingObj.scrollInfoWindowToTop);
+
 }
 
 // function to initialise the map
@@ -929,6 +930,11 @@ MappingClass.prototype.processInfoWindowData = function(data) {
 // funtion to build the infoWindow for contributors
 MappingClass.prototype.buildContributorInfoWindow = function() {
 
+	if(mappingObj.infoWindowData.length == 0) {
+		mappingObj.infoWindowReference.setContent('<div class="infoWindowContent">' + buildErrorMsgBox('the request for contributor information') + '</div>');
+		return;
+	}
+
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
 	var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
@@ -1006,10 +1012,23 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
+	
+	// add a function to the domready event to adjust the infoWindow
+	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
+		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
+		var height = $('.infoWindowContent').parent().parent().height();
+		height = height - 15;
+		$('.infoWindowContent').parent().parent().height(height);
+	});
 }
 
 // funtion to build the infoWindow for contributors
 MappingClass.prototype.buildOrganisationInfoWindow = function() {
+
+	if(mappingObj.infoWindowData.length == 0) {
+		mappingObj.infoWindowReference.setContent('<div class="infoWindowContent">' + buildErrorMsgBox('the request for organisation information') + '</div>');
+		return;
+	}
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
@@ -1082,10 +1101,23 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 	
 	// replace the content of the infoWindow
 	mappingObj.infoWindowReference.setContent(content);
+	
+	// add a function to the domready event to adjust the infoWindow
+	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
+		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
+		var height = $('.infoWindowContent').parent().parent().height();
+		height = height - 15;
+		$('.infoWindowContent').parent().parent().height(height);
+	});
 }
 
 // function to buld the infoWindow for venues
 MappingClass.prototype.buildVenueInfoWindow = function() {
+
+	if(mappingObj.infoWindowData.length == 0) {
+		mappingObj.infoWindowReference.setContent('<div class="infoWindowContent">' + buildErrorMsgBox('the request for venue information') + '</div>');
+		return;
+	}
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
@@ -1193,7 +1225,15 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 	list += '</ul></div></div>';
 	
 	// replace the content of the infoWindow
-	mappingObj.infoWindowReference.setContent(list);
+	mappingObj.infoWindowReference.setContent(content);
+	
+	// add a function to the domready event to adjust the infoWindow
+	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
+		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
+		var height = $('.infoWindowContent').parent().parent().height();
+		height = height - 15;
+		$('.infoWindowContent').parent().parent().height(height);
+	});
 	
 }
 
