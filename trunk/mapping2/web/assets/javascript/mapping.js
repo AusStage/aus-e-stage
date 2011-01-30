@@ -1246,7 +1246,7 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 	list += '</ul></div></div>';
 	
 	// replace the content of the infoWindow
-	mappingObj.infoWindowReference.setContent(content);
+	mappingObj.infoWindowReference.setContent(list);
 	
 	// add a function to the domready event to adjust the infoWindow
 	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
