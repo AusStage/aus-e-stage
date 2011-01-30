@@ -1015,10 +1015,17 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 	
 	// add a function to the domready event to adjust the infoWindow
 	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
-		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
-		var height = $('.infoWindowContent').parent().parent().height();
-		height = height - 15;
-		$('.infoWindowContent').parent().parent().height(height);
+	
+		// check to see if scrollbars are present
+		var divOfInterest = $('.infoWindowContent').parent().parent();
+		
+		if(divOfInterest.get(0).scrollHeight > divOfInterest.height()) {
+			// scroll bars are found so adjust
+			divOfInterest.css("margin-top", "15px");
+			var height = divOfInterest.height();
+			height = height - 15;
+			divOfInterest.height(height);
+		}
 	});
 }
 
@@ -1104,10 +1111,17 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 	
 	// add a function to the domready event to adjust the infoWindow
 	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
-		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
-		var height = $('.infoWindowContent').parent().parent().height();
-		height = height - 15;
-		$('.infoWindowContent').parent().parent().height(height);
+	
+		// check to see if scrollbars are present
+		var divOfInterest = $('.infoWindowContent').parent().parent();
+		
+		if(divOfInterest.get(0).scrollHeight > divOfInterest.height()) {
+			// scroll bars are found so adjust
+			divOfInterest.css("margin-top", "15px");
+			var height = divOfInterest.height();
+			height = height - 15;
+			divOfInterest.height(height);
+		}
 	});
 }
 
@@ -1185,10 +1199,17 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	
 	// add a function to the domready event to adjust the infoWindow
 	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
-		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
-		var height = $('.infoWindowContent').parent().parent().height();
-		height = height - 15;
-		$('.infoWindowContent').parent().parent().height(height);
+	
+		// check to see if scrollbars are present
+		var divOfInterest = $('.infoWindowContent').parent().parent();
+		
+		if(divOfInterest.get(0).scrollHeight > divOfInterest.height()) {
+			// scroll bars are found so adjust
+			divOfInterest.css("margin-top", "15px");
+			var height = divOfInterest.height();
+			height = height - 15;
+			divOfInterest.height(height);
+		}
 	});
 }
 
@@ -1229,10 +1250,17 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 	
 	// add a function to the domready event to adjust the infoWindow
 	google.maps.event.addListener(mappingObj.infoWindowReference, 'domready', function() {
-		$('.infoWindowContent').parent().parent().css("margin-top", "15px");
-		var height = $('.infoWindowContent').parent().parent().height();
-		height = height - 15;
-		$('.infoWindowContent').parent().parent().height(height);
+	
+		// check to see if scrollbars are present
+		var divOfInterest = $('.infoWindowContent').parent().parent();
+		
+		if(divOfInterest.get(0).scrollHeight > divOfInterest.height()) {
+			// scroll bars are found so adjust
+			divOfInterest.css("margin-top", "15px");
+			var height = divOfInterest.height();
+			height = height - 15;
+			divOfInterest.height(height);
+		}
 	});
 	
 }
