@@ -64,6 +64,25 @@
 		<ul>
 			<li class="peekaboo clickable">Hide Menu</li>
 		</ul>
+		<div class="mapLegendContainer">
+			<h2>Map Legend</h2>
+			<div class="accordion">
+				<h3><a href="#">Contributors</a></h3>
+				
+			</div>
+			<div class="accordion">
+				<h3><a href="#">Organisations</a></h3>
+				
+			</div>
+			<div class="accordion">
+				<h3><a href="#">Venues</a></h3>
+				
+			</div>
+			<div class="accordion">
+				<h3><a href="#">Events</a></h3>
+				
+			</div>
+		</div>
 	</div>
 	<div class="main b-184 f-187">
 		<div id="tabs" class="tab-container">

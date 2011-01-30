@@ -331,6 +331,7 @@ table.mapIconHelpTbl td {
 
 .infoWindowContent {
 	margin-top: 10px;
+	min-height: 100px;
 }
 
 .infoWindowLinkContainer {
@@ -412,6 +413,11 @@ table.mapIconHelpTbl td {
 	height: 32px;
 	float: left;
 	margin: 5px 5px 5px 5px;
+}
+
+/* styles for the map legend */
+.mapLegendContainer {
+	margin-top: 10px;
 }
 
 
