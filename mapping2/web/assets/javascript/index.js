@@ -22,9 +22,10 @@
 $(document).ready(function(){
 
 	// initialise global objects
-	searchObj  = new SearchClass();
-	browseObj  = new BrowseClass();
-	mappingObj = new MappingClass();
+	searchObj    = new SearchClass();
+	browseObj    = new BrowseClass();
+	mappingObj   = new MappingClass();
+	mapLegendObj = new MapLegendClass();
 
 	/*
 	 * page setup
@@ -32,6 +33,9 @@ $(document).ready(function(){
 	 	
 	// prevent a FOUC
 	$('html').removeClass('js');
+	
+	// initialise the map legend
+	mapLegendObj.init();
 	
 	// setup the tabs
 	$("#tabs").tabs();

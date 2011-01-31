@@ -43,6 +43,7 @@
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
 	<script type="text/javascript" src="assets/javascript/browse.js"></script>
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
+	<script type="text/javascript" src="assets/javascript/map-legend.js"></script>
 	<script type="text/javascript" src="assets/javascript/index.js"></script>
 	<!-- prevent a FOUC from the messages div -->
 	<script type="text/javascript">
@@ -64,10 +65,12 @@
 		<ul>
 			<li class="peekaboo clickable">Hide Menu</li>
 		</ul>
-		<div class="mapLegendContainer">
+		<div class="mapLegendContainer js">
 			<h2>Map Legend</h2>
 			<div class="accordion">
 				<h3><a href="#">Contributors</a></h3>
+				<div id="mapLegendContributors" class="mapLegendInnerContainer">
+				</div>
 				
 			</div>
 			<div class="accordion">
