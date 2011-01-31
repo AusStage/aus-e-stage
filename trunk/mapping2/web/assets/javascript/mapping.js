@@ -226,6 +226,9 @@ MappingClass.prototype.updateMap = function() {
 	
 	// finalise the map updates
 	mappingObj.resizeMap();
+	
+	// update the map legend
+	mapLegendObj.showLegend();
 }
 
 // function to build the table for the iconography layout

@@ -112,7 +112,10 @@ html, body {
 	padding-left: 10px;
 	padding-right: 10px
 	overflow: hidden;
-	width: 150px;
+	/* width: 150px; */
+	/* temp width */
+	/* don't forget the peekaboo method */
+	width: 250px;
 	padding-bottom: 32767px;
 	margin-bottom: -32767px;
 }
@@ -165,7 +168,9 @@ a:hover {
 
 /* specific styles for the main content div */
 .main {
-	margin-left: 160px;
+	/* temp development margin */
+	/* margin-left: 160px; */
+	margin-left: 260px;
 	min-height: 100%;
 }
 
@@ -419,6 +424,63 @@ table.mapIconHelpTbl td {
 .mapLegendContainer {
 	margin-top: 10px;
 }
+
+.mapLegendInnerContainer {
+	padding: 0px;
+	margin: 0px;
+}
+
+.mapLegendContainer a {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+.mapLegendContainer a:visited {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+.mapLegendContainer a:hover {
+	/* same colour as f-189 */
+	text-decoration: underline;
+	color: #001bcc;
+}
+
+table.mapLegendTable {
+	background-color: #fff;
+	text-align: left;
+	border-collapse: collapse;
+	width: 245px;
+	margin-left: -30px;
+	margin-right: 0px;
+	padding-right: 0px;
+	margin-top: -5px;
+}
+
+/*.mapLegendIcon {*/
+/*	width: 34px;*/
+/*	vertical-align: center;*/
+/*	padding: 0px;*/
+/*}*/
+
+.mapLegendIconImg {
+	margin: 0px;
+	padding: 0px;
+	height: 32px;
+	width: 32px;
+	display: block;
+}
+
+.mapLegendShowHide {
+	width: 15px;
+}
+
+.mapLegendDelete {
+	width: 15px;
+}
+	
 
 
 /* Styles for the Tipsy Library */

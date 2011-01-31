@@ -158,7 +158,8 @@ function resizeSidebar() {
 		sidebarState = 1;
 	} else {
 		// show the sidebar
-		$('.sidebar').animate({width: 150}, 'slow', function() {
+		// temp development width
+		$('.sidebar').animate({width: 250}, 'slow', function() {
 			$('.peekaboo-tohide').show();
 			$('.peekaboo').removeClass('peekaboo-big');
 			$('.peekaboo').text('Hide Menu');
@@ -200,6 +201,37 @@ function sortOrganisationArray(a, b) {
 		return 1;
 	}
 }
+
+// define a function used to sort an array of contributor objects on name
+function sortContributorArrayAlt(a, b) {
+
+	if(a.lastName == b.lastName) {
+		if((a.lastName + a.firstName) == (a.lastName + a.firstName)) {
+			return 0;
+		} else if((a.lastName + a.firstName) < (a.lastName + a.firstName)) {
+			return -1;
+		} else {
+			return 1;
+		}
+	} else if(a.lastName < b.lastName) {
+		return -1;
+	} else {
+		return 1;
+	}
+}
+
+// define a function used to sort an array of organisation objects on name
+function sortOrganisationArrayAlt(a, b) {
+
+	if(a.name == b.name) {
+		return 0;
+	} else if(a.name < b.name) {
+		return -1;
+	} else {
+		return 1;
+	}
+}
+
 
 // define a function used to sort an array of venue objects on name
 function sortVenueArray(a, b) {
