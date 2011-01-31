@@ -111,19 +111,84 @@ MapLegendClass.prototype.updateLegend = function() {
 		
 		// finish the table and add it to the page
 		tableData += '</table>';
-		$('#mapLegendContributors').empty().append(tableData);	
+		$('#mapLegendContributors').empty().append(tableData);
+		
+		if(objects.length > 0) {
+			$('#mapLegendContributorHeading').empty().append('Contributors (' + objects.length +')');
+		}
 	}
 	
 	if(recordData.organisations.objects.length > 0) {
 		// add the organisations
+		objects = recordData.organisations.objects;
+		
+		// reset the tableData variable
+		tableData = '<table id="mapLegendOrganisations" class="mapLegendTable">';
+		
+		// loop through the list of objects
+		for(var i = 0; i < objects.length; i++) {
+		
+			// colour the odd rows
+			if(i % 2 == 1) {
+				tableData += '<tr class="odd">'; 
+			} else {
+				tableData += '<tr>'; 
+			}
+			
+			obj = objects[i];
+			idx = $.inArray(obj.id, mappingObj.organisationColours.ids);
+			
+			// add the icon
+			tableData += '<td class="mapLegendIcon"><span class="' + mappingObj.organisationColours.colours[idx] + ' mapLegendIconImg"><img src="' + mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+			
+			// build a tmp variable containing the name
+			//tmp = obj.name;
+			//tmp = tmp.replace(/\s/g, '&nbsp;');
+			
+			// add the name and functions
+			tableData += '<td class="mapLegendInfo"><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
+			
+			// add the address
+			tableData += mappingObj.buildAddressAlt(obj.suburb, obj.state, obj.country);
+			
+			// add the show/hide check box
+			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendOrganisation" class="mapLegendShowHideOrganisation use-tipsy" value="' + obj.id + '" title="Tick to hide this organisation"/></td>';
+			
+			// add the delete icon
+			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Organisation from Map"></span></td>';
+			
+			// finsih the row
+			tableData += '</tr>';		
+		}
+		
+		// finish the table and add it to the page
+		tableData += '</table>';
+		$('#mapLegendOrganisations').empty().append(tableData);
+		
+		if(objects.length > 0) {
+			$('#mapLegendOrganisationHeading').empty().append('Organisations (' + objects.length +')');
+		}
+		
 	}
 	
 	if(recordData.venues.objects.length > 0) {
 		// add the venues
+		
+		/*
+		if(objects.length > 0) {
+			$('#mapLegendVenueHeading').empty().append('Venues (' + objects.length +')';
+		}
+		*/
 	}
 	
 	if(recordData.events.objects.length > 0) {
 		// add the events
+		
+		/*
+		if(objects.length > 0) {
+			$('#mapLegendEventsHeading').empty().append('Events (' + objects.length +')';
+		}
+		*/
 	}
 }
 

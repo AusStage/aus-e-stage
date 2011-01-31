@@ -65,24 +65,30 @@
 		<ul>
 			<li class="peekaboo clickable">Hide Menu</li>
 		</ul>
-		<div class="mapLegendContainer js">
+		<div class="mapLegendContainer js peekaboo-tohide">
 			<h2>Map Legend</h2>
 			<div class="accordion">
-				<h3><a href="#">Contributors</a></h3>
+				<h3><a href="#" id="mapLegendContributorHeading">Contributors</a></h3>
 				<div id="mapLegendContributors" class="mapLegendInnerContainer">
 				</div>
 				
 			</div>
 			<div class="accordion">
-				<h3><a href="#">Organisations</a></h3>
+				<h3><a href="#" id="mapLegendOrganisationHeading">Organisations</a></h3>
+				<div id="mapLegendOrganisations" class="mapLegendInnerContainer">
+				</div>
 				
 			</div>
 			<div class="accordion">
-				<h3><a href="#">Venues</a></h3>
+				<h3><a href="#" id="mapLegendVenueHeading">Venues</a></h3>
+				<div id="mapLegendVenues" class="mapLegendInnerContainer">
+				</div>
 				
 			</div>
 			<div class="accordion">
-				<h3><a href="#">Events</a></h3>
+				<h3><a href="#" id="mapLegendEventHeading">Events</a></h3>
+				<div id="mapLegendEvents" class="mapLegendInnerContainer">
+				</div>
 				
 			</div>
 		</div>

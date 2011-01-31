@@ -126,6 +126,10 @@ html, body {
 	list-style:none;
 }
 
+.sidebar li {
+	margin-bottom:0.25em;
+}
+
 .sidebar a {
 	/* same colour as f-188 */
 	color: #ffffff;
