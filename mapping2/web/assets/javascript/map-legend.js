@@ -173,22 +173,94 @@ MapLegendClass.prototype.updateLegend = function() {
 	
 	if(recordData.venues.objects.length > 0) {
 		// add the venues
+		objects = recordData.venues.objects;
 		
-		/*
-		if(objects.length > 0) {
-			$('#mapLegendVenueHeading').empty().append('Venues (' + objects.length +')';
+		// reset the tableData variable
+		tableData = '<table id="mapLegendVenues" class="mapLegendTable">';
+		
+		// loop through the list of objects
+		for(var i = 0; i < objects.length; i++) {
+		
+			// colour the odd rows
+			if(i % 2 == 1) {
+				tableData += '<tr class="odd">'; 
+			} else {
+				tableData += '<tr>'; 
+			}
+			
+			obj = objects[i];
+			
+			// add the icon
+			tableData += '<td class="mapLegendIcon"><span class="' + mapIconography.venueColours[0] + ' mapLegendIconImg"><img src="' + mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+						
+			// add the name and functions
+			tableData += '<td class="mapLegendInfo"><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
+			
+			// add the address
+			tableData += mappingObj.buildAddress(obj.street, obj.suburb, obj.state, obj.country);
+			
+			// add the show/hide check box
+			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendVenue" class="mapLegendShowHideVenue use-tipsy" value="' + obj.id + '" title="Tick to hide this venue"/></td>';
+			
+			// add the delete icon
+			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Venue from Map"></span></td>';
+			
+			// finsih the row
+			tableData += '</tr>';		
 		}
-		*/
+		
+		// finish the table and add it to the page
+		tableData += '</table>';
+		$('#mapLegendVenues').empty().append(tableData);
+		
+		if(objects.length > 0) {
+			$('#mapLegendVenueHeading').empty().append('Venues (' + objects.length +')');
+		}
 	}
 	
 	if(recordData.events.objects.length > 0) {
 		// add the events
+		objects = recordData.events.objects;
 		
-		/*
-		if(objects.length > 0) {
-			$('#mapLegendEventsHeading').empty().append('Events (' + objects.length +')';
+		// reset the tableData variable
+		tableData = '<table id="mapLegendEvents" class="mapLegendTable">';
+		
+		// loop through the list of objects
+		for(var i = 0; i < objects.length; i++) {
+		
+			// colour the odd rows
+			if(i % 2 == 1) {
+				tableData += '<tr class="odd">'; 
+			} else {
+				tableData += '<tr>'; 
+			}
+			
+			obj = objects[i];
+			
+			// add the icon
+			tableData += '<td class="mapLegendIcon"><span class="' + mapIconography.eventColours[0] + ' mapLegendIconImg"><img src="' + mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+						
+			// add the name and functions
+			tableData += '<td class="mapLegendInfo"><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
+			tableData += obj.venue.name + ', ' + mappingObj.buildAddressAlt(obj.venue.suburb, obj.venue.state, obj.venue.country);
+			
+			// add the show/hide check box
+			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendEvent" class="mapLegendShowHideEvent use-tipsy" value="' + obj.id + '" title="Tick to hide this event"/></td>';
+			
+			// add the delete icon
+			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Event from Map"></span></td>';
+			
+			// finsih the row
+			tableData += '</tr>';		
 		}
-		*/
+		
+		// finish the table and add it to the page
+		tableData += '</table>';
+		$('#mapLegendVenues').empty().append(tableData);
+		
+		if(objects.length > 0) {
+			$('#mapLegendEventsHeading').empty().append('Events (' + objects.length +')');
+		}
 	}
 }
 
