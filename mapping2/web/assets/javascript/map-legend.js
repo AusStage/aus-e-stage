@@ -256,7 +256,7 @@ MapLegendClass.prototype.updateLegend = function() {
 		
 		// finish the table and add it to the page
 		tableData += '</table>';
-		$('#mapLegendVenues').empty().append(tableData);
+		$('#mapLegendEvents').empty().append(tableData);
 		
 		if(objects.length > 0) {
 			$('#mapLegendEventsHeading').empty().append('Events (' + objects.length +')');

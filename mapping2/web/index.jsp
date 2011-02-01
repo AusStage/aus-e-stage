@@ -86,7 +86,7 @@
 				
 			</div>
 			<div class="accordion">
-				<h3><a href="#" id="mapLegendEventHeading">Events</a></h3>
+				<h3><a href="#" id="mapLegendEventsHeading">Events</a></h3>
 				<div id="mapLegendEvents" class="mapLegendInnerContainer">
 				</div>
 				
