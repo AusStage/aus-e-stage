@@ -7,8 +7,11 @@ var vis;
 var focus;
 
 // sizing and scales 
-var w = $(window).width() - 250,	//width of the focus panel = width of the window less padding for the sidebar AND slider on the left.
-	h = $(window).height() - 112;  	//height of the focus panel
+var spacer = 40;
+var hSpacer = 45;
+var w;
+var	h;
+
 
 var startDate;
 var endDate;
@@ -78,7 +81,8 @@ var edgeIndexPoint = -1;	//stores the index of the edge that the mouse is curren
 var nodeIndexPoint = -1;	//stores the index of the node that the mouse is currently over. Used for mouse in/out. 
 
 //CLICK VARIABLES
-var currentFocus;			//set ON CLICK. EDGE or NODE
+var dragIndicator = false;  //set to true on drag
+var currentFocus = "";			//set ON CLICK. EDGE or NODE
 var edgeId = -1;			//stored the ID of the selected EDGE
 var edgeIndex = -1;			//stores the INDEX of the selected contributor - specific to the selected edge.
 var nodeIndex = -1;			//stores the INDEX of the selected NODE	
@@ -98,22 +102,36 @@ var CLEAR = "clear";
 =======================================================================================================================*/
 $(document).ready(function() {
 	
+	//set the width and height
+	w = $(window).width() - ($("#sidebar").width()+spacer);
+
+	h =  $(window).height() - ($("#header").height()+$("footer").height()+hSpacer);  	//height of the focus panel
+	
+	//set up legend
+	$("#selected_object").hide();
+
+	$("#related_objects").hide();
+
+	$("#selected_object").click(function () {
+		$(this).toggleClass("open");	
+		$("#related_objects").slideToggle();
+	}); 
+
+	$("#network_properties_header").hide();
+
+	$("#network_properties").hide();
+
+	$("#network_properties_header").click(function () {
+		$(this).toggleClass("open");	
+		$("#network_properties").slideToggle();		
+	}); 
+
 	//hide the ruler div
 	$("#ruler").hide();
 	
 	//hide the main div
 	$("#main").hide();
 	
-	//set up accordion legend and hide it
-	$(function() {
-		$( ".accordion" ).accordion({collapsible: true,
-									 clearStyle: true,
-									 active: false});
-	});
-
-	$("#network_details_div").hide();
-	$("#network_properties_div").hide();	
-
 	// style the buttons
 	$("button, input:submit").button();
 		
@@ -180,7 +198,7 @@ $(document).ready(function() {
 function showInteraction(){
 		$("#main").show();
 		$("#display_labels_div").show();	
-		$("#network_properties_div").show();	
+		$("#network_properties_header").show();	
 
 }
 
@@ -216,7 +234,7 @@ function showGraph(targetDiv){
     	.events("all")
 	    .event("mousedown", pv.Behavior.pan().bound(1))
 	    .event("mousewheel", pv.Behavior.zoom(0.4).bound(1))
-    	.event("pan", transform)
+    	.event("pan", transformPan)
 	    .event("zoom", transform)
 	    .event("click", function(d) {onClick(null, CLEAR, null); return focus;})
 		;
@@ -316,7 +334,17 @@ function showGraph(targetDiv){
 /* TRANSFORM FUNCTIONS - handles zoom, pan, drag, click and window resize events.
 ====================================================================================================================*/
 
-// pan and zoom handler 
+//pan handler... ha! repeates exactly what zoom handler does, but changes the drag indicator. 
+//Couldn't work out how to combine the two. stoopid
+function transformPan(){
+	dragIndicator = true;
+	var t = this.transform().invert();
+		xAxis.domain(xAxis.invert(t.x + xAxis(startDate) *t.k),xAxis.invert(t.x + xAxis(endDate) * t.k));				
+		yAxis.domain(yAxis.invert(t.y + yAxis(0) *t.k), yAxis.invert(t.y + yAxis(events.nodes.length) * t.k));
+	vis.render();
+}
+
+// zoom handler 
 function transform() {
 	
 	var t = this.transform().invert();
@@ -327,13 +355,13 @@ function transform() {
 
 //window resize handler
 function windowResized(){
-	  
+
 	  var t = focus.transform().invert();  	//get mouse position and scale 	
 		  
 	  //reset the width and height
-	  w = $(window).width() - 250;
-	  h = $(window).height() - 112;
-	  
+	  w = $(window).width() - ($("#sidebar").width()+spacer);
+	  h = $(window).height() - ($("#header").height()+$("footer").height()+hSpacer);
+
 	  //reset the timeline range accordingly
 	  xAxis.range(0, w);
 	  yAxis.range(0, h);
@@ -348,6 +376,8 @@ function dragNode(d){
 	var y = focus.mouse().y;		//get mouse position
 	d.top = yAxis.invert(y);		//update the node position		
 
+	dragIndicator = true;
+
 	vis.render();
 }
 
@@ -355,10 +385,16 @@ function dragNode(d){
 function onClick(d, what, p){
 	switch (what){
 		case CLEAR: 
-			currentFocus = "";
-		    edgeId = -1;
-		    edgeIndex = -1;
-			nodeIndex = -1;					
+			if (!dragIndicator){
+				currentFocus = "";
+			    edgeId = -1;
+			    edgeIndex = -1;
+				nodeIndex = -1;
+				resetLegend();					
+			}else {
+				what = currentFocus;
+			} 
+			dragIndicator = false;
 			break;
 		
 		case EDGE: 
@@ -369,12 +405,19 @@ function onClick(d, what, p){
 			break;
 		
 		case NODE: 
-			currentFocus = NODE;
-			edgeId = -1;
-			edgeIndex = -1;
-  	   	    nodeIndex = p.index;
+			if (!dragIndicator){
+				currentFocus = NODE;
+				edgeId = -1;
+				edgeIndex = -1;
+  	   	   		nodeIndex = p.index;
+			}else{
+				what = currentFocus;
+				console.log(currentFocus);
+			}
+			dragIndicator = false;
 			break;
 	}	
+		if(currentFocus == ""){currentFocus = CLEAR;}
 		displayPanelInfo(what);			
 		windowResized();
 }
@@ -638,17 +681,19 @@ function displayPanelInfo(what){
 	var dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
 	var tableClass = "";
 	
-	var contributorList = "";
+	var contributorList = new Array();
 	var eventList = [];
 	
 	//clear the info panel
 	$("#selected_object").empty();
 	$("#related_objects").empty();
 	
-	if (what == CLEAR){	html = " ";
-						$("#network_details_div").hide();
+	if (what == CLEAR){	
+		html = " ";
+		$("#selected_object").hide();
+		$("#related_objects").hide();		
 	}else{
-		$("#network_details_div").show();
+		$("#selected_object").show();
 	}
 			
 	
@@ -657,21 +702,30 @@ function displayPanelInfo(what){
 	if (what == NODE){
 
 		//set the title to the event.
-		titleHtml = events.nodes[nodeIndex].nodeName+" <p>"+
-    				events.nodes[nodeIndex].venue+" "+			//venue
-    				dateFormat(events.nodes[nodeIndex].startDate)+"</p>";
+		titleHtml = "<a href=" + eventUrl +""+ events.nodes[nodeIndex].id+" target=\"_blank\">"+
+										events.nodes[nodeIndex].nodeName+"</a><p>"+
+										events.nodes[nodeIndex].venue+" "+
+										dateFormat(events.nodes[nodeIndex].startDate)+"</p>";
 		
+		//create an array of related contributors, sort by last name
+    	for (i = 0; i < events.nodes[nodeIndex].contributor_id.length; i++){
+
+    		var lastName = events.nodes[nodeIndex].contributor_name[i].split(" ")[1];
+    		contributorList[i] = {name:lastName,
+    		 					  fullName: events.nodes[nodeIndex].contributor_name[i],
+    					   		  id:events.nodes[nodeIndex].contributor_id[i]}		
+    	}
+    	contributorList.sort(sortByName);    	
 		//create the list of contributors
-		for(i = 0; i < events.nodes[nodeIndex].contributor_name.length; i++){
+		for(i = 0; i < contributorList.length; i++){
 			if(isEven(i)) tableClass = "d0";
 			 else tableClass = "d1";
-			contributorList += "<tr class=\""+tableClass+"\"><td><a href=" + contributorUrl +""+ events.nodes[nodeIndex].contributor_id[i]+" target=\"_blank\">"+
-								events.nodes[nodeIndex].contributor_name[i] +"</a>"+
+			html += "<tr class=\""+tableClass+"\"><td><a href=" + contributorUrl +""+ contributorList[i].id+" target=\"_blank\">"+
+								contributorList[i].fullName +"</a>"+
 								"<p>"+"Role Not Yet Supported"+"</p></td></tr>" 	
 		}
 	  
-		html += contributorList+
-    			"</table><br>";	  
+		html += "</table><br>";	  
 	}
 
 	//***************/
@@ -1044,4 +1098,17 @@ function measureText(pText) {
  $("#ruler").append(pText);
  return $("#ruler").width();
  
+}
+
+//sorting function
+function sortByName(a, b) {
+    var x = a.name.toLowerCase();
+    var y = b.name.toLowerCase();
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+}
+
+function resetLegend(){
+	if ($("#selected_object").attr('class').indexOf("open") >=0){
+		$("#selected_object").toggleClass("open");			
+	}
 }

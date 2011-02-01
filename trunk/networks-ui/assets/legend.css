@@ -1,0 +1,112 @@
+/*
+ * This file is part of the Aus-e-Stage Beta Root Website
+ *
+ * The Aus-e-Stage Beta Root Website is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The Aus-e-Stage Beta Root Website is distributed in the hope that it will
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the Aus-e-Stage Beta Root Website.
+ * If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* root element for Legend. */
+.legendHeader {
+        font-weight:normal;
+        margin:0 0 0 0;
+        font-size:14px;
+        color:#fff;	
+        padding:10px 10px 10px 10px;
+        background: #aaaaaa;
+        font-family:Helvetica, Arial, sans-serif;
+        cursor:pointer;
+
+}
+
+.legendHeader:hover {
+		background: #bbbbbb;
+}
+
+.legendHeader a{
+        font-weight:normal;
+        margin:0 0 0 0;
+        font-size:14px;
+        color:#fff;
+}
+
+.legendHeader p{
+        font-weight:normal;
+        margin:0 0 0 0;
+        font-size:10px;
+        color:#fff;
+}
+
+.legendHeader.open  {
+		background: #333333;
+}
+
+.legendBody {
+        margin:0;
+        padding:0;
+        height:230px;
+        overflow:auto;
+        resize:vertical;
+        background: #fff;
+        font-family:Helvetica, Arial, sans-serif;
+        border:1px solid #fff;
+        border-width:0 2px;
+        display:none;
+        color:#000;
+        font-size:12px;       
+}
+
+.legendBody.small{
+        margin:0;
+        padding:0;
+        height:130px;
+        resize:none;
+        overflow:auto;
+        background: #fff;
+        font-family:Helvetica, Arial, sans-serif;
+} 
+
+.legendBody a {
+        font-weight:normal;
+        margin:0 0 -5px 0;
+        font-size:14px;
+        color:#3300ff;
+}
+
+.legendBody p {
+        font-weight:normal;
+        margin:0 0 -5px 0;
+        font-size:10px;
+        color:#000;
+}
+
+.legendBody tr.d1 td {
+	background-color:#CCC; 	
+	padding-bottom:10px;
+}
+
+.legendBody tr.d0 td {
+	background-color:#fff; 
+	padding-bottom:10px;
+}
+
+
+
+
+/* a title inside pane */
+.legendBody .pane h3 {
+        font-weight:normal;
+        margin:0 0 -5px 0;
+        font-size:16px;
+        color:#999;
+}

@@ -27,11 +27,12 @@
 	<!-- helper files -->
     <script type="text/javascript" src="assets/javascript/network-ui.js"></script>   
 
-	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.4.custom.css" type="text/css" />
+	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.css" />	
 	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.filter.css" />	
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
 	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/tabs-accordion.css" />		
 
 <style>
 //#protovis   { position: absolute; width: 986px; float:left; top: 75px; bottom: 50px; left: 200px; background-color: red; }
@@ -83,12 +84,29 @@
 		</div>
 
 		<div id="network_details_div">
-			<ul id="selected_details">
-			</ul>
-	
-			<ul id="network_details">
-			</ul>
+			<!--Legend/ info window for the network -->
+			<div class="accordion">
+				<h2><a href="#" id="selected_object"></a></h2>
+				<div class="pane" id="related_objects"></div>
+			</div>
 		</div>
+		<div id="network_properties_div">
+			<!--Network properties will always display. -->						
+			<div class="accordion">
+				<h2><a href="#" id="network_properties_header">Network Properties</a></h2>
+				<div class="pane" id="network_properties" >
+				</div>
+			</div>
+		</div>		
+		<br>
+		<div id="display_labels_div">
+			<input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" />
+			<label for="showContributors">Show ALL contributor names</label>
+			<br>
+			<input type="checkbox" name="showRelatedContributors" class="checkbox" id="show_contrib_check" />
+			<label for="showContributors">Show RELATED contributor names</label>
+		</div>
+
 		<br>
 		<div id="faceted_browsing_btn_div" align=right>
 			<input type="submit" name="submit" class="button" id="faceted_browsing_btn" value="Faceted Browsing" />
@@ -106,75 +124,31 @@
 			<br>
 			<br>	
 		</div>
+	</div>
 
 
-		<div id="advanced_search_div">
-			<div id="date_range_div" align=right>
-
-				<form name="dateRanges">
-					<table width = 100%>
-						<tr>
-							<td colspan=2>
-							<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
-							<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
-							<select name="startDate" id="startDate">
-							</select>
-							<select name="endDate" id="endDate">
-							</select>	
-							</td>
-						</tr>
-						<tr>
-						<!-- little hack to space out the information nicer. Hopefully I'll find a better way to do this.-->
-						<td colspan=2>&nbsp</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td><input type="submit" name="submit" class="button" id="refresh_date_btn" value="Refresh" /></td>
-						</tr>					
-
-					</table>												
-				</form>
-			</div>
-			
-			<div id="faceted_browsing_div" Title="Faceted Browsing">
-				<form id = "faceted_browsing">
-					<p><b>Contributor Functions</b></p>
-					<div id="faceted_function_div" class="scroll_checkboxes"></div>
-					<p><b>Gender</b></p>
-					<div id="faceted_gender_div" class="scroll_checkboxes_small"></div>
-					<p><b>Nationality</b></p>
-					<div id="faceted_nationality_div" class="scroll_checkboxes"></div>
-					<p id="faceted_selection_p"></p>
-				</form>
-				<br>
-				<br>
-				<br>
-			</div>
-		</div>
-</div>
-
-<!--dialogue for loading the network. -->
-<div id="network_loading" style="display: none" title="Loading Network. Please wait...">
-	<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
-</div>
+	<!--dialogue for loading the network. -->
+	<div id="network_loading" style="display: none" title="Loading Network. Please wait...">
+		<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+	</div>
 
 	<!-- Search form div -->
-<div id="search_div" title="Contributor Search">
-	<p>Enter a contributor name, or part of their name, and click the search button</p>
-	<form name="search" action="">			
-		<table class="formTable">
-			<tbody>
-				<tr>
-				<th scope="row">
-				<label id="name_label" for="name">Contributor Name: </label>
-				</th>
-				<td>
-				<input type="text" size="40" id="query" name="query" title="Enter the contributor name, or part of their name, and click the search button"/>
-				</td>
-				</tr>
-			</tbody>
-		</table>
-	</form>
+	<div id="search_div" title="Contributor Search">
+		<p>Enter a contributor name, or part of their name, and click the search button</p>
+		<form name="search" action="">			
+			<table class="formTable">
+				<tbody>
+					<tr>
+					<th scope="row">
+					<label id="name_label" for="name">Contributor Name: </label>
+					</th>
+					<td>
+					<input type="text" size="40" id="query" name="query" title="Enter the contributor name, or part of their name, and click the search button"/>
+					</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
 		<table id="search_results" class="searchResults">
 			<thead>
 				<tr>
@@ -198,12 +172,11 @@
 		<p>
 		 <strong>Note: </strong>Search results are limited to 5 records. If you do not see the contributor that you expected, please refine your search. Alternatively the contributor may not be part of the Navigating Networks Dataset at this time.
 		</p>		
-</div>
+	</div>
 
 
-<div id="footer">
-
-</div>
+	<div id="footer">
+	</div>
 
 </div>
 </body>

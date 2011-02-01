@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" lang="en">
 <head>
-	<title>Test</title>
+	<title>Navigating Networks - Event to Event</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 	<link rel="stylesheet" type="text/css" media="screen" href="assets/main-style.css"/>
 
@@ -30,7 +30,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.filter.css" />	
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
 	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/tabs-accordion.css" />	
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/legend.css" />	
 
    <!-- Google Analytics Script -->
 <script type="text/javascript">
@@ -58,7 +58,7 @@
 <div id="wrap">
 
 
-	<div id="header"><h1>Test Page</h1></div>
+	<div id="header"><h1>Navigating Networks - Event to Event</h1></div>
 	
 
 	<div id="sidebar">
@@ -73,25 +73,13 @@
 		      	<input type="submit" name="submit" class="button" id="network_btn" value="View" />	             
 	  	  	  </form>
 		</div>
-		<div id="network_details_div">
-	
-			<!--Legend/ info window for the network -->
-			<div class="accordion">
-				<h2><a href="#" id="selected_object"></a></h2>
-				<div class="pane" id="related_objects"></div>
-			</div>
-		</div>
-		<div id="network_properties_div">
-			<!--Network properties will always display. -->						
-			<div class="accordion">
-				<h2><a href="#" id="network_properties_header">Network Properties</a></h2>
-				<div class="pane" id="network_properties" >
-				</div>
-			</div>
-		</div>		
 
-
-							
+		<div class="legendHeader" id="selected_object" ></div>
+		<div class="legendBody" id="related_objects"></div>
+			
+		<div class="legendHeader" id="network_properties_header" >Network Properties</div>
+		<div class="legendBody small" id="network_properties"></div>
+					
 		<br>
 		
 		<div id="display_labels_div">
@@ -123,9 +111,8 @@
 	</div>
 
 
-<div id="footer">
-</div>
-
+	<div id="footer">
+	</div>
 </div>
 </body>
 </html>
