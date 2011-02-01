@@ -1,37 +1,124 @@
+//GLOBAL VARIABLES
+//=======================================================
+var vis = null;
+var force;
+
+//sizing 
+var w = $(window).width() - 250,	//width of the focus panel = width of the window less padding for the sidebar AND slider on the left.
+	h = $(window).height() - 94;  	//height of the focus panel
+	
+/* appearance variables */
+var panelColor = "white";
+
+var thickLine = 3;
+var thinLine = 1.5;
+
+var largeFont = "8 pt sans-serif";
+var smallFont = "6 pt sans-serif";
+
+var selectedEdge = "rgba(0,0,255,1)";				//blue
+var selectedLabel = "rgba(0,0,255,1)";				//blue
+var selectedNode = "rgba(0,0,255,1)";				//blue
+var selectedNodeBorder = "rgba(0,0,255,1)";  		//blue
+var selectedText = "rgba(0,0,255,1)";				//blue
+
+var unselectedEdge = "rgba(170,170,170,0.7)";		//light grey
+var unselectedLabel = "rgba(170,170,170,1)";			//light grey
+var unselectedNode = "rgba(170,170,170,0.7)";		//light grey
+var unselectedNodeBorder = "rgba(170,170,170,1)";	//light grey
+var unselectedText = "rgba(170,170,170,1)";			//light grey
+
+var relatedEdge = "rgba(46,46,46,0.7)";				//dark grey
+var relatedLabel = "rgba(46,46,46,1)";				//dark grey
+var relatedNode = "rgba(46,46,46,1)";				//dark grey
+var relatedNodeBorder = "rgba(46,46,46,1)";			//dark grey
+var relatedText = "rgba(46,46,46,1)";				//dark grey
 
 
-//style buttons
+var showAllContributors = false;	//set to true if related checkbox is checked. Will display all contributor labels
+var showRelatedContributors = false;	//set to true if related checkbox is checked. Will display related contributor labels
+
+//MOUSE OVER VARIABLES
+var nodeIndexPoint = -1;	//stores the index of the node that the mouse is currently over. Used for mouse in/out. 
+var edgeTIndexPoint = -1;  	//stores the target index of the edge that the mouse is currently over. Used for mouse in/out. 
+var edgeSIndexPoint = -1;	//stores the source index of the edge that the mouse is currently over. Used for mouse in/out. 
+ 
+//CLICK VARIABLES
+var nodeIndex = -1;			//stores the INDEX of the selected NODE	 
+var edgeTIndex = -1;		//stores the target index of the edge selected
+var edgeSIndex = -1;		//stores the source index of the edge selected
+
+// constants    
+var EDGE = "edge";
+var NODE = "node";
+var CLEAR = "clear";
+
+//PAGE SET UP
+//=======================================================
 
 $(document).ready(function() {
+	
+	//hide the main div
+	$("#main").hide();
+	
+	//hide the show labels checkboxes
+	$("#display_labels_div").hide();
+	
+	//set up accordion legend and hide it
+	$(function() {
+		$( ".accordion" ).accordion({collapsible: true,
+									 clearStyle: true,
+									 active: false});
+	});
+
+	$("#network_details_div").hide();
+	$("#network_properties_div").hide();	
+	
 	// style the buttons
 	$("button, input:submit").button();
 	
 	// disable network button
 	$("#network_btn").button("disable");
 		
-	//hide the date range
-	$("select#startDate").hide();
-	$("select#endDate").hide();
-	$("#date_range_div").hide();
-	
-	//hide the faceted browsing button
-	$("#faceted_browsing_btn_div").hide();
-	//hide the faceted browsing
-	$("#faceted_browsing_div").hide();
-	
-	
 	//clear search field values
 	$("#id").val("");
 	$("#name").val("");
 	
 	//set the focus to id
 	$("#id").focus();
+	
+	//deal with window resizing	
+	$(window).resize(function() {
+	  windowResized();
+	});
+	
+	//set up label on/off checkboxes for contributor names
+	$("input[name=showAllContributors]").click(function() { 
+
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showAllContributors]").is(":checked")){
+			showAllContributors = true;	
+    	}
+    	else showAllContributors = false;
+    	vis.render();
+	}); 
+	//set up label on/off checkboxes for contributor names
+	$("input[name=showRelatedContributors]").click(function() { 
+
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showRelatedContributors]").is(":checked")){
+			showRelatedContributors = true;	
+    	}
+    	else showRelatedContributors = false;
+    	vis.render();
+	}); 
+
 		
 });
 
 
-//search area ////////////////////////////////////////////////////////////////////////////
-// define lookup functionality and all the buttons for search and display /
+//SEARCH CONTRIBUTOR SET UP
+//=======================================================
 $(document).ready(function() {
 
 	//define the lookup button
@@ -113,7 +200,6 @@ $(document).ready(function() {
    			}
 	});	
 
-    
     //setup the search contributors dialogue
 	$("#search_div").dialog({ 
 		autoOpen: false,
@@ -150,7 +236,6 @@ $(document).ready(function() {
 		}
 	});
     
-
 	//set up network button    
 	$("#network_btn").click(function() {
 
@@ -161,78 +246,26 @@ $(document).ready(function() {
         	return false;
       	}
 	 
-	 	findAndDisplayContributorNetwork(id); 
+	 	getNetworkAndDisplay(id); 
 	 	
 	 	//tidy up the form
 	 	$("#name").val("");
 		$("#id").val(""); 
      	return false;
     });
+});    
     
-    //set up refresh button
-    $("#refresh_date_btn").click(function() {
-    	$("#startDateStore").val( $("select#startDate").val()) ;
-    	$("#endDateStore").val( $("select#endDate").val()) ;  
-		refreshNetwork("dateRange");
-	    return false;
-    });
-
-    //set up browsing button
-    $("#faceted_browsing_btn").click(function() {
-		$("#faceted_browsing_div").dialog("open");
-	    return false;
-    });
-
-    //set up faceted browsing dialog
-    $("#faceted_browsing_div").dialog({ 
-		autoOpen: false,
-		closeOnEscape: false,
-		height: 600,
-		width: 300,
-		modal: false,
-		position: ["right","top"],
-		buttons: {
-			"Refresh": function() {
-				reloadFacetedSelection();
-				refreshNetwork("browse");
-				return false;
-			},
-			'Close': function(){
-				$(this).dialog('close');
-				return false;
-			}
-		},
-		open: function(){
-		$("#refresh_date_btn").button("disable");	
-		browseTrigger = true;
-		refreshNetwork("browse");
-		},
-	  	close: function() {
-		$("#refresh_date_btn").button("enable");	
-		browseTrigger= false;
-		refreshNetwork("dateRange");
-		}
-	
-	});
-    
-});
-
-  
-
 function showLoader(type) {
-
 	if(type == "show" || typeof(type) == "undefined") {
 		// tidy up the search results
 		$("#search_results_body").empty();
 		$("#search_results").hide();
-	
 		//show the loading message
 		$("#search_waiting").hide();
 	} else {
 		// hide the loading message
 		$("#search_waiting").hide();
 	}
-	
 }
  
 
@@ -259,14 +292,8 @@ function closeWaitingDialog() {
 	$("#network_loading").dialog('close');
 }
 
-
-// SEARCH DIV functions.
-// query dataset for contributor
-// display returned results.
-
 //look for contributors
 function getContributors(queryString){
-
 	var dataString = "http://beta.ausstage.edu.au/networks/search?task=collaborator&query="+queryString+"&format=json&limit=5&callback=?";
 	$("#search_waiting").show();
 		  jQuery.getJSON(dataString, 
@@ -276,12 +303,10 @@ function getContributors(queryString){
 			});
 	}
 
-
 //display results in the search results div.	
 function displayResults(results){
 	//define helper constants
 	var MAX_FUNCTIONS = 3;
-
 	// tidy up the search results
 	$("#search_results_body").empty();
 	$("#search_results").hide();
@@ -292,11 +317,10 @@ function displayResults(results){
 	
 	// loop through the search results
 	for(i = 0; i < results.length; i++){
-		
 		contributor = results[i];
-		
 		// add the name and link
-		html += '<tr><td><a href="' + contributor.url + '" target="ausstage" title="View the record for ' + contributor.name + ' in AusStage">' + contributor.name + '</a></td>';
+		html += '<tr><td><a href="' + contributor.url 
+				+ '" target="ausstage" title="View the record for ' + contributor.name + ' in AusStage">' + contributor.name + '</a></td>';
 		
 		// add the list of functions
 		html += '<td><ul>';
@@ -313,10 +337,7 @@ function displayResults(results){
 		}
 		
 		html += '</ul></td>';
-		
-		// add the contributor count
-//		html += '<td>' + contributor.collaborations + '</td>';
-		
+				
 		// add the button
 		html += '<td><button id="choose_' + contributor.id + '" class="choose_button">Choose</button></td>';
 		
@@ -369,620 +390,67 @@ function displayResults(results){
 }
 
 
-//Network display/////////////////////////////////////////////////////////////////////////////////////////
+//DATA RETRIEVAL 
+//=======================================================
 
-// NETWORK information search and display functions
-// 	find and display contributor network,
-//  load node neighbors (used in network interaction)
-//  set date ranges for time slider
-
-//define the function to find and contributor network based on id
-function findAndDisplayContributorNetwork(id){
+function getNetworkAndDisplay(id){
    
-   //build the url
-   var dataString = "http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id="+id+"&radius=1&callback=?";
+   	//build the url
+   	var dataString = "http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id="+id+"&radius=1&callback=?";
 
-   //display the loading bar
-				waitingDialog();
+   	//display the loading bar
+	waitingDialog();
 
 	//query the api
-	  jQuery.getJSON(dataString, 
-			function(data) {
-				
+	jQuery.getJSON(dataString, 
+			function(data) {			
 				// small fix for erroneous export, should be able to remove later
 				if(!contains(data.nodes, null)){ 
-					
 					contributors = null;
 					contributors = data;
-					
-					
-					//need to do date population before loading the graph
-					//get the date ranges
-					var dateRange = findDateRange();
-	
-					//set the date ranges for the slider
-					setDateRanges(dateRange);		
-
-					//find all functions for faceted browsing
-					setFacetedOptions(getFacetedOptions(contributors.nodes));		
-
-					//display the faceted Options
-					$("#faceted_browsing_div").show();
-				
-					//load the graph
-					reloadNetwork("protovis")
-
-					//update the side panel with contributor infomation
-					displayAllInfo(contributors.nodes.length-1,contributors);
-				
-					//display the slider
-					$("#date_range_div").show(); 
-					//display the faceted browsing button
-					$("#faceted_browsing_btn_div").show();
+					showGraph("protovis");
+					showInteraction();
 				}
 				else{
 					alert("Data for contributor "+id+" is corrupted. Please search for another contributor");
 				}
 				//hide the loading bar				
 				closeWaitingDialog();
-
-			});
-	}
-
-
-
-//Faceted Browsing operations.//////////////////////////
-
-//get all functions from the contributor list.
-function getFacetedOptions(nodeList){
-	
-	//function variables
-	var functionList = [""];
-	var currFunction;
-	var functionIndex = 0;
-	
-	//gender variables
-	var genderList = [""];
-	var currGender;
-	var genderIndex = 0;
-	
-	//nationality variables
-	var nationalityList = [""];
-	var currNationality;
-	var nationalityIndex = 0;
-	var returnArray = [""];
-
-	//loop through the nodelist.
-	for (i=0; i<nodeList.length; i++){
-		
-		//find unique genders. if null set to unknown
-		currGender = nodeList[i].gender;
-		if (currGender == null){
-			currGender = "Unknown";
-		}
-		
-		if (contains(genderList, currGender) == false){
-			genderList[genderIndex] = currGender;
-			genderIndex++;
-		}
-		
-		//find unique nationality. If null set to unknown
-		currNationality = nodeList[i].nationality;
-		if (currNationality == null){
-			currNationality = "Unknown";
-		}
-		if (contains(nationalityList, currNationality) == false){
-			nationalityList[nationalityIndex] = currNationality;
-			nationalityIndex++;
-		}
-						
-		//loop through the function list. 
-		for (x=0; x<nodeList[i].functions.length; x++){	
-		
-			//if - this function is not in function list, add it to the function list.
-			currFunction = nodeList[i].functions[x];
-
-			if (contains(functionList, currFunction ) == false){
-				functionList[functionIndex] = currFunction;
-
-				functionIndex++;
 			}
-		//else do nothing
-		}
-	}
-
-	returnArray[0] = functionList;
-	returnArray[1] = genderList;
-	returnArray[2] = nationalityList;
-	
-	return returnArray;
-}
-
-
-//set the select box with functions
-function setFacetedOptions(facetedList){
-	
-	var functionList = facetedList[0];
-	var genderList = facetedList[1];
-	var nationalityList = facetedList[2];
-
-	
-	//clear the functions list
-	$("#faceted_function_div").empty();
-	//clear the gender list
-	$("#faceted_gender_div").empty();
-	//clear the nationality list
-	$("#faceted_nationality_div").empty();
-	//clear the description area
-	$("#faceted_selection_p").empty();
-	
-	
-	//sort and create the function checkboxes
-	functionList.sort();	
-	for(i = 0; i<functionList.length; i++){
-	$("#faceted_function_div").append('<input type="checkbox" id="function" value="'+functionList[i]+'" /> <label for="'+i+'">'+functionList[i]+
-	'</label><br>');
-	}	
-
-	
-	//sort and create the gender checkboxes
-	genderList.sort();	
-	for(i = 0; i<genderList.length; i++){
-	$("#faceted_gender_div").append('<input type="checkbox" id="gender" value="'+genderList[i]+'" /> <label for="'+i+'">'+genderList[i]+
-	'</label><br>');
-	}	
-
-	//sort and create the nationality checkboxes
-	nationalityList.sort();	
-	for(i = 0; i<nationalityList.length; i++){
-	$("#faceted_nationality_div").append('<input type="checkbox" id="nationality" value="'+nationalityList[i]+'" /> <label for="'+i+'">'+nationalityList[i]+
-	'</label><br>');
-	}	
-
-	//restrict gender to only one check box selected.
-	$('#faceted_gender_div input:checkbox').exclusiveCheck();
-
-}
-
-	//update the display to show what's been selected
-	function reloadFacetedSelection() {
-		
-		$("#faceted_selection_p").empty();
-		var displayStr = "";
-		var startStr = "<b>Contributors who are: </b><br>";
-		var middleStr = "<br><b>and </b>";
-		var middleOrStr = "<br><b>or </b>";
-		var functionStr = "";
-		var genderStr = "";
-		var nationalityStr = "";
-		
-		if($("input:checked").length>0){
-	         displayStr = startStr;         
-		}
-         
-        $("input#function:checked").each(function (index, value) {
-               functionStr += value.value + "<br>";
-        });
-        
-        if(functionStr.length !=0){
-        	functionStr += " ";
-        }
-        
-        //remove the last - and replace with s
-		functionStr = functionStr.replace("<br> ","s ");
-
-        
-        $("input#gender:checked").each(function (index, value) {
-               genderStr += value.value + " ";
-        });
-        
-        $("input#nationality:checked").each(function (index, value) {
-               nationalityStr += value.value + " "+ middleOrStr;
-        });
-        
-        if(nationalityStr.length!=0){
-        	nationalityStr+= " ";
-        }
-        nationalityStr = nationalityStr.replace(middleOrStr+" "," ");
-
-		
-		displayStr += functionStr;
-		
-		if(functionStr.length !=0 && genderStr.length != 0){
-			displayStr += middleStr;			
-		}
-		displayStr += genderStr;
-		
-		if((functionStr.length !=0 && genderStr.length != 0 && nationalityStr.length !=0)||
-			(functionStr.length == 0 && genderStr.length !=0 && nationalityStr.length !=0)||
-			(functionStr.length !=0 && genderStr.length ==0 && nationalityStr.length !=0) ){
-				displayStr += middleStr;
-		}
-		displayStr += nationalityStr;
-		
-                     
-        $("#faceted_selection_p").append(displayStr);
-   };
-
-
-//validate and clean date records.
-function validateDate(dateRecord){
-	switch (dateRecord.length){
-		case 6:
-			dateRecord = dateRecord.substring(0,4)+"-01-01";
-			break;
-		case 8:
-			dateRecord = dateRecord.substring(0,7)+"-01";
-			break;
-	}
-	return dateRecord;		
-}
-
-//findDateRange - traverses the firstdate of contributors and gets the largest and smallest values to become our date range.
-function findDateRange(){
-	contributors.edges[0].firstDate = validateDate(contributors.edges[0].firstDate)
-	
-	var startDate = contributors.edges[0].firstDate;
-	var endDate = contributors.edges[0].firstDate;
-	for (i = 1; i < contributors.edges.length; i++){
-		
-		contributors.edges[i].firstDate = validateDate(contributors.edges[i].firstDate);
-		
-		if (startDate > contributors.edges[i].firstDate){
-			startDate = contributors.edges[i].firstDate;			
-			}
-		if (endDate < contributors.edges[i].firstDate){
-			endDate = contributors.edges[i].firstDate;
-			}
-		}
-		return new Array(startDate, endDate);
-	
-	}
-
-
-// sets the slider values.
-function setDateRanges(dateRange){
-
-		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-		var days = [31,28,31,30,31,30,31,31,30,31,30,31]
-		//set the start and end dates
-		var startDate = dateRange[0];
-		var endDate = dateRange[1];
-
-		var currYear = startDate.substring(0,4);
-		var currMonth = startDate.substring(5,7);
-
-		var endYear = endDate.substring(0,4);
-		var endMonth = endDate.substring(5,7);		
-
-		var startList = document.getElementById("startDate");
-		var endList = document.getElementById("endDate");
-
-		var firstRun = true;
-		var finishPopulate = false;
-		
-		//clear date range select boxes
-		while (startList.hasChildNodes()) {
- 			 startList.removeChild(startList.firstChild);
-		}
-		while (endList.hasChildNodes()) {
- 			 endList.removeChild(endList.firstChild);
-		}
-
-		for(currYear; currYear<=endYear; currYear++){ 
-
-				if (!firstRun) currMonth = 1; 						
-				for(currMonth; currMonth<=12 ; currMonth++){
-
-					if(!finishPopulate){
-						var month = document.createElement("option");
-						var month2 = document.createElement("option");							
-							
-						month2.value = (currYear+"-"+currMonth+"-"+days[currMonth-1]);
-						
-						month2.appendChild(document.createTextNode(months[currMonth-1]+"_"+currYear));							
-						month.value = (currYear+"-"+currMonth+"-"+"01");
-						
-						month.appendChild(document.createTextNode(months[currMonth-1]+"_"+currYear));							
-						if (firstRun){
-								firstRun = false; 
-						}
-						if (currYear == endYear && currMonth == endMonth){
-								finishPopulate=true;
-						}
-						startList.appendChild(month);
-						endList.appendChild(month2);
-					}
-				}
-						
-						
-		}
-		// select the last and first options before building the time slider
-        $("#startDate option:first").attr("selected", "selected");
-        $("#endDate option:last").attr("selected", "selected");
-
-		
-		$("#startDateStore").val( $("select#startDate").val()) ;
-    	$("#endDateStore").val( $("select#endDate").val()) ;
-		
-		// remove any existing slider
-	    $('.ui-slider-scale').hide();
-		$('.ui-slider').slider('destroy');
-        
-		$('select#startDate, select#endDate').selectToUISlider({
-			labels: 6,
-			labelSrc:"text"
-		});	
-		
-}
-
-//loadNodeNeighbors takes the json data and loads each node as the first value in a 3d array. Any 
-// associated nodes are then added into the second array. 
-function loadNodeNeighbors(contributors){
-				
-	var nodeHash = new Array();
-	var firstIndex=0;
-	for(firstIndex; firstIndex < contributors.nodes.length; firstIndex++){
-				
-		var secondIndex = 0;	
-		nodeHash[firstIndex] = new Array();
-				
-		for(var x=0; x<contributors.edges.length; x++){
-			if (contributors.edges[x].source == firstIndex){	
-				nodeHash[firstIndex][secondIndex]=contributors.edges[x].target;
-				secondIndex++;						
-			}
-			if (contributors.edges[x].target == firstIndex){
-				nodeHash[firstIndex][secondIndex]=contributors.edges[x].source;
-				secondIndex++;
-			}
-		}
-	}
-	return nodeHash;
+	);
 }
 
 
 
-//SIDE PANEL information display functions
-//  display all info
-//  	display network stats
-//		display contributor info
-//		display edge info 
-
-
-    //displays overall network and selected contributor information
-    function displayAllInfo(activeNode, contributors){
-    	updateNetworkInfo(contributors);
-    	updateSelectedInfo(activeNode, contributors, "nodes");
-    	}
-    
-    //displays the network statistics in the side panel
-function updateNetworkInfo(contributors){
-		var eventCount = 0;
-		for (i=0;i<contributors.edges.length;i++){
-			eventCount = eventCount+contributors.edges[i].value;
-		}
-		
-	    var html = 	"<br><table style=\"border-bottom: grey 1px solid; border-top:grey 1px solid;\" >"+
-	    			"<tr><td colspan=2> <h3> Network Properties </h3></td> </tr>"+
-    				"<tr><td valign=top><b> Centre:</b></td><td> <a href ="+contributors.nodes[activeNode].nodeUrl.replace("amp;", "")+
-    				" target=\"_blank\">"+	    
-					contributors.nodes[activeNode].nodeName+" ("+contributors.nodes[activeNode].id+")"+    				
-    				"</a></td></tr>"+
-    				"<tr><td><b>Contributors:</b></td><td> "+contributors.nodes.length+"</td></tr>"+					
-					"<tr><td><b>Relationships:</b> </td><td>"+contributors.edges.length+"</td></tr>"+
-					"<tr><td><b>Collaborations:</b> </td><td>"+eventCount+"</td></tr>";
-    				
- 		$("#network_details").empty();
-		$("#network_details").append(html);
-
+//GRAPH DISPLAY
+//=======================================================
+function showInteraction(){
+		$("#main").show();
+		$("#display_labels_div").show();
+		$("#network_properties_div").show();		
 }
-    
-    //displays information on the selected contributor in the side panel
-function updateSelectedInfo(activeNode, contributorArray, ui_focus){
-    //get contributor functions
-    var functionList = "";
-    var html = "<br><table style=\"border-bottom: grey 1px solid; border-top:grey 1px solid;\" >";
-    
-    //clear the window of previous information
-    $("#selected_details").empty(); 
-
-    if (ui_focus == "nodes"){	  	
-    	for(i = 0;i<contributorArray.nodes[activeNode].functions.length; i++){
-			functionList = functionList + contributorArray.nodes[activeNode].functions[i] + "<br>";
-    	} 
-    	html += 	"<tr><td colspan=2>"+ 
-    			"<a href="+contributorArray.nodes[activeNode].nodeUrl.replace("amp;", "")+" target=\"_blank\"><b>"
-    			+contributorArray.nodes[activeNode].nodeName +" ("+contributorArray.nodes[activeNode].id+")</b></a>"+
-    			"</td></tr>"+
-    			"<tr><td valign=top>"+
-    			"<b>Functions: </b><br>"+
-    			functionList+"</td></tr>"+
-    			"<tr><td><b>Relationships:</b> "+nodeNeighbors[activeNode].length+"</td></tr>"
-    			"</table>";
-
-    }
-    else if(ui_focus =="link"){
-		
-    	
-    	html +=  "<tr><td><a href="+contributorArray.sourceNode.nodeUrl.replace("amp;", "")+"><b>"+contributorArray.sourceNode.nodeName+
-				" ("+contributorArray.sourceNode.id+")</b></a>"+
-    			"</td></tr><tr><td><a href="+contributorArray.targetNode.nodeUrl.replace("amp;", "")+"><b>"+contributorArray.targetNode.nodeName+
-				" ("+contributorArray.targetNode.id+")</b></a></td></tr>"+
-				"<tr><td><b>Date Range: </b></td></tr><tr><td>"+formatDate(contributorArray.firstDate) + " to " + formatDate(contributorArray.lastDate)+"</td> </tr>"+
-				"<tr><td><b>Events: </b>"+contributorArray.value+"</td></tr>" ;
-    }
-
-		$("#selected_details").append(html);    		
-}
-//small helper functions.
-
-	// formatDate function, takes in Ausstage format date, and spits out date string as dd mmm yyyy
-	// ASSUMES date input as YYYY-MM-DD
-	function formatDate(d){
-		
-		var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-		var dateToken = d.split("-");
-		var day = dateToken[2];
-		var month = monthNames[dateToken[1]-1];
-		var year = dateToken[0];
-
-		return day+" "+month+" "+year;		
-	}
-	 	
-    //quick function to check if an array contains a property	
-	function contains(a, obj){
-		for(var i = 0; i < a.length; i++) {
-    		if(a[i] == obj){
-		      return true;
-    		}
-  		}
-  		return false;
-	}
-	
-
-//Protovis code. for displaying the graph/////////////////////////////////////////////////
-	
-//global variables, to be used with protovis code.
-var vis = null;
-
-// holds functions selected by faceted browsing criteria
-var selectedFunctions = [""];
-
-// holds gender selected by faceted browsing criteria
-var selectedGender = "";
-
-// holds the nationality selected by faceted browsing options
-var selectedNationality = [""];
-
-// define variables for colour options.
-
-    //backgound for the graph	
-	var bgColour = "white";
-			
-    //edge colour for Selected edges		
-	var activeLinkStroke = "rgba(0,0,255,1)";
-	
-	//edge colour for related edges.
-    var relatedLinkStroke = "rgba(46,46,46,0.7)"; 
-    
-    //edge colour for non related edges
-    var inactiveLinkStroke = "rgba(170,170,170,0.7)";
-    
-    //mouse over colour for edges. - not currently in use.
-    var mouseoverLinkStroke = "rgba(220,20,60,0.7)";
-
-	//edge and node colouring for elemenst out of the range of the date slider.
-    var outOfDateEdge = "rgba(170,170,170,0.05)";
-    var outOfDateNode = "rgba(170,170,170,0.1)";
-        		
-    // node fill and stroke for related nodes    		
-    var relatedNodeFill = "rgba(46,46,46,1)";
-    var relatedNodeStroke = "rgba(46,46,46,1)";
-    		
-    // node fill and stroke for unrelated nodes		
-    var inactiveNodeFill = "rgba(170,170,170,1)";
-    var inactiveNodeStroke = "rgba(170,170,170,1)";
-    		
-    // node fill and stroke for focus-central node.
-    var focusNodeFill = "blue";
-    var focusNodeStroke = "blue";
-    var focusText = "blue";
-    
-    
-    // faceted colour scheme
-    var bgColourFacet = "#333333";   
-    var nodeFacet = "rgba(170,170,170,1)";
-    var nodeFacetStroke = "rgba(170,170,170,1)";
-    var focusNodeFacet = "blue";
-    var focusNodeStrokeFacet = "blue";
-    var focusNodeRelStrokeFacet = "white";
-    var linkFacet = "rgba(170,170,170,0.2)";
-	var relatedLinkFacet = "rgba(255,255,255,0.9)";
-	var activeLinkFacet = "rgba(255,255,255,0.9)";    
-    var textFacet = "white";
-  		 
-	//width and height settings for the protovis window.
-	var w = 995,
-    	h = 600;
-
-//define the faceted browsing switch
-	var browseTrigger = false;
-
-// define the active node
-	var activeNode;
-
-// define nodeFocus. True if focus is on nodes. False if on edges.
-    var nodeFocus = true;    	
-
-// define mouseOverEdge. True if mouse is over an edge.
-    var mouseOver = false;
-		
-// store target and source node for edge focus operations
-    var targetNodeSelect;
-    var sourceNodeSelect;
-    	
-// store seperate target and source node info for mouse over operations.
-    var targetNodeMO;
-    var sourceNodeMO;	
-    
-	var nodeNeighbors;
 
 function getNodes(){return contributors.nodes;}
 function getEdges(){return contributors.edges;}
-
-function resetProtovisVariables(){
-
-	activeNode = null;
-	nodeFocus = true;    	
-	mouseOver = false;
-	targetNodeSelect = -1;
-    sourceNodeSelect = -1;
-    targetNodeMO = -1;
-	sourceNodeMO = -1;	
-	
-	selectedFunctions.splice(0, selectedFunctions.length); 
-	selectedGender = "";
-	selectedNationality.splice(0,selectedNationality.length);
-	
-}
+function getCentralNode(){return contributors.nodes.length-1;}
 
 //create the network
-//sets the focus node in position and creates the visualisation. does not render it though.
-function createNetwork(targetDiv){
+function showGraph(targetDiv){
 	if (contributors != null){
-    	
-    	
-    	////////////////////////////////////////////////////////	
-		// construct a 3d array of nodes and their neighbors
-			nodeNeighbors = loadNodeNeighbors(contributors);
-
-		///////////////////////////////////////////////////////
-		// set the active node to the last in the array. -JSON data export puts the central node last.
-		//fix the central node in position. This is a fix to help the stability of the system
-			activeNode = contributors.nodes.length-1;
-			
-			contributors.nodes[activeNode].fix = new pv.Vector(w/2,h/2);
-
-		///////////////////////////////////////////////////////
-		// new panel. 
-		// Essentially the base element 
-		// for all protovis visualisation
-			vis = new pv.Panel().canvas(targetDiv)
-			    .width(w)
-			    .height(h)
-			    .fillStyle(function(){if (browseTrigger==true) {
-			    						return bgColourFacet;
-			    					  }else return bgColour;
-			    						})
-			    .event("mousedown", pv.Behavior.pan())
-			    .event("mousewheel", pv.Behavior.zoom());
-
 		
-		///////////////////////////////////////////////////////
+		prepareData();
+
+		vis = new pv.Panel().canvas(targetDiv)
+				.fillStyle(panelColor)
+			  	.width(function(){return w})
+			  	.height(function(){return h})
+			  	.event("mousedown", pv.Behavior.pan())
+			  	.event("mousewheel", pv.Behavior.zoom())
+			  	.event("click", function(d) {onClick(null, CLEAR); return vis;});
+
 		//add a force layout to the Panel. 
-			var	force = vis.add(pv.Layout.Force)
-			    .nodes(getNodes())
+		force = vis.add(pv.Layout.Force)
+			  	.nodes(getNodes())
 			    .links(getEdges())
 			    .bound(true)
 			    .chargeConstant(-80)
@@ -990,410 +458,398 @@ function createNetwork(targetDiv){
 			    .springConstant(0.05)
 			    .chargeMaxDistance(600)			    
 			    .springLength(150)
-//			    .dragConstant(0.06)
-			   // .springConstant(0.05)
  			    .iterations(500)
-			   // .transform(pv.Transform.identity.scale(3).translate(-w/3,-h/3)) 
+ 			    .transform(pv.Transform.identity.scale(1));
 
-				;
-		
-		/////////////////////////////////////////////////////////
 		//add the edges
-  		   force.link.add(pv.Line) 
-  		   		.strokeStyle(function(d, p){return getLinkStrokeStyle(d, p) })
-
-	//	    	.event("mouseover", function(d, p) {targetNodeMO = p.targetNode.index;
-	//		    									sourceNodeMO = p.sourceNode.index;
-	//		    									mouseOver = true;
-	//		    									return vis;
-	//	    										})
-		    										
-	//	    	.event("mouseout", function(d,p) {mouseOver = false;
-	//	    									  targetNodeMO = -1;
-	//	    									  sourceNodeMO = -1;
-	//	    									  return vis;
-	//	    									  })
-
-			    .event("click", function(d, p) {updateSelectedInfo(activeNode, p, "link");
-			    								targetNodeSelect = p.targetNode.index;
-			    								sourceNodeSelect = p.sourceNode.index;
-			    								targetNodeMO = -1;
-			    								sourceNodeMO = -1;
-			    								nodeFocus=false;
-			    								vis.render();})
-			;		
+  		force.link.add(pv.Line)
+	  			.lineWidth(function(d,p){return getEdgeLineWidth(p)})
+	  			.strokeStyle(function(d,p){return getEdgeStroke(p)})
+	  			.event("click", function(d, p) {onClick(p, EDGE); return vis;})		
+	  			.event("mouseover", function(d, p){	edgeTIndexPoint = p.target;
+	  											 	edgeSIndexPoint = p.source;
+	  											 	return vis})
+	  			.event("mouseout", function(d, p){	edgeTIndexPoint = -1;
+	  											 	edgeSIndexPoint = -1;
+	  											 	return vis});
+	  											 	
 		//add the nodes
-			force.node.add(pv.Dot)
-
+		force.node.add(pv.Dot)
 			    .size(function(d){return (d.linkDegree + 1) * Math.pow(this.scale, -1.5)})
-
-			    .fillStyle(function(d){ return getNodeFillStyle(d, this, nodeNeighbors)})
-
-			    .strokeStyle(function(d) { return getNodeStrokeStyle(d, this, nodeNeighbors)})
-
-			    .lineWidth(2)
-
-	 		  	.event("mouseover", function(d) {targetNodeMO = d.index;
-		    									mouseOver = true;
-		    									return vis;})
-
-		    	.event("mouseout", function() {mouseOver = false;
-		    								   targetNodeMO = -1;
-											   return vis;})
-
-			    .event("mousedown", pv.Behavior.drag())
-
+			    .fillStyle(function(d){return getNodeFill(d)})
+			    .strokeStyle(function(d){return getNodeStroke(d)})
+			    .lineWidth(function(d) {return getNodeLineWidth(d)})
+			    
+				.event("click", function(d) {onClick(d, NODE); return vis;})
+			    .event("mouseover", function(d){nodeIndexPoint = d.index;
+			    								return vis;})
+			    .event("mouseout", function(d){nodeIndexPoint = -1;
+			    								return vis;})
+				.event("mousedown", pv.Behavior.drag())			    								
 			    .event("drag", force)
+    			.anchor("top").add(pv.Label)
+    				.text(function(d){return d.nodeName})
+    				.visible(function(d){return isVisible(d)})
+    				.font(function(d){return getFont(d)})
+    				.textStyle(function(d){return getTextStyle(d)});
 
-			    .event("click", function(d) { activeNode = this.index;
-    										  nodeFocus = true;
-			    							  targetNodeSelect = -1;
-			    							  sourceNodeSelect = -1;    										 
-    										  updateSelectedInfo(activeNode, contributors, "nodes");
-    										  return vis;})
-    										  
-    			.event("dblclick", function(d){return findAndDisplayContributorNetwork(contributors.nodes[this.index].id)})
-    			
-    			.anchor("top").add(pv.Label).text(function(d){return d.nodeName})
-    			
-    				.font("9pt sans-serif")
-					.textStyle(	function(d) { return getTextStyle(d, this, nodeNeighbors)})
-					.textShadow("0.1em 0.1em 0.1em #fff")
+		displayNetworkProperties();  
+		displayPanelInfo(NODE);  				
+    	vis.render();		
+	}					    	
+}
+
+//INTERACTION FUNCTIONS - resize, zoom etc
+//=======================================================
+
+function windowResized(){
+	  //reset the width and height
+	  w = $(window).width() - 250;
+	  h = $(window).height() - 94;	  
+	  vis.render();	
+
+}
+
+//click functionality
+function onClick(d, what){
+	switch (what){
+		case CLEAR: 
+			nodeIndex = -1;					
+			edgeTIndex = -1;
+			edgeSIndex = -1;
+			break;
+		
+		case EDGE: 
+			nodeIndex = -1;	
+			edgeTIndex = d.target;
+			edgeSIndex = d.source;	
+			break;
+		
+		case NODE: 
+  	   	    nodeIndex = d.index;
+			edgeTIndex = -1;
+			edgeSIndex = -1;  	   	    
+			break;
+	}
+	displayPanelInfo(what);				
+}
+
+//GRAPH APPEARANCE FUNCTIONS
+//=======================================================
+
+//label visibility
+function isVisible(d){
+	//if mouse is over the node
+	if(d.index==nodeIndexPoint){return true}
+	//if node is selected
+	else if (d.index==nodeIndex){return true}
+	//if mouse is over a related edge
+	else if (d.index == edgeTIndexPoint || d.index == edgeSIndexPoint){return true}
+	//if related edge is selected
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return true}
+	//if show all contributors button is selected
+	else if (showAllContributors){return true}
+	//if show related contributors is selected
+	else if (showRelatedContributors && (contains(d.neighbors, nodeIndex))){return true}
+	else return false;
+}
+
+
+//determine font
+function getFont(d){
+	
+	//if current node index == index of object selected.			
+	if (d.index == nodeIndexPoint){return largeFont;}
+	//if current node index == index of object selected
+	if (d.index == nodeIndex){return largeFont;}
+	//if selected contributor is related to this node
+	if (contains(d.neighbors, nodeIndex)){return largeFont;}
+	//if mouse is over a related edge
+	else if (d.index == edgeTIndexPoint || d.index == edgeSIndexPoint){return largeFont}
+	//if related edge is selected
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return largeFont}
+
+	else 
+		return smallFont;
+}
+
+function getTextStyle(d){
+	//if node is selected
+	if (d.index == nodeIndex){return selectedText;}
+	//if node is related to selected node
+	else if (contains(d.neighbors, nodeIndex)){return relatedText;}
+	//if node is related to selected edge
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return relatedText}
+	else return unselectedText;
+	
+}
+
+
+//line width
+function getNodeLineWidth(d){
+	switch(d.index){
+		case nodeIndexPoint:
+			return thickLine;
+			break;
+		case nodeIndex:
+			return thickLine;
+			break;
+		default : return thinLine;
+	}
+}
+
+function getNodeFill(d){
+	//if node is selected
+	if (d.index == nodeIndex){return selectedNode;}
+	//if node is related to selected node
+	else if (contains(d.neighbors, nodeIndex)){return relatedNode;}
+	//if node is related to selected edge
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return relatedNode}
+	else return unselectedNode;
+}
+
+function getNodeStroke(d){
+	//if node is selected
+	if (d.index == nodeIndex){return selectedNodeBorder;}
+	//if node is related to selected node
+	else if (contains(d.neighbors, nodeIndex)){return relatedNodeBorder;}
+	//if node is related to selected edge
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return relatedNode}	
+	else return unselectedNodeBorder;
+}
+
+function getEdgeLineWidth(p){
+	var i = p.value;
+	if (i != 1){i = i/2;}
+	
+	//if mouse is over this edge
+	if(p.source == edgeSIndexPoint && p.target == edgeTIndexPoint){
+		return i+2;		
+	}
+	if(p.source == edgeSIndex && p.target == edgeTIndex){
+		return i+2;		
+	}
+	else return i;
+}
+
+function getEdgeStroke(p){
+	//if the edge connects to the selected node
+	if (p.source == nodeIndex || p.target == nodeIndex){
+		return relatedEdge;
+	}
+	else if(p.source == edgeSIndex && p.target == edgeTIndex){
+		return selectedEdge;	
+	}
+	else return unselectedEdge;
+}
+
+/* SIDE PANEL INFORMATION DISPLAY METHODS
+====================================================================================================================*/
+//display the network properties
+function displayNetworkProperties(){	
+		var collabCount = 0;
+		for (i=0;i<contributors.edges.length;i++){
+			collabCount = collabCount+contributors.edges[i].value;
+		}
+		var center = getCentralNode();
+		var comma = "";	
+		var contribUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
+	    var html = 	"<table>"+
+	  				"<tr class=\"d0\"><td valign=top><b> Centre:</b></td><td>"+
+	  				"<a href=" + contribUrl +""+ contributors.nodes[center].id+" target=\"_blank\">"+	
+	  				contributors.nodes[center].nodeName+"</a><br> ";
+    	for (var i=0; i<contributors.nodes[center].functions.length; i++){
+    		html+= comma + contributors.nodes[center].functions[i];
+    		comma = ", ";
+    	}
+    	html += "</td></tr>"+
+    				"<tr class=\"d1\"><td><b>Contributors:</b></td><td> "+contributors.nodes.length+"</td></tr>"+					
+					"<tr class=\"d0\"><td><b>Relationships:</b> </td><td>"+contributors.edges.length+"</td></tr></table>";			
+					"<tr class=\"d1\"><td><b>Collaborations:</b> </td><td>"+collabCount+"</td></tr></table>";							
+ 		$("#network_properties").empty();
+		$("#network_properties").append(html);
+
+}
+
+//display information about the selected element.
+function displayPanelInfo(what){
+	
+	var comma = "";
+	var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 
+	var contributorUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id="
+	var titleHtml = ""
+	var html = "<table width=100%>";
+	var dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
+	var tableClass = "";
+	
+	var contributorList = new Array();
+	var eventList = [];
+	
+	//clear the info panel
+	$("#selected_object").empty();
+	$("#related_objects").empty();
+	
+	if (what == CLEAR){	html = " "; $("#network_details_div").hide();}
+	else{$("#network_details_div").show();}
+			
+	
+	//***************/
+	//NODE
+	if (what == NODE){
+	
+		//set the title to the contributor.
+		titleHtml = contributors.nodes[nodeIndex].nodeName+" <p>";
+    	// add the roles
+    	for (var i=0; i<contributors.nodes[nodeIndex].functions.length; i++){
+    		titleHtml+= comma + contributors.nodes[nodeIndex].functions[i];
+    		comma = ", ";
+    	}
+
+    	titleHtml +="</p>";
+		
+		//create an array of related contributors, sort by last name
+    	for (i = 0; i < contributors.nodes[nodeIndex].neighbors.length; i++){
+
+    		var lastName = contributors.nodes[contributors.nodes[nodeIndex].neighbors[i]].nodeName.split(" ")[1];
+    		contributorList[i] = {name:lastName, 
+    					   		  index:contributors.nodes[contributors.nodes[nodeIndex].neighbors[i]].index}		
+    	}
+    	contributorList.sort(sortByName);    	
+    	
+		//build the table of contributors
+		for(i = 0; i < contributorList.length; i++){
+			comma = "";
+			if(isEven(i)) tableClass = "d0";
+			 else tableClass = "d1";
+
+			html += "<tr class=\""+tableClass+"\"><td><a href=" 
+								+ contributorUrl +""+ contributors.nodes[contributorList[i].index].id
+								+" target=\"_blank\">"+
+								contributors.nodes[contributorList[i].index].nodeName +"</a>";
+			
+			html +="<p>";
+			 
+			for (var x=0; x<contributors.nodes[contributorList[i].index].functions.length; x++){
+    			html+= comma + contributors.nodes[contributorList[i].index].functions[x];
+    			comma = ", ";
+	    	}
+			html+="</p></td></tr>";
+		}
+		html += "</table><br>";	  
+		
+	}
+	
+
+	//***************/
+	//EDGE
+/*	if (what == EDGE){
+	
+		titleHtml = events.edges[edgeIndex].name+" <p>"+
+    				events.edges[edgeIndex].role+			
+					"</p>";		
+	
+		var x = 0;
+	
+		//create the list of events
+			for(i = 0; i < events.nodes.length; i++){
+					if (contains(events.nodes[i].contributor_id, edgeId)){
+						eventList[x] = {event:"<a href=" + eventUrl +""+ events.nodes[i].id+" target=\"_blank\">"+
+										events.nodes[i].nodeName+"</a><p>"+
+										events.nodes[i].venue+" "+
+										dateFormat(events.nodes[i].startDate)+"</p>"
+						, startDate:events.nodes[i].startDate};
+						x++;
+					}
+				}
+				//sort events, earliest to latest
+				eventList.sort(function(a, b){return a.startDate - b.startDate})		
 				
-					.visible(function(){return mouseOver && this.index == targetNodeMO || this.index == sourceNodeMO ? true :
-										nodeFocus ? activeNode == this.index?true:false:
-							    		targetNodeSelect == this.index || sourceNodeSelect == this.index ? true : false})
-    			;		
-			}
-					    	
-}
-
-//reload network and render
-function reloadNetwork(targetDiv){
-		resetDateRangeVisibility();
-		resetProtovisVariables();    		
-		createNetwork(targetDiv);
-		vis.render();	
+		//create the html to display the info.
+    	for( i = 0;i<eventList.length; i++ ){
+    		if(isEven(i)) tableClass = "d0";
+			else tableClass = "d1";
+			
+    		html += "<tr class=\""+tableClass+"\"><td>"+eventList[i].event+"</td></tr>"
+    	}
+    	
+    	html+= "</table><br>";
+		
 	}
-	
-//refresh network 
-function refreshNetwork(typeOfRefresh){
-	if(typeOfRefresh == "dateRange"){
-		resetDateRangeVisibility();
-	}
-	else if (typeOfRefresh == "browse"){
-		setFacetedSelection($("input#function:checked"),$("input#gender:checked"),$("input#nationality:checked"));  
-	}
-	vis.render();
-	}
-
-//resets all the visibility fields for nodes
-function resetDateRangeVisibility(){
-
-	for (var i = 0; i<contributors.nodes.length; i++){
-		contributors.nodes[i].visible=false;
-		}
-	}
-
-//resets the checked values for faceted browsing 
-function setFacetedSelection(chosenFunctions, chosenGender, chosenNationality){
-	
-	
-	//reset the function array
-	selectedFunctions.splice(0, selectedFunctions.length);
-
-	//reset the nationality array
-	selectedNationality.splice(0, selectedNationality.length);
-
-
-	//set the function array with chosen values
-	for (i = 0; i < chosenFunctions.length; i++){
-		selectedFunctions[i] = chosenFunctions[i].value;
-	}
-	
-	//reset the gender variable
-	if(chosenGender.length == 1){
-		selectedGender = chosenGender[0].value;
-	}
-	else{
-		selectedGender = "";
-	}
-
-	//set the function array with chosen values
-	for (i = 0; i < chosenNationality.length; i++){
-		selectedNationality[i] = chosenNationality[i].value;
-	}
+*/	
+	$("#selected_object").append(titleHtml);    		
+	$("#related_objects").append(html);    		
 
 }
 
-//functions to set the colour and style of nodes and links	
 
-//link stroke style rules
-function getLinkStrokeStyle(d, p){
-	if (($("#startDateStore").val().substring(0,p.firstDate.length)>p.firstDate)||
-		($("#endDateStore").val().substring(0,p.firstDate.length)<p.firstDate)){
-			return outOfDateEdge;
+/* DATA MANIPULATION FUNCTIONS - manipulate retrieved data and prepare for visualisation.
+====================================================================================================================*/
+
+function prepareData(){
+	
+	//fix the central node in position. This is a fix to help the stability of the system	
+	contributors.nodes[getCentralNode()].fix = new pv.Vector(w/2,h/2);
+	//set the active node
+	nodeIndex = getCentralNode();
+	//set list of adjoining nodes for each node
+	loadNeighbors();	
+}
+
+//adds extra array to each node storing neighboring node indexes
+function loadNeighbors(){
+
+	for(i = 0; i < contributors.nodes.length; i ++){
+
+		//while we're already looping through the nodes array, best remove any double spaces
+		contributors.nodes[i].nodeName = contributors.nodes[i].nodeName.replace("  ", " "); 
+		
+		contributors.nodes[i].neighbors = [];
+		var neighbor_count = 0;
+		
+		for (x = 0; x < contributors.edges.length; x ++){
+			if(contributors.edges[x].source == i){
+				if (!contains(contributors.nodes[i].neighbors, contributors.edges[x].target)){
+					contributors.nodes[i].neighbors[neighbor_count] = contributors.edges[x].target;
+					neighbor_count++;
+				}
 			}
-	else{	
-		p.targetNode.visible = true;
-		p.sourceNode.visible = true;
-		 if (mouseOver == true && p.targetNode.index == targetNodeMO && p.sourceNode.index == sourceNodeMO) {
-			return mouseoverLinkStroke;
-			} 
-	//if the focus is on a node rather than a link
-		else if (nodeFocus == true && (p.sourceNode.index == activeNode || p.targetNode.index == activeNode)){
-			if (browseTrigger){ 
-				return relatedLinkFacet;
-			}
-			else
-				return relatedLinkStroke;
-		}
-	//if the focus is on edges
-		else if (p.targetNode.index == targetNodeSelect && p.sourceNode.index == sourceNodeSelect){
-			if(browseTrigger){
-				return activeLinkFacet;
-			}
-			else
-				return activeLinkStroke;
-			}
-		else if(browseTrigger){
-			return linkFacet;
-		}
-		else 
-			return inactiveLinkStroke;	
+			if(contributors.edges[x].target == i){
+				if (!contains(contributors.nodes[i].neighbors, contributors.edges[x].source)){
+					contributors.nodes[i].neighbors[neighbor_count] = contributors.edges[x].source;
+					neighbor_count++;
+				}
+			}			
+		}			
 	}	
 }
 
-//node fill style rules
-function getNodeFillStyle(d, node, nodeNeighbors){
-	if (browseTrigger){
-		
-		var functionMatch = true;
-		var genderMatch = true;
-		var nationalityMatch = true;
-		var selectedOptions = 0;
-		
-		
-		if(selectedFunctions.length != 0) selectedOptions += 1;
-		if(selectedGender != "") selectedOptions += 1;
-		if(selectedNationality.length != 0) selectedOptions += 1;
-		
-		if(selectedFunctions[0] != ""){
-			//check for matching functions		
-			for(i=0; i<selectedFunctions.length; i++){			
-				if(contains(d.functions, selectedFunctions[i])){
-					functionMatch = true;
-	
-				}
-				else{
-					 functionMatch = false; 
-					 break;
-				}
-			
-			}
-		}
-		
-		if (selectedGender!=""){
-			if(d.gender == null){d.gender = "Unknown";}
-			if (selectedGender == d.gender){
-				genderMatch = true;	
-			}	
-			else genderMatch = false;
-		}
 
-		if(selectedNationality.length!=0){
-			if (d.nationality == null){d.nationality = "Unknown";}			
-			//check for matching functions		
-			if (contains(selectedNationality, d.nationality)){
-				nationalityMatch = true;
-			}
-			else nationalityMatch = false;
-		
-		}
-		
-		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
-
-			return focusNodeFacet;
-		}
-		else{
-			return nodeFacet;
-		}
-	}
-		else
-	if (!d.visible){
-		return outOfDateNode;
-	}
-	else
-	if (nodeFocus==true){
-		
-		if (activeNode== node.index){ 
-			return focusNodeFill;
-		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
-			return relatedNodeFill;	
-		}
-		else return inactiveNodeFill;		
-	}
-	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
-		return focusNodeFill;
-	}
-	else return inactiveNodeFill;	
+//HELPER FUNCTIONS
+//=======================================================
+    
+//quick function to check if an array contains a property	
+function contains(a, obj){
+	for(var i = 0; i < a.length; i++) {
+    	if(a[i] == obj){
+			return true;
+    	}
+  	}
+  	return false;
 }
 
-
-//node stroke style rules
-function getNodeStrokeStyle(d, node, nodeNeighbors){
-	if (browseTrigger){
-		
-		var functionMatch = true;
-		var genderMatch = true;
-		var nationalityMatch = true;
-		var selectedOptions = 0;
-		
-		
-		if(selectedFunctions.length != 0) selectedOptions += 1;
-		if(selectedGender != "") selectedOptions += 1;
-		if(selectedNationality.length != 0) selectedOptions += 1;
-		
-		if(selectedFunctions[0] != ""){
-			//check for matching functions		
-			for(i=0; i<selectedFunctions.length; i++){			
-				if(contains(d.functions, selectedFunctions[i])){
-					functionMatch = true;
+//determine if a number is odd or even returns true if even, false if odd
+function isEven(a){
+	var num = a/2;
+	var inum = Math.round(num);
 	
-				}
-				else{
-					 functionMatch = false; 
-					 break;
-				}
-			
-			}
-		}
-		
-		if (selectedGender!=""){
-			if(d.gender == null){d.gender = "Unknown";}
-			if (selectedGender == d.gender){
-				genderMatch = true;	
-			}	
-			else genderMatch = false;
-		}
-		
-		if(selectedNationality.length!=0){
-			
-			if (d.nationality == null){d.nationality = "Unknown";}			
-			//check for matching functions		
-			if (contains(selectedNationality, d.nationality)){
-				nationalityMatch = true;
-			}
-			else nationalityMatch = false;
-		
-		}
-		
-		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
-			if (contains(nodeNeighbors[activeNode], node.index)==true || activeNode == node.index){
-				return focusNodeRelStrokeFacet;
-			}
-			return focusNodeStrokeFacet;
-		}
-		else{
-			if (contains(nodeNeighbors[activeNode], node.index)==true|| activeNode == node.index){
-				return focusNodeRelStrokeFacet;
-			}
-			return nodeFacetStroke;
-		}
-	}
-		else
-	if (!d.visible){
-		return outOfDateNode;
-	}
-	else
-	if (nodeFocus==true){
-		
-		if (activeNode== node.index){ 
-			return focusNodeStroke;
-		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
-			return relatedNodeStroke;	
-		}
-		else return inactiveNodeStroke;		
-	}
-	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
-		return focusNodeStroke;
-	}
-	else return inactiveNodeStroke;	
+	if (num == inum) return true;
+	else return false;		
 }
 
-//Text style rules
-function getTextStyle(d, node, nodeNeighbors){
-	if (browseTrigger){
-		
-		var functionMatch = true;
-		var genderMatch = true;
-		var nationalityMatch = true;
-		var selectedOptions = 0;
-		
-		
-		if(selectedFunctions.length != 0) selectedOptions += 1;
-		if(selectedGender != "") selectedOptions += 1;
-		if(selectedNationality.length != 0) selectedOptions += 1;
-		
-		if(selectedFunctions[0] != ""){
-			//check for matching functions		
-			for(i=0; i<selectedFunctions.length; i++){			
-				if(contains(d.functions, selectedFunctions[i])){
-					functionMatch = true;
-	
-				}
-				else{
-					 functionMatch = false; 
-					 break;
-				}
-			
-			}
-		}
-		
-		if (selectedGender!=""){
-			if(d.gender == null){d.gender = "Unknown";}
-			if (selectedGender == d.gender){
-				genderMatch = true;	
-			}	
-			else genderMatch = false;
-		}
-		
-		if(selectedNationality.length!=0){
-			if (d.nationality == null){d.nationality = "Unknown";}			
-			//check for matching nationality		
-			if (contains(selectedNationality, d.nationality)){
-				nationalityMatch = true;
-			}
-			else nationalityMatch = false;
-		
-		}
-
-		if (functionMatch == true && genderMatch == true && nationalityMatch == true && selectedOptions > 0 ){
-
-			return focusNodeFacet;
-		}
-		else{
-			return nodeFacet;
-		}
-	}
-		else
-	if (!d.visible){
-		return outOfDateNode;
-	}
-	else
-	if (nodeFocus==true){
-		
-		if (activeNode== node.index){ 
-			return focusNodeFill;
-		}else if (contains(nodeNeighbors[activeNode], node.index)==true){
-			return relatedNodeFill;	
-		}
-		else return inactiveNodeFill;		
-	}
-	else if (targetNodeSelect == node.index || sourceNodeSelect == node.index){
-		return focusNodeFill;
-	}
-	else return inactiveNodeFill;	
+//sorting function
+function sortByName(a, b) {
+    var x = a.name.toLowerCase();
+    var y = b.name.toLowerCase();
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
-
 
