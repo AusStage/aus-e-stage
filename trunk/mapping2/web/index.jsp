@@ -54,7 +54,7 @@
 <div class="wrapper">
 	<div class="header b-187"><h1>AusStage Mapping Service</h1></div>
 	<div class="sidebar b-186 f-184">
-		<div class="peekaboo-tohide">
+		<div class="peekaboo-tohide mainMenu">
 			<h2>Main Menu</h2>
 			<ul>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>

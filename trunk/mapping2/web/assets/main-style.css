@@ -115,7 +115,7 @@ html, body {
 	/* width: 150px; */
 	/* temp width */
 	/* don't forget the peekaboo method */
-	width: 250px;
+	width: 265px;
 	padding-bottom: 32767px;
 	margin-bottom: -32767px;
 }
@@ -174,7 +174,7 @@ a:hover {
 .main {
 	/* temp development margin */
 	/* margin-left: 160px; */
-	margin-left: 260px;
+	margin-left: 275px;
 	min-height: 100%;
 }
 
@@ -427,6 +427,8 @@ table.mapIconHelpTbl td {
 /* styles for the map legend */
 .mapLegendContainer {
 	margin-top: 10px;
+	height: 400px;
+	overflow: auto;
 }
 
 .mapLegendInnerContainer {
@@ -463,11 +465,11 @@ table.mapLegendTable {
 	margin-top: -5px;
 }
 
-/*.mapLegendIcon {*/
-/*	width: 34px;*/
-/*	vertical-align: center;*/
-/*	padding: 0px;*/
-/*}*/
+.mapLegendIcon {
+	width: 34px;
+	vertical-align: top;
+	padding: 0px;
+}
 
 .mapLegendIconImg {
 	margin: 0px;

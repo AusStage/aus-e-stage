@@ -19,6 +19,8 @@
 // define the map legend class
 function MapLegendClass() {
 
+	this.HEIGHT_BUFFER_CONSTANT = 105;
+
 }
 
 // function to hide the legend
@@ -28,6 +30,7 @@ MapLegendClass.prototype.hideLegend = function() {
 
 // initialise the map legend
 MapLegendClass.prototype.init = function() {
+	mapLegendObj.resizeMapLegend();
 	mapLegendObj.hideLegend();
 	
 	// update and show the legend when the map is shown
@@ -100,7 +103,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			}
 			
 			// add the show/hide check box
-			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendContributor" class="mapLegendShowHideContributor use-tipsy" value="' + obj.id + '" title="Tick to hide this contributor"/></td>';
+			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendContributor" class="mapLegendShowHideContributor use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this contributor"/></td>';
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Contributor from Map"></span></td>';
@@ -152,7 +155,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mappingObj.buildAddressAlt(obj.suburb, obj.state, obj.country);
 			
 			// add the show/hide check box
-			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendOrganisation" class="mapLegendShowHideOrganisation use-tipsy" value="' + obj.id + '" title="Tick to hide this organisation"/></td>';
+			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendOrganisation" class="mapLegendShowHideOrganisation use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this organisation"/></td>';
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Organisation from Map"></span></td>';
@@ -200,7 +203,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mappingObj.buildAddress(obj.street, obj.suburb, obj.state, obj.country);
 			
 			// add the show/hide check box
-			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendVenue" class="mapLegendShowHideVenue use-tipsy" value="' + obj.id + '" title="Tick to hide this venue"/></td>';
+			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendVenue" class="mapLegendShowHideVenue use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this venue"/></td>';
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Venue from Map"></span></td>';
@@ -245,7 +248,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += obj.venue.name + ', ' + mappingObj.buildAddressAlt(obj.venue.suburb, obj.venue.state, obj.venue.country);
 			
 			// add the show/hide check box
-			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendEvent" class="mapLegendShowHideEvent use-tipsy" value="' + obj.id + '" title="Tick to hide this event"/></td>';
+			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendEvent" class="mapLegendShowHideEvent use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this event"/></td>';
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Event from Map"></span></td>';
@@ -383,3 +386,30 @@ MapLegendClass.prototype.buildRecordData = function() {
 	
 	return recordData;
 }
+
+// compute the height of the map
+MapLegendClass.prototype.computeMapLegendHeight = function() {
+
+	// start the height calculations
+	//var height = mappingObj.HEIGHT_CONSTANT;
+	var height = 0;
+	
+	// get the height of various elements
+	var wrapper   = $('.wrapper').height();
+	var header    = $('.header').height();
+	var mainMenu  = $('.mainMenu').height();
+	var pushElem  = $('.push').height();
+	var footer    = $('.footer').height();
+	
+	height = wrapper - (header + mainMenu + pushElem + footer + mapLegendObj.HEIGHT_BUFFER_CONSTANT);
+	
+	return Math.floor(height);
+}
+
+// a function to resize the map
+MapLegendClass.prototype.resizeMapLegend = function() {
+	
+	var mapLegendDiv = $('.mapLegendContainer');
+	mapLegendDiv.height(mapLegendObj.computeMapLegendHeight());
+}
+
