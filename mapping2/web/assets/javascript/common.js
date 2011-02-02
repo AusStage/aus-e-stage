@@ -159,7 +159,7 @@ function resizeSidebar() {
 	} else {
 		// show the sidebar
 		// temp development width
-		$('.sidebar').animate({width: 250}, 'slow', function() {
+		$('.sidebar').animate({width: 265}, 'slow', function() {
 			$('.peekaboo-tohide').show();
 			$('.peekaboo').removeClass('peekaboo-big');
 			$('.peekaboo').text('Hide Menu');
