@@ -940,10 +940,11 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
-	var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
+	var header  = '<div class="infoWindowContentHeader b-187 f-184"><div class="infoWindowContentHeaderItems">';
 	var list    = '<div class="infoWindowContentList">';
 	var idx     = null;
 	var colour  = null;
+	var tmp = null;
 	
 	// sort the array
 	mappingObj.infoWindowData.sort(sortContributorArray);
@@ -954,7 +955,8 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 		var data = mappingObj.infoWindowData[i];
 		
 		// add the venue to the header
-		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.contributor.id + '">' + data.contributor.firstName + ' ' + data.contributor.lastName + '</li>';
+		tmp = data.contributor.firstName + ' ' + data.contributor.lastName;
+		header += '<span class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.contributor.id + '">' + tmp.replace(/\s/g, '&nbsp;') + '</span> | ';
 		
 		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.contributor.id + '">';
 		
@@ -1004,7 +1006,8 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 	}
 	
 	// finish the content
-	header += '</ul></div>';
+	header = header.substr(0, header.length - 10);
+	header += '</span></div></div>';
 	list   += '</div>';
 	
 	if(mappingObj.infoWindowData.length > 1) {
@@ -1042,7 +1045,7 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
-	var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
+	var header  = '<div class="infoWindowContentHeader b-187 f-184"><div class="infoWindowContentHeaderItems">';
 	var list    = '<div class="infoWindowContentList">';
 	var idx     = null;
 	var colour  = null;
@@ -1056,7 +1059,7 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 		var data = mappingObj.infoWindowData[i];
 		
 		// add the venue to the header
-		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.organisation.id + '">' + data.organisation.name + '</li>';
+		header += '<span class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.organisation.id + '">' + data.organisation.name.replace(/\s/g, '&nbsp;') + '</span> | ';
 		
 		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.organisation.id + '">';
 		
@@ -1100,7 +1103,8 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 	}
 	
 	// finish the content
-	header += '</ul></div>';
+	header = header.substr(0, header.length - 10);
+	header += '</span></div></div>';
 	list   += '</div>';
 	
 	if(mappingObj.infoWindowData.length > 1) {
@@ -1138,7 +1142,6 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
-	//var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
 	var header  = '<div class="infoWindowContentHeader b-187 f-184"><div class="infoWindowContentHeaderItems">';
 	var list    = '<div class="infoWindowContentList">';
 	
@@ -1151,7 +1154,6 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		var data = mappingObj.infoWindowData[i];
 		
 		// add the venue to the header
-		//header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name + '</li>';
 		header += '<span class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name.replace(/\s/g, '&nbsp;') + '</span> | ';
 		
 		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.id + '">';
@@ -1190,7 +1192,6 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	}
 	
 	// finish the content
-	//header += '</ul></div>';
 	header = header.substr(0, header.length - 10);
 	header += '</span></div></div>';
 	list   += '</div>';
