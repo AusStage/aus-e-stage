@@ -1138,7 +1138,8 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 
 	// define a variable to store the infoWindow content
 	var content = '<div class="infoWindowContent">';
-	var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
+	//var header  = '<div class="infoWindowContentHeader b-187 f-184"><ul class="infoWindowContentHeaderItems">';
+	var header  = '<div class="infoWindowContentHeader b-187 f-184"><div class="infoWindowContentHeaderItems">';
 	var list    = '<div class="infoWindowContentList">';
 	
 	// sort the array
@@ -1150,7 +1151,8 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		var data = mappingObj.infoWindowData[i];
 		
 		// add the venue to the header
-		header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name + '</li>';
+		//header += '<li class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name + '</li>';
+		header += '<span class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name.replace(/\s/g, '&nbsp;') + '</span> | ';
 		
 		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.id + '">';
 		list += '<span class="infoWindowListIcon ' + mapIconography.venueColours[0] + '"><img src="'+ mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
@@ -1188,7 +1190,9 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 	}
 	
 	// finish the content
-	header += '</ul></div>';
+	//header += '</ul></div>';
+	header = header.substr(0, header.length - 10);
+	header += '</span></div></div>';
 	list   += '</div>';
 	
 	if(mappingObj.infoWindowData.length > 1) {
