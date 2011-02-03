@@ -27,7 +27,7 @@ var thinLine = 1.5;
 
 var fontHeight = 9;
 var largeFont = "8 pt sans-serif";
-var smallFont = "6 pt sans-serif";
+var smallFont = "8 pt sans-serif";
 
 var hoverEdge = "rgba(105, 105, 105, 0.5)";			//slate grey
 var hoverText = "rgba(105, 105, 105, 0.5)";			//slate grey
@@ -40,7 +40,7 @@ var selectedText = "rgba(0,0,255,1)";				//blue
 
 var unselectedEdge = "rgba(170,170,170,0.7)";		//light grey
 var unselectedLabel = "rgba(170,170,170,1)";			//light grey
-var unselectedNode = "rgba(170,170,170,0.7)";		//light grey
+var unselectedNode = "rgba(170,170,170,1)";		//light grey
 var unselectedNodeBorder = "rgba(170,170,170,1)";	//light grey
 var unselectedText = "rgba(170,170,170,1)";			//light grey
 
@@ -97,7 +97,6 @@ var NODE = "node";
 var CLEAR = "clear";
 
 
-
 /*PAGE SET UP - set display style and hide elements etc
 =======================================================================================================================*/
 $(document).ready(function() {
@@ -105,27 +104,20 @@ $(document).ready(function() {
 	//set the width and height
 	w = $(window).width() - ($("#sidebar").width()+spacer);
 
-	h =  $(window).height() - ($("#header").height()+$("footer").height()+hSpacer);  	//height of the focus panel
-	
+	h =  $(window).height() - ($("#header").height()+$("footer").height()+hSpacer);  	//height of the focus panel	
+
+	createLegend("#network_properties_header");
+	createLegend("#selected_object");
+
 	//set up legend
 	$("#selected_object").hide();
 
 	$("#related_objects").hide();
 
-	$("#selected_object").click(function () {
-		$(this).toggleClass("open");	
-		$("#related_objects").slideToggle();
-	}); 
-
 	$("#network_properties_header").hide();
 
 	$("#network_properties").hide();
-
-	$("#network_properties_header").click(function () {
-		$(this).toggleClass("open");	
-		$("#network_properties").slideToggle();		
-	}); 
-
+	
 	//hide the ruler div
 	$("#ruler").hide();
 	
@@ -217,18 +209,19 @@ function showGraph(targetDiv){
 	// X-axis and ticks. 
 	vis.add(pv.Rule)
     	.data(function() {return xAxis.ticks()})
+    	.strokeStyle("lightgrey")
     	.left(xAxis)
 			.anchor("bottom").add(pv.Label)
 		    .text(xAxis.tickFormat);
 
 	// Y-axis and ticks. 
-	vis.add(pv.Rule)
+	/*vis.add(pv.Rule)
     	.data(function() {return yAxis.ticks()})
 	    .strokeStyle("lightgrey")
     	.top(yAxis)
 			.anchor("left").add(pv.Label)
 		    .text(yAxis.tickFormat);
-    
+    */
 	// Use an invisible panel to capture pan & zoom events. 
 	vis.add(pv.Panel)
     	.events("all")
@@ -390,7 +383,7 @@ function onClick(d, what, p){
 			    edgeId = -1;
 			    edgeIndex = -1;
 				nodeIndex = -1;
-				resetLegend();					
+				resetLegend("#selected_object");					
 			}else {
 				what = currentFocus;
 			} 
@@ -412,7 +405,6 @@ function onClick(d, what, p){
   	   	   		nodeIndex = p.index;
 			}else{
 				what = currentFocus;
-				console.log(currentFocus);
 			}
 			dragIndicator = false;
 			break;
@@ -659,14 +651,15 @@ function displayNetworkProperties(){
 			
 		var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 		
 	    var html = 	"<table>"+
-	  				"<tr class=\"d0\"><td valign=top><b> Centre:</b></td><td>"+
+	  				"<tr class=\"d0\"><td valign=top><b> Centre</b></td><td>"+
 	  				"<a href=" + eventUrl +""+ events.nodes[centreNode].id+" target=\"_blank\">"+	
-	  				events.nodes[centreNode].nodeName+" ("+events.nodes[centreNode].id+")<br>"+
-    				"</a> "+events.nodes[centreNode].venue+"</td></tr>"+
-    				"<tr class=\"d1\"><td><b>Events:</b></td><td> "+events.nodes.length+"</td></tr>"+					
-					"<tr class=\"d0\"><td><b>Contributors:</b> </td><td>"+contributorCount+"</td></tr></table>";			
+	  				events.nodes[centreNode].nodeName+
+    				"</a> <p>"+events.nodes[centreNode].venue+"</p></td></tr>"+
+    				"<tr class=\"d1\"><td><b>Events</b></td><td> "+events.nodes.length+"</td></tr>"+					
+					"<tr class=\"d0\"><td><b>Contributors</b> </td><td>"+contributorCount+"</td></tr></table>";			
  		$("#network_properties").empty();
 		$("#network_properties").append(html);	
+		
 	}	
 }
 
@@ -685,7 +678,6 @@ function displayPanelInfo(what){
 	var eventList = [];
 	
 	//clear the info panel
-	$("#selected_object").empty();
 	$("#related_objects").empty();
 	
 	if (what == CLEAR){	
@@ -764,9 +756,9 @@ function displayPanelInfo(what){
 		
 	}
 	
-	$("#selected_object").append(titleHtml);    		
-	$("#related_objects").append(html);    		
-
+	$("#selected_object").button( "option", "label", titleHtml );					 		
+	$("#related_objects").append(html);  
+	
 }
 
 
@@ -1107,8 +1099,32 @@ function sortByName(a, b) {
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
-function resetLegend(){
-	if ($("#selected_object").attr('class').indexOf("open") >=0){
-		$("#selected_object").toggleClass("open");			
+//reset the legend to its closed state 
+function resetLegend(element){
+	if ($(element).attr('class').indexOf("open") >=0){
+		$(element).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );
+		$(element).toggleClass("open");
+					
 	}
 }
+
+//create the legend
+function createLegend(element){
+	
+	$(element).button({ icons: {primary:'ui-icon-triangle-1-e',secondary:null}});
+    $(element).css({'text-align':'left', width: '248px', 'padding': '0 0 0 0', 'margin':'0 0 0 0'});
+    
+    $(element).click(function () {
+		$(this).toggleClass("open");
+		if($(this).hasClass("open")){
+			$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-s',secondary:null} );
+		} else{
+			$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );					
+		}
+		$(element).next().slideToggle();
+	}); 
+					
+    	
+}	
+	
+
