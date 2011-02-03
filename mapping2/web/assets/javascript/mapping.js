@@ -70,7 +70,7 @@ function MappingClass() {
 	this.markerData = {hashes: [], objects: []};
 					  
 	// variable to keep track of the markers on the map
-	this.mapMarkers = [];      
+	this.mapMarkers = {hashes: [], objects: []};      
 	
 	// variables to hold a height / width constant for use in computing the height / width of the map
 	this.HEIGHT_BUFFER_CONSTANT = 55;
@@ -171,16 +171,17 @@ MappingClass.prototype.updateMap = function() {
 		// reset the map
 	
 		// remove any existing markers
-		for(var i = 0; i < mappingObj.mapMarkers.length; i++) {
+		for(var i = 0; i < mappingObj.mapMarkers.objects.length; i++) {
 			// remove the marker from the map
-			mappingObj.mapMarkers[i].setMap(null);
+			mappingObj.mapMarkers.objects[i].setMap(null);
 		
 			// null this object
-			mappingObj.mapMarkers[i] = null;
+			mappingObj.mapMarkers.objects[i] = null;
 		}
 	
 		// reset the array
-		mappingObj.mapMarkers = [];
+		mappingObj.mapMarkers.objects = [];
+		mappingObj.mapMarkers.hashes = [];
 	}
 	
 	// declare helper variables
@@ -224,7 +225,8 @@ MappingClass.prototype.updateMap = function() {
 			icon:         mapIconography.pointer
 		});
 		
-		mappingObj.mapMarkers.push(marker);
+		mappingObj.mapMarkers.objects.push(marker);
+		mappingObj.mapMarkers.hashes.push(mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude));
 	}
 	
 	// finalise the map updates
