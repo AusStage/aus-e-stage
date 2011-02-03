@@ -145,7 +145,10 @@ MappingClass.prototype.initMap = function() {
 	mappingObj.map = new google.maps.Map(document.getElementById("map_div"), mappingObj.options);
 	
 	// style the map
-	var styledMapOptions = {map: mappingObj.map, name: "AusStage"};
+	var styledMapOptions = {map: mappingObj.map, 
+							name: "AusStage",
+							alt: 'Show AusStage style map'
+						   };
 	var ausstageStyle    = new google.maps.StyledMapType(mappingObj.mapStyle, styledMapOptions);
 	
 	mappingObj.map.mapTypes.set('ausstage', ausstageStyle);

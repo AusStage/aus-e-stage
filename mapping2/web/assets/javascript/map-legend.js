@@ -40,6 +40,9 @@ MapLegendClass.prototype.init = function() {
 			mapLegendObj.hideLegend();
 		}
 	});
+	
+	// add a live event for the pan and zoom controls
+	$('.mapPanAndZoom').live('click', mapLegendObj.panAndZoomMap);
 }
 
 // function to show the legend
@@ -50,6 +53,9 @@ MapLegendClass.prototype.showLegend = function() {
 
 // function to update the legend
 MapLegendClass.prototype.updateLegend = function() {
+
+	// add the pan and zoom section
+	mapLegendObj.buildPanAndZoom();
 
 	// declare helper variables
 	var tableData = "";
@@ -411,5 +417,56 @@ MapLegendClass.prototype.resizeMapLegend = function() {
 	
 	var mapLegendDiv = $('.mapLegendContainer');
 	mapLegendDiv.height(mapLegendObj.computeMapLegendHeight());
+}
+
+// a function to build the pan and zoom controls
+MapLegendClass.prototype.buildPanAndZoom = function() {
+
+	// declare helper variables
+	var tableData = '<table id="mapLegendVenues" class="mapLegendTable">';
+	
+	// add the contries row
+	tableData += '<tr><th scope="row">Country</th>';
+	tableData += '<td><span class="clickable mapPanAndZoom" id="mpz-australia">Australia</span> | <span class="clickable mapPanAndZoom" id="mpz-international">International</span></td></tr>';
+	
+	// add the state row
+	tableData += '<tr class="odd"><th scope="row">State</th>';
+	tableData += '<td><span class="clickable mapPanAndZoom" id="mpz-act">ACT</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-nsw">NSW</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-nt">NT</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-qld">QLD</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-sa">SA</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-tas">TAS</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-vic">VIC</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-wa">WA</span></td></tr>';
+	
+	// add the cities row
+	tableData += '<tr><th scope="row">City</th>';
+	tableData += '<td><span class="clickable mapPanAndZoom" id="mpz-adelaide">Adelaide</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-brisbane">Brisbane</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-canberra">Canberra</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-darwin">Darwin</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-hobart">Hobart</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-melbourne">Melbourne</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-perth">Perth</span> | ';
+	tableData += '<span class="clickable mapPanAndZoom" id="mpz-sydney">Sydney</span></td></tr>';
+	
+	// finalise the table
+	tableData += '</table>';
+	
+	$('#mapLegendPanAndZoom').empty().append(tableData);
+}
+
+// a function to pan and zoom the map
+MapLegendClass.prototype.panAndZoomMap = function () {
+
+	var map = mappingObj.map;
+	var id = this.id.split('-');
+	var location = mappingObj.commonLocales[id[1]];
+	
+	if(map != null) {
+		map.panTo(new google.maps.LatLng(location.lat, location.lng));
+		map.setZoom(location.zoom);
+	}
 }
 
