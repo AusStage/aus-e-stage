@@ -68,6 +68,11 @@
 		<div class="mapLegendContainer js peekaboo-tohide">
 			<h2>Map Legend</h2>
 			<div class="accordion">
+				<h3><a href="#" id="mapLegendPanAndZoomHeading">Pan &amp; Zoom Map</a></h3>
+				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
+				</div>
+			</div>
+			<div class="accordion">
 				<h3><a href="#" id="mapLegendContributorHeading">Contributors</a></h3>
 				<div id="mapLegendContributors" class="mapLegendInnerContainer">
 				</div>
