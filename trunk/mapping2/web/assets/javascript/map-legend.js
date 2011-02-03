@@ -490,4 +490,15 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 	
 	map.setZoom(mapLegendObj.DEFAULT_MARKER_ZOOM_LEVEL);
 	map.panTo(new google.maps.LatLng(obj.latitude, obj.longitude));
+	
+	/*
+	// get the actual marker object
+	idx = $.inArray(mappingObj.computeLatLngHash(obj.latitude, obj.longitude), mappingObj.mapMarkers.hashes);
+	var marker = mappingObj.mapMarkers.objects[idx];
+	
+	// start the marker bouncing and set a timeout
+	marker.setAnimation(google.maps.Animation.BOUNCE);
+
+	setTimeout(function() { marker.setAnimation(null); }, 3000);
+	*/
 }
