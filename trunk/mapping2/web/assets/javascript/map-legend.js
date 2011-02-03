@@ -20,6 +20,9 @@
 function MapLegendClass() {
 
 	this.HEIGHT_BUFFER_CONSTANT = 105;
+	this.DEFAULT_MARKER_ZOOM_LEVEL = 17;
+	
+	this.recordData = null;
 
 }
 
@@ -43,6 +46,7 @@ MapLegendClass.prototype.init = function() {
 	
 	// add a live event for the pan and zoom controls
 	$('.mapPanAndZoom').live('click', mapLegendObj.panAndZoomMap);
+	$('.mapLegendIconImgClick').live('click', mapLegendObj.panAndZoomMapToMarker);
 }
 
 // function to show the legend
@@ -200,7 +204,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			obj = objects[i];
 			
 			// add the icon
-			tableData += '<td class="mapLegendIcon"><span class="' + mapIconography.venueColours[0] + ' mapLegendIconImg"><img src="' + mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+			tableData += '<td class="mapLegendIcon"><span class="' + mapIconography.venueColours[0] + ' mapLegendIconImg"><img class="mapLegendIconImgClick" id="mpz-venue-' + obj.id + '" src="' + mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
 						
 			// add the name and functions
 			tableData += '<td class="mapLegendInfo"><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
@@ -390,6 +394,8 @@ MapLegendClass.prototype.buildRecordData = function() {
 		}
 	}
 	
+	mapLegendObj.recordData = recordData;
+	
 	return recordData;
 }
 
@@ -423,7 +429,7 @@ MapLegendClass.prototype.resizeMapLegend = function() {
 MapLegendClass.prototype.buildPanAndZoom = function() {
 
 	// declare helper variables
-	var tableData = '<table id="mapLegendVenues" class="mapLegendTable">';
+	var tableData = '<table class="mapLegendTable">';
 	
 	// add the contries row
 	tableData += '<tr><th scope="row">Country</th>';
@@ -458,15 +464,30 @@ MapLegendClass.prototype.buildPanAndZoom = function() {
 }
 
 // a function to pan and zoom the map
-MapLegendClass.prototype.panAndZoomMap = function () {
+MapLegendClass.prototype.panAndZoomMap = function() {
 
 	var map = mappingObj.map;
 	var id = this.id.split('-');
 	var location = mappingObj.commonLocales[id[1]];
 	
-	if(map != null) {
-		map.panTo(new google.maps.LatLng(location.lat, location.lng));
-		map.setZoom(location.zoom);
-	}
+	map.setZoom(location.zoom);
+	map.panTo(new google.maps.LatLng(location.lat, location.lng));
 }
 
+// a function to pan and zoom the map to a venue
+MapLegendClass.prototype.panAndZoomMapToMarker = function() {
+
+	var map = mappingObj.map;
+	var id = this.id.split('-');
+	var obj = null;
+	var idx = null;
+	
+	// find the venue object of applicable
+	if(id[1] == 'venue') {
+		idx = $.inArray(id[2], mapLegendObj.recordData.venues.ids);
+		obj = mapLegendObj.recordData.venues.objects[idx];
+	}
+	
+	map.setZoom(mapLegendObj.DEFAULT_MARKER_ZOOM_LEVEL);
+	map.panTo(new google.maps.LatLng(obj.latitude, obj.longitude));
+}

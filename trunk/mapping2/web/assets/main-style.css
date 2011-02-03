@@ -486,6 +486,10 @@ table.mapLegendTable {
 .mapLegendDelete {
 	width: 15px;
 }
+
+.mapLegendIconImgClick {
+	cursor: pointer;
+}
 	
 
 
