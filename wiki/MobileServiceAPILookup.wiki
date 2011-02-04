@@ -108,7 +108,36 @@ The fields of the object are as follows:
 || venueUrl || the persistent link for the venue in !AusStage ||
 || date || the date that the event is occurring in the "Day DD Month, YYYY" format ||
 
-== Form Validation ==
+= Date Lookup Data Fields =
+
+Looks up performances based by a start and end date. 
+
+== Parameters ==
+
+|| *Name*   || *Required Value*     || *Optional* || *Default* ||
+|| task     || date             || No || ||
+|| startdate     || Start date in the format of yyyy-mm-dd || No || || 
+|| enddate     || End date in the format of yyyy-mm-dd || No || || 
+|| callback || function name to use for a JSONP request || Yes || ||
+
+== Result data   ==
+
+A successful request will produces a [http://en.wikipedia.org/wiki/JSON JSON] encoded object that contains metadata about the performances. 
+
+The fields of the object are as follows:
+
+|| *Field Name* || *Purpose ||
+|| event || the name of the event ||
+|| eventUrl || the persistent link for the event in !AusStage ||
+|| question || the text of the question asked of the audience ||
+|| organisation || the name of the organisation holding the event ||
+|| organisationUrl || the persistent link for the organisation in !AusStage ||
+|| venue || the name of the venue where the event is being held ||
+|| venueUrl || the persistent link for the venue in !AusStage ||
+|| date || the date that the event is occurring in the "Day DD Month, YYYY" format ||
+
+
+= Form Validation = 
 
 Many forms use the [http://docs.jquery.com/Plugins/validation jQuery Validation Plugin] and the lookup API supports the validation of the following fields via the [http://docs.jquery.com/Plugins/Validation/Methods/remote#options remote validation method]:
 
