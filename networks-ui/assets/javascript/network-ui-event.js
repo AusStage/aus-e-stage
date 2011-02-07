@@ -91,6 +91,9 @@ var nodeIndex = -1;			//stores the INDEX of the selected NODE
 var showContributors = false;	//set to true if related checkbox is checked. Will display all contributor labels
 var showEvents = false;			//set to true if related checkbox is checked. Will display all event labels
 
+//legend switch - allow clicking the link without toggling the content on/off
+var allowToggle = true;
+
 // constants    
 var EDGE = "edge";
 var NODE = "node";
@@ -383,7 +386,7 @@ function onClick(d, what, p){
 			    edgeId = -1;
 			    edgeIndex = -1;
 				nodeIndex = -1;
-				resetLegend("#selected_object");					
+				
 			}else {
 				what = currentFocus;
 			} 
@@ -670,7 +673,7 @@ function displayPanelInfo(what){
 	var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 
 	var contributorUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id="
 	var titleHtml = ""
-	var html = "<table width=100%>";
+	var html = "<table>";
 	var dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
 	var tableClass = "";
 	
@@ -683,7 +686,8 @@ function displayPanelInfo(what){
 	if (what == CLEAR){	
 		html = " ";
 		$("#selected_object").hide();
-		$("#related_objects").hide();		
+		$("#related_objects").hide();
+		resetLegend("#selected_object");							
 	}else{
 		$("#selected_object").show();
 	}
@@ -694,7 +698,7 @@ function displayPanelInfo(what){
 	if (what == NODE){
 
 		//set the title to the event.
-		titleHtml = "<a href=" + eventUrl +""+ events.nodes[nodeIndex].id+" target=\"_blank\">"+
+		titleHtml = "<a class=\"titleLink\" href=" + eventUrl +""+ events.nodes[nodeIndex].id+" target=\"_blank\">"+
 										events.nodes[nodeIndex].nodeName+"</a><p>"+
 										events.nodes[nodeIndex].venue+" "+
 										dateFormat(events.nodes[nodeIndex].startDate)+"</p>";
@@ -724,7 +728,8 @@ function displayPanelInfo(what){
 	//EDGE
 	if (what == EDGE){
 	
-		titleHtml = events.edges[edgeIndex].name+" <p>"+
+		titleHtml = "<a class=\"titleLink\" href=" + contributorUrl +""+ events.edges[edgeIndex].id+" target=\"_blank\">"+
+					events.edges[edgeIndex].name+"</a> <p>"+
     				events.edges[edgeIndex].role+			
 					"</p>";		
 	
@@ -735,8 +740,8 @@ function displayPanelInfo(what){
 					if (contains(events.nodes[i].contributor_id, edgeId)){
 						eventList[x] = {event:"<a href=" + eventUrl +""+ events.nodes[i].id+" target=\"_blank\">"+
 										events.nodes[i].nodeName+"</a><p>"+
-										events.nodes[i].venue+" "+
-										dateFormat(events.nodes[i].startDate)+"</p>"
+										events.nodes[i].venue+", "+
+										"<span class=\"date\" >"+dateFormat(events.nodes[i].startDate)+"</span></p>"
 						, startDate:events.nodes[i].startDate};
 						x++;
 					}
@@ -758,7 +763,10 @@ function displayPanelInfo(what){
 	
 	$("#selected_object").button( "option", "label", titleHtml );					 		
 	$("#related_objects").append(html);  
-	
+	//fix to ensure the content doesn't toggle based on the link click
+	$(".titleLink").click(function(){
+		allowToggle = false;
+	}); 	
 }
 
 
@@ -1115,16 +1123,25 @@ function createLegend(element){
     $(element).css({'text-align':'left', width: '248px', 'padding': '0 0 0 0', 'margin':'0 0 0 0'});
     
     $(element).click(function () {
-		$(this).toggleClass("open");
-		if($(this).hasClass("open")){
-			$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-s',secondary:null} );
-		} else{
-			$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );					
-		}
-		$(element).next().slideToggle();
-	}); 
-					
-    	
+    	if(allowToggle){
+    			
+			$(this).toggleClass("open");
+			if($(this).hasClass("open")){
+				$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-s',secondary:null} );
+			} else{
+				$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );					
+			}
+			$(element).next().slideToggle();
+			
+			//fix to ensure the content wont toggle based on the link click
+			$(".titleLink").click(function(){
+				allowToggle = false;
+			});   		
+
+    	}else{
+    		allowToggle=true;	
+    	}
+	});   	
 }	
 	
 
