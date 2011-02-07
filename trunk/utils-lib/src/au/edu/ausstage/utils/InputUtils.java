@@ -18,6 +18,10 @@
 
 package au.edu.ausstage.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 /**
  * A class of methods useful when validating input to methods
  */
@@ -134,6 +138,25 @@ public class InputUtils {
 			return false;
 		}			
 	} // end the isValid method
+	
+	/**
+	 * check to ensure a parameters value is valid
+	 *
+	 * @param date the date to check in the format yyyy-mm-dd
+	 */
+	public static boolean isValidDate(String date) {
+	
+		// define the pattern
+		Pattern pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+		Matcher matcher = pattern.matcher(date);
+		
+		if(matcher.find() == true) {
+			return true;
+		} else {
+			return false;
+		}	
+	}
+		
 	
 	/**
 	 * A method to take an array of values and return them in a comma delimited list
