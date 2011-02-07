@@ -96,7 +96,7 @@ function MappingClass() {
 	this.INFO_WINDOW_MAX_WIDTH = 500;
 	
 	// variable to define maximum length of an address
-	this.MAX_ADDRESS_LENGTH = 50;
+	//this.MAX_ADDRESS_LENGTH = 30;
 
 }
 
@@ -966,14 +966,16 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 		tmp = data.contributor.firstName + ' ' + data.contributor.lastName;
 		header += '<span class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.contributor.id + '">' + tmp.replace(/\s/g, '&nbsp;') + '</span> | ';
 		
-		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.contributor.id + '">';
+		list += '<div class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.contributor.id + '">';
 		
 		idx = $.inArray(data.contributor.id, mappingObj.contributorColours.ids);
 		colour = mappingObj.contributorColours.colours[idx];
 		
-		list += '<span class="infoWindowListIcon ' + colour + '"><img src="'+ mapIconography.contributor + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
+		list += '<table class="infoWindowListHeaderLayout"><tr><td class="mapLegendIcon"><span class="infoWindowListIcon ' + colour + '"><img src="'+ mapIconography.contributor + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+		list += '<td><span class="infoWindowListTitle"><a href="' + data.contributor.url + '" target="_ausstage">' + data.contributor.firstName + ' ' + data.contributor.lastName + '</a>';
 		
-		list += '<span class="infoWindowListTitle"><a href="' + data.contributor.url + '" target="_ausstage">' + data.contributor.firstName + ' ' + data.contributor.lastName + '</a>';
+		//list += '<span class="infoWindowListIcon ' + colour + '"><img src="'+ mapIconography.contributor + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
+		//list += '<span class="infoWindowListTitle"><a href="' + data.contributor.url + '" target="_ausstage">' + data.contributor.firstName + ' ' + data.contributor.lastName + '</a>';
 		
 		if(i > 0) {
 			list +=  ' <span class="infoWindowToTop clickable">[top]</span><br/>';
@@ -991,7 +993,7 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 		}
 		
 		// finalise the link and start of the content
-		list += '</span></p><ul class="infoWindowEventList">';
+		list += '</span></td></tr></table></div><ul class="infoWindowEventList">';
 		
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
@@ -1069,14 +1071,17 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 		// add the venue to the header
 		header += '<span class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.organisation.id + '">' + data.organisation.name.replace(/\s/g, '&nbsp;') + '</span> | ';
 		
-		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.organisation.id + '">';
+		list += '<div class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.organisation.id + '">';
 		
 		idx = $.inArray(data.organisation.id, mappingObj.organisationColours.ids);
 		colour = mappingObj.organisationColours.colours[idx];
 		
-		list += '<span class="infoWindowListIcon ' + colour + '"><img src="'+ mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
+		list += '<table class="infoWindowListHeaderLayout"><tr><td class="mapLegendIcon"><span class="infoWindowListIcon ' + colour + '"><img src="'+ mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+		list += '<td><span class="infoWindowListTitle"><a href="' + data.organisation.url + '" target="_ausstage">' + data.organisation.name + '</a>';
 		
-		list += '<span class="infoWindowListTitle"><a href="' + data.organisation.url + '" target="_ausstage">' + data.organisation.name + '</a>';
+		//list += '<span class="infoWindowListIcon ' + colour + '"><img src="'+ mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
+		
+		//list += '<span class="infoWindowListTitle"><a href="' + data.organisation.url + '" target="_ausstage">' + data.organisation.name + '</a>';
 		
 		if(i > 0) {
 			list +=  ' <span class="infoWindowToTop clickable">[top]</span><br/>';
@@ -1088,7 +1093,7 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 		list += mappingObj.buildAddressAlt(data.organisation.suburb, data.organisation.state, data.organisation.country);
 		
 		// finalise the link and start of the content
-		list += '</span></p><ul class="infoWindowEventList">';
+		list += '</span></td></tr></table></div><ul class="infoWindowEventList">';
 		
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
@@ -1164,9 +1169,12 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the venue to the header
 		header += '<span class="infoWindowHeaderItem clickable" id="infoWindowScroll-' + data.id + '">' + data.name.replace(/\s/g, '&nbsp;') + '</span> | ';
 		
-		list += '<p class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.id + '">';
-		list += '<span class="infoWindowListIcon ' + mapIconography.venueColours[0] + '"><img src="'+ mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
-		list += '<span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a>';
+		list += '<div class="infoWindowListHeader b-186 f-184" id="infoWindowScrollTo-' + data.id + '">';
+		list += '<table class="infoWindowListHeaderLayout"><tr><td class="mapLegendIcon"><span class="infoWindowListIcon ' + mapIconography.venueColours[0] + '"><img src="'+ mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+		list += '<td><span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a>';
+		
+		//list += '<span class="infoWindowListIcon ' + mapIconography.venueColours[0] + '"><img src="'+ mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span>';
+		//list += '<span class="infoWindowListTitle"><a href="' + data.url + '" target="_ausstage">' + data.name + '</a>';
 		
 		// add the venue content
 		if(i > 0) {
@@ -1176,10 +1184,10 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		}
 		
 		// add the address
-		list += mappingObj.buildAddress(data.street, data.suburb, data.state, data.country) + '</span>';
+		list += mappingObj.buildAddress(data.street, data.suburb, data.state, data.country) + '</span></td></tr></table>';
 		
 		// finalise the link and start of the content
-		list += '</p><ul class="infoWindowEventList">';
+		list += '</div><ul class="infoWindowEventList">';
 		
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
@@ -1317,12 +1325,6 @@ MappingClass.prototype.buildAddress = function(street, suburb, state, country) {
 		}
 	}
 	
-	// check to see if the address needs to be altered
-	if(address.length > mappingObj.MAX_ADDRESS_LENGTH) {
-		address = address.substring(0, mappingObj.MAX_ADDRESS_LENGTH);
-		address += ' &hellip;';
-	}
-	
 	return address;
 }
 
@@ -1353,12 +1355,6 @@ MappingClass.prototype.buildAddressAlt = function(suburb, state, country) {
 		} else {
 			address = address.substr(0, address.length - 2);
 		}
-	}
-	
-	// check to see if the address needs to be altered
-	if(address.length > mappingObj.MAX_ADDRESS_LENGTH) {
-		address = address.substring(0, mappingObj.MAX_ADDRESS_LENGTH);
-		address += ' &hellip;';
 	}
 	
 	return address;

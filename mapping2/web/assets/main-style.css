@@ -406,10 +406,18 @@ table.mapIconHelpTbl td {
 	color: #fff;
 }
 
+/*
 .infoWindowListTitle {
 	float: left;
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
+*/
+
+infoWindowListHeaderLayout {
+	border-collapse: collapse;
+	margin: 0px;
+	padding: 0px;
 }
 
 .infoWindowEventList {
