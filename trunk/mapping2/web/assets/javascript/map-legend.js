@@ -495,15 +495,4 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 	google.maps.event.addListenerOnce(mappingObj.map, 'idle', function() {
 		$('#mapIcon-venue-' + mappingObj.computeLatLngHash(obj.latitude, obj.longitude)).click();	
 	});
-	
-	/*
-	// get the actual marker object
-	idx = $.inArray(mappingObj.computeLatLngHash(obj.latitude, obj.longitude), mappingObj.mapMarkers.hashes);
-	var marker = mappingObj.mapMarkers.objects[idx];
-	
-	// start the marker bouncing and set a timeout
-	marker.setAnimation(google.maps.Animation.BOUNCE);
-
-	setTimeout(function() { marker.setAnimation(null); }, 3000);
-	*/
 }
