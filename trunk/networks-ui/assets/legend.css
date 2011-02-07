@@ -56,7 +56,6 @@
         padding:0;
         height:230px;
         overflow:auto;
-        resize:vertical;
         background: #fff;
         font-family:Helvetica, Arial, sans-serif;
         font-size:11px;        
@@ -70,7 +69,6 @@
         margin:0;
         padding:0;
         height:80px;
-        resize:none;
         overflow:auto;
         background: #fff;
         font-family:Helvetica, Arial, sans-serif;
@@ -91,7 +89,8 @@
 }
 
 .legendBody table {
-border-collapse: collapse;
+	border-collapse: collapse;
+	width: 100%;
 }
 
 .legendBody tr.d1 td {
@@ -102,6 +101,10 @@ border-collapse: collapse;
 .legendBody tr.d0 td {
 	background-color:#fff; 
 	padding-bottom:10px;
+}
+
+.date {
+	white-space:nowrap;
 }
 
 

@@ -1,11 +1,17 @@
 //GLOBAL VARIABLES
 //=======================================================
 var vis = null;
+var contributors;
 var force;
 
 //sizing 
-var w = $(window).width() - 250,	//width of the focus panel = width of the window less padding for the sidebar AND slider on the left.
-	h = $(window).height() - 94;  	//height of the focus panel
+var spacer = 40;
+var hSpacer = 30;
+var w;
+var	h;
+
+//var w = $(window).width() - 250,	//width of the focus panel = width of the window less padding for the sidebar AND slider on the left.
+//	h = $(window).height() - 94;  	//height of the focus panel
 	
 /* appearance variables */
 var panelColor = "white";
@@ -48,32 +54,53 @@ var nodeIndex = -1;			//stores the INDEX of the selected NODE
 var edgeTIndex = -1;		//stores the target index of the edge selected
 var edgeSIndex = -1;		//stores the source index of the edge selected
 
+//legend switch - allow clicking the link without toggling the content on/off
+var allowToggle = true;
+
 // constants    
 var EDGE = "edge";
 var NODE = "node";
 var CLEAR = "clear";
+
+
 
 //PAGE SET UP
 //=======================================================
 
 $(document).ready(function() {
 	
+	//HIDE UNWANTED DIVS
+
+	//hide the ruler div
+	$("#ruler").hide();
 	//hide the main div
 	$("#main").hide();
-	
+	//hide the date range
+	//$("select#startDate").hide();
+	//$("select#endDate").hide();
+	//$("#date_range_div").hide();
+	//hide the faceted browsing button
+	$("#faceted_browsing_btn_div").hide();
+	//hide the faceted browsing
+	$("#faceted_browsing_div").hide();
 	//hide the show labels checkboxes
 	$("#display_labels_div").hide();
-	
-	//set up accordion legend and hide it
-	$(function() {
-		$( ".accordion" ).accordion({collapsible: true,
-									 clearStyle: true,
-									 active: false});
-	});
-
+	//hide the legend
 	$("#network_details_div").hide();
 	$("#network_properties_div").hide();	
+
 	
+	//set the width and height
+	w = $(window).width() - ($("#sidebar").width()+spacer);
+
+	h =  $(window).height() - ($("#header").height()+$("footer").height()+hSpacer);  	//height of the focus panel	
+
+
+	//SET UP INTERACTION 
+	//style the legend
+	createLegend("#network_properties_header");
+	createLegend("#selected_object");
+
 	// style the buttons
 	$("button, input:submit").button();
 	
@@ -94,7 +121,6 @@ $(document).ready(function() {
 	
 	//set up label on/off checkboxes for contributor names
 	$("input[name=showAllContributors]").click(function() { 
-
 		//if checked, then set showContributors to true, else set to false;
     	if($("input[name=showAllContributors]").is(":checked")){
 			showAllContributors = true;	
@@ -102,9 +128,9 @@ $(document).ready(function() {
     	else showAllContributors = false;
     	vis.render();
 	}); 
+	
 	//set up label on/off checkboxes for contributor names
 	$("input[name=showRelatedContributors]").click(function() { 
-
 		//if checked, then set showContributors to true, else set to false;
     	if($("input[name=showRelatedContributors]").is(":checked")){
 			showRelatedContributors = true;	
@@ -113,7 +139,6 @@ $(document).ready(function() {
     	vis.render();
 	}); 
 
-		
 });
 
 
@@ -121,21 +146,16 @@ $(document).ready(function() {
 //=======================================================
 $(document).ready(function() {
 
-	//define the lookup button
+	//LOOKUP BUTTON CLICK FUNCTIONALITY
     $("#lookup_btn").click(function() {
-	
 	  //disable network button
 	  $("#network_btn").button("disable");
-
       // validate and process form here
   	  var id = $("input#id").val();
-  	  
   	  //define the api.
   	  var dataString = "http://beta.ausstage.edu.au/networks/lookup?task=collaborator&format=json&id="+id+"&callback=?";
-  	  
   	  //if id has been entered check for a contributor 
   	  if (id.length > 0 ) {
-	 
 	  jQuery.getJSON(dataString, 
 			function(data) {
 				// check on what was returned
@@ -148,37 +168,30 @@ $(document).ready(function() {
 					$("#network_btn").button("enable");
 					$("#network_btn").focus();
 				}
-			});
-			
+			});	
   	  } else {
   	  	$("#search_div").dialog('open');
-  	  	
   	  }
 	  return false;
     });
         
-    // bind a focusout event to the id text field
+    // FOCUS OUT ON ID FUNCTIONALITY
 	$("#id").focusout(function() {
-
 		// get the content of the id text box	
 		var val = $("#id").val();
-		
 		// trim the value
 		val = val.replace(/^\s*/, "").replace(/\s*$/, "");
-
 		// see if the value is an empty string
 		if(val == "") {
 			// if it is tidy the form
 			$("#name").val("");
 			$("#id").val("");
-			
 			// disable the network button
 			$("#network_btn").button("disable");
-
 		}
 	});
 	
-	//focus in event on the name field. If clicked it automatically calls the lookup
+	//FOCUS IN ON THE NAME FIELD FUNCTIONALITY
 	$("#name").focusin(function(){
 		var val = $("#id").val(); 
 		if (val == ""){
@@ -188,7 +201,7 @@ $(document).ready(function() {
 			
 	});
     
-  	//handle enter in the search dialogue
+  	//KEYPRESS - ENTER/RETURN IN THE SEARCH DIALOGUE
 	$("#query").keypress(function(event){
 			if (event.keyCode == '13') {
     			 event.preventDefault();
@@ -200,7 +213,7 @@ $(document).ready(function() {
    			}
 	});	
 
-    //setup the search contributors dialogue
+    //SEARCH BY NAME DIALOGUE SET UP
 	$("#search_div").dialog({ 
 		autoOpen: false,
 		height: 500,
@@ -236,7 +249,7 @@ $(document).ready(function() {
 		}
 	});
     
-	//set up network button    
+	//NETWORK BUTTON CLICK FUNCTIONALITY    
 	$("#network_btn").click(function() {
 
     	// validate and process form here
@@ -244,17 +257,16 @@ $(document).ready(function() {
   		if (id == "") {
         	$("input#id").focus();
         	return false;
-      	}
-	 
+      	} 
 	 	getNetworkAndDisplay(id); 
-	 	
 	 	//tidy up the form
 	 	$("#name").val("");
 		$("#id").val(""); 
      	return false;
     });
 });    
-    
+ 
+//SHOW LOADER - SHOWS THE SEARCHING IMAGE    
 function showLoader(type) {
 	if(type == "show" || typeof(type) == "undefined") {
 		// tidy up the search results
@@ -270,7 +282,7 @@ function showLoader(type) {
  
 
 
-// set up loading network dialogue box
+// NETWORK LOADING DIALOGUE, SHOWS LOADING BAR AS NETWORK IS RETRIEVED AND RENDERED
 $(document).ready(function() {
 	// create the loading window and set autoOpen to false
 	$("#network_loading").dialog({
@@ -292,7 +304,7 @@ function closeWaitingDialog() {
 	$("#network_loading").dialog('close');
 }
 
-//look for contributors
+//SEARCH THE RDF FOR CONTRIBUTORS
 function getContributors(queryString){
 	var dataString = "http://beta.ausstage.edu.au/networks/search?task=collaborator&query="+queryString+"&format=json&limit=5&callback=?";
 	$("#search_waiting").show();
@@ -301,32 +313,27 @@ function getContributors(queryString){
 				showLoader("hide");
 				displayResults(data);
 			});
-	}
+}
 
-//display results in the search results div.	
+//DISPLAY RESULTS IN SEARCH DIV
 function displayResults(results){
 	//define helper constants
 	var MAX_FUNCTIONS = 3;
 	// tidy up the search results
 	$("#search_results_body").empty();
 	$("#search_results").hide();
-	
 	var html = "";
 	var contributor;
 	var functions;
-	
 	// loop through the search results
 	for(i = 0; i < results.length; i++){
 		contributor = results[i];
 		// add the name and link
 		html += '<tr><td><a href="' + contributor.url 
 				+ '" target="ausstage" title="View the record for ' + contributor.name + ' in AusStage">' + contributor.name + '</a></td>';
-		
 		// add the list of functions
 		html += '<td><ul>';
-		
 		functions = contributor.functions;
-		
 		for(x = 0; x < functions.length; x++) {
 			if(x < MAX_FUNCTIONS) {
 				html += '<li>' + functions[x] + '</li>';
@@ -335,54 +342,37 @@ function displayResults(results){
 				x = functions.length + 1;
 			}
 		}
-		
-		html += '</ul></td>';
-				
+		html += '</ul></td>';		
 		// add the button
 		html += '<td><button id="choose_' + contributor.id + '" class="choose_button">Choose</button></td>';
-		
 		// finish the row
 		html += '</tr>';
 	}
-	
 	// check to see on what was built
 	if(html != "") {
-	
 		// add the search results to the table
 		$("#search_results_body").append(html);
-	
 		// hide the loader
 		showLoader("hide");
-	
 		// style the new buttons
 		$("button, input:submit").button();
-		
 		// add a function to each of the choose buttons
 		$(".choose_button").click(function(eventObject) {
-
 			// get the id of this button
 			var id = this.id;
-			
 			var tags = id.split("_");
-			
 			// add the id to the text file
 			$("#id").val(tags[1]);
-			
 			// close the dialog box
 			$("#search_div").dialog("close");
-			
 			// execute the lookup function
 			$("#lookup_btn").trigger('click');
 		});
-	
 		// show the search results
 		$("#search_results").show();
-		
 	} else {
-		
 		// hide the loader
 		showLoader("hide");
-	
 		$("#error_message").empty();
 		$("#error_message").append('<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Warning:</strong> No contributors matched your search criteria. Please try again</p></div>');	
 		$("#error_message").show();
@@ -408,6 +398,7 @@ function getNetworkAndDisplay(id){
 				if(!contains(data.nodes, null)){ 
 					contributors = null;
 					contributors = data;
+					//load the graph
 					showGraph("protovis");
 					showInteraction();
 				}
@@ -439,6 +430,8 @@ function showGraph(targetDiv){
 	if (contributors != null){
 		
 		prepareData();
+		setDateSlider();
+		
 
 		vis = new pv.Panel().canvas(targetDiv)
 				.fillStyle(panelColor)
@@ -504,10 +497,12 @@ function showGraph(targetDiv){
 
 function windowResized(){
 	  //reset the width and height
-	  w = $(window).width() - 250;
-	  h = $(window).height() - 94;	  
-	  vis.render();	
-
+	w = $(window).width() - ($("#sidebar").width()+spacer);
+	h =  $(window).height() - ($("#header").height()+$("footer").height()+hSpacer);
+	
+	if(contributors!=null){
+		vis.render();	
+	}
 }
 
 //click functionality
@@ -657,15 +652,16 @@ function displayNetworkProperties(){
 	    var html = 	"<table>"+
 	  				"<tr class=\"d0\"><td valign=top><b> Centre:</b></td><td>"+
 	  				"<a href=" + contribUrl +""+ contributors.nodes[center].id+" target=\"_blank\">"+	
-	  				contributors.nodes[center].nodeName+"</a><br> ";
+	  				contributors.nodes[center].nodeName+"</a><p>";
     	for (var i=0; i<contributors.nodes[center].functions.length; i++){
     		html+= comma + contributors.nodes[center].functions[i];
     		comma = ", ";
     	}
+    	html += "</p>";
     	html += "</td></tr>"+
-    				"<tr class=\"d1\"><td><b>Contributors:</b></td><td> "+contributors.nodes.length+"</td></tr>"+					
-					"<tr class=\"d0\"><td><b>Relationships:</b> </td><td>"+contributors.edges.length+"</td></tr></table>";			
-					"<tr class=\"d1\"><td><b>Collaborations:</b> </td><td>"+collabCount+"</td></tr></table>";							
+    				"<tr class=\"d1\"><td><b>Contributors </b></td><td> "+contributors.nodes.length+"</td></tr>"+					
+					"<tr class=\"d0\"><td><b>Relationships </b> </td><td>"+contributors.edges.length+"</td></tr></table>";			
+					"<tr class=\"d1\"><td><b>Collaborations </b> </td><td>"+collabCount+"</td></tr></table>";							
  		$("#network_properties").empty();
 		$("#network_properties").append(html);
 
@@ -689,7 +685,12 @@ function displayPanelInfo(what){
 	$("#selected_object").empty();
 	$("#related_objects").empty();
 	
-	if (what == CLEAR){	html = " "; $("#network_details_div").hide();}
+	if (what == CLEAR){	
+		html = " "; 
+		$("#network_details_div").hide();
+		$("#related_objects").hide();
+		resetLegend("#selected_object");
+	}
 	else{$("#network_details_div").show();}
 			
 	
@@ -698,7 +699,8 @@ function displayPanelInfo(what){
 	if (what == NODE){
 	
 		//set the title to the contributor.
-		titleHtml = contributors.nodes[nodeIndex].nodeName+" <p>";
+		titleHtml = "<a class=\"titleLink\" href="+contributorUrl+contributors.nodes[nodeIndex].id+" target=\"_blank\">"+
+					contributors.nodes[nodeIndex].nodeName+"</a> <p>";
     	// add the roles
     	for (var i=0; i<contributors.nodes[nodeIndex].functions.length; i++){
     		titleHtml+= comma + contributors.nodes[nodeIndex].functions[i];
@@ -742,42 +744,47 @@ function displayPanelInfo(what){
 
 	//***************/
 	//EDGE
-/*	if (what == EDGE){
+	if (what == EDGE){
 	
-		titleHtml = events.edges[edgeIndex].name+" <p>"+
-    				events.edges[edgeIndex].role+			
-					"</p>";		
-	
-		var x = 0;
-	
-		//create the list of events
-			for(i = 0; i < events.nodes.length; i++){
-					if (contains(events.nodes[i].contributor_id, edgeId)){
-						eventList[x] = {event:"<a href=" + eventUrl +""+ events.nodes[i].id+" target=\"_blank\">"+
-										events.nodes[i].nodeName+"</a><p>"+
-										events.nodes[i].venue+" "+
-										dateFormat(events.nodes[i].startDate)+"</p>"
-						, startDate:events.nodes[i].startDate};
-						x++;
-					}
-				}
-				//sort events, earliest to latest
-				eventList.sort(function(a, b){return a.startDate - b.startDate})		
-				
+		//add the target contributor
+		titleHtml = "<a class=\"titleLink\" href="+contributorUrl+contributors.nodes[edgeTIndex].id+" target=\"_blank\">"+
+					contributors.nodes[edgeTIndex].nodeName+"</a> <p>";
+		//add target contributor roles
+		for (var i=0; i<contributors.nodes[edgeTIndex].functions.length; i++){
+    		titleHtml+= comma + contributors.nodes[edgeTIndex].functions[i];
+    		comma = ", ";
+    	}
+    	titleHtml +="</p>";					
+
+		//add the source contributor
+		titleHtml += "<a class=\"titleLink\" href="+contributorUrl+contributors.nodes[edgeSIndex].id+" target=\"_blank\">"+
+					contributors.nodes[edgeSIndex].nodeName+"</a> <p>";
+		//add source contributor roles
+		comma = "";
+		for (var i=0; i<contributors.nodes[edgeSIndex].functions.length; i++){
+    		titleHtml+= comma + contributors.nodes[edgeSIndex].functions[i];
+    		comma = ", ";
+    	}
+    	titleHtml +="</p>";					
+
 		//create the html to display the info.
-    	for( i = 0;i<eventList.length; i++ ){
+    	for( i = 0;i<5; i++ ){
     		if(isEven(i)) tableClass = "d0";
 			else tableClass = "d1";
 			
-    		html += "<tr class=\""+tableClass+"\"><td>"+eventList[i].event+"</td></tr>"
+    		html += "<tr class=\""+tableClass+"\"><td>events not yet supported</td></tr>"
     	}
     	
     	html+= "</table><br>";
 		
 	}
-*/	
-	$("#selected_object").append(titleHtml);    		
-	$("#related_objects").append(html);    		
+	
+	$("#selected_object").button( "option", "label", titleHtml );					 		  		
+	$("#related_objects").append(html); 
+	//fix to ensure the content doesn't toggle based on the link click
+	$(".titleLink").click(function(){
+		allowToggle = false;
+	});   		
 
 }
 
@@ -791,6 +798,8 @@ function prepareData(){
 	contributors.nodes[getCentralNode()].fix = new pv.Vector(w/2,h/2);
 	//set the active node
 	nodeIndex = getCentralNode();
+	//clean the date records
+	cleanDates();
 	//set list of adjoining nodes for each node
 	loadNeighbors();	
 }
@@ -823,6 +832,17 @@ function loadNeighbors(){
 	}	
 }
 
+function setDateSlider(){
+/*
+from the dates, get the max date and the min date.
+then while early date (month and year) < later date (month and year)
+populate the select with incrementing dates
+*/
+	thedate = new Date(pv.min(contributors.edges, function(d) {return d.firstDate}));	
+	console.log("*"+thedate);
+	thedate = new Date(pv.max(contributors.edges, function(d) {return d.firstDate}));		
+	console.log("*"+thedate);	
+}
 
 //HELPER FUNCTIONS
 //=======================================================
@@ -853,3 +873,63 @@ function sortByName(a, b) {
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
+//function to crop function list to one line
+function cropText(pText, class, length) {
+
+	$("#ruler").empty(); 
+	$("#ruler").append(pText);
+	return $("#ruler").width();
+ 
+}
+
+//reset the legend to its closed state 
+function resetLegend(element){
+	if ($(element).attr('class').indexOf("open") >=0){
+		$(element).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );
+		$(element).toggleClass("open");
+					
+	}
+}
+
+//create the legend
+function createLegend(element){
+	
+	$(element).button({ icons: {primary:'ui-icon-triangle-1-e',secondary:null}});
+    $(element).css({'text-align':'left', width: '248px', 'padding': '0 0 0 0', 'margin':'0 0 0 0'});
+    
+    $(element).click(function () {
+    	if(allowToggle){
+
+			$(this).toggleClass("open");
+			if($(this).hasClass("open")){
+				$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-s',secondary:null} );
+			} else{
+				$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );					
+			}
+			$(element).next().slideToggle();
+			
+			//fix to ensure the content wont toggle based on the link click
+			$(".titleLink").click(function(){
+				allowToggle = false;
+			});   		
+
+    	}else{
+    		allowToggle=true;
+    	}
+	});   	
+}
+
+//validate and clean date records.
+function cleanDates(){
+	for (i in contributors.edges){
+		switch (contributors.edges[i].firstDate.length){
+			case 6:
+				contributors.edges[i].firstDate = contributors.edges[i].firstDate.substring(0,4)+"-01-01";
+				break;
+			case 8:
+				contributors.edges[i].firstDate = contributors.edges[i].firstDate.substring(0,7)+"-01";
+				break;
+		}
+		contributors.edges[i].firstDate = new Date(contributors.edges[i].firstDate);	
+	}	
+}

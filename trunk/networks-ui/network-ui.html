@@ -21,8 +21,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-min.js"></script>	
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.filter.js"></script>	
-	<script type="text/javascript" src="assets/javascript/libraries/exclusivecheck.jquery.min.js"></script>		
-		
+	<script type="text/javascript" src="assets/javascript/libraries/exclusivecheck.jquery.min.js"></script>			
 
 	<!-- helper files -->
     <script type="text/javascript" src="assets/javascript/network-ui.js"></script>   
@@ -32,17 +31,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.filter.css" />	
 	<link rel="Stylesheet" href="assets/jquery-ui/ui.slider.extras.css" type="text/css" />
 	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="assets/tabs-accordion.css" />		
-
-<style>
-//#protovis   { position: absolute; width: 986px; float:left; top: 75px; bottom: 50px; left: 200px; background-color: red; }
-</style>
-    <!-- Input file. JSON format. -->
-<!--    <script type="text/javascript" src="smlNetworkEx.js"></script>-->
-
-			<script type="text/javascript+protovis">
-					
-    </script>
+	<link rel="stylesheet" type="text/css" media="screen" href="assets/legend.css" />		
     
     <!-- Google Analytics Script -->
 <script type="text/javascript">
@@ -63,15 +52,16 @@
 </head>
 
 <body>
+
+<span id="ruler"></span>
+
 <div id="wrap">
 	<div id="header"><h1>AusStage Navigating Networks Protovis Trial</h1></div>
-<!--	<div id="nav">
-	</div>-->
-	<!-- Include the sidebar -->
-	
 
+	<!-- Sidebar -->
 	<div id="sidebar">
 
+		<!--search for contributor form-->
 		<div id="load_network_form">
 			  <form name="search" action="" align=right>
 		    	<label for="id" id="id_label">ID</label>
@@ -83,22 +73,18 @@
 	  	  	  </form>
 		</div>
 
+		<!--Legend/ info window for the network - displays information about the selected seciotn of the graph -->
 		<div id="network_details_div">
-			<!--Legend/ info window for the network -->
-			<div class="accordion">
-				<h2><a href="#" id="selected_object"></a></h2>
-				<div class="pane" id="related_objects"></div>
-			</div>
+			<div class="legendHeader" id="selected_object" ></div>
+			<div class="legendBody" id="related_objects"></div>
 		</div>
+		<!--Network properties - displays information about the network as a whole -->						
 		<div id="network_properties_div">
-			<!--Network properties will always display. -->						
-			<div class="accordion">
-				<h2><a href="#" id="network_properties_header">Network Properties</a></h2>
-				<div class="pane" id="network_properties" >
-				</div>
-			</div>
+			<div class="legendHeader" id="network_properties_header" >Network Properties</div>
+			<div class="legendBody small" id="network_properties"></div>
 		</div>		
 		<br>
+		<!-- Options to display labels for the graph-->
 		<div id="display_labels_div">
 			<input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" />
 			<label for="showContributors">Show ALL contributor names</label>
@@ -108,13 +94,14 @@
 		</div>
 
 		<br>
+		<!--faceted browsing on/off-->
 		<div id="faceted_browsing_btn_div" align=right>
 			<input type="submit" name="submit" class="button" id="faceted_browsing_btn" value="Faceted Browsing" />
 		</div>
 		
 	</div>
 
-	
+	<!--main display window. -->
 	<div id="main">
 		<div id="protovis" >
 			<br>
@@ -126,13 +113,59 @@
 		</div>
 	</div>
 
+	<!--date slider and facteded browsing form-->
+	<div id="advanced_search_div"> 
+		<!-- date slider -->
+		<div id="date_range_div" align=right>
+			<form name="dateRanges">
+				<table width = 100%>
+					<tr>
+						<td colspan=2>
+							<input type="hidden" name="startDateStore" id="startDateStore" value=""/>
+							<input type="hidden" name="endDateStore" id="endDateStore" value=""/>
+							<select name="startDate" id="startDate">
+							</select>
+							<select name="endDate" id="endDate">
+							</select>	
+						</td>
+					</tr>
+					<tr>
+					<!-- little hack to space out the information nicer. Hopefully I'll find a better way to do this.-->
+						<td colspan=2>&nbsp</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="submit" name="submit" class="button" id="refresh_date_btn" value="Refresh" /></td>
+					</tr>					
+
+				</table>												
+			</form>
+		</div>
+			
+		<!-- faceted browsing window -->	
+		<div id="faceted_browsing_div" Title="Faceted Browsing">
+			<form id = "faceted_browsing">
+				<p><b>Contributor Functions</b></p>
+				<div id="faceted_function_div" class="scroll_checkboxes"></div>
+				<p><b>Gender</b></p>
+				<div id="faceted_gender_div" class="scroll_checkboxes_small"></div>
+				<p><b>Nationality</b></p>
+				<div id="faceted_nationality_div" class="scroll_checkboxes"></div>
+				<p id="faceted_selection_p"></p>
+			</form>
+			<br>
+			<br>
+			<br>
+		</div>
+	</div>
+
 
 	<!--dialogue for loading the network. -->
 	<div id="network_loading" style="display: none" title="Loading Network. Please wait...">
 		<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
 	</div>
 
-	<!-- Search form div -->
+	<!-- Search by name form div -->
 	<div id="search_div" title="Contributor Search">
 		<p>Enter a contributor name, or part of their name, and click the search button</p>
 		<form name="search" action="">			
