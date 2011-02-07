@@ -36,7 +36,7 @@ public class LookupServlet extends HttpServlet {
 	private DbManager database;
 	
 	// declare private constants
-	private final String[] TASK_TYPES        = {"system-property", "performance", "validate", "question", "location"};
+	private final String[] TASK_TYPES        = {"system-property", "performance", "validate", "question", "location", "date"};
 	private final String[] FORMAT_TYPES      = {"json"};
 	private final String[] PROPERTY_ID_TYPES = {"feedback-source-types"};
 	private final String[] VALIDATION_TYPES  = {"performance", "question"};
@@ -68,6 +68,8 @@ public class LookupServlet extends HttpServlet {
 		String latitude       = request.getParameter("lat");
 		String longitude      = request.getParameter("lng");
 		String distance       = request.getParameter("distance");		
+		String startDate      = request.getParameter("startdate");
+		String endDate        = request.getParameter("enddate");
 		String validationType = null;
 		
 		// check on the taskType parameter
@@ -107,7 +109,7 @@ public class LookupServlet extends HttpServlet {
 			// this is a location request
 			// first round of validation
 			if(InputUtils.isValid(latitude) == false || InputUtils.isValid(longitude) == false || InputUtils.isValid(distance) == false) {
-				throw new ServletException("Missing parameters, expect lat, lng and distance");
+				throw new ServletException("Missing parameters, expected lat, lng and distance");
 			} else {
 				// second round validation
 				if(CoordinateManager.isValidLatitude(Float.valueOf(latitude)) == false) {
@@ -122,6 +124,15 @@ public class LookupServlet extends HttpServlet {
 					throw new ServletException("The value of the distance parameter must be a valid integer");
 				}
 			}
+		} else if(taskType.equals("date") == true) {
+			if(InputUtils.isValid(startDate) == false || InputUtils.isValid(endDate) == false) {
+				throw new ServletException("Missing parameters, expected 'startdate', 'enddate'");
+			}
+		
+			if(InputUtils.isValidDate(startDate) == false || InputUtils.isValidDate(endDate) == false) {
+				throw new IllegalArgumentException("Both parameters, 'startdate', 'enddate', must be in the format yyyy-mm-dd");
+			}
+		
 		} else {
 			// this is another type of lookup request
 			if(InputUtils.isValidInt(id) == false) {
@@ -184,6 +195,8 @@ public class LookupServlet extends HttpServlet {
 			}
 		} else if(taskType.equals("location") == true) {
 			results = lookup.getPerformanceByLocation(latitude, longitude, distance);
+		} else if(taskType.equals("date") == true) {
+			results = lookup.getPerformanceByDate(startDate, endDate);
 		}
 		
 		

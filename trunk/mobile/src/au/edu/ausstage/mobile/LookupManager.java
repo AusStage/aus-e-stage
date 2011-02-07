@@ -348,5 +348,74 @@ public class LookupManager {
 		
 		return list.toString();
 	}
+	
+	/**
+	 * A method to get a list of performances during the specified date range
+	 *
+	 * @param startDate the start of the date range
+	 * @param endDate   the end of the date range
+	 *
+	 * @return          a string containing the details of any found performances
+	 */
+	@SuppressWarnings("unchecked")
+	public String getPerformanceByDate(String startDate, String endDate) {
+	
+		// check the parameters
+		if(InputUtils.isValid(startDate) == false || InputUtils.isValid(endDate) == false) {
+			throw new IllegalArgumentException("Both parameters to this method must be valid non empty strings");
+		}
+		
+		if(InputUtils.isValidDate(startDate) == false || InputUtils.isValidDate(endDate) == false) {
+			throw new IllegalArgumentException("Both parameters to this method must be in the format yyyy-mm-dd");
+		}
+		
+		// expand the scope of the dates
+		startDate = startDate + " 00:00:00";
+		endDate   = endDate   + " 23:59:59";
+		
+		// define the sql
+		String sql = "SELECT performance_id, start_date_time "
+				   + "FROM mob_performances "
+				   + "WHERE start_date_time >= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
+				   + "AND   end_date_time   <= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS')";
+				   
+		// define the sql parameters
+		String[] sqlParameters = new String[2];
+		sqlParameters[0] = startDate;
+		sqlParameters[1] = endDate;
+		
+		// declare helper variables
+		JSONArray  list   = new JSONArray();
+		JSONObject obj    = new JSONObject();
+		JSONParser parser = new JSONParser();
+		String     json   = null;
+		
+		// execute the sql
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		ResultSet resultSet = results.getResultSet();
+		
+		//loop through the resultSet
+		try {
+			while(resultSet.next() == true) {
+			
+				// get the json for this performance
+				json = getPerformanceDetails(resultSet.getString(1), "json");
+				
+				// convert the json into an object
+				obj = (JSONObject) parser.parse(json);
+				
+				// add the object to the array
+				list.add(obj);				
+				
+			} 
+		} catch(java.sql.SQLException ex) {
+			return new JSONArray().toString();
+		} catch(org.json.simple.parser.ParseException ex) {
+			return new JSONArray().toString();
+		}
+		
+		return list.toString();
+	
+	}
 
 } // end class definition
