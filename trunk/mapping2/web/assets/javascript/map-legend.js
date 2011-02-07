@@ -491,6 +491,11 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 	map.setZoom(mapLegendObj.DEFAULT_MARKER_ZOOM_LEVEL);
 	map.panTo(new google.maps.LatLng(obj.latitude, obj.longitude));
 	
+	// bind to the idle event to determine when to show the infoWindow
+	google.maps.event.addListenerOnce(mappingObj.map, 'idle', function() {
+		$('#mapIcon-venue-' + mappingObj.computeLatLngHash(obj.latitude, obj.longitude)).click();	
+	});
+	
 	/*
 	// get the actual marker object
 	idx = $.inArray(mappingObj.computeLatLngHash(obj.latitude, obj.longitude), mappingObj.mapMarkers.hashes);

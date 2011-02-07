@@ -94,6 +94,9 @@ function MappingClass() {
 	
 	// variable to hold default max width for infoWindows
 	this.INFO_WINDOW_MAX_WIDTH = 500;
+	
+	// variable to define maximum length of an address
+	this.MAX_ADDRESS_LENGTH = 50;
 
 }
 
@@ -1298,7 +1301,6 @@ MappingClass.prototype.buildAddress = function(street, suburb, state, country) {
 			address = address.substr(0, address.length - 2);
 		}
 		
-		return address;
 	} else {
 		if(street != null) {
 			address += street + ', ';
@@ -1313,9 +1315,15 @@ MappingClass.prototype.buildAddress = function(street, suburb, state, country) {
 		} else {
 			address = address.substr(0, address.length - 2);
 		}
-		
-		return address;
 	}
+	
+	// check to see if the address needs to be altered
+	if(address.length > mappingObj.MAX_ADDRESS_LENGTH) {
+		address = address.substring(0, mappingObj.MAX_ADDRESS_LENGTH);
+		address += ' &hellip;';
+	}
+	
+	return address;
 }
 
 MappingClass.prototype.buildAddressAlt = function(suburb, state, country) {
@@ -1334,7 +1342,6 @@ MappingClass.prototype.buildAddressAlt = function(suburb, state, country) {
 			address = address.substr(0, address.length - 2);
 		}
 		
-		return address;
 	} else {
 		
 		if(suburb != null) {
@@ -1346,9 +1353,15 @@ MappingClass.prototype.buildAddressAlt = function(suburb, state, country) {
 		} else {
 			address = address.substr(0, address.length - 2);
 		}
-		
-		return address;
 	}
+	
+	// check to see if the address needs to be altered
+	if(address.length > mappingObj.MAX_ADDRESS_LENGTH) {
+		address = address.substring(0, mappingObj.MAX_ADDRESS_LENGTH);
+		address += ' &hellip;';
+	}
+	
+	return address;
 }
 
 
