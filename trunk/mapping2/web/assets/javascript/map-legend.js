@@ -514,6 +514,9 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 // a function to delete a marker from the map
 MapLegendClass.prototype.deleteMarker = function() {
 
+	// manually hide the tooltip so it isn't left hanging
+	$('#' + this.id).tipsy('hide');
+
 	var id   = this.id.split('-');
 	var mapData = mappingObj.markerData.objects;
 	var contributors;
@@ -541,14 +544,33 @@ MapLegendClass.prototype.deleteMarker = function() {
 					if(contributors[x].id == id) {
 						// ids match so delete
 						contributors.splice(x, 1);
+						if(x > 0) {
+							x--;
+						}
 					}
 				}
 			}	
 		}
 	}
 	
-	// TODO tidy up the data structure by removing slots where all of the arrays are empty
+	// tidy up the map data structure by removing slots with no data
+	for (var i = 0; i < mapData.length; i++) {
 	
+		// check for zero length arrays
+		if(mapData[i].contributors.length == 0) {
+			if(mapData[i].organisations.length == 0) {
+				if(mapData[i].venues.length == 0) {
+					if(mapData[i].events.length == 0) {
+						// remove this entry from the array
+						mapData.splice(i, 1);
+						if(i > 0) {
+							i--;
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	// update the map
 	mappingObj.updateMap();
