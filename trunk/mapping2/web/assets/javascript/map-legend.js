@@ -251,7 +251,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			obj = objects[i];
 			
 			// add the icon
-			tableData += '<td class="mapLegendIcon"><span class="' + mapIconography.eventColours[0] + ' mapLegendIconImg"><img src="' + mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+			tableData += '<td class="mapLegendIcon"><span class="' + mapIconography.eventColours[0] + ' mapLegendIconImg"><img class="mapLegendIconImgClick" id="mpz-event-' + obj.id + '" src="' + mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
 						
 			// add the name and functions
 			tableData += '<td class="mapLegendInfo"><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
@@ -486,13 +486,24 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 	if(id[1] == 'venue') {
 		idx = $.inArray(id[2], mapLegendObj.recordData.venues.ids);
 		obj = mapLegendObj.recordData.venues.objects[idx];
+		
+		map.setZoom(mapLegendObj.DEFAULT_MARKER_ZOOM_LEVEL);
+		map.panTo(new google.maps.LatLng(obj.latitude, obj.longitude));
+	
+		// bind to the idle event to determine when to show the infoWindow
+		google.maps.event.addListenerOnce(mappingObj.map, 'idle', function() {
+			$('#mapIcon-venue-' + mappingObj.computeLatLngHash(obj.latitude, obj.longitude)).click();	
+		});
+	} else if(id[1] == 'event') {
+		idx = $.inArray(id[2], mapLegendObj.recordData.events.ids);
+		obj = mapLegendObj.recordData.events.objects[idx];
+		
+		map.setZoom(mapLegendObj.DEFAULT_MARKER_ZOOM_LEVEL);
+		map.panTo(new google.maps.LatLng(obj.venue.latitude, obj.venue.longitude));
+	
+		// bind to the idle event to determine when to show the infoWindow
+		google.maps.event.addListenerOnce(mappingObj.map, 'idle', function() {
+			$('#mapIcon-event-' + mappingObj.computeLatLngHash(obj.venue.latitude, obj.venue.longitude)).click();	
+		});
 	}
-	
-	map.setZoom(mapLegendObj.DEFAULT_MARKER_ZOOM_LEVEL);
-	map.panTo(new google.maps.LatLng(obj.latitude, obj.longitude));
-	
-	// bind to the idle event to determine when to show the infoWindow
-	google.maps.event.addListenerOnce(mappingObj.map, 'idle', function() {
-		$('#mapIcon-venue-' + mappingObj.computeLatLngHash(obj.latitude, obj.longitude)).click();	
-	});
 }
