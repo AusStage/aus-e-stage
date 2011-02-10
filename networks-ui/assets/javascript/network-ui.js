@@ -6,7 +6,7 @@ var force;
 
 //sizing 
 var spacer = 40;
-var hSpacer = 30;
+var hSpacer = 67;
 var w;
 var	h;
 
@@ -14,35 +14,54 @@ var	h;
 //	h = $(window).height() - 94;  	//height of the focus panel
 	
 /* appearance variables */
-var panelColor = "white";
-
 var thickLine = 3;
 var thinLine = 1.5;
 
 var largeFont = "8 pt sans-serif";
 var smallFont = "6 pt sans-serif";
+//edge, node and background colouring for normal browsing
+var nodeColors = {	panelColor:			"white",
+					selectedNode:		"rgba(0,0,255,1)",				//blue
+					unselectedNode:		"rgba(170,170,170,0.7)",		//light grey
+					relatedNode:		"rgba(46,46,46,1)",				//dark grey	
+					outOfDateNode:		"rgba(170,170,170,0.1)",		//light grey transparent
+					selectedNodeBorder:	"rgba(0,0,255,1)",	  			//blue								
+					unselectedNodeBorder:"rgba(170,170,170,1)",			//light grey
+					relatedNodeBorder:	"rgba(46,46,46,1)",				//dark grey
+					outOfDateNodeBorder:"rgba(170,170,170,0.1)",		//light grey transparent	
+					selectedEdge:		"rgba(0,0,255,1)",				//blue				
+					unselectedEdge:		"rgba(170,170,170,0.7)",		//light grey
+					relatedEdge:		"rgba(46,46,46,0.7)",			//dark grey
+					outOfDateEdge:		"rgba(170,170,170,0.05)",
+					selectedText:		"rgba(0,0,255,1)",				//blue
+					unselectedText:		"rgba(170,170,170,1)",			//light grey
+					relatedText:		"rgba(46,46,46,1)",				//dark grey
+					outOfDateText:		"rgba(170,170,170,0.3)"
+				  }
+//edge, node and background colouring for faceted browsing				  
+var nodeColorsF = {	panelColor:			"black",
+					selectedNode:		"rgba(170,170,170,1)",			//light grey
+					unselectedNode:		"rgba(170,170,170,1)",			//light grey
+					relatedNode:		"rgba(170,170,170,1)",			//light grey
+					highlightNode:		"blue",							//blue
+					selectedNodeBorder:	"white",						//white
+					unselectedNodeBorder:"rgba(170,170,170,1)",			//light grey
+					relatedNodeBorder:	"white",						//white
+					highlightNodeBorder:"blue",							//blue
+					selectedEdge:		"rgba(255,255,255,0.9)",		//white 
+					unselectedEdge:		"rgba(170,170,170,0.5)",		//light grey
+					relatedEdge:		"rgba(255,255,255,0.9)",		//white
+					outOfDateEdge:		"rgba(170,170,170,0.2)",
+					selectedText:		"rgba(170,170,170,1)",			//light grey
+					unselectedText:		"rgba(170,170,170,1)",			//light grey
+					relatedText:		"rgba(170,170,170,1)",			//light grey
+					highlightText:		"blue",							//blue
+				   }
 
-var selectedEdge = "rgba(0,0,255,1)";				//blue
-var selectedLabel = "rgba(0,0,255,1)";				//blue
-var selectedNode = "rgba(0,0,255,1)";				//blue
-var selectedNodeBorder = "rgba(0,0,255,1)";  		//blue
-var selectedText = "rgba(0,0,255,1)";				//blue
-
-var unselectedEdge = "rgba(170,170,170,0.7)";		//light grey
-var unselectedLabel = "rgba(170,170,170,1)";			//light grey
-var unselectedNode = "rgba(170,170,170,0.7)";		//light grey
-var unselectedNodeBorder = "rgba(170,170,170,1)";	//light grey
-var unselectedText = "rgba(170,170,170,1)";			//light grey
-
-var relatedEdge = "rgba(46,46,46,0.7)";				//dark grey
-var relatedLabel = "rgba(46,46,46,1)";				//dark grey
-var relatedNode = "rgba(46,46,46,1)";				//dark grey
-var relatedNodeBorder = "rgba(46,46,46,1)";			//dark grey
-var relatedText = "rgba(46,46,46,1)";				//dark grey
-
-
+//switches - show labels and faceted view on/off
 var showAllContributors = false;	//set to true if related checkbox is checked. Will display all contributor labels
 var showRelatedContributors = false;	//set to true if related checkbox is checked. Will display related contributor labels
+var viewFaceted = false;			//set to true if facteded browsing selected.
 
 //MOUSE OVER VARIABLES
 var nodeIndexPoint = -1;	//stores the index of the node that the mouse is currently over. Used for mouse in/out. 
@@ -62,13 +81,10 @@ var EDGE = "edge";
 var NODE = "node";
 var CLEAR = "clear";
 
-
-
 //PAGE SET UP
 //=======================================================
 
 $(document).ready(function() {
-	
 	//HIDE UNWANTED DIVS
 
 	//hide the ruler div
@@ -76,8 +92,8 @@ $(document).ready(function() {
 	//hide the main div
 	$("#main").hide();
 	//hide the date range
-	//$("select#startDate").hide();
-	//$("select#endDate").hide();
+	$("select#startDate").hide();
+	$("select#endDate").hide();
 	//$("#date_range_div").hide();
 	//hide the faceted browsing button
 	$("#faceted_browsing_btn_div").hide();
@@ -101,6 +117,10 @@ $(document).ready(function() {
 	createLegend("#network_properties_header");
 	createLegend("#selected_object");
 
+	//style the faceted browsing optionf
+	createLegend("#functions_header");
+	createLegend("#gender_header");
+	createLegend("#nationality_header");		
 	// style the buttons
 	$("button, input:submit").button();
 	
@@ -264,6 +284,7 @@ $(document).ready(function() {
 		$("#id").val(""); 
      	return false;
     });
+
 });    
  
 //SHOW LOADER - SHOWS THE SEARCHING IMAGE    
@@ -280,7 +301,6 @@ function showLoader(type) {
 	}
 }
  
-
 
 // NETWORK LOADING DIALOGUE, SHOWS LOADING BAR AS NETWORK IS RETRIEVED AND RENDERED
 $(document).ready(function() {
@@ -416,9 +436,10 @@ function getNetworkAndDisplay(id){
 //GRAPH DISPLAY
 //=======================================================
 function showInteraction(){
-		$("#main").show();
-		$("#display_labels_div").show();
-		$("#network_properties_div").show();		
+		$("#main").show();//show visualisation
+		$("#display_labels_div").show();//show display label options
+		$("#network_properties_div").show();//show network properties	
+		$("#faceted_browsing_btn_div").show();//show faceted browsing on/off		
 }
 
 function getNodes(){return contributors.nodes;}
@@ -429,12 +450,11 @@ function getCentralNode(){return contributors.nodes.length-1;}
 function showGraph(targetDiv){
 	if (contributors != null){
 		
+		//prepare data for render
 		prepareData();
-		setDateSlider();
-		
 
 		vis = new pv.Panel().canvas(targetDiv)
-				.fillStyle(panelColor)
+				.fillStyle(function(){return getPanelColor()})
 			  	.width(function(){return w})
 			  	.height(function(){return h})
 			  	.event("mousedown", pv.Behavior.pan())
@@ -474,6 +494,7 @@ function showGraph(targetDiv){
 			    .lineWidth(function(d) {return getNodeLineWidth(d)})
 			    
 				.event("click", function(d) {onClick(d, NODE); return vis;})
+				.event("dblclick", function(d){return getNetworkAndDisplay(contributors.nodes[this.index].id)})				
 			    .event("mouseover", function(d){nodeIndexPoint = d.index;
 			    								return vis;})
 			    .event("mouseout", function(d){nodeIndexPoint = -1;
@@ -491,6 +512,18 @@ function showGraph(targetDiv){
     	vis.render();		
 	}					    	
 }
+
+//refresh network 
+function refreshNetwork(typeOfRefresh){
+	if(typeOfRefresh == "dateRange"){
+		resetDateRangeVisibility();
+	}
+	else if (typeOfRefresh == "faceted"){
+		resetFacetedVisibility();
+	}
+	vis.render();
+}
+
 
 //INTERACTION FUNCTIONS - resize, zoom etc
 //=======================================================
@@ -531,6 +564,10 @@ function onClick(d, what){
 
 //GRAPH APPEARANCE FUNCTIONS
 //=======================================================
+function getPanelColor(){
+	return (viewFaceted) ? nodeColorsF.panelColor:nodeColors.panelColor;	
+}
+
 
 //label visibility
 function isVisible(d){
@@ -569,14 +606,18 @@ function getFont(d){
 }
 
 function getTextStyle(d){
+	var color = (viewFaceted)? nodeColorsF:nodeColors;	
+	//if node/edge is out of the date range
+	if (!d.withinDateRange && !viewFaceted){return color.outOfDateText;}
+	//if node matches faceted criteria
+	if (viewFaceted && d.facetedMatch){return color.highlightText}
 	//if node is selected
-	if (d.index == nodeIndex){return selectedText;}
+	if (d.index == nodeIndex){return color.selectedText;}
 	//if node is related to selected node
-	else if (contains(d.neighbors, nodeIndex)){return relatedText;}
+	else if (contains(d.neighbors, nodeIndex)){return color.relatedText;}
 	//if node is related to selected edge
-	else if (d.index == edgeTIndex || d.index == edgeSIndex){return relatedText}
-	else return unselectedText;
-	
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return color.relatedText}
+	else return color.unselectedText;	
 }
 
 
@@ -594,23 +635,46 @@ function getNodeLineWidth(d){
 }
 
 function getNodeFill(d){
+	var color = (viewFaceted)? nodeColorsF:nodeColors;	
+	//check date range first. doesn't count if viewing faceted
+	if (!d.withinDateRange && !viewFaceted){return color.outOfDateNode;}
+	//if viewing faceted, change the color scheme, nodes are either selected or not
+	if(viewFaceted){return (d.facetedMatch) ? color.highlightNode:color.unselectedNode}
 	//if node is selected
-	if (d.index == nodeIndex){return selectedNode;}
+	else if (d.index == nodeIndex){return color.selectedNode;}
 	//if node is related to selected node
-	else if (contains(d.neighbors, nodeIndex)){return relatedNode;}
+	else if (contains(d.neighbors, nodeIndex)){return color.relatedNode;}
 	//if node is related to selected edge
-	else if (d.index == edgeTIndex || d.index == edgeSIndex){return relatedNode}
-	else return unselectedNode;
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return color.relatedNode}
+	else return color.unselectedNode;	
 }
 
 function getNodeStroke(d){
+	var color = (viewFaceted) ? nodeColorsF:nodeColors;	
+	//if node is out of the date range
+	if (!d.withinDateRange && !viewFaceted){return color.outOfDateNodeBorder;}	
 	//if node is selected
-	if (d.index == nodeIndex){return selectedNodeBorder;}
+	else if (d.index == nodeIndex){return color.selectedNodeBorder;}
 	//if node is related to selected node
-	else if (contains(d.neighbors, nodeIndex)){return relatedNodeBorder;}
+	else if (contains(d.neighbors, nodeIndex)){return color.relatedNodeBorder;}
 	//if node is related to selected edge
-	else if (d.index == edgeTIndex || d.index == edgeSIndex){return relatedNode}	
-	else return unselectedNodeBorder;
+	else if (d.index == edgeTIndex || d.index == edgeSIndex){return color.relatedNodeBorder}	
+	else if (viewFaceted && d.facetedMatch){return color.highlightNodeBorder}
+	else return color.unselectedNodeBorder;
+}
+
+function getEdgeStroke(p){
+	var color = (viewFaceted) ? nodeColorsF:nodeColors;	
+	//if edge is out of the date range
+	if (!p.withinDateRange){return color.outOfDateEdge;}
+	//if the edge connects to the selected node
+	if (p.source == nodeIndex || p.target == nodeIndex){
+		return color.relatedEdge;
+	}
+	else if(p.source == edgeSIndex && p.target == edgeTIndex){
+		return color.selectedEdge;	
+	}
+	else return color.unselectedEdge;
 }
 
 function getEdgeLineWidth(p){
@@ -625,17 +689,6 @@ function getEdgeLineWidth(p){
 		return i+2;		
 	}
 	else return i;
-}
-
-function getEdgeStroke(p){
-	//if the edge connects to the selected node
-	if (p.source == nodeIndex || p.target == nodeIndex){
-		return relatedEdge;
-	}
-	else if(p.source == edgeSIndex && p.target == edgeTIndex){
-		return selectedEdge;	
-	}
-	else return unselectedEdge;
 }
 
 /* SIDE PANEL INFORMATION DISPLAY METHODS
@@ -798,31 +851,45 @@ function prepareData(){
 	contributors.nodes[getCentralNode()].fix = new pv.Vector(w/2,h/2);
 	//set the active node
 	nodeIndex = getCentralNode();
+	//set list of adjoining nodes for each node
+	loadNeighbors();
 	//clean the date records
 	cleanDates();
-	//set list of adjoining nodes for each node
-	loadNeighbors();	
+	//set the date slider based on date records
+	setDateSlider();
+	//set visibility fields for date range
+	resetDateRangeVisibility();	
+	//set the values for faceted browsing
+	setFacetedOptions(getFacetedOptions());
+
 }
 
 //adds extra array to each node storing neighboring node indexes
+//also adds array of edge indexes relating to this node
 function loadNeighbors(){
 
 	for(i = 0; i < contributors.nodes.length; i ++){
 
 		//while we're already looping through the nodes array, best remove any double spaces
 		contributors.nodes[i].nodeName = contributors.nodes[i].nodeName.replace("  ", " "); 
+		//and double check nationality and gender are left empty
+		if (contributors.nodes[i].gender == null){contributors.nodes[i].gender = "Unknown";}
+		if (contributors.nodes[i].nationality == null){contributors.nodes[i].nationality = "Unknown";}		
 		
 		contributors.nodes[i].neighbors = [];
+		contributors.nodes[i].edgeList = [];
 		var neighbor_count = 0;
 		
 		for (x = 0; x < contributors.edges.length; x ++){
 			if(contributors.edges[x].source == i){
+				contributors.nodes[i].edgeList.push(x);
 				if (!contains(contributors.nodes[i].neighbors, contributors.edges[x].target)){
 					contributors.nodes[i].neighbors[neighbor_count] = contributors.edges[x].target;
 					neighbor_count++;
 				}
 			}
 			if(contributors.edges[x].target == i){
+				contributors.nodes[i].edgeList.push(x);				
 				if (!contains(contributors.nodes[i].neighbors, contributors.edges[x].source)){
 					contributors.nodes[i].neighbors[neighbor_count] = contributors.edges[x].source;
 					neighbor_count++;
@@ -832,17 +899,339 @@ function loadNeighbors(){
 	}	
 }
 
+/* FACETED BROWSE FUNCTIONS - set the values for faceted browse, define the faceted window etc.
+====================================================================================================================*/
+$(document).ready(function() {    
+    //set up browsing button
+    $("#faceted_browsing_btn").click(function() {
+		$("#faceted_browsing_div").dialog("open");
+	    return false;
+    });
+ 
+    //set up faceted browsing dialog
+    $("#faceted_browsing_div").dialog({ 
+		autoOpen: false,
+		closeOnEscape: false,
+		maxWidth:280,
+		minWidth:280,
+		width: 280,
+		modal: false,
+		position: ["right","top"],
+		buttons: {
+			"Refresh": function() {
+				updateFacetedTerms();
+				refreshNetwork("faceted");
+				return false;
+			},
+			'Close': function(){
+				$(this).dialog('close');
+				return false;
+			}
+		},
+		open: function(){
+		$("#refresh_date_btn").button("disable");	
+		viewFaceted = true;
+		refreshNetwork("faceted");
+		},
+	  	close: function() {
+		$("#refresh_date_btn").button("enable");	
+		viewFaceted= false;
+		refreshNetwork("dateRange");
+		}
+	
+	});
+});
+
+//get all functions from the contributor list.
+function getFacetedOptions(){
+	
+	//function variables
+	var functionList = [];
+	//gender variables
+	var genderList = [];
+	//nationality variables
+	var nationalityList = [];
+
+	//loop through the nodelist.
+	for (i in contributors.nodes){
+		//find unique genders.
+		if (!contains(genderList, contributors.nodes[i].gender)){
+			genderList.push(contributors.nodes[i].gender);
+		}
+		//find unique nationality.
+		if (!contains(nationalityList, contributors.nodes[i].nationality)){
+			nationalityList.push(contributors.nodes[i].nationality);
+		}			
+		//loop through the function list. 
+		for (x in contributors.nodes[i].functions){	
+			//if - this function is not in function list, add it to the function list.
+			if (!contains(functionList, contributors.nodes[i].functions[x] )){
+				functionList.push(contributors.nodes[i].functions[x]);
+			}
+		//else do nothing
+		}
+	}
+	return {functions: functionList.sort(), genders: genderList.sort(), nationalities:nationalityList.sort()};
+}
+
+//set the select box with functions
+function setFacetedOptions(list){
+	var html = "";	
+	var tableClass = "";
+	//clear the functions list
+	$("#faceted_function_div").empty();
+	//clear the gender list
+	$("#faceted_gender_div").empty();
+	//clear the nationality list
+	$("#faceted_nationality_div").empty();
+	//clear the description area
+	$("#faceted_selection_p").empty();
+
+	//create the function checkboxes
+	html +="<table>";		
+	for(i in list.functions){
+		tableClass = (isEven(i)) ? "d0":"d1";
+		
+		html += '<tr class="'+tableClass+'"><td><input type="checkbox" id="function" value="'+list.functions[i]
+		+'" /> <label for="'+i+'">'+list.functions[i]+'</label></td></tr>';
+	}	
+	html +="</table>";
+	$("#faceted_function_div").append(html);
+	
+	//create the gender checkboxes
+	html = "<table>";
+	for(i in list.genders){
+		tableClass = (isEven(i)) ? "d0":"d1";
+
+		html+= ('<tr class="'+tableClass+'"><td><input type="checkbox" id="gender" value="'+list.genders[i]
+		+'" /> <label for="'+i+'">'+list.genders[i]+'</label></td></tr>');
+	}	
+	html += "</table>";
+	$('#faceted_gender_div').append(html);
+	
+	//create the nationality checkboxes
+	html = "<table>";
+	for(i in list.nationalities){
+		tableClass = (isEven(i)) ? "d0":"d1";
+
+		html+= ('<tr class="'+tableClass+'"><td><input type="checkbox" id="nationality" value="'+list.nationalities[i]
+		+'" /> <label for="'+i+'">'+list.nationalities[i]+'</label></td></tr>');
+	}	
+	html += "</table>";
+	$('#faceted_nationality_div').append(html);
+	
+	//restrict gender to only one check box selected.
+	$('#faceted_gender_div input:checkbox').exclusiveCheck();
+}
+
+//update the display to show what's been selected
+function updateFacetedTerms() {	
+	//empty the existing terms	
+	$("#faceted_selection_p").empty();
+	var displayStr = "";
+	var startStr = "<b>Contributors who are: </b><br>";
+	var middleStr = "<br><b>and </b>";
+	var middleOrStr = "<br><b>or </b>";
+	var functionStr = "";
+	var genderStr = "";
+	var nationalityStr = "";
+	//if there are checked options	
+	if($("input:checked").length>0){ displayStr = startStr;}    
+	//loop through the checked functions 
+    $("input#function:checked").each(function (index, value) {
+    	functionStr += value.value + "<br>";
+    });
+    //if function string has been populated
+    if(functionStr.length !=0){
+    	functionStr += " ";
+    }
+    //remove the last space - and replace with s
+	functionStr = functionStr.replace("<br> ","s ");
+    //get selected gender
+    $("input#gender:checked").each(function (index, value) {
+          genderStr += value.value + " ";
+    });
+    //get the nationalities    
+    $("input#nationality:checked").each(function (index, value) {
+          nationalityStr += value.value + " "+ middleOrStr;
+    });
+    // insert 'or' between selected nationality values    
+    if(nationalityStr.length!=0){
+    	nationalityStr+= " ";
+    }
+    nationalityStr = nationalityStr.replace(middleOrStr+" "," ");
+	//consolidate the strings - add the string of funcitons
+	displayStr += functionStr;
+	//if functions and gender has been selected add 'and'	
+	if(functionStr.length !=0 && genderStr.length != 0){
+		displayStr += middleStr;			
+	}
+	//add the gender string
+	displayStr += genderStr;
+		
+	if((functionStr.length !=0 && genderStr.length != 0 && nationalityStr.length !=0)||
+			(functionStr.length == 0 && genderStr.length !=0 && nationalityStr.length !=0)||
+			(functionStr.length !=0 && genderStr.length ==0 && nationalityStr.length !=0) ){
+				displayStr += middleStr;
+	}
+	displayStr += nationalityStr;
+	//update the display                     
+    $("#faceted_selection_p").append(displayStr);
+};
+
+function resetFacetedVisibility(){
+/*set facetedMatch = true if matches criteria.
+false if not. Used in the graph appearance functions
+*/	
+	var match;
+	//get selected functions
+	var functions = $("input#function:checked");
+	//get selected gender
+	var gender = $("input#gender:checked");
+	//get selected nationalities - put values into array
+	var nationalities = [];
+	for (var n = 0; n < $("input#nationality:checked").length; n++){
+		nationalities.push($("input#nationality:checked")[n].value);
+	}
+	//loop through each node and compare to the criteria.
+	for(i in contributors.nodes){
+
+		match = (functions.length==0 && gender.length==0 && nationalities.length==0) ? false:true; 
+		for(var f = 0; f < functions.length; f++){
+			if(!contains(contributors.nodes[i].functions, functions[f].value)){match = false;}
+		}
+		for(var g = 0; g < gender.length; g++){
+			if(contributors.nodes[i].gender != gender[g].value){match = false;}
+		}	
+		if(nationalities.length != 0 && !contains(nationalities, contributors.nodes[i].nationality)){match = false;}
+		//set the node value dependant on match found
+		contributors.nodes[i].facetedMatch = match;
+	}
+}
+
+
+
+/* DATE BROWSE FUNCTIONS - set the time slider, reset visible values based on date range. refresh date dutton
+====================================================================================================================*/
+//date browsing buttons
+$(document).ready(function() {    
+    $("#refresh_date_btn").click(function() {
+    	$("#startDateStore").val( $("select#startDate").val()) ;
+    	$("#endDateStore").val( $("select#endDate").val()) ;  
+		refreshNetwork("dateRange");
+	    return false;
+    });
+});    
+
 function setDateSlider(){
-/*
-from the dates, get the max date and the min date.
+/*from the dates, get the max date and the min date.
 then while early date (month and year) < later date (month and year)
 populate the select with incrementing dates
 */
-	thedate = new Date(pv.min(contributors.edges, function(d) {return d.firstDate}));	
-	console.log("*"+thedate);
-	thedate = new Date(pv.max(contributors.edges, function(d) {return d.firstDate}));		
-	console.log("*"+thedate);	
+	//create the format for the date to display
+	var dateFormat = pv.Format.date("%b/%Y");
+	var startList = document.getElementById("startDate");
+	var endList = document.getElementById("endDate");	
+	
+	// get the max and min first dates
+	var maxDate = new Date(pv.max(contributors.edges, function(d) {return d.firstDate}));		 
+	var minDate = new Date(pv.min(contributors.edges, function(d) {return d.firstDate}));	
+	
+	//clear date range select boxes
+	while (startList.hasChildNodes()) {
+ 		startList.removeChild(startList.firstChild);
+	}
+	while (endList.hasChildNodes()) {
+ 		endList.removeChild(endList.firstChild);
+	}
+	
+	//set the min date to the first of the month
+	minDate.setDate(1);
+	//set max date to the last of the month
+	maxDate.setMonth(maxDate.getMonth()+1);
+	maxDate.setDate(0);
+	
+	//create the dates for the slider
+	while(minDate<maxDate){
+		
+		var opt = document.createElement("option");
+		opt.value = (minDate);
+		opt.appendChild(document.createTextNode(dateFormat(minDate)));										
+		startList.appendChild(opt);
+
+		var opt2 = document.createElement("option");
+		opt2.value = (minDate);
+		opt2.appendChild(document.createTextNode(dateFormat(minDate)));										
+		endList.appendChild(opt2);
+	
+		minDate.setMonth(minDate.getMonth()+1);
+	}
+	//add the final max date 
+	var opt = document.createElement("option");
+	opt.value = (maxDate);
+	opt.appendChild(document.createTextNode(dateFormat(maxDate)));										
+	startList.appendChild(opt);
+
+	var opt2 = document.createElement("option");
+	opt2.value = (maxDate);
+	opt2.appendChild(document.createTextNode(dateFormat(maxDate)));										
+	endList.appendChild(opt2);
+	
+	// select the last and first options before building the time slider
+    $("#startDate option:first").attr("selected", "selected");
+    $("#endDate option:last").attr("selected", "selected");
+
+	$("#startDateStore").val( $("select#startDate").val()) ;
+    $("#endDateStore").val( $("select#endDate").val()) ;
+	// remove any existing slider
+	$('.ui-slider-scale').hide();
+	$('.ui-slider').slider('destroy');
+	
+	$('select#startDate, select#endDate').selectToUISlider({
+		labels: 6,
+		labelSrc:"text"
+	});	
 }
+
+//given the selected date range, reset nodes and edge visibility
+function resetDateRangeVisibility(){
+	
+	var minDate =new Date($("#startDateStore").val());
+	var maxDate =new Date($("#endDateStore").val()); 
+	//for each node
+	for (n in contributors.nodes){
+		var hasVisibleEdge = false;
+	
+		//for each edge related to the node
+		for(e in contributors.nodes[n].edgeList){
+			var edge=contributors.nodes[n].edgeList[e];
+			//if edge is out of date range
+			if(contributors.edges[edge].firstDate < minDate || contributors.edges[edge].firstDate > maxDate){
+				contributors.edges[edge].withinDateRange = false;				
+			} else {
+				contributors.edges[edge].withinDateRange = true;
+				hasVisibleEdge = true;				
+			}
+		}
+		contributors.nodes[n].withinDateRange = hasVisibleEdge;		
+	}
+}
+
+//validate and clean date records.
+function cleanDates(){
+	for (i in contributors.edges){
+		switch (contributors.edges[i].firstDate.length){
+			case 6:
+				contributors.edges[i].firstDate = contributors.edges[i].firstDate.substring(0,4)+"-01-01";
+				break;
+			case 8:
+				contributors.edges[i].firstDate = contributors.edges[i].firstDate.substring(0,7)+"-01";
+				break;
+		}
+		contributors.edges[i].firstDate = new Date(contributors.edges[i].firstDate);	
+	}	
+}
+
 
 //HELPER FUNCTIONS
 //=======================================================
@@ -917,19 +1306,4 @@ function createLegend(element){
     		allowToggle=true;
     	}
 	});   	
-}
-
-//validate and clean date records.
-function cleanDates(){
-	for (i in contributors.edges){
-		switch (contributors.edges[i].firstDate.length){
-			case 6:
-				contributors.edges[i].firstDate = contributors.edges[i].firstDate.substring(0,4)+"-01-01";
-				break;
-			case 8:
-				contributors.edges[i].firstDate = contributors.edges[i].firstDate.substring(0,7)+"-01";
-				break;
-		}
-		contributors.edges[i].firstDate = new Date(contributors.edges[i].firstDate);	
-	}	
 }

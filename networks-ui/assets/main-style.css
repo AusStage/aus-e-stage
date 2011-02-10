@@ -33,9 +33,6 @@ a:hover {
 }
 
 #wrap {
-       // width:1200px;
-       // width:auto;
-       // margin:0 auto;
         background:#aaaaaa;
 }
 #header {
@@ -86,10 +83,9 @@ h1 {
         width:auto;
         padding:10px;
         background:#ffffff;
-        font-size: 90%;
+        font-size: 80%;
         font-family:Helvetica,Arial;
-	    color:#333333;
-	    
+	    color:#333333;	    
 }
 
 h2 {
@@ -114,13 +110,11 @@ blockquote
 #sidebar ul {
         margin:0;
         padding:0;
-//font-size: 90%;
         list-style:none;
 }
 
 #sidebar ul a {
         color: #fff;
-//font-size: 90%;
         text-decoration: none;
 }
 
@@ -238,16 +232,3 @@ table.searchResults tfoot {
 .tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
 .tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
 
-/*Protovis faceted browsing style*/
-.scroll_checkboxes {
-    height: 100px;
-    padding: 5px;
-    overflow: auto;
-    border: 1px solid #ccc;
-}
-.scroll_checkboxes_small {
-    height: 50px;
-    padding: 5px;
-    overflow: auto;
-    border: 1px solid #ccc;
-}
