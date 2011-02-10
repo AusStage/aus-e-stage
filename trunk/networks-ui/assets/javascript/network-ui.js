@@ -1136,7 +1136,6 @@ populate the select with incrementing dates
 	// get the max and min first dates
 	var maxDate = new Date(pv.max(contributors.edges, function(d) {return d.firstDate}));		 
 	var minDate = new Date(pv.min(contributors.edges, function(d) {return d.firstDate}));	
-	
 	//clear date range select boxes
 	while (startList.hasChildNodes()) {
  		startList.removeChild(startList.firstChild);
@@ -1183,6 +1182,7 @@ populate the select with incrementing dates
 
 	$("#startDateStore").val( $("select#startDate").val()) ;
     $("#endDateStore").val( $("select#endDate").val()) ;
+    
 	// remove any existing slider
 	$('.ui-slider-scale').hide();
 	$('.ui-slider').slider('destroy');
@@ -1228,10 +1228,15 @@ function cleanDates(){
 				contributors.edges[i].firstDate = contributors.edges[i].firstDate.substring(0,7)+"-01";
 				break;
 		}
-		contributors.edges[i].firstDate = new Date(contributors.edges[i].firstDate);	
+		contributors.edges[i].firstDate = parseDate(contributors.edges[i].firstDate);	
 	}	
 }
 
+//safari fix for date handling
+function parseDate(input) {
+  var parts = input.match(/(\d+)/g);
+  return new Date(parts[0], parts[1]-1, parts[2]);
+}
 
 //HELPER FUNCTIONS
 //=======================================================
@@ -1260,15 +1265,6 @@ function sortByName(a, b) {
     var x = a.name.toLowerCase();
     var y = b.name.toLowerCase();
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-}
-
-//function to crop function list to one line
-function cropText(pText, class, length) {
-
-	$("#ruler").empty(); 
-	$("#ruler").append(pText);
-	return $("#ruler").width();
- 
 }
 
 //reset the legend to its closed state 

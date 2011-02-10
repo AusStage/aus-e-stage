@@ -1,0 +1,234 @@
+/*
+ * This file is part of the AusStage Mapping Service
+ *
+ * The AusStage Mapping Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The AusStage Mapping Service is distributed in the hope that it will
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.
+ * If not, see <http://www.gnu.org/licenses/>.
+*/
+html, body {
+        margin:0;
+        padding:0;
+        color:#333333;
+        background: #fff;
+        font-family:Helvetica, Arial, sans-serif;
+}
+
+a {
+        color: #4433cc;
+        text-decoration: none;
+}
+
+a:hover {
+        text-decoration: underline;
+}
+
+#wrap {
+        background:#aaaaaa;
+}
+#header {
+        height: 64px;
+        padding:0px;
+        background: #333333;
+        background-image: url('images/ausstagehomebrand.gif');
+        background-repeat: no-repeat;
+        background-position: top left;
+}
+#header h1 {
+        color: #eeeeee;
+        text-align: right;
+        font-size: 110%;
+        font-weight: normal;
+        padding-top: 24px;
+        padding-right: 10px;
+}
+
+h1 {
+    margin:0;
+}
+
+#nav {
+        padding:5px 10px;
+        background:#333333;
+        font-size: 90%;
+
+}
+#nav ul {
+        margin:0;
+        padding:0;
+        list-style:none;
+}
+#nav li {
+        display:inline;
+        margin:0;
+        padding:0;
+        font-size: 90%;
+}
+
+#nav a {
+        color: #fff;
+}
+
+#main {
+        float:left;
+        width:auto;
+        padding:10px;
+        background:#ffffff;
+        font-size: 80%;
+        font-family:Helvetica,Arial;
+	    color:#333333;	    
+}
+
+h2 {
+        margin:0 0 1em;
+        font-size: 110%;
+
+}
+
+blockquote
+        {background-color:#eeeeee;
+}
+
+#sidebar {
+        float:left;
+        width:250px;
+        padding-left: 5px;
+        background-color: #aaaaaa;
+        color: #fff;
+        font-size: 80%;
+}
+
+#sidebar ul {
+        margin:0;
+        padding:0;
+        list-style:none;
+}
+
+#sidebar ul a {
+        color: #fff;
+        text-decoration: none;
+}
+
+#sidebar a:hover {
+        text-decoration: underline;
+}
+
+#sidebar h3 {
+        color: #000;
+        font-size: 110%;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+}
+
+#footer {
+        clear:both;
+        padding:5px 10px;
+        background:#aaaaaa;
+        color:#fff;
+}
+#footer p {
+        margin:0;
+        font-size: 75%;
+    text-align: center;
+}
+
+#footer a {
+        color: #fff;
+        text-decoration: none;
+}
+
+#footer a:hover {
+        text-decoration: underline;
+}
+
+* html #footer {
+        height:1px;
+        font-size: 90%;
+}
+
+/* Styles for forms */
+table.formTable {
+        border-width: 0px;
+        border-spacing: 3px;
+        border-collapse: separate;
+}
+
+table.formTable th {
+        text-align: left;
+
+}
+
+table.formTable th label {
+        text-align: left;
+
+}
+
+/* Styles for Validation Errors */
+label.error {
+        float: none;
+        color: red;
+        padding-left: .5em;
+        vertical-align: top;
+}
+
+/* Styles for tables */
+table.searchResults {
+        background-color: #fff;
+        text-align: left;
+        border: 1px solid #aaaaaa;
+        border-collapse: collapse;
+        width: 100%;
+}
+
+table.searchResults th {
+        border: 1px solid #aaaaaa;
+        padding: 2px;
+        text-align: left;
+        color: #000;
+}
+
+table.searchResults td {
+        padding: 2px;
+}
+
+tr.odd {
+        background-color: #eeeeee;
+}
+
+table.searchResults tfoot {
+        border: 1px solid #aaaaaa;
+        font-size: 90%;
+}
+
+/* Dialog styles */
+.ui-dialog-content a {
+        color: blue!important;
+}
+
+.ui-dialog-content a:visited {
+        color: purple!important;
+}
+
+/* Styles for the Tipsy Library */
+.tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }
+.tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
+.tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+.tipsy-arrow { position: absolute; background: url('images/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
+.tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
+.tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
+.tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
+.tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
+.tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
+.tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
+.tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
+.tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+
