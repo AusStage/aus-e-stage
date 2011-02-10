@@ -29,7 +29,7 @@
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
 	<jsp:include page="analytics.jsp"/>
 	<!-- libraries -->
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.3.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.5.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.6.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>

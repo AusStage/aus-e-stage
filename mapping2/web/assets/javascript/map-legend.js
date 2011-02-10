@@ -47,6 +47,9 @@ MapLegendClass.prototype.init = function() {
 	// add a live event for the pan and zoom controls
 	$('.mapPanAndZoom').live('click', mapLegendObj.panAndZoomMap);
 	$('.mapLegendIconImgClick').live('click', mapLegendObj.panAndZoomMapToMarker);
+	
+	// add a live event for the delete of objects
+	$('.mapLegendDeleteIcon').live('click', mapLegendObj.deleteMarker);
 }
 
 // function to show the legend
@@ -116,7 +119,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendContributor" class="mapLegendShowHideContributor use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this contributor"/></td>';
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Contributor from Map"></span></td>';
+			tableData += '<td class="mapLegendDelete"><span id="mld-contributor-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Contributor from Map"></span></td>';
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -507,3 +510,47 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 		});
 	}
 }
+
+// a function to delete a marker from the map
+MapLegendClass.prototype.deleteMarker = function() {
+
+	var id   = this.id.split('-');
+	var mapData = mappingObj.markerData.objects;
+	var contributors;
+	var organisations;
+	var venues;
+	var events;
+	var idx;
+	
+	// find and delete the appropriate object
+	if(id[1] == 'contributor') {
+		// delete contributors from the map
+		
+		id = id[2];
+		
+		// loop through the marker data
+		for (var i = 0; i < mapData.length; i++) {
+		
+			// get the list of contributors
+			contributors = mapData[i].contributors;
+			
+			if(contributors.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < contributors.length; x++) {
+					// check to see if the ids match
+					if(contributors[x].id == id) {
+						// ids match so delete
+						contributors.splice(x, 1);
+					}
+				}
+			}	
+		}
+	}
+	
+	// TODO tidy up the data structure by removing slots where all of the arrays are empty
+	
+	
+	// update the map
+	mappingObj.updateMap();
+}
+
