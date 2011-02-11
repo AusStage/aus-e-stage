@@ -377,7 +377,8 @@ public class LookupManager {
 		String sql = "SELECT performance_id, start_date_time "
 				   + "FROM mob_performances "
 				   + "WHERE start_date_time >= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
-				   + "AND   end_date_time   <= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS')";
+				   + "AND   end_date_time   <= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
+				   + "ORDER BY start_date_time DESC";
 				   
 		// define the sql parameters
 		String[] sqlParameters = new String[2];
