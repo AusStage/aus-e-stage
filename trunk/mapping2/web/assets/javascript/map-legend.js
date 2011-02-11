@@ -572,6 +572,12 @@ MapLegendClass.prototype.deleteMarker = function() {
 		}
 	}
 	
+	//TODO check for and deal with any open infoWindows
+	if(mappingObj.infoWindowReference != null) {
+		mappingObj.infoWindowReference.close();
+		mappingObj.infoWindowReference = null;
+	}
+	
 	// update the map
 	mappingObj.updateMap();
 }
