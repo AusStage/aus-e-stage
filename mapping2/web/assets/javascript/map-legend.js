@@ -171,7 +171,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendOrganisation" class="mapLegendShowHideOrganisation use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this organisation"/></td>';
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Organisation from Map"></span></td>';
+			tableData += '<td class="mapLegendDelete"><span id="mld-organisation-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Organisation from Map"></span></td>';
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -219,7 +219,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendVenue" class="mapLegendShowHideVenue use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this venue"/></td>';
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Venue from Map"></span></td>';
+			tableData += '<td class="mapLegendDelete"><span id="mld-venue-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Venue from Map"></span></td>';
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -264,7 +264,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendEvent" class="mapLegendShowHideEvent use-tipsy" checked="checked" value="' + obj.id + '" title="Untick to hide this event"/></td>';
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mapLegendDeleteIcon" class="ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Event from Map"></span></td>';
+			tableData += '<td class="mapLegendDelete"><span id="mld-event-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Event from Map"></span></td>';
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -524,6 +524,7 @@ MapLegendClass.prototype.deleteMarker = function() {
 	var venues;
 	var events;
 	var idx;
+	var hash;
 	
 	// find and delete the appropriate object
 	if(id[1] == 'contributor') {
@@ -553,6 +554,90 @@ MapLegendClass.prototype.deleteMarker = function() {
 		}
 	}
 	
+	// find and delete the appropriate object
+	if(id[1] == 'organisation') {
+		// delete organisations from the map
+		
+		id = id[2];
+		
+		// loop through the marker data
+		for (var i = 0; i < mapData.length; i++) {
+		
+			// get the list of contributors
+			organisations = mapData[i].organisations;
+			
+			if(organisations.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < organisations.length; x++) {
+					// check to see if the ids match
+					if(organisations[x].id == id) {
+						// ids match so delete
+						organisations.splice(x, 1);
+						if(x > 0) {
+							x--;
+						}
+					}
+				}
+			}	
+		}
+	}
+	
+	// find and delete the appropriate object
+	if(id[1] == 'venue') {
+		// delete venues from the map
+		
+		id = id[2];
+		
+		// loop through the marker data
+		for (var i = 0; i < mapData.length; i++) {
+		
+			// get the list of contributors
+			venues = mapData[i].venues;
+			
+			if(venues.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < venues.length; x++) {
+					// check to see if the ids match
+					if(venues[x].id == id) {
+						// ids match so delete
+						venues.splice(x, 1);
+						if(x > 0) {
+							x--;
+						}
+					}
+				}
+			}	
+		}
+	}
+	
+	// find and delete the appropriate object
+	if(id[1] == 'event') {
+		// delete venues from the map
+		
+		id = id[2];
+		
+		// loop through the marker data
+		for (var i = 0; i < mapData.length; i++) {
+		
+			// get the list of contributors
+			events = mapData[i].events;
+			
+			if(events.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < events.length; x++) {
+					// check to see if the ids match
+					if(events[x].id == id) {
+						// ids match so delete
+						events.splice(x, 1);
+						if(x > 0) {
+							x--;
+						}
+					}
+				}
+			}	
+		}
+	}
+	
 	// tidy up the map data structure by removing slots with no data
 	for (var i = 0; i < mapData.length; i++) {
 	
@@ -561,6 +646,16 @@ MapLegendClass.prototype.deleteMarker = function() {
 			if(mapData[i].organisations.length == 0) {
 				if(mapData[i].venues.length == 0) {
 					if(mapData[i].events.length == 0) {
+					
+						//get a hash of the latitude and longitude of this entry
+						hash = mappingObj.computeLatLngHash(mapData[i].latitude, mapData[i].longitude);
+						idx = $.inArray(hash, mappingObj.markerData.hashes);
+						
+						// tidy up the hash array
+						if(idx > -1) {
+							mappingObj.markerData.hashes.splice(idx, 1);
+						}
+					
 						// remove this entry from the array
 						mapData.splice(i, 1);
 						if(i > 0) {
@@ -572,13 +667,13 @@ MapLegendClass.prototype.deleteMarker = function() {
 		}
 	}
 	
-	//TODO check for and deal with any open infoWindows
+	// check for and deal with any open infoWindows
 	if(mappingObj.infoWindowReference != null) {
 		mappingObj.infoWindowReference.close();
 		mappingObj.infoWindowReference = null;
 	}
 	
-	// update the map
+	// update the map and as a result update the legend
 	mappingObj.updateMap();
 }
 
