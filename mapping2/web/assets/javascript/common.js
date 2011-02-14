@@ -29,6 +29,7 @@ var ADD_VIEW_BTN_HELP = '<span class="ui-icon ui-icon-help clickable use-tipsy s
 var searchObj    = null;
 var browseObj    = null;
 var mappingObj   = null;
+var mapLegendObj = null;
 var sidebarState = 0;
 
 var mapIconography = { pointer:      BASE_URL + 'assets/images/iconography/pointer.png',
