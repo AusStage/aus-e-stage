@@ -270,5 +270,15 @@
 		</tbody>
 	</table>
 </div>
+<div id="map_legend_confirm_delete" title="Confirm Map Marker Deletion" style="font-size: 90%">
+	<h3>Are you sure?</h3>
+	<p>
+		Are you sure you want to delete the marker from the map?
+		<br/>
+		&nbsp;
+	</p>
+	<div id="map_legend_confirm_delete_text">
+	</div>
+</div>
 </body>
 </html>

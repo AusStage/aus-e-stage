@@ -511,13 +511,204 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 	}
 }
 
-// a function to delete a marker from the map
+// function to check to ensure the user wants to delete the marker
 MapLegendClass.prototype.deleteMarker = function() {
 
-	// manually hide the tooltip so it isn't left hanging
-	$('#' + this.id).tipsy('hide');
+	var param = this.id;
+	var id    = param.split('-');
+	var mapData = mappingObj.markerData.objects;
+	var obj;
+	var objs
+	
+	// work out what is being deleted
+	if(id[1] == 'contributor') {
+		// contributors
+		id = id[2];
+		// loop through the marker data looking for this contributor
+		for (var i = 0; i < mapData.length; i++) {
+			objs = mapData[i].contributors;
+			
+			if(objs.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < objs.length; x++) {
+					// check to see if the ids match
+					if(objs[x].id == id) {
+						// ids match so keep a copy of this item
+						obj = objs[x];
+						x = objs.length + 1;
+						i = mapData.length + 1;
+					}
+				}
+			}	
+		}
+	} else if(id[1] == 'organisation') {
+		// organisation
+		id = id[2];
+		// loop through the marker data looking for this organisation
+		for (var i = 0; i < mapData.length; i++) {
+			objs = mapData[i].organisations;
+			
+			if(objs.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < objs.length; x++) {
+					// check to see if the ids match
+					if(objs[x].id == id) {
+						// ids match so keep a copy of this item
+						obj = objs[x];
+						x = objs.length + 1;
+						i = mapData.length + 1;
+					}
+				}
+			}	
+		}
+	} else if(id[1] == 'venue') {
+		// venue
+		id = id[2];
+		// loop through the marker data looking for this venue
+		for (var i = 0; i < mapData.length; i++) {
+			objs = mapData[i].venues;
+			
+			if(objs.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < objs.length; x++) {
+					// check to see if the ids match
+					if(objs[x].id == id) {
+						// ids match so keep a copy of this item
+						obj = objs[x];
+						x = objs.length + 1;
+						i = mapData.length + 1;
+					}
+				}
+			}	
+		}
+	} else {
+		// event
+		id = id[2];
+		// loop through the marker data looking for this event
+		for (var i = 0; i < mapData.length; i++) {
+			objs = mapData[i].events;
+			
+			if(objs.length > 0) {
+				// loop through the list of contributors
+				for(var x = 0; x < objs.length; x++) {
+					// check to see if the ids match
+					if(objs[x].id == id) {
+						// ids match so keep a copy of this item
+						obj = objs[x];
+						x = objs.length + 1;
+						i = mapData.length + 1;
+					}
+				}
+			}	
+		}
+	}
+	
+	// prepare the prompt
+	id = param.split('-');
+	var idx;
+	var tmp;
+	var prompt = '<table><tr>';
+	
+	if(id[1] == 'contributor') {
+	
+		idx = $.inArray(obj.id, mappingObj.contributorColours.ids);
+			
+		// add the icon
+		prompt += '<td class="mapLegendIcon"><span class="' + mappingObj.contributorColours.colours[idx] + ' mapLegendIconImg"><img src="' + mapIconography.contributor + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+		
+		// build a tmp variable containing the name
+		tmp = obj.firstName + ' ' + obj.lastName;
+		tmp = tmp.replace(/\s/g, '&nbsp;');
+		
+		// add the name and functions
+		prompt += '<td><a href="' + obj.url + '" target="_ausstage">' + tmp + '</a><br/>';
+		
+		// add the functions
+		if(obj.functions.length != 0) {
+		
+			for(var y = 0; y < obj.functions.length; y++ ){
+				prompt += obj.functions[y] + ', ';
+			}
+	
+			prompt = prompt.substr(0, prompt.length -2);
+		}
+		
+		// finalise the prompt
+		prompt += '</td></tr></table>';
 
-	var id   = this.id.split('-');
+	} else if(id[1] == 'organisation') {
+	
+		idx = $.inArray(obj.id, mappingObj.organisationColours.ids);
+			
+		// add the icon
+		prompt += '<td><span class="' + mappingObj.organisationColours.colours[idx] + ' mapLegendIconImg"><img src="' + mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+		
+		// add the name and functions
+		prompt += '<td><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
+		
+		// add the address
+		prompt += mappingObj.buildAddressAlt(obj.suburb, obj.state, obj.country);
+		
+		// finalise the prompt
+		prompt += '</td></tr></table>';
+	
+	} else if(id[1] == 'venue') {
+	
+		// add the icon
+		prompt += '<td><span class="' + mapIconography.venueColours[0] + ' mapLegendIconImg"><img id="mpz-venue-' + obj.id + '" src="' + mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+					
+		// add the name and functions
+		prompt += '<td><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
+		
+		// add the address
+		prompt += mappingObj.buildAddress(obj.street, obj.suburb, obj.state, obj.country);
+	
+		// finalise the prompt
+		prompt += '</td></tr></table>';
+	
+	} else {
+	
+		// add the icon
+		prompt += '<td><span class="' + mapIconography.eventColours[0] + ' mapLegendIconImg"><img id="mpz-event-' + obj.id + '" src="' + mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+					
+		// add the name and functions
+		prompt += '<td><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
+		prompt += obj.venue.name + ', ' + mappingObj.buildAddressAlt(obj.venue.suburb, obj.venue.state, obj.venue.country);
+	
+		// finalise the prompt
+		prompt += '</td></tr></table>';
+	
+	}
+
+	$('#map_legend_confirm_delete_text').empty().append(prompt);
+	
+	// setup the map legend marker delete confirmation box
+	$("#map_legend_confirm_delete").dialog({
+		autoOpen: false,
+		height: 300,
+		width: 400,
+		modal: true,
+		buttons: {
+			Yes: function() {
+				$(this).dialog('close');
+				mapLegendObj.doDeleteMarker(param);
+			},
+			No: function() {
+				$(this).dialog('close');
+			}
+		}
+	});	
+		
+	$('#map_legend_confirm_delete').dialog('open');
+}
+
+// a function to delete a marker from the map
+MapLegendClass.prototype.doDeleteMarker = function(param) {
+
+	// manually hide the tooltip so it isn't left hanging
+	$('#' + param).tipsy('hide');
+
+	var id   = param.split('-');
 	var mapData = mappingObj.markerData.objects;
 	var contributors;
 	var organisations;
