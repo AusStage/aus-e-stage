@@ -8,7 +8,7 @@ var focus;
 
 // sizing and scales 
 var spacer = 40;
-var hSpacer = 200;
+var hSpacer = 45;
 var w;
 var	h;
 

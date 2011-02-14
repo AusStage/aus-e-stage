@@ -63,12 +63,12 @@
 
 		<!--search for contributor form-->
 		<div id="load_network_form">
-			  <form name="search" action="" align=right>
+			  <form name="search" action="">
 		    	<label for="id" id="id_label">ID</label>
-		     	<input type="text" name="id" id="id" size="10" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/><br><label for="name" id="name_label">Name</label>
+		     	<input type="text" name="id" id="id" size="20" value="" class="text-input" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/><br><label for="name" id="name_label">Name</label>
  				<input type="text" readonly="readonly" name="name" id="name" size="20" value="" class="text-input" />
 				<br>      
-		      	<input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
+		      	<label>&nbsp; </label><input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
 		      	<input type="submit" name="submit" class="button" id="network_btn" value="View" />	             
 	  	  	  </form>
 		</div>
@@ -135,7 +135,6 @@
 
 			<!-- faceted browsing window -->
 			<div id="faceted_browsing_div" Title="Faceted Browsing">
-					<p id="faceted_selection_p"></p>
 					<!--functions-->
 					<div class="legendHeader" id="functions_header" >Contributor Functions</div>
 					<div class="legendBody scroll_checkboxes" id="faceted_function_div"></div>
@@ -145,6 +144,10 @@
 					<!--nationality-->					
 					<div class="legendHeader" id="nationality_header" >Contributor Nationality</div>
 					<div class="legendBody scroll_checkboxes" id="faceted_nationality_div"></div>
+					<!-- list the selected faceted criteria-->
+					<div class="legendHeader" id="criteria_header" >Search Criteria</div>
+					<div class="legendBody" id="faceted_criteria_div"></div>
+					
 			</div>
 		</div>	
 	</div>

@@ -120,7 +120,9 @@ $(document).ready(function() {
 	//style the faceted browsing optionf
 	createLegend("#functions_header");
 	createLegend("#gender_header");
-	createLegend("#nationality_header");		
+	createLegend("#nationality_header");	
+	createLegend("#criteria_header");			
+	
 	// style the buttons
 	$("button, input:submit").button();
 	
@@ -696,6 +698,7 @@ function getEdgeLineWidth(p){
 //display the network properties
 function displayNetworkProperties(){	
 		var collabCount = 0;
+		var tempHtml = "";
 		for (i=0;i<contributors.edges.length;i++){
 			collabCount = collabCount+contributors.edges[i].value;
 		}
@@ -707,9 +710,10 @@ function displayNetworkProperties(){
 	  				"<a href=" + contribUrl +""+ contributors.nodes[center].id+" target=\"_blank\">"+	
 	  				contributors.nodes[center].nodeName+"</a><p>";
     	for (var i=0; i<contributors.nodes[center].functions.length; i++){
-    		html+= comma + contributors.nodes[center].functions[i];
+    		tempHtml+= comma + contributors.nodes[center].functions[i];
     		comma = ", ";
     	}
+    	html += constrain(tempHtml, $("#sidebar").width()-70, "legendBody", "ellipsis");
     	html += "</p>";
     	html += "</td></tr>"+
     				"<tr class=\"d1\"><td><b>Contributors </b></td><td> "+contributors.nodes.length+"</td></tr>"+					
@@ -717,6 +721,7 @@ function displayNetworkProperties(){
 					"<tr class=\"d1\"><td><b>Collaborations </b> </td><td>"+collabCount+"</td></tr></table>";							
  		$("#network_properties").empty();
 		$("#network_properties").append(html);
+		$(".ellipsis").tipsy({gravity: $.fn.tipsy.autoNS});
 
 }
 
@@ -728,6 +733,7 @@ function displayPanelInfo(what){
 	var contributorUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id="
 	var titleHtml = ""
 	var html = "<table width=100%>";
+	var tempHtml = "";
 	var dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
 	var tableClass = "";
 	
@@ -756,9 +762,11 @@ function displayPanelInfo(what){
 					contributors.nodes[nodeIndex].nodeName+"</a> <p>";
     	// add the roles
     	for (var i=0; i<contributors.nodes[nodeIndex].functions.length; i++){
-    		titleHtml+= comma + contributors.nodes[nodeIndex].functions[i];
+    		tempHtml+= comma + contributors.nodes[nodeIndex].functions[i];
     		comma = ", ";
     	}
+		titleHtml += constrain(tempHtml, $("#sidebar").width()-50, "legendHeader", "ellipsis header");
+	    tempHtml = "";
 
     	titleHtml +="</p>";
 		
@@ -783,11 +791,13 @@ function displayPanelInfo(what){
 								contributors.nodes[contributorList[i].index].nodeName +"</a>";
 			
 			html +="<p>";
-			 
 			for (var x=0; x<contributors.nodes[contributorList[i].index].functions.length; x++){
-    			html+= comma + contributors.nodes[contributorList[i].index].functions[x];
+    			tempHtml+= comma + contributors.nodes[contributorList[i].index].functions[x];
     			comma = ", ";
 	    	}
+	    	html += constrain(tempHtml, $("#sidebar").width()-20, "legendBody", "ellipsis");
+	    	tempHtml = "";
+			 
 			html+="</p></td></tr>";
 		}
 		html += "</table><br>";	  
@@ -804,9 +814,11 @@ function displayPanelInfo(what){
 					contributors.nodes[edgeTIndex].nodeName+"</a> <p>";
 		//add target contributor roles
 		for (var i=0; i<contributors.nodes[edgeTIndex].functions.length; i++){
-    		titleHtml+= comma + contributors.nodes[edgeTIndex].functions[i];
+    		tempHtml+= comma + contributors.nodes[edgeTIndex].functions[i];
     		comma = ", ";
     	}
+    	titleHtml += constrain(tempHtml, $("#sidebar").width()-50, "legendHeader", "ellipsis header");
+    	tempHtml = "";
     	titleHtml +="</p>";					
 
 		//add the source contributor
@@ -815,9 +827,11 @@ function displayPanelInfo(what){
 		//add source contributor roles
 		comma = "";
 		for (var i=0; i<contributors.nodes[edgeSIndex].functions.length; i++){
-    		titleHtml+= comma + contributors.nodes[edgeSIndex].functions[i];
+    		tempHtml+= comma + contributors.nodes[edgeSIndex].functions[i];
     		comma = ", ";
     	}
+    	titleHtml += constrain(tempHtml, $("#sidebar").width()-50, "legendHeader", "ellipsis header");
+    	tempHtml = "";    	
     	titleHtml +="</p>";					
 
 		//create the html to display the info.
@@ -834,10 +848,15 @@ function displayPanelInfo(what){
 	
 	$("#selected_object").button( "option", "label", titleHtml );					 		  		
 	$("#related_objects").append(html); 
+	$(".ellipsis").tipsy({gravity: $.fn.tipsy.autoNS});
 	//fix to ensure the content doesn't toggle based on the link click
 	$(".titleLink").click(function(){
 		allowToggle = false;
+	});   
+	$(".ellipsis.header").click(function(){
+		allowToggle = false;
 	});   		
+		
 
 }
 
@@ -1027,7 +1046,7 @@ function setFacetedOptions(list){
 //update the display to show what's been selected
 function updateFacetedTerms() {	
 	//empty the existing terms	
-	$("#faceted_selection_p").empty();
+	$("#faceted_criteria_div").empty();
 	var displayStr = "";
 	var startStr = "<b>Contributors who are: </b><br>";
 	var middleStr = "<br><b>and </b>";
@@ -1076,7 +1095,7 @@ function updateFacetedTerms() {
 	}
 	displayStr += nationalityStr;
 	//update the display                     
-    $("#faceted_selection_p").append(displayStr);
+    $("#faceted_criteria_div").append(displayStr);
 };
 
 function resetFacetedVisibility(){
@@ -1296,10 +1315,33 @@ function createLegend(element){
 			//fix to ensure the content wont toggle based on the link click
 			$(".titleLink").click(function(){
 				allowToggle = false;
-			});   		
-
+			}); 
+			$(".ellipsis.header").click(function(){
+				allowToggle = false;
+			});
     	}else{
     		allowToggle=true;
     	}
+    $(".ellipsis").tipsy({gravity: $.fn.tipsy.autoNS});   					  			
 	});   	
 }
+
+function constrain(text, ideal_width, className, linkClass){
+
+    var temp_item = ('<span class="'+className+'_hide" style="display:none;">'+ text +'</span>');
+    $(temp_item).appendTo('body');
+    var item_width = $('span.'+className+'_hide').width();
+    var ideal = parseInt(ideal_width);
+    var smaller_text = text;
+
+    if (item_width>ideal_width){
+        while (item_width > ideal) {
+        	smaller_text = smaller_text.substr(0,(smaller_text.lastIndexOf(", ")));
+            $('.'+className+'_hide').html(smaller_text + '&hellip;');
+            item_width = $('span.'+className+'_hide').width();
+        }
+        smaller_text = smaller_text + '<a href="#" class="'+linkClass+'" title="'+text+'">&hellip;</a>'
+    }
+    $('span.'+className+'_hide').remove();
+    return smaller_text;
+}	

@@ -15,6 +15,23 @@
  * along with the Aus-e-Stage Beta Root Website.
  * If not, see <http://www.gnu.org/licenses/>.
 */
+
+#load_network_form form {
+	float:right;
+}
+#load_network_form label {
+	width: 4em;
+	float: left;
+	text-align: right;
+	margin-right: 0.5em;
+	display: block
+}
+#load_network_form .submit input{
+	float:right;
+	margin-left: 4.5em;
+}
+
+
 #date_range_div{
 	background:#eeeeee;	
 }
@@ -50,6 +67,14 @@
         color:#fff;
 }
 
+.legendHeader_hide{
+        font-weight:normal;
+        margin:0 0 0 0;
+        font-size:10px;
+        color:#fff;
+}
+
+
 .legendHeader.open  {
 		background: #333333;
 }
@@ -82,6 +107,13 @@
         color:#000;
 }
 
+.legendBody_hide {
+        font-weight:normal;
+        margin:0 0 -5px 0;
+        font-size:9px;
+        color:#000;
+}
+
 .legendBody table {
 	border-collapse: collapse;
 	width: 100%;
@@ -108,8 +140,9 @@
 	font-family:Helvetica, Arial, sans-serif;
     font-size:14px;        
 }
-#faceted_browsing_div p{
+#faceted_browsing_div .legendBody{
     font-size:11px;        
+	border: 1px solid #ccc;    
 }
 
 .scroll_checkboxes{
