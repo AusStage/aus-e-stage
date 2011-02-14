@@ -161,6 +161,14 @@ function resizeSidebar() {
 		// temp development width
 		$('.sidebar').animate({width: 265}, 'slow', function() {
 			$('.peekaboo-tohide').show();
+			
+			// hide the map legend if necessary
+			var tabs = $('#tabs').tabs();
+			var selected = tabs.tabs('option', 'selected');
+			if(selected != 2) {
+				$('.mapLegendContainer').hide();
+			}			
+			
 			$('.peekaboo').removeClass('peekaboo-big');
 			$('.peekaboo').text('Hide Menu');
 			$('.main').removeClass('main-big');
