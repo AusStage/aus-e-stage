@@ -32,7 +32,7 @@ nodes:[
 ],
 edges:[         
 
-	{ id:"440144", name:"Amy Bagshaw", source:"22", target:"23", role:"Stage Manager"},
+	{ id:"440144", name:"Amy Bagshaw", source:"22", target:"23", role:"Stage Manager sdfsdf sdfdsfd sdfsdfd sdfdsfdf"},
 	{ id:"426508", name:"Katherine Chan", source:"22", target:"23", role:"Designer"},
 	{ id:"418381", name:"Matt Scholten", source:"22", target:"23", role:"Director"},
 	{ id:"440143", name:"Ben Keene", source:"22", target:"23", role:"Composer"},

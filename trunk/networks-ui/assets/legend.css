@@ -24,13 +24,11 @@
 	float: left;
 	text-align: right;
 	margin-right: 0.5em;
-	display: block
 }
 #load_network_form .submit input{
 	float:right;
 	margin-left: 4.5em;
 }
-
 
 #date_range_div{
 	background:#eeeeee;	
