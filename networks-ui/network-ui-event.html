@@ -64,22 +64,23 @@
 	<div id="sidebar">
 
 		<div id="load_network_form">
-			  <form name="search" action="" align=right>
+			  <form name="search" action="">
 		    	<label for="id" id="id_label">ID</label>
 		     	<input type="text" name="id" id="id" size="20" value="" class="text-input" title="Enter the Event ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/><br><label for="name" id="name_label">Event</label>
  				<input type="text" readonly="readonly" name="name" id="name" size="20" value="" class="text-input" />
 				<br>      
-		      	<input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
+		      	<label>&nbsp; </label><input type="submit" name="submit" class="button" id="lookup_btn" value="Lookup" />
 		      	<input type="submit" name="submit" class="button" id="network_btn" value="View" />	             
 	  	  	  </form>
 		</div>
-			
-		<div class="legendHeader" id="selected_object" ></div>
-		<div class="legendBody" id="related_objects"></div>
-			
-		<div class="legendHeader" id="network_properties_header" >Network Properties</div>
-		<div class="legendBody small" id="network_properties"></div>
-					
+		<div id="network_details_div">
+			<div class="legendHeader" id="selected_object" ></div>
+			<div class="legendBody" id="related_objects"></div>
+		</div>
+		<div id="network_properties_div">			
+			<div class="legendHeader" id="network_properties_header" >Network Properties</div>
+			<div class="legendBody small" id="network_properties"></div>
+		</div>			
 		<br>
 		
 		<div id="display_labels_div">
