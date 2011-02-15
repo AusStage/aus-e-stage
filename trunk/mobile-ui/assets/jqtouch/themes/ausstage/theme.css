@@ -2,6 +2,7 @@
 body {
     background:#282828;
     color: #ddd;
+
 }
 
 body > * {
@@ -587,7 +588,7 @@ ul li {
 }
 
 
-li .performance {
+li .performance  {
 	display:none;
 }
 
@@ -627,6 +628,13 @@ h3.question {
 	padding-left:200px;
 }
 	
+#home h3 {
+ 	padding-left:15px;
+ 	padding-top:5px;
+ 	padding-bottom:15px;
+
+}
+
 
 ul.performances .event {
 	font-size:1.1em;
@@ -634,19 +642,70 @@ ul.performances .event {
 }
 
 ul.performances .startDateTime {
-		font-size:.8em;
+		font-size:.9em;
 		color:#CCC;
 		font-weight:normal;
 }
-
 	
 ul.performances .venue ,ul.performances .organisation {
 	font-size:.7em;
 	color:#CCC;
 	font-weight:normal;
 
+}
+
+
+ .CurrentPerformance, .recentPerformances {
+	 	display:none;
+ }
+ 
+/*** Repeat of the same sort of formating for the CurrentPeformance list on the home page  **/
+
+ 
+ .currentPerformancesBlock .recentPerformancesBlock{
+	 display:none; 
+}
+ 
+ 
+
+ 
+ 
+.loading {
+ /*display:none;*/
+ 
+ 	 background-image:url('img/ajax-loader.gif');
+	 background-repeat:no-repeat;
+	 background-position:center;
+	 display:block;
+	 height:20px;
 
 }
+ 
+
+
+
+
+
+ 
+
+ul.currentPerformances .event {
+	font-size:1.2em;
+
+}
+
+ul.currentPerformances .startDateTime {
+		font-size:.9em;
+		color:#CCC;
+		font-weight:normal;
+}
+	
+ul.currentPerformances .venue ,ul.currentPerformances  .organisation {
+	font-size:.7em;
+	color:#CCC;
+	font-weight:normal;
+
+}
+
 
 
 
