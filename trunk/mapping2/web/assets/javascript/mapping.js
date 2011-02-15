@@ -44,8 +44,7 @@ function MappingClass() {
 					];
 					
 	// variable to keep track of common areas
-	this.commonLocales = {
-							sa:  {lat: -32,        lng: 135.763333, zoom: 6},
+	this.commonLocales = {  sa:  {lat: -32,        lng: 135.763333, zoom: 6},
 							wa:  {lat: -25.328055, lng: 122.298333, zoom: 5},
 							nsw: {lat: -32.163333, lng: 147.016666, zoom: 6},
 							qld: {lat: -22.486944, lng: 144.431666, zoom: 5},
@@ -70,7 +69,14 @@ function MappingClass() {
 	this.markerData = {hashes: [], objects: []};
 					  
 	// variable to keep track of the markers on the map
-	this.mapMarkers = {hashes: [], objects: []};      
+	this.mapMarkers = {hashes: [], objects: []};   
+	
+	// variable to keep track of hidden markers
+	this.hiddenMarkers = { contributors:  [],
+						   organisations: [],
+						   venues:        [],
+						   events:        []
+						 };   
 	
 	// variables to hold a height / width constant for use in computing the height / width of the map
 	this.HEIGHT_BUFFER_CONSTANT = 55;

@@ -579,7 +579,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 	
 		// buld the new table row
 		row += '<td><a href="#" onclick="searchObj.doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat this Search" class="use-tipsy">' + $("#query").val() + '</a></td>';
-		row += '<td><a href="' + BASE_URL + 'index.jsp?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search" class="use-tipsy">link</a></td>';
+		row += '<td><a href="' + BASE_URL + '?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search" class="use-tipsy">link</a></td>';
 		row += '<td><span class="use-tipsy" title="Contributors"> ' + searchObj.trackerObj.contributor_count + ' </span>/<span class="use-tipsy" title="Organisations"> ' + searchObj.trackerObj.organisation_count + ' </span>/<span class="use-tipsy" title="Venues"> ' + searchObj.trackerObj.venue_count + ' </span>/<span class="use-tipsy" title="Events"> ' + searchObj.trackerObj.event_count + '</span></td></tr>';
 		
 		// insert the new row in the table
