@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>AusStage</title>
+        <title>AusStage Researching Audiences Service</title>
         <style type="text/css" media="screen">@import "assets/jqtouch/jqtouch.css";</style>
         <style type="text/css" media="screen">@import "assets/jqtouch/themes/ausstage/theme.css";</style>
         <script src="assets/jqtouch/jquery.1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
@@ -30,13 +30,11 @@
             });
 			
         	//Glabals
-			var gCurrentPerformance = 0;
-		
-		  var _gaq = _gaq || [];
-		   _gaq.push(['_setAccount', 'UA-10089663-2']);
-		
-		
-		
+			var gCurrentPerformance = 0 ;
+			
+			//Setup   Google analytics  
+		    var _gaq = _gaq || [];
+		    _gaq.push(['_setAccount', 'UA-10089663-2']);		
 		  (function() {
 			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -44,32 +42,266 @@
 		  })();
 		  
   
-  		//Our main document load 
-		$(document).ready(function() {			
-			
+ 
+			  /**
+			  * The Jquery document ready. Acts like the main. 
+			  *  See if there is any url varialbes and 
+			  *  the user directly to that feedback if that is the case. 
+			  *  If there is now URL variable then the current peformance list is loaded in on the homepage   
+			  */
+						   
+		   $(document).ready(function() {			
 		
 			  			
 			//Do have any URL variables - if so load those and then display the current performance form.    
 			if(window.location.href.indexOf('?') != -1) {
 				
 				var performanceVariables = ['p','performance'];
-				
-				for (var i = 0; i < performanceVariables.length; i++) {
-					if (getUrlVars()[ performanceVariables[i]]) {
-						gCurrentPerformance = getUrlVars()[ performanceVariables[i]];
-					    _gaq.push(['_trackPageview', 'DirectLinkToForm/?performance=' + gCurrentPerformance ]);
-
-						getPerformanceData();	
-						jQT.goTo('#FeedbackDisplayWithForm');
-					}
-				
+					for (var i = 0; i < performanceVariables.length; i++) {
+						if (getUrlVars()[ performanceVariables[i]]) {
+							gCurrentPerformance = getUrlVars()[ performanceVariables[i]];
+							_gaq.push(['_trackPageview', 'DirectLinkToForm/?performance=' + gCurrentPerformance ]);
+	
+							getPerformanceData(gCurrentPerformance);	
+							jQT.goTo('#FeedbackDisplayWithForm');
+						}
+					
+				}
+			} else {
+			// trigger the loading of the current peformnaces   
+				getCurrentPerformances ();
 			}
-			}
+			 
 			
 		});
 		
-		// function to get parameters from url
-			function getUrlVars()
+		/**
+		* Takes data objects and converts it to yyyy-mm-dd string  
+		* @param  date  is he data object that is going be converted  
+		* @returns returns the date in yyyy-mm-dd form  
+		*/	
+			
+		function reFormatDatetoYYYYMMDD (date){
+			
+			var year = date.getFullYear();  
+			var month = date.getMonth() +1;//correct for Jan being 00
+			//Reformat the month if it's be 10   
+			if(month < 10) {  
+				var month  =  '0' + month;
+				};
+
+			
+			var day = date.getDate(); 
+			//Reformat the  day if it's less than 10  
+			if(day < 10) {  
+				var day =  '0' + day;
+			};
+			
+			var dataString =  '' + year + '-' + month + '-' + day;
+			return dataString; 
+		}
+
+		/**
+		* Looks at the date and gets peformances based on dates, loads this include the current peformances and recent performaces. It actuall does API call twic. 
+		* The api call it's makeing looks like  http://beta.ausstage.edu.au/mobile/lookup?task=date&startdate=2010-01-01&enddate=2011-05-05
+		* More details about that dpi are are at http://code.google.com/p/aus-e-stage/wiki/MobileServiceAPILookup#Date_Lookup_Data_Fields
+		*/
+						   
+		function getCurrentPerformances (){
+		   
+		   	   //figure out which server this running on what the data type should be  
+			   host = buildHost();
+			   var mydataType = getDataType(); 
+			   
+			   //set up the data range
+			   //This is hard coded to look on day in past and 5 days forwrd 
+			   					
+			  var startdate = new Date('Dec 11 2010');
+			  //var startdate = new Date();
+
+			   startdate.setDate( startdate.getDate());
+			   //window.console.log(startdate.toDateString());
+			
+			   //Now formatted the into yyyy-mm-dd
+			    startdateString = reFormatDatetoYYYYMMDD(startdate); 
+				
+			   var  enddate = new Date();
+			   enddate.setDate( startdate.getDate() + 5);
+			   
+   				//Now formatted the into yyyy-mm-dd
+			    enddateString = reFormatDatetoYYYYMMDD(enddate); 
+				
+							  // build the query string			    
+			   var params = {
+					 
+					 task:'date',
+					 startdate: startdateString,
+					 enddate:   enddateString,
+
+				 };
+				 
+				 var values = jQuery.param(params);//encode thos
+				
+				var source =  host + '/mobile/lookup?' +  values;
+
+								
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						dataType:  mydataType,
+						cache: false,
+						success: function (data) {
+									window.console.log(data);
+						//see if we have some data only the display the current performances and load them  
+						if (data.length !=  0) {
+							//Sort by the startDateTime
+							
+							data.reverse(); 
+							
+							//Take the loaiding class off and the display the block inside of that 	
+							$(".currentPerformancesBlock").removeClass("loading");
+							$(".currentPerformancesBlock").css("display","block");
+							
+								//Got the date and now load that into the current performances.  
+								//Clear what is there current 
+								//$(".performances").empty();
+		
+									// add the list of feedback
+									for(var i = 0; i < data.length; i++) {
+										//window.console.log(data);
+										item = data[i];
+									
+										$(".currentPerformances").append('<li class="arrow">' +
+												'<a href="#FeedbackDisplayWithForm" ' + 
+												 ' onClick="loadFeedbackForm(event)" ><div class="event">' +
+													item.event + '</div>' + 
+												'<span class="startDateTime">' + item.startDateTime + '</span><br / >' +			
+												'<span class="organisation"> ' + item.organisation  + ', </span>' +
+												'<span class="venue">' + item.venue +' </span>' +
+												'<span class="performance">' +
+													item.id +
+											'</span></a></li>');
+									}
+									
+							} else {
+								//Nothing found so we turn off the display
+								$(".currentPerformancesBlock").css("display","none");
+								
+							}
+																	
+						},
+					//Some thing has gone wrong, show the user an error screen.  
+					error:function (xhr, ajaxOptions, thrownError){
+						
+                    	//alert(xhr.status);
+                    	//alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+					async: true 
+					}); 
+					
+					
+				//  ------------- API call for the recent 
+				// reset the data
+				var startdate = new Date('Dec 11 2010');
+				//var startdate = new Date();
+			    startdate.setDate( startdate.getDate() -2);
+			   //window.console.log(startdate.toDateString());
+			
+			   //Now formatted the into yyyy-mm-dd
+			    startdateString = reFormatDatetoYYYYMMDD(startdate); 
+				
+			   //var  enddate = new Date();
+			   //var  enddate = new Date();
+			 
+			   enddate = new Date('Dec 11 2010'); // look for the peformances that have already happen. 
+			   enddate.setDate( enddate.getDate() -1);
+			   
+   				//Now formatted the into yyyy-mm-dd
+			    enddateString = reFormatDatetoYYYYMMDD(enddate); 
+				
+			 // build the query string			    
+			   var params = {
+					 
+					 task:'date',
+					 startdate: startdateString,
+					 enddate:   enddateString,
+
+				 };
+				 var values = jQuery.param(params);//encode thos
+				
+				var source =  host + '/mobile/lookup?' +  values;
+						window.console.log(source);
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						dataType:  mydataType,
+						cache: false,
+						success: function (data) {
+						
+						window.console.log('Recent Performances');
+
+						window.console.log(data);
+						//see if we have some data only the display the current performances and load them  
+						if (data.length !=  0) {
+							//Sort by the startDateTime
+							
+							
+							//Take the loaiding class off and the display the block inside of that 	
+							$(".recentPerformancesBlock").removeClass("loading");
+							$(".recentPerformancesBlock").css("display","block");
+							
+								//Got the date and now load that into the current performances.  
+								//Clear what is there current 
+								//$(".performances").empty();
+		
+									// add the list of feedback
+									for(var i = 0; i < data.length; i++) {
+										//window.console.log(data);
+										item = data[i];
+									
+										$(".recentPerformances").append('<li class="arrow">' +
+												'<a href="#FeedbackDisplayWithForm" ' + 
+												 ' onClick="loadFeedbackForm(event)" ><div class="event">' +
+													item.event + '</div>' + 
+												'<span class="startDateTime">' + item.startDateTime + '</span><br / >' +			
+												'<span class="organisation"> ' + item.organisation  + ', </span>' +
+												'<span class="venue">' + item.venue +' </span>' +
+												'<span class="performance">' +
+													item.id +
+											'</span></a></li>');
+									}
+									
+							} else {
+								//Nothing found so we turn off the display
+								$(".recentPerformancesBlock").css("display","none");
+								
+							}
+																	
+						},
+					//Some thing has gone wrong, show the user an error screen.  
+					error:function (xhr, ajaxOptions, thrownError){
+						
+                    	//alert(xhr.status);
+                    	//alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+					async: true 
+					}); 
+					
+					
+					
+		}
+		
+		
+
+		
+		/*
+		* Get the URL var and takes the user to the current form for that performance.    
+		* 
+		*/ 			function getUrlVars()
 				{
 					var pairs;
 					var pairs = window.location.href.slice(window.location.href.indexOf('?') + 1);
@@ -102,47 +334,48 @@
 			
 		}
 		
-
+		/**
+		* Called form the submit button.  Reads the information form the current form submits and the reloads the page. 
+		*/
+		
 		function submitForm(){
 			
-		//	alert("submitting the form"); 
 			  window.console.log("about to submit the form");
 			   
 			   _gaq.push(['_trackPageview', 'FormSubmitted/?performance=' + gCurrentPerformance ]);
 				$('.submit').html('Loading');
 				//figure out which server we one 
-				host = buildHost();
 				
-				//now do the stuff to make the host names work 
-				  if (host != 'http://beta.ausstage.edu.au')  { 
-					  host = 'http://beta.ausstage.edu.au';
-					  mydataType =  'jsonp';
-				  } else {
-					   mydataType =  'json';
-				  }
-				  				  
-				////window.console.log(source)	;
-	
+				host = buildHost();
+			    var mydataType = getDataType(); 
+			   
+		 		//var gCurrentPerformance = $('.class')	
+							    
+ 				  	
 				//Get the date and time; 
+				/* OLD material
 				var CurrentDate = new Date(); 
 				var currentTime =  CurrentDate.toTimeString();
 				//Change the format of the date so that works with API
 				currentTime =  currentTime.replace(" (EST)", "", "gi");  
 				currentTime =  currentTime.replace("GMT", "", "gi");  
 				currentTime =  currentTime.replace(" (CST)", "", "gi");  
+				*/
 				//bulld the  
 				
 				// get the message form the form
 				
 				var message =  $('[name=message]').val();
 				
+				//get the current peformance from the form. 
+				gCurrentPerformance = $(".CurrentPerformance").html(); 
+
+				
 				 var params = {
 					 
 					 type:'mobile-web',
-					 time:currentTime,
-				 	 //time:'14:55:32 +1100',
-					 //date:'Tue Nov 02 2010',
-					 date:CurrentDate.toDateString(),
+					// time:currentTime,
+					// date:CurrentDate.toDateString(),
 					 performance:gCurrentPerformance,
 					 message:message	 
 				 
@@ -168,7 +401,7 @@
 							//$(".feedback").items('remove').chain();//load this data in the feedback
 							
 							//$(".feedback").items('replace',data.feedback.reverse()).chain();//load this data in the feedback
-							$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 
+							//$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 
 							
 							$(".feedbackForm").empty();
 							
@@ -210,11 +443,24 @@
 					});	
 		}
 		
-		
+		/**
+		* Add's the current location to  .LocInfo 
+		* @param text   The text to be added to class .LocInfo  
+		*/	
+					
 		 function setLocDisplay(text) {
 					$('.LocInfo').empty().append(text);
 					
                 }
+		
+		/**
+		* After the phone location has been found, this calls the API and loads the information the LI
+		* API call looks like http://beta.ausstage.edu.au/mobile/lookup?task=location&lat=-35.02470743224244&lng=138.572359085083&distance=1000
+		* @param latitude  
+		* @param longitude   
+
+		*/
+		
 				
 		function findPerformances(latitude,longitude) {
 			
@@ -223,21 +469,16 @@
 			//now do the stuff to make the host names work 
 			
 				host = buildHost();
-
-				  if (host != 'http://beta.ausstage.edu.au')  { 
-					  host = 'http://beta.ausstage.edu.au';
-					  mydataType =  'jsonp';
-				  } else {
-					   mydataType =  'json';
-				  }
-				  
+	 		    mydataType = getDataType(); 
+ 			
+	
 				  
 				  var params = {
 					 
 					 task:'location',
 					 lat:latitude,
 					 lng:longitude,
-					 distance:4000, // BUG - this maybe no large enought
+					 distance:1000, // BUG - this maybe no large enought
 				 };
 				 
 				 var values = jQuery.param(params);//encode thos
@@ -254,30 +495,38 @@
 							
 						window.console.log(data);
 						$(".performances").empty();
-
+						
+						if(data.length > 0){
+							//found some performances so updatae 
 							// add the list of feedback
 							for(var i = 0; i < data.length; i++) {
 								//window.console.log(data);
 								item = data[i];
 								//window.console.log(item);
 	
-								$(".performances").append('<li class="arrow">' +
+								$(".NearByPerformances").append('<li class="arrow">' +
 										//'<div class="performances">' +
 										'<a href="#FeedbackDisplayWithForm"' + 
-										 'onClick="loadFeedbackForm(event)"><div class="event">' +
-											item.event + '</span><br \><span class="startDateTime">' + item.startDateTime +										 
-											'</span><span class="performance">' +
+										 'onClick="loadFeedbackForm(event)"><div class="event"></div><br \>' + 
+										'<span class="startDateTime">' + item.startDateTime + '</span>' +			
+										'<span class="organisation"> ' + item.organisation  + ', </span>' +
+              						    '<span class="venue">' + item.venue +' </span>' +
+										'<span class="performance">' +
 											item.id +
-											'</span>' +			
-										'</div>' + 
-										 '<span class="organisation"> ' + item.organisation  + ', </span>' +
-              						     '<span class="venue">' + item.venue +' </span>' +
-										'</a>' +
-									  //'</div>' +
-								  '</li>');
+											'</span></a></li>');
 							}
-				
-											//window.console.log(data);
+		
+		
+						} else {
+							// got no data so display a message saying that. 
+							
+								$(".NearByPerformances").empty();
+								$(".NearByPerformances").append('<li class="arrow">' +
+								 '<a href="#home" >No performances found</a></li>');
+								
+
+						}
+							
 						},
 					
 					error:function (xhr, ajaxOptions, thrownError){
@@ -293,6 +542,11 @@
 					
 				  
 		}
+		
+		/**
+		* Does the look up of  the current location and calles findPerformances and convertLatLongToPlace, which triggers the updates to the interface   
+		*/
+		
 		
 		function findLocation(){
 				 _gaq.push(['_trackPageview', 'PerformancesNearBy']);
@@ -323,6 +577,10 @@
 					
 		}
 		
+		/*
+		*  Using the Google MAP api try the LAT and LONG into a place name 
+		*   
+		*/ 
 		
 		function convertLatLongToPlace(lat, lng) {
     		geocoder = new google.maps.Geocoder();
@@ -341,49 +599,77 @@
 	
 		}
 	
+		/*
+		* Get the current host name from the location string   
+		* @returns host as a string    
+		*/ 
+		
 		function buildHost() {
 			
 			 var host = $(location).attr('host');
-			 return host;
+			  if (host != 'http://beta.ausstage.edu.au')  { 
+					  host = 'http://beta.ausstage.edu.au';				  
+			  }
+			  return host;
 				  
 			
 		}
-		function getPerformanceData() {
+		/*
+		* See if the data types should be jsonp or json, it does his based on host. The only server that josn will work on is http://beta.ausstage.edu.au   
+		* 
+		* @returns data as a string, it will be json or json.     
+		*/ 
+		
+		function getDataType() {
+			 	var host = $(location).attr('host');
+			   if (host != 'http://beta.ausstage.edu.au')  { 
+					  return 'jsonp';
+				  } else {
+					  return 'json';
+				  }
+		
+		}
+		
+		/*
+		* Load the peformance data and last feedback into the actual form.    
+		* 
+		* @param  gCurrentPerformance the current performane we are working thi   
+		*/ 
+				  
+		function getPerformanceData(gCurrentPerformance) {
+				
+				//Do Google Analytics
 				
 				_gaq.push(['_trackPageview', 'LoadingPerformanceData/?performance=' + gCurrentPerformance]);
+					
+				//change the Interfaace to show that is loading 
+				
 				$('.submit').html('Loading');
 				
+				//find out what server we are running on make sure the data type is right 
 				host = buildHost();
+			 	mydataType = getDataType(); 
 				
-				//now do the stuff to make the host names work 
-				  if (host != 'http://beta.ausstage.edu.au')  { 
-					  host = 'http://beta.ausstage.edu.au';
-					  mydataType =  'jsonp';
-				  } else {
-					   mydataType =  'json';
-				  }
-				  
-				  
-				 
-				//now build the url  
+				//alert(gCurrentPerformance);
+				
+				//now build the url/calll  for API 
+				
 				var source =  host + '/mobile/feedback?task=initial&performance=' + gCurrentPerformance  ;  //TODO code to see what server the system is running on and build this URL 
 				
 				window.console.log(source);
 				
-				//$(".feedback").items('remove').chain();//load this data in the feedback
-				//$(".feedbackForm").items('remove').chain();//load this data in the feedback 
-				
-				
+				//The important bit more  
 				$.ajax({
 						type:   'GET',
 						url: source, 
-						dataType: mydataType,
+						dataType: 'jsonp',
 						cache: false,
 						success: function (data) {
 							
-							$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 							populate(data);
-							
-							//$(".feedbackForm").items(data.feedback).chain();//BUG - this doesn't always refresh  
+								$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 	populate(data);
+								//make sure the current peformance in the html so can pick it up later.  
+								$(".CurrentPerformance").html(gCurrentPerformance);
+								
 							//$(".feedback").items('replace',data.feedback).chain();//load this data in the feedback
 							
 							$(".feedbackForm").empty();
@@ -425,30 +711,45 @@
 
 		}; 
 		
+		
+		/*
+		* Called from some like 
+		*<a href="#FeedbackDisplayWithForm" onClick="loadFeedbackForm(event)"><div class="event">
+     	*   Be Your Self
+    	*   </div>
+    	*   <span class="startDateTime">Australian Dance Theatre/Garry Stewart</span> <br>
+    	*                        
+    	*   <span class="organisation">  </span>
+    	*   <span class="venue"></span>
+    	*   <span class="performance">46</span></a>
+    	*   </li>
+							   
+		*  Pick up the text inside the performnace class and then triggers the actual ajax loading  
+		*   
+		*/ 
 				
 		
 		function loadFeedbackForm() {
-		
-		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
-		  var CurrentPerformance =   $(element).children("span.performance").text();
-		  gCurrentPerformance = CurrentPerformance;  
-		  getPerformanceData();
+		 
+		  //var element = (event.target.nodeName == "LI") ? event.target.parentNode : event.target;
+		  //Get the event's parent  
+		  var element = event.target.parentNode;
+		 
+		  //window.console.log( event.target.parentNode);
+		 // window.console.log($(".performance",element).text());
+		 
+		  //Get the performance element =
+		  var gCurrentPerformance = $(".performance",element).text();
+		 
+		  
+		  //get the ajax loading started  
+		  getPerformanceData(gCurrentPerformance);
 
 				
 		}; 
 		
 		
-		
-		function loadFeedback() {
-		
-		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
-		  var CurrentPerformance =   $(element).children("span.performance").text();
-		  gCurrentPerformance =  CurrentPerformance;  
 
-		  getPerformanceData();
-
-		}; 
-		
 	
 		
         </script>
@@ -459,6 +760,7 @@
  
         </style>
     </head>
+
     <body >
  
          <div id="home" class="current">
@@ -475,12 +777,39 @@
             <ul class="rounded">
             
             <li class="arrow"><a href="#Near" onClick="findLocation()">Performances near you</a> </li> 
+            <li class="arrow"><a href="#Recent">Recent Performances</a></li> 
+
 			<li class="arrow"><a href="#About">About</a> </li>
 
             </ul>
-            
+
+            	<span class="currentPerformancesBlock loading"></span>
+            	<!--<span class="currentPerformancesBlock loading">-->
+                    <h3  class="currentPerformancesBlock">Current Performances</h3>
+                     <ul class="currentPerformances rounded currentPerformancesBlock">
+                        
+             	    </ul>
+      
+      
+      
              <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Home']);</script>
         </div>
+        
+ <div id="Recent">
+            <div class="toolbar">
+                <h1>Recent Performance</h1>
+                <a class="back" href="#">Back</a>
+                <a class="button slideup" id="infoButton" href="#About">About</a>
+            </div> 
+         
+  		      	<span class="recentPerformancesBlock loading"></span>
+                    <ul class="recentPerformances rounded performances recentPerformancesBlock">
+             	    </ul>
+                    
+                                 
+      
+</div>
+
 
 
  <div id="Near">
@@ -493,13 +822,12 @@
   		<div class="LocInfo info round">
                 <p>Looking up location&hellip;</p>
             </div>
-        
-           <ul class="performances rounded">
-
-            </ul>
-         	
-            
-     
+                     
+        <ul class="rounded NearByPerformances">
+           <li class="arrow">
+             Searching 
+            </li>		   
+        </ul>              
       
 </div>
 
@@ -514,25 +842,14 @@
             </div>  
             
               <div id="about" class="selectable">
-                            <h3>What is AusStage? </h3>
-                <p>AusStage documents the performing arts in Australia.<br />
-                  Future generations, researchers and contemporary audiences can log on to AusStage to search and retrieve information about:</p>
-                <ol>
-                  <li>company and performer histories,</li>
-                  <li>maps and tours, and </li>
-                  <li> links to relatedresources. </li>
-                </ol>
-                <p>For more information please go to: http://<a href="www.ausstage.edu.au">www.ausstage.edu.au</a>.</p>
-                <h3>We Need Your Help</h3>
-                <p> AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies <strong>know what you thought of the production you are seeing right now</strong>.</p>
-                <p>You can use your phone to send a<strong> text message</strong> or, if you're a tweeter you can use <strong>Twitter</strong> or, if you'd like to <strong>jump on the web</strong> and use the mobile web site you could do that too.<br />
-                </p>
-                <p><strong>Don't worry – AusStage does NOT record or store ANY IDENTIFYING INFORMATION about you.<br />
-                  </strong></p>
-                <p>In fact, it doesn't even record the phone number or Twitter account you've used to respond so there is no way that they, or the company whose show you're talking about, can tell who you are, let alone contact you. Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn't like.<br />
-                  This project is being led by Flinders University alongside the companies and artists who you are seeing in this performance. It has been funded by the National eResearch Architecture Taskforce (NeAT).<br />
-                  If you do decide that you'd like to have your say about what you see in this performance standard costs for SMS and network access apply. If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study. As mentioned your participation is voluntary, you will NOT be identified in any results and your response will be stored confidentially (however, please note that sending information via mobile devices is inherently insecure).</p>
-				<p>This research project has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892). For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on human.researchethics@flinders.edu.au. Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to <a href="mailto:jonathan.bollen@flinders.edu.au">jonathan.bollen@flinders.edu.au</a>.</p>
+            <p>AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can log on to AusStage, search and retrieve information about, company and performer histories, maps, tours and, links to related material, all at <a href="http://www.ausstage.edu.au.">www.ausstage.edu.au.</a> For free.</p>
+            <p>AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies know what you thought of the production you're seeing right now. You can use your phone to send a text message or, if you're a tweeter you can use Twitter or, if you'd like to jump on the web and use the mobile web site you could do that too.</p>
+            <p>Don't worry – AusStage doesn't record or store ANY IDENTIFYING INFORMATION about you. In fact, it doesn't even record the phone number or Twitter account you've used to respond so there's no way that they, or the company whose show you're talking about, can tell who you are, let alone contact you.</p>
+            <p>Recording audience responses to performance is important for companies, researchers, performers and you. It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn't like.</p>
+            <p>This project is being led by Flinders University alongside the companies and artists who you are seeing tonight. It has been funded by the National e-Research Architecture Taskforce (NeAT).</p>
+            <p>If you do decide that you'd like to have your say about what you see tonight your standard costs for SMS and network access apply. If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study. As mentioned your participation is voluntary, you will NOT be identified in any results and your response will be stored confidentially (however,please note that sending information via mobile devices is inherently insecure).</p>
+            <p>This research project has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892). For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on human.researchethics@flinders.edu.au.</p>
+            <p>Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to <a href="mailto:jonathan.bollen@flinders.edu.au">jonathan.bollen@flinders.edu.au</a></p>
                             <p><br /><br /><a href="#" class="grayButton goback">Back</a></p>
                 </div>            
                             
@@ -597,7 +914,7 @@
             <span class="date"></span>
             </div>
             
-           <span class="performance"></span>
+           <span class="CurrentPerformance"></span>
 
              
          <form id="submit-feedback" action="" method="GET" class="form">
@@ -651,4 +968,5 @@
             
       
     </body>
+
 </html>
