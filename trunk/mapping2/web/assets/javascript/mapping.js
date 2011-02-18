@@ -156,7 +156,7 @@ MappingClass.prototype.initMap = function() {
 	// style the map
 	var styledMapOptions = {map: mappingObj.map, 
 							name: "AusStage",
-							alt: 'Show AusStage style map'
+							alt: 'Show AusStage styled map'
 						   };
 	var ausstageStyle    = new google.maps.StyledMapType(mappingObj.mapStyle, styledMapOptions);
 	
@@ -198,44 +198,30 @@ MappingClass.prototype.updateMap = function() {
 	
 	// add the markers to the map
 	var objects = mappingObj.markerData.objects;
+	var iconography = null;
+	var offset = 0;
 	
 	for(var i = 0; i < objects.length; i++) {
 		
 		// build the iconography
-		var iconography = mappingObj.buildIconography(objects[i]);
+		iconography = mappingObj.buildIconography(objects[i]);
 		
-		// calculate the pointer offset
-		var offset = 0;
+		if(iconography != null) {
 		
-		if(objects[i].contributors.length > 0) {
-			offset++;
+			// create a marker with a label
+			var marker = new MarkerWithLabel({
+				position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
+				map:          mappingObj.map,
+				draggable:    false,
+				labelContent: iconography.table,
+				labelClass:   'mapIconContainer',
+				labelAnchor:  new google.maps.Point(mappingObj.POINTER_X_OFFSET * iconography.offset, mappingObj.POINTER_Y_OFFSET),
+				icon:         mapIconography.pointer
+			});
+		
+			mappingObj.mapMarkers.objects.push(marker);
+			mappingObj.mapMarkers.hashes.push(mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude));
 		}
-		
-		if(objects[i].organisations.length > 0) {
-			offset++;
-		}
-		
-		if(objects[i].venues.length > 0) {
-			offset++;
-		}
-		
-		if(objects[i].events.length > 0) {
-			offset++;
-		}
-		
-		// create a marker with a label
-		var marker = new MarkerWithLabel({
-			position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
-			map:          mappingObj.map,
-			draggable:    false,
-			labelContent: iconography,
-			labelClass:   'mapIconContainer',
-			labelAnchor:  new google.maps.Point(mappingObj.POINTER_X_OFFSET * offset, mappingObj.POINTER_Y_OFFSET),
-			icon:         mapIconography.pointer
-		});
-		
-		mappingObj.mapMarkers.objects.push(marker);
-		mappingObj.mapMarkers.hashes.push(mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude));
 	}
 	
 	// finalise the map updates
@@ -253,108 +239,194 @@ MappingClass.prototype.buildIconography = function(data) {
 	
 	// build the table cells
 	var cells = '';
+	var footerCells = '';
 	
-	if(data.contributors.length > 0) {
+	// declare other helper variables
+	var objArray = [];
+	var obj;
+	var idx;
+	var offset = 0;
+	
+	// make a copy of the contributors array,
+	// excluding any hidden markers
+	if(data.contributors.length > 0 && mappingObj.hiddenMarkers.contributors.length > 0) {
+	
+		for(var i = 0; i < data.contributors.length; i++) {
+			// check to see if this marker should be hidden
+			idx = $.inArray(data.contributors[i].id, mappingObj.hiddenMarkers.contributors);
+			
+			if(idx == -1) {
+				// make a copy and store it in the copy array
+				obj = jQuery.extend(true, {}, data.contributors[i]);
+				objArray.push(obj);
+			}
+		}
+	
+	} else {
+		objArray = data.contributors;
+	}
+	
+	if(objArray.length > 0) {
 		// we need to add a contributor icon
-		if(data.contributors.length == 1) {
+		if(objArray.length == 1) {
 			//cellColour = mapIconography.contributorColours[0];
-			var obj = data.contributors[0];
-			var idx = $.inArray(obj.id, mappingObj.contributorColours.ids);
+			obj = objArray[0];
+			idx = $.inArray(obj.id, mappingObj.contributorColours.ids);
 			cellColour = mappingObj.contributorColours.colours[idx];
-		} else if (data.contributors.length > 1 && data.contributors.length < 6) {
+		} else if (objArray.length > 1 && objArray.length < 6) {
 			cellColour = mapIconography.contributorColours[1];
-		} else if (data.contributors.length > 5 && data.contributors.length < 16) {
+		} else if (objArray.length > 5 && objArray.length < 16) {
 			cellColour = mapIconography.contributorColours[2];
-		} else if (data.contributors.length > 15 && data.contributors.length < 31) {
+		} else if (objArray.length > 15 && objArray.length < 31) {
 			cellColour = mapIconography.contributorColours[3];
 		} else {
 			cellColour = mapIconography.contributorColours[4];
 		}
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-contributor-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.contributor + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
+		footerCells += '<td class="mapIconNum b-184">' + objArray.length + '</td>';
+		offset ++;
 	}
 	
-	if(data.organisations.length > 0) {
-		// we need to add a venue icon
-		if(data.organisations.length == 1) {
+	// reset variables
+	objArray = [];
+	obj = null;
+	
+	// make a copy of the organisations array,
+	// excluding any hidden markers
+	if(data.organisations.length > 0 && mappingObj.hiddenMarkers.organisations.length > 0) {
+	
+		for(var i = 0; i < data.organisations.length; i++) {
+			// check to see if this marker should be hidden
+			idx = $.inArray(data.organisations[i].id, mappingObj.hiddenMarkers.organisations);
+			
+			if(idx == -1) {
+				// make a copy and store it in the copy array
+				obj = jQuery.extend(true, {}, data.organisations[i]);
+				objArray.push(obj);
+			}
+		}
+	
+	} else {
+		objArray = data.organisations;
+	}
+	
+	if(objArray.length > 0) {
+		// we need to add an organisation icon
+		if(objArray.length == 1) {
 			//cellColour = mapIconography.organisationColours[0];
-			var obj = data.organisations[0];
-			var idx = $.inArray(obj.id, mappingObj.organisationColours.ids);
+			obj = data.organisations[0];
+			idx = $.inArray(obj.id, mappingObj.organisationColours.ids);
 			cellColour = mappingObj.organisationColours.colours[idx];
-		} else if (data.organisations.length > 1 && data.organisations.length < 6) {
+		} else if (objArray.length > 1 && objArray.length < 6) {
 			cellColour = mapIconography.organisationColours[1];
-		} else if (data.organisations.length > 5 && data.organisations.length < 16) {
+		} else if (objArray.length > 5 && objArray.length < 16) {
 			cellColour = mapIconography.organisationColours[2];
-		} else if (data.organisations.length > 15 && data.organisations.length < 31) {
+		} else if (objArray.length > 15 && objArray.length < 31) {
 			cellColour = mapIconography.organisationColours[3];
 		} else {
 			cellColour = mapIconography.organisationColours[4];
 		}
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-organisation-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
+		footerCells += '<td class="mapIconNum b-184">' + objArray.length + '</td>';
+		offset ++;
 	}
 	
-	if(data.venues.length > 0) {
+	// reset variables
+	objArray = [];
+	obj = null;
+	
+	// make a copy of the venues array,
+	// excluding any hidden markers
+	if(data.venues.length > 0 && mappingObj.hiddenMarkers.venues.length > 0) {
+	
+		for(var i = 0; i < data.venues.length; i++) {
+			// check to see if this marker should be hidden
+			idx = $.inArray(data.venues[i].id, mappingObj.hiddenMarkers.venues);
+			
+			if(idx == -1) {
+				// make a copy and store it in the copy array
+				obj = jQuery.extend(true, {}, data.venues[i]);
+				objArray.push(obj);
+			}
+		}
+	
+	} else {
+		objArray = data.venues;
+	}
+	
+	if(objArray.length > 0) {
 		// we need to add a venue icon
-		if(data.venues.length == 1) {
+		if(objArray.length == 1) {
 			cellColour = mapIconography.venueColours[0];
-		} else if (data.venues.length > 1 && data.venues.length < 6) {
+		} else if (objArray.length > 1 && objArray.length < 6) {
 			cellColour = mapIconography.venueColours[1];
-		} else if (data.venues.length > 5 && data.venues.length < 16) {
+		} else if (objArray.length > 5 && objArray.length < 16) {
 			cellColour = mapIconography.venueColours[2];
-		} else if (data.venues.length > 15 && data.venues.length < 31) {
+		} else if (objArray.length > 15 && objArray.length < 31) {
 			cellColour = mapIconography.venueColours[3];
 		} else {
 			cellColour = mapIconography.venueColours[4];
 		}
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-venue-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
+		footerCells += '<td class="mapIconNum b-184">' + objArray.length + '</td>';
+		offset ++;
 	}
 	
-	if(data.events.length > 0) {
+	// reset variables
+	objArray = [];
+	obj = null;
+	
+	// make a copy of the events array,
+	// excluding any hidden markers
+	if(data.events.length > 0 && mappingObj.hiddenMarkers.events.length > 0) {
+	
+		for(var i = 0; i < data.events.length; i++) {
+			// check to see if this marker should be hidden
+			idx = $.inArray(data.events[i].id, mappingObj.hiddenMarkers.events);
+			
+			if(idx == -1) {
+				// make a copy and store it in the copy array
+				obj = jQuery.extend(true, {}, data.events[i]);
+				objArray.push(obj);
+			}
+		}
+	
+	} else {
+		objArray = data.events;
+	}
+	
+	if(objArray.length > 0) {
 		// we need to add a venue icon
-		if(data.events.length == 1) {
+		if(objArray.length == 1) {
 			cellColour = mapIconography.eventColours[0];
-		} else if (data.events.length > 1 && data.events.length < 6) {
+		} else if (objArray.length > 1 && objArray.length < 6) {
 			cellColour = mapIconography.eventColours[1];
-		} else if (data.events.length > 5 && data.events.length < 16) {
+		} else if (objArray.length > 5 && objArray.length < 16) {
 			cellColour = mapIconography.eventColours[2];
-		} else if (data.events.length > 15 &&data.events.length < 31) {
+		} else if (objArray.length > 15 && objArray.length < 31) {
 			cellColour = mapIconography.eventColours[3];
 		} else {
 			cellColour = mapIconography.eventColours[4];
 		}
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-event-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
+		footerCells += '<td class="mapIconNum b-184">' + objArray.length + '</td>';
+		offset ++;
 	}
 	
-	// start to build the table for venue data	
-	var table =  '<table class="mapIcon"><tr>' + cells + '</tr>';
-	cells = '';
-	
-	if(data.contributors.length > 0) {
-		cells += '<td class="mapIconNum b-184">' + data.contributors.length + '</td>';
+	// return the iconography table
+	if(cells == '') {
+		return null;
+	} else {
+		return  {table: '<table class="mapIcon"><tr>' + cells + '</tr><tr>' + footerCells + '</tr></table>',
+		         offset: offset
+		        }
 	}
-	
-	if(data.organisations.length > 0) {
-		cells += '<td class="mapIconNum b-184">' + data.organisations.length + '</td>';
-	}
-	
-	if(data.venues.length > 0) {
-		cells += '<td class="mapIconNum b-184">' + data.venues.length + '</td>';
-	}
-	
-	if(data.events.length > 0) {
-		cells += '<td class="mapIconNum b-184">' + data.events.length + '</td>';
-	}
-	
-	table += '<tr>' + cells + '</tr>';
-	    
-	// return the completed table
-	table += '</table>';
-	
-	return table;	
 }
+
 
 // function to update the list of venues with data from the browse interface
 MappingClass.prototype.addVenueBrowseData = function(data) {
