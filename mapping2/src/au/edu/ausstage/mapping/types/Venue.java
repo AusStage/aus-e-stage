@@ -431,7 +431,7 @@ public class Venue implements Comparable<Venue>{
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		}
 		
-		this.id = value;
+		this.id = value.trim();
 	}
 	
 	public String getName() {
@@ -442,7 +442,7 @@ public class Venue implements Comparable<Venue>{
 		if(InputUtils.isValid(value) == false) {
 			throw new IllegalArgumentException("The value cannot be null");
 		}
-		name = value;
+		name = value.trim();
 	}
 	
 	public String getState() {
@@ -453,7 +453,7 @@ public class Venue implements Comparable<Venue>{
 		if(InputUtils.isValid(value) == false) {
 			throw new IllegalArgumentException("The value cannot be null");
 		}
-		state = value;
+		state = value.trim();
 	}
 	
 	public String getSuburb() {
@@ -461,7 +461,7 @@ public class Venue implements Comparable<Venue>{
 	}
 	
 	public void setSuburb(String value) {
-		suburb = value;
+		suburb = value.trim();
 	}
 	
 	public String getStreet() {
@@ -469,7 +469,7 @@ public class Venue implements Comparable<Venue>{
 	}
 	
 	public void setStreet(String value) {
-		street = value;
+		street = value.trim();
 	}
 	
 	public String getPostcode() {
@@ -477,7 +477,7 @@ public class Venue implements Comparable<Venue>{
 	}
 	
 	public void setPostcode(String value) {
-		postcode = value;
+		postcode = value.trim();
 	}
 	
 	public String getCountry() {
@@ -485,7 +485,7 @@ public class Venue implements Comparable<Venue>{
 	}
 	
 	public void setCountry(String value) {
-		country = value;
+		country = value.trim();
 	}
 	
 	public String getLatitude() {
@@ -496,7 +496,7 @@ public class Venue implements Comparable<Venue>{
 //		if(InputUtils.isValid(value) == false) {
 //			throw new IllegalArgumentException("The value cannot be null");
 //		}
-		latitude = value;
+		latitude = value.trim();
 	}
 	
 	public String getLongitude() {
@@ -507,7 +507,7 @@ public class Venue implements Comparable<Venue>{
 //		if(InputUtils.isValid(value) == false) {
 //			throw new IllegalArgumentException("The value cannot be null");
 //		}
-		longitude = value;
+		longitude = value.trim();
 	}
 	
 	public String getUrl() {
@@ -518,7 +518,7 @@ public class Venue implements Comparable<Venue>{
 		if(InputUtils.isValid(value) == false) {
 			throw new IllegalArgumentException("The value cannot be null");
 		}
-		url = value;
+		url = value.trim();
 	}
 	
 	public String getEventCount() {
@@ -531,7 +531,7 @@ public class Venue implements Comparable<Venue>{
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		}
 		
-		this.eventCount = value;
+		this.eventCount = value.trim();
 	}
 	
 	/*
