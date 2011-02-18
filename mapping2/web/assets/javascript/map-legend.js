@@ -135,6 +135,9 @@ MapLegendClass.prototype.updateLegend = function() {
 		if(objects.length > 0) {
 			$('#mapLegendContributorHeading').empty().append('Contributors (' + objects.length +')');
 		}
+	} else {
+		$('#mapLegendContributors').empty();
+		$('#mapLegendContributorHeading').empty().append('Contributors (0)');
 	}
 	
 	if(recordData.organisations.objects.length > 0) {
@@ -188,6 +191,9 @@ MapLegendClass.prototype.updateLegend = function() {
 			$('#mapLegendOrganisationHeading').empty().append('Organisations (' + objects.length +')');
 		}
 		
+	} else {
+		$('#mapLegendOrganisations').empty();
+		$('#mapLegendOrganisationHeading').empty().append('Organisations (0)');
 	}
 	
 	if(recordData.venues.objects.length > 0) {
@@ -235,8 +241,11 @@ MapLegendClass.prototype.updateLegend = function() {
 		if(objects.length > 0) {
 			$('#mapLegendVenueHeading').empty().append('Venues (' + objects.length +')');
 		}
+	} else {
+		$('#mapLegendVenues').empty();
+		$('#mapLegendVenueHeading').empty().append('Venues (0)');
 	}
-	
+		
 	if(recordData.events.objects.length > 0) {
 		// add the events
 		objects = recordData.events.objects;
@@ -280,6 +289,9 @@ MapLegendClass.prototype.updateLegend = function() {
 		if(objects.length > 0) {
 			$('#mapLegendEventsHeading').empty().append('Events (' + objects.length +')');
 		}
+	} else {
+		$('#mapLegendEvents').empty();
+		$('#mapLegendEventsHeading').empty().append('Events (0)');
 	}
 }
 
@@ -539,7 +551,6 @@ MapLegendClass.prototype.deleteMarker = function() {
 	var id    = param.split('-');
 	var mapData = mappingObj.markerData.objects;
 	var obj;
-	var objs
 	
 	// work out what is being deleted
 	if(id[1] == 'contributor') {
@@ -547,60 +558,35 @@ MapLegendClass.prototype.deleteMarker = function() {
 		id = id[2];
 		// loop through the marker data looking for this contributor
 		for (var i = 0; i < mapData.length; i++) {
-			objs = mapData[i].contributors;
 			
-			if(objs.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < objs.length; x++) {
-					// check to see if the ids match
-					if(objs[x].id == id) {
-						// ids match so keep a copy of this item
-						obj = objs[x];
-						x = objs.length + 1;
-						i = mapData.length + 1;
-					}
-				}
-			}	
+			obj = mapLegendObj.findObjectById(mapData[i].contributors, id);
+			
+			if(obj != null) {
+				i = mapData.length + 1;
+			}
+	
 		}
 	} else if(id[1] == 'organisation') {
 		// organisation
 		id = id[2];
 		// loop through the marker data looking for this organisation
 		for (var i = 0; i < mapData.length; i++) {
-			objs = mapData[i].organisations;
+			obj = mapLegendObj.findObjectById(mapData[i].organisations, id);
 			
-			if(objs.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < objs.length; x++) {
-					// check to see if the ids match
-					if(objs[x].id == id) {
-						// ids match so keep a copy of this item
-						obj = objs[x];
-						x = objs.length + 1;
-						i = mapData.length + 1;
-					}
-				}
-			}	
+			if(obj != null) {
+				i = mapData.length + 1;
+			}
 		}
 	} else if(id[1] == 'venue') {
 		// venue
 		id = id[2];
 		// loop through the marker data looking for this venue
 		for (var i = 0; i < mapData.length; i++) {
-			objs = mapData[i].venues;
+			obj = mapLegendObj.findObjectById(mapData[i].venues, id);
 			
-			if(objs.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < objs.length; x++) {
-					// check to see if the ids match
-					if(objs[x].id == id) {
-						// ids match so keep a copy of this item
-						obj = objs[x];
-						x = objs.length + 1;
-						i = mapData.length + 1;
-					}
-				}
-			}	
+			if(obj != null) {
+				i = mapData.length + 1;
+			}
 		}
 	} else {
 		// event
@@ -609,17 +595,10 @@ MapLegendClass.prototype.deleteMarker = function() {
 		for (var i = 0; i < mapData.length; i++) {
 			objs = mapData[i].events;
 			
-			if(objs.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < objs.length; x++) {
-					// check to see if the ids match
-					if(objs[x].id == id) {
-						// ids match so keep a copy of this item
-						obj = objs[x];
-						x = objs.length + 1;
-						i = mapData.length + 1;
-					}
-				}
+			obj = mapLegendObj.findObjectById(mapData[i].venues, id);
+			
+			if(obj != null) {
+				i = mapData.length + 1;
 			}	
 		}
 	}
@@ -721,6 +700,24 @@ MapLegendClass.prototype.deleteMarker = function() {
 	});	
 		
 	$('#map_legend_confirm_delete').dialog('open');
+}
+
+// a function to find a the specified object by id
+MapLegendClass.prototype.findObjectById = function(collection, id) {
+
+	if(collection.length > 0) {
+		// loop through the collection
+		for(var i = 0; i < collection.length; i++) {
+			// check to see if the ids match
+			if(collection[i].id == id) {
+				// ids match so return this object
+				return collection[i];
+			}
+		}
+	}
+	
+	// no match found so return null
+	return null
 }
 
 // a function to delete a marker from the map
