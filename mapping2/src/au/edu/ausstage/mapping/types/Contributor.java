@@ -73,7 +73,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		}
 		
-		this.id = id;
+		this.id = id.trim();
 	
 		// initialise the collections
 		events = new HashSet<Event>();
@@ -99,9 +99,9 @@ public class Contributor implements Comparable<Contributor>{
 		}
 		
 		// store the new values
-		this.id   = id;
-		this.name = name;
-		this.url  = url;
+		this.id   = id.trim();
+		this.name = name.trim();
+		this.url  = url.trim();
 		
 		// initalise the collections		
 		events = new HashSet<Event>();
@@ -279,7 +279,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		}
 		
-		id = value;
+		id = value.trim();
 	}
 	
 	public String getName() {
@@ -296,7 +296,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The value cannot be null or empty");
 		}
 		
-		name = value;
+		name = value.trim();
 	}
 	
 	public String getFirstName() {
@@ -308,7 +308,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The value cannot be null or empty");
 		}
 		
-		firstName = value;
+		firstName = value.trim();
 	}
 	
 	public String getLastName() {
@@ -320,7 +320,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The value cannot be null or empty");
 		}
 		
-		lastName = value;
+		lastName = value.trim();
 	}
 	
 	public String getUrl() {
@@ -332,7 +332,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The value cannot be null or empty");
 		}
 		
-		url = value;
+		url = value.trim();
 	}
 	
 	public String getEventDates() {
@@ -344,7 +344,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The value cannot be null or empty");
 		}
 		
-		eventDates = value;
+		eventDates = value.trim();
 	}
 	
 	public void setEventCount(String value) {
@@ -352,7 +352,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The value parameter must be a valid integer");
 		}
 		
-		eventCount = value;
+		eventCount = value.trim();
 	}
 	
 	public String getMappedEventCount() {
@@ -364,7 +364,7 @@ public class Contributor implements Comparable<Contributor>{
 			throw new IllegalArgumentException("The value parameter must be a valid integer");
 		}
 		
-		mappedEventCount = value;
+		mappedEventCount = value.trim();
 	}
 	
 	public String getFunctions() {
@@ -373,7 +373,7 @@ public class Contributor implements Comparable<Contributor>{
 	
 	public void setFunctions(String value) {
 		
-		functions = value;
+		functions = value.trim();
 	}
 	
 	public String[] getFunctionsAsArray() {
