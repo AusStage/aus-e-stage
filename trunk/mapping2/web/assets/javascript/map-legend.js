@@ -119,12 +119,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			}
 			
 			// add the show/hide check box
-			idx = $.inArray(obj.id, mappingObj.hiddenMarkers.contributors);
-			if(idx == -1) {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendContributor" class="mapLegendShowHideMarker use-tipsy" checked="checked" value="mlh-contributor-' + obj.id + '" title="Untick to hide this contributor"/></td>';
-			} else {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendContributor" class="mapLegendShowHideMarker use-tipsy" value="mlh-contributor-' + obj.id + '" title="Untick to hide this contributor"/></td>';
-			}
+			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.contributors), 'contributor', obj.id);
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mld-contributor-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Contributor from Map"></span></td>';
@@ -176,12 +171,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mappingObj.buildAddressAlt(obj.suburb, obj.state, obj.country);
 			
 			// add the show/hide check box
-			idx = $.inArray(obj.id, mappingObj.hiddenMarkers.organisations);
-			if(idx == -1) {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendOrganisation" class="mapLegendShowHideMarker use-tipsy" checked="checked" value="mlh-organisation-' + obj.id + '" title="Untick to hide this organisation"/></td>';
-			} else {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendOrganisation" class="mapLegendShowHideMarker use-tipsy" value="mlh-organisation-' + obj.id + '" title="Untick to hide this organisation"/></td>';
-			}
+			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.organisations), 'organisation', obj.id);
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mld-organisation-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Organisation from Map"></span></td>';
@@ -229,12 +219,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mappingObj.buildAddress(obj.street, obj.suburb, obj.state, obj.country);
 			
 			// add the show/hide check box
-			idx = $.inArray(obj.id, mappingObj.hiddenMarkers.venues);
-			if(idx == -1) {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendVenue" class="mapLegendShowHideMarker use-tipsy" checked="checked" value="mlh-venue-' + obj.id + '" title="Untick to hide this venue"/></td>';
-			} else {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendVenue" class="mapLegendShowHideMarker use-tipsy" value="mlh-venue-' + obj.id + '" title="Untick to hide this venue"/></td>';
-			}
+			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.venues), 'venue', obj.id);
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mld-venue-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Venue from Map"></span></td>';
@@ -279,12 +264,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += obj.venue.name + ', ' + mappingObj.buildAddressAlt(obj.venue.suburb, obj.venue.state, obj.venue.country);
 			
 			// add the show/hide check box
-			idx = $.inArray(obj.id, mappingObj.hiddenMarkers.events);
-			if(idx == -1) {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendEvent" class="mapLegendShowHideMarker use-tipsy" checked="checked" value="mlh-event-' + obj.id + '" title="Untick to hide this event"/></td>';
-			} else {
-				tableData += '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendEvent" class="mapLegendShowHideMarker use-tipsy" value="mlh-event-' + obj.id + '" title="Untick to hide this event"/></td>';
-			}
+			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.events), 'event', obj.id);
 			
 			// add the delete icon
 			tableData += '<td class="mapLegendDelete"><span id="mld-event-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Event from Map"></span></td>';
@@ -300,6 +280,16 @@ MapLegendClass.prototype.updateLegend = function() {
 		if(objects.length > 0) {
 			$('#mapLegendEventsHeading').empty().append('Events (' + objects.length +')');
 		}
+	}
+}
+
+// a function to build the hide checkbox 
+MapLegendClass.prototype.buildShowHide = function(idx, type, id) {
+
+	if(idx == -1) {
+		return '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendShowHide" class="mapLegendShowHideMarker use-tipsy" checked="checked" value="mlh-' + type + '-' + id + '" title="Untick to hide this ' + type + '"/></td>';
+	} else {
+		return '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendShowHide" class="mapLegendShowHideMarker use-tipsy" value="mlh-' + type + '-' + id + '" title="Tick to show this ' + type + '"/></td>';
 	}
 }
 
