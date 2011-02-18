@@ -274,7 +274,7 @@ public class Organisation implements Comparable<Organisation> {
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		}
 		
-		id = value;
+		id = value.trim();
 	}
 	
 	public String getName() {
@@ -286,7 +286,7 @@ public class Organisation implements Comparable<Organisation> {
 			throw new IllegalArgumentException("The value cannot be null or empty");
 		}
 		
-		name = value;
+		name = value.trim();
 	}
 	
 	public String getUrl() {
@@ -298,7 +298,7 @@ public class Organisation implements Comparable<Organisation> {
 			throw new IllegalArgumentException("The value cannot be null or empty");
 		}
 		
-		url = value;
+		url = value.trim();
 	}
 	
 	public void setEventCount(String value) {
@@ -306,7 +306,7 @@ public class Organisation implements Comparable<Organisation> {
 			throw new IllegalArgumentException("The value parameter must be a valid integer");
 		}
 		
-		eventCount = value;
+		eventCount = value.trim();
 	}
 	
 	public String getMappedEventCount() {
@@ -318,7 +318,7 @@ public class Organisation implements Comparable<Organisation> {
 			throw new IllegalArgumentException("The value parameter must be a valid integer");
 		}
 		
-		mappedEventCount = value;
+		mappedEventCount = value.trim();
 	}
 	
 	public String getAddress() {
@@ -326,7 +326,7 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setAddress(String value) {
-		address = value;
+		address = value.trim();
 	}
 	
 	public String getSuburb() {
@@ -334,7 +334,7 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setSuburb(String value) {
-		suburb = value;
+		suburb = value.trim();
 	}
 	
 	public String getState() {
@@ -342,7 +342,7 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setState(String value) {
-		state = value;
+		state = value.trim();
 	}
 	
 	public String getPostcode() {
@@ -350,7 +350,7 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setPostcode(String value) {
-		postcode = value;
+		postcode = value.trim();
 	}
 	
 	public String getCountry() {
@@ -362,7 +362,7 @@ public class Organisation implements Comparable<Organisation> {
 			throw new IllegalArgumentException("The value parameter must be a valid string");
 		}
 		
-		country = value;
+		country = value.trim();
 	}
 	
 	/*
