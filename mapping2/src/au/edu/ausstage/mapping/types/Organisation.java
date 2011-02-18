@@ -326,7 +326,11 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setAddress(String value) {
-		address = value.trim();
+		if(value != null) {
+			address = value.trim();
+		} else {
+			address = null;
+		}
 	}
 	
 	public String getSuburb() {
@@ -334,7 +338,11 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setSuburb(String value) {
-		suburb = value.trim();
+		if(value != null) {
+			suburb = value.trim();
+		} else {
+			suburb = null;
+		}
 	}
 	
 	public String getState() {
@@ -342,7 +350,11 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setState(String value) {
-		state = value.trim();
+		if(value != null) {
+			state = value.trim();
+		} else {
+			state = null;
+		}
 	}
 	
 	public String getPostcode() {
@@ -350,7 +362,11 @@ public class Organisation implements Comparable<Organisation> {
 	}
 	
 	public void setPostcode(String value) {
-		postcode = value.trim();
+		if(value != null) {
+			postcode = value.trim();
+		} else {
+			postcode = null;
+		}
 	}
 	
 	public String getCountry() {

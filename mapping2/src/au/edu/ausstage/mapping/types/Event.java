@@ -179,7 +179,11 @@ public class Event implements Comparable<Event> {
 //		if(InputUtils.isValid(value) == false) {
 //			throw new IllegalArgumentException("The parameter must be not be null or empty");
 //		}
-		latitude = value.trim();
+		if (value != null) {
+			latitude = value.trim();
+		} else {
+			latitude = null;
+		}
 	}
 	
 	public String getLatitude() {
@@ -191,7 +195,12 @@ public class Event implements Comparable<Event> {
 //		if(InputUtils.isValid(value) == false) {
 //			throw new IllegalArgumentException("The parameter must be not be null or empty");
 //		}
-		longitude = value.trim();
+		
+		if (value != null) {
+			longitude = value.trim();
+		} else {
+			longitude = null;
+		}
 	}
 	
 	public String getLongitude() {
