@@ -122,7 +122,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.contributors), 'contributor', obj.id);
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mld-contributor-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Contributor from Map"></span></td>';
+			tableData += mapLegendObj.buildDelete('contributor', obj.id);
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -174,7 +174,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.organisations), 'organisation', obj.id);
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mld-organisation-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Organisation from Map"></span></td>';
+			tableData += mapLegendObj.buildDelete('organisation', obj.id);
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -222,7 +222,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.venues), 'venue', obj.id);
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mld-venue-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Venue from Map"></span></td>';
+			tableData += mapLegendObj.buildDelete('venue', obj.id);
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -267,7 +267,7 @@ MapLegendClass.prototype.updateLegend = function() {
 			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.events), 'event', obj.id);
 			
 			// add the delete icon
-			tableData += '<td class="mapLegendDelete"><span id="mld-event-' + obj.id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete Event from Map"></span></td>';
+			tableData += mapLegendObj.buildDelete('event', obj.id);
 			
 			// finsih the row
 			tableData += '</tr>';		
@@ -291,6 +291,14 @@ MapLegendClass.prototype.buildShowHide = function(idx, type, id) {
 	} else {
 		return '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendShowHide" class="mapLegendShowHideMarker use-tipsy" value="mlh-' + type + '-' + id + '" title="Tick to show this ' + type + '"/></td>';
 	}
+}
+
+// a function to build the delete icon
+MapLegendClass.prototype.buildDelete = function(type, id) {
+
+	// add the delete icon
+	return '<td class="mapLegendDelete"><span id="mld-' + type + '-' + id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete this ' + type + ' from the map"></span></td>';
+
 }
 
 // a function to build the internal legend specific datastructure
