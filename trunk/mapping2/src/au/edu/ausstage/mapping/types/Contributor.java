@@ -373,7 +373,11 @@ public class Contributor implements Comparable<Contributor>{
 	
 	public void setFunctions(String value) {
 		
-		functions = value.trim();
+		if(value != null) {
+			functions = value.trim();
+		} else {
+			functions = null;
+		}
 	}
 	
 	public String[] getFunctionsAsArray() {
