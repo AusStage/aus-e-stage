@@ -271,6 +271,8 @@ MapLegendClass.prototype.updateLegend = function() {
 			// add the name and functions
 			tableData += '<td class="mapLegendInfo"><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
 			tableData += obj.venue.name + ', ' + mappingObj.buildAddressAlt(obj.venue.suburb, obj.venue.state, obj.venue.country);
+			// output the date
+			tableData += ', ' + obj.firstDisplayDate.replace(/\s/g, '&nbsp;');
 			
 			// add the show/hide check box
 			tableData += mapLegendObj.buildShowHide($.inArray(obj.id, mappingObj.hiddenMarkers.events), 'event', obj.id);
