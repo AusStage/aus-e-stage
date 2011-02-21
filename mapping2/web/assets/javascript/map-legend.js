@@ -301,9 +301,9 @@ MapLegendClass.prototype.updateLegend = function() {
 MapLegendClass.prototype.buildShowHide = function(idx, type, id) {
 
 	if(idx == -1) {
-		return '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendShowHide" class="mapLegendShowHideMarker use-tipsy" checked="checked" value="mlh-' + type + '-' + id + '" title="Untick to hide this ' + type + '"/></td>';
+		return '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendShowHide" class="mapLegendShowHideMarker" checked="checked" value="mlh-' + type + '-' + id + '"/></td>';
 	} else {
-		return '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendShowHide" class="mapLegendShowHideMarker use-tipsy" value="mlh-' + type + '-' + id + '" title="Tick to show this ' + type + '"/></td>';
+		return '</td><td class="mapLegendShowHide"><input type="checkbox" name="mapLegendShowHide" class="mapLegendShowHideMarker" value="mlh-' + type + '-' + id + '"/></td>';
 	}
 }
 
@@ -311,7 +311,7 @@ MapLegendClass.prototype.buildShowHide = function(idx, type, id) {
 MapLegendClass.prototype.buildDelete = function(type, id) {
 
 	// add the delete icon
-	return '<td class="mapLegendDelete"><span id="mld-' + type + '-' + id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable use-tipsy" style="display: inline-block;" title="Delete this ' + type + ' from the map"></span></td>';
+	return '<td class="mapLegendDelete"><span id="mld-' + type + '-' + id + '" class="mapLegendDeleteIcon ui-icon ui-icon-closethick clickable" style="display: inline-block;"></span></td>';
 
 }
 
@@ -631,6 +631,8 @@ MapLegendClass.prototype.deleteMarker = function() {
 		// add the name and functions
 		prompt += '<td><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
 		prompt += obj.venue.name + ', ' + mappingObj.buildAddressAlt(obj.venue.suburb, obj.venue.state, obj.venue.country);
+		// output the date
+		prompt += ', ' + obj.firstDisplayDate.replace(/\s/g, '&nbsp;');
 	
 		// finalise the prompt
 		prompt += '</td></tr></table>';
