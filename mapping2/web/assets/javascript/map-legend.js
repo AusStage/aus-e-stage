@@ -334,65 +334,11 @@ MapLegendClass.prototype.buildRecordData = function() {
 	// loop through the marker data
 	for (var i = 0; i < mapData.length; i++) {
 	
-		// get the list of contributors
-		contributors = mapData[i].contributors;
-		
-		// process these contributors
-		if(contributors.length > 0) {
-		
-			for(var x = 0; x < contributors.length; x++) {
-				idx = $.inArray(contributors[x].id, recordData.contributors.ids);
-				if(idx == -1) {
-					recordData.contributors.ids.push(contributors[x].id);
-					recordData.contributors.objects.push(contributors[x]);
-				}
-			}		
-		}
-		
-		// get the list of organisations
-		organisations = mapData[i].organisations;
-		
-		// process these contributors
-		if(organisations.length > 0) {
-		
-			for(var x = 0; x < organisations.length; x++) {
-				idx = $.inArray(organisations[x].id, recordData.organisations.ids);
-				if(idx == -1) {
-					recordData.organisations.ids.push(organisations[x].id);
-					recordData.organisations.objects.push(organisations[x]);
-				}
-			}		
-		}
-		
-		// get the list of venues
-		venues = mapData[i].venues;
-		
-		// process these contributors
-		if(venues.length > 0) {
-		
-			for(var x = 0; x < venues.length; x++) {
-				idx = $.inArray(venues[x].id, recordData.venues.ids);
-				if(idx == -1) {
-					recordData.venues.ids.push(venues[x].id);
-					recordData.venues.objects.push(venues[x]);
-				}
-			}		
-		}
-		
-		// get the list of venues
-		events = mapData[i].events;
-		
-		// process these contributors
-		if(events.length > 0) {
-		
-			for(var x = 0; x < events.length; x++) {
-				idx = $.inArray(events[x].id, recordData.events.ids);
-				if(idx == -1) {
-					recordData.events.ids.push(events[x].id);
-					recordData.events.objects.push(events[x]);
-				}
-			}		
-		}	
+		// process contributors
+		mapLegendObj.createRecordDataArray(mapData[i].contributors,  recordData.contributors);
+		mapLegendObj.createRecordDataArray(mapData[i].organisations, recordData.organisations);
+		mapLegendObj.createRecordDataArray(mapData[i].venues,        recordData.venues);
+		mapLegendObj.createRecordDataArray(mapData[i].events,        recordData.events);
 	}
 	
 	// sort the arrays
@@ -402,37 +348,45 @@ MapLegendClass.prototype.buildRecordData = function() {
 	recordData.events.objects.sort(sortEventArray);
 	
 	// update the id indexes
-	if(recordData.contributors.objects.length > 0) {
-		recordData.contributors.ids = [];
-		for(var i = 0; i < recordData.contributors.objects.length; i++) {
-			recordData.contributors.ids.push(recordData.contributors.objects[i].id);
-		}
-	}
-	
-	if(recordData.organisations.objects.length > 0) {
-		recordData.organisations.ids = [];
-		for(var i = 0; i < recordData.organisations.objects.length; i++) {
-			recordData.organisations.ids.push(recordData.organisations.objects[i].id);
-		}
-	}
-	
-	if(recordData.venues.objects.length > 0) {
-		recordData.venues.ids = [];
-		for(var i = 0; i < recordData.venues.objects.length; i++) {
-			recordData.venues.ids.push(recordData.venues.objects[i].id);
-		}
-	}
-	
-	if(recordData.events.objects.length > 0) {
-		recordData.events.ids = [];
-		for(var i = 0; i < recordData.events.objects.length; i++) {
-			recordData.events.ids.push(recordData.events.objects[i].id);
-		}
-	}
+	mapLegendObj.reindexRecordDataArray(recordData.contributors);
+	mapLegendObj.reindexRecordDataArray(recordData.organisations);
+	mapLegendObj.reindexRecordDataArray(recordData.venues);
+	mapLegendObj.reindexRecordDataArray(recordData.events);
 	
 	mapLegendObj.recordData = recordData;
 	
 	return recordData;
+}
+
+// copy an array and turn it into the record data array
+MapLegendClass.prototype.createRecordDataArray = function(src, dest) {
+
+	// declare helper variables
+	var idx = null;
+
+	// process the array
+	if(src.length > 0) {
+		for(var i = 0; i < src.length; i++) {
+			// check to see if it is in the dest array already
+			idx = $.inArray(src[i].id, dest.ids);
+			if(idx == -1) {
+				// no so add it
+				dest.ids.push(src[i].id);
+				dest.objects.push(src[i]);
+			}
+		}
+	}
+}
+
+// reindex record data array
+MapLegendClass.prototype.reindexRecordDataArray = function(arr) {
+
+	if(arr.objects.length > 0) {
+		arr.ids = [];
+		for(var i = 0; i < arr.objects.length; i++) {
+			arr.ids.push(arr.objects[i].id);
+		}
+	}
 }
 
 // compute the height of the map
@@ -518,8 +472,8 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 	var obj = null;
 	var idx = null;
 	
-	// find the venue object of applicable
 	if(id[1] == 'venue') {
+		// find the venue object
 		idx = $.inArray(id[2], mapLegendObj.recordData.venues.ids);
 		obj = mapLegendObj.recordData.venues.objects[idx];
 		
@@ -531,6 +485,7 @@ MapLegendClass.prototype.panAndZoomMapToMarker = function() {
 			$('#mapIcon-venue-' + mappingObj.computeLatLngHash(obj.latitude, obj.longitude)).click();	
 		});
 	} else if(id[1] == 'event') {
+		// find the event object
 		idx = $.inArray(id[2], mapLegendObj.recordData.events.ids);
 		obj = mapLegendObj.recordData.events.objects[idx];
 		
@@ -595,7 +550,7 @@ MapLegendClass.prototype.deleteMarker = function() {
 		for (var i = 0; i < mapData.length; i++) {
 			objs = mapData[i].events;
 			
-			obj = mapLegendObj.findObjectById(mapData[i].venues, id);
+			obj = mapLegendObj.findObjectById(mapData[i].events, id);
 			
 			if(obj != null) {
 				i = mapData.length + 1;
@@ -743,23 +698,7 @@ MapLegendClass.prototype.doDeleteMarker = function(param) {
 		
 		// loop through the marker data
 		for (var i = 0; i < mapData.length; i++) {
-		
-			// get the list of contributors
-			contributors = mapData[i].contributors;
-			
-			if(contributors.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < contributors.length; x++) {
-					// check to see if the ids match
-					if(contributors[x].id == id) {
-						// ids match so delete
-						contributors.splice(x, 1);
-						if(x > 0) {
-							x--;
-						}
-					}
-				}
-			}	
+			mapLegendObj.doMarkerDeletion(mapData[i].contributors, id);				
 		}
 	}
 	
@@ -771,23 +710,7 @@ MapLegendClass.prototype.doDeleteMarker = function(param) {
 		
 		// loop through the marker data
 		for (var i = 0; i < mapData.length; i++) {
-		
-			// get the list of contributors
-			organisations = mapData[i].organisations;
-			
-			if(organisations.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < organisations.length; x++) {
-					// check to see if the ids match
-					if(organisations[x].id == id) {
-						// ids match so delete
-						organisations.splice(x, 1);
-						if(x > 0) {
-							x--;
-						}
-					}
-				}
-			}	
+			mapLegendObj.doMarkerDeletion(mapData[i].organisations, id);	
 		}
 	}
 	
@@ -799,23 +722,7 @@ MapLegendClass.prototype.doDeleteMarker = function(param) {
 		
 		// loop through the marker data
 		for (var i = 0; i < mapData.length; i++) {
-		
-			// get the list of contributors
-			venues = mapData[i].venues;
-			
-			if(venues.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < venues.length; x++) {
-					// check to see if the ids match
-					if(venues[x].id == id) {
-						// ids match so delete
-						venues.splice(x, 1);
-						if(x > 0) {
-							x--;
-						}
-					}
-				}
-			}	
+			mapLegendObj.doMarkerDeletion(mapData[i].venues, id);	
 		}
 	}
 	
@@ -827,23 +734,7 @@ MapLegendClass.prototype.doDeleteMarker = function(param) {
 		
 		// loop through the marker data
 		for (var i = 0; i < mapData.length; i++) {
-		
-			// get the list of contributors
-			events = mapData[i].events;
-			
-			if(events.length > 0) {
-				// loop through the list of contributors
-				for(var x = 0; x < events.length; x++) {
-					// check to see if the ids match
-					if(events[x].id == id) {
-						// ids match so delete
-						events.splice(x, 1);
-						if(x > 0) {
-							x--;
-						}
-					}
-				}
-			}	
+			mapLegendObj.doMarkerDeletion(mapData[i].events, id);	
 		}
 	}
 	
@@ -886,8 +777,28 @@ MapLegendClass.prototype.doDeleteMarker = function(param) {
 	mappingObj.updateMap();
 }
 
+// function to do the actual deletion of markers
+MapLegendClass.prototype.doMarkerDeletion = function(arr, id) {
+
+	// get the list of contributors
+	//contributors = mapData[i].contributors;
+	
+	if(arr.length > 0) {
+		// loop through the list of contributors
+		for(var i = 0; i < arr.length; i++) {
+			// check to see if the ids match
+			if(arr[i].id == id) {
+				// ids match so delete
+				arr.splice(i, 1);
+				if(i > 0) {
+					i--;
+				}
+			}
+		}
+	}
+}
+
 // a function to show / hide a marker
-// function to check to ensure the user wants to delete the marker
 MapLegendClass.prototype.showHideMarker = function() {
 	
 	var checkbox = $(this);
