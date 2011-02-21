@@ -248,23 +248,7 @@ MappingClass.prototype.buildIconography = function(data) {
 	var offset = 0;
 	
 	// make a copy of the contributors array,
-	// excluding any hidden markers
-	if(data.contributors.length > 0 && mappingObj.hiddenMarkers.contributors.length > 0) {
-	
-		for(var i = 0; i < data.contributors.length; i++) {
-			// check to see if this marker should be hidden
-			idx = $.inArray(data.contributors[i].id, mappingObj.hiddenMarkers.contributors);
-			
-			if(idx == -1) {
-				// make a copy and store it in the copy array
-				obj = jQuery.extend(true, {}, data.contributors[i]);
-				objArray.push(obj);
-			}
-		}
-	
-	} else {
-		objArray = data.contributors;
-	}
+	objArray = mappingObj.copyArrayExcludeHidden(data.contributors, mappingObj.hiddenMarkers.contributors);	
 	
 	if(objArray.length > 0) {
 		// we need to add a contributor icon
@@ -292,24 +276,8 @@ MappingClass.prototype.buildIconography = function(data) {
 	objArray = [];
 	obj = null;
 	
-	// make a copy of the organisations array,
-	// excluding any hidden markers
-	if(data.organisations.length > 0 && mappingObj.hiddenMarkers.organisations.length > 0) {
-	
-		for(var i = 0; i < data.organisations.length; i++) {
-			// check to see if this marker should be hidden
-			idx = $.inArray(data.organisations[i].id, mappingObj.hiddenMarkers.organisations);
-			
-			if(idx == -1) {
-				// make a copy and store it in the copy array
-				obj = jQuery.extend(true, {}, data.organisations[i]);
-				objArray.push(obj);
-			}
-		}
-	
-	} else {
-		objArray = data.organisations;
-	}
+	// make a copy of the organisations array
+	objArray = mappingObj.copyArrayExcludeHidden(data.organisations, mappingObj.hiddenMarkers.organisations);
 	
 	if(objArray.length > 0) {
 		// we need to add an organisation icon
@@ -338,23 +306,7 @@ MappingClass.prototype.buildIconography = function(data) {
 	obj = null;
 	
 	// make a copy of the venues array,
-	// excluding any hidden markers
-	if(data.venues.length > 0 && mappingObj.hiddenMarkers.venues.length > 0) {
-	
-		for(var i = 0; i < data.venues.length; i++) {
-			// check to see if this marker should be hidden
-			idx = $.inArray(data.venues[i].id, mappingObj.hiddenMarkers.venues);
-			
-			if(idx == -1) {
-				// make a copy and store it in the copy array
-				obj = jQuery.extend(true, {}, data.venues[i]);
-				objArray.push(obj);
-			}
-		}
-	
-	} else {
-		objArray = data.venues;
-	}
+	objArray = mappingObj.copyArrayExcludeHidden(data.venues, mappingObj.hiddenMarkers.venues);
 	
 	if(objArray.length > 0) {
 		// we need to add a venue icon
@@ -380,23 +332,7 @@ MappingClass.prototype.buildIconography = function(data) {
 	obj = null;
 	
 	// make a copy of the events array,
-	// excluding any hidden markers
-	if(data.events.length > 0 && mappingObj.hiddenMarkers.events.length > 0) {
-	
-		for(var i = 0; i < data.events.length; i++) {
-			// check to see if this marker should be hidden
-			idx = $.inArray(data.events[i].id, mappingObj.hiddenMarkers.events);
-			
-			if(idx == -1) {
-				// make a copy and store it in the copy array
-				obj = jQuery.extend(true, {}, data.events[i]);
-				objArray.push(obj);
-			}
-		}
-	
-	} else {
-		objArray = data.events;
-	}
+	objArray = mappingObj.copyArrayExcludeHidden(data.events, mappingObj.hiddenMarkers.events);
 	
 	if(objArray.length > 0) {
 		// we need to add a venue icon
@@ -427,6 +363,31 @@ MappingClass.prototype.buildIconography = function(data) {
 	}
 }
 
+// function to copy the array of markers excluding hidden markers
+MappingClass.prototype.copyArrayExcludeHidden = function(arr, hidden) {
+
+	var objArray = [];
+
+	// excluding any hidden markers
+	if(arr.length > 0 && hidden.length > 0) {
+	
+		for(var i = 0; i < arr.length; i++) {
+			// check to see if this marker should be hidden
+			idx = $.inArray(arr[i].id, hidden);
+			
+			if(idx == -1) {
+				// make a copy and store it in the copy array
+				obj = jQuery.extend(true, {}, arr[i]);
+				objArray.push(obj);
+			}
+		}
+	
+	} else {
+		return arr;
+	}
+
+	return objArray;
+}
 
 // function to update the list of venues with data from the browse interface
 MappingClass.prototype.addVenueBrowseData = function(data) {

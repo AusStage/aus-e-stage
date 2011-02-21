@@ -215,9 +215,9 @@ function sortOrganisationArray(a, b) {
 function sortContributorArrayAlt(a, b) {
 
 	if(a.lastName == b.lastName) {
-		if((a.lastName + a.firstName) == (a.lastName + a.firstName)) {
+		if((a.lastName + a.firstName) == (b.lastName + b.firstName)) {
 			return 0;
-		} else if((a.lastName + a.firstName) < (a.lastName + a.firstName)) {
+		} else if((a.lastName + a.firstName) < (b.lastName + b.firstName)) {
 			return -1;
 		} else {
 			return 1;
