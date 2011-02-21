@@ -257,14 +257,8 @@ MappingClass.prototype.buildIconography = function(data) {
 			obj = objArray[0];
 			idx = $.inArray(obj.id, mappingObj.contributorColours.ids);
 			cellColour = mappingObj.contributorColours.colours[idx];
-		} else if (objArray.length > 1 && objArray.length < 6) {
-			cellColour = mapIconography.contributorColours[1];
-		} else if (objArray.length > 5 && objArray.length < 16) {
-			cellColour = mapIconography.contributorColours[2];
-		} else if (objArray.length > 15 && objArray.length < 31) {
-			cellColour = mapIconography.contributorColours[3];
 		} else {
-			cellColour = mapIconography.contributorColours[4];
+			cellColour = mappingObj.lookupCellColour(objArray.length, mapIconography.contributorColours);
 		}
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-contributor-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.contributor + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
@@ -286,14 +280,8 @@ MappingClass.prototype.buildIconography = function(data) {
 			obj = data.organisations[0];
 			idx = $.inArray(obj.id, mappingObj.organisationColours.ids);
 			cellColour = mappingObj.organisationColours.colours[idx];
-		} else if (objArray.length > 1 && objArray.length < 6) {
-			cellColour = mapIconography.organisationColours[1];
-		} else if (objArray.length > 5 && objArray.length < 16) {
-			cellColour = mapIconography.organisationColours[2];
-		} else if (objArray.length > 15 && objArray.length < 31) {
-			cellColour = mapIconography.organisationColours[3];
 		} else {
-			cellColour = mapIconography.organisationColours[4];
+			cellColour = mappingObj.lookupCellColour(objArray.length, mapIconography.organisationColours);
 		}
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-organisation-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
@@ -309,18 +297,9 @@ MappingClass.prototype.buildIconography = function(data) {
 	objArray = mappingObj.copyArrayExcludeHidden(data.venues, mappingObj.hiddenMarkers.venues);
 	
 	if(objArray.length > 0) {
+	
 		// we need to add a venue icon
-		if(objArray.length == 1) {
-			cellColour = mapIconography.venueColours[0];
-		} else if (objArray.length > 1 && objArray.length < 6) {
-			cellColour = mapIconography.venueColours[1];
-		} else if (objArray.length > 5 && objArray.length < 16) {
-			cellColour = mapIconography.venueColours[2];
-		} else if (objArray.length > 15 && objArray.length < 31) {
-			cellColour = mapIconography.venueColours[3];
-		} else {
-			cellColour = mapIconography.venueColours[4];
-		}
+		cellColour = mappingObj.lookupCellColour(objArray.length, mapIconography.venueColours);
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-venue-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.venue + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
 		footerCells += '<td class="mapIconNum b-184">' + objArray.length + '</td>';
@@ -335,18 +314,9 @@ MappingClass.prototype.buildIconography = function(data) {
 	objArray = mappingObj.copyArrayExcludeHidden(data.events, mappingObj.hiddenMarkers.events);
 	
 	if(objArray.length > 0) {
-		// we need to add a venue icon
-		if(objArray.length == 1) {
-			cellColour = mapIconography.eventColours[0];
-		} else if (objArray.length > 1 && objArray.length < 6) {
-			cellColour = mapIconography.eventColours[1];
-		} else if (objArray.length > 5 && objArray.length < 16) {
-			cellColour = mapIconography.eventColours[2];
-		} else if (objArray.length > 15 && objArray.length < 31) {
-			cellColour = mapIconography.eventColours[3];
-		} else {
-			cellColour = mapIconography.eventColours[4];
-		}
+	
+		//we need to add an event icon	
+		cellColour = mappingObj.lookupCellColour(objArray.length, mapIconography.eventColours);
 		
 		cells += '<td class="' + cellColour + ' mapIconImg"><img class="mapIconImgImg" id="mapIcon-event-' + mappingObj.computeLatLngHash(data.latitude, data.longitude) +'" src="' + mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></td>';
 		footerCells += '<td class="mapIconNum b-184">' + objArray.length + '</td>';
@@ -387,6 +357,27 @@ MappingClass.prototype.copyArrayExcludeHidden = function(arr, hidden) {
 	}
 
 	return objArray;
+}
+
+// function to get the cell colour
+MappingClass.prototype.lookupCellColour = function(len, arr) {
+
+	var cellColour = null;
+
+	// determine cell colour based on the length of 
+	if(len == 1) {
+		cellColour = arr[0];
+	} else if (len > 1 && len < 6) {
+		cellColour = arr[1];
+	} else if (len > 5 && len < 16) {
+		cellColour = arr[2];
+	} else if (len > 15 && len < 31) {
+		cellColour = arr[3];
+	} else {
+		cellColour = arr[4];
+	}
+	
+	return cellColour;
 }
 
 // function to update the list of venues with data from the browse interface
@@ -456,7 +447,7 @@ MappingClass.prototype.addContributorData = function(data) {
 	// loop through the data
 	for(var i = 0; i < data.length; i++) {
 	
-		// get the contributor information and list of venes
+		// get the contributor information and list of venues
 		contributor = data[i].extra[0];
 		venues      = data[i].venues;
 		
@@ -1084,7 +1075,7 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 	});
 }
 
-// funtion to build the infoWindow for contributors
+// funtion to build the infoWindow for organisations
 MappingClass.prototype.buildOrganisationInfoWindow = function() {
 
 	if(mappingObj.infoWindowData.length == 0) {
@@ -1281,6 +1272,8 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 
 	// define a variable to store the infoWindow content
 	var list    = '<div class="infoWindowContent"><div class="infoWindowContentList"><ul class="infoWindowEventList">';
+	var idx;
+	var event;
 	
 	// sort the array
 	data.sort(sortEventArray);
@@ -1288,20 +1281,25 @@ MappingClass.prototype.buildEventInfoWindow = function(data) {
 	// build the content
 	for(var i = 0; i < data.length; i++) {
 	
-		var event = data[i];
+		// check to see if this event is hidden
+		event = data[i];
+		idx = $.inArray(event.id, mappingObj.hiddenMarkers.events);
 		
-		if(i % 2 == 1) {
-			list += '<li class="b-185">';
-		} else {
-			list += '<li>';
+		if(idx == -1) {
+		
+			if(i % 2 == 1) {
+				list += '<li class="b-185">';
+			} else {
+				list += '<li>';
+			}
+		
+			list += '<a href="' + event.url + '" target="_ausstage">' + event.name + '</a> ' + event.venue.name;
+		
+			list += ', ' + mappingObj.buildAddressAlt(event.venue.suburb, event.venue.state, event.venue.country);
+		
+			// output the date
+			list += ', ' + event.firstDisplayDate.replace(/\s/g, '&nbsp;') + '</li>';
 		}
-		
-		list += '<a href="' + event.url + '" target="_ausstage">' + event.name + '</a> ' + event.venue.name;
-		
-		list += ', ' + mappingObj.buildAddressAlt(event.venue.suburb, event.venue.state, event.venue.country);
-		
-		// output the date
-		list += ', ' + event.firstDisplayDate.replace(/\s/g, '&nbsp;') + '</li>';
 	}
 	
 			
