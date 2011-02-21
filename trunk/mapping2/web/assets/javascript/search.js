@@ -172,6 +172,8 @@ SearchClass.prototype.init = function() {
 			$("#search_messages").show();
 			$("#search_status_message").show();
 			
+			$('#search_btn').button('option', 'disabled', true);
+			
 			searchObj.searching_underway_flag = true;
 			setTimeout("searchObj.updateMessages()", UPDATE_DELAY);
 		
@@ -351,7 +353,7 @@ SearchClass.prototype.buildContributorResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="6" class="alignRight"><div id="searchAddContributorError" style="float: left"></div><button id="searchAddContributors" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="6" class="alignRight"><div id="searchAddContributorError" style="float: left"></div><button id="searchAddContributors" class="addSearchResult" disabled="disabled">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#contributor_results").append(list);
@@ -415,7 +417,7 @@ SearchClass.prototype.buildOrganisationResults = function(data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="5" style="text-align: right"><div id="searchAddOrganisationError" style="float: left"></div><button id="searchAddOrganisations" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="5" style="text-align: right"><div id="searchAddOrganisationError" style="float: left"></div><button id="searchAddOrganisations" class="addSearchResult" disabled="disabled">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#organisation_results").append(list);
@@ -480,7 +482,7 @@ SearchClass.prototype.buildVenueResults = function (data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="4" style="text-align: right"><div id="searchAddVenueError" style="float: left"></div><button id="searchAddVenues" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="4" style="text-align: right"><div id="searchAddVenueError" style="float: left"></div><button id="searchAddVenues" class="addSearchResult" disabled="disabled">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 	
 	if(i > 0) {
 		$("#venue_results").append(list);
@@ -543,7 +545,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 	}
 	
 	// add the button
-	list += '</tbody><tfoot><tr><td colspan="4" class="alignRight"><div id="searchAddEventError" style="float: left"></div><button id="searchAddEvents" class="addSearchResult">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
+	list += '</tbody><tfoot><tr><td colspan="4" class="alignRight"><div id="searchAddEventError" style="float: left"></div><button id="searchAddEvents" class="addSearchResult" disabled="disabled">Add to Map</button>' + ADD_VIEW_BTN_HELP + '</td></tr></tfoot></table>';
 
 	if(i > 0) {
 		$("#event_results").append(list);
@@ -588,6 +590,14 @@ SearchClass.prototype.buildEventResults = function (data) {
 		$('.use-tipsy').tipsy({trigger: 'focus', gravity: 'n'});
 		
 	}
+	
+	// enable the buttons
+	$('.addSearchResult').each(function() {
+		//$(this).removeAttr('disabled');
+		$(this).button('option', 'disabled', false);
+	});
+	
+	$('#search_btn').button('option', 'disabled', false);
 }
 
 // define a method of the search class to respond to the click event
