@@ -20,7 +20,7 @@
 var FEEDBACK_BASE_URL = "/mobile/feedback?";
 var UPDATE_DELAY = 5000;
 var feedback_count = 1;
-var item = null;
+var item = {id: 0};
 var performance = null;
 var updating = false;
 
@@ -87,6 +87,12 @@ $(document).ready(function() {
 					$("#table_anchor").after('<tr><td class="feedback_messages_left">' + feedback_count + '</td><td class="feedback_messages_middle">' + item.content + '</td><td class="feedback_messages_right">' + item.type + '</td></tr>');
 					feedback_count++;
 				}
+				
+				for(var i = 0; i < data.feedback.length; i++) {
+					if(item.id < data.feedback[i].id) {
+						item = data.feedback[i];
+					}
+				}
 			}
 			
 			//set up the loop that will start the automatic updating process every x seconds
@@ -121,10 +127,14 @@ function updateFeedback() {
 		
 			// process the batch of data
 			if(data.length != 0 || typeof(data) != "undefined") {
-				
+							
 				// add the list of feedback
 				for(var i = 0; i < data.length; i++) {
-					item = data[i];					
+				
+					if(item.id < data[i].id) {
+						item = data[i];
+					}
+					
 					$("#table_anchor").after('<tr><td class="feedback_messages_left feedback_messages_new">' + feedback_count + '</td><td class="feedback_messages_middle feedback_messages_new">' + item.content + '</td><td class="feedback_messages_right feedback_messages_new">' + item.type + '</td></tr>');
 					feedback_count++;
 				}
