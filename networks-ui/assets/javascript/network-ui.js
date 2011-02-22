@@ -22,9 +22,9 @@ var smallFont = "6 pt sans-serif";
 //edge, node and background colouring for normal browsing
 var nodeColors = {	panelColor:			"white",
 					selectedNode:		"rgba(0,0,255,1)",				//blue
-					unselectedNode:		"rgba(170,170,170,0.7)",		//light grey
+					unselectedNode:		"rgba(170,170,170,1)",		//light grey
 					relatedNode:		"rgba(46,46,46,1)",				//dark grey	
-					outOfDateNode:		"rgba(170,170,170,0.1)",		//light grey transparent
+					outOfDateNode:		"rgba(170,170,170,0.5)",		//light grey transparent
 					selectedNodeBorder:	"rgba(0,0,255,1)",	  			//blue								
 					unselectedNodeBorder:"rgba(170,170,170,1)",			//light grey
 					relatedNodeBorder:	"rgba(46,46,46,1)",				//dark grey
@@ -32,14 +32,14 @@ var nodeColors = {	panelColor:			"white",
 					selectedEdge:		"rgba(0,0,255,1)",				//blue				
 					unselectedEdge:		"rgba(170,170,170,0.7)",		//light grey
 					relatedEdge:		"rgba(46,46,46,0.7)",			//dark grey
-					outOfDateEdge:		"rgba(170,170,170,0.05)",
+					outOfDateEdge:		"rgba(170,170,170,0.5)",
 					selectedText:		"rgba(0,0,255,1)",				//blue
 					unselectedText:		"rgba(170,170,170,1)",			//light grey
 					relatedText:		"rgba(46,46,46,1)",				//dark grey
 					outOfDateText:		"rgba(170,170,170,0.3)"
 				  }
 //edge, node and background colouring for faceted browsing				  
-var nodeColorsF = {	panelColor:			"black",
+var nodeColorsF = {	panelColor:			"rgba(46, 46, 46, 1)",		
 					selectedNode:		"rgba(170,170,170,1)",			//light grey
 					unselectedNode:		"rgba(170,170,170,1)",			//light grey
 					relatedNode:		"rgba(170,170,170,1)",			//light grey
@@ -62,6 +62,7 @@ var nodeColorsF = {	panelColor:			"black",
 var showAllContributors = false;	//set to true if related checkbox is checked. Will display all contributor labels
 var showRelatedContributors = false;	//set to true if related checkbox is checked. Will display related contributor labels
 var viewFaceted = false;			//set to true if facteded browsing selected.
+var showAllFaceted = true;			//set to true if all nodes are visible in faceted search
 
 //MOUSE OVER VARIABLES
 var nodeIndexPoint = -1;	//stores the index of the node that the mouse is currently over. Used for mouse in/out. 
@@ -160,6 +161,17 @@ $(document).ready(function() {
     	else showRelatedContributors = false;
     	vis.render();
 	}); 
+	
+	//set up display on/off checkboxes for Faceted Browse
+	$("input[name=showAllFaceted]").click(function() { 
+		//if checked, then set showAllFaceted to true, else set to false;
+    	if($("input[name=showAllFaceted]").is(":checked")){
+			showAllFaceted = true;	
+    	}
+    	else showAllFaceted = false;
+    	vis.render();
+	}); 
+	
 
 });
 
@@ -480,6 +492,7 @@ function showGraph(targetDiv){
   		force.link.add(pv.Line)
 	  			.lineWidth(function(d,p){return getEdgeLineWidth(p)})
 	  			.strokeStyle(function(d,p){return getEdgeStroke(p)})
+	  			.visible(function(d,p){return isVisibleEdge(p)})
 	  			.event("click", function(d, p) {onClick(p, EDGE); return vis;})		
 	  			.event("mouseover", function(d, p){	edgeTIndexPoint = p.target;
 	  											 	edgeSIndexPoint = p.source;
@@ -494,6 +507,7 @@ function showGraph(targetDiv){
 			    .fillStyle(function(d){return getNodeFill(d)})
 			    .strokeStyle(function(d){return getNodeStroke(d)})
 			    .lineWidth(function(d) {return getNodeLineWidth(d)})
+			    .visible(function(d){return isVisibleNode(d)})
 			    
 				.event("click", function(d) {onClick(d, NODE); return vis;})
 				.event("dblclick", function(d){return getNetworkAndDisplay(contributors.nodes[this.index].id)})				
@@ -570,9 +584,24 @@ function getPanelColor(){
 	return (viewFaceted) ? nodeColorsF.panelColor:nodeColors.panelColor;	
 }
 
+//node visibility
+function isVisibleNode(d){
+	if (viewFaceted && !showAllFaceted){return (d.facetedMatch)?true:false;}
+	if (!d.withinDateRange){return false;}
+	else return true;	
+}
+//edge visibility
+function isVisibleEdge(p){
+	if (viewFaceted && !showAllFaceted){
+		return (p.targetNode.facetedMatch && p.sourceNode.facetedMatch)?true:false;}
+	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){return false}
+	else return true;	
+}
 
 //label visibility
 function isVisible(d){
+	if (viewFaceted && !showAllFaceted){if (!d.facetedMatch){return false}}
+	if (!d.withinDateRange) {return false}
 	//if mouse is over the node
 	if(d.index==nodeIndexPoint){return true}
 	//if node is selected
@@ -1008,6 +1037,10 @@ function setFacetedOptions(list){
 
 	//create the function checkboxes
 	html +="<table>";		
+	
+	html += '<tr class="d1"><td><input type="checkbox" id="select_all_functions" value="select_all_functions" />'+
+			'<label for="select_all_functions">Select All</label></td></tr>';
+
 	for(i in list.functions){
 		tableClass = (isEven(i)) ? "d0":"d1";
 		
@@ -1030,6 +1063,9 @@ function setFacetedOptions(list){
 	
 	//create the nationality checkboxes
 	html = "<table>";
+	
+	html += '<tr class="d1"><td><input type="checkbox" id="select_all_nationalities" value="select_all_nationalities" />'+
+			'<label for="select_all_nationalities">Select All</label></td></tr>';
 	for(i in list.nationalities){
 		tableClass = (isEven(i)) ? "d0":"d1";
 
@@ -1039,8 +1075,27 @@ function setFacetedOptions(list){
 	html += "</table>";
 	$('#faceted_nationality_div').append(html);
 	
+	//select all functionality
+	$("input#select_all_functions").click(function() { 
+		//if checked, then set showAllFaceted to true, else set to false;
+    	$("input#function").each(function () {
+		    if($("input#select_all_functions").is(":checked")){
+	        	$(this).attr("checked", true);
+		    }else{$(this).attr("checked", false);}	   
+		});
+	}); 	
+	//select all functionality
+	$("input#select_all_nationalities").click(function() { 
+		//if checked, then set showAllFaceted to true, else set to false;
+    	$("input#nationality").each(function () {
+		    if($("input#select_all_nationalities").is(":checked")){
+	        	$(this).attr("checked", true);
+		    }else{$(this).attr("checked", false);}	   
+		});
+	}); 	
+	
 	//restrict gender to only one check box selected.
-	$('#faceted_gender_div input:checkbox').exclusiveCheck();
+	//$('#faceted_gender_div input:checkbox').exclusiveCheck();
 }
 
 //update the display to show what's been selected
@@ -1104,9 +1159,16 @@ false if not. Used in the graph appearance functions
 */	
 	var match;
 	//get selected functions
-	var functions = $("input#function:checked");
+	var functions = [];
+	for (var f = 0; f < $("input#function:checked").length; f++){
+		functions.push($("input#function:checked")[f].value);
+	}
 	//get selected gender
-	var gender = $("input#gender:checked");
+	var gender = [];
+	for (var g = 0; g < $("input#gender:checked").length; g++){
+		gender.push($("input#gender:checked")[g].value);
+	}
+
 	//get selected nationalities - put values into array
 	var nationalities = [];
 	for (var n = 0; n < $("input#nationality:checked").length; n++){
@@ -1114,14 +1176,13 @@ false if not. Used in the graph appearance functions
 	}
 	//loop through each node and compare to the criteria.
 	for(i in contributors.nodes){
-
+		
 		match = (functions.length==0 && gender.length==0 && nationalities.length==0) ? false:true; 
 		for(var f = 0; f < functions.length; f++){
-			if(!contains(contributors.nodes[i].functions, functions[f].value)){match = false;}
+			if(!contains(contributors.nodes[i].functions, functions[f])){match = false;}
+			else{match = true; f=functions.length++;}
 		}
-		for(var g = 0; g < gender.length; g++){
-			if(contributors.nodes[i].gender != gender[g].value){match = false;}
-		}	
+		if(gender.length != 0 && !contains(gender, contributors.nodes[i].gender)){match = false;}
 		if(nationalities.length != 0 && !contains(nationalities, contributors.nodes[i].nationality)){match = false;}
 		//set the node value dependant on match found
 		contributors.nodes[i].facetedMatch = match;
