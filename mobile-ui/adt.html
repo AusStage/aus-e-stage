@@ -1,0 +1,632 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>AusStage Researching Audiences Service</title>
+        <style type="text/css" media="screen">@import "assets/jqtouch/jqtouch.css";</style>
+        <style type="text/css" media="screen">@import "assets/jqtouch/themes/ausstage/theme.css";</style>
+        <script src="assets/jqtouch/jquery.1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>
+          <script src="assets/jqtouch/extensions/jqt.location.js" type="application/x-javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+        <script type="text/javascript" src="assets/javascript/chain-0.2.js" type="application/x-javascript" charset="utf-8"></script>
+
+
+        <script type="text/javascript" charset="utf-8">
+            var jQT = new $.jQTouch({
+                icon: 'assets/jqtouch/themes/ausstage/img/icon.png',
+                addGlossToIcon: false,
+                startupScreen: 'assets/jqtouch/themes/ausstage/img/startup.png',
+                statusBar: 'black',
+                preloadImages: [
+                    'assets/jqtouch/themes/ausstage/img/back_button.png',
+                    'assets/jqtouch/themes/ausstage/img/back_button_clicked.png',
+                    'assets/jqtouch/themes/ausstage/img/button_clicked.png',
+                    'assets/jqtouch/themes/ausstage/img/grayButton.png',
+                    'assets/jqtouch/themes/ausstage/img/greenButton.png',
+                    'assets/jqtouch//themes/ausstage/img/loading.gif'
+                    ]
+            });
+			
+        	//Glabals
+			var gCurrentPerformance = 46;
+			var gHost = buildHost(); 
+			var mydataType = 'jsonp';
+		
+		  var _gaq = _gaq || [];
+		   _gaq.push(['_setAccount', 'UA-10089663-2']);
+		
+		
+		
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		  
+  
+  		//Our main document load 
+		$(document).ready(function() {			
+			
+			
+			if (gHost != 'http://beta.ausstage.edu.au')  { 
+					  gHost = 'http://beta.ausstage.edu.au';
+					  mydataType =  'jsonp';
+				  } else {
+					   mydataType =  'json';
+				  }
+		
+		
+		
+			  			
+			//Do have any URL variables - if so load those and then display the current performance form.    
+			if(window.location.href.indexOf('?') != -1) {
+				
+				var performanceVariables = ['p','performance'];
+				
+				for (var i = 0; i < performanceVariables.length; i++) {
+					if (getUrlVars()[ performanceVariables[i]]) {
+						gCurrentPerformance = getUrlVars()[ performanceVariables[i]];
+					    _gaq.push(['_trackPageview', 'DirectLinkToForm/?performance=' + gCurrentPerformance ]);
+
+						getPerformanceData();	
+						jQT.goTo('#FeedbackDisplayWithForm');
+					}
+				
+			}
+			}
+			
+		});
+		
+		// function to get parameters from url
+			function getUrlVars()
+				{
+					var pairs;
+					var pairs = window.location.href.slice(window.location.href.indexOf('?') + 1);
+
+					//the url might be ?p=4#Home so we make sure we just dealing bit before the #
+					if (pairs.indexOf("#") != -1) {
+						var firstArray = pairs.split('#'); //make that into array rid of it.
+						var UrlVars = firstArray[0];    
+					} else {
+						var UrlVars = pairs[0];
+					
+						//just return the first param 
+					}
+					
+					//window.console.log("url variables = " + UrlVars);					
+						
+					 var vars = [], hash;
+					 var hashes = UrlVars.split('&');
+					 
+					 for(var i = 0; i < hashes.length; i++)
+						{
+							hash = hashes[i].split('=');
+							vars.push(hash[0]);
+							vars[hash[0]] = hash[1];
+					}
+					
+					return vars;
+					
+			
+			
+		}
+		
+		function changeLanguage(lang) {
+			//var source =  gHost + '/lang.json';
+			var source =  'lang.json';
+
+			$.ajax({
+						type:   'GET',
+						url: source, 
+						cache: false,
+						dataType: 'json',
+						success: function (data) {
+							 //$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 
+							window.console.log(data[lang]);
+							
+							/*$("#home").item(data[lang]).chain();
+							$("#FeedbackDisplayWithForm").item(data[lang]).chain();
+							$("#About").item(data[lang]).chain();
+							$("#FeedbackDisplay").item(data[lang]).chain();
+							$("#Error").item(data[lang]).chain();*/
+							$(".aboutButton").html(data[lang].About); 
+							
+							 $(".intro").html(data[lang].intro);
+							 $(".About").html(data[lang].About);
+							 $(".aboutButton").html(data[lang].aboutButton);
+							 $(".back").html(data[lang].back);
+							 $(".submitLabel").html(data[lang].submitLabel);
+							 $(".event").html(data[lang].event);
+							 $(".organisation").html(data[lang].organisation);
+							 $(".question").html(data[lang].question);
+							 $(".aboutText").html(data[lang].aboutText);
+								
+								
+
+
+						},
+						error:function (xhr, ajaxOptions, thrownError){
+                    	alert(xhr.status);
+                    	alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+					
+						async: true 
+					});	
+					
+							  
+				  
+			
+		}
+		
+
+		function submitForm(){
+			
+		//	alert("submitting the form"); 
+			  window.console.log("about to submit the form");
+			   
+			   _gaq.push(['_trackPageview', 'FormSubmitted/?performance=' + gCurrentPerformance ]);
+				$('.submit').html('Loading');
+				//figure out which server we one 
+			   host = buildHost();
+			   var mydataType = getDataType(); 	
+			   
+			   		  
+				////window.console.log(source)	;
+	
+				//Get the date and time; 
+				/* OLD material
+				var CurrentDate = new Date(); 
+				var currentTime =  CurrentDate.toTimeString();
+				//Change the format of the date so that works with API
+				currentTime =  currentTime.replace(" (EST)", "", "gi");  
+				currentTime =  currentTime.replace("GMT", "", "gi");  
+				currentTime =  currentTime.replace(" (CST)", "", "gi");  
+				*/
+				//bulld the  
+				
+				// get the message form the form
+				
+				var message =  $('[name=message]').val();
+				
+				 var params = {
+					 
+					 type:'mobile-web',
+					// time:currentTime,
+					// date:CurrentDate.toDateString(),
+					 performance:gCurrentPerformance,
+					 message:message	 
+				 
+				 };
+				 var values = jQuery.param(params);//encode thos
+				
+				var source =  host + '/mobile/gatherer?' +  values;
+
+				window.console.log(source);
+				
+				//remove what is currently is being shown 
+				$(".feedback").items('remove').chain();//load this data in the feedback
+				$(".feedbackForm").items('remove').chain();//load this data in the feedback 
+				
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						cache: false,
+						dataType: mydataType,
+						success: function (data) {
+							//window.console.log(data);
+
+							//$(".feedback").items('remove').chain();//load this data in the feedback
+							
+							//$(".feedback").items('replace',data.feedback.reverse()).chain();//load this data in the feedback
+							//$("#FeedbackDisplay").item(data).chain();//load this data in the feedback 
+							
+							$(".feedbackForm").empty();
+							
+							 data.feedback.reverse();
+							// add the list of feedback
+							for(var i = 0; i < data.feedback.length; i++) {
+								item = data.feedback[i];	
+								//window.console.log(item.content);
+
+								$(".feedbackForm").append('<li>' +
+
+											'<div class="content">' + item.content + '</div>' +
+											'<span class="feedback-about">' + 
+						   
+												'<span class="date">' + item.date +' </span>' +
+												'<span class="time">' + item.time +' </span>' +
+												'<span class="type">' + item.type +' </span>' +
+                       						
+											'</span>'
+								+'</li>');
+								
+							}
+				
+				
+							
+							$('.submit').html('Submit');
+
+							//	jQT.goTo('#FeedbackDisplayWithForm');
+
+						},
+						error:function (xhr, ajaxOptions, thrownError){
+                    	alert(xhr.status);
+                    	alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+					
+						async: true 
+					});	
+		}
+		
+		
+		 function setLocDisplay(text) {
+					$('.LocInfo').empty().append(text);
+					
+                }
+		
+	
+		function buildHost() {
+			
+			 var host = $(location).attr('host');
+			 return host;
+				  
+			
+		}
+		function getPerformanceData() {
+				
+				_gaq.push(['_trackPageview', 'LoadingPerformanceData/?performance=' + gCurrentPerformance]);
+				//$('.submit').html('Loading');
+				
+				host = buildHost();
+				
+				//now do the stuff to make the host names work 
+				  if (host != 'http://beta.ausstage.edu.au')  { 
+					  host = 'http://beta.ausstage.edu.au';
+					  mydataType =  'jsonp';
+				  } else {
+					   mydataType =  'json';
+				  }
+				  
+				  
+				//alert(gCurrentPerformance);
+				//now build the url  
+				var source =  host + '/mobile/feedback?task=initial&performance=' + gCurrentPerformance  ;  //TODO code to see what server the system is running on and build this URL 
+				
+				window.console.log(source);
+				
+				//$(".feedback").items('remove').chain();//load this data in the feedback
+				//$(".feedbackForm").items('remove').chain();//load this data in the feedback 
+				
+				
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						dataType: mydataType,
+						cache: false,
+						success: function (data) {
+							
+							//$("#FeedbackDisplayWithForm").item(data).chain();//load this data in the feedback 							populate(data);
+							
+							//$(".feedbackForm").items(data.feedback).chain();//BUG - this doesn't always refresh  
+							//$(".feedback").items('replace',data.feedback).chain();//load this data in the feedback
+							
+							$(".feedbackForm").empty();
+							
+							 data.feedback.reverse();
+							// add the list of feedback
+							for(var i = 0; i < data.feedback.length; i++) {
+								item = data.feedback[i];	
+								//window.console.log(item.content);
+
+								$(".feedbackForm").append('<li>' +
+
+											'<div class="content">' + item.content + '</div>' +
+											'<span class="feedback-about">' + 
+						   
+												'<span class="date">' + item.date +' </span>' +
+												'<span class="time">' + item.time +' </span>' +
+												'<span class="type">' + item.type +' </span>' +
+                       						
+											'</span>'
+								+'</li>');
+							}
+				
+				
+							//$('.submit').html('Submit');
+							//window.console.log(data);
+						},
+					
+					error:function (xhr, ajaxOptions, thrownError){
+                    	//alert(xhr.status);
+                    	//alert(thrownError);
+						jQT.goTo('#Error');
+
+                	},
+				
+				
+					async: true 
+					}); 			
+
+		}; 
+		
+				
+		
+		function loadFeedbackForm() {
+		 
+		  //var element = (event.target.nodeName == "LI") ? event.target.parentNode : event.target;
+		  var element = event.target.parentNode;
+		  window.console.log( event.target.parentNode);
+		  window.console.log($(".performance",element).text());
+		//  var gCurrentPerformance = $(".performance",element).text();
+		  //var gCurrentPerformance = 46;
+
+
+		  //alert( gCurrentPerformance);
+		  getPerformanceData();
+
+				
+		}; 
+		
+		
+		
+		function loadFeedback() {
+		
+		  //var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
+		  var element = (event.target.nodeName == "SPAN") ? event.target.parentNode : event.target;
+		  var CurrentPerformance =   $(element).children("span.performance").text();
+		  gCurrentPerformance =  CurrentPerformance;  
+
+		  getPerformanceData();
+
+		}; 
+		
+	
+		
+        </script>
+        <style type="text/css" media="screen">
+            body.fullscreen #home .info {
+                display: none;
+            }
+ 
+        </style>
+    </head>
+    <body >
+ 
+         <div id="home" class="current">
+            <div class="toolbar">
+            	<img src="assets/jqtouch/themes/ausstage/img/logo.png" />
+            <h1>AusStage</h1>
+                <a class="button slideup" id="infoButton" href="#About"><span class="aboutButton">About</span></a>
+            </div>
+            
+            <div class="info round">
+                <p><span class="intro">Aus-e-Stage Researching Audiences Project</span></p>
+            </div>
+			<h3>      	
+                <p>Change your language</p>
+            </h3>
+            
+        
+        <ul class="performances rounded">
+        
+        	<li class="arrow"><a href="#FeedbackDisplayWithForm" onClick="changeLanguage('german');loadFeedbackForm(event)">
+			Deutsch
+          		<span class="performance">46</span></a>
+          	</li>
+            
+            <li class="arrow"><a href="#FeedbackDisplayWithForm" onClick="changeLanguage('english');loadFeedbackForm(event)">
+       		English
+          		<span class="performance">46</span></a>
+          	</li>
+      	
+           <li class="arrow"><a href="#FeedbackDisplayWithForm" onClick="changeLanguage('spanish');loadFeedbackForm(event)">
+				Español
+          	<span class="performance">46</span></a>
+          	</li>  
+                   
+          <li class="arrow"><a href="#FeedbackDisplayWithForm" onClick="changeLanguage('french');loadFeedbackForm(event)">
+			Français
+          		<span class="performance">46</span></a>
+          	</li>
+       
+           <li class="arrow"><a href="#FeedbackDisplayWithForm" onClick="changeLanguage('dutch');loadFeedbackForm(event)">
+			Nederlands
+          		<span class="performance">46</span></a>
+          	</li>
+                       
+    
+           <li class="arrow"><a href="#FeedbackDisplayWithForm" onClick="changeLanguage('portuguese');loadFeedbackForm(event)">
+				Português
+          		<span class="performance">46</span></a>
+          	</li>            
+        	     
+        
+
+        
+      </ul>
+        
+            <ul class="rounded">
+            
+          <!--  <li class="arrow"><a href="#Near" onClick="findLocation()">Performances near you</a> </li> -->
+			<li class="arrow"><a href="#About"><span class="aboutButton">About</span></a> </li>
+
+            </ul>
+            
+             <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Home']);</script>
+        </div>
+
+
+
+      
+          <div id="About">
+            <div class="toolbar">
+                <h1 class="About">About</h1>
+                <a class="back" href="#">Back</a>
+                 <a class="button" id="infoButton" href="#About"><span class="aboutButton">About</span></a>
+            </div>  
+            
+              <div id="about" class="selectable">
+           
+           	<span class="aboutText">
+           
+                    <h3>What is AusStage?</h3>
+                    <p>AusStage documents the performing arts in Australia. </p>
+                    <p>Future generations, researchers and contemporary audiences can log on to AusStage to search and retrieve information about:</p>
+                    <ol>
+                      <li>company and performer histories, and</li>
+                      <li>links to related resources.<br />
+                      </li>
+                    </ol>
+                    <p>For more information please go to: <a href="http://www.ausstage.edu.au">http://www.ausstage.edu.au</a>.</p>
+                    <h3>We Need Your Help</h3>
+                    <p>AusStage now provides audiences with the chance to contribute to this important cultural record by letting companies <strong>know what you thought of the production you are seeing right now</strong>. </p>
+                    <p>We welcome your feedback via our special mobile web site set up just for this purpose.  You can use your mobile phone or internet ready device to access this site at any time during or immediately after the performance. </p>
+                    <p><strong>Don't worry – AusStage does NOT record or store ANY IDENTIFYING INFORMATION about you.</strong></p>
+                    <p>In fact, it doesn't even record the phone number or IP address you've used to respond so there is no way that they, or the company whose show you're talking about, can tell who you are, let alone contact you.  Recording audience responses to performance is important for companies, researchers, performers and you.  It fleshes out our cultural history and will provide future generations with a richer and fuller understanding of what we did, saw, liked and didn't like. </p>
+                    <p>This project is being led by Flinders University alongside the companies and artists who you are seeing in this performance.  This work is part of a National eResearch Architecture Taskforce (NeAT) project, supported by the Australian National Data Service (ANDS) through the Education Investment Fund (EIF) Super Science Initiative, and the Australian Research Collaboration Service (ARCS) through the National Collaborative Research Infrastructure Strategy Program.  AusStage is also funded by the Australian Research Council through its Linkage Infrastructure, Equipment and Facilities scheme.</p>
+                    <p>If you do decide that you'd like to have your say about what you see in this performance standard costs for SMS and network access apply.  If you are under 18 years, you must ask for your parent/guardian's permission to participate in this study.  As mentioned your participation is voluntary, you will NOT be identified in any results and your response will be stored confidentially (however, please note that sending information via mobile devices is inherently insecure).</p>
+					<p>This research project has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892).  For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on human.researchethics@flinders.edu.au.  Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to <a href="mailto:jonathan.bollen@flinders.edu.au">jonathan.bollen@flinders.edu.au</a>.</p>
+
+                     <p><br /><br /><a href="#" class="grayButton goback"><span class="aboutButton">Back</span></a></p>
+                     
+                 </span>
+
+
+                </div>            
+                            
+                            
+             <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Search']);</script>
+        
+         </div> 
+        
+       
+     
+                           
+	 <div id="FeedbackDisplay">
+            <div class="toolbar">
+                <h1 class="event"></h1>
+                <a class="back" href="#">Back</a>
+               <a class="button slideup" id="infoButton" href="#About"><span class="aboutButton">About</span></a>
+
+            </div>             
+            
+             <div class="info">
+                <div class="event">event</div>
+                <div class="organisation">organisation</div>
+                <div class="venue">venue</div>
+                <div class="date">date</div>
+            </div>
+            
+           <span class="performance"></span>
+           <h3 class="question"></h3>
+			
+            <ul class="feedback">
+                    <li>
+                        <span class="content"></span>
+                        <span class="date"></span>
+                        <span class="time"></span>
+                        <span class="type"></span>
+
+                    /li>
+            </ul>
+         	
+         
+         </div>  
+         
+            
+            
+         <div id="FeedbackDisplayWithForm">
+            <div class="toolbar">
+            
+
+                <h1></h1>
+                <a class="button" id="refreshButton"  href="#FeedbackDisplayWithForm"  onClick="getPerformanceData()">
+                            	<img src="assets/jqtouch/themes/ausstage/img/refresh.png" />
+                </a>
+                <a class="back" href="#">Back</a>
+               <a class="button slideup" id="infoButton" href="#About"><span class="aboutButton">About</span></a>
+
+            </div>             
+            
+             <div class="info round">
+             <div class="event"></div>
+            <div class="organisation">Loading</div>
+            <!--<span class="venue"></span>-->
+            <!--<span class="date"></span>>--> 
+            </div>
+            
+           <span class="performance"></span>
+
+             
+         <form id="submit-feedback" action="" method="GET" class="form">
+        		<h3 class="question">Question</h3>
+				<ul class="rounded" >
+            		<li class="form"><textarea placeholder="" name="message"></textarea></li>
+               </ul>
+
+ 			<a  href="#" onClick="submitForm()" class="greenButton submit"><span class="submitLabel">Submit</span></a>
+         </form>
+        	
+            
+     
+            <ul class="feedbackForm edgetoedge">
+                    <li>
+                    
+                        <div class="content">Loading .... </div>
+                        <span class="feedback-about">
+                            <span class="date"></span>
+                            <span class="time"></span>
+                            . Via <span class="type"></span>
+                        </span>
+                    
+                    </li>
+            </ul>
+                  
+         </div>  
+         
+         
+           <div id="Error">
+            <div class="toolbar">
+                <h1>Error</h1>
+               <a class="button slideup" id="infoButton" href="#About">About</a>
+
+            </div>             
+            
+             <div class="info">
+            
+            	Something has gone wrong, that performance has cann't be found. Try going back the home page. 
+                 
+ 			<a style="margin:0 10px;color:rgba(0,0,0,.9)" href="#home"  class="whiteButton">Home</a>
+                
+                
+            </div>
+                  <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Error']);</script>
+
+                  
+         </div>  
+         
+         
+            
+      <script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(['_setAccount', 'UA-3158456-14']);
+			  _gaq.push(['_trackPageview']);
+			
+			  (function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+			
+			</script>
+
+
+    </body>
+</html>
