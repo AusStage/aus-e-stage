@@ -69,7 +69,8 @@
 				}
 			} else {
 			// trigger the loading of the current peformnaces   
-				getCurrentPerformances ();
+				//getCurrentPerformances ();
+				getPerformances (0,0,'.currentPerformancesBlock')
 			}
 			 
 			
@@ -101,32 +102,36 @@
 			return dataString; 
 		}
 
-		/**
-		* Looks at the date and gets peformances based on dates, loads this include the current peformances and recent performaces. It actuall does API call twic. 
+
+		/** 
+		* Looks at the date and gets peformances based on dates the current, loads this include the current peformances and recent performaces. It actuall does API call twic. 
 		* The api call it's makeing looks like  http://beta.ausstage.edu.au/mobile/lookup?task=date&startdate=2010-01-01&enddate=2011-05-05
 		* More details about that dpi are are at http://code.google.com/p/aus-e-stage/wiki/MobileServiceAPILookup#Date_Lookup_Data_Fields
+		* @param  start  How many days in the past to look back    
+		* @param  end    How many days formward to look  
+		* @param  target  What part of the DOM are targetting to display the results    
+
 		*/
 						   
-		function getCurrentPerformances (){
+		function getPerformances (start,end,target){
 		   
 		   	   //figure out which server this running on what the data type should be  
 			   host = buildHost();
 			   var mydataType = getDataType(); 
 			   
-			   //set up the data range
-			   //This is hard coded to look on day in past and 5 days forwrd 
-			   					
-			  var startdate = new Date('Dec 11 2010');
+			   //set up the date 
+			  //DEC test var startdate = new Date('Dec 11 2010');
+			  var startdate = new Date('');
 			  //var startdate = new Date();
 
-			   startdate.setDate( startdate.getDate());
+			   startdate.setDate( startdate.getDate() + start );
 			   //window.console.log(startdate.toDateString());
 			
 			   //Now formatted the into yyyy-mm-dd
 			    startdateString = reFormatDatetoYYYYMMDD(startdate); 
 				
-			   var  enddate = new Date();
-			   enddate.setDate( startdate.getDate() + 5);
+			   var  enddate = startdate;
+			   enddate.setDate( startdate.getDate() + end);
 			   
    				//Now formatted the into yyyy-mm-dd
 			    enddateString = reFormatDatetoYYYYMMDD(enddate); 
@@ -143,7 +148,8 @@
 				 var values = jQuery.param(params);//encode thos
 				
 				var source =  host + '/mobile/lookup?' +  values;
-
+				
+				window.console.log(source);
 								
 				$.ajax({
 						type:   'GET',
@@ -151,7 +157,7 @@
 						dataType:  mydataType,
 						cache: false,
 						success: function (data) {
-									window.console.log(data);
+						window.console.log(data);
 						//see if we have some data only the display the current performances and load them  
 						if (data.length !=  0) {
 							//Sort by the startDateTime
@@ -159,19 +165,19 @@
 							data.reverse(); 
 							
 							//Take the loaiding class off and the display the block inside of that 	
-							$(".currentPerformancesBlock").removeClass("loading");
-							$(".currentPerformancesBlock").css("display","block");
+							$(target).removeClass("loading");
+							$(target).css("display","block");
 							
 								//Got the date and now load that into the current performances.  
 								//Clear what is there current 
-								//$(".performances").empty();
+								$(target + ".Performances").empty();
 		
 									// add the list of feedback
 									for(var i = 0; i < data.length; i++) {
 										//window.console.log(data);
 										item = data[i];
-									
-										$(".currentPerformances").append('<li class="arrow">' +
+										//$(target + ".Performances").append('<li class="arrow">' +
+										$(target + ".Performances").append('<li class="arrow">' +
 												'<a href="#FeedbackDisplayWithForm" ' + 
 												 ' onClick="loadFeedbackForm(event)" ><div class="event">' +
 													item.event + '</div>' + 
@@ -185,7 +191,16 @@
 									
 							} else {
 								//Nothing found so we turn off the display
-								$(".currentPerformancesBlock").css("display","none");
+								//$(target).css("display","none");
+								$(target).removeClass("loading");
+								$(target + ".Performances").empty();
+
+								$(target + ".Performances").append('<li class="arrow">' +
+												'<a href="#home" ' + 
+												 '  ><div class="event"> No Performances Found' +
+													'</div></a></li>');
+											
+											
 								
 							}
 																	
@@ -200,100 +215,10 @@
                 	},
 					async: true 
 					}); 
-					
-					
-				//  ------------- API call for the recent 
-				// reset the data
-				var startdate = new Date('Dec 11 2010');
-				//var startdate = new Date();
-			    startdate.setDate( startdate.getDate() -2);
-			   //window.console.log(startdate.toDateString());
-			
-			   //Now formatted the into yyyy-mm-dd
-			    startdateString = reFormatDatetoYYYYMMDD(startdate); 
-				
-			   //var  enddate = new Date();
-			   //var  enddate = new Date();
-			 
-			   enddate = new Date('Dec 11 2010'); // look for the peformances that have already happen. 
-			   enddate.setDate( enddate.getDate() -1);
-			   
-   				//Now formatted the into yyyy-mm-dd
-			    enddateString = reFormatDatetoYYYYMMDD(enddate); 
-				
-			 // build the query string			    
-			   var params = {
-					 
-					 task:'date',
-					 startdate: startdateString,
-					 enddate:   enddateString,
-
-				 };
-				 var values = jQuery.param(params);//encode thos
-				
-				var source =  host + '/mobile/lookup?' +  values;
-						window.console.log(source);
-				$.ajax({
-						type:   'GET',
-						url: source, 
-						dataType:  mydataType,
-						cache: false,
-						success: function (data) {
-						
-						window.console.log('Recent Performances');
-
-						window.console.log(data);
-						//see if we have some data only the display the current performances and load them  
-						if (data.length !=  0) {
-							//Sort by the startDateTime
-							
-							
-							//Take the loaiding class off and the display the block inside of that 	
-							$(".recentPerformancesBlock").removeClass("loading");
-							$(".recentPerformancesBlock").css("display","block");
-							
-								//Got the date and now load that into the current performances.  
-								//Clear what is there current 
-								//$(".performances").empty();
-		
-									// add the list of feedback
-									for(var i = 0; i < data.length; i++) {
-										//window.console.log(data);
-										item = data[i];
-									
-										$(".recentPerformances").append('<li class="arrow">' +
-												'<a href="#FeedbackDisplayWithForm" ' + 
-												 ' onClick="loadFeedbackForm(event)" ><div class="event">' +
-													item.event + '</div>' + 
-												'<span class="startDateTime">' + item.startDateTime + '</span><br / >' +			
-												'<span class="organisation"> ' + item.organisation  + ', </span>' +
-												'<span class="venue">' + item.venue +' </span>' +
-												'<span class="performance">' +
-													item.id +
-											'</span></a></li>');
-									}
-									
-							} else {
-								//Nothing found so we turn off the display
-								$(".recentPerformancesBlock").css("display","none");
-								
-							}
-																	
-						},
-					//Some thing has gone wrong, show the user an error screen.  
-					error:function (xhr, ajaxOptions, thrownError){
-						
-                    	//alert(xhr.status);
-                    	//alert(thrownError);
-						jQT.goTo('#Error');
-
-                	},
-					async: true 
-					}); 
-					
-					
 					
 		}
+		
+		
 		
 		
 
@@ -301,7 +226,9 @@
 		/*
 		* Get the URL var and takes the user to the current form for that performance.    
 		* 
-		*/ 			function getUrlVars()
+		*/ 			
+		
+		function getUrlVars()
 				{
 					var pairs;
 					var pairs = window.location.href.slice(window.location.href.indexOf('?') + 1);
@@ -750,8 +677,6 @@
 		
 		
 
-	
-		
         </script>
         <style type="text/css" media="screen">
             body.fullscreen #home .info {
@@ -777,8 +702,8 @@
             <ul class="rounded">
             
             <li class="arrow"><a href="#Near" onClick="findLocation()">Performances near you</a> </li> 
-            <li class="arrow"><a href="#Recent">Recent Performances</a></li> 
-
+            <li class="arrow"><a href="#Recent" onClick="getPerformances(0,-5,'.recentPerformancesBlock')">Recent Performances</a></li> 
+            <li class="arrow"><a href="#Upcoming" onClick="getPerformances(0,7,'.upcomingPerformancesBlock')"> Upcoming Performances</a></li> 
 			<li class="arrow"><a href="#About">About</a> </li>
 
             </ul>
@@ -786,7 +711,7 @@
             	<span class="currentPerformancesBlock loading"></span>
             	<!--<span class="currentPerformancesBlock loading">-->
                     <h3  class="currentPerformancesBlock">Current Performances</h3>
-                     <ul class="currentPerformances rounded currentPerformancesBlock">
+                     <ul class="Performances rounded currentPerformancesBlock performances">
                         
              	    </ul>
       
@@ -794,16 +719,34 @@
       
              <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Home']);</script>
         </div>
-        
+   
+   
+    <div id="Upcoming">
+            <div class="toolbar">
+                <h1>Upcoming</h1>
+                <a class="back" href="#">Back</a>
+                <a class="button slideup" id="infoButton" href="#About">About</a>
+            </div> 
+         
+  		      	<span class="upcomingPerformancesBlock loading"></span>
+                    <ul class="Performances rounded upcomingPerformancesBlock  performances ">
+             	    </ul>
+                    
+                                 
+      
+    </div>
+
+
+     
  <div id="Recent">
             <div class="toolbar">
-                <h1>Recent Performance</h1>
+                <h1>Recent</h1>
                 <a class="back" href="#">Back</a>
                 <a class="button slideup" id="infoButton" href="#About">About</a>
             </div> 
          
   		      	<span class="recentPerformancesBlock loading"></span>
-                    <ul class="recentPerformances rounded performances recentPerformancesBlock">
+                    <ul class="Performances rounded recentPerformancesBlock performances">
              	    </ul>
                     
                                  
