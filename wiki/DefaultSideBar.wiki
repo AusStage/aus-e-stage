@@ -33,6 +33,7 @@
        * [MobileServiceUseCases Use Cases]
        * [MobileServiceDisplayUserStories User Stories - Desktop]
        * [MobileServiceInterfaceDevelopmentStages Interface Development Stages]  
+       * [MobileServiceFeedbackMatching Feedback Matching Strategy]
      * [MobileServiceDatabaseTables Database Tables]
      * [MobileServiceAPI Mobile Service API]
        * [MobileServiceAPIGatherer Input Gatherer]
