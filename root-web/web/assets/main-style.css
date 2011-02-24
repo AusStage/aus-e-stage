@@ -172,3 +172,21 @@ a:hover {
 	margin: 1em 0;
 }
 
+/* table styles */
+tr.odd {
+	background-color: #eeeeee;
+}
+
+td.numeric {
+	white-space: nowrap;
+	text-align: right;
+	width: 120px;
+}
+
+th.numeric {
+	width: 120px;
+	white-space: nowrap;
+	text-align: right;
+	width: 120px;
+}
+

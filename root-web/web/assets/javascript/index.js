@@ -72,6 +72,12 @@ function getAnalyticsReports() {
 	});
 	
 	// ausstage database placeholder
+	url = BASE_ANALYTICS_URL + 'ausstage-record-count';
+	
+	ajaxQueue.add({
+		success: addAnalytics,
+		url: url
+	});
 	
 	url = BASE_ANALYTICS_URL + 'exchange-analytics.xml';
 	
@@ -93,7 +99,7 @@ function addAnalytics(data, textStatus, xhr, options) {
 		$('#analytics-3').empty().append(data);
 	} else if(options.url.indexOf('ausstage-website.xml') != -1) {
 		$('#analytics-4').empty().append(data);
-	} else if(options.url.indexOf('record-count.xml') != -1) {
+	} else if(options.url.indexOf('ausstage-record-count') != -1) {
 		$('#analytics-5').empty().append(data);
 	} else {
 		$('#analytics-6').empty().append(data);

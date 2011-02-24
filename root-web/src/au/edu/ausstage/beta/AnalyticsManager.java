@@ -18,13 +18,17 @@
 package au.edu.ausstage.beta;
 
 // import the ausstage utilities
-import au.edu.ausstage.utils.InputUtils;
+import au.edu.ausstage.utils.DateUtils;
+import au.edu.ausstage.utils.DbManager;
+import au.edu.ausstage.utils.DbObjects;
 import au.edu.ausstage.utils.FileUtils;
+import au.edu.ausstage.utils.InputUtils;
 
 // import additional java libraries
 import java.io.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
+import java.util.ArrayList;
  
  
 /**
@@ -33,6 +37,11 @@ import javax.xml.transform.stream.*;
  * @author corey.wallis@flinders.edu.au
  */
 public class AnalyticsManager {
+
+	/**
+	 * AusStage tables used to provide record count analytics
+	 */
+	public static final String[] AUSSTAGE_TABLES = {"events", "venue", "contributor", "organisation", "item", "work"};
 	
 	/**
 	 * A method to take convert the XML representation of the report into HTML using XSL
@@ -108,5 +117,85 @@ public class AnalyticsManager {
 		htmlOutput = htmlOutput.replace("&gt;", ">");
 		
 		return htmlOutput;
+	}
+	
+	/**
+	 * A method to generate the record count analytics
+	 *
+	 * @param database an open connection to the database
+	 *
+	 * @return         the HTML that can be added to the page
+	 */
+	public static String getRecordCountAnalytics(DbManager database) {
+	
+		// check on the parameters
+		if(database == null) {
+			throw new IllegalArgumentException("the database parameter cannot be null");
+		}
+		
+		String count = null;
+		String name  = null;
+		
+		// start the html output
+		StringBuilder htmlOutput = new StringBuilder();
+		htmlOutput.append("<div class=\"report\" id=\"\">");
+		htmlOutput.append("<h1>AusStage Database Record Counts</h1>");
+		htmlOutput.append("<div id=\"generated\"><p>" + DateUtils.getCurrentDateAndTime() + "</p><div>");
+		
+		// add the description
+		htmlOutput.append("<div class=\"report_section\" id=\"description\"><h2>About These Analytics</h2>");
+		htmlOutput.append("<div class=\"report_section_content\"><p>These analytics show the number of records in a number of strategic table within the AusStage database at the time displayed above</p></div></div>");
+		
+		// start the output table
+		htmlOutput.append("<div class=\"report_section\" id=\"record-count-table\"><h2>Number of Records in these Tables</h2>");
+		htmlOutput.append("<table><thead><tr><th>Table Name</th><th class=\"numeric\">Record Count</th></tr></thead><tbody>");
+		
+		for(int i = 0; i < AUSSTAGE_TABLES.length; i++) {
+		
+			count = getRecordCount(database, AUSSTAGE_TABLES[i]);
+			
+			name = AUSSTAGE_TABLES[i];
+			name = name.substring(0,1).toUpperCase() + name.substring(1);
+			
+			if(i % 2 == 1) {
+				htmlOutput.append("<tr class=\"odd\">");
+			} else {
+				htmlOutput.append("<tr>");
+			}
+			
+			htmlOutput.append("<td>" + name + "</td><td class=\"numeric\">" + count.format("%,d", new Integer(count))+ "</td></tr>");			
+		}
+		
+		
+		// finish the table
+		htmlOutput.append("</tbody></table>");
+		
+		return htmlOutput.toString();
+	
+	}
+	
+	// private method to get the record count
+	private static String getRecordCount(DbManager database, String table) {
+	
+		// declare sql variables
+		String sql = "select count(*) from " + table;
+		
+		// get the count
+		DbObjects results = database.executeStatement(sql);
+		
+		// check to see that data was returned
+		if(results == null) {
+			return null;
+		}
+		
+		// get the count
+		String count = results.getColumn(1).get(0);
+		
+		// play nice and tidy up
+		results.tidyUp();
+		results = null;	
+		
+		// return the count
+		return count;	
 	}
 }

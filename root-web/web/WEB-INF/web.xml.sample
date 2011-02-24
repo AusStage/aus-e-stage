@@ -36,6 +36,10 @@
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
+        <param-name>databaseConnectionString</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
         <param-name>systemName</param-name>
         <param-value>Aus-e-Stage System Development</param-value>
     </context-param>    

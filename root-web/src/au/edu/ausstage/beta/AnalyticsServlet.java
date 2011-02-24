@@ -25,6 +25,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 // import the ausstage utilities
+import au.edu.ausstage.utils.DbManager;
 import au.edu.ausstage.utils.InputUtils;
 
 /**
@@ -67,13 +68,32 @@ public class AnalyticsServlet extends HttpServlet {
 	
 		// get what type of data is incoming
 		String reportFile = request.getParameter("report-file");
+		String data       = null;
 		
 		// check the parameter
 		if(InputUtils.isValid(reportFile) == false) {
 			throw new ServletException("Missing report-file parameter");
 		}
 		
-		String data = AnalyticsManager.processXMLReport(reportDirectory, XSL_FILE_NAME, reportFile);
+		if(reportFile.equals("ausstage-record-count") == true) {
+		
+			// instantiate a connection to the database
+			DbManager database;
+		
+			try {
+				database = new DbManager(servletConfig.getServletContext().getInitParameter("databaseConnectionString"));
+			} catch (IllegalArgumentException ex) {
+				throw new ServletException("Unable to read the connection string parameter from the web.xml file");
+			}
+		
+			if(database.connect() == false) {
+				throw new ServletException("Unable to connect to the database");
+			}
+		
+			data = AnalyticsManager.getRecordCountAnalytics(database);
+		} else {
+			data = AnalyticsManager.processXMLReport(reportDirectory, XSL_FILE_NAME, reportFile);
+		}
 		
 		if(data == null) {
 			throw new ServletException("An unexpected error has occured during the XML processing");
