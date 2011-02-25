@@ -1,12 +1,12 @@
 /*
- * This file is part of the AusStage Mapping Service
+ * This file is part of the Aus-e-Stage Beta Website
  *
- * The AusStage Mapping Service is free software: you can redistribute
+ * The Aus-e-Stage Beta Website is free software: you can redistribute
  * it and/or modify it under the terms of the GNU General Public License 
  * as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
- * The AusStage Mapping Service is distributed in the hope that it will 
+ * The Aus-e-Stage Beta Website is distributed in the hope that it will 
  * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -14,266 +14,228 @@
  * You should have received a copy of the GNU General Public License
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
+/* primary structure styles */
+
+* {
+	margin: 0;
+}
+
 html, body {
-	margin:0;
-	padding:0;
-	color:#333333;
-	background: #fff;
-	font-family:Helvetica, Arial, sans-serif;
+	height: 100%;
+	font-size: 95%;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
 }
 
-a {
-	color: #4433cc;
-	text-decoration: none;
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -2em;
+	overflow: hidden;
 }
 
-a:hover {
-	text-decoration: underline;
+.footer {
+	clear: both;
+	height: 2em;
 }
 
-#wrap {
-	width:1200px;
-	margin:0 auto;
-	background:#aaaaaa;
+.push {
+	clear:both;
+	height: 1px;
 }
-#header {
+
+.tab-container {
+	width: 100%;
+	height: 100%;
+}
+
+#tabs {
+	height: 100%;
+	width:  100%;
+}
+
+/* specific styles for the header */
+.header {
 	height: 64px;
 	padding:0px;
-	background: #333333;
 	background-image: url('images/ausstagehomebrand.gif');
 	background-repeat: no-repeat;
 	background-position: top left;
 }
-#header h1 {
+
+.header h1 {
 	color: #eeeeee;
 	text-align: right;
-	font-size: 110%;
 	font-weight: normal;
 	padding-top: 24px;
 	padding-right: 10px;
 }
 
-h1 {
-    margin:0;
+/* ui tabs styles to fix layout issue */
+.fix-ui-tabs {
+	height: 40px;
 }
 
-#nav {
-	padding:5px 10px;
-	background:#333333;
-	font-size: 90%;
-
-}
-#nav ul {
-	margin:0;
-	padding:0;
-	list-style:none;
-}
-#nav li {
-	display:inline;
-	margin:0;
-	padding:0;
-	font-size: 90%;
-}
-
-#nav a {
-	color: #fff;
-}
-
-#main {
-	float:right;
-	width:986px;
-	padding:10px;
-	background:#ffffff;
-	font-size: 90%;
-	font-family:Helvetica,Arial;
-    color:#333333;
-}
-h2 {
-	margin:0 0 1em;
-	font-size: 110%;
-	
-}
-
-h3 {
-	margin:0 0 1em;
-	font-size: 110%;
-	
-}
-
-blockquote
-	{background-color:#eeeeee;
-}
-
-#sidebar {
-	float:left;
-	width:174px;
-	padding-right:10px;
-	padding-left: 10px;
-	background-color: #aaaaaa;
-}
-
-#sidebar ul {
-	margin:0;
-	padding:0;
-	list-style:none;
-}
-
-#sidebar ul a {
-	color: #fff;
-	font-size: 90%;
-	text-decoration: none;
-}
-
-#sidebar a:hover {
-	text-decoration: underline;
-}
-
-#sidebar h3 {
-	color: #fff;
-	font-size: 90%;
-	margin-bottom: 0px;
-	padding-bottom: 0px;
-}
-
-#footer {
-	clear:both;
-	padding:5px 10px;
-	background:#aaaaaa;
+/* specific styles for the footer */
+.footer  {
 	color:#fff;
+	font-size: 90%;
+	margin-top: 10px;
+	padding-top: 3px;
 }
-#footer p {
-	margin:0;
-	font-size: 75%;
+
+.footer p {
+	margin: 0;
     text-align: center;
 }
 
-#footer a {
+.footer a {
 	color: #fff;
 	text-decoration: none;
 }
 
-#footer a:hover {
+.footer a:visited {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.footer a:hover {
 	text-decoration: underline;
 }
 
-* html #footer {
-	height:1px;
-	font-size: 90%;
+/* specific styles for the sidebar */
+.sidebar {
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px
+	overflow: hidden;
+	width: 265px;
+	padding-bottom: 32767px;
+	margin-bottom: -32767px;
 }
 
-/* Styles for forms */
-table.formTable {
-	border-width: 0px;
-	border-spacing: 3px;
-	border-collapse: separate;
+.sidebar ul {
+	margin:0;
+	padding:0;
+	list-style:none;
 }
 
-table.formTable th {
-	text-align: left;
-
+.sidebar li {
+	margin-bottom:0.25em;
 }
 
-table.formTable th label {
-	text-align: left;
-
-}	
-
-/* Styles for Validation Errors */
-label.error { 
-	float: none; 
-	color: red; 
-	padding-left: .5em; 
-	vertical-align: top; 
-} 
-
-/* Styles for tables */
-table.searchResults {
-	background-color: #fff;
-	text-align: left;
-	border: 1px solid #aaaaaa;
-	border-collapse: collapse;
-	width: 100%;
+.sidebar a {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
 }
 
-table.searchResults th {
-	border: 1px solid #aaaaaa;
-	padding: 2px;
-	text-align: left;
-	color: #000;
+.sidebar a:visited {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
 }
 
-table.searchResults td {
-	padding: 2px;
+.sidebar a:hover {
+	color: #ffffff;
+	text-decoration: underline;
 }
 
+/* style anchor tags */
+a {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+a:visited {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+a:hover {
+	/* same colour as f-189 */
+	text-decoration: underline;
+	color: #001bcc;
+}
+
+/* specific styles for the main content div */
+.main {
+	margin-left: 275px;
+	min-height: 100%;
+}
+
+.main p {
+	margin: 1em 0;
+}
+
+/* table styles */
 tr.odd {
 	background-color: #eeeeee;
 }
 
-table.searchResults tfoot {
-	border: 1px solid #aaaaaa;
-	font-size: 90%;
+td.numeric {
+	white-space: nowrap;
+	text-align: right;
+	width: 120px;
 }
 
-/* Dialog styles */
-.ui-dialog-content a {
-	color: blue!important;
-}
-
-.ui-dialog-content a:visited {
-	color: purple!important;
-}
-
-/* Styles for the feedback table */
-#feedback_messages {
-	border-collapse: collapse;
-	width: 100%;
+th.numeric {
+	width: 120px;
+	white-space: nowrap;
+	text-align: right;
+	width: 120px;
 }
 
 
-#feedback_messages td {
-	padding-top: 5px;
+/* Styles of the screen grab on the home page.  */
+
+ul.services {
+	
+	display:inline;
+	
 }
 
 
-td.feedback_messages_left {
-	border-left: 2px solid #aaaaaa;
-	border-bottom: 2px solid #aaaaaa;
-	border-top: 2px solid #aaaaaa;
-	padding-right: 15px;
+ul.services img {
+	padding-top:9px;	
+} 
+
+
+ul.services a img , ul.services a p {
+	text-decoration:none;
+	color:#333;	
+} 
+
+
+ul.services a:hover img , ul.services a:hover p {
+	text-decoration:none;
+	color:#333;	
+} 
+
+
+
+ul.services li {
+	float: left;
+	list-style:none;
+	width:210px;
+	border: 1px dotted #666;
+	padding:10px;	
+	margin:10px;
+	
+	min-height:300px;
+	
 }
 
-td.feedback_messages_right {
-	border-right: 2px solid #aaaaaa;
-	border-bottom: 2px solid #aaaaaa;
-	border-top: 2px solid #aaaaaa;
-	padding-left: 15px;
+.clear {
+	
+	clear:both;
+	
 }
 
-td.feedback_messages_middle {
-	border-bottom: 2px solid #aaaaaa;
-	border-top: 2px solid #aaaaaa;
-}
 
-td.feedback_messages_new {
-	background: #ffeb80 url(jquery-ui/images/ui-bg_inset-hard_55_ffeb80_1x100.png) 50% bottom repeat-x;
-}
-
-#table_anchor {
-	display: none;
-}
-
-/* Styles for the Tipsy Library */
-.tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }
-.tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
-.tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
-.tipsy-arrow { position: absolute; background: url('images/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
-.tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
-.tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
-.tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
-.tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
-.tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
-.tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
-.tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
-.tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+	
+	

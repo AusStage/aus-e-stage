@@ -1,0 +1,95 @@
+/*
+ * This file is part of the Aus-e-Stage Beta Website
+ *
+ * The Aus-e-Stage Beta Website is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The Aus-e-Stage Beta Website is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+/* Tables
+-------------------------------------------------------------- */
+
+/* 
+	Because of the need for padding on TH and TD, the vertical rhythm 
+	on table cells has to be 27px, instead of the standard 18px or 36px 
+	of other elements. 
+ */ 
+table       { margin-bottom: 1.4em; width:100%; }
+
+th          { font-weight: bold; }
+
+thead th    { background:#999;
+			text-align:left;
+
+}
+
+th,td,caption { padding: 4px 10px 4px 5px; }
+
+tr {
+	
+	background:#FFF;
+	background-color:#F5F5F5
+	
+}
+
+td {
+	border-bottom: 1px solid #333;	
+}
+/*
+	You can zebra-stripe your tables in outdated browsers by adding 
+	the class "even" to every other table row. 
+ */
+tbody tr:nth-child(even) td, 
+tbody tr.even td  { 
+
+}
+tfoot       { font-style: italic; }
+caption     { background: #eee; }
+
+#feedback_messages {
+	width:90%;
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;
+
+}
+ 
+#feedback_messages  .feedback {
+	font-size:1.1em;
+	padding:10px;
+
+}
+
+#feedback_messages  .datetime {
+		font-size:.95em;
+		font-weight:normal;
+}
+	
+
+
+
+
+.info  {
+	padding-top:3px;
+	font-size:1.1em;	
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;
+}
+
+.info .question {
+	font-size:1.1em;
+	font-weight:bold;
+}
+	
