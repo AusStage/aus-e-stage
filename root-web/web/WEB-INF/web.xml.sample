@@ -24,15 +24,23 @@
     <description>
         The root web app for the Aus-e-Stage Beta Website
     </description>
-    <!-- Servlets -->
+     <!-- Servlets -->
     <servlet>
         <servlet-name>AnalyticsServlet</servlet-name>
         <servlet-class>au.edu.ausstage.beta.AnalyticsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TransformServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.beta.TransformServlet</servlet-class>
     </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>AnalyticsServlet</servlet-name>
         <url-pattern>/analytics/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransformServlet</servlet-name>
+        <url-pattern>/transform/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>

@@ -30,6 +30,12 @@ $(document).ready(function() {
 	// setup the analytics tabs
 	$('#analytics-tabs').tabs();
 	
+	// setup the extras tabs
+	$('#extras-tabs').tabs();
+	
+	// setup the CSS form
+	setupCssForm();
+	
 	// bring in the analytics reports via ajax
 	getAnalyticsReports();
 });
@@ -104,4 +110,43 @@ function addAnalytics(data, textStatus, xhr, options) {
 	} else {
 		$('#analytics-6').empty().append(data);
 	}
+}
+
+// function to setup the CSS transform form
+function setupCssForm() {
+
+	// bind the form plugin to the form
+	$('#css-input-form').ajaxForm({
+		beforeSubmit: validateCssForm,
+		success:      showCssResponse,
+		dataType:     'json',
+		type:         'post',
+		url:          'transform?type=css'									
+	});
+								  
+	// add an error handler for this form
+	$('#css-input-form').ajaxError(function(e, xhr, settings, exception) {
+		if (settings.url == 'transform?type=css') {
+			alert('An error occurred during your request\nIf the problem continues please contact the AusStage project manager');
+		}
+	});
+}
+
+// function to validate the form
+function validateCssForm(formData, jqForm, options) {
+
+	if(formData[0].value == "") {
+		alert('Please enter CSS to transform'); 
+		return false; 
+	}
+}
+
+// function to show the result of the CSS transform
+function showCssResponse(data) {
+
+	// reset the form fields
+	$('#css-foreground').val(data.foreground);
+	$('#css-background').val(data.background);
+	$('#kml-colours').val(data.kml);
+
 }

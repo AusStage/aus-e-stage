@@ -190,33 +190,41 @@ th.numeric {
 	width: 120px;
 }
 
+/* Styles for forms */
+table.formTable {
+	border-width: 0px;
+	border-spacing: 3px;
+	border-collapse: separate;
+}
+
+table.formTable th {
+	text-align: left;
+}
+
+table.formTable th label {
+	text-align: left;
+}
+
 
 /* Styles of the screen grab on the home page.  */
 
 ul.services {
-	
 	display:inline;
-	
 }
-
 
 ul.services img {
 	padding-top:9px;	
 } 
-
 
 ul.services a img , ul.services a p {
 	text-decoration:none;
 	color:#333;	
 } 
 
-
 ul.services a:hover img , ul.services a:hover p {
 	text-decoration:none;
 	color:#333;	
 } 
-
-
 
 ul.services li {
 	float: left;
@@ -224,18 +232,10 @@ ul.services li {
 	width:210px;
 	border: 1px dotted #666;
 	padding:10px;	
-	margin:10px;
-	
+	margin:10px;	
 	min-height:300px;
-	
 }
 
 .clear {
-	
 	clear:both;
-	
 }
-
-
-	
-	
