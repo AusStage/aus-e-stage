@@ -190,7 +190,7 @@
 							<ul>
 								<li>The CSS rules for <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colours.css" title="Download the CSS">foreground colours</a></li>
 								<li>The CSS rules for <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css" title="Download the CSS">background colours</a></li>
-								<li>The colours transformed into the syntax used in KML files</li>
+								<li>The colours transformed into the syntax used in <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/kml-colours.xml" title="Download the XML file">KML files</a></li>
 							</ul>
 							<h2 style="padding-top: 5px;">Transform the CSS</h2>
 							<p>
