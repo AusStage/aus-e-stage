@@ -1,30 +1,25 @@
 /*
- * This file is part of the Aus-e-Stage Beta Root Website
+ * This file is part of the Aus-e-Stage Beta Website
  *
- * The Aus-e-Stage Beta Root Website is free software: you can redistribute
+ * The Aus-e-Stage Beta Website is free software: you can redistribute
  * it and/or modify it under the terms of the GNU General Public License 
  * as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
- * The Aus-e-Stage Beta Root Website is distributed in the hope that it will 
+ * The Aus-e-Stage Beta Website is distributed in the hope that it will 
  * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the Aus-e-Stage Beta Root Website.  
+ * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/*
- * When this bookmarkmlet is used it links for records in AusStage directly to the mapping service
- *
- * currently only organisation records are supported
  */
- 
-// declare helper functions
-// adapted from http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
-// get all of the parameters in the URL as a hash
+/**
+ * @author corey.wallis@flinders.edu.au
+ */
+
+// this function adapted from http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
 function getUrlVars(){
 	var vars = [], hash;
 	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -37,19 +32,25 @@ function getUrlVars(){
 	return vars;
 }
 
-// get the specified param
 function getUrlVar(param){
 	return getUrlVars()[param];
 }
 
-// get the parameter that is the organisation id
-var orgId = getUrlVar('f_org_id');
-
-// check to make sure the id was found
-if(orgId != null) {
-	// yes it was, so use it
-	window.location.href = 'http://beta.ausstage.edu.au/mapping/maplinks.jsp?type=org&id=' + orgId + '&source=bookmarklet';
-} else {
-	// no it wasn't so show error
-	alert('This bookmarklet works only with organisation records in AusStage.\nIf this problem persists please contact us with the URL of this page');
+if(getUrlVar('f_org_id') != null) {
+	window.location.href =  'http://beta.ausstage.edu.au/mapping2/?simple-map=true&type=organisation&id=' + getUrlVar('f_org_id') + '&source=bookmarklet';
 }
+
+if(getUrlVar('f_contrib_id') != null) {
+	window.location.href =  'http://beta.ausstage.edu.au/mapping2/?simple-map=true&type=contributor&id=' + getUrlVar('f_contrib_id') + '&source=bookmarklet';
+}
+
+if(getUrlVar('f_venue_id') != null) {
+	window.location.href =  'http://beta.ausstage.edu.au/mapping2/?simple-map=true&type=venue&id=' + getUrlVar('f_venue_id') + '&source=bookmarklet';
+}
+
+if(getUrlVar('f_event_id') != null) {
+	window.location.href =  'http://beta.ausstage.edu.au/mapping2/?simple-map=true&type=event&id=' + getUrlVar('f_event_id') + '&source=bookmarklet';
+}
+
+// if we get this far something bad happened
+alert('Unable to locate the record identifier.\nThis bookmarklet only works with the AusStage Index Drill Down page');

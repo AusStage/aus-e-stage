@@ -50,10 +50,10 @@
 			<h2>Main Menu</h2>
 			<ul>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
-				<li><a href="/mapping/" title="AusStage Mapping Service (Alpha)">Mapping Service (Alpha)</a></li>
-				<li><a href="/mapping2/" title="AusStage Mapping Service (Beta)">Mapping Service (Beta)</a></li>
-				<li><a href="/networks/" title="AusStage Navigating Networks Service (Beta)">Navigating Networks</a></li>
-				<li><a href="/mobile/" title="AusStage Researching Audiences Service (Beta)">Researching Audiences</a></li>
+				<li><a href="/mapping/" title="Aus-e-Stage Mapping Service (Alpha)">Mapping Service (Alpha)</a></li>
+				<li><a href="/mapping2/" title="Aus-e-Stage Mapping Service (Beta)">Mapping Service (Beta)</a></li>
+				<li><a href="/networks/" title="Aus-e-Stage Navigating Networks Service (Beta)">Navigating Networks</a></li>
+				<li><a href="/mobile/" title="Ause-e-Stage Researching Audiences Service (Beta)">Researching Audiences</a></li>
 				<li><a href="http://code.google.com/p/aus-e-stage/wiki/StartPage" title="Aus-e-Stage Project Documentation.">Aus-e-Stage Wiki</a></li>
 			</ul>
 		</div>
@@ -156,9 +156,26 @@
 				<div id="tabs-3" class="tab-content">
 					<div id="extras-tabs">
 						<ul class="fix-ui-tabs">
-							<li><a href="#extras-1">AusStage Colour Scheme</a></li>
+							<li><a href="#extras-1">Map Bookmarklet</a></li>
+							<li><a href="#extras-2">AusStage Colour Scheme</a></li>
 						</ul>
 						<div id="extras-1">
+							<p>
+								A <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="Wikipedia article on this topic">bookmarklet</a> is a link that you can save in the bookmarks bar or the bookmarks list in your browser. 
+							</p>
+							<p>
+								The bookmarklet below acts as a link between the <a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a> and the <a href="/mapping2/" title="Aus-e-Stage Mapping Service (Beta)">Aus-e-Stage Mapping Service</a>. 
+								When you are viewing an Index Drill Down page or a record page in AusStage clicking on the bookmarklet will 
+								automatically redirect your browser to the Aus-e-Stage mapping service and build a map for the contributor, organisation, venue, or event record that you had displayed.
+							</p>
+							<p>
+								To use the bookmarklet simply drag the link below to your bookmarks bar.
+							</p>
+							<p>
+								<a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://beta.ausstage.edu.au/assets/javascript/map-bookmarklet.js';})();" title="Link directly from AusStage into the Mapping Service"/>View AusStage Map</a>
+							</p>
+						</div>
+						<div id="extras-2">
 							<h1>AusStage Colour Scheme</h1>
 							<p>
 								The <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-scheme.html" title="HTML version of the Colour Scheme">AusStage colour scheme</a> that is being used for all of the Aus-e-Stage services is documented in <a href="http://code.google.com/p/aus-e-stage/wiki/AusStageColourScheme" title="More Information on the Colour Scheme">our project wiki</a>.
@@ -203,20 +220,6 @@
 							<textarea cols="50" rows="5" name="kml-colours" id="kml-colours"></textarea>
 						</div>
 					</div>
-					
-					<!--
-					<p>
-					On this page we list small applications, scripts and web pages that we're exploring that may be of use to others in the AusStage community. <br/>The first such extra is a bookmarklet to show maps in AusStage.
-					</p>
-					<h2>Map Bookmarklet</h2>
-					<p>This <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="Wikipedia article on this topic">bookmarklet</a> makes it easy to link into the <a href="http://beta.ausstage.edu.au/mapping/" title="Mapping Service Homepage">Mapping Service</a> from an organisation record in <a href="http://www.ausstage.edu.au/" title="AusStage homepage">AusStage</a>. 
-					   <br/>&nbsp;<br/>
-					   To use the bookmarklet simply drag the link below to your bookmarks bar. Then, when you're viewing an organisation record in AusStage, you can click the bookmark to view the map for the organisation in the Mapping Service.
-					   <br/>&nbsp;<br/>
-						<a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://beta.ausstage.edu.au/assets/javascript/map-bookmarklet.js';})();"
-						  title="Link directly from an organisation record to the Mapping Service"/>View AusStage Map</a>
-					</p>
-					-->
 				</div>
 				<div id="tabs-4" class="tab-content">
 					<h2>Contact the Aus-e-Stage team</h2>
