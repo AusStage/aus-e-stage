@@ -54,6 +54,7 @@
 				<li><a href="/mapping2/" title="AusStage Mapping Service (Beta)">Mapping Service (Beta)</a></li>
 				<li><a href="/networks/" title="AusStage Navigating Networks Service (Beta)">Navigating Networks</a></li>
 				<li><a href="/mobile/" title="AusStage Researching Audiences Service (Beta)">Researching Audiences</a></li>
+				<li><a href="http://code.google.com/p/aus-e-stage/wiki/StartPage" title="Aus-e-Stage Project Documentation.">Aus-e-Stage Wiki</a></li>
 			</ul>
 		</div>
 	</div>
@@ -87,41 +88,37 @@
 						three new services that will be designed, tested and deployed to operate alongside the current AusStage text-based search-and-retrieval service.
 					</p>
 					<p>
-						<h3>These services are:</h3>
+						<h2>These services are:</h2>
 					</p>
 					<ul class="services">
-						<li><a href="/mapping/" title="AusStage Mapping Service (Alpha)"><h4>Mapping Service (Alpha)</h4>
-                        
-                       	<img src="assets/images/map-screengrab.jpg" width="200" height="150" alt="Mapping"></a>
-                          
-                           <p><strong>Visualise AusStage data on a map.</strong></p><p>Will be retired once all of the functionality is migrated into the beta service.</p>                           
-                           </li>
-                           
-						<li><a href="/mapping2/" title="AusStage Mapping Service (Beta)"><h4>Mapping Service (Beta</h4>
-                        
-                        
-                          <img src="assets/images/map-screengrab.jpg" width="200" height="150" alt="Mapping"></a>
-							<p> <strong> Visualise AusStage data on a map. </strong></p><p>Undergoing active testing and development.</p>
+						<li>
+							<a href="/mapping/" title="AusStage Mapping Service homepage">
+								<h3>Mapping Service</h3>
+								<img src="assets/images/map-screengrab.jpg" width="200" height="150" alt="">
+							</a>
+							<p>
+								<strong>Visualise AusStage data on a map.</strong>
+							</p>
 						</li>
-                        
-                        
-						<li><a href="/networks/" title="AusStage Navigating Networks Service (Beta)"><h4>Navigating Networks</h4> 
-                        
-                                 <img src="assets/images/networks-screengrab.jpg" width="200" height="150" alt="Networks"></a>
-
-                           <p><strong>Visualise networks of artistic collaboration</strong></p><p>Undergoing active testing and development.</p>                           
-
+						<li>
+							<a href="/networks/" title="AusStage Navigating Networks Service">
+								<h3>Navigating Networks</h3>
+								<img src="assets/images/networks-screengrab.jpg" width="200" height="150" alt="">
+							</a>
+							<p>
+								<strong>Visualise networks of artistic collaboration</strong>
+							</p>
 						</li>
-                        
-                        
-						<li><a href="/mobile/" title="AusStage Researching Audiences Service (Beta)"><h4>Researching Audiences</h4>
-                        
-                           <img src="assets/images/response-screengrab.jpg" width="200" height="150" alt="Mobile - screen grab of an iphone "> </a>
-                           <p><strong>Gather feedback from audiences using mobile devices</strong><p></p> Best viewed using mobile devices such as smartphones</p>                          
-                       
+						<li>
+							<a href="http://code.google.com/p/aus-e-stage/wiki/MobileService" title="Information about the AusStage Researching Audiences Service">
+								<h3>Researching Audiences</h3>
+								<img src="assets/images/response-screengrab.jpg" width="200" height="150" alt=""> 
+							</a>
+							<p>
+								<strong>Gather feedback from audiences using mobile devices</strong>
+							<p>
 						</li>
-					</ul>
-                    
+					</ul>                    
 					<p class="clear">
 						The source code for these services is available on the <a href="http://code.google.com/p/aus-e-stage/" title="Source code repository, documentation wiki etc.">aus-e-stage</a> project hosted on Google Code.
 					</p>
