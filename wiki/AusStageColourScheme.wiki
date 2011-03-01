@@ -32,7 +32,7 @@ A version of the CSS used with the [http://jqueryui.com/ jQuery UI] library that
 
 A version of the colour palette based on the CSS version that uses style elements as used in [http://en.wikipedia.org/wiki/Keyhole_Markup_Language KML files], such as maps intended for use in [http://www.google.com/earth/index.html Google Earth]
 
-Download Link not available at this time
+[http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/kml-colours.xml Download Link]
 
 ==Using the Colour Scheme==
 
