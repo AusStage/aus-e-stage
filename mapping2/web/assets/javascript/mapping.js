@@ -380,6 +380,11 @@ MappingClass.prototype.lookupCellColour = function(len, arr) {
 	return cellColour;
 }
 
+// convenience function for the adding of venue data
+MappingClass.prototype.addVenueData = function(data) {
+	mappingObj.addVenueBrowseData(data);
+}
+
 // function to update the list of venues with data from the browse interface
 MappingClass.prototype.addVenueBrowseData = function(data) {
 
@@ -1410,4 +1415,84 @@ MappingClass.prototype.scrollInfoWindow = function() {
 MappingClass.prototype.scrollInfoWindowToTop = function() {
 	
 	$('.infoWindowContent').parent().parent().scrollTo($('.infoWindowContentHeader'), {duration:1000});
+}
+
+// build and display a map from a persistent link
+MappingClass.prototype.doMapFromLink = function() {
+
+	var param = $.getUrlVar('simple-map');
+	
+	if(typeof(param) != 'undefined') {
+	
+		// get the other parameters
+		var type = $.getUrlVar('type');
+		var id   = $.getUrlVar('id');
+		
+		if(typeof(type) != 'undefined' && typeof(id) != 'undefined') {
+			mappingObj.doSimpleMapFromLink(type, id);
+		}
+	}
+}
+
+// build a simple map
+MappingClass.prototype.doSimpleMapFromLink = function(type, id) {
+
+	// determine which type of map to create
+	if(type == 'contributor') {
+		// contributor map
+		
+		// build the url
+		var url  = BASE_URL + 'markers?type=contributor&id=' + id;
+		
+		// get the data
+		$.getJSON(url, function(data) {
+			if(data.length > 0) {
+				mappingObj.addContributorData(data);
+			} else {
+				alert('No records were found using the id in the persistent link that can be added to a map');
+			}			
+		});
+	} else if(type == 'organisation') {
+		// organisation map
+		
+		// build the url
+		var url  = BASE_URL + 'markers?type=organisation&id=' + id;
+		
+		// get the data
+		$.getJSON(url, function(data) {
+			if(data.length > 0) {
+				mappingObj.addOrganisationData(data);
+			} else {
+				alert('No records were found using the id in the persistent link that can be added to a map');
+			}
+		});
+	} else if(type == 'venue') {
+		// venue map
+
+		// build the url
+		var url  = BASE_URL + 'markers?type=venue&id=' + id;
+		
+		// get the data
+		$.getJSON(url, function(data) {
+			if(data.length > 0) {
+				mappingObj.addVenueBrowseData(data);
+			} else {
+				alert('No records were found using the id in the persistent link that can be added to a map');
+			}
+		});
+	} else if(type == 'event') {
+		// event map
+		
+		// build the url
+		var url  = BASE_URL + 'markers?type=event&id=' + id;
+		
+		// get the data
+		$.getJSON(url, function(data) {
+			if(data.length > 0) {
+				mappingObj.addEventData(data);
+			} else {
+				alert('No records were found using the id in the persistent link that can be added to a map');
+			}
+		});
+	}
 }

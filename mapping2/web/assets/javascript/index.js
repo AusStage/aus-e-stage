@@ -52,9 +52,6 @@ $(document).ready(function(){
 	// initialise the search page elements
 	searchObj.init();	
 	
-	// check to see if this is a persistent link search
-	searchObj.doSearchFromLink();
-	
 	// initialise the browse page elements
 	browseObj.init();
 	
@@ -88,19 +85,9 @@ $(document).ready(function(){
 		$('#help_map_icons_div').dialog('open');
 	});
 	
-	// setup the map legend marker delete confirmation box
-	$("#map_legend_confirm_delete").dialog({
-		autoOpen: false,
-		height: 300,
-		width: 350,
-		modal: true,
-		buttons: {
-			Yes: function() {
-				// TODO add call to delete function
-			},
-			No: function() {
-				$(this).dialog('close');
-			}
-		}
-	});		
+	// check to see if this is a persistent link search request
+	searchObj.doSearchFromLink();
+	
+	// check to see if this is a persistent link map request
+	mappingObj.doMapFromLink();
 });

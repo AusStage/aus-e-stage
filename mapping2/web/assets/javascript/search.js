@@ -266,8 +266,6 @@ SearchClass.prototype.doSearchFromLink = function() {
 			searchObj.doSearch(queryParam);
 		}
 	}
-
-
 }
 
 // undertake a search
