@@ -83,10 +83,12 @@ public class SearchServlet extends HttpServlet {
 		}
 
 		// check on the id parameter
-		if(InputUtils.isValid(query) == false) {
-			throw new ServletException("Missing or invalid query parameter.");
-		} else if(query.length() < MIN_QUERY_LENGTH) {
-			throw new ServletException("The query parameter must be at least " + MIN_QUERY_LENGTH + " characters long");
+		if(searchType.equals("id") != true) {
+			if(InputUtils.isValid(query) == false) {
+				throw new ServletException("Missing or invalid query parameter.");
+			} else if(query.length() < MIN_QUERY_LENGTH) {
+				throw new ServletException("The query parameter must be at least " + MIN_QUERY_LENGTH + " characters long");
+			}
 		}
 		
 		if(searchType.equals("id") == true) {

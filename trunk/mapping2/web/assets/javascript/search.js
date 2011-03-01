@@ -144,6 +144,7 @@ SearchClass.prototype.init = function() {
 		errorContainer: '#search_error_message',
 		errorLabelContainer: '#search_error_text',
 		wrapper: "",
+		/*
 		showErrors: function(errorMap, errorList) {
 			if(errorList.length > 0) {
 				this.defaultShowErrors();
@@ -159,6 +160,7 @@ SearchClass.prototype.init = function() {
 			$("#search_messages").hide();
 			$("#search_error_message").hide();
 		},
+		*/
 		messages: {
 			query: {
 				required: "Please enter a few search terms",

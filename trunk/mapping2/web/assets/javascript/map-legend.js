@@ -53,6 +53,23 @@ MapLegendClass.prototype.init = function() {
 	
 	// add a live event for the hiding of markers
 	$('.mapLegendShowHideMarker').live('click', mapLegendObj.showHideMarker);
+	
+	// setup the map legend marker delete confirmation box
+	$("#map_legend_confirm_delete").dialog({
+		autoOpen: false,
+		height: 300,
+		width: 400,
+		modal: true,
+		buttons: {
+			Yes: function() {
+				$(this).dialog('close');
+				mapLegendObj.doDeleteMarker(param);
+			},
+			No: function() {
+				$(this).dialog('close');
+			}
+		}
+	});
 }
 
 // function to show the legend
