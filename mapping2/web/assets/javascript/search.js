@@ -144,7 +144,6 @@ SearchClass.prototype.init = function() {
 		errorContainer: '#search_error_message',
 		errorLabelContainer: '#search_error_text',
 		wrapper: "",
-		/*
 		showErrors: function(errorMap, errorList) {
 			if(errorList.length > 0) {
 				this.defaultShowErrors();
@@ -160,7 +159,6 @@ SearchClass.prototype.init = function() {
 			$("#search_messages").hide();
 			$("#search_error_message").hide();
 		},
-		*/
 		messages: {
 			query: {
 				required: "Please enter a few search terms",
@@ -303,7 +301,7 @@ SearchClass.prototype.updateMessages = function() {
 
 	if(searchObj.searching_underway_flag != true) {
 		// indicate that the search has finished
-		if(error_condition == false) {
+		if(searchObj.error_condition == false) {
 			$("#search_messages").hide();
 		} else {
 			$("#search_status_message").hide();
