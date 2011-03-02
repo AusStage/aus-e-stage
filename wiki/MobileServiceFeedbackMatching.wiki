@@ -22,7 +22,7 @@ The complexity with searching and matching happens with Twitter.
 If user are able to reply to the @aus-stage then the match process could easier. If feedback was being sent back out via Twitter and people could follow @aus-stage then a community might develop around the service. 
 
 === 3.  Search for partial matches  === 
-We could thinking of the tag as having 3 criteria 
+We could thinking of the tag as having 3 criteria: 
 
   # The word tusk 
   # The number 2 
