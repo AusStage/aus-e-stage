@@ -2,7 +2,7 @@
 
 <h1>Search API</h1>
 
-Components of the MolileService are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
+Components of the Mobile Service are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
 
 The Search API exposes methods and data elements that can be used to search for contributors, organisations, etc. 
 
