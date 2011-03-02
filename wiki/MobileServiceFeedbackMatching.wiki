@@ -19,13 +19,13 @@ This could include the approach of having a tablet in the foyer that audience me
 === 2. For twitter using @aus-stage replies   === 
 The complexity with searching and matching happens with Twitter. 
 
-If user are able to reply to the @aus-stage then the match process could easier. If feedback was being sent back out via Twitter and people could follow @aus-stage then a community might develop around the service. 
+If users are able to reply to the @aus-stage then the match process could be easier. If feedback was being sent back out via Twitter and people could follow @aus-stage then a community might develop around the service. 
 
 === 3.  Search for partial matches  === 
-We could thinking of the tag as having 3 criteria: 
+We can think of the tag as having 3 criteria: 
 
   # The word tusk 
   # The number 2 
   # The time it happens  
 
-When a perfect match has not been found then the system looks to see whether two other criteria have been meet.   In the current system this would be hard, maybe even impossible to achieve with the twitter gatherer.  
+When a perfect match has not been found then the system looks to see whether two other criteria have been met.   In the current system this would be hard, maybe even impossible to achieve with the twitter gatherer.  
