@@ -58,7 +58,6 @@ The name of the callback function used when a request is made for JSONP encoded 
 The search result is formatted as a JSON array with zero, one, or more result objects. 
 
 === Organisation, Venue, Event, Question, Hashtag  ===
-Hashtag Name Search
 Conduct a search for performances that contain the words "What"  "makes"  "you" in their hashtag using the default record limit
 
 URL: http://beta.ausstage.edu.au/mobile/search?task=hash&type=name&query=What+makes+you
