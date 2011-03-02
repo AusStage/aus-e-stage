@@ -57,11 +57,11 @@ The name of the callback function used when a request is made for JSONP encoded 
 
 The search result is formatted as a JSON array with zero, one, or more result objects. 
 
-=== performance ===
-Organisation Name Search
-Conduct a search for organisations that contain the words "australian" and "dance" in their name using the default record limit
+=== Organisation, Venue, Event, Question, Hashtag  ===
+Hashtag Name Search
+Conduct a search for performances that contain the words "What"  "makes"  "you" in their hashtag using the default record limit
 
-URL: http://beta.ausstage.edu.au/mobile/search?task=organisation&type=name&query=australian+dance
+URL: http://beta.ausstage.edu.au/mobile/search?task=hash&type=name&query=What+makes+you
 {{{
 { "endDateTime" : "30-SEP-2010 22:00:00",
   "event" : "Be Your Self",
@@ -77,3 +77,34 @@ URL: http://beta.ausstage.edu.au/mobile/search?task=organisation&type=name&query
   "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3447"
 }
 }}}
+
+===  Feedback  ===
+Feedback Name Search
+Conduct a search for performances that contain the words "What"  "makes"  "you" in their hashtag using the default record limit
+
+URL: http://beta.ausstage.edu.au/mobile/search?task=feedback&type=name&query=dna
+
+{{{
+   "date": "Thursday 30 September, 2010",
+   "event": "Be Your Self".
+ "id" : 4,
+
+   "eventUr": "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=86534",
+   "feedback:  [
+     {
+      "content: "My dna #adt",
+      "date: "Thursday 30 September, 2010",
+       "id: "93",
+       "time: "21:05:31",
+       "type: "SMS"},
+
+],
+
+  "organisation: "Australian Dance Theatre",
+  "organisationUrl: "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102",
+  "question: "Test Development Question",
+  "venue: "Golden Grove Recreation and Arts Centre",
+  "venueUrl: "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3447",
+}
+}}}
+
