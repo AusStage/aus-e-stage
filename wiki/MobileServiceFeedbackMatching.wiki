@@ -2,31 +2,30 @@
 
 = Problem=
 
-In trials so far a high percentage of feedback doesn't come back with the correct hashtags. At this stage (March 2010) most the feedback had come back via SMS  
+In trials to date a high percentage of feedback has not come back with a correct hashtag. At this stage (March 2011) most of the feedback has come back via SMS.  
 
-eg when hash was #tusk2 user gave us  
+eg when the hash was #tusk2 user gave us  
 
   * TUSK 2  
   * Tusk2
 
-This could be because user couldn't find the # on there phone.     
+This could be because the user couldn't find the # on their phone.     
 
 == Possible solutions ==
 
 === 1. Improved user education and explanation  === 
-This could include approach such as having a tablet in the foyer that audience members could use.  
+This could include the approach of having a tablet in the foyer that audience members could use.  
 
 === 2. For twitter using @aus-stage replies   === 
 The complexity with searching and matching happens with Twitter. 
 
-If user are able to reply to the @aus-stage then the match process could easier. If feedback was being sent back out via Twitter and people could follow @aus-stage and then a community might develop around the service. 
+If user are able to reply to the @aus-stage then the match process could easier. If feedback was being sent back out via Twitter and people could follow @aus-stage then a community might develop around the service. 
 
 === 3.  Search for partial matches  === 
-
 We could thinking of the tag as having 3 criteria 
 
   # The word tusk 
   # The number 2 
-  # The time it happen's  
+  # The time it happens  
 
-When a perfect hasn't  been found then the system looks if 2 other criteria are meet.   The current system this would hard, maybe even impossible to achieve with the twitter gather.  
+When a perfect match has not been found then the system looks to see whether two other criteria have been meet.   In the current system this would be hard, maybe even impossible to achieve with the twitter gatherer.  
