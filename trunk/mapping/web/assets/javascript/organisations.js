@@ -66,6 +66,7 @@ $(document).ready(function(){
 		},
 		submitHandler: function(form) {
 			jQuery(form).ajaxSubmit({
+				dataType:     "json",
 				beforeSubmit: showLoader,
 				success:      loadNewPage,
 				error:        showErrorMessage2
@@ -152,7 +153,9 @@ function hideMap() {
 
 /** form processing functions **/
 // function to show the search results
-function showSearchResults(responseText, statusText)  {
+function showSearchResults(responseText, statusText, xhr, $form)  { 
+	
+	if(responseText.
 
 	$("#search_results").hide();
 	$("#search_results").empty();
