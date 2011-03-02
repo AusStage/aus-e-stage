@@ -209,33 +209,40 @@ table.formTable th label {
 /* Styles of the screen grab on the home page.  */
 
 ul.services {
-	display:inline;
+	display: inline;
 }
 
 ul.services img {
-	padding-top:9px;	
+	padding-top: 9px;	
 } 
 
 ul.services a img , ul.services a p {
-	text-decoration:none;
-	color:#333;	
+	text-decoration: none;
+	color: #333;
+	border: 0px;
 } 
 
+ul.services p {
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
 ul.services a:hover img , ul.services a:hover p {
-	text-decoration:none;
-	color:#333;	
+	text-decoration: none;
+	color: #333;	
 } 
 
 ul.services li {
 	float: left;
-	list-style:none;
-	width:210px;
+	list-style: none;
+	width: 230px;
 	border: 1px dotted #666;
-	padding:10px;	
-	margin:10px;	
-	min-height:300px;
+	padding: 10px 10px 0px 10px;	
+	margin: 10px 10px 0px 10px;	
+	min-height: 250px;
 }
 
 .clear {
-	clear:both;
+	clear: both;
+	padding-top: 1em;
 }
