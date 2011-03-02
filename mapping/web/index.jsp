@@ -58,7 +58,7 @@
 		<p>The AusStage Mapping Service aims to provide an interactive, map-based interface which allows users to search, manage and visually display AusStage event data. The Mapping service will introduce a geographic intelligence to research applications of the AusStage data set by providing researchers with the ability to chart the geographic distribution of performance events.</p>
 		<p>To date the Mapping Service has been developed in two distinct phases.</p>
 		<ol>
-			<li>The <a href="index2.jsp" title="Mapping Service homepage">first version of the Mapping Service</a> was developed prior to the release of Google MapsAPI V3 and is still available.  <br/>It was decided to terminate further development of this model due to the significant changes in the Google Maps API implemented in 2010.</li>
+			<li>The <a href="index2.jsp" title="Mapping Service homepage">first version of the Mapping Service</a> was developed prior to the release of Google Maps API V3 and is still available. It was decided to terminate further development of this model due to the significant changes in the Google Maps API implemented in 2010.</li>
 			<li>The <a href="/mapping2/" title="Mapping Service homepage">second, and current, version of the Mapping Service</a> has been developed in line with upgrade to Google Maps API V3 and is the version under continued development.</li>
 		</ol>
 		<p>
@@ -66,12 +66,12 @@
 		</p>
 		<ul>
 			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceAPI" title="Information on the API in our Wiki">Mapping Service API</a> - Information on the API designed for the retrieval of data related to building a map on a web page and the export of data in the KML format.</li>
-			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceFeedback" title="Alpha testing feedback document">Mapping Service Feedback</a> - Detail of user feedback received in Alpha testing processes</li>
-			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceConsultancy" title="Documentation on the consultancy activity">Mapping Service Consultancy</a> - Documentation on the consultancy undertaken with the University of Sydney Archaeology Computing Laboratory</li>
-			<li><a href="http://code.google.com/p/aus-e-stage/wiki/GoogleEarthImageOverlay" title="Overlay creation documentation">Mapping How To Article</a> Information on how to create an overlay for use in <a href="http://www.google.com/earth/index.html" title="Information on the Google Earth app">Google Earth</a></li>
+			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceFeedback" title="Alpha testing feedback document">Mapping Service Feedback</a> - Detail of user feedback received in Alpha testing processes.</li>
+			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceConsultancy" title="Documentation on the consultancy activity">Mapping Service Consultancy</a> - Documentation on the consultancy undertaken with the University of Sydney Archaeology Computing Laboratory.</li>
+			<li><a href="http://code.google.com/p/aus-e-stage/wiki/GoogleEarthImageOverlay" title="Overlay creation documentation">Mapping How To Article</a> - Information on how to create an overlay for use in <a href="http://www.google.com/earth/index.html" title="Information on the Google Earth app">Google Earth</a>.</li>
 		</ul>
 		<p>
-			Please help us to develop the AusStage Mapping Service by exploring its functionality. If you have any feedback, questions, or queries please <a href="/" title="Aus-e-Stage homepage">Contact Us</a>. 
+			Please help us to develop the AusStage Mapping Service by exploring its functionality. If you have any feedback, questions or queries please <a href="/" title="Aus-e-Stage homepage">Contact Us</a>. 
 		</p>
 	</div>
 	<!-- always at the bottom of the content -->
