@@ -1,10 +1,10 @@
-#summary Specification for the strategy to match feedback with performances
+#summary Specification for the Strategy to Match Feedback with Performances
 
 = Problem=
 
 In trials to date a high percentage of feedback has not come back with a correct hashtag. At this stage (March 2011) most of the feedback has come back via SMS.  
 
-eg when the hash was #tusk2 user gave us  
+eg when the hash was #tusk2 users gave us  
 
   * TUSK 2  
   * Tusk2
