@@ -71,7 +71,7 @@ URL: http://beta.ausstage.edu.au/mobile/search?task=hash&type=name&query=What+ma
   "organisationUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=102",
   "question" : "What makes you, you?",
   "tag" : "beyourself",
-  "totalFeedbackCount": 6.  
+  "totalFeedbackCount": "6",   
   "startDateTime" : "30-SEP-2010 19:30:00",
   "venue" : "Golden Grove Recreation and Arts Centre",
   "venueUrl" : "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3447"
