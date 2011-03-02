@@ -13,18 +13,20 @@ This could be because user couldn't find the # on there phone.
 
 == Possible solutions ==
 
-=== Improved user education and explanations === 
+=== 1. Improved user education and explanation  === 
 This could include approach such as having a tablet in the foyer that audience members could use.  
 
-=== For twitter using @aus-stage replies   === 
-The complexity with searching and matching happens with Twitter.  If user are able to reply to the @aus-stage then the match process will be easier.    
+=== 2. For twitter using @aus-stage replies   === 
+The complexity with searching and matching happens with Twitter. 
 
-=== Search for partial matches  === 
+If user are able to reply to the @aus-stage then the match process could easier. If feedback was being sent back out via Twitter and people could follow @aus-stage and then a community might develop around the service. 
+
+=== 3.  Search for partial matches  === 
 
 We could thinking of the tag as having 3 criteria 
 
-1) The word tusk 
-2) The number 2 
-3) The time it happen's  
+  # The word tusk 
+  # The number 2 
+  # The time it happen's  
 
-When a perfect hasn't  been found then the system looks if 2 other criteria are meet.    
+When a perfect hasn't  been found then the system looks if 2 other criteria are meet.   The current system this would hard, maybe even impossible to achieve with the twitter gather.  
