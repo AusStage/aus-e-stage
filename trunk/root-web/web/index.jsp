@@ -97,7 +97,7 @@
 								<img src="assets/images/map-screengrab.jpg" width="200" height="150" alt="">
 							</a>
 							<p>
-								<strong>Visualise AusStage data on a map.</strong>
+								<strong>Visualise AusStage data on a map</strong>
 							</p>
 						</li>
 						<li>
@@ -116,7 +116,7 @@
 							</a>
 							<p>
 								<strong>Gather feedback from audiences using mobile devices</strong>
-							<p>
+							</p>
 						</li>
 					</ul>                    
 					<p class="clear">
