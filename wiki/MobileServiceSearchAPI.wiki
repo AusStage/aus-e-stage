@@ -8,7 +8,7 @@ The Search API exposes methods and data elements that can be used to search for 
 
 _Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
 
-_Note 2: The search interface provided by the mapping service is designed to be supplementary to the existing text based search interface. Once the new !AusStage website is in place this API is expected to be deprecated as the mapping service will be integrated with the new !AusStage website._
+_Note 2: The search interface provided by the mapping service is designed to be supplementary to the existing text based search interface. Once the new !AusStage website is in place this API is expected to be deprecated as the moblie service will be integrated with the new !AusStage website._
 
 <wiki:toc max_depth="3" />
 
@@ -107,4 +107,3 @@ URL: http://beta.ausstage.edu.au/mobile/search?task=feedback&type=name&query=dna
   "venueUrl: "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_venue_id=3447",
 }
 }}}
-
