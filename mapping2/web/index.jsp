@@ -58,7 +58,8 @@
 			<h2>Main Menu</h2>
 			<ul>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
-				<li><a href="/mapping2/" title="Networks Service Homepage">Mapping Homepage</a></li>
+				<li><a href="/" title="Aus-e-Stage Homepage">Aus-e-Stage Website</a></li>
+				<li><a href="/mapping2/" title="Mapping Service Homepage">Mapping (Beta) Homepage</a></li>
 				<li class="map-icon-help clickable">Map Iconography</li>
 			</ul>
 		</div>
