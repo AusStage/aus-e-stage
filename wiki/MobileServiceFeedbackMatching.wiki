@@ -1,13 +1,30 @@
 #summary Specification for the strategy to match feedback with performances
 
-= Introduction =
+= Problem=
 
-Add your content here.
+In trials so far a high percentage of feedback doesn't come back with the correct hashtags. At this stage (March 2010) most the feedback had come back via SMS  
 
+eg when hash was #tusk2 user gave us  
 
-= Details =
+  * TUSK 2  
+  * Tusk2
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+This could be because user couldn't find the # on there phone.     
+
+== Possible solutions ==
+
+=== Improved user education and explanations === 
+This could include approach such as having a tablet in the foyer that audience members could use.  
+
+=== For twitter using @aus-stage replies   === 
+The complexity with searching and matching happens with Twitter.  If user are able to reply to the @aus-stage then the match process will be easier.    
+
+=== Search for partial matches  === 
+
+We could thinking of the tag as having 3 criteria 
+
+1) The word tusk 
+2) The number 2 
+3) The time it happen's  
+
+When a perfect hasn't  been found then the system looks if 2 other criteria are meet.    
