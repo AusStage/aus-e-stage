@@ -1,28 +1,3 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"%>
-<%
-/*
- * This file is part of the Aus-e-Stage Beta Website
- *
- * The Aus-e-Stage Beta Website is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * The Aus-e-Stage Beta Website is distributed in the hope that it will 
- * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with the AusStage Mapping Service.  
- * If not, see <http://www.gnu.org/licenses/>.
- */
-%>
-<%
-/*
- * @author robin@sproutlabs.com.au
- */
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,13 +56,25 @@
         <div id="error_message"></div>
         
         <span class="PerformancesBlock loading"></span>
-        <h3>Peformances currently have feedback</h3>
-          <ul class="Performances">
-                        
-          </ul>
-      
-      
-      
+        <h3>Peformances that currently have feedback</h3>
+        
+          <table id="SearchResults">
+          <thead>
+        	<tr>
+            <th scope="col">Event</th>
+            <th scope="col">Organisation</th>
+             <th scope="col">Date and Time</th>
+
+            <th scope="col">Venue</th> 
+            <th scope="col">View</th>    
+   
+            </tr>
+          </thead>
+          
+			<tr id="table_anchor"></tr>
+		</table>
+        
+    
         
 
 	</div>
