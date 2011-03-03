@@ -29,3 +29,45 @@
 	color:#FFF;
 	
 }
+
+
+/* Tables
+-------------------------------------------------------------- */
+
+/* 
+	Because of the need for padding on TH and TD, the vertical rhythm 
+	on table cells has to be 27px, instead of the standard 18px or 36px 
+	of other elements. 
+ */ 
+table       { margin-bottom: 1.4em; width:100%; }
+
+th          { font-weight: bold; }
+
+thead th    { background:#999;
+			text-align:left;
+
+}
+
+th,td,caption { padding: 4px 10px 4px 5px; }
+
+tr {
+	
+	background:#FFF;
+	background-color:#F5F5F5
+	
+}
+
+td {
+	border-bottom: 1px solid #333;	
+}
+/*
+	You can zebra-stripe your tables in outdated browsers by adding 
+	the class "even" to every other table row. 
+ */
+tbody tr:nth-child(even) td, 
+tbody tr.even td  { 
+
+}
+tfoot       { font-style: italic; }
+caption     { background: #eee; }
+
