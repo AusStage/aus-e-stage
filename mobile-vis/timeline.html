@@ -1,33 +1,8 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"%>
-<%
-/*
- * This file is part of the Aus-e-Stage Beta Website
- *
- * The Aus-e-Stage Beta Website is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * The Aus-e-Stage Beta Website is distributed in the hope that it will 
- * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with the AusStage Mapping Service.  
- * If not, see <http://www.gnu.org/licenses/>.
- */
-%>
-<%
-/*
- * @author robin@sproutlabs.com.au
- */
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Aus-e-Stage Service Development</title>
+	<title>Aus-e-Stage - Timeline View</title>
 	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css"/>
@@ -73,7 +48,7 @@
 			<h2>Main Menu</h2>
 			<ul>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
-
+				<li><a href="index.html" title="AusStage Homepage">Response Search</a></li>
 			</ul>
 		</div>
 	</div>
@@ -84,10 +59,11 @@
         
         
               <div class="info">
-                 <span class="event"></span> by <span class="organisation"></span>.
-               		At <span class="venue"></span >.
-                 	On <span class="date"></span>
-                 <div class="question"><span>Question: </span><span class="question"></span > </div>
+                 <h2><span class="event"></span></h2>
+                 <h4><span class="organisation"></span></h4>
+                    <p><span class="venue"></span> ,  
+                    <span class="date"></span> </p>
+                 <h4 class="question"> <span>Question: </span><span class="question"></span></h4 >
            </div>
          
             
@@ -95,14 +71,15 @@
           <thead>
         	<tr>
             <th scope="col">Feedback</th>
-            <th scope="col">Date and Time</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
             <th scope="col">Source</th>    
             </tr>
           </thead>
           
-			<tr id="table_anchor">
-			
-			</tr>
+			<tbody id="table_anchor">
+				
+			</tbody>
 		</table>
         
         
