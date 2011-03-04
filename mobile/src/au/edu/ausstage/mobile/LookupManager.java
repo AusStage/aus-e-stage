@@ -136,19 +136,25 @@ public class LookupManager {
 		JSONObject object = null;
 		
 		// build the sql
-		String sql = "SELECT e.event_name, e.eventid, mq.question, o.name, o.organisationid, v.venue_name, v.venueid, TO_CHAR(mp.start_date_time, 'DD-MON-YYYY HH24:MI:SS'), TO_CHAR(mp.end_date_time, 'DD-MON-YYYY HH24:MI:SS')"
-				   + "FROM mob_performances mp, events e, mob_questions mq, orgevlink oe, organisation o, mob_organisations mo, venue v "
+		String sql = "SELECT DISTINCT e.event_name, e.eventid, mq.question, o.name, o.organisationid, v.venue_name, v.venueid, TO_CHAR(mp.start_date_time, 'DD-MON-YYYY HH24:MI:SS'), TO_CHAR(mp.end_date_time, 'DD-MON-YYYY HH24:MI:SS'), mp.hash_tag, mo.twitter_hash_tag, feedback.feedback_count "
+				   + "FROM mob_performances mp, events e, mob_questions mq, orgevlink oe, organisation o, mob_organisations mo, venue v, "
+				   + "     (SELECT count(feedback_id) as feedback_count, performance_id "
+				   + "      FROM mob_feedback "
+				   + "      WHERE performance_id = ? "
+				   + "      GROUP BY performance_id) feedback "
 				   + "WHERE mp.performance_id = ? "
 				   + "AND mp.event_id = e.eventid "
 				   + "AND mp.question_id = mq.question_id "
 				   + "AND e.eventid = oe.eventid "
 				   + "AND o.organisationid = oe.organisationid "
 				   + "AND mo.organisation_id = o.organisationid "
-				   + "AND e.venueid = v.venueid ";
+				   + "AND e.venueid = v.venueid "
+				   + "AND mp.performance_id = feedback.performance_id (+) ";
 				   
 		// build parameters
-		String[] sqlParameters = new String[1];
+		String[] sqlParameters = new String[2];
 		sqlParameters[0] = id;
+		sqlParameters[1] = id;
 				   
 		// execute the sql
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
@@ -172,6 +178,17 @@ public class LookupManager {
 				object.put("venueUrl", LinksManager.getVenueLink(resultSet.getString(7)));
 				object.put("startDateTime", resultSet.getString(8));
 				object.put("endDateTime", resultSet.getString(9));
+				if(resultSet.getString(10) != null) {
+					object.put("tag", resultSet.getString(10).replace("#", ""));
+				} else {
+					object.put("tag", resultSet.getString(11).replace("#", ""));
+				}
+				if(resultSet.getString(12) != null) {
+					object.put("totalFeedbackCount", resultSet.getString(12));
+				} else {
+					object.put("totalFeedbackCount", "0");
+				}
+				
 
 			} else {
 				return new JSONObject().toString();
