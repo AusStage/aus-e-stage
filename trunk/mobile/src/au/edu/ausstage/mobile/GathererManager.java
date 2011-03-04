@@ -428,8 +428,6 @@ public class GathererManager {
 	 * A public method to process a new mobile web message
 	 * 
 	 * @param performance the unique performance identifier
-	 * @param date        the date that the message was sent
-	 * @param time        the time that the message was sent
 	 * @param message     the content of the feedback message
 	 * @param remoteAddr  the remote IP address of the client
 	 *
