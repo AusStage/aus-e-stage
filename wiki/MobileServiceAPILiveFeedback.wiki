@@ -41,6 +41,7 @@ The fields of the object are as follows:
 || organisationUrl || the persistent link for the organisation in !AusStage ||
 || venue || the name of the venue where the event is being held ||
 || venueUrl || the persistent link for the venue in !AusStage ||
+|| tag || the tag is being used for this performance ||
 || date || the date that the event is occurring in the "Day DD Month, YYYY" format ||
 || feedback || an array of feedback objects ||
 
