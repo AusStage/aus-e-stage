@@ -67,7 +67,7 @@ function model(name) {
 				 var values = jQuery.param(params);//encode thos
 				
 				var source =  host + '/mobile/lookup?' +  values;
-				
+
 				window.console.log(source);
 				
 				current = this; // in the success function we normal scope this, so we put this in to current so called stuff in a few moments.
