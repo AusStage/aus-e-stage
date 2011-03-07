@@ -23,6 +23,12 @@ function  visControllerSignage(newModel) {
 		
 		 this.model = newModel; 
 
+		//Configure for the slide show 
+		 this.fx =  'fade';  // choose your transition type, ex: fade, scrollUp, shuffle, etc...	
+		 this.speed =  2000;  
+		 this.timeout =  4000; 
+						
+						
 		/*
 		* Called when the results are updated     
 		*/ 	
@@ -45,22 +51,18 @@ function  visControllerSignage(newModel) {
 			window.console.log('about to buill the controller for this');
 			//this.results = newResults; 
 			this.BuildView(); // just do a simple redraw because in this case we not going to do much with data.
-			//For more more information about the slide plug that is used see http://slidesjs.com/
-					$('#feedback').slides({
-						container: 'feedback_messages',
-						preload: true,
-						preloadImage: 'img/loading.gif', //TODO - add the correct image
-						play: 3000,
-						pause: 5000,
-						effect: 'fade',
-						hoverPause: true,
-						pagination: false,
-						generatePagination: false
-		
-					});		
-					
-					
-					}
+				
+				//For more more information about the slide plug that is used see http://jquery.malsup.com/cycle/
+						
+				$('.feedback_messages').cycle({
+					fx: this.fx, 
+					speed: this.speed, 
+					timeout: this.timeout, 	 	
+				});	
+							
+				$('.feedback_messages').show();
+
+		}
 		
 				
 		/*
@@ -68,11 +70,18 @@ function  visControllerSignage(newModel) {
 		*/
 		this.BuildView  = function (newResults)
 		{	
-			results = this.model.results;
+			
+		    results = this.model.results;
+			
+									
+									
+									
 			for (var a = 0; a < results.length; a++) { //loop over the controllers 
 				
 				//Show the performance name etc 
-					$('.theQuestion').html(results[a].question);
+				 $('.theQuestion').html(results[a].question);
+				  $(".tag").html(results[a].tag);
+
 									
 				for(var i = 0; i < results[a].feedback.length; i++) {
 					item = results[a].feedback[i];	
@@ -81,33 +90,46 @@ function  visControllerSignage(newModel) {
 					
 				    $(".feedback_messages").append('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
 									
-									
-									
 				}
 				
 			}	
 							
-			 
 		}	
 		
 		/*
 		* Refresh the timeline view with the current results.    
+		* There is a more elegant whay to do this. 
 		*/
 		this.refreshView  = function (newResults)
 		{	
 		
-		for (var a = 0; a < newResults.length; a++) { //loop over the controllers 
+		//$('.feedback_messages').hide();
+		
+		$('.feedback_messages').cycle(
+				'destroy' 		
+		);
+			
+			for (var a = 0; a < newResults.length; a++) { //loop over the controllers 
+					
+						item = newResults[a];			
+						//ADD the new feedback 
+						$(".feedback_messages").prepend('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>'); // BUG this is not working 
+															
+					
+			}
 				
-					item = newResults[a];	
-				    $(".feedback_messages").prepend('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>'); // BUG this is not working 
-					//make slide show go back to the start
- 														
-				
-			}	
-							
-			 
+		//REBUILD Add it back 
+		$('.feedback_messages').cycle({
+			fx: this.fx, 
+			speed: this.speed, 
+			timeout: this.timeout, 	 	
+		});			 
 		}	
 		
+		
+				
+
+
 		
 
 
