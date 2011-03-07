@@ -22,17 +22,14 @@
 
 function model(name) {
 		
-		  this.UPDATE_DELAY = 5000;
+		 this.UPDATE_DELAY = 30000;
 
 		 this.results = new Array();
 		 this.controllers = new Array(); 
 		 this.errorController = new errorController();
 		 this.errorStatus = 0;  
 		 this.lastFeedbackID = 0;   
-		 
-		 this.feedback_count = 0;
-		 this.last_feedback_count = 0; 
-		 
+				 
 
 		/*
 		* Get the URL var and takes the user to the current form for that performance.    
