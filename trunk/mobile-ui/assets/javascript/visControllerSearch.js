@@ -55,6 +55,8 @@ function visControllerSearch(newModel) {
 													'<td class="view"><a href="timeline.html?performance=' + item.id + '">Timeline</a>, ' +
 													'<a href="signage.html?performance=' + item.id + '">Signage</a> ' +
 													'</td>' +
+													'<td class="totalFeedbackCount">' + item.totalFeedbackCount +' </td>' +
+
 													'</tr>'
 													);
 													
