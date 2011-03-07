@@ -22,6 +22,11 @@ package au.edu.ausstage.mobile;
 import au.edu.ausstage.utils.*;
 import java.sql.ResultSet;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+
 // import additional java packages / classes
 import org.json.simple.*;
 
@@ -72,6 +77,23 @@ public class FeedbackManager {
 		JSONObject item   = new JSONObject();
 		JSONArray  list   = new JSONArray();
 		
+		// get the performance details
+		LookupManager lookup = new LookupManager(database);
+		
+		object = (JSONObject)JSONValue.parse(lookup.getPerformanceDetails(performance, "json"));
+		
+		try {
+			DateFormat format = new SimpleDateFormat("dd-MMMM-yyyy HH:mm:ss");
+			Date       date   = format.parse((String)object.get("startDateTime"));
+			
+			format = new SimpleDateFormat("EEEE dd MMMM, yyyy");
+			object.put("date", format.format(date));
+		} catch (ParseException e) {
+			object.put("date", object.get("startDateTime"));
+		}
+		
+		
+		/*
 		// define the sql
 		sql = "SELECT e.event_name, e.eventid, mq.question, o.name, o.organisationid, v.venue_name, v.venueid, TO_CHAR(mp.start_date_time, 'FMDay DD Month, YYYY') as performance_date "
 			+ "FROM mob_performances mp, events e, mob_questions mq, orgevlink oe, organisation o, mob_organisations mo, venue v "
@@ -129,7 +151,9 @@ public class FeedbackManager {
 		
 		// play nice and tidy up
 		resultSet = null;
-		results.tidyUp();		
+		results.tidyUp();	
+		
+		*/	
 		
 		//get any feedback
 		sql = "SELECT mf.feedback_id, mf.short_content, mst.source_name, TO_CHAR(mf.received_date_time, 'FMDay DD Month, YYYY') as feedback_date, TO_CHAR(mf.received_date_time, 'HH24:MI:SS') as feedback_time "
@@ -139,9 +163,13 @@ public class FeedbackManager {
 			+ "AND mf.source_type = mst.source_type "
 			+ "ORDER BY mf.received_date_time ASC "; // order is reverse of what you'd expect due to the way the content is added to the page
 			
+		// define the parameters
+		sqlParameters = new String[1];
+		sqlParameters[0] = performance;
+			
 		// get the data
-		results = database.executePreparedStatement(sql, sqlParameters);
-		resultSet = results.getResultSet();
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		ResultSet resultSet = results.getResultSet();
 		
 		try {
 		
