@@ -60,6 +60,10 @@ tr {
 td {
 	border-bottom: 1px solid #333;	
 }
+
+td.totalFeedbackCount {
+	width:60px;	
+}
 /*
 	You can zebra-stripe your tables in outdated browsers by adding 
 	the class "even" to every other table row. 
