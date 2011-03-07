@@ -70,7 +70,7 @@ function visControllerTimeline(newModel) {
 					item = results[a].feedback[i];	
 					//Make the update acutally hoppen
 					//window.console.log(item);
-					$("#table_anchor").append('<tr><td class="feedback">' +	item.id + ' ' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');
+					$("#table_anchor").append('<tr><td class="feedback">' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');
 				}
 				
 			}	
