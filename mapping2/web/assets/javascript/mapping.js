@@ -101,8 +101,8 @@ function MappingClass() {
 	// variable to hold default max width for infoWindows
 	this.INFO_WINDOW_MAX_WIDTH = 500;
 	
-	// variable to define maximum length of an address
-	//this.MAX_ADDRESS_LENGTH = 30;
+	// variable to hold reference to the marker clusterer object
+	this.markerClusterer = null;
 
 }
 
@@ -163,8 +163,9 @@ MappingClass.prototype.initMap = function() {
 	mappingObj.map.mapTypes.set('ausstage', ausstageStyle);
 	mappingObj.map.setMapTypeId('ausstage');
 	
-	// add a function to the idle event to ensure markers get events added to them
+	// add a function to various events to ensure markers get events added to them
 	google.maps.event.addListener(mappingObj.map, 'idle', mappingObj.addMarkerClickEvent);
+	google.maps.event.addListener(mappingObj.map, 'center_changed', mappingObj.addMarkerClickEvent2);
 
 }
 
@@ -177,7 +178,12 @@ MappingClass.prototype.updateMap = function() {
 		mappingObj.initMap();
 		mappingObj.resizeMap();
 	} else {
-		// reset the map
+		// reset the map and associated objects
+		
+		// reset the marker clusterer
+		if(mappingObj.markerClusterer != null) {
+			mappingObj.markerClusterer.clearMarkers();
+		}
 	
 		// remove any existing markers
 		for(var i = 0; i < mappingObj.mapMarkers.objects.length; i++) {
@@ -211,7 +217,7 @@ MappingClass.prototype.updateMap = function() {
 			// create a marker with a label
 			var marker = new MarkerWithLabel({
 				position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
-				map:          mappingObj.map,
+				//map:          mappingObj.map,
 				draggable:    false,
 				labelContent: iconography.table,
 				labelClass:   'mapIconContainer',
@@ -223,6 +229,10 @@ MappingClass.prototype.updateMap = function() {
 			mappingObj.mapMarkers.hashes.push(mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude));
 		}
 	}
+	
+	// add marker clustering
+	mappingObj.markerClusterer = new MarkerClusterer(mappingObj.map);
+	mappingObj.markerClusterer.addMarkers(mappingObj.mapMarkers.objects);
 	
 	// finalise the map updates
 	mappingObj.resizeMap();
@@ -807,6 +817,11 @@ MappingClass.prototype.addMarkerClickEvent = function() {
 			icon.addClass('mapIconImgImgEvnt');
 		}
 	});
+}
+
+MappingClass.prototype.addMarkerClickEvent2 = function() {
+
+	setTimeout("mappingObj.addMarkerClickEvent()", UPDATE_DELAY * 3);
 }
 
 // respond to click events on icons
