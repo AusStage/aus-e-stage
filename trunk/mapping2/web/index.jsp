@@ -38,6 +38,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-1.4.2.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.3&sensor=false"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/markerwithlabel-1.1.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/markerclusterer-1.0.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
