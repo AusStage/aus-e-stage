@@ -1,6 +1,8 @@
 #summary Mobile Service API - Search
 
-<h1>Search API</h1>
+<h1>Proposed Search API - NOT implemented</h1>
+
+*NOTE: This is only a proposed API and hasn't actually been implemented* 
 
 Components of the Mobile Service are exposed as an [http://en.wikipedia.org/wiki/Application_programming_interface API]. The intention of the API is to make it easier for developers to customise their own front end interfaces and to split the work equitably amongst the software engineers working on the Aus-e-Stage project. 
 
