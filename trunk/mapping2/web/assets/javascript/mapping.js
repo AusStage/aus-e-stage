@@ -165,7 +165,7 @@ MappingClass.prototype.initMap = function() {
 	
 	// add a function to various events to ensure markers get events added to them
 	google.maps.event.addListener(mappingObj.map, 'idle', mappingObj.addMarkerClickEvent);
-	google.maps.event.addListener(mappingObj.map, 'center_changed', mappingObj.addMarkerClickEvent2);
+	google.maps.event.addListener(mappingObj.map, 'zoom_changed', mappingObj.addMarkerClickEvent2);
 
 }
 
@@ -224,6 +224,9 @@ MappingClass.prototype.updateMap = function() {
 				labelAnchor:  new google.maps.Point(mappingObj.POINTER_X_OFFSET * iconography.offset, mappingObj.POINTER_Y_OFFSET),
 				icon:         mapIconography.pointer
 			});
+			
+			// add the index hash to the marker
+			marker._indexHash = mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude);
 		
 			mappingObj.mapMarkers.objects.push(marker);
 			mappingObj.mapMarkers.hashes.push(mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude));
