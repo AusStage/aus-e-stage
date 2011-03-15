@@ -190,7 +190,7 @@
 						<div id="browse_footer" style="height:50px; width=100%;">
 							<div style="float:left; padding-top: 15px;" id="browse_messages"></div>
 							<div style="float:right; padding-top: 15px;">
-								<input type="button" id="browse_add_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add to Map Help"></span>
+								<input type="button" id="browse_reset_btn" value="Reset Browse List"/><input type="button" id="browse_add_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add to Map Help"></span>
 							</div>
 						</div>
 					</div>
