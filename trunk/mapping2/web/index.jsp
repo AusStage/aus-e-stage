@@ -69,6 +69,7 @@
 		</ul>
 		<div class="mapLegendContainer js peekaboo-tohide">
 			<h2>Map Legend</h2>
+			<input type="button" name="btn_reset_map" id="btn_reset_map" value="Reset Map"/>
 			<div class="accordion">
 				<h3><a href="#" id="mapLegendPanAndZoomHeading">Pan &amp; Zoom Map</a></h3>
 				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
@@ -281,6 +282,14 @@
 	</p>
 	<div id="map_legend_confirm_delete_text">
 	</div>
+</div>
+<div id="map_legend_confirm_reset" title="Confirm Map Reset" style="font-size: 90%">
+	<h3>Are you sure?</h3>
+	<p>
+		Are you sure you want to reset the map and delete all markers from the map?
+		<br/>&nbsp;<br/>
+		Please note your search history will be preserved and is available under the 'Search History' heading on the Search tab.
+	</p>
 </div>
 </body>
 </html>
