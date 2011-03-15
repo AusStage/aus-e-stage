@@ -1514,3 +1514,42 @@ MappingClass.prototype.doSimpleMapFromLink = function(type, id) {
 		});
 	}
 }
+
+// function to reset the map
+MappingClass.prototype.resetMap = function() {
+
+	// delete all of the markers if necessary
+	if(mappingObj.map == null) {
+		// initialise the map
+		mappingObj.initMap();
+		mappingObj.resizeMap();
+	} else {
+		// reset the map and associated objects
+		
+		// reset the marker clusterer
+		if(mappingObj.markerClusterer != null) {
+			mappingObj.markerClusterer.clearMarkers();
+		}
+	
+		// remove any existing markers
+		for(var i = 0; i < mappingObj.mapMarkers.objects.length; i++) {
+			// remove the marker from the map
+			mappingObj.mapMarkers.objects[i].setMap(null);
+		
+			// null this object
+			mappingObj.mapMarkers.objects[i] = null;
+		}
+	
+		// reset the array
+		mappingObj.mapMarkers.objects = [];
+		mappingObj.mapMarkers.hashes = [];
+		
+		// reset the data array
+		mappingObj.markerData.hashes = [];
+		mappingObj.markerData.objects = [];
+	}
+	
+	// update the map
+	mappingObj.updateMap();
+
+}
