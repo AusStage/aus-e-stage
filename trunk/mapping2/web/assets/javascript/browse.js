@@ -34,6 +34,7 @@ BrowseClass.prototype.init = function() {
 	 $('.browseSuburb').live('click', browseObj.getVenuesClickEvent);
 	 $('.browseCheckBox').live('click', browseObj.checkboxClickEvent);
 	 $('#browse_add_btn').click(browseObj.addToMap);
+	 $('#browse_reset_btn').click(browseObj.resetBrowseList);
 	 
 	 // set up handler for when an ajax request results in an error for searching
 	 $("#browse_messages").ajaxError(function(e, xhr, settings, exception) {
@@ -76,7 +77,7 @@ BrowseClass.prototype.getMajorAreas = function() {
 		
 		list += '</ul></li></ul>'
 		
-		$("#browse_major_area").append(list);
+		$("#browse_major_area").empty().append(list);
 		styleButtons();
 	});
 }
@@ -526,4 +527,15 @@ BrowseClass.prototype.processAjaxData = function(data) {
 BrowseClass.prototype.addDataToMap = function() {
 	mappingObj.addVenueBrowseData(browseObj.markerData);
 	$('#browse_messages').empty();
+}
+
+// function to reset the browse list
+BrowseClass.prototype.resetBrowseList = function() {
+
+	// get the major areas again
+	browseObj.getMajorAreas();
+	
+	// empty the other lists
+	$("#browse_suburb").empty();
+	$("#browse_venue").empty();
 }
