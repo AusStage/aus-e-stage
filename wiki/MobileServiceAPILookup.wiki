@@ -112,7 +112,7 @@ The fields of the object are as follows:
 
 = Date Lookup Data Fields =
 
-Looks up performances based by a start and end date. 
+Looks up performances that occur within the date range,  this includes performances that extend beyond the enddate.     
 
 == Parameters ==
 
