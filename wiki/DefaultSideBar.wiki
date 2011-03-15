@@ -17,6 +17,7 @@
      * [WikiImages Using Images in the Wiki]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
+     * [DataExchangeServiceExtensions Data Exchange Service Extensions]
    * [MappingService Mapping Service]
      * [MappingServiceAPI Mapping Service API]
        * [MappingServiceAPIMarkers Marker Data]
