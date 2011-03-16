@@ -71,6 +71,29 @@
 			<li><a href="http://code.google.com/p/aus-e-stage/wiki/GoogleEarthImageOverlay" title="Overlay creation documentation">Mapping How To Article</a> - Information on how to create an overlay for use in <a href="http://www.google.com/earth/index.html" title="Information on the Google Earth app">Google Earth</a>.</li>
 		</ul>
 		<p>
+			<h2>These services are:</h2>
+		</p>
+		<ul class="services">
+			<li>
+				<a href="index2.jsp" title="AusStage Mapping Service (Alpha)">
+					<h3>Mapping Service (Alpha)</h3>
+					<img src="/assets/images/map-alpha-screengrab.jpg" width="200" height="150" alt="">
+				</a>
+				<p>
+					<strong>Mapping Service - Alpha Version</strong>
+				</p>
+			</li>
+			<li>
+				<a href="/mapping2/" title="AusStage Mapping Service (Beta)">
+					<h3>Mapping Service (Beta)</h3>
+					<img src="/assets/images/map-screengrab.jpg" width="200" height="150" alt="">
+				</a>
+				<p>
+					<strong>Mapping Service - Beta Version</strong>
+				</p>
+			</li>
+		</ul>                    
+		<p class="clear">
 			Please help us to develop the AusStage Mapping Service by exploring its functionality. If you have any feedback, questions or queries please <a href="/" title="Aus-e-Stage homepage">Contact Us</a>. 
 		</p>
 	</div>
