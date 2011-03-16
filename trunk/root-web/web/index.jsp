@@ -53,7 +53,7 @@
 				<li><a href="/mapping/" title="Aus-e-Stage Mapping Service (Alpha)">Mapping Service (Alpha)</a></li>
 				<li><a href="/mapping2/" title="Aus-e-Stage Mapping Service (Beta)">Mapping Service (Beta)</a></li>
 				<li><a href="/networks/" title="Aus-e-Stage Navigating Networks Service (Beta)">Navigating Networks</a></li>
-				<li><a href="/mobile/" title="Ause-e-Stage Researching Audiences Service (Beta)">Researching Audiences</a></li>
+				<li><a href="http://code.google.com/p/aus-e-stage/wiki/MobileService" title="Information about the AusStage Researching Audiences Service">Researching Audiences</a></li>
 				<li><a href="http://code.google.com/p/aus-e-stage/wiki/StartPage" title="Aus-e-Stage Project Documentation.">Aus-e-Stage Wiki</a></li>
 			</ul>
 		</div>
