@@ -1,12 +1,3 @@
 #summary Mapping Beta Phase Testing
 
-= Introduction =
-
-Mapping Beta phase testing information and reports to come.....
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Notes relating to the demonstration of the [http://beta.ausstage.edu.au/mapping2/ Mapping Service (Mapping2)] during the Beta Testing phase are [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Demonstration_of_the_New_Aus-e-Stage_Mapping_Service_March_7_2011.pdf available for download] as a PDF file.
