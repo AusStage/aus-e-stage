@@ -112,14 +112,16 @@ The fields of the object are as follows:
 
 = Date Lookup Data Fields =
 
-Looks up performances that occur within the date range,  this includes performances that extend beyond the enddate.     
+Looks up performances that occur within the date range. 
+
+If the enddate parameter is missing the API will return performances that have an end date in the database greater than or equal to the supplied start date.   
 
 == Parameters ==
 
 || *Name*   || *Required Value*     || *Optional* || *Default* ||
 || task     || date             || No || ||
 || startdate     || Start date in the format of yyyy-mm-dd || No || || 
-|| enddate     || End date in the format of yyyy-mm-dd || No || || 
+|| enddate     || End date in the format of yyyy-mm-dd || YES || || 
 || callback || function name to use for a JSONP request || Yes || ||
 
 == Result data   ==
