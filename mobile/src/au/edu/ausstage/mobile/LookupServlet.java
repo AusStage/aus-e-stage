@@ -125,12 +125,19 @@ public class LookupServlet extends HttpServlet {
 				}
 			}
 		} else if(taskType.equals("date") == true) {
-			if(InputUtils.isValid(startDate) == false || InputUtils.isValid(endDate) == false) {
-				throw new ServletException("Missing parameters, expected 'startdate', 'enddate'");
+		
+			if(InputUtils.isValid(startDate) == false) {
+				throw new ServletException("The startDate parameter is required");
 			}
 		
-			if(InputUtils.isValidDate(startDate) == false || InputUtils.isValidDate(endDate) == false) {
-				throw new IllegalArgumentException("Both parameters, 'startdate', 'enddate', must be in the format yyyy-mm-dd");
+			if(InputUtils.isValidDate(startDate) == false) {
+				throw new ServletException("The startDate parameter must be in the format yyyy-mm-dd");
+			}
+		
+			if(InputUtils.isValid(endDate) == true) {
+				if(InputUtils.isValidDate(endDate) == false) {
+					throw new ServletException("The endDate parameter must be in the format yyyy-mm-dd");
+				}
 			}
 		
 		} else {
