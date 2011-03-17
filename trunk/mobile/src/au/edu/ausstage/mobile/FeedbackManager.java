@@ -90,8 +90,9 @@ public class FeedbackManager {
 			object.put("date", format.format(date));
 		} catch (ParseException e) {
 			object.put("date", object.get("startDateTime"));
+		} catch (NullPointerException e) {
+			object.put("date", object.get("startDateTime"));
 		}
-		
 		
 		/*
 		// define the sql

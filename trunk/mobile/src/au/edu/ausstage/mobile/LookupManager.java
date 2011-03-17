@@ -378,29 +378,54 @@ public class LookupManager {
 	public String getPerformanceByDate(String startDate, String endDate) {
 	
 		// check the parameters
-		if(InputUtils.isValid(startDate) == false || InputUtils.isValid(endDate) == false) {
-			throw new IllegalArgumentException("Both parameters to this method must be valid non empty strings");
+		if(InputUtils.isValid(startDate) == false) {
+			throw new IllegalArgumentException("The startDate parameter is required");
 		}
 		
-		if(InputUtils.isValidDate(startDate) == false || InputUtils.isValidDate(endDate) == false) {
-			throw new IllegalArgumentException("Both parameters to this method must be in the format yyyy-mm-dd");
+		if(InputUtils.isValidDate(startDate) == false) {
+			throw new IllegalArgumentException("The startDate parameter must be in the format yyyy-mm-dd");
 		}
 		
-		// expand the scope of the dates
-		startDate = startDate + " 00:00:00";
-		endDate   = endDate   + " 23:59:59";
+		if(InputUtils.isValid(endDate) == true) {
+			if(InputUtils.isValidDate(endDate) == false) {
+				throw new IllegalArgumentException("The endDate parameter must be in the format yyyy-mm-dd");
+			}
+		}
 		
-		// define the sql
-		String sql = "SELECT performance_id, start_date_time "
-				   + "FROM mob_performances "
-				   + "WHERE start_date_time >= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
-				   + "AND   end_date_time   <= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
-				   + "ORDER BY start_date_time DESC";
-				   
-		// define the sql parameters
-		String[] sqlParameters = new String[2];
-		sqlParameters[0] = startDate;
-		sqlParameters[1] = endDate;
+		String sql = null;
+		String[] sqlParameters = null;
+		
+		// prepare the sql related variables
+		if(InputUtils.isValid(endDate) == true) {
+			// use the endDate as part of the SQL
+			startDate = startDate + " 00:00:00";
+			endDate   = endDate   + " 23:59:59";
+		
+			// define the sql
+			sql = "SELECT performance_id, start_date_time "
+			    + "FROM mob_performances "
+			    + "WHERE start_date_time >= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
+			    + "AND   end_date_time   <= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
+			    + "ORDER BY start_date_time DESC";
+					   
+			// define the sql parameters
+			sqlParameters = new String[2];
+			sqlParameters[0] = startDate;
+			sqlParameters[1] = endDate;
+		} else {
+			// do not use the endDate as part of the SQL
+			startDate = startDate + " 00:00:00";
+		
+			// define the sql
+			sql = "SELECT performance_id, start_date_time "
+			    + "FROM mob_performances "
+			    + "WHERE start_date_time >= TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
+			    + "ORDER BY start_date_time DESC";
+					   
+			// define the sql parameters
+			sqlParameters = new String[1];
+			sqlParameters[0] = startDate;			
+		}
 		
 		// declare helper variables
 		JSONArray  list   = new JSONArray();
@@ -416,15 +441,14 @@ public class LookupManager {
 		try {
 			while(resultSet.next() == true) {
 			
-				// get the json for this performance
+				//get the json for this performance
 				json = getPerformanceDetails(resultSet.getString(1), "json");
-				
+
 				// convert the json into an object
 				obj = (JSONObject) parser.parse(json);
 				
 				// add the object to the array
-				list.add(obj);				
-				
+				list.add(obj);
 			} 
 		} catch(java.sql.SQLException ex) {
 			return new JSONArray().toString();
