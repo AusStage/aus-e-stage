@@ -104,7 +104,11 @@ public class EmailManager {
 			email.setMsg(message);
 		
 			// set the to address
-			email.addTo(options.getToAddress());
+			String[] addresses = options.getToAddress().split(":");
+			
+			for(int i = 0; i < addresses.length; i++) {
+				email.addTo(addresses[i]);
+			}
 		
 			// set the security options
 			if(options.getTLS() == true) {
@@ -172,7 +176,11 @@ public class EmailManager {
 			email.setMsg(message);
 		
 			// set the to address
-			email.addTo(options.getToAddress());
+			String[] addresses = options.getToAddress().split(":");
+			
+			for(int i = 0; i < addresses.length; i++) {
+				email.addTo(addresses[i]);
+			}
 		
 			// set the security options
 			if(options.getTLS() == true) {
