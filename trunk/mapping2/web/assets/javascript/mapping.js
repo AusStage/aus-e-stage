@@ -106,6 +106,9 @@ function MappingClass() {
 	
 	// variable to tell if clustering is enabled
 	this.clusteringEnabled = false;
+	
+	// zoom level at which point clustering stops
+	this.clusterMaxZoomLevel = 16;
 
 }
 
@@ -253,6 +256,7 @@ MappingClass.prototype.updateMap = function() {
 	if(mappingObj.clusteringEnabled == true) {
 		mappingObj.markerClusterer = new MarkerClusterer(mappingObj.map);
 		mappingObj.markerClusterer.setStyles(clusterIconography);
+		mappingObj.markerClusterer.setMaxZoom(mappingObj.clusterMaxZoomLevel);
 		mappingObj.markerClusterer.addMarkers(mappingObj.mapMarkers.objects);
 	} else {
 		mappingObj.markerClusterer = null;
