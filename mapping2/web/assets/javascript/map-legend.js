@@ -92,6 +92,19 @@ MapLegendClass.prototype.init = function() {
 	$("#btn_reset_map").click(function() {
 		$("#map_legend_confirm_reset").dialog('open');
 	});
+	
+	// setup click event on the enable clustering button
+	$("#btn_cluster_map").click(function() {
+		if(mappingObj.clusteringEnabled == false) {
+			mappingObj.clusteringEnabled = true;
+			mappingObj.updateMap();
+			$("#btn_cluster_map").val('Disable Clustering');
+		} else {
+			mappingObj.clusteringEnabled = false;
+			mappingObj.updateMap();
+			$("#btn_cluster_map").val('Enable Clustering');
+		}
+	});
 }
 
 // function to show the legend
