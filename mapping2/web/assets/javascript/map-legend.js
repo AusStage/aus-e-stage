@@ -347,6 +347,13 @@ MapLegendClass.prototype.updateLegend = function() {
 		$('#mapLegendEvents').empty();
 		$('#mapLegendEventsHeading').empty().append('Events (0)');
 	}
+	
+	// determine the text to show on the cluster button
+	if(mappingObj.clusteringEnabled == true) {
+		$("#btn_cluster_map").val('Disable Clustering');
+	} else {
+		$("#btn_cluster_map").val('Enable Clustering');
+	}
 }
 
 // a function to build the hide checkbox 

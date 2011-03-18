@@ -109,6 +109,9 @@ function MappingClass() {
 	
 	// zoom level at which point clustering stops
 	this.clusterMaxZoomLevel = 16;
+	
+	// record limit before clustering is enabled by default
+	this.applyClusterRecordLimit = 100;
 
 }
 
@@ -203,6 +206,11 @@ MappingClass.prototype.updateMap = function() {
 		// reset the array
 		mappingObj.mapMarkers.objects = [];
 		mappingObj.mapMarkers.hashes = [];
+	}
+	
+	// check to see if clustering should be enabled
+	if(mappingObj.markerData.objects.length >= mappingObj.applyClusterRecordLimit) {
+		mappingObj.clusteringEnabled = true;
 	}
 	
 	// declare helper variables
