@@ -273,6 +273,19 @@
 		<tbody id="map_iconography_individual_colours">
 		</tbody>
 	</table>
+	<p><br/>&nbsp;<br/><strong>Marker Clusters</strong></p>
+	<p>
+		When Marker Clustering is enabled markers on the map are clustered together based on how close they are on the map. 
+		<br/>&nbsp;<br/>
+		When two or more markers are close enough to each other at the current map zoom level they are clustered together. 
+		<br/>&nbsp;<br/>
+		A marker cluster is shown on the map using the icon below.
+		<br/>&nbsp;<br/>
+		The number shown on a marker cluster icon indicates the number of markers clustered together.
+	</p>
+	<div style="background-color: #c2d2e1; width:96px; height:96px;">
+		<img src="assets/images/iconography/cluster.png" width="96" height="96" alt="Marker Cluster Icon"/>
+	</div>
 </div>
 <div id="map_legend_confirm_delete" title="Confirm Map Marker Deletion" style="font-size: 90%">
 	<h3>Are you sure?</h3>
