@@ -103,6 +103,9 @@ function MappingClass() {
 	
 	// variable to hold reference to the marker clusterer object
 	this.markerClusterer = null;
+	
+	// variable to tell if clustering is enabled
+	this.clusteringEnabled = false;
 
 }
 
@@ -214,28 +217,46 @@ MappingClass.prototype.updateMap = function() {
 		
 		if(iconography != null) {
 		
-			// create a marker with a label
-			var marker = new MarkerWithLabel({
-				position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
-				//map:          mappingObj.map,
-				draggable:    false,
-				labelContent: iconography.table,
-				labelClass:   'mapIconContainer',
-				labelAnchor:  new google.maps.Point(mappingObj.POINTER_X_OFFSET * iconography.offset, mappingObj.POINTER_Y_OFFSET),
-				icon:         mapIconography.pointer
-			});
+			if(mappingObj.clusteringEnabled == false) {
+		
+				// create a marker with a label
+				var marker = new MarkerWithLabel({
+					position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
+					map:          mappingObj.map,
+					draggable:    false,
+					labelContent: iconography.table,
+					labelClass:   'mapIconContainer',
+					labelAnchor:  new google.maps.Point(mappingObj.POINTER_X_OFFSET * iconography.offset, mappingObj.POINTER_Y_OFFSET),
+					icon:         mapIconography.pointer
+				});
+			} else {
 			
-			// add the index hash to the marker
-			marker._indexHash = mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude);
+				// create a marker with a label
+				var marker = new MarkerWithLabel({
+					position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
+					//map:          mappingObj.map,
+					draggable:    false,
+					labelContent: iconography.table,
+					labelClass:   'mapIconContainer',
+					labelAnchor:  new google.maps.Point(mappingObj.POINTER_X_OFFSET * iconography.offset, mappingObj.POINTER_Y_OFFSET),
+					icon:         mapIconography.pointer
+				});
+			}
 		
 			mappingObj.mapMarkers.objects.push(marker);
 			mappingObj.mapMarkers.hashes.push(mappingObj.computeLatLngHash(objects[i].latitude, objects[i].longitude));
 		}
 	}
 	
+	
 	// add marker clustering
-	mappingObj.markerClusterer = new MarkerClusterer(mappingObj.map);
-	mappingObj.markerClusterer.addMarkers(mappingObj.mapMarkers.objects);
+	if(mappingObj.clusteringEnabled == true) {
+		mappingObj.markerClusterer = new MarkerClusterer(mappingObj.map);
+		mappingObj.markerClusterer.setStyles(clusterIconography);
+		mappingObj.markerClusterer.addMarkers(mappingObj.mapMarkers.objects);
+	} else {
+		mappingObj.markerClusterer = null;
+	}
 	
 	// finalise the map updates
 	mappingObj.resizeMap();

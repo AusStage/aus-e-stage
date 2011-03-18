@@ -1240,8 +1240,8 @@ ClusterIcon.prototype.createCss = function(pos) {
   var txtSize = this.textSize_ ? this.textSize_ : 11;
 
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
-      pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
-      txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
+      pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' + txtSize + 'px;');
+      //txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
   return style.join('');
 };
 

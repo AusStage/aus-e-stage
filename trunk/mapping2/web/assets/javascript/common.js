@@ -46,7 +46,46 @@ var mapIconography = { pointer:      BASE_URL + 'assets/images/iconography/point
 					   individualContributors:  ['b-50', 'b-49', 'b-48', 'b-47', 'b-46', 'b-45', 'b-44', 'b-43', 'b-42', 'b-41', 'b-40', 'b-39', 'b-86', 'b-85', 'b-84', 'b-83', 'b-82', 'b-81', 'b-80', 'b-79', 'b-78', 'b-77', 'b-76', 'b-75', 'b-74', 'b-73', 'b-72', 'b-71', 'b-70', 'b-69', 'b-68', 'b-67', 'b-66', 'b-65', 'b-64', 'b-63', 'b-62', 'b-61', 'b-60', 'b-59', 'b-58', 'b-57', 'b-56', 'b-55', 'b-54', 'b-53', 'b-52', 'b-51'],
 					   individualOrganisations: ['b-66', 'b-67', 'b-68', 'b-69', 'b-70', 'b-71', 'b-72', 'b-73', 'b-74', 'b-75', 'b-76', 'b-77', 'b-78', 'b-79', 'b-80', 'b-81', 'b-82', 'b-83', 'b-84', 'b-85', 'b-86', 'b-60', 'b-61', 'b-62', 'b-63', 'b-64', 'b-65', 'b-59', 'b-58', 'b-57', 'b-56', 'b-55', 'b-54', 'b-53', 'b-52', 'b-51', 'b-50', 'b-49', 'b-48', 'b-47', 'b-46', 'b-45', 'b-44', 'b-43', 'b-42', 'b-41', 'b-40', 'b-39']
 					 };
- 
+
+var clusterIconography = [{url: BASE_URL + 'assets/images/iconography/cluster.png',
+							height: 96,
+							width: 96,
+							anchor: [40, 45],
+							textColor: '#000000',
+							textSize: 9
+						   },
+						   {url: BASE_URL + 'assets/images/iconography/cluster.png',
+							height: 96,
+							width: 96,
+							anchor: [40, 42],
+							textColor: '#000000',
+							textSize: 9
+						   },
+						   {url: BASE_URL + 'assets/images/iconography/cluster.png',
+							height: 96,
+							width: 96,
+							anchor: [40, 39],
+							textColor: '#000000',
+							textSize: 9
+						   },
+						   {url: BASE_URL + 'assets/images/iconography/cluster.png',
+							height: 96,
+							width: 96,
+							anchor: [40, 36],
+							textColor: '#000000',
+							textSize: 9
+						   }
+						   ,
+						   {url: BASE_URL + 'assets/images/iconography/cluster.png',
+							height: 96,
+							width: 96,
+							anchor: [40, 33],
+							textColor: '#000000',
+							textSize: 9
+						   }
+						  ];
+						   
+
 /**
  * Common functions used across more than one page in the site
  */
