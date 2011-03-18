@@ -84,7 +84,6 @@ var clusterIconography = [{url: BASE_URL + 'assets/images/iconography/cluster.pn
 							textSize: 9
 						   }
 						  ];
-						   
 
 /**
  * Common functions used across more than one page in the site
