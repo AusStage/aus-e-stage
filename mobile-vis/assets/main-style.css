@@ -1,0 +1,241 @@
+/*
+ * This file is part of the Aus-e-Stage Beta Website
+ *
+ * The Aus-e-Stage Beta Website is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License 
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The Aus-e-Stage Beta Website is distributed in the hope that it will 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.  
+ * If not, see <http://www.gnu.org/licenses/>.
+ */
+/* primary structure styles */
+
+* {
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+	font-size: 95%;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+}
+
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -2em;
+	overflow: hidden;
+}
+
+.footer {
+	clear: both;
+	height: 2em;
+}
+
+.push {
+	clear:both;
+	height: 1px;
+}
+
+.tab-container {
+	width: 100%;
+	height: 100%;
+}
+
+#tabs {
+	height: 100%;
+	width:  100%;
+}
+
+/* specific styles for the header */
+.header {
+	height: 64px;
+	padding:0px;
+	background-image: url('images/ausstagehomebrand.gif');
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+.header h1 {
+	color: #eeeeee;
+	text-align: right;
+	font-weight: normal;
+	padding-top: 24px;
+	padding-right: 10px;
+}
+
+/* ui tabs styles to fix layout issue */
+.fix-ui-tabs {
+	height: 40px;
+}
+
+/* specific styles for the footer */
+.footer  {
+	color:#fff;
+	font-size: 90%;
+	margin-top: 10px;
+	padding-top: 3px;
+}
+
+.footer p {
+	margin: 0;
+    text-align: center;
+}
+
+.footer a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.footer a:visited {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.footer a:hover {
+	text-decoration: underline;
+}
+
+/* specific styles for the sidebar */
+.sidebar {
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px
+	overflow: hidden;
+	width: 265px;
+	padding-bottom: 32767px;
+	margin-bottom: -32767px;
+}
+
+.sidebar ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+.sidebar li {
+	margin-bottom:0.25em;
+}
+
+.sidebar a {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.sidebar a:visited {
+	/* same colour as f-188 */
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.sidebar a:hover {
+	color: #ffffff;
+	text-decoration: underline;
+}
+
+/* style anchor tags */
+a {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+a:visited {
+	/* same colour as f-189 */
+	text-decoration: none;
+	color: #001bcc;
+}
+
+a:hover {
+	/* same colour as f-189 */
+	text-decoration: underline;
+	color: #001bcc;
+}
+
+/* specific styles for the main content div */
+.main {
+	margin-left: 275px;
+	min-height: 100%;
+}
+
+.main p {
+	margin: 1em 0;
+}
+
+/* table styles */
+tr.odd {
+	background-color: #eeeeee;
+}
+
+td.numeric {
+	white-space: nowrap;
+	text-align: right;
+	width: 120px;
+}
+
+th.numeric {
+	width: 120px;
+	white-space: nowrap;
+	text-align: right;
+	width: 120px;
+}
+
+
+/* Styles of the screen grab on the home page.  */
+
+ul.services {
+	
+	display:inline;
+	
+}
+
+
+ul.services img {
+	padding-top:9px;	
+} 
+
+
+ul.services a img , ul.services a p {
+	text-decoration:none;
+	color:#333;	
+} 
+
+
+ul.services a:hover img , ul.services a:hover p {
+	text-decoration:none;
+	color:#333;	
+} 
+
+
+
+ul.services li {
+	float: left;
+	list-style:none;
+	width:210px;
+	border: 1px dotted #666;
+	padding:10px;	
+	margin:10px;
+	
+	min-height:300px;
+	
+}
+
+.clear {
+	
+	clear:both;
+	
+}
+
+
+	
+	
