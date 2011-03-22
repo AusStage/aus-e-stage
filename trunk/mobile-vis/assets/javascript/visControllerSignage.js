@@ -25,8 +25,8 @@ function  visControllerSignage(newModel) {
 
 		//Configure for the slide show 
 		 this.fx =  'fade';  // choose your transition type, ex: fade, scrollUp, shuffle, etc...	
-		 this.speed =  200;  
-		 this.timeout =  400; 
+		 this.speed =  300;
+		 this.timeout =  2000;
 						
 						
 		/*
@@ -108,7 +108,7 @@ function  visControllerSignage(newModel) {
 
 
                $.each(newResults, function() {
-                        /window.console.log('in the performances loop ');
+                        //window.console.log('in the performances loop ');
                         //window.console.log(this);
                          
                          $.each(this, function() {
