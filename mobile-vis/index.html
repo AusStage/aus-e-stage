@@ -54,8 +54,22 @@
 		<p>TODO - add introduction to service </p>
         
         <div id="error_message"></div>
-        
-        <span class="PerformancesBlock loading"></span>
+				<div class="ui-state-highlight ui-corner-all search-status-messages" id="search_status_message" >
+						<p>
+						<span class="ui-icon ui-icon-info status-icon"></span>
+						<span id="search_message_text"> Message</span>
+					     </p>
+				</div>       
+                                        
+                <div class="ui-state-error ui-corner-all search-status-messages" id="search_error_message"> 
+                             <p><span class="ui-icon ui-icon-alert status-icon"></span> 
+                             <span id="search_error_text">The Error Message</span>
+                            </p>
+				</div>
+                                        
+                                                                
+                                        
+        	 <span class="PerformancesBlock loading"></span>
         <h3>Peformances that currently have feedback</h3>
         
           <table id="SearchResults">
