@@ -22,7 +22,7 @@
 
 function model(name) {
 		
-		 this.UPDATE_DELAY = 3000;
+		 this.UPDATE_DELAY = 60000;
                  
                  this.CurrentPerformances;
 
@@ -164,7 +164,7 @@ function model(name) {
 				host = this.buildHost();
 			 	mydataType = this.getDataType(); 
 				
-                                this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
+                                //this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
                                 var newData = new Array();
                                 
                                 for(var i = 0; i < CurrentPerformances.length; i++){
