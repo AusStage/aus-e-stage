@@ -83,12 +83,12 @@ html, body {
 	color:#fff;
 	font-size: 90%;
 	margin-top: 10px;
-	padding-top: 3px;
+	padding-top: 13px;
 }
 
 .footer p {
-	margin: 0;
     text-align: center;
+    margin-top: 6px;
 }
 
 .footer a {
@@ -433,9 +433,12 @@ table.mapIconHelpTbl td {
 }
 
 /* styles for the map legend */
+.mapControlsContainer {
+	overflow: auto;
+}
+
 .mapLegendContainer {
 	margin-top: 10px;
-	height: 400px;
 	overflow: auto;
 }
 
