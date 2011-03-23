@@ -1595,7 +1595,6 @@ MappingClass.prototype.resetMap = function() {
 
 // function to scroll the map
 MappingClass.prototype.scrollMapPosition = function() {
-	console.log($(window).scrollTop());
 	var windowRef = $(window);
 	
 	if(windowRef.scrollTop() > 150) {
