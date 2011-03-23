@@ -119,31 +119,47 @@
 			   host = buildHost();
 			   var mydataType = getDataType(); 
 			   
-			   //set up the date 
-			  //DEC test var startdate = new Date('Dec 11 2010');
-			  var startdate = new Date('');
-			  //var startdate = new Date();
+			   //set up the date
+			   //var startdate = new Date('Dec 12 2010'); // FOR TESTING
+                            var startdate = new Date();
 
-			   startdate.setDate( startdate.getDate() + start );
+			   //enddate.setDate(startdate.getDate() + 10);
+                           
+			   startdate.setDate(startdate.getDate() - start);
 			   //window.console.log(startdate.toDateString());
-			
-			   //Now formatted the into yyyy-mm-dd
-			    startdateString = reFormatDatetoYYYYMMDD(startdate); 
-				
-			   var  enddate = startdate;
-			   enddate.setDate( startdate.getDate() + end);
-			   
-   				//Now formatted the into yyyy-mm-dd
-			    enddateString = reFormatDatetoYYYYMMDD(enddate); 
-				
-							  // build the query string			    
-			   var params = {
-					 
-					 task:'date',
-					 startdate: startdateString,
-					 enddate:   enddateString,
+                           //
+                           //Now formatted the into yyyy-mm-dd
 
-				 };
+                           startdateString = reFormatDatetoYYYYMMDD(startdate);
+			   window.console.log(startdateString);
+
+                           
+                            //var today = new Date('Dec 12 2010'); // FOR TESTING
+                            var today = new Date();
+                            var enddate = today;
+                            
+                            enddate.setDate(today.getDate() + end);
+
+                           //Now formatted the into yyyy-mm-dd
+                            enddateString = reFormatDatetoYYYYMMDD(enddate);
+			    window.console.log(enddateString);
+                            
+                            if (end == 0 && start == 0 ) {				  // build the query string
+                               //don't include the end date'
+                               var params = {
+                                             task:'date',
+                                             startdate: startdateString,
+
+                                     };
+                             } else {
+                               var params = {
+                                             task:'date',
+                                             startdate: startdateString,
+                                             enddate: enddateString,
+
+
+                                     };
+                             }
 				 
 				 var values = jQuery.param(params);//encode thos
 				
@@ -687,7 +703,7 @@
     </head>
 
     <body >
- 
+
          <div id="home" class="current">
             <div class="toolbar">
             	<img src="assets/jqtouch/themes/ausstage/img/logo.png" />
@@ -702,8 +718,8 @@
             <ul class="rounded">
             
             <li class="arrow"><a href="#Near" onClick="findLocation()">Performances near you</a> </li> 
-            <li class="arrow"><a href="#Recent" onClick="getPerformances(0,-5,'.recentPerformancesBlock')">Recent Performances</a></li> 
-            <li class="arrow"><a href="#Upcoming" onClick="getPerformances(0,7,'.upcomingPerformancesBlock')"> Upcoming Performances</a></li> 
+            <li class="arrow"><a href="#Recent" onClick="getPerformances(5,0,'.recentPerformancesBlock')">Recent Performances</a></li>
+           <!-- <li class="arrow"><a href="#Upcoming" onClick="getPerformances(0,7,'.upcomingPerformancesBlock')"> Upcoming Performances</a></li> -->
 			<li class="arrow"><a href="#About">About</a> </li>
 
             </ul>
@@ -747,7 +763,7 @@
          
   		      	<span class="recentPerformancesBlock loading"></span>
                     <ul class="Performances rounded recentPerformancesBlock performances">
-             	    </ul>
+             	  </ul>
                     
                                  
       
