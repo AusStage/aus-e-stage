@@ -19,16 +19,11 @@
 // define the map legend class
 function MapLegendClass() {
 
-	this.HEIGHT_BUFFER_CONSTANT = 105;
+	this.HEIGHT_BUFFER_CONSTANT = 120;
 	this.DEFAULT_MARKER_ZOOM_LEVEL = 17;
 	
 	this.recordData = null;
 
-}
-
-// function to hide the legend
-MapLegendClass.prototype.hideLegend = function() {
-	$('.mapLegendContainer').hide();
 }
 
 // initialise the map legend
@@ -107,9 +102,16 @@ MapLegendClass.prototype.init = function() {
 	});
 }
 
+// function to hide the legend
+MapLegendClass.prototype.hideLegend = function() {
+	$('.mapControlsContainer').hide();
+	$('.mapLegendContainer').hide();
+}
+
 // function to show the legend
 MapLegendClass.prototype.showLegend = function() {
 	mapLegendObj.updateLegend();
+	$('.mapControlsContainer').show();
 	$('.mapLegendContainer').show();
 }
 
@@ -463,17 +465,20 @@ MapLegendClass.prototype.computeMapLegendHeight = function() {
 	var mainMenu  = $('.mainMenu').height();
 	var pushElem  = $('.push').height();
 	var footer    = $('.footer').height();
+	var controls  = $('.mapControlsContainer').height();
 	
-	height = wrapper - (header + mainMenu + pushElem + footer + mapLegendObj.HEIGHT_BUFFER_CONSTANT);
+	height = wrapper - (header + mainMenu + pushElem + footer + controls + mapLegendObj.HEIGHT_BUFFER_CONSTANT);
 	
 	return Math.floor(height);
 }
 
 // a function to resize the map
 MapLegendClass.prototype.resizeMapLegend = function() {
-	
+
+/*	
 	var mapLegendDiv = $('.mapLegendContainer');
 	mapLegendDiv.height(mapLegendObj.computeMapLegendHeight());
+*/
 }
 
 // a function to build the pan and zoom controls

@@ -67,7 +67,7 @@
 		<ul>
 			<li class="peekaboo clickable">Hide Menu</li>
 		</ul>
-		<div class="mapLegendContainer js peekaboo-tohide">
+		<div class="mapControlsContainer js peekaboo-tohide">
 			<h2>Map Controls</h2>
 			<input type="button" name="btn_reset_map" id="btn_reset_map" value="Reset Map"/><input type="button" name="btn_cluster_map" id="btn_cluster_map" value="Enable Clustering"/>
 			<div class="accordion">
@@ -75,6 +75,8 @@
 				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
 				</div>
 			</div>
+		</div>
+		<div class="mapLegendContainer js peekaboo-tohide">
 			<h2>Map Legend</h2>
 			<div class="accordion">
 				<h3><a href="#" id="mapLegendContributorHeading">Contributors</a></h3>
@@ -197,8 +199,10 @@
 					</div>
 				</div>
 				<div id="tabs-3">
-					<h3>Map of the Selected Items</h3>
-					<div id="map_div">
+					<div id="map_container_div">
+						<h3>Map of the Selected Items</h3>
+						<div id="map_div">
+						</div>
 					</div>
 				</div>
 			</div>

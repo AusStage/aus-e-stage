@@ -829,6 +829,10 @@ SearchClass.prototype.processAjaxData = function(data) {
 
 // function to add the data to the map
 SearchClass.prototype.addDataToMap = function() {
+
+	// scroll to the top of thw window
+	$(window).scrollTop(0);
+
 	if(searchObj.add_data_type == 'venue') {
 		mappingObj.addVenueBrowseData(searchObj.markerData);
 		$("#searchAddVenueError").empty();

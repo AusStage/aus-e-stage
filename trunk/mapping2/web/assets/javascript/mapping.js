@@ -112,6 +112,9 @@ function MappingClass() {
 	
 	// record limit before clustering is enabled by default
 	this.applyClusterRecordLimit = 100;
+	
+	// reference to the map div as a JQuery object
+	this.mapDivReference = $('#map_container_div');
 
 }
 
@@ -175,6 +178,9 @@ MappingClass.prototype.initMap = function() {
 	// add a function to various events to ensure markers get events added to them
 	google.maps.event.addListener(mappingObj.map, 'idle', mappingObj.addMarkerClickEvent);
 	google.maps.event.addListener(mappingObj.map, 'zoom_changed', mappingObj.addMarkerClickEvent2);
+	
+	// add a function to scroll the map position
+	$(window).scroll(mappingObj.scrollMapPosition);
 
 }
 
@@ -1585,4 +1591,18 @@ MappingClass.prototype.resetMap = function() {
 	// update the map
 	mappingObj.updateMap();
 
+}
+
+// function to scroll the map
+MappingClass.prototype.scrollMapPosition = function() {
+	console.log($(window).scrollTop());
+	var windowRef = $(window);
+	
+	if(windowRef.scrollTop() > 150) {
+		mappingObj.mapDivReference.stop();
+		mappingObj.mapDivReference.animate({'marginTop': ($(window).scrollTop() - 110) + 'px'}, 'slow');
+	} else {
+		mappingObj.mapDivReference.stop();
+		mappingObj.mapDivReference.animate({'marginTop': '0px'}, 'slow');
+	}
 }
