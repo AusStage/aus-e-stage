@@ -88,6 +88,19 @@ MapLegendClass.prototype.init = function() {
 		}
 	});
 	
+	// setup the map legend map reset confirmation box
+	$("#map_legend_clustering_error").dialog({
+		autoOpen: false,
+		height: 300,
+		width: 400,
+		modal: true,
+		buttons: {
+			OK: function() {
+				$(this).dialog('close');
+			}
+		}
+	});
+	
 	// setup click event on the reset map button
 	$("#btn_reset_map").click(function() {
 		$("#map_legend_confirm_reset").dialog('open');
@@ -100,9 +113,17 @@ MapLegendClass.prototype.init = function() {
 			mappingObj.updateMap();
 			$("#btn_cluster_map").val('Disable Clustering');
 		} else {
-			mappingObj.clusteringEnabled = false;
-			mappingObj.updateMap();
-			$("#btn_cluster_map").val('Enable Clustering');
+		
+			// check to see if we can disable clustering
+			if(mappingObj.markerData.objects.length >= mappingObj.applyClusterLimit) {
+				$("#mlce_max").empty().append(mappingObj.applyClusterLimit);
+				$("#mlce_current").empty().append(mappingObj.markerData.objects.length);
+				$("#map_legend_clustering_error").dialog('open');
+			} else {
+				mappingObj.clusteringEnabled = false;
+				mappingObj.updateMap();
+				$("#btn_cluster_map").val('Enable Clustering');
+			}
 		}
 	});
 	

@@ -307,5 +307,15 @@
 		Please note your search history will be preserved and is available under the 'Search History' heading on the Search tab.
 	</p>
 </div>
+<div id="map_legend_clustering_error" title="Unable to Disable Clustering" style="font-size: 90%">
+	<h3>Clustering cannot be disabled at this time</h3>
+	<p>
+		Clustering is automatically enabled when <span id="mlce_max"></span> markers are added to the map (including currently hidden markers).
+		<br/>&nbsp;<br/>
+		You currently have <span id="mlce_current"></span> markers added to the map. Delete some markers and then try again.
+		<br/>&nbsp;<br/>
+		If you feel the limit is too low, please contact the AusStage team
+	</p>
+</div>
 </body>
 </html>

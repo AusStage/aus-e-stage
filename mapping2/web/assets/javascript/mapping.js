@@ -111,7 +111,7 @@ function MappingClass() {
 	this.clusterMaxZoomLevel = 16;
 	
 	// record limit before clustering is enabled by default
-	this.applyClusterRecordLimit = 100;
+	this.applyClusterLimit = 100;
 	
 	// reference to the map div as a JQuery object
 	this.mapDivReference = $('#map_container_div');
@@ -215,7 +215,7 @@ MappingClass.prototype.updateMap = function() {
 	}
 	
 	// check to see if clustering should be enabled
-	if(mappingObj.markerData.objects.length >= mappingObj.applyClusterRecordLimit) {
+	if(mappingObj.markerData.objects.length >= mappingObj.applyClusterLimit) {
 		mappingObj.clusteringEnabled = true;
 	}
 	
