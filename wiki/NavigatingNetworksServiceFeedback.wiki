@@ -2,6 +2,6 @@ _Details of the Navigating Networks Testing Feedback_
 
 The Navigating Networks service is being developed in stages.  As a result testing feedback is being incrementally gathered, reviewed and updated.  
 
-The most recent round of Navigating Networks Alpha Testing Feedback is tabled in the document at:  
+The December 2010 - March 2011 round of Navigating Networks Alpha Testing Feedback is tabled in the document [http://aus-e-stage.googlecode.com/svn-history/r1745/trunk/wiki-assets/Alpha_1_Testing_Networking_feedback_report_December_2010_-_March_2011.pdf available here].
 
-http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/alpha-1-testing-networking-feedback-report-Dec-2010.pdf
+The December 2010 round of Navigating Networks Alpha Testing Feedback is tabled in the document [http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/alpha-1-testing-networking-feedback-report-Dec-2010.pdf available here].
