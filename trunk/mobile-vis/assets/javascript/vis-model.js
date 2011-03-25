@@ -23,7 +23,7 @@
 function model(name) {
 		
 		 this.UPDATE_DELAY = 60000;
-                 
+  
                  this.CurrentPerformances;
 
 		 this.results = new Array();
@@ -110,8 +110,14 @@ function model(name) {
 						dataType: mydataType,
 						cache: false,							
 						success: function (data, textStatus, jqXHR) {
+
 							if(current.errorStatus 	== 1) {current.errorController.turnOffError ()};
-							feedbackLength =  data.feedback.length -1; 
+							feedbackLength =  data.feedback.length -1;
+                                                        if(feedbackLength == - 1) {
+                                                            current.errorController.updateError("No feedback found for performance number  " + CurrentPerformance + '<br />');
+                                                            return; 
+                                                        };
+
 							///window.console.log(data.feedback[feedbackLength].id);
 							current.lastFeedbackID = data.feedback[feedbackLength].id; 
 							
@@ -164,7 +170,7 @@ function model(name) {
 				host = this.buildHost();
 			 	mydataType = this.getDataType(); 
 				
-                                //this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
+                               // this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
                                 var newData = new Array();
                                 
                                 for(var i = 0; i < CurrentPerformances.length; i++){
