@@ -27,7 +27,6 @@ function model(name) {
 		 this.errorController = new errorController();
 		 this.errorStatus = 0;  
 
-		
 		/** 
 	    * 
 		*  
@@ -60,7 +59,7 @@ function model(name) {
 					 
 					 task:'date',
 					 startdate: startdateString,
-					 enddate:   enddateString,
+					// enddate:   enddateString,
 
 				 };
 				 
