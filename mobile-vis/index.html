@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/common-web-assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/common-web-assets/ausstage-background-colours.css"/>
-	<link rel="stylesheet" href="assets/common-web-assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
+	<link rel="stylesheet" href="assets/common-web-assets/jquery-ui-1.8.6.custom.css"/>
     
     <link rel="stylesheet" href="assets/vis.css"/>
     
@@ -14,10 +14,13 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.5.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.6.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
-	<!-- custom code -->
-                <script src="assets/javascript/searchModel.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
+        <!-- custom code -->
+        <script src="assets/javascript/searchModel.js"></script>
         <script src="assets/javascript/errorController.js"></script>
         <script src="assets/javascript/visControllerSearch.js"></script>
+        <script src="assets/javascript/visControllerChooseView.js"></script>
+
 
         <script type="text/javascript" charset="utf-8">
          
@@ -29,7 +32,8 @@
 			
 				myModel = new model();
 				myModel.controllers.push(new visControllerSearch(myModel)); // Add the timeline controller the model
-				myModel.searchPerformances();
+				myModel.controllers.push(new visControllerChooseView(this)); // Add the timeline controller the model
+                                myModel.searchPerformances();
 				
 		});
 		
@@ -53,42 +57,53 @@
 		<!-- main conttent -->
 		<p>TODO - add introduction to service </p>
         
-        <div id="error_message"></div>
-				<div class="ui-state-highlight ui-corner-all search-status-messages" id="search_status_message" >
-						<p>
-						<span class="ui-icon ui-icon-info status-icon"></span>
-						<span id="search_message_text"> Message</span>
-					     </p>
-				</div>       
-                                        
-                <div class="ui-state-error ui-corner-all search-status-messages" id="search_error_message"> 
-                             <p><span class="ui-icon ui-icon-alert status-icon"></span> 
-                             <span id="search_error_text">The Error Message</span>
-                            </p>
-				</div>
-                                        
+                 <div class="ui-state-error ui-corner-all status-messages" id="search_error_message">
+                                             <p><span class="ui-icon ui-icon-alert status-icon"></span>
+                                             <span id="error_text"></span>
+                                            </p>
+                                  </div>
+
+                          <div class="ui-state-highlight ui-corner-all status-messages" id="status_message" >
+                                                                <p>
+                                                                <span class="ui-icon ui-icon-info status-icon"></span>
+                                                                <span id="message_text"></span>
+                                                            </p>
+                                </div>
+
                                                                 
                                         
         	 <span class="PerformancesBlock loading"></span>
         <h3>Peformances that currently have feedback</h3>
-        
+
+
+         <form action="" method="get" id="performanceForm">
+
           <table id="SearchResults">
           <thead>
         	<tr>
-            <th scope="col">Event</th>
-            <th scope="col">Organisation</th>
-             <th scope="col">Date and Time</th>
+                    <th scope="col"></th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Organisation</th>
+                     <th scope="col">Date and Time</th>
 
-            <th scope="col">Venue</th>
-            <th scope="col">View</th>    
-            <th scope="col">Feedback Count</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col">View</th>
+                    <th scope="col">Feedback Count</th>
             </tr>
           </thead>
           
-			<tr id="table_anchor"></tr>
+                <tr id="table_anchor"></tr>
+                <!-- Below is where the actual date goes -->
+
 		</table>
-        
-    
+             <div id="instrctions"><strong>Choose how you would like to view the selected performances.</strong></div> <br/>
+             <div id="viewChoices">
+                 <input type="button" value="List View" name="ListView" id="chooseList" />
+                <input type="button" value="Signage View" name="SignageView" id="chooseSignage" />
+             </div>
+
+
+         </form>
         
 
 	</div>
