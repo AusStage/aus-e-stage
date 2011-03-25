@@ -90,14 +90,19 @@ function visControllerTimeline(newModel) {
 		
 		this.refreshView  = function (newResults)
 		{	
-                        for (var a = 0; a < newResults.length; a++) { //loop over the controllers
-				
-					//Make the update acutally hoppen
-                                        //This works well if all the results are from the same peformaance
-					$("#table_anchor").prepend('<tr><td class="feedback">' + newResult[a].content + '</td><td class="date">' + newResult[a].date  + '</td><td class="time">' + newResult[a].time + '</td><td class="type">' + newResult[a].type + '</td></tr>');
-                                        //window.console.log(item);
-			}	
-							
+
+                       //window.console.log(newResults);
+
+                       $.each(newResults, function() {
+                                //window.console.log('in the performances loop ');
+                                //window.console.log(this);
+                                 $.each(this, function() {					//Make the update acutally hoppen
+                                                //This works well if all the results are from the same peformaance
+                                                $("#table_anchor").prepend('<tr><td class="feedback">' + this.content + '</td><td class="date">' + this.date  + '</td><td class="time">' + this.time + '</td><td class="type">' + this.type + '</td></tr>');
+                                                //window.console.log(item);
+                                   });
+                       });
+
 			 
 		}	
 		

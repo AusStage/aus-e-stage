@@ -20,7 +20,7 @@
 function visControllerSearch(newModel) {
 		
 		 this.model = newModel; 
-
+		 this.errorController = new errorController();
 		/*
 		* Called when the results are updated     
 		*/ 	
@@ -48,9 +48,10 @@ function visControllerSearch(newModel) {
 					 window.console.log(item );
 							
 							    $("#table_anchor").after('<tr>' +
-													'<td class="event">'  + item.event + '</td>' + 
+                                                                                                        '<td class="select"> <input type="checkbox"  name="performance" id="' + item.id + '" value="' + item.id + '" /> </td>' +
+                                                                                                        '<td class="event">'  + item.event + '</td>' +
 													'<td class="organisation"> ' + item.organisation  + ' </td>' +
-												    '<td class="startDateTime">' + item.startDateTime + '</td>' +			
+												        '<td class="startDateTime">' + item.startDateTime + '</td>' +
 													'<td class="venue">' + item.venue +' </td>' +
 													'<td class="view"><a href="timeline.html?performance=' + item.id + '">Timeline</a>, ' +
 													'<a href="signage.html?performance=' + item.id + '">Signage</a> ' +
@@ -66,10 +67,11 @@ function visControllerSearch(newModel) {
 					
 			}	
 							
-			 
+
 		}	
 
 
+         
 
 		
 } 
