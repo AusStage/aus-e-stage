@@ -200,7 +200,9 @@
 				</div>
 				<div id="tabs-3">
 					<h3>Map of the Selected Items</h3>
-					<div id="map_div">
+					<div id="map_container_div">
+						<div id="map_div" style="height: 100%; width: 100%">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -310,7 +312,7 @@
 <div id="map_legend_clustering_error" title="Unable to Disable Clustering" style="font-size: 90%">
 	<h3>Clustering cannot be disabled at this time</h3>
 	<p>
-		Clustering is automatically enabled when <span id="mlce_max"></span> markers are added to the map (including currently hidden markers).
+		Clustering is automatically enabled when <span id="mlce_max"></span> markers are added to the map (including hidden markers).
 		<br/>&nbsp;<br/>
 		You currently have <span id="mlce_current"></span> markers added to the map. Delete some markers and then try again.
 		<br/>&nbsp;<br/>

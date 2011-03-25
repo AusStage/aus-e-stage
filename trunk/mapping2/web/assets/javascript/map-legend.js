@@ -113,7 +113,6 @@ MapLegendClass.prototype.init = function() {
 			mappingObj.updateMap();
 			$("#btn_cluster_map").val('Disable Clustering');
 		} else {
-		
 			// check to see if we can disable clustering
 			if(mappingObj.markerData.objects.length >= mappingObj.applyClusterLimit) {
 				$("#mlce_max").empty().append(mappingObj.applyClusterLimit);

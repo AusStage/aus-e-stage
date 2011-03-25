@@ -79,7 +79,7 @@ function MappingClass() {
 						 };   
 	
 	// variables to hold a height / width constant for use in computing the height / width of the map
-	this.HEIGHT_BUFFER_CONSTANT = 55;
+	this.HEIGHT_BUFFER_CONSTANT = 35;
 	this.WIDTH_BUFFER_CONSTANT  = 55;
 	
 	// variables to hold the x / y offset constants for computing the placement pointer on a marker
@@ -178,9 +178,6 @@ MappingClass.prototype.initMap = function() {
 	// add a function to various events to ensure markers get events added to them
 	google.maps.event.addListener(mappingObj.map, 'idle', mappingObj.addMarkerClickEvent);
 	google.maps.event.addListener(mappingObj.map, 'zoom_changed', mappingObj.addMarkerClickEvent2);
-	
-	// add a function to scroll the map position
-	$(window).scroll(mappingObj.scrollMapPosition);
 
 }
 
@@ -738,6 +735,14 @@ MappingClass.prototype.computeLatLngHash = function(latitude, longitude) {
 // compute the height of the map
 MappingClass.prototype.computeMapHeight = function() {
 
+	var containerCoords = $('#map_container_div').offset();
+	var footerCoords = $('.footer').offset();
+	
+	var newHeight = footerCoords.top - (containerCoords.top + mappingObj.HEIGHT_BUFFER_CONSTANT);
+	return Math.floor(newHeight);	
+
+/*
+
 	// start the height calculations
 	//var height = mappingObj.HEIGHT_CONSTANT;
 	var height = 0;
@@ -752,6 +757,7 @@ MappingClass.prototype.computeMapHeight = function() {
 	height = wrapper - (header + tabHeader + pushElem + footer + mappingObj.HEIGHT_BUFFER_CONSTANT);
 	
 	return Math.floor(height);
+*/
 }
 
 // compute the width of the map
@@ -773,7 +779,8 @@ MappingClass.prototype.computeMapWidth = function() {
 MappingClass.prototype.resizeMap = function() {
 
 	if(mappingObj.map != null) {
-		var mapDiv = $(mappingObj.map.getDiv());
+		//var mapDiv = $(mappingObj.map.getDiv());
+		var mapDiv = $('#map_container_div');
 		mapDiv.height(mappingObj.computeMapHeight());
 		mapDiv.width(mappingObj.computeMapWidth());
 	
@@ -1591,17 +1598,4 @@ MappingClass.prototype.resetMap = function() {
 	// update the map
 	mappingObj.updateMap();
 
-}
-
-// function to scroll the map
-MappingClass.prototype.scrollMapPosition = function() {
-	var windowRef = $(window);
-	
-	if(windowRef.scrollTop() > 150) {
-		mappingObj.mapDivReference.stop();
-		mappingObj.mapDivReference.animate({'marginTop': ($(window).scrollTop() - 110) + 'px'}, 'slow');
-	} else {
-		mappingObj.mapDivReference.stop();
-		mappingObj.mapDivReference.animate({'marginTop': '0px'}, 'slow');
-	}
 }
