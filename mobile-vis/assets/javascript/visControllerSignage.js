@@ -66,7 +66,7 @@ function  visControllerSignage(newModel) {
 		
 				
 		/*
-		* Build the timeline view with the current results.    
+		* Build the signage view with the current results.
 		*/
 		this.BuildView  = function (newResults)
 		{	
@@ -95,41 +95,51 @@ function  visControllerSignage(newModel) {
 		}	
 		
 		/*
-		* Refresh the timeline view with the current results.    
+		* Refresh the signage view with the current results.
 		* There is a more elegant whay to do this. 
 		*/
 		this.refreshView  = function (newResults)
 		{	
-		//$('.feedback_messages').hide();
-		
-		$('.feedback_messages').cycle(
-				'destroy' 		
-		);
 
+                window.console.log('In the signage view refresh');
 
-               $.each(newResults, function() {
+                  $('#feedback').fadeOut('slow', function() {
+
+                        $('.feedback_messages').cycle(
+                                 'destroy'
+                          );
+                              
+                        $.each(newResults, function() {
                         //window.console.log('in the performances loop ');
                         //window.console.log(this);
-                         
-                         $.each(this, function() {
-                          //  window.console.log('in the feedback loop ');
-                            //window.console.log(this.content);
+                             $.each(this, function() {
+                              //  window.console.log('in the feedback loop ');
+                                //window.console.log(this.content);
 
-                            $(".feedback_messages").prepend('<span class="feedback"><div class="content">' + this.content + '</div><span class="feedback-about"><span class="date">' + this.date  + '</span><span class="time">' + this.time + ' </span><span class="type">' +  this.type + ' </span></span></span>');
-                          });
-               });
+                                 $(".feedback_messages").prepend('<span class="feedback"><div class="content">' + this.content + '</div><span class="feedback-about"><span class="date">' + this.date  + '</span><span class="time">' + this.time + ' </span><span class="type">' +  this.type + ' </span></span></span>');
+                              });
+                         });
 
 
-        
+                        //REBUILD Add it back
+                       $('.feedback_messages').cycle({
+                                    fx: this.fx,
+                                    speed: this.speed,
+                                    timeout: this.timeout,
+                         });
+            
+                        $('#feedback').fadeIn('slow');
+                   });
+
+	
+
+                }
+       
          
 				
-		//REBUILD Add it back 
-		$('.feedback_messages').cycle({
-			fx: this.fx, 
-			speed: this.speed, 
-			timeout: this.timeout, 	 	
-		});			 
-		}	
+		
+
+             	
 		
 		
 				
