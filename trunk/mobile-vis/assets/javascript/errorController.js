@@ -30,7 +30,7 @@ function errorController() {
 		{
 			window.console.log('------- ERROR -------' + error );
 			$(window.$(".ui-state-error")).css('display','block');
-			$(window.$("#error_text")).append(message + ".  Error number:" + error );
+			$(window.$("#error_text")).html(message );
 
 		}
 		
@@ -42,9 +42,9 @@ function errorController() {
 			
 		this.updateMessage = function (message, error)
 		{
-			window.console.log('------- ERROR -------' + error );
+                        window.console.log('------- ERROR -------' + error );
 			$(window.$(".ui-state-highlight")).css('display','block');
-			$(window.$("#message_text")).append(message + ".  Error number:" + error );
+			$(window.$("#message_text")).html(message);
 
 		}
 		
