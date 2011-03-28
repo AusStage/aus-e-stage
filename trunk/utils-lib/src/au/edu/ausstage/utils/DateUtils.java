@@ -411,7 +411,7 @@ public class DateUtils {
 	 *
 	 * @param fyear  the first year
 	 * @param fmonth the first month
-	 * @apram fday   the first day	
+	 * @param fday   the first day	
 	 *
 	 * @param lyear  the last year
 	 * @param lmonth the last month
