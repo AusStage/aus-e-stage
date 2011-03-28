@@ -403,6 +403,83 @@ public class DateUtils {
 		}
 		
 		return getIntegerFromDate(date, "-");
-	}	
+	}
+	
+	/**
+	 * A method to turn dates from AusStage into dates that can be used for sorting
+	 * Used primarily to prepare data for use in the mapping service time slideer
+	 *
+	 * @param fyear  the first year
+	 * @param fmonth the first month
+	 * @apram fday   the first day	
+	 *
+	 * @param lyear  the last year
+	 * @param lmonth the last month
+	 * @param lday   the last day
+	 *
+	 * @return       a two element string array, first element is the first date, the second is the last date
+	 */
+	public static String[] getDatesForTimeline(String fyear, String fmonth, String fday, String lyear, String lmonth, String lday) {
+	
+		// validate the parameters
+		if(InputUtils.isValid(fyear) == false) {
+			throw new IllegalArgumentException("Error: The fyear parameter is required");
+		}
+		
+		// declare helper variables
+		String[] dates = new String[2];
+		
+		/*
+		 * process the first date
+		 */
+		if(InputUtils.isValid(fmonth) == false) {
+			dates[0] = fyear + "-01-01";
+		} else if(InputUtils.isValid(fday) == false) {
+			dates[0] = fyear + "-" + fmonth + "-01";
+		} else {
+			dates[0] = fyear + "-" + fmonth + "-" + fday;
+		}
+		
+		/*
+		 * process the last date
+		 */
+		if(InputUtils.isValid(lyear) == false) {
+			dates[1] = dates[0];
+		} else if (InputUtils.isValid(lmonth) == false) {
+			dates[1] = lyear + "01-01";
+		} else {
+			dates[1] = lyear + "-" + lmonth + "-" + getLastDay(lyear, lmonth);
+		}
+		
+		// outlier check
+		try {
+			if(InputUtils.isValid(lyear) == true) {
+				if(Integer.parseInt(lyear) > Integer.parseInt(fyear)) {
+					dates[1] = lyear + "-01-01";
+				}
+			}
+		} catch (NumberFormatException e) {}
+		
+		return dates;	
+	}
+	
+	/**
+	 * A method to turn dates from AusStage into dates that can be used for sorting
+	 * Used primarily to prepare data for use in the mapping service time slideer
+	 *
+	 * @param fdate the first date
+	 * @param ldate the last  date
+	 *
+	 * @return       a two element string array, first element is the first date, the second is the last date
+	 */
+	public static String[] getDatesForTimeline(String fdate, String ldate) {
+	
+		// explode the dates
+		String[] fdates = getExplodedDate(fdate);
+		String[] ldates = getExplodedDate(ldate);
+		
+		return getDatesForTimeline(fdates[0], fdates[1], fdates[2], ldates[0], ldates[1], ldates[2]);
+	
+	}
 		
 } // end class definition
