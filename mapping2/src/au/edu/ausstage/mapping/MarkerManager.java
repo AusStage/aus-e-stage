@@ -77,18 +77,22 @@ public class MarkerManager {
 		
 		if(stateId.equals("99") == true) {
 			// all australian states
-			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM venue v, states s "
+			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "		  vd.min_event_date, vd.max_event_date "
+				+ "FROM venue v, states s , venue_min_max_event_dates vd "
 				+ "WHERE v.state < ? "
 				+ "AND v.state = s.stateid "
-				+ "AND latitude IS NOT NULL";
+				+ "AND latitude IS NOT NULL "
+				+ "AND v.venueid = vd.venueid";
 		} else {
 			// international venues
-			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM venue v, states s "
+			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "		  vd.min_event_date, vd.max_event_date "
+				+ "FROM venue v, states s , venue_min_max_event_dates vd "
 				+ "WHERE v.state = ? "
 				+ "AND v.state = s.stateid "
-				+ "AND latitude IS NOT NULL";
+				+ "AND latitude IS NOT NULL "
+				+ "AND v.venueid = vd.venueid";
 		}
 		
 		// get the data
@@ -148,13 +152,15 @@ public class MarkerManager {
 		sqlParameters[1] = sqlParameters[1].toLowerCase();
 		
 		// build the SQL
-		String sql = "SELECT DISTINCT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				   + "FROM venue v, states s, events e "
+		String sql = "SELECT DISTINCT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				   + "		          vd.min_event_date, vd.max_event_date "
+				   + "FROM venue v, states s, events e, venue_min_max_event_dates vd "
 				   + "WHERE v.state = ? "
 				   + "AND LOWER(v.suburb) = ? "
-				   + "AND v.state = s.stateid  "
+				   + "AND v.state = s.stateid "
 				   + "AND v.venueid = e.venueid "
-				   + "AND latitude IS NOT NULL  ";
+				   + "AND latitude IS NOT NULL "
+				   + "AND v.venueid = vd.venueid";
 		
 		// get the data
 		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
@@ -224,14 +230,17 @@ public class MarkerManager {
 		String sql = null;
 		
 		if(sqlParameters.length == 1) {
-			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM venue v, states s "
+			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "       vd.min_event_date, vd.max_event_date "
+				+ "FROM venue v, states s, venue_min_max_event_dates vd "
 				+ "WHERE v.venueid = ? "
 				+ "AND v.state = s.stateid "
-				+ "AND latitude IS NOT NULL ";
+				+ "AND latitude IS NOT NULL "
+				+ "AND v.venueid = vd.venueid";
 		} else {
-			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM venue v, states s "
+			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "       vd.min_event_date, vd.max_event_date "
+				+ "FROM venue v, states s, venue_min_max_event_dates vd "
 				+ "WHERE v.venueid = ANY (";
 					   
 			// add sufficient place holders for all of the ids
@@ -245,7 +254,8 @@ public class MarkerManager {
 			// finalise the sql string
 			sql += ") "
 				+ "AND v.state = s.stateid "
-				+ "AND latitude IS NOT NULL ";
+				+ "AND latitude IS NOT NULL "
+				+ "AND v.venueid = vd.venueid";
 		}
 		
 		// get the data
@@ -316,17 +326,21 @@ public class MarkerManager {
 		String sql = null;
 		
 		if(sqlParameters.length == 1) {
-			sql = "SELECT DISTINCT o.organisationid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM organisation o, orgevlink oel, events e, venue v, states s "
-				+ "WHERE o.organisationid = ?"
+			sql = "SELECT DISTINCT o.organisationid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "       ovd.min_date, ovd.max_date "
+				+ "FROM organisation o, orgevlink oel, events e, venue v, states s, org_venue_min_max_event_dates ovd "
+				+ "WHERE o.organisationid = ? "
 				+ "AND o.organisationid = oel.organisationid "
-				+ "AND oel.eventid = e.eventid "
-				+ "AND e.venueid = v.venueid "
+				+ "AND oel.eventid = e.eventid " 
+				+ "AND e.venueid = v.venueid " 
 				+ "AND v.state = s.stateid "
-				+ "AND latitude IS NOT NULL ";
+				+ "AND latitude IS NOT NULL "
+				+ "AND o.organisationid = ovd.organisationid "
+				+ "AND v.venueid = ovd.venueid";
 		} else {
-			sql = "SELECT DISTINCT o.organisationid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM organisation o, orgevlink oel, events e, venue v, states s "
+			sql = "SELECT DISTINCT o.organisationid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "       ovd.min_date, ovd.max_date "
+				+ "FROM organisation o, orgevlink oel, events e, venue v, states s, org_venue_min_max_event_dates ovd "
 				+ "WHERE o.organisationid = ANY (";
 					   
 			// add sufficient place holders for all of the ids
@@ -344,6 +358,8 @@ public class MarkerManager {
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.state = s.stateid "
 				+ "AND latitude IS NOT NULL "
+				+ "AND o.organisationid = ovd.organisationid "
+				+ "AND v.venueid = ovd.venueid "
 				+ "ORDER BY o.organisationid";
 		}
 		
@@ -414,17 +430,21 @@ public class MarkerManager {
 		String sql = null;
 		
 		if(sqlParameters.length == 1) {
-			sql = "SELECT DISTINCT c.contributorid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM contributor c, conevlink cel, events e, venue v, states s "
-				+ "WHERE c.contributorid = ?"
+			sql = "SELECT DISTINCT c.contributorid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "                cvd.min_date, cvd.max_date "
+				+ "FROM contributor c, conevlink cel, events e, venue v, states s, con_venue_min_max_event_dates cvd "
+				+ "WHERE c.contributorid = ? "
 				+ "AND c.contributorid = cel.contributorid "
-				+ "AND cel.eventid = e.eventid "
+				+ "AND cel.eventid = e.eventid " 
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.state = s.stateid "
-				+ "AND latitude IS NOT NULL ";
+				+ "AND latitude IS NOT NULL "
+				+ "AND c.contributorid = cvd.contributorid "
+				+ "AND v.venueid = cvd.venueid";
 		} else {
-			sql = "SELECT DISTINCT c.contributorid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
-				+ "FROM contributor c, conevlink cel, events e, venue v, states s "
+			sql = "SELECT DISTINCT c.contributorid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "                cvd.min_date, cvd.max_date "
+				+ "FROM contributor c, conevlink cel, events e, venue v, states s, con_venue_min_max_event_dates cvd "
 				+ "WHERE c.contributorid = ANY (";
 					   
 			// add sufficient place holders for all of the ids
@@ -442,6 +462,8 @@ public class MarkerManager {
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.state = s.stateid "
 				+ "AND latitude IS NOT NULL "
+				+ "AND c.contributorid = cvd.contributorid "
+				+ "AND v.venueid = cvd.venueid "
 				+ "ORDER BY c.contributorid";
 		}
 		
@@ -512,14 +534,18 @@ public class MarkerManager {
 		String sql = null;
 		
 		if(sqlParameters.length == 1) {
-			sql = "SELECT e.eventid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+			sql = "SELECT e.eventid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "       e.yyyyfirst_date || e.mmfirst_date || e.ddfirst_date AS fdate_index, "
+				+ "       e.yyyylast_date || e.mmlast_date || e.ddlast_date AS ldate_index "
 				+ "FROM events e, venue v, states s "
 				+ "WHERE e.eventid = ? "
-				+ "AND e.venueid = v.venueid "
+				+ "AND e.venueid = v.venueid " 
 				+ "AND v.state = s.stateid "
-				+ "AND v.latitude IS NOT NULL ";
+				+ "AND v.latitude IS NOT NULL";
 		} else {
-			sql = "SELECT e.eventid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude "
+			sql = "SELECT e.eventid, v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				+ "       e.yyyyfirst_date || e.mmfirst_date || e.ddfirst_date AS fdate_index, "
+				+ "       e.yyyylast_date || e.mmlast_date || e.ddlast_date AS ldate_index "
 				+ "FROM events e, venue v, states s "
 				+ "WHERE e.eventid = ANY (";
 					   
@@ -602,6 +628,8 @@ public class MarkerManager {
 				venue.setLatitude(resultSet.getString(8));
 				venue.setLongitude(resultSet.getString(9));
 				venue.setUrl(LinksManager.getVenueLink(resultSet.getString(2)));
+				venue.setMinEventDate(resultSet.getString(10));
+				venue.setMaxEventDate(resultSet.getString(11));
 				
 				// add the venue to the list
 				venues.addVenue(venue);			
@@ -758,6 +786,8 @@ public class MarkerManager {
 				venue.setLatitude(resultSet.getString(7));
 				venue.setLongitude(resultSet.getString(8));
 				venue.setUrl(LinksManager.getVenueLink(resultSet.getString(1)));
+				venue.setMinEventDate(resultSet.getString(9));
+				venue.setMaxEventDate(resultSet.getString(10));
 				
 				// add the venue to the list
 				venues.addVenue(venue);			
@@ -832,6 +862,7 @@ public class MarkerManager {
 	private JSONObject venueToJson(Venue venue) {
 	
 		JSONObject object = new JSONObject();
+		String[]   dates  = null;
 		
 		object.put("id", venue.getId());
 		object.put("name", venue.getName());
@@ -841,6 +872,12 @@ public class MarkerManager {
 		object.put("latitude", venue.getLatitude());
 		object.put("longitude", venue.getLongitude());
 		object.put("url", venue.getUrl());
+		
+		// get the dates for comparison
+		dates = DateUtils.getDatesForTimeline(venue.getMinEventDate(), venue.getMaxEventDate());
+		
+		object.put("minEventDate", DateUtils.getIntegerFromDate(dates[0]));
+		object.put("maxEventDate", DateUtils.getIntegerFromDate(dates[1]));
 		
 		return object;	
 	}

@@ -46,6 +46,8 @@ public class Venue implements Comparable<Venue>{
 	private String eventCount = null;
 	private Set<Contributor> contributors;
 	private Set<Organisation> organisations;
+	private String minEventDate = null;
+	private String maxEventDate = null;
 	
 	// declare public constants
 	/**
@@ -556,6 +558,22 @@ public class Venue implements Comparable<Venue>{
 		}
 		
 		this.eventCount = value.trim();
+	}
+	
+	public String getMinEventDate() {
+		return minEventDate;
+	}
+	
+	public void setMinEventDate(String value) {
+		minEventDate = value;
+	}
+	
+	public String getMaxEventDate() {
+		return maxEventDate;
+	}
+	
+	public void setMaxEventDate(String value) {
+		maxEventDate = value;
 	}
 	
 	/*
