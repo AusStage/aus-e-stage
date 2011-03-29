@@ -1024,7 +1024,9 @@ public class SearchManager {
 	private String doEventIdSearch(String query, String formatType) {
 		
 		// declare the SQL variables
-		String sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid "
+		String sql = "SELECT eventid, event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, "
+				   + "       yyyyfirst_date || mmfirst_date || ddfirst_date as fdate, "
+				   + "       yyyylast_date || mmlast_date || ddlast_date as ldate "
 				   + "FROM events, venue "
 				   + "WHERE eventid = ? "
 				   + "AND events.venueid = venue.venueid";
@@ -1061,6 +1063,8 @@ public class SearchManager {
 			event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
 			event.setVenue(doVenueIdSearch(resultSet.getString(6), formatType));
 			event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+			event.setSortFirstDate(resultSet.getString(7));
+			event.setSortLastDate(resultSet.getString(8));
 		
 			// add the event to the list
 			list.addEvent(event);
@@ -1105,7 +1109,9 @@ public class SearchManager {
 		query = sanitiseQuery(query);
 		
 		// declare the sql variables
-		String sql = "SELECT events.eventid, events.event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid "
+		String sql = "SELECT events.eventid, events.event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, "
+				   + "       yyyyfirst_date || mmfirst_date || ddfirst_date as fdate, "
+				   + "       yyyylast_date || mmlast_date || ddlast_date as ldate "
 				   + "FROM events, venue, search_event "
 				   + "WHERE CONTAINS(search_event.combined_all, ?, 1) > 0 "
 				   + "AND search_event.eventid = events.eventid "
@@ -1152,6 +1158,8 @@ public class SearchManager {
 				event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
 				event.setVenue(doVenueIdSearch(resultSet.getString(6), formatType));
 				event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+				event.setSortFirstDate(resultSet.getString(7));
+				event.setSortLastDate(resultSet.getString(8));
 		
 				// add the venue to the list
 				list.addEvent(event);
@@ -1223,7 +1231,7 @@ public class SearchManager {
 		JSONParser parser   = new JSONParser();
 		Object     obj      = null;
 		JSONArray  objArray = null;
-
+		String[]   dates    = null;
 		
 		while(iterator.hasNext()) {
 		
@@ -1250,6 +1258,12 @@ public class SearchManager {
 			}			
 			
 			object.put("url", event.getUrl());
+			
+			// get the dates for comparison
+			dates = DateUtils.getDatesForTimeline(event.getSortFirstDate(), event.getSortLastDate());
+			
+			object.put("sortFirstDate", DateUtils.getIntegerFromDate(dates[0]));
+			object.put("sortLastDate", DateUtils.getIntegerFromDate(dates[1]));
 			
 			// add the new object to the array
 			list.add(object);		

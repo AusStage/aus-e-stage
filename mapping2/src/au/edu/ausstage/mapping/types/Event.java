@@ -36,6 +36,8 @@ public class Event implements Comparable<Event> {
 	private String venue = null;
 	private String latitude = null;
 	private String longitude = null;
+	private String sortFirstDate = null;
+	private String sortLastDate = null;
 	
 	/**
 	 * Constructor for this class
@@ -205,6 +207,22 @@ public class Event implements Comparable<Event> {
 	
 	public String getLongitude() {
 		return longitude;
+	}
+	
+	public void setSortFirstDate(String value) {
+		sortFirstDate = value;
+	}
+	
+	public String getSortFirstDate() {
+		return sortFirstDate;
+	}
+	
+	public void setSortLastDate(String value) {
+		sortLastDate = value;
+	}
+	
+	public String getSortLastDate() {
+		return sortLastDate;
 	}
 
 	/*
