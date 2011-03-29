@@ -98,12 +98,12 @@ TimelineClass.prototype.findDates = function(list, type) {
 		for(var i = 0; i < list.length; i++) {
 			obj = list[i];
 		
-			if(obj.minEventDate < timelineObj.firstDate) {
-				timelineObj.firstDate = obj.minEventDate;
+			if(obj.sortFirstDate < timelineObj.firstDate) {
+				timelineObj.firstDate = obj.sortFirstDate;
 			}
 		
-			if(obj.maxEventDate > timelineObj.lastDate) {
-				timelineObj.lastDate = obj.maxEventDate;
+			if(obj.sortLastDate > timelineObj.lastDate) {
+				timelineObj.lastDate = obj.sortLastDate;
 			}
 		}
 	}
