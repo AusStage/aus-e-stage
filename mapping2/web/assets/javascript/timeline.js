@@ -45,6 +45,14 @@ TimelineClass.prototype.update = function() {
 		if(markers[i].organisations.length > 0) {
 			timelineObj.findDates(markers[i].organisations, 1);
 		}
+		
+		if(markers[i].venues.length > 0) {
+			timelineObj.findDates(markers[i].venues, 2);
+		}
+		
+		if(markers[i].events.length > 0) {
+			timelineObj.findDates(markers[i].events, 3);
+		}
 	}
 	
 	console.log(timelineObj.firstDate);
@@ -59,7 +67,7 @@ TimelineClass.prototype.findDates = function(list, type) {
 
 	if(type == 1) {
 		// find the fDate and lDate and compare
-		for(var i = 0; i < list.length; i++) {
+		for(var i = 0; i < list.length; i++) { // contributors and organisations
 			obj = list[i];
 		
 			if(obj.venueObj.minEventDate < timelineObj.firstDate) {
@@ -68,6 +76,34 @@ TimelineClass.prototype.findDates = function(list, type) {
 		
 			if(obj.venueObj.maxEventDate > timelineObj.lastDate) {
 				timelineObj.lastDate = obj.venueObj.maxEventDate;
+			}
+		}
+	} else if(type == 2) { // venues
+	
+		// find the fDate and lDate and compare
+		for(var i = 0; i < list.length; i++) {
+			obj = list[i];
+		
+			if(obj.minEventDate < timelineObj.firstDate) {
+				timelineObj.firstDate = obj.minEventDate;
+			}
+		
+			if(obj.maxEventDate > timelineObj.lastDate) {
+				timelineObj.lastDate = obj.maxEventDate;
+			}
+		}
+	} else if(type == 3) { // events
+	
+		// find the fDate and lDate and compare
+		for(var i = 0; i < list.length; i++) {
+			obj = list[i];
+		
+			if(obj.minEventDate < timelineObj.firstDate) {
+				timelineObj.firstDate = obj.minEventDate;
+			}
+		
+			if(obj.maxEventDate > timelineObj.lastDate) {
+				timelineObj.lastDate = obj.maxEventDate;
 			}
 		}
 	}
