@@ -69,7 +69,7 @@ TimelineClass.prototype.update = function() {
 				   wheelMode: null,
 				   wheelSpeed: 4,
 				   arrows: true,
-				   valueLabels: 'show',
+				   valueLabels: 'change',
 				   formatter: timelineObj.dateFormatter,
 				   durationIn: 0,
 				   durationOut: 400,
