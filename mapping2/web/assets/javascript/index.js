@@ -26,6 +26,7 @@ $(document).ready(function(){
 	browseObj    = new BrowseClass();
 	mappingObj   = new MappingClass();
 	mapLegendObj = new MapLegendClass();
+	timelineObj  = new TimelineClass();
 
 	/*
 	 * page setup
@@ -36,6 +37,9 @@ $(document).ready(function(){
 	
 	// initialise the map legend
 	mapLegendObj.init();
+	
+	// initialise the timeline
+	timelineObj.init();
 	
 	// setup the tabs
 	$("#tabs").tabs();

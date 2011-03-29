@@ -42,13 +42,14 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.rangeslider-2.02.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.daterangeslider-2.0.2.js"></script>
 	<!-- custom code -->
+	<script type="text/javascript" src="assets/javascript/index.js"></script>
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
 	<script type="text/javascript" src="assets/javascript/search.js"></script>
 	<script type="text/javascript" src="assets/javascript/browse.js"></script>
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 	<script type="text/javascript" src="assets/javascript/map-legend.js"></script>
-	<script type="text/javascript" src="assets/javascript/index.js"></script>
-	<!-- prevent a FOUC from the messages div -->
+	<script type="text/javascript" src="assets/javascript/timeline.js"></script>
+	<!-- prevent a FOUC -->
 	<script type="text/javascript">
 		$('html').addClass('js');
 	</script>

@@ -278,6 +278,9 @@ MappingClass.prototype.updateMap = function() {
 	
 	// update the map legend
 	mapLegendObj.showLegend();
+	
+	// update the timeline
+	timelineObj.update();
 }
 
 // function to build the table for the iconography layout
@@ -536,6 +539,7 @@ MappingClass.prototype.addContributorData = function(data) {
 				// make a copy of this contributor and add a venue
 				objCopy = jQuery.extend(true, {}, contributor);
 				objCopy.venue = venues[x].id;
+				objCopy.venueObj = venues[x];
 				
 				obj.contributors.push(objCopy);
 				obj.latitude  = venues[x].latitude;
@@ -560,7 +564,8 @@ MappingClass.prototype.addContributorData = function(data) {
 				if(found == false) {
 					// make a copy of this contributor and add a venue
 					objCopy = jQuery.extend(true, {}, contributor);
-					objCopy.venue = venues[x].id;				
+					objCopy.venue = venues[x].id;
+					objCopy.venueObj = venues[x];			
 					obj.contributors.push(objCopy);
 				}
 			}
@@ -622,6 +627,7 @@ MappingClass.prototype.addOrganisationData = function(data) {
 				// make a copy of this contributor and add a venue
 				objCopy = jQuery.extend(true, {}, organisation);
 				objCopy.venue = venues[x].id;
+				objCopy.venueObj = venues[x];
 				
 				obj.organisations.push(objCopy);
 				obj.latitude  = venues[x].latitude;
@@ -647,6 +653,7 @@ MappingClass.prototype.addOrganisationData = function(data) {
 					// make a copy of this contributor and add a venue
 					objCopy = jQuery.extend(true, {}, organisation);
 					objCopy.venue = venues[x].id;
+					objCopy.venueObj = venues[x];
 				
 					obj.organisations.push(objCopy);
 				}
