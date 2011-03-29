@@ -27,6 +27,7 @@
 	<link rel="stylesheet" href="assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css"/>
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
+	<link rel="stylesheet" href="assets/rangeslider/dev.css"/>
 	<jsp:include page="analytics.jsp"/>
 	<!-- libraries -->
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.5.min.js"></script>
@@ -35,12 +36,12 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.11.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-1.4.2.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollto-1.4.2.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.3&sensor=false"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/markerwithlabel-1.1.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/markerclusterer-1.0.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.rangeslider-2.02.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.daterangeslider-2.0.2.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.rangeslider-2.1.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.daterangeslider-2.1.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/index.js"></script>
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
@@ -205,6 +206,10 @@
 					<h3>Map of the Selected Items</h3>
 					<div id="map_container_div">
 						<div id="map_div" style="height: 100%; width: 100%">
+						</div>
+						<div class="timeSliderContainer">
+							<div id="timeSlider">
+							</div>
 						</div>
 					</div>
 				</div>

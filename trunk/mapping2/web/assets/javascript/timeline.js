@@ -36,6 +36,12 @@ TimelineClass.prototype.update = function() {
 	// get the marker data
 	var markers = mappingObj.markerData.objects;
 	
+	// don't do anything if we don't have to
+	if(markers.lenght == 0) {
+		$('#timeSlider').empty();
+		return;
+	}
+	
 	// loop through the markers looking for the lowest fDate an the highest lDate
 	for(var i = 0; i < markers.length; i++) {
 		if(markers[i].contributors.length > 0) {
@@ -55,8 +61,22 @@ TimelineClass.prototype.update = function() {
 		}
 	}
 	
-	console.log(timelineObj.firstDate);
-	console.log(timelineObj.lastDate);
+	// add the time slider to the page, clearing away any that already exists
+	var fdate = timelineObj.getDateFromInt(timelineObj.firstDate);
+	var ldate = timelineObj.getDateFromInt(timelineObj.lastDate);
+	var options = {bounds: { min: fdate, max: ldate},
+				   defaultValues: { min: fdate, max: ldate},
+				   wheelMode: null,
+				   wheelSpeed: 4,
+				   arrows: true,
+				   valueLabels: 'show',
+				   formatter: timelineObj.dateFormatter,
+				   durationIn: 0,
+				   durationOut: 400,
+				   delayOut: 200
+	              };
+	$('#timeSlider').empty();
+	$('#timeSlider').dateRangeSlider(options);
 
 }
 
@@ -107,4 +127,33 @@ TimelineClass.prototype.findDates = function(list, type) {
 			}
 		}
 	}
+}
+
+// convert the sort date value into a date
+TimelineClass.prototype.getDateFromInt = function(value) {
+
+	var tokens = [];
+	
+	value = value.toString();
+	
+	tokens[0] = value.substr(0, 4);
+	tokens[1] = value.substr(4, 2);
+	tokens[2] = value.substr(6, 2);
+	
+	return new Date(tokens[0], tokens[1], tokens[2]);
+	
+}
+
+// format the dates to the AusStage style
+TimelineClass.prototype.dateFormatter = function(value) {
+
+	var tokens = [];
+	
+	tokens[0] = value.getDate();
+	tokens[1] = value.getMonth() + 1;
+	tokens[2] = value.getFullYear();
+	
+	tokens[1] = lookupMonthFromInt(tokens[1]);
+	
+	return tokens[0] + " " + tokens[1] + " " + tokens[2];
 }
