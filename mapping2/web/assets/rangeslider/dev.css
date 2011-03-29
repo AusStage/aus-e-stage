@@ -25,6 +25,17 @@
 }
 
 .ui-rangeSlider .ui-rangeSlider-bar{
+	border: 1px solid #aaaaaa; 
+	background: #aaaaaa url(images/ui-bg_flat_100_aaaaaa_40x100.png) 50% 50% repeat-x; 
+	color: #333333; 
+	font-weight: bold; 
+	margin: 1px 0;
+	height:20px;
+	cursor:move;
+	cursor:grab;
+	cursor: -moz-grab;
+	z-index:3;
+/*
 	margin: 1px 0;
 	background:#CCC;
 	background:rgba(100,100,150, 0.2);
@@ -33,6 +44,7 @@
 	cursor:grab;
 	cursor: -moz-grab;
 	z-index:3;
+*/
 }
 
 .ui-rangeSlider .ui-rangeSlider-bar.ui-draggable-dragging{
