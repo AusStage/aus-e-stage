@@ -75,8 +75,8 @@ TimelineClass.prototype.update = function() {
 				   durationOut: 400,
 				   delayOut: 200
 	              };
-	$('#timeSlider').empty();
 	$('#timeSlider').dateRangeSlider(options);
+	$('#timeSlider').dateRangeSlider('values', fdate, ldate);
 
 }
 
