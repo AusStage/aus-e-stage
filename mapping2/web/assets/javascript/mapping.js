@@ -747,24 +747,6 @@ MappingClass.prototype.computeMapHeight = function() {
 	
 	var newHeight = footerCoords.top - (containerCoords.top + mappingObj.HEIGHT_BUFFER_CONSTANT);
 	return Math.floor(newHeight);	
-
-/*
-
-	// start the height calculations
-	//var height = mappingObj.HEIGHT_CONSTANT;
-	var height = 0;
-	
-	// get the height of various elements
-	var wrapper   = $('.wrapper').height();
-	var header    = $('.header').height();
-	var tabHeader = $('.fix-ui-tabs').height();
-	var pushElem  = $('.push').height();
-	var footer    = $('.footer').height();
-	
-	height = wrapper - (header + tabHeader + pushElem + footer + mappingObj.HEIGHT_BUFFER_CONSTANT);
-	
-	return Math.floor(height);
-*/
 }
 
 // compute the width of the map
@@ -792,6 +774,9 @@ MappingClass.prototype.resizeMap = function() {
 		mapDiv.width(mappingObj.computeMapWidth());
 	
 		google.maps.event.trigger(mappingObj.map, 'resize');
+		
+		// resize the time slider
+		$('.timeSliderContainer').width(mappingObj.computeMapWidth());
 		
 		// manually trigger an idle event
 		var zoom = mappingObj.map.getZoom();
