@@ -111,7 +111,7 @@ MapLegendClass.prototype.init = function() {
 		if(mappingObj.clusteringEnabled == false) {
 			mappingObj.clusteringEnabled = true;
 			mappingObj.updateMap();
-			$("#btn_cluster_map").val('Disable Clustering');
+			$("#btn_cluster_map").val('Clustering Off');
 		} else {
 			// check to see if we can disable clustering
 			if(mappingObj.markerData.objects.length >= mappingObj.applyClusterLimit) {
@@ -121,7 +121,7 @@ MapLegendClass.prototype.init = function() {
 			} else {
 				mappingObj.clusteringEnabled = false;
 				mappingObj.updateMap();
-				$("#btn_cluster_map").val('Enable Clustering');
+				$("#btn_cluster_map").val('Clustering On');
 			}
 		}
 	});
@@ -426,9 +426,9 @@ MapLegendClass.prototype.updateLegend = function() {
 	
 	// determine the text to show on the cluster button
 	if(mappingObj.clusteringEnabled == true) {
-		$("#btn_cluster_map").val('Disable Clustering');
+		$("#btn_cluster_map").val('Clustering Off');
 	} else {
-		$("#btn_cluster_map").val('Enable Clustering');
+		$("#btn_cluster_map").val('Clustering On');
 	}
 }
 
