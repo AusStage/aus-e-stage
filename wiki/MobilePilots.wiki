@@ -10,9 +10,11 @@ To date these Aus-e-Stage Mobile Researching Audiences Service pilots include:
  # Be Your Self International Tour (Europe and UK, January - March 2011)
 
 *The Flinders University Drama Centre*
+
 Drama Block Productions of The Crucible and Tusk Tusk (Bedford Park, December 2010)
 
 *The Perth Theatre Company*
+
 The Ugly One (Perth, March - April 2011)
 
 Feedback gathered for each performance is available via the links listed under each production above. Feedback has been collected via SMS, Mobile Web and Twitter.  A Desktop interface is to be implemented shortly. 
