@@ -15,6 +15,6 @@ Drama Block Productions of The Crucible and Tusk Tusk (Bedford Park, December 20
 *The Perth Theatre Company* <br/>
 The Ugly One (Perth, March - April 2011)
 
-Feedback gathered for each performance is available via the links listed under each production above. Feedback has been collected via SMS, Mobile Web and Twitter.  A Desktop interface is to be implemented shortly. 
+Feedback gathered for each performance is available via the links listed under each production above. Feedback has been collected via SMS, Mobile Web and Twitter.  A Desktop web interface is to be implemented shortly. 
 
-In each instance a full information leaflet containing ethics details and feedback criteria is distributed to audience members for use. A sample of this is available at http://code.google.com/p/aus-e-stage/wiki/MobileServiceInfoCardTmpl. 
+In each instance a full information leaflet containing ethics details and feedback criteria is distributed to audience members for use. More detail of this is available at http://code.google.com/p/aus-e-stage/wiki/MobileServiceInfoCardTmpl. 
