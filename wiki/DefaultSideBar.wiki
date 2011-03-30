@@ -42,6 +42,7 @@
        * [MobileServiceAPILookup Lookup Information]
        * [MobileServiceAPIInterface Mobile Interface]
        * [MobileServiceSearchAPI Search API]
+     * [MobilePilots]
      * [MobileServiceInfoCardTmpl Information Card Template]
    * [NetworkService Network Service]
      * Specification
