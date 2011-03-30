@@ -4,22 +4,23 @@
  */
 
 .ui-rangeSlider{
-	height:22px;
-	z-index:1;
+	height: 22px;
+	z-index: 1;
 }
 
 .ui-rangeSlider .ui-rangeSlider-innerBar{
-	height:16px;
-	margin:3px 6px;
-	background:#DDD;
-	z-index:2;
+	height: 16px;
+	margin: 3px 6px;
+	background-image: url('../jquery-ui/images/ui-bg_flat_75_bbbbbb_40x100.png');
+	background-color: #bbbbbb;
+	z-index: 2;
 }
 
 .ui-rangeSlider .ui-rangeSlider-handle{
 	width:6px;
 	height:22px;
-	background:#AAA;
-	background:rgba(100,100,100, 0.3);
+	background-image: url('../jquery-ui/images/ui-bg_flat_100_333333_40x100.png');
+	background-color: #333333;
 	cursor:col-resize;
 	z-index:4;
 }
@@ -27,24 +28,13 @@
 .ui-rangeSlider .ui-rangeSlider-bar{
 	border: 1px solid #aaaaaa; 
 	background: #aaaaaa url(images/ui-bg_flat_100_aaaaaa_40x100.png) 50% 50% repeat-x; 
-	color: #333333; 
-	font-weight: bold; 
+	color: #aaaaaa; 
 	margin: 1px 0;
 	height:20px;
 	cursor:move;
 	cursor:grab;
 	cursor: -moz-grab;
 	z-index:3;
-/*
-	margin: 1px 0;
-	background:#CCC;
-	background:rgba(100,100,150, 0.2);
-	height:20px;
-	cursor:move;
-	cursor:grab;
-	cursor: -moz-grab;
-	z-index:3;
-*/
 }
 
 .ui-rangeSlider .ui-rangeSlider-bar.ui-draggable-dragging{
@@ -53,9 +43,9 @@
 }
 
 .ui-rangeSlider-arrow{
-	height:16px;
-	margin:2px 0;
-	width:16px;
+	height: 16px;
+	margin: 2px 0;
+	width: 16px;
 	background-repeat:no-repeat;
 	cursor:pointer;
 }
@@ -83,11 +73,14 @@
 }
 
 .ui-rangeSlider-label{
-	padding:2px 5px 6px;
-	margin:0 2px 2px;
-	background-image:url('icons/label.png');
-	background-position:bottom center;
-	background-repeat:no-repeat;
+	padding: 2px;
+	margin: 2px;
+	color: #ffffff; 
+	background-image: url('../jquery-ui/images/ui-bg_flat_75_bbbbbb_40x100.png');
+	background-color: #bbbbbb;
+	background-repeat: repeat;
 	z-index: 9999;
 	white-space: nowrap;
+	font-size: 90%;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
 }
