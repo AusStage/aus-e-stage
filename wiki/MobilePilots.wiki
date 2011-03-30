@@ -1,0 +1,24 @@
+#Pilots conducted for the Mobile Researching Audiences Service.
+
+= Introduction =
+
+The Aus-e-Stage Mobile Researching Audiences Service is presently being utlilised by several companies in pilot projects.  
+
+
+= Details =
+
+To date Aus-e-Stage Mobile Researching Audiences Service pilots include:
+
+*The Australian Dance Theatre*
+#Be Your Self tour show preview (Golden Grove, September 2010)
+#Be Your Self International Tour (Europe and UK, January - March 2011)
+
+*The Flinders University Drama Centre*
+Drama Block Productions of The Crucible and Tusk Tusk (Bedford Park, December 2010)
+
+*The Perth Theatre Company*
+The Ugly One (Perth, March - April 2011)
+
+Feedback gathered for each performance is available via the links listed under each production above. Feedback has been collected via SMS, Mobile Web and Twitter.  A Desktop interface is to be implemented shortly. 
+
+In each instance a full information leaflet containing ethics details and feedback criteria is distributed to audience members for use. A sample of this is available at http://code.google.com/p/aus-e-stage/wiki/MobileServiceInfoCardTmpl. 
