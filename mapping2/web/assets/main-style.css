@@ -505,9 +505,7 @@ table.mapLegendTable {
 /* Styles for the Time Slider */
 .timeSliderContainer {
 	width: 100%;
-	height: 50px;
-/*	margin-left: 40px;*/
-/*	margin-right: 40px;*/
+	height: 100px;
 }
 
 #timeSlider {

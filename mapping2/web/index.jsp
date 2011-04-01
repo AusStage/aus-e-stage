@@ -207,6 +207,7 @@
 					<div id="map_container_div">
 						<div id="map_div" style="height: 100%; width: 100%">
 						</div>
+						<div style="height: 25px;"></div>
 						<div class="timeSliderContainer">
 							<div id="timeSlider">
 							</div>

@@ -69,7 +69,7 @@ TimelineClass.prototype.update = function() {
 				   wheelMode: null,
 				   wheelSpeed: 4,
 				   arrows: true,
-				   valueLabels: 'change',
+				   valueLabels: 'show',
 				   formatter: timelineObj.dateFormatter,
 				   durationIn: 0,
 				   durationOut: 400,
@@ -77,6 +77,9 @@ TimelineClass.prototype.update = function() {
 	              };
 	$('#timeSlider').dateRangeSlider(options);
 	$('#timeSlider').dateRangeSlider('values', fdate, ldate);
+	$('#timeSlider').bind('valuesChanged', function(event, ui) {
+		timelineObj.updateMarkers(event, ui);
+	});
 
 }
 
@@ -156,4 +159,36 @@ TimelineClass.prototype.dateFormatter = function(value) {
 	tokens[1] = lookupMonthFromInt(tokens[1]);
 	
 	return tokens[0] + " " + tokens[1] + " " + tokens[2];
+}
+
+// change the map based on the new values
+TimelineClass.prototype.updateMarkers = function(event, ui) {
+
+	// get the values
+	var minDate = ui.values.min;
+	var maxDate = ui.values.max;
+	
+	minDate = timelineObj.DateToInt(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+	maxDate = timelineObj.DateToInt(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+
+	console.log(minDate);
+	console.log(maxDate);
+}
+
+TimelineClass.prototype.DateToInt = function(year, month, day) {
+
+	var tokens = [];
+	tokens[0] = "" + year
+	tokens[1] = "" + (month + 1);
+	tokens[2] = "" + day
+	
+	if(tokens[1].length == 1) {
+		tokens[1] = "0" + tokens[1];
+	}
+	
+	if(tokens[2].length == 1) {
+		tokens[2] = "0" + tokens[2];
+	}
+	
+	return tokens[0] + "" + tokens[1] + "" + tokens[2];
 }

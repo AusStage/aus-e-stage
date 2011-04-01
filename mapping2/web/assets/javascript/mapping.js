@@ -79,7 +79,8 @@ function MappingClass() {
 						 };   
 	
 	// variables to hold a height / width constant for use in computing the height / width of the map
-	this.HEIGHT_BUFFER_CONSTANT = 35;
+	//this.HEIGHT_BUFFER_CONSTANT = 35;
+	this.HEIGHT_BUFFER_CONSTANT = 65;
 	this.WIDTH_BUFFER_CONSTANT  = 55;
 	
 	// variables to hold the x / y offset constants for computing the placement pointer on a marker
