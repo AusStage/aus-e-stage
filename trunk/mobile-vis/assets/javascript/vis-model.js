@@ -27,11 +27,14 @@ function model(name) {
                  this.CurrentPerformances;
 
 		 this.results = new Array();
+                 this.newResults = new Array();
+
 		 this.controllers = new Array(); 
 		 this.errorController = new errorController();
 		 this.errorStatus = 0;  
 		 this.lastFeedbackID = 0;
                  this.howManyRequests = 0;
+                 this.currentLoading = 0;
                  this.loadedRequests = 0; 
 				 
 		/*
@@ -124,6 +127,7 @@ function model(name) {
 							window.console.log(data);
 							data.feedback.reverse(); //maybe should do that in cotrol  
 							current.results.push(data);
+
 							//set up the loop that will start the automatic updating process every x seconds
 
                                                         current.loadedRequests ++ ;
@@ -160,7 +164,7 @@ function model(name) {
 		/*
 		* Updates current peformance data and send's that current controller refresh data function
 		* 
-		* @param  CurrentPerformance the current performane we are working thi   
+		* @param  CurrentPerformance the current performance we are working thi
 		*/ 
 				  
 		this.updatePerformanceData = function (CurrentPerformances) {
@@ -170,25 +174,52 @@ function model(name) {
 				host = this.buildHost();
 			 	mydataType = this.getDataType(); 
 				
-                               // this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
+                                //this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
                                 var newData = new Array();
+
+                                 var ajaxQueue = $.manageAjax.create('updateQueue', {
+                                           
+                                 });
                                 
                                 for(var i = 0; i < CurrentPerformances.length; i++){
                                     
-                                    var source =  host + '/mobile/feedback?task=update&performance=' + CurrentPerformances[i] + '&lastid='  + this.lastFeedbackID   ;
+                                      var source =  host + '/mobile/feedback?task=update&performance=' + CurrentPerformances[i] + '&lastid='  + this.lastFeedbackID   ;
+                                    //var source =  host + '/mobile/feedback';
+                                    
+
+                                    this.currentLoading = CurrentPerformances[i];
+                                    //alert(this.currentLoading);
 
                                     window.console.log(source);
+                                 
+                                          // create a queue
+                                     ajaxQueue.add( {
+                                         //success: this.processData,
+                                         success: this.processData,
+                                         CurrentPerformance: CurrentPerformances[i],
+                                         url: source,
+                                         type:   'GET',
+                                         dataType: mydataType
 
-                                    //The important bit more
-                                    current = this; // in the success function we normal scope this, so we put this in to current so called stuff in a few moments.
-                                    $.ajax({
-                                                    type:   'GET',
-                                                    url: source,
-                                                    dataType: 'jsonp',
-                                                    cache: false,
-                                                    success: function (data) {
+                                       });
+                               
 
-                                                            if(current.errorStatus 	== 1) {current.errorController.turnOffError ()};
+                                     }
+
+		};		
+
+
+/*
+		* Processes the data from update requests and the triggers the controllers
+		*
+		* @param  data the JSON request from the update api request
+		*/
+
+		this.processUpdate = function (data) {
+
+                     var current = parent.myModel; //more the of weird scope stuff
+
+                    if(current.errorStatus == 1) {current.errorController.turnOffError ()};
 
                                                             //window.console.log(data);
                                                             if(data.length != 0) {
@@ -196,57 +227,40 @@ function model(name) {
                                                                      window.console.log('got new data');
 
                                                                      for (var a = 0; a < data.length; a++) { //loop over each bit of the array
-                                                                      current.results[0].feedback.push(data[a]);// TODO - this will need to change because th
+                                                                       //current.results[i-1].feedback.push(data[a]);// TODO - this will need to change because th
                                                                      }
+                                                                       window.console.log('refresh completed for this ');
+                                                                       for (var a = 0; a < data.length; a++) { //loop over each bit of the array
+                                                                              data[a].performanceID = this.CurrentPerformance;
+                                                                       }
 
+                                                                       //window.console.log(data);
+                                                                       current.newResults.push(data);
+                                                                       current.loadedRequests++;
 
-                                                                       current.loadedRequests ++ ;
-                                                                       window.console.log('refresh completed for one');
+                                                                      //window.console.log(current.results[current.loadedRequests]);
 
-                                                                       newData.push(data);
-
-                                                                         //window.console.log(current.howManyRequests);
-                                                                         //window.console.log(current.loadedRequests);
-
+                                                                       //window.console.log(current.howManyRequests);
+                                                                       //window.console.log(current.loadedRequests);
                                                                         if (current.loadedRequests == current.howManyRequests ){
                                                                             //now are all the request the controllers can be reuild.
                                                                             window.console.log('All the requests are loaded');
                                                                             //reset the loadRequest so that we can re use this when we are updating
                                                                             current.loadedRequests = 0;
-                                                                            //window.console.log(newData);
-                                                                            current.refreshControllers(newData);//BUG - this might actually an array of day because we looking at
+                                                                            window.console.log(current.newResults);
+                                                                            current.refreshControllers(current.newResults);//BUG - this might actually an array of day because we looking at
+
+                                                                            current.newResults=  [];
 
                                                                             setTimeout("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
 
                                                                         }
 
 
-
-                                                                     //window.console.log(current.results);
-                                                                     //data.feedback.reverse(); //maybe should do that in cotrol
-                                                                    
-                                                                    //set up the loop that will start the automatic updating process every x seconds
-
                                                             }
 
-                                                    },
 
-                                            error:function (xhr, ajaxOptions, thrownError){
-                            //alert(xhr.status);
-                            //alert(thrownError);
-                                                    current.errorController.updateError("Couldn't load that performance",xhr.status);
-                                                    current.errorStatus = 1;
-                            },
-
-                                            async: true
-                                            });
-
-                                     }
-
-		};		
-
-
-
+                }
 		/*
 		* We have the new data so loop over the controllers and send them the results   
 		* 
@@ -273,7 +287,7 @@ function model(name) {
 		* 
 		*/ 		
 		
-		this.refreshControllers = function (data)
+		this.refreshControllers = function (newData)
 				{
 
 					window.console.log('refreshing the controllers');
@@ -284,7 +298,7 @@ function model(name) {
 					
 					try { //inside a try because we might not controllers  
 							for (var i = 0; i < this.controllers.length; i++) { //loop over the controllers 
-								this.controllers[i].refresh(data);
+								this.controllers[i].refresh(newData);
 							}	
 					}
 					catch (err) {

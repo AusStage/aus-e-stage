@@ -33,7 +33,7 @@ function visControllerSearch(newModel) {
 		}
 		
 		/*
-		* Redraw  Update the timeline view with the current results.    
+		* Redraw  Update the view with the current results.    
 		*/
 		this.UpdateView  = function (newResults)
 		{	
@@ -53,7 +53,7 @@ function visControllerSearch(newModel) {
 													'<td class="organisation"> ' + item.organisation  + ' </td>' +
 												        '<td class="startDateTime">' + item.startDateTime + '</td>' +
 													'<td class="venue">' + item.venue +' </td>' +
-													'<td class="view"><a href="timeline.html?performance=' + item.id + '">Timeline</a>, ' +
+													'<td class="view"><a href="list.html?performance=' + item.id + '">List</a>, ' +
 													'<a href="signage.html?performance=' + item.id + '">Signage</a> ' +
 													'</td>' +
 													'<td class="totalFeedbackCount">' + item.totalFeedbackCount +' </td>' +
