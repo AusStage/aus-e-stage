@@ -234,7 +234,7 @@ MappingClass.prototype.updateMap = function() {
 		
 			if(mappingObj.clusteringEnabled == false) {
 		
-				// create a marker with a label
+				// create a marker with a label and add it to the map
 				var marker = new MarkerWithLabel({
 					position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
 					map:          mappingObj.map,
@@ -246,7 +246,7 @@ MappingClass.prototype.updateMap = function() {
 				});
 			} else {
 			
-				// create a marker with a label
+				// create a marker with a label and do not add it to the map
 				var marker = new MarkerWithLabel({
 					position:     new google.maps.LatLng(objects[i].latitude, objects[i].longitude),
 					//map:          mappingObj.map,
@@ -263,8 +263,7 @@ MappingClass.prototype.updateMap = function() {
 		}
 	}
 	
-	
-	// add marker clustering
+	// add markers using clustering
 	if(mappingObj.clusteringEnabled == true) {
 		mappingObj.markerClusterer = new MarkerClusterer(mappingObj.map);
 		mappingObj.markerClusterer.setStyles(clusterIconography);
@@ -406,7 +405,40 @@ MappingClass.prototype.copyArrayExcludeHidden = function(arr, hidden) {
 		}
 	
 	} else {
-		return arr;
+		objArray = arr;
+	}
+	
+	// take into account the time slider
+	if(((timelineObj.firstDate != timelineObj.selectedFirstDate) || (timelineObj.lastDate != timelineObj.selectedLastDate)) && timelineObj.firstDate != 99999999) {
+	
+		// declare helper variables
+		var minDate;
+		var maxDate;
+	
+		// adjust the markers using dates
+		for(var i = 0; i < objArray.length; i++) {
+		
+			if(typeof objArray[i].venueObj != "undefined") {
+				// contributors and organisations
+				minDate = objArray[i].venueObj.minEventDate;
+				maxDate = objArray[i].venueObj.maxEventDate;
+			} else if(typeof objArray[i].minEventDate != "undefined") {
+				// venues
+				minDate = objArray[i].minEventDate;
+				maxDate = objArray[i].maxEventDate;
+			} else {
+				// events
+				minDate = objArray[i].sortFirstDate;
+				maxDate = objArray[i].sortLastDate;
+			}
+			
+			if((minDate >= timelineObj.selectedFirstDate && minDate <= timelineObj.selectedLastDate) || (maxDate >= timelineObj.selectedFirstDate && maxDate <= timelineObj.selectedLastDate)) {
+				// this is OK so don't do anything
+			} else {
+				// remove the marker from the array
+				objArray.splice(i, 1);
+			}
+		}
 	}
 
 	return objArray;

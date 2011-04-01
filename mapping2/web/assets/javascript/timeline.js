@@ -22,6 +22,10 @@ function TimelineClass() {
 	// variables to keep track of minimum amd maximum dates
 	this.firstDate = 99999999;
 	this.lastDate  = 0;
+	
+	// variables to keep track of the time period selected
+	this.selectedFirstDate = -1;
+	this.selectedLastDate  = -1;
 
 }
 
@@ -37,7 +41,7 @@ TimelineClass.prototype.update = function() {
 	var markers = mappingObj.markerData.objects;
 	
 	// don't do anything if we don't have to
-	if(markers.lenght == 0) {
+	if(markers.length == 0) {
 		$('#timeSlider').empty();
 		return;
 	}
@@ -100,6 +104,11 @@ TimelineClass.prototype.findDates = function(list, type) {
 			if(obj.venueObj.maxEventDate > timelineObj.lastDate) {
 				timelineObj.lastDate = obj.venueObj.maxEventDate;
 			}
+			
+			//debug code
+			if(timelineObj.lastDate > 99999999) {
+				console.log("WTF!");
+			}
 		}
 	} else if(type == 2) { // venues
 	
@@ -113,6 +122,11 @@ TimelineClass.prototype.findDates = function(list, type) {
 		
 			if(obj.maxEventDate > timelineObj.lastDate) {
 				timelineObj.lastDate = obj.maxEventDate;
+			}
+			
+			//debug code
+			if(timelineObj.lastDate > 99999999) {
+				console.log("WTF!");
 			}
 		}
 	} else if(type == 3) { // events
@@ -128,8 +142,17 @@ TimelineClass.prototype.findDates = function(list, type) {
 			if(obj.sortLastDate > timelineObj.lastDate) {
 				timelineObj.lastDate = obj.sortLastDate;
 			}
+			
+			//debug code
+			if(timelineObj.lastDate > 99999999) {
+				console.log("WTF!");
+			}
 		}
 	}
+	
+	// reset the selected dates
+	timelineObj.selectedFirstDate = timelineObj.firstDate;
+	timelineObj.selectedLastDate  = timelineObj.lastDate;
 }
 
 // convert the sort date value into a date
@@ -170,11 +193,16 @@ TimelineClass.prototype.updateMarkers = function(event, ui) {
 	
 	minDate = timelineObj.DateToInt(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
 	maxDate = timelineObj.DateToInt(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
-
-	console.log(minDate);
-	console.log(maxDate);
+	
+	// store the values
+	timelineObj.selectedFirstDate = minDate;
+	timelineObj.selectedLastDate  = maxDate;
+	
+	// update the map
+	mappingObj.updateMap();	
 }
 
+// turn a date back into the int representation
 TimelineClass.prototype.DateToInt = function(year, month, day) {
 
 	var tokens = [];
