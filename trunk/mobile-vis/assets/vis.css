@@ -81,3 +81,71 @@ tbody tr.even td  {
 tfoot       { font-style: italic; }
 caption     { background: #eee; }
 
+td.event {
+    min-width: 80px;
+}
+/* Icon placement for the different view types */
+.view {
+    width:100px;
+}
+
+.visList, .visSign {
+    width:35px;
+    font-size: .75em;
+    float:left;
+    margin-left: 5px;
+
+    
+}
+
+
+.visList img, .visSign img {
+ 
+    padding-left:-30px;
+}
+
+.label {
+    padding-left:2px;
+}
+
+.visList a:hover , .visSign a:hover {
+    text-decoration: none;
+
+}
+
+.visList a:hover a.img:hover {
+     text-decoration: none;
+     color:white;
+
+}
+
+
+#viewChoices, #instructions {
+    margin-left: 10px;
+}
+
+/* The formatting of the view choice buttons */ 
+
+#viewChoices input  {
+    background-color: #aaaaaa;
+    padding:6px;
+    border: none;
+    font-weight: bold;
+    font-size: .9em;
+    color:white;
+    height: 34px;
+    padding-left:32px;
+    width:110px;
+}
+
+
+
+
+#viewChoices input#chooseList {
+    background-image: url('../assets/images/list-icon.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    
+    
+}
+
