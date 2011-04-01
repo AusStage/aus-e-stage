@@ -104,11 +104,6 @@ TimelineClass.prototype.findDates = function(list, type) {
 			if(obj.venueObj.maxEventDate > timelineObj.lastDate) {
 				timelineObj.lastDate = obj.venueObj.maxEventDate;
 			}
-			
-			//debug code
-			if(timelineObj.lastDate > 99999999) {
-				console.log("WTF!");
-			}
 		}
 	} else if(type == 2) { // venues
 	
@@ -123,11 +118,6 @@ TimelineClass.prototype.findDates = function(list, type) {
 			if(obj.maxEventDate > timelineObj.lastDate) {
 				timelineObj.lastDate = obj.maxEventDate;
 			}
-			
-			//debug code
-			if(timelineObj.lastDate > 99999999) {
-				console.log("WTF!");
-			}
 		}
 	} else if(type == 3) { // events
 	
@@ -141,11 +131,6 @@ TimelineClass.prototype.findDates = function(list, type) {
 		
 			if(obj.sortLastDate > timelineObj.lastDate) {
 				timelineObj.lastDate = obj.sortLastDate;
-			}
-			
-			//debug code
-			if(timelineObj.lastDate > 99999999) {
-				console.log("WTF!");
 			}
 		}
 	}
