@@ -446,18 +446,23 @@ public class DateUtils {
 		if(InputUtils.isValid(lyear) == false) {
 			dates[1] = dates[0];
 		} else if (InputUtils.isValid(lmonth) == false) {
-			dates[1] = lyear + "01-01";
+			dates[1] = lyear + "-01-01";
 		} else {
 			dates[1] = lyear + "-" + lmonth + "-" + getLastDay(lyear, lmonth);
 		}
 		
-		// outlier check
+		// outlier checks
 		try {
 			if(InputUtils.isValid(lyear) == true) {
 				if(Integer.parseInt(lyear) > Integer.parseInt(fyear)) {
 					dates[1] = lyear + "-01-01";
 				}
 			}
+		
+			if(getIntegerFromDate(dates[1]) < getIntegerFromDate(dates[0])) {
+				dates[1] = dates[0];
+			}
+			
 		} catch (NumberFormatException e) {}
 		
 		return dates;	
