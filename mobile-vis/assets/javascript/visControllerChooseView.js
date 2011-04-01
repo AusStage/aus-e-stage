@@ -21,9 +21,6 @@ function visControllerChooseView(doc) {
 		
 		this.doc = doc;
 
-//                $('form#performanceForm').submit(function(){
-//                    alert('here');
-//                });
 
 
                 // add a click method to buttons to see what view has been choose
@@ -33,7 +30,7 @@ function visControllerChooseView(doc) {
 
                     //choose the view type
                     if (this.id == 'chooseList') {
-                        var nextView = 'timeline.html';
+                        var nextView = 'list.html';
                         //alert('Button chooseList as clicekd');
                     }
                     else if (this.id == 'chooseSignage') {
@@ -80,7 +77,7 @@ function visControllerChooseView(doc) {
 		}
 		
 		/*
-		* Redraw  Update the timeline view with the current results.    
+		* Redraw  Update the  view with the current results.    
 		*/
 		this.UpdateView  = function (newResults)
 		{	

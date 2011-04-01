@@ -98,7 +98,7 @@ function  visControllerSignage(newModel) {
 		* Refresh the signage view with the current results.
 		* There is a more elegant whay to do this. 
 		*/
-		this.refreshView  = function (newResults)
+		this.refreshView  = function (newResults,newPerformances)
 		{	
 
                 window.console.log('In the signage view refresh');
