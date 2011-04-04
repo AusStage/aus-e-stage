@@ -73,6 +73,10 @@ TimelineClass.prototype.update = function() {
 	// add the time slider to the page, clearing away any that already exists
 	var fdate = timelineObj.getDateFromInt(timelineObj.firstDate);
 	var ldate = timelineObj.getDateFromInt(timelineObj.lastDate);
+	
+	// adjust the dates
+//	fdate.setDate(fdate.getDate() - 31);
+//	ldate.setDate(ldate.getDate() + 31);
 
 	var sfdate = null;
 	var sldate = null;
