@@ -78,19 +78,19 @@ TimelineClass.prototype.update = function() {
 	var sldate = null;
 	
 	if(timelineObj.selectedFirstDate == null) {
-		sfdate = fdate;
-		sldate = ldate;
+		sfdate = timelineObj.getDateFromInt(timelineObj.firstDate);
+		sldate = timelineObj.getDateFromInt(timelineObj.lastDate);
 	} else {
-		if(timelineObj.selectedFirstDate < fdate) {
+	
+		sfdate = timelineObj.getDateFromInt(timelineObj.selectedFirstDate);
+		sldate = timelineObj.getDateFromInt(timelineObj.selectedLastDate);
+		
+		if(sfdate < fdate) {
 			sfdate = fdate;
-		} else {
-			sfdate = timelineObj.selectedFirstDate;
 		}
 		
-		if(timelineObj.selectedLastDate > ldate) {
+		if(sldate > ldate) {
 			sldate = ldate;
-		} else {
-			sldate = timelineObj.selectedLastDate;
 		}
 	}
 	
@@ -197,8 +197,8 @@ TimelineClass.prototype.updateMarkers = function(event, ui) {
 	var minDate = ui.values.min;
 	var maxDate = ui.values.max;
 	
-	//minDate = timelineObj.DateToInt(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-	//maxDate = timelineObj.DateToInt(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+	minDate = timelineObj.DateToInt(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+	maxDate = timelineObj.DateToInt(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
 	
 	// store the values
 	timelineObj.selectedFirstDate = minDate;

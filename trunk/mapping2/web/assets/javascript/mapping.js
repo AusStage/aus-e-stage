@@ -442,11 +442,21 @@ MappingClass.prototype.copyArrayExcludeHidden = function(arr, hidden) {
 			} else {
 				// remove the marker from the array
 				objArray.splice(i, 1);
+				
+				// adjust the count
+				i--;
 			}
 		}
 	}
 
-	return objArray;
+	// debug code
+	if(objArray.length > 1) {
+		return objArray;
+	} else {
+		return objArray;
+	}
+
+//	return objArray;
 }
 
 // function to get the cell colour
