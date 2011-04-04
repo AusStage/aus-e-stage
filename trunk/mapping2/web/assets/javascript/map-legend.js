@@ -173,23 +173,6 @@ MapLegendClass.prototype.computeMapLegendHeight = function() {
 	var newHeight = footerCoords.top - (legendCoords.top - mapLegendObj.HEIGHT_BUFFER_CONSTANT);
 
 	return Math.floor(newHeight);	
-
-/*
-	// start the height calculations
-	//var height = mappingObj.HEIGHT_CONSTANT;
-	var height = 0;
-	
-	// get the height of various elements
-	var wrapper   = $('.wrapper').height();
-	var header    = $('.header').height();
-	var mainMenu  = $('.mainMenu').height();
-	var pushElem  = $('.push').height();
-	var footer    = $('.footer').height();
-	
-	height = wrapper - (header + mainMenu + pushElem + footer + mapLegendObj.HEIGHT_BUFFER_CONSTANT);
-	
-	return Math.floor(height);
-*/
 }
 
 // function to update the legend

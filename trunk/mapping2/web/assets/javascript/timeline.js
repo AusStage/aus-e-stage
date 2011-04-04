@@ -24,13 +24,18 @@ function TimelineClass() {
 	this.lastDate  = 0;
 	
 	// variables to keep track of the time period selected
-	this.selectedFirstDate = -1;
-	this.selectedLastDate  = -1;
+	this.selectedFirstDate = null;
+	this.selectedLastDate  = null;
 
 }
 
 // function to initialise the timeline
 TimelineClass.prototype.init = function() {
+
+	$('#timeSlider').bind('valuesChanged', function(event, ui) {
+		//timelineObj.updateMarkers(event, ui);
+		$.debounce(250, false, timelineObj.updateMarkers(event, ui)); // wait until 250ms after last scroll before executing
+	});
 
 }
 
@@ -42,7 +47,7 @@ TimelineClass.prototype.update = function() {
 	
 	// don't do anything if we don't have to
 	if(markers.length == 0) {
-		$('#timeSlider').empty();
+		
 		return;
 	}
 	
@@ -68,8 +73,29 @@ TimelineClass.prototype.update = function() {
 	// add the time slider to the page, clearing away any that already exists
 	var fdate = timelineObj.getDateFromInt(timelineObj.firstDate);
 	var ldate = timelineObj.getDateFromInt(timelineObj.lastDate);
+
+	var sfdate = null;
+	var sldate = null;
+	
+	if(timelineObj.selectedFirstDate == null) {
+		sfdate = fdate;
+		sldate = ldate;
+	} else {
+		if(timelineObj.selectedFirstDate < fdate) {
+			sfdate = fdate;
+		} else {
+			sfdate = timelineObj.selectedFirstDate;
+		}
+		
+		if(timelineObj.selectedLastDate > ldate) {
+			sldate = ldate;
+		} else {
+			sldate = timelineObj.selectedLastDate;
+		}
+	}
+	
 	var options = {bounds: { min: fdate, max: ldate},
-				   defaultValues: { min: fdate, max: ldate},
+				   defaultValues: { min: sfdate, max: sldate},
 				   wheelMode: null,
 				   wheelSpeed: 4,
 				   arrows: true,
@@ -80,10 +106,6 @@ TimelineClass.prototype.update = function() {
 				   delayOut: 200
 	              };
 	$('#timeSlider').dateRangeSlider(options);
-	$('#timeSlider').dateRangeSlider('values', fdate, ldate);
-	$('#timeSlider').bind('valuesChanged', function(event, ui) {
-		timelineObj.updateMarkers(event, ui);
-	});
 
 }
 
@@ -134,10 +156,6 @@ TimelineClass.prototype.findDates = function(list, type) {
 			}
 		}
 	}
-	
-	// reset the selected dates
-	timelineObj.selectedFirstDate = timelineObj.firstDate;
-	timelineObj.selectedLastDate  = timelineObj.lastDate;
 }
 
 // convert the sort date value into a date
@@ -172,12 +190,15 @@ TimelineClass.prototype.dateFormatter = function(value) {
 // change the map based on the new values
 TimelineClass.prototype.updateMarkers = function(event, ui) {
 
+	//debug code
+	console.log("updateMarkers called");
+
 	// get the values
 	var minDate = ui.values.min;
 	var maxDate = ui.values.max;
 	
-	minDate = timelineObj.DateToInt(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-	maxDate = timelineObj.DateToInt(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+	//minDate = timelineObj.DateToInt(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+	//maxDate = timelineObj.DateToInt(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
 	
 	// store the values
 	timelineObj.selectedFirstDate = minDate;
@@ -204,4 +225,14 @@ TimelineClass.prototype.DateToInt = function(year, month, day) {
 	}
 	
 	return tokens[0] + "" + tokens[1] + "" + tokens[2];
+}
+
+TimelineClass.prototype.resetTimeline = function() {
+
+		$('#timeSlider').empty();
+		$('#timeSlider').dateRangeSlider('destroy');
+		timelineObj.firstDate = 99999999;
+		timelineObj.lastDate  = 0;
+		timelineObj.selectedFirstDate = -1;
+		timelineObj.selectedLastDate  = -1;
 }

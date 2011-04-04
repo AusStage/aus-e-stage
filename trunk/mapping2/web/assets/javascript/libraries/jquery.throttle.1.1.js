@@ -187,7 +187,13 @@
     // it can be removed in jQuery 1.4+ .unbind or .die by using the original
     // callback as a reference.
     if ( $.guid ) {
-      wrapper.guid = callback.guid = callback.guid || $.guid++;
+    
+      //edit by cw
+      if(callback != null) {
+	      wrapper.guid = callback.guid = callback.guid || $.guid++;
+	  } else {
+	  	wrapper.guid = $.guid++;
+	  }
     }
     
     // Return the wrapper function.
