@@ -405,7 +405,12 @@ MappingClass.prototype.copyArrayExcludeHidden = function(arr, hidden) {
 		}
 	
 	} else {
-		objArray = arr;
+		// make a copy of the array
+		// always work on a copy and not the original
+		for(var i = 0; i < arr.length; i++) {
+			obj = jQuery.extend(true, {}, arr[i]);
+			objArray.push(obj);
+		}
 	}
 	
 	// take into account the time slider

@@ -42,6 +42,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/markerclusterer-1.0.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.rangeslider-2.1.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.daterangeslider-2.1.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.throttle.1.1.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/index.js"></script>
 	<script type="text/javascript" src="assets/javascript/common.js"></script>
