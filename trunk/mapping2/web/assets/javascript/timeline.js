@@ -194,9 +194,6 @@ TimelineClass.prototype.dateFormatter = function(value) {
 // change the map based on the new values
 TimelineClass.prototype.updateMarkers = function(event, ui) {
 
-	//debug code
-	console.log("updateMarkers called");
-
 	// get the values
 	var minDate = ui.values.min;
 	var maxDate = ui.values.max;
