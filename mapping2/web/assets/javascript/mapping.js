@@ -414,7 +414,7 @@ MappingClass.prototype.copyArrayExcludeHidden = function(arr, hidden) {
 	}
 	
 	// take into account the time slider
-	if(timelineObj.selectedFirstDate != null) {
+	if(timelineObj.selectedFirstDate != null && timelineObj.selectedFirstDate != -1) {
 		if(((timelineObj.firstDate != timelineObj.selectedFirstDate) || (timelineObj.lastDate != timelineObj.selectedLastDate)) && timelineObj.firstDate != 99999999) {
 	
 			// declare helper variables
@@ -1145,15 +1145,18 @@ MappingClass.prototype.buildContributorInfoWindow = function() {
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
 		
-			if(x % 2 == 1) {
-				list += '<li class="b-185">';
-			} else {
-				list += '<li>';
-			}
+			if(data.events[x].filterDate >= timelineObj.selectedFirstDate && data.events[x].filterDate <= timelineObj.selectedLastDate) {
 		
-			list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ';
-			list += data.name + ', ' + mappingObj.buildAddressAlt(data.suburb, data.state, data.country);
-			list += ', ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+				if(x % 2 == 1) {
+					list += '<li class="b-185">';
+				} else {
+					list += '<li>';
+				}
+		
+				list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ';
+				list += data.name + ', ' + mappingObj.buildAddressAlt(data.suburb, data.state, data.country);
+				list += ', ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+			}
 			
 		}
 		
@@ -1245,16 +1248,17 @@ MappingClass.prototype.buildOrganisationInfoWindow = function() {
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
 		
-			if(x % 2 == 1) {
-				list += '<li class="b-185">';
-			} else {
-				list += '<li>';
-			}
+			if(data.events[x].filterDate >= timelineObj.selectedFirstDate && data.events[x].filterDate <= timelineObj.selectedLastDate) {
+				if(x % 2 == 1) {
+					list += '<li class="b-185">';
+				} else {
+					list += '<li>';
+				}
 		
-			list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ';
-			list += data.name + ', ' + mappingObj.buildAddressAlt(data.suburb, data.state, data.country);
-			list += ', ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
-			
+				list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ';
+				list += data.name + ', ' + mappingObj.buildAddressAlt(data.suburb, data.state, data.country);
+				list += ', ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+			}
 		}
 		
 		// finalise the list of events
@@ -1339,13 +1343,15 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 		// add the events
 		for(var x = 0; x < data.events.length; x++) {
 		
-			if(x % 2 == 1) {
-				list += '<li class="b-185">';
-			} else {
-				list += '<li>';
-			}
+			if(data.events[x].filterDate >= timelineObj.selectedFirstDate && data.events[x].filterDate <= timelineObj.selectedLastDate) {
+				if(x % 2 == 1) {
+					list += '<li class="b-185">';
+				} else {
+					list += '<li>';
+				}
 		
-			list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+				list += '<a href="' + data.events[x].url + '" target="_ausstage">' + data.events[x].name + '</a>, ' + data.events[x].firstDate.replace(/\s/g, '&nbsp;') + '</li>';
+			}
 			
 		}
 		
@@ -1641,6 +1647,9 @@ MappingClass.prototype.resetMap = function() {
 		// reset the data array
 		mappingObj.markerData.hashes = [];
 		mappingObj.markerData.objects = [];
+		
+		//reset the timeline object
+		timelineObj.resetTimeline();
 	}
 	
 	// update the map
