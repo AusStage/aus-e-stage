@@ -6,8 +6,9 @@
 	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/common-web-assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/common-web-assets/ausstage-background-colours.css"/>
-	<link rel="stylesheet" href="assets/common-web-assets/jquery-ui-1.8.6.custom.css"/>
-    
+	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
+
+
         <link rel="stylesheet" href="assets/vis.css"/>
     
 	<!-- libraries -->
@@ -15,6 +16,9 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.6.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
+        <script type="text/javascript" src="assets/javascript/chain-0.2.js" type="application/x-javascript" charset="utf-8"></script>
+
+                
         <!-- custom code -->
         <script src="assets/javascript/searchModel.js"></script>
         <script src="assets/javascript/errorController.js"></script>
@@ -34,7 +38,10 @@
 				myModel.controllers.push(new visControllerSearch(myModel)); // Add the timeline controller the model
 				myModel.controllers.push(new visControllerChooseView(this)); // Add the timeline controller the model
                                 myModel.searchPerformances();
-				
+
+                                myModel.getPerformances (0,0,'.currentPerformancesBlock'); // See what performances are currently looking for feedback
+				myModel.getPerformances (0,0,'.currentPerformancesBlock'); // See what performances are currently looking for feedback
+
 		});
 		
         </script>
@@ -54,8 +61,8 @@
 		</div>
 	</div>
 	<div class="main b-184 f-187">
-		<!-- main conttent -->
-        
+		<!-- main content -->
+                <div id="content">
                  <div class="ui-state-error ui-corner-all status-messages" id="search_error_message">
                                              <p><span class="ui-icon ui-icon-alert status-icon"></span>
                                              <span id="error_text"></span>
@@ -70,8 +77,16 @@
                                 </div>
 
                                                                 
-                                        
-        	 <span class="PerformancesBlock loading"></span>
+           <!--<span class="currentPerformancesBlock loading">-->
+           <div id="CurrentPerformances">
+               <h3  class="currentPerformancesBlock">Performances currently seeking feedback</h3>
+
+                     <ul class="Performances currentPerformancesBlock performances">
+                        
+             	     </ul>
+           </div>
+       
+        <div id="Performances">
         <h3>Peformances that currently have feedback</h3>
 
 
@@ -103,8 +118,10 @@
 
          </form>
         
-
+        </div>
 	</div>
+
+        </div>
 	<!-- always at the bottom of the content -->
 	<div class="push"></div>
 </div>
