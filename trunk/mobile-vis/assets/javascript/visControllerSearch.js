@@ -42,7 +42,8 @@ function visControllerSearch(newModel) {
 
 			for (var a = 0; a < results.length; a++) { //loop over the controllers 
 				for(var i = 0; i < results[a].length; i++) { //loop of over results in the 
-				 	
+
+                                        
 					item  = results[a][i];
 				 	 
 					 window.console.log(item );
@@ -53,8 +54,11 @@ function visControllerSearch(newModel) {
 													'<td class="organisation"> ' + item.organisation  + ' </td>' +
 												        '<td class="startDateTime">' + item.startDateTime + '</td>' +
 													'<td class="venue">' + item.venue +' </td>' +
-													'<td class="view"><a href="list.html?performance=' + item.id + '">List</a>, ' +
-													'<a href="signage.html?performance=' + item.id + '">Signage</a> ' +
+													'<td class="view">\n\
+\n\
+                                                                                                         <span class="visList"><a href="list.html?performance=' + item.id + '"><img src ="assets/images/list-icon.png" alt="list" > <br /><span class="label">List</span></a></span> ' +
+													'<span class="visSign"><a href="signage.html?performance=' + item.id + '">\n\
+                                                                                                          <img src ="assets/images/sign-icon.png" alt="Signage" > <br /><span class="label">Signage</span></a></span>' +
 													'</td>' +
 													'<td class="totalFeedbackCount">' + item.totalFeedbackCount +' </td>' +
 
