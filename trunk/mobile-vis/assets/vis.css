@@ -17,6 +17,11 @@
  */
 /* This shared across the whole project */
 
+#content {
+    padding-left:12px;
+    padding-top:12px;
+    padding-right:12px;
+}
 .ui-state-error, .ui-state-highlight {
 	display:none; 
 	margin:40px;
@@ -149,3 +154,58 @@ td.event {
     
 }
 
+/* relates to add button */ 
+
+.CurrentPerformance  {
+    display: none;
+}
+
+.add .form {
+    margin-left: 10px;
+}
+
+.add .form  {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.loading  {
+
+    background-image: url('images/loading.gif');
+    background-position:center;
+    background-repeat: no-repeat;
+
+    min-height: 50px;
+
+}
+
+/*  Current Peformances on the homepage */
+
+#CurrentPerformances ul li {
+  
+   margin: 12px;
+}
+
+
+#CurrentPerformances ul li {
+    list-style: none;
+    border-bottom: 1px solid #333;
+    padding-bottom: 6px;
+    margin-left: -35px;
+}
+
+
+#CurrentPerformances .event {
+    font-size: 1.6em;
+    font-weight: bold;
+
+}
+
+
+#Performances {
+       margin-top: 12px;  
+}
+
+#Performances #SearchResults {
+       margin-top: 12px;
+}
