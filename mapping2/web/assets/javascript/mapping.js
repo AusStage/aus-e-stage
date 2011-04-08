@@ -996,11 +996,14 @@ MappingClass.prototype.iconClick = function(event) {
 		
 		mappingObj.infoWindowReference.open(mappingObj.map, marker);
 		
+		// get a filtered data array
+		objArray = mappingObj.copyArrayExcludeHidden(data.organisations, mappingObj.hiddenMarkers.organisations);
+		
 		// use the queue to get the data
-		for(var i = 0; i < data.organisations.length; i++) {
+		for(var i = 0; i < objArray.length; i++) {
 	
 			// build the url
-			var url  = BASE_URL + 'events?task=organisation&id=' + data.organisations[i].id +'&venue=' + data.organisations[i].venue;
+			var url  = BASE_URL + 'events?task=organisation&id=' + objArray[i].id +'&venue=' + objArray[i].venue;
 		
 			ajaxQueue.add({
 				success: mappingObj.processInfoWindowData,
@@ -1034,11 +1037,14 @@ MappingClass.prototype.iconClick = function(event) {
 		
 		mappingObj.infoWindowReference.open(mappingObj.map, marker);
 		
+		// get a filtered data array
+		objArray = mappingObj.copyArrayExcludeHidden(data.venues, mappingObj.hiddenMarkers.venues);
+		
 		// use the queue to get the data
-		for(var i = 0; i < data.venues.length; i++) {
+		for(var i = 0; i < objArray.length; i++) {
 	
 			// build the url
-			var url  = BASE_URL + 'events?task=venue&id=' + data.venues[i].id;
+			var url  = BASE_URL + 'events?task=venue&id=' + objArray[i].id;
 		
 			ajaxQueue.add({
 				success: mappingObj.processInfoWindowData,
@@ -1066,8 +1072,11 @@ MappingClass.prototype.iconClick = function(event) {
 		
 		mappingObj.infoWindowReference.open(mappingObj.map, marker);
 		
+		// get a filtered data array
+		objArray = mappingObj.copyArrayExcludeHidden(data.events, mappingObj.hiddenMarkers.events);
+		
 		// build the event data for the infoWindow
-		mappingObj.buildEventInfoWindow(data.events);
+		mappingObj.buildEventInfoWindow(objArray);
 	}
 }
 
