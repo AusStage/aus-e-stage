@@ -470,7 +470,7 @@ table.mapLegendTable {
 	text-align: left;
 	border-collapse: collapse;
 	width: 245px;
-	margin-left: -30px;
+    margin-left: -2em;
 	margin-right: 0px;
 	padding-right: 0px;
 	margin-top: -5px;
