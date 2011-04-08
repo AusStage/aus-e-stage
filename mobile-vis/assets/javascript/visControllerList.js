@@ -71,7 +71,7 @@ function visControllerList(newModel) {
                              $(".venue").html(results[0].venue);
                              $(".date").html(results[0].date);
                              $("span.question").html(results[0].question);
-                             
+
 				for(var i = 0; i < results[0].feedback.length; i++) {
 					item = results[0].feedback[i];
 					//Make the update acutally hoppen
