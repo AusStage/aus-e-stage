@@ -1,0 +1,129 @@
+
+
+
+html, body{ 
+	color:#FFF;
+	background-color:#000;
+	font-family:Arial, Helvetica, sans-serif;
+	height: 100%;
+}
+
+#container {
+	min-height: 100%;
+}
+
+
+#main {
+	overflow:visible;
+	padding-bottom: 240px;
+	height:400px;
+	padding-top:10%;
+
+
+	}  
+
+
+/*Control of the actual question*/
+
+#question {
+	float:left;
+	font-size:1.8em;
+	font-weight:bold;
+	margin-left:5%;
+	width:20%;
+	min-height:300px;
+	color:#CCC;
+ 
+}
+
+
+#question h3  {
+	margin: 0px;
+	font-size:.9em;
+	color:#999;
+}
+
+
+#question p  {
+	
+}
+
+
+
+/* Control the div that wraps around the presenation */
+#feedback {
+	width:65%;
+	margin-left:30%;
+
+}
+
+/*** Custom Aus-Stage sent up ***/
+
+.feedback {
+	width:90%;
+	font-size:1.8em;
+	font-weight:bold;
+	min-height:300px;
+
+
+}
+
+
+.feedback-about {
+	font-size:.6em;
+	font-weight:lighter;
+	color:#999;
+}
+
+
+#AddingFeedback  {
+	position: relative;
+	margin-top: -220px; /* negative value of footer height */
+	background:#000;
+	width:80%;
+	margin-left:5%;
+	margin-right:auto;
+	
+	font-size:1.3em;
+	padding-left:5px;
+	
+	}     
+
+.FeedbackMethod {
+		float:left;
+		width:30%;
+		font-weight:bold;
+		padding-left:15px;
+		padding-top:15px;
+		
+		margin-left:15px;
+		margin-top:15px;
+		
+		border-left:solid;
+		border-left-color:#999;
+		border-left-width:2px; 
+			
+	}
+
+
+.FeedbackMethod img {
+		float:left;
+		padding-right:6px;
+		
+			
+	}
+.FeedbackMethod p {
+		
+			
+	}
+	
+		
+	
+.FeedbackMethod.SMS {
+	
+	
+		
+		
+	}
+	
+	
