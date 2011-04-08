@@ -486,5 +486,39 @@ public class DateUtils {
 		return getDatesForTimeline(fdates[0], fdates[1], fdates[2], ldates[0], ldates[1], ldates[2]);
 	
 	}
+	
+	/**
+	 * A method to turn dates from AusStage into dates that can be used for sorting
+	 * Used primarily to prepare data for use in the mapping service time slideer
+	 *
+	 * @param fyear  the first year
+	 * @param fmonth the first month
+	 * @param fday   the first day	
+	 *
+	 * @return       the date that can be used for sorting, especially useful in the mapping service and the time slider
+	 */
+	public static String getSortDate(String fyear, String fmonth, String fday) {
+	
+		// validate the parameters
+		if(InputUtils.isValid(fyear) == false) {
+			throw new IllegalArgumentException("Error: The fyear parameter is required");
+		}
+		
+		// declare helper variables
+		String[] dates = new String[2];
+		
+		/*
+		 * process the first date
+		 */
+		if(InputUtils.isValid(fmonth) == false) {
+			dates[0] = fyear + "-01-01";
+		} else if(InputUtils.isValid(fday) == false) {
+			dates[0] = fyear + "-" + fmonth + "-01";
+		} else {
+			dates[0] = fyear + "-" + fmonth + "-" + fday;
+		}
+		
+		return dates[0];	
+	}
 		
 } // end class definition
