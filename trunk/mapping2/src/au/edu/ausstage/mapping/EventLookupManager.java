@@ -107,6 +107,7 @@ public class EventLookupManager {
 				object.put("id", resultSet.getString(1));
 				object.put("name", resultSet.getString(2));
 				object.put("firstDate", DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				object.put("filterDate", DateUtils.getIntegerFromDate(DateUtils.getSortDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5))));
 				object.put("url", LinksManager.getEventLink(resultSet.getString(1)));
 				
 				// add the object to the list
@@ -277,6 +278,7 @@ public class EventLookupManager {
 				object.put("id", resultSet.getString(1));
 				object.put("name", resultSet.getString(2));
 				object.put("firstDate", DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				object.put("filterDate", DateUtils.getIntegerFromDate(DateUtils.getSortDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5))));
 				object.put("url", LinksManager.getEventLink(resultSet.getString(1)));
 				
 				// add the object to the list
@@ -370,6 +372,7 @@ public class EventLookupManager {
 				object.put("id", resultSet.getString(1));
 				object.put("name", resultSet.getString(2));
 				object.put("firstDate", DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				object.put("filterDate", DateUtils.getIntegerFromDate(DateUtils.getSortDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5))));
 				object.put("url", LinksManager.getEventLink(resultSet.getString(1)));
 				
 				// add the object to the list
