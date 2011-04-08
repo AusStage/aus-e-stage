@@ -75,8 +75,8 @@ TimelineClass.prototype.update = function() {
 	var ldate = timelineObj.getDateFromInt(timelineObj.lastDate);
 	
 	// adjust the dates
-//	fdate.setDate(fdate.getDate() - 31);
-//	ldate.setDate(ldate.getDate() + 31);
+	fdate.setDate(fdate.getDate() - 31);
+	ldate.setDate(ldate.getDate() + 31);
 
 	var sfdate = null;
 	var sldate = null;
