@@ -414,49 +414,44 @@ MappingClass.prototype.copyArrayExcludeHidden = function(arr, hidden) {
 	}
 	
 	// take into account the time slider
-	if(((timelineObj.firstDate != timelineObj.selectedFirstDate) || (timelineObj.lastDate != timelineObj.selectedLastDate)) && timelineObj.firstDate != 99999999) {
+	if(timelineObj.selectedFirstDate != null) {
+		if(((timelineObj.firstDate != timelineObj.selectedFirstDate) || (timelineObj.lastDate != timelineObj.selectedLastDate)) && timelineObj.firstDate != 99999999) {
 	
-		// declare helper variables
-		var minDate;
-		var maxDate;
+			// declare helper variables
+			var minDate;
+			var maxDate;
 	
-		// adjust the markers using dates
-		for(var i = 0; i < objArray.length; i++) {
+			// adjust the markers using dates
+			for(var i = 0; i < objArray.length; i++) {
 		
-			if(typeof objArray[i].venueObj != "undefined") {
-				// contributors and organisations
-				minDate = objArray[i].venueObj.minEventDate;
-				maxDate = objArray[i].venueObj.maxEventDate;
-			} else if(typeof objArray[i].minEventDate != "undefined") {
-				// venues
-				minDate = objArray[i].minEventDate;
-				maxDate = objArray[i].maxEventDate;
-			} else {
-				// events
-				minDate = objArray[i].sortFirstDate;
-				maxDate = objArray[i].sortLastDate;
-			}
+				if(typeof objArray[i].venueObj != "undefined") {
+					// contributors and organisations
+					minDate = objArray[i].venueObj.minEventDate;
+					maxDate = objArray[i].venueObj.maxEventDate;
+				} else if(typeof objArray[i].minEventDate != "undefined") {
+					// venues
+					minDate = objArray[i].minEventDate;
+					maxDate = objArray[i].maxEventDate;
+				} else {
+					// events
+					minDate = objArray[i].sortFirstDate;
+					maxDate = objArray[i].sortLastDate;
+				}
 			
-			if((minDate >= timelineObj.selectedFirstDate && minDate <= timelineObj.selectedLastDate) || (maxDate >= timelineObj.selectedFirstDate && maxDate <= timelineObj.selectedLastDate)) {
-				// this is OK so don't do anything
-			} else {
-				// remove the marker from the array
-				objArray.splice(i, 1);
+				if((minDate >= timelineObj.selectedFirstDate && minDate <= timelineObj.selectedLastDate) || (maxDate >= timelineObj.selectedFirstDate && maxDate <= timelineObj.selectedLastDate)) {
+					// this is OK so don't do anything
+				} else {
+					// remove the marker from the array
+					objArray.splice(i, 1);
 				
-				// adjust the count
-				i--;
+					// adjust the count
+					i--;
+				}
 			}
 		}
 	}
-
-	// debug code
-	if(objArray.length > 1) {
-		return objArray;
-	} else {
-		return objArray;
-	}
-
-//	return objArray;
+	
+	return objArray;
 }
 
 // function to get the cell colour
@@ -922,6 +917,7 @@ MappingClass.prototype.iconClick = function(event) {
 	// get the markerData object for this location
 	var idx = $.inArray(tokens[2], mappingObj.markerData.hashes);
 	var data = mappingObj.markerData.objects[idx];
+	var objArray = [];
 	
 	// reset the infoWindowData variable
 	mappingObj.infoWindowData = [];
@@ -958,11 +954,14 @@ MappingClass.prototype.iconClick = function(event) {
 		
 		mappingObj.infoWindowReference.open(mappingObj.map, marker);
 		
+		// get a filtered data array
+		objArray = mappingObj.copyArrayExcludeHidden(data.contributors, mappingObj.hiddenMarkers.contributors);	
+		
 		// use the queue to get the data
-		for(var i = 0; i < data.contributors.length; i++) {
+		for(var i = 0; i < objArray.length; i++) {
 	
 			// build the url
-			var url  = BASE_URL + 'events?task=contributor&id=' + data.contributors[i].id +'&venue=' + data.contributors[i].venue;
+			var url  = BASE_URL + 'events?task=contributor&id=' + objArray[i].id +'&venue=' + objArray[i].venue;
 		
 			ajaxQueue.add({
 				success: mappingObj.processInfoWindowData,
