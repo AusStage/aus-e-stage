@@ -31,8 +31,125 @@ function model(name) {
 	    * 
 		*  
 		*/
-	
-		this.searchPerformances = function () {
+
+		this.getPerformances = function (start,end,target){
+		   
+		   	   //figure out which server this running on what the data type should be  
+			   host = this.buildHost();
+			   var mydataType = this.getDataType();
+			   
+			   //set up the date
+			   //var startdate = new Date('Dec 12 2010'); // FOR TESTING
+                            var startdate = new Date();
+
+			   //enddate.setDate(startdate.getDate() + 10);
+                           
+			   startdate.setDate(startdate.getDate() - start);
+			   //window.console.log(startdate.toDateString());
+                           //
+                           //Now formatted the into yyyy-mm-dd
+
+                           startdateString = reFormatDatetoYYYYMMDD(startdate);
+			   window.console.log(startdateString);
+
+                           
+                            //var today = new Date('Dec 12 2010'); // FOR TESTING
+                            var today = new Date();
+                            var enddate = today;
+                            
+                            enddate.setDate(today.getDate() + end);
+
+                           //Now formatted the into yyyy-mm-dd
+                            enddateString = reFormatDatetoYYYYMMDD(enddate);
+			    window.console.log(enddateString);
+                            
+                            if (end == 0 && start == 0 ) {				  // build the query string
+                               //don't include the end date'
+                               var params = {
+                                             task:'date',
+                                             startdate: startdateString,
+
+                                     };
+                             } else {
+                               var params = {
+                                             task:'date',
+                                             startdate: startdateString,
+                                             enddate: enddateString,
+
+
+                                     };
+                             }
+				 
+				 var values = jQuery.param(params);//encode thos
+				
+				var source =  host + '/mobile/lookup?' +  values;
+				
+				window.console.log(source);
+								
+				$.ajax({
+						type:   'GET',
+						url: source, 
+						dataType:  mydataType,
+						cache: false,
+						success: function (data) {
+						window.console.log(data);
+						//see if we have some data only the display the current performances and load them  
+						if (data.length !=  0) {
+							//Sort by the startDateTime
+							
+							data.reverse(); 
+							
+							//Take the loaiding class off and the display the block inside of that 	
+							$(target).removeClass("loading");
+							$(target).css("display","block");
+							
+								//Got the date and now load that into the current performances.  
+								//Clear what is there current 
+								$(target + ".Performances").empty();
+		
+									// add the list of feedback
+									for(var i = 0; i < data.length; i++) {
+										//window.console.log(data);
+										item = data[i];
+										//$(target + ".Performances").append('<li class="arrow">' +
+										$(target + ".Performances").append('<li class="arrow">' +
+												'<a href="add.html?performance=' +
+												item.id +
+                                                                                                '" ><div class="event">' +
+													item.event + '</div></a>' +
+			
+												'<span class="organisation"> ' + item.organisation  + ', </span>' +
+												'<span class="venue">' + item.venue +',</span>' +
+												'<span class="startDateTime">' + item.startDateTime + '</span>' +
+                                                                                                '</li>');
+									}
+									
+							} else {
+								//Nothing found so we turn off the display
+								//$(target).css("display","none");
+								$(target).removeClass("loading");
+								$(target + ".Performances").empty();
+
+								$(target + ".Performances").append('<li class="arrow">' +
+												'<a href="#home" ' + 
+												 '  ><div class="event"> No Performances Found' +
+													'</div></a></li>');
+											
+											
+								
+							}
+																	
+						},
+					//Some thing has gone wrong, show the user an error screen.  
+					error:function (xhr, ajaxOptions, thrownError){
+
+                	},
+					async: true 
+					}); 
+					
+		}
+
+                this.searchPerformances = function () {
 		   
 		   	   //figure out which server this running on what the data type should be  
 			  	host = this.buildHost();
