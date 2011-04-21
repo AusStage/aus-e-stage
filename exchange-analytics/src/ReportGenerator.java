@@ -99,7 +99,7 @@ public class ReportGenerator {
 		}
 		
 		// add a section
-		status = this.addSection("description", ReportConstants.DISPLAY_ALL, "About These Analytics", "<p>These analytics show usage of the <a href=\"http://beta.ausstage.edu.au/exchange\" title=\"Service homepage\">AusStage Data Exchange</a> service for 2010. The service is designed to allow members of the AusStage community to retrieve data stored in the AusStage system in real time and incorporate the data into their own websites.</p>");
+		status = this.addSection("description", ReportConstants.DISPLAY_ALL, "About These Analytics", "<p>These analytics show usage of the <a href=\"http://beta.ausstage.edu.au/exchange/\" title=\"Data Exchange Service homepage\">AusStage Data Exchange</a> service. The service allows <a href=\"http://www.ausstage.edu.au\" title=\"AusStage Website homepage\">AusStage</a> data to be retrieved in real time for display in external websites.</p><p><a href=\"http://beta.ausstage.edu.au/?tab=analytics&section=exchange\" title=\"Persistent link to this tab\">Persistent Link</a> to these analytics.</p>");
 		
 		// check to see if it is OK to proceed
 		if(status == false) {
@@ -117,7 +117,7 @@ public class ReportGenerator {
 		}
 		
 		// add the section for the current month chart
-		status = this.addSectionWithChart("current-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Current Month", "<p>This chart provides an overview of the number of successful requests to the Exchange Data Service for the current month</p>", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT); 
+		status = this.addSectionWithChart("current-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Current Month", "<p>This chart provides an overview of the number of successful requests to the AusStage Data Exchange service for the current month.</p>", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT); 
 		
 		// check to see if it is OK to proceed
 		if(status == false) {
@@ -135,7 +135,7 @@ public class ReportGenerator {
 		}
 		
 		// add the section for the current month chart
-		status = this.addSectionWithChart("prev-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Previous Month", "", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
+		status = this.addSectionWithChart("prev-month-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Previous Month", "<p>This chart provides an overview of the number of successful requests to the AusStage Data Exchange service for the previous month.</p>", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
 		
 		// check to see if it is OK to proceed
 		if(status == false) {
@@ -153,7 +153,7 @@ public class ReportGenerator {
 		}
 		
 		// add the section for the current month chart
-		status = this.addSectionWithChart("year-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Year", "", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
+		status = this.addSectionWithChart("year-chart", ReportConstants.DISPLAY_DESKTOP, "Requests for the Year", "<p>This chart provides an overview of the number of successful requests to the AusStage Data Exchange service for the current year.</p>", chartURL, this.BAR_CHART_WIDTH, this.BAR_CHART_HEIGHT);
 		
 		// check to see if it is OK to proceed
 		if(status == false) {
@@ -171,7 +171,7 @@ public class ReportGenerator {
 		}
 		
 		// add the section for the request type chart
-		status = this.addSectionWithChart("req-type-chart", ReportConstants.DISPLAY_DESKTOP, "Requests by Request Type", "<p>Please note percentages may add up to more than 100% due to rounding for display purposes</p>", chartURL, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
+		status = this.addSectionWithChart("req-type-chart", ReportConstants.DISPLAY_DESKTOP, "Requests by Request Type", "<p>This chart provides an overview of the requests by type for the current year.<br/>Please note percentages may add up to more than 100% due to rounding for display purposes</p>", chartURL, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
 		
 		// check to see if it is OK to proceed
 		if(status == false) {
@@ -189,7 +189,7 @@ public class ReportGenerator {
 		}
 		
 		// add the section for the request type chart
-		status = this.addSectionWithChart("output-type-chart", ReportConstants.DISPLAY_DESKTOP, "Requests by Output Type", "<p>Please note percentages may add up to more than 100% due to rounding for display purposes</p>", chartURL, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
+		status = this.addSectionWithChart("output-type-chart", ReportConstants.DISPLAY_DESKTOP, "Requests by Output Type", "<p>This chart provides an overview of the requests by output type for the current year.<br/>Please note percentages may add up to more than 100% due to rounding for display purposes</p>", chartURL, this.PIE_CHART_WIDTH, this.PIE_CHART_HEIGHT);
 		
 		// check to see if it is OK to proceed
 		if(status == false) {
