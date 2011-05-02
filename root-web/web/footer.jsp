@@ -18,11 +18,6 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%
-/*
- * @author corey.wallis@flinders.edu.au
- */
-%>
 <div class="footer b-186">
 	<%
 		ServletContext context = getServletContext();
@@ -30,5 +25,5 @@
 		String systemVersion   = (String)context.getInitParameter("systemVersion");
 		String moreInfo		   = (String)context.getInitParameter("moreInfo");
 	%>
-	<p><%=systemName%> Version: <%=systemVersion%> | <a href="<%=moreInfo%>" title="More Information About the System">More Info</a> | <a href="http://beta.ausstage.edu.au/" title="Contact Project Members">Contact Us</a></p>
+	<p><%=systemName%> | Version: <%=systemVersion%> | <a href="<%=moreInfo%>" title="More Information">More Information</a> | <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">Contact Us</a></p>
 </div>
