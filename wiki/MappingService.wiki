@@ -2,7 +2,7 @@
 
 <h1>!AusStage Mapping Service</h1>
 
-The [http://beta.ausstage.edu.au/mapping Mapping Events] service provides an interface to enables researchers to search, display and visually analyse information about live performance on a map. It introduces geographic capabilities to research applications of AusStage dataset. It is one of three [https://www.pfc.org.au/bin/view/Main/NeAT NeAT] funded services to enhance the research capabilities of the [http://www.ausstage.edu.au AusStage] database.
+The [http://beta.ausstage.edu.au/mapping Mapping Events] service provides an interface to enables researchers to search, display and visually analyse information about live performance on a map. It introduces geographic capabilities to research applications of !AusStage dataset. It is one of three [https://www.pfc.org.au/bin/view/Main/NeAT NeAT] funded services to enhance the research capabilities of the [http://www.ausstage.edu.au AusStage] database.
 
 The goal of the Mapping Service is to allow users to create maps that visualise event data. 
 
