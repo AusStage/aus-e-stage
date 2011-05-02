@@ -144,7 +144,7 @@ public class AnalyticsManager {
 		
 		// add the description
 		htmlOutput.append("<div class=\"report_section\" id=\"description\"><h2>About These Analytics</h2>");
-		htmlOutput.append("<div class=\"report_section_content\"><p>These analytics show the number of records in a number of strategic table within the AusStage database at the time displayed above</p></div></div>");
+		htmlOutput.append("<div class=\"report_section_content\"><p>These analytics show the current number of records in the main tables of the <a href=\"http://www.ausstage.edu.au\" title=\"AusStage Website homepage\">AusStage</a> database.</p><p><a href=\"http://beta.ausstage.edu.au/?tab=analytics&section=ausstage-database\" title=\"Persistent link to this tab\">Persistent Link</a> to these analytics.</p></div></div>");
 		
 		// start the output table
 		htmlOutput.append("<div class=\"report_section\" id=\"record-count-table\"><h2>Number of Records in these Tables</h2>");

@@ -18,16 +18,11 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%
-/*
- * @author corey.wallis@flinders.edu.au
- */
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Aus-e-Stage Service Development</title>
+	<title>Aus-e-Stage Project</title>
 	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css"/>
@@ -40,21 +35,22 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.64.js"></script>
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/index.js"></script>
+	<script type="text/javascript" src="assets/javascript/tab-selector.js"></script>
 </head>
 <body>
 <div class="wrapper">
-	<div class="header b-187"><h1>Aus-e-Stage Service Development</h1></div>
+	<div class="header b-187"><h1>Aus-e-Stage Project</h1></div>
 	<div class="sidebar b-186 f-184">
 		<!-- side bar content -->
 		<div class="mainMenu">
-			<h2>Main Menu</h2>
 			<ul>
-				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
-				<li><a href="/mapping/" title="Aus-e-Stage Mapping Service (Alpha)">Mapping Service (Alpha)</a></li>
-				<li><a href="/mapping2/" title="Aus-e-Stage Mapping Service (Beta)">Mapping Service (Beta)</a></li>
-				<li><a href="/networks/" title="Aus-e-Stage Navigating Networks Service (Beta)">Navigating Networks</a></li>
-				<li><a href="http://code.google.com/p/aus-e-stage/wiki/MobileService" title="Information about the AusStage Researching Audiences Service">Researching Audiences</a></li>
-				<li><a href="http://code.google.com/p/aus-e-stage/wiki/StartPage" title="Aus-e-Stage Project Documentation.">Aus-e-Stage Wiki</a></li>
+				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a></li>
+				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
+				<li><a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a></li>
+				<li><a href="http://beta.ausstage.edu.au/networks" title="Navigating Networks homepage">Navigating Networks</a></li>
+				<li><a href="http://beta.ausstage.edu.au/mobile/mobile-vis/" title="Researching Audiences homepage">Researching Audiences</a></li>
+				<li><a href="http://code.google.com/p/aus-e-stage/wiki/StartPage" title="Project Wiki homepage">Project Wiki</a></li>
+				<li><a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">Contact Us</a></li>
 			</ul>
 		</div>
 	</div>
@@ -71,37 +67,31 @@
 				<div id="tabs-1" class="tab-content">
 					<h1>Aus-e-Stage Project Overview</h1>
 					<p>
-						<a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> fulfils a national need for public access to reliable information on the full spectrum of live performance in Australia,
-						delivering a data set of national significance to research, post graduate students, policy makers in government and industry practitioners;
-						there is no other comparable database in existence. 
+						<a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> fulfils a national need for public access to reliable information on the full spectrum of live performance in Australia. It delivers a dataset of national significance to researchers, postgraduate students, policy makers in government and industry practitioners. 
 					</p>
 					<p>
-						However, the conventional database methods of text-based search-and-retrieval are, on
-						their own, no longer sufficiently effective in meeting the evolving needs of arts and humanities research. 
+						However, conventional database methods of text-based search-and-retrieval are, on their own, no longer sufficiently effective in meeting the evolving needs of research.
 					</p>
 					<p>
-						As a result the Aus-e-Stage project has evolved from this need for new visual interfaces to interact more flexibly with quantifiable research data and to collaborate
-						more productively across sectors of the creative economy. 
-					</p>
+						The <a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage project</a> is developing new visual interfaces to enable researchers to interact more flexibly with the <a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> dataset. Three new services are developed to operate alongside the current <a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> search-and-retrieval service. These services are:
 					<p>
-						Aus-e-Stage is a <a href="https://www.pfc.org.au/bin/view/Main/NeAT" title="More information on the National eResearch Architecture Taskforce">NeAT</a> funded project with the aim of developing
-						three new services that will be designed, tested and deployed to operate alongside the current AusStage text-based search-and-retrieval service.
-					</p>
+					
 					<p>
-						<h2>These services are:</h2>
+						<a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage</a> is funded by <a href="https://www.pfc.org.au/bin/view/Main/NeAT" title="NeAT homepage">NeAT</a>, the National eResaerch Architecture Taskforce. The source code for these services is available on the <a href="http://code.google.com/p/aus-e-stage/" title="Aus-e-Stage Project Wiki and Source Code Repository">aus-e-stage</a> project hosted on Google Code.
 					</p>
+					<h2>These services are:</h2>
 					<ul class="services">
 						<li>
-							<a href="/mapping/" title="AusStage Mapping Service homepage">
-								<h3>Mapping Service</h3>
+							<a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">
+								<h3>Mapping Events</h3>
 								<img src="assets/images/map-screengrab.jpg" width="200" height="150" alt="">
 							</a>
 							<p>
-								<strong>Visualise AusStage data on a map</strong>
+								<strong>Visualise live performance on a map</strong>
 							</p>
 						</li>
 						<li>
-							<a href="/networks/" title="AusStage Navigating Networks Service">
+							<a href="http://beta.ausstage.edu.au/networks" title="Navigating Networks homepage">
 								<h3>Navigating Networks</h3>
 								<img src="assets/images/networks-screengrab.jpg" width="200" height="150" alt="">
 							</a>
@@ -110,7 +100,7 @@
 							</p>
 						</li>
 						<li>
-							<a href="http://code.google.com/p/aus-e-stage/wiki/MobileService" title="Information about the AusStage Researching Audiences Service">
+							<a href="http://beta.ausstage.edu.au/mobile/mobile-vis/" title="Researching Audiences homepage">
 								<h3>Researching Audiences</h3>
 								<img src="assets/images/response-screengrab.jpg" width="200" height="150" alt=""> 
 							</a>
@@ -118,10 +108,7 @@
 								<strong>Gather feedback from audiences using mobile devices</strong>
 							</p>
 						</li>
-					</ul>                    
-					<p class="clear">
-						The source code for these services is available on the <a href="http://code.google.com/p/aus-e-stage/" title="Source code repository, documentation wiki etc.">aus-e-stage</a> project hosted on Google Code.
-					</p>
+					</ul>
 				</div>
 				<div id="tabs-2" class="tab-content">
 					<div id="analytics-tabs">
@@ -164,9 +151,7 @@
 								A <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="Wikipedia article on this topic">bookmarklet</a> is a link that you can save in the bookmarks bar or the bookmarks list in your browser. 
 							</p>
 							<p>
-								The bookmarklet below acts as a link between the <a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a> and the <a href="/mapping2/" title="Aus-e-Stage Mapping Service (Beta)">Aus-e-Stage Mapping Service</a>. 
-								When you are viewing an Index Drill Down page or a record page in AusStage clicking on the bookmarklet will 
-								automatically redirect your browser to the Aus-e-Stage mapping service and build a map for the contributor, organisation, venue, or event record that you had displayed.
+								This bookmarklet acts as a link between the <a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a> and the <a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Aus-e-Stage Mapping Events</a> service. When you are viewing an event, contributor, organisation or venue in AusStage, clicking on the bookmarklet will redirect your browser to the Aus-e-Stage Mapping Events service and build a map for the record you had displayed.
 							</p>
 							<p>
 								To use the bookmarklet simply drag the link below to your bookmarks bar.
@@ -174,17 +159,18 @@
 							<p>
 								<a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://beta.ausstage.edu.au/assets/javascript/map-bookmarklet.js';})();" title="Link directly from AusStage into the Mapping Service"/>View AusStage Map</a>
 							</p>
+							<p>
+								<a href="http://beta.ausstage.edu.au/?tab=extras&section=bookmarklet" title="Persistent link to this tab">Persistent Link</a> to this section.
+							</p>
+							</div>
 						</div>
 						<div id="extras-2">
 							<h1>AusStage Colour Scheme</h1>
 							<p>
-								The <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-scheme.html" title="HTML version of the Colour Scheme">AusStage colour scheme</a> that is being used for all of the Aus-e-Stage services is documented in <a href="http://code.google.com/p/aus-e-stage/wiki/AusStageColourScheme" title="More Information on the Colour Scheme">our project wiki</a>.
-							</p>
-							<p>
+								The AusStage <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-colour-scheme.html" title="HTML version of the Colour Scheme">colour scheme</a> is documented in the Aus-e-Stage project <a href="http://code.google.com/p/aus-e-stage/wiki/AusStageColourScheme" title="Direct link to the page in the wiki">wiki</a>.
 								To ensure consistency across all of our services the CSS files are stored in our <a href="http://code.google.com/p/aus-e-stage/source/browse/#svn%2Ftrunk%2Fcommon-web-assets" title="Browse the Source Code Repository">source code repository</a>. 
-								The colour scheme was developed using <a href="http://www.colorschemer.com/" title="ColourSchemer Studio homepage">ColourSchemer Studio</a>, version 2.0.1.
-							</p>
 							<p>
+								The colour scheme was developed using <a href="http://www.colorschemer.com/" title="ColourSchemer Studio homepage">ColourSchemer Studio</a>, version 2.0.1.
 								Use the form below to turn the CSS generated by ColourSchemer into:
 							</p>
 							<ul>
@@ -192,6 +178,9 @@
 								<li>The CSS rules for <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/ausstage-background-colours.css" title="Download the CSS">background colours</a></li>
 								<li>The colours transformed into the syntax used in <a href="http://aus-e-stage.googlecode.com/svn/trunk/common-web-assets/kml-colours.xml" title="Download the XML file">KML files</a></li>
 							</ul>
+							<p>
+								<a href="http://beta.ausstage.edu.au/?tab=extras&section=colours" title="Persistent link to this tab">Persistent Link</a> to this section.
+							</p>
 							<h2 style="padding-top: 5px;">Transform the CSS</h2>
 							<p>
 								Copy &amp; Paste the CSS output from the ColourSchemer application into the field below and click the 'Transform CSS' button.
@@ -228,6 +217,9 @@
 					</p>
 					<p><strong>Aus-e-Stage Project Manager: </strong>Mrs Liz Milford, (08) 8201 2085, <a href="mailto:liz.milford@flinders.edu.au" title="Email Liz">liz.milford@flinders.edu.au</a></p>
 					<p><strong>Aus-e-Stage Software Engineer: </strong>Mr Corey Wallis, (08) 8201 5818, <a href="mailto:corey.wallis@flinders.edu.au" title="Email Corey">corey.wallis@flinders.edu.au</a></p>
+					<p>
+						<a href="http://beta.ausstage.edu.au/?tab=contacts" title="Persistent link to this tab">Persistent Link</a> to this section.
+					</p>
 				</div>
 			</div>
 		</div>

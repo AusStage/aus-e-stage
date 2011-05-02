@@ -15,9 +15,6 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * @author corey.wallis@flinders.edu.au
- */
  
 // global variables
 var BASE_ANALYTICS_URL = 'analytics?report-file=';
