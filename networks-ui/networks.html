@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" lang="en">
+<head>
+	<title>AusStage Navigating Networks</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
+
+	<!-- css -->
+	<link rel="stylesheet" href="assets/networks.css"/>
+	<link rel="stylesheet" href="assets/ausstage-colours.css">
+	<link rel="stylesheet" href="assets/ausstage-background-colours.css">
+	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.css" />	
+	<link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery.multiselect.filter.css" />	
+	<link rel="stylesheet" href="assets/rangeslider/dev.css"/>	
+	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
+	<!-- libraries --> 
+    <script type="text/javascript" src="assets/javascript/libraries/protovis-r3.2.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollTo-min.js"></script>	
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.multiselect.filter.js"></script>	
+	<script type="text/javascript" src="assets/javascript/libraries/exclusivecheck.jquery.min.js"></script>	
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.jsonp-2.1.4.min.js"></script>			
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.icolor.js"></script>		
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.rangeslider-2.1.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.daterangeslider-2.1.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.throttle.1.1.js"></script>				
+	<!-- custom code -->
+	<script type="text/javascript" src="assets/javascript/networks.js"></script>	
+	<script type="text/javascript" src="assets/javascript/common.js"></script>		
+	<script type="text/javascript" src="assets/javascript/search.js"></script>
+	<script type="text/javascript" src="assets/javascript/viewerControl.js"></script>		
+	<script type="text/javascript" src="assets/javascript/eventViewer.js"></script>		
+	<script type="text/javascript" src="assets/javascript/contributorViewer.js"></script>
+	<script type="text/javascript" src="assets/javascript/timeline.js"></script>	
+	<script type="text/javascript" src="assets/javascript/networkExampleBasic.js"></script>			    
+    <!-- Google Analytics Script -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10089663-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+    
+</head>
+
+<body>
+
+<span id="ruler"></span>
+
+<div class="wrapper">
+	<div class="header b-187"><h1>AusStage Navigating Networks</h1></div>
+
+	<!-- Sidebar -->
+	<div class="sidebar b-186 f-184">
+
+		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
+		<div id="network_details_div">
+			<div class="legendHeader" id="selected_object" ></div>
+			<div class="legendBody" id="related_objects"></div>
+		</div>
+		<!--Network properties - displays information about the network as a whole -->						
+		<div id="network_properties_div">
+			<div class="legendHeader" id="network_properties_header" >Network Properties</div>
+			<div class="legendBody" id="network_properties"></div>
+		</div>		
+		<div id="viewer_options_div">
+			<div class="legendHeader" id="viewer_options_header" >Viewer Options</div>
+			<div class="legendBody" id="viewer_options">
+				<div class='innerHeader'>LABEL DISPLAY</div>
+				<div id="display_labels_div">
+					<input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" />
+					<label for="showContributors">Show ALL contributor names</label>
+					<br>
+					<input type="checkbox" name="showRelatedContributors" class="checkbox" id="show_contrib_check" />
+					<label for="showContributors">Show RELATED contributor names</label>
+				</div>
+				<div id="display_event_labels_div">
+					<input type="checkbox" name="showContributors" class="checkbox" id="show_contrib_check" />
+					<label for="showContributors">Show contributor names</label>
+					<br>
+					<input type="checkbox" name="showEvents" class="checkbox" id="show_event_check" />
+					<label for="showEvents">Show event names</label>
+				</div>	
+				<div class='innerHeader'>CUSTOM COLORS</div>
+				<div id="display_cust_colors_div">
+					<table>
+					<tr>
+						<td>				
+							<input type="checkbox" name="showCustColors" class="checkbox" id="show_cust_colors" checked="yes"/>
+							<label for="showCustColors">Show custom colors</label>
+						</td>
+						<td class='alignRight'>
+							<a href='#' id='reset_cust_colors'>reset &nbsp;</a> 
+						</td>
+					</tr>
+					</table>
+				</div>
+				<div class='innerHeader'>CUSTOM VISIBILITY</div>
+				<div id="display_cust_vis_div">
+					<table>
+					<tr>
+						<td>
+							<input type="checkbox" name="showCustVis" class="checkbox" id="show_cust_vis"/>
+							<label for="showCustVis">Show user-hidden elements</label>
+						</td>
+						<td class='alignRight'>					
+							<a href='#' id='reset_cust_vis'>reset &nbsp;</a>
+						</td>
+					</tr>
+					</table>
+				</div>				
+			</div>
+		</div>
+		<!-- Options to display labels for the graph-->
+
+
+		<br>
+		<!--faceted browsing on/off-->
+		<div id="faceted_browsing_btn_div" align=right>
+			<input type="submit" name="submit" class="button" id="faceted_browsing_btn" value="Faceted Browsing" />
+		</div>
+
+	
+	</div>
+
+	<!--main display window. -->
+	<div class="main">
+		<div id="tabs" class="tab-container"> 
+			<ul class="fix-ui-tabs" id="fix-ui-tabs">
+				<li><a href="#tabs-0">Search</a></li>
+				<li><a href="#tabs-1">Network</a></li>				
+			</ul>
+			
+			<!--search tab-->
+			<div id="tabs-0">
+				<h2 style="margin-bottom: -5px;">Search the AusStage Database</h2>
+				<form name="search" action="">
+					<table class="formTable" style="height: 60px;">
+						<tbody>
+							<tr>
+								<td>
+									<input type="search" size="40" id="query" name="query" /> 
+									<input type="submit" name="search_btn" id="search_btn" value="Search"/> 
+								</td>
+								<td>
+									<div id="search_messages" class="js">
+										<div class="ui-state-highlight ui-corner-all search-status-messages" id="search_status_message">
+											<p>
+												<span class="ui-icon ui-icon-info status-icon"></span>
+												<span id="search_status_text"></span>
+											</p>
+										</div>
+										<div class="ui-state-error ui-corner-all search-status-messages" id="search_error_message"> 
+											<p><span class="ui-icon ui-icon-alert status-icon"></span> 
+											<span id="search_error_text"></span>
+											</p>
+										</div>										
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+
+				<h3>Search Results</h3>
+				<div class="accordion">
+					<h3><a href="#" id="contributor_heading">Contributors</a></h3>
+					<div id="contributor_results"></div>
+				</div>
+				<div class="accordion">
+					<h3><a href="#" id="event_heading">Events</a></h3>
+					<div id="event_results"></div>
+				</div>
+
+
+			</div>
+			
+	
+			<!--network Browser-->
+			<div id="tabs-1">
+				<div id="viewerMsg"></div>
+				<div id="viewer"></div>
+				<!--date slider and facteded browsing form-->
+				<div id="advanced_search_div"> 
+				<!-- date slider -->
+					<div class="timeSliderContainer">
+						<div id="timeSlider">
+						</div>
+					</div> 
+					<!-- faceted browsing window -->
+					<div id="faceted_browsing_div" Title="Faceted Browsing">
+						<!--functions-->
+						<div class="legendHeader" id="functions_header" >Contributor Functions</div>
+						<div class="legendBody scroll_checkboxes" id="faceted_function_div"></div>
+						<!--gender-->
+						<div class="legendHeader" id="gender_header" >Contributor Gender</div>
+						<div class="legendBody scroll_checkboxes" id="faceted_gender_div"></div>
+						<!--nationality-->					
+						<div class="legendHeader" id="nationality_header" >Contributor Nationality</div>
+						<div class="legendBody scroll_checkboxes" id="faceted_nationality_div"></div>
+						<!-- list the selected faceted criteria-->
+						<div class="legendHeader" id="criteria_header" >Search Criteria</div>
+						<div class="legendBody" id="faceted_criteria_div"></div>	
+						<p><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
+						<label for="showAllNodes">Show all nodes</label></p>
+					</div>
+					<!-- custom context menu - opens on alt click or ctrl click-->
+					<div id="custom_div">
+						<div id="color_picker" class="color_picker"></div>
+						<div id="custom_dialog_opts">
+							<input type="submit" name="submit" class="button" id="remove_color" value="Remove custom color" />
+							<input type="submit" name="submit" class="button" id="hide_element" value="Hide Element" />
+						</div>
+					</div>
+				</div>	
+			</div>						
+		</div>	
+	</div>
+	<!-- always at the bottom of the content -->
+	<div class="push"></div>
+</div>
+<div class="footer b-186">
+</div>
+</body>
+</html>
