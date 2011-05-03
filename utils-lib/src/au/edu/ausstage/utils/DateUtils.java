@@ -452,6 +452,7 @@ public class DateUtils {
 		}
 		
 		// outlier checks
+		/*
 		try {
 			if(InputUtils.isValid(lyear) == true) {
 				if(Integer.parseInt(lyear) > Integer.parseInt(fyear)) {
@@ -464,6 +465,7 @@ public class DateUtils {
 			}
 			
 		} catch (NumberFormatException e) {}
+		*/
 		
 		return dates;	
 	}
