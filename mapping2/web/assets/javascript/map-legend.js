@@ -520,7 +520,7 @@ MapLegendClass.prototype.buildPanAndZoom = function() {
 	tableData += '<td><span class="clickable mapPanAndZoom" id="mpz-australia">Australia</span> | <span class="clickable mapPanAndZoom" id="mpz-international">International</span></td></tr>';
 	
 	// add the state row
-	tableData += '<tr class="odd"><th scope="row">State</th>';
+	tableData += '<tr><th scope="row">State</th>';
 	tableData += '<td><span class="clickable mapPanAndZoom" id="mpz-act">ACT</span> | ';
 	tableData += '<span class="clickable mapPanAndZoom" id="mpz-nsw">NSW</span> | ';
 	tableData += '<span class="clickable mapPanAndZoom" id="mpz-nt">NT</span> | ';

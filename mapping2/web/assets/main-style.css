@@ -476,6 +476,12 @@ table.mapLegendTable {
 	margin-top: -5px;
 }
 
+table.mapLegendTable th {
+	vertical-align: top;
+	color: #aaa;
+	font-weight: normal;
+}
+
 .mapLegendIcon {
 	width: 34px;
 	vertical-align: top;

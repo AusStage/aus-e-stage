@@ -63,9 +63,9 @@
 		<div class="peekaboo-tohide mainMenu">
 			<h2>Main Menu</h2>
 			<ul>
-				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
-				<li><a href="/" title="Aus-e-Stage Homepage">Aus-e-Stage Website</a></li>
-				<li><a href="/mapping2/" title="Mapping Service Homepage">Mapping (Beta) Homepage</a></li>
+				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a></li>
+				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
+				<li><a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a></li>
 				<li class="map-icon-help clickable">Map Iconography</li>
 			</ul>
 		</div>
@@ -73,7 +73,7 @@
 			<li class="peekaboo clickable">Hide Menu</li>
 		</ul>
 		<div class="mapControlsContainer js peejaboo-tohide">
-			<h2>Map Controls</h2>
+			<h2>Controls</h2>
 			<input type="button" name="btn_reset_map" id="btn_reset_map" value="Reset Map"/><input type="button" name="btn_cluster_map" id="btn_cluster_map" value="Clustering On"/>
 			<div class="accordion" id="mapLegendPanAndZoomControls">
 				<h3><a href="#" id="mapLegendPanAndZoomHeading">Pan &amp; Zoom Map</a></h3>
@@ -82,7 +82,7 @@
 			</div>
 		</div>
 		<div class="mapLegendContainer js peekaboo-tohide">
-			<h2>Map Legend</h2>
+			<h2>Legend</h2>
 			<div class="accordion">
 				<h3><a href="#" id="mapLegendContributorHeading">Contributors</a></h3>
 				<div id="mapLegendContributors" class="mapLegendInnerContainer">
@@ -113,12 +113,12 @@
 		<div id="tabs" class="tab-container">
 			<ul class="fix-ui-tabs">
 				<li><a href="#tabs-1">Search</a></li>
-				<li><a href="#tabs-2">Venues</a></li>
+				<li><a href="#tabs-2">Browse</a></li>
 				<li><a href="#tabs-3">Map</a></li>
 			</ul>
 			<div>
 				<div id="tabs-1">
-					<h2 style="margin-bottom: -5px;">Search the AusStage Database</h2>
+					<p>Search the AusStage Database</p>
 					<form action="/mapping/" method="get" id="search" name="search">
 						<table class="formTable" style="height: 60px;">
 							<tbody>
@@ -177,17 +177,17 @@
 					</div>
 				</div>
 				<div id="tabs-2">
-					<h2>Browse Areas to Find Venues</h2>
+					<p>Browse for venues</p>
 					<div style="max-width: 990px">
 						<div id="browse_header" style="height: 30px; width=100%">
 							<div style="float:left; width: 26%; height: 100%; padding-right: 10px;">
-								<h3>Countries and States</h3>
+								<p>Countries and States</p>
 							</div>
 							<div style="float:left; width: 32%; height: 100%; margin-left: 10px;">
-								<h3>Suburbs</h3>
+								<p>Cities, Suburbs and Localities</p>
 							</div>
 							<div style="float: right; width: 37%; height: 100%; padding-left: 10px;">
-								<h3>Venues</h3>
+								<p>Venues</p>
 							</div>
 						</div>
 						<div id="browse_content" style="height: 380px;">
@@ -204,7 +204,7 @@
 					</div>
 				</div>
 				<div id="tabs-3">
-					<h3>Map of the Selected Items</h3>
+					<p>Map of the Selected Items</p>
 					<div id="map_container_div">
 						<div id="map_div" style="height: 100%; width: 100%">
 						</div>
@@ -250,7 +250,7 @@
 <div id="help_map_icons_div" title="Help on Map Iconography" style="font-size: 90%">
 	<h3>AusStage Map Iconography</h3>
 	<p>
-		Map iconography refers to the way in which information is displayed on a map using icons. The AusStage mapping service uses a number of icons to display information on a map. 
+		Map iconography refers to the way in which information is displayed on a map using icons. The AusStage mapping service uses a number of icons to display information on a map.
 		<br/>&nbsp;<br/>
 		The colour of an icon indicates the number records associated with the location.
 		<br/>&nbsp;<br/>
@@ -289,11 +289,11 @@
 	</table>
 	<p><br/>&nbsp;<br/><strong>Marker Clusters</strong></p>
 	<p>
-		When Marker Clustering is enabled markers on the map are clustered together based on how close they are on the map. 
+		When Marker Clustering is enabled markers on the map are clustered together based on how close they are on the map.
 		<br/>&nbsp;<br/>
-		When two or more markers are close enough to each other at the current map zoom level they are clustered together. 
+		When two or more markers are close enough to each other at the current map zoom level they are clustered together.
 		<br/>&nbsp;<br/>
-		A marker cluster is shown on the map using the icon below.
+		A marker cluster is shown on the map using the icon below. 
 		<br/>&nbsp;<br/>
 		The number shown on a marker cluster icon indicates the number of markers clustered together.
 	</p>
