@@ -209,8 +209,16 @@ public class MarkerManager {
 			if(sqlParameters.length > 2) {
 				throw new IllegalArgumentException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
 			} else {
-				if(InputUtils.isValid(sqlParameters[0], LookupServlet.VALID_STATES) == false) {
-					throw new IllegalArgumentException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+				if(sqlParameters[0].contains("-") == false) {				
+					if(InputUtils.isValid(sqlParameters[0], LookupServlet.VALID_STATES) == false) {
+						throw new IllegalArgumentException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+					}
+				} else {
+					if(sqlParameters[0].startsWith("999") == false) {
+						throw new IllegalArgumentException("Invalid suburb code. Expected it to start with 999");
+					} else {
+						return getInternationSuburbMarkers(suburbId);
+					}
 				}
 			}
 		}
@@ -223,6 +231,68 @@ public class MarkerManager {
 				   + "		          vd.min_event_date, vd.max_event_date "
 				   + "FROM venue v, states s, events e, venue_min_max_event_dates vd "
 				   + "WHERE v.state = ? "
+				   + "AND LOWER(v.suburb) = ? "
+				   + "AND v.state = s.stateid "
+				   + "AND v.venueid = e.venueid "
+				   + "AND latitude IS NOT NULL "
+				   + "AND v.venueid = vd.venueid";
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			return getEmptyArray();
+		}
+		
+		// build the dataset using internal objects
+		// build a list of venues
+		ResultSet resultSet = results.getResultSet();
+		VenueList venues = buildVenueList(resultSet);
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;		
+		
+		// check what was returned
+		if(venues == null) {
+			return getEmptyArray();
+		}
+		
+		// build and return the JSON data
+		return venueListToJson(venues);
+	}
+	
+	/**
+	 * A public method to buld marker data for an international suburb
+	 *
+	 * @param suburbId the suburb id used to build search criteria
+	 * 
+	 * @return          json encoded data as a string
+	 */
+	public String getInternationSuburbMarkers(String suburbId) {
+	
+		if(suburbId.startsWith("999") == false) {
+			throw new IllegalArgumentException("Invalid suburb code. Expected it to start with 999");
+		}
+		
+		// split the id
+		String[] ids = suburbId.split("-");
+		String[] sqlParameters = ids[1].split("_");
+		
+		if(sqlParameters.length != 2) {
+			throw new IllegalArgumentException("Unable to parse the suburbId");
+		}
+		
+		// tidy up the parameters
+		sqlParameters[1] = sqlParameters[1].toLowerCase();
+		
+		// build the SQL
+		String sql = "SELECT DISTINCT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				   + "  		      vd.min_event_date, vd.max_event_date "
+				   + "FROM venue v, states s, events e, venue_min_max_event_dates vd "
+				   + "WHERE v.countryid = ? "
 				   + "AND LOWER(v.suburb) = ? "
 				   + "AND v.state = s.stateid "
 				   + "AND v.venueid = e.venueid "
