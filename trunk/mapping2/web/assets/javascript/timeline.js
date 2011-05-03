@@ -51,7 +51,7 @@ TimelineClass.prototype.update = function() {
 		return;
 	}
 	
-	// loop through the markers looking for the lowest fDate an the highest lDate
+	// loop through the markers looking for the lowest fDate and the highest lDate
 	for(var i = 0; i < markers.length; i++) {
 		if(markers[i].contributors.length > 0) {
 			timelineObj.findDates(markers[i].contributors, 1);
@@ -82,8 +82,12 @@ TimelineClass.prototype.update = function() {
 	var sldate = null;
 	
 	if(timelineObj.selectedFirstDate == null) {
-		sfdate = timelineObj.getDateFromInt(timelineObj.firstDate);
-		sldate = timelineObj.getDateFromInt(timelineObj.lastDate);
+		sfdate = fdate;
+		sldate = ldate;
+		
+		timelineObj.selectedFirstDate = timelineObj.DateToInt(fdate.getFullYear(), fdate.getMonth(), fdate.getDate());
+		timelineObj.selectedLastDate = timelineObj.DateToInt(ldate.getFullYear(), ldate.getMonth(), ldate.getDate());
+		
 	} else {
 	
 		sfdate = timelineObj.getDateFromInt(timelineObj.selectedFirstDate);
@@ -232,8 +236,10 @@ TimelineClass.prototype.resetTimeline = function() {
 
 		$('#timeSlider').empty();
 		$('#timeSlider').dateRangeSlider('destroy');
+		
 		timelineObj.firstDate = 99999999;
 		timelineObj.lastDate  = 0;
-		timelineObj.selectedFirstDate = -1;
-		timelineObj.selectedLastDate  = -1;
+	
+		timelineObj.selectedFirstDate = null;
+		timelineObj.selectedLastDate  = null;
 }
