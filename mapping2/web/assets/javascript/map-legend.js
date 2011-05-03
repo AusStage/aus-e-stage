@@ -412,9 +412,9 @@ MapLegendClass.prototype.updateLegend = function() {
 	
 	// determine the text to show on the cluster button
 	if(mappingObj.clusteringEnabled == true) {
-		$("#btn_cluster_map").val('Clustering Off');
+		checkbox.attr('checked','checked');
 	} else {
-		$("#btn_cluster_map").val('Clustering On');
+		checkbox.removeAttr('checked');
 	}
 }
 

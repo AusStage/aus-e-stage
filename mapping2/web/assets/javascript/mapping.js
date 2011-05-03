@@ -157,11 +157,11 @@ MappingClass.prototype.initMap = function() {
 					 	  center: new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng),
 					 	  mapTypeControl: true,
 						  mapTypeControlOptions: {
-						    mapTypeIds: [google.maps.MapTypeId.ROADMAP, 
-						    			 google.maps.MapTypeId.SATELLITE, 
-						    			 google.maps.MapTypeId.HYBRID, 
-						    			 google.maps.MapTypeId.TERRAIN, 
-						    			 'ausstage']
+						   mapTypeIds: [google.maps.MapTypeId.ROADMAP, 
+						    			google.maps.MapTypeId.SATELLITE, 
+						    			google.maps.MapTypeId.HYBRID, 
+						    			google.maps.MapTypeId.TERRAIN, 
+						    			'ausstage']
 						  }
 				         };	
 	
