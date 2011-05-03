@@ -80,7 +80,8 @@ function MappingClass() {
 	
 	// variables to hold a height / width constant for use in computing the height / width of the map
 	//this.HEIGHT_BUFFER_CONSTANT = 35;
-	this.HEIGHT_BUFFER_CONSTANT = 65;
+	//this.HEIGHT_BUFFER_CONSTANT = 65;
+	this.HEIGHT_BUFFER_CONSTANT = 75;
 	this.WIDTH_BUFFER_CONSTANT  = 55;
 	
 	// variables to hold the x / y offset constants for computing the placement pointer on a marker
@@ -819,7 +820,7 @@ MappingClass.prototype.resizeMap = function() {
 		google.maps.event.trigger(mappingObj.map, 'resize');
 		
 		// resize the time slider
-		$('.timeSliderContainer').width(mappingObj.computeMapWidth());
+		$('.timeSliderContainer').width(mappingObj.computeMapWidth() - ($("#mapResetButtonContainer").width() + 30));
 		
 		// manually trigger an idle event
 		var zoom = mappingObj.map.getZoom();
