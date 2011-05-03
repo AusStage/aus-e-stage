@@ -40,6 +40,9 @@ TimelineClass.prototype.init = function() {
 // function to update the timeline
 TimelineClass.prototype.update = function() {
 
+	//destroy any existing timline
+	$('#timeSlider').dateRangeSlider('destroy');
+
 	// don't do anything if we don't have to
 	if(viewer.json.edges.length == 0) {
 		
@@ -50,19 +53,14 @@ TimelineClass.prototype.update = function() {
 
 		
 	// add the time slider to the page, clearing away any that already exists
-	var fdate = viewer.timelineObj.firstDate;
-	var ldate = viewer.timelineObj.lastDate;
-	
-	// adjust the dates
-	
+	// adjust the dates	
 	viewer.timelineObj.firstDate.setDate(viewer.timelineObj.firstDate.getDate() - 31);
 	viewer.timelineObj.lastDate.setDate(viewer.timelineObj.lastDate.getDate() + 31);
 	
-	if(viewer.timelineObj.selectedFirstDate == null) {
-		viewer.timelineObj.selectedFirstDate = viewer.timelineObj.firstDate;
-		viewer.timelineObj.selectedLastDate = viewer.timelineObj.lastDate;
-	}
-	var options = {bounds: { min: fdate, max: ldate},
+	viewer.timelineObj.selectedFirstDate = viewer.timelineObj.firstDate;
+	viewer.timelineObj.selectedLastDate = viewer.timelineObj.lastDate;
+		
+	var options = {bounds: { min: viewer.timelineObj.firstDate, max: viewer.timelineObj.lastDate},
 				   defaultValues: { min: viewer.timelineObj.selectedFirstDate, max: viewer.timelineObj.selectedLastDate},
 				   wheelMode: null,
 				   wheelSpeed: 4,

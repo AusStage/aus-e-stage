@@ -71,17 +71,17 @@
 
 		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
 		<div id="network_details_div">
-			<div class="legendHeader" id="selected_object" ></div>
-			<div class="legendBody" id="related_objects"></div>
+			<div class="legendHeader" id="selected_object_header" ></div>
+			<div class="legendBody" id="selected_object_body"></div>
 		</div>
 		<!--Network properties - displays information about the network as a whole -->						
 		<div id="network_properties_div">
 			<div class="legendHeader" id="network_properties_header" >Network Properties</div>
-			<div class="legendBody" id="network_properties"></div>
+			<div class="legendBody" id="network_properties_body"></div>
 		</div>		
 		<div id="viewer_options_div">
 			<div class="legendHeader" id="viewer_options_header" >Viewer Options</div>
-			<div class="legendBody" id="viewer_options">
+			<div class="legendBody" id="viewer_options_body">
 				<div class='innerHeader'>LABEL DISPLAY</div>
 				<div id="display_labels_div">
 					<input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" />
@@ -207,16 +207,16 @@
 					<div id="faceted_browsing_div" Title="Faceted Browsing">
 						<!--functions-->
 						<div class="legendHeader" id="functions_header" >Contributor Functions</div>
-						<div class="legendBody scroll_checkboxes" id="faceted_function_div"></div>
+						<div class="legendBody scroll_checkboxes" id="functions_body"></div>
 						<!--gender-->
 						<div class="legendHeader" id="gender_header" >Contributor Gender</div>
-						<div class="legendBody scroll_checkboxes" id="faceted_gender_div"></div>
+						<div class="legendBody scroll_checkboxes" id="gender_body"></div>
 						<!--nationality-->					
 						<div class="legendHeader" id="nationality_header" >Contributor Nationality</div>
-						<div class="legendBody scroll_checkboxes" id="faceted_nationality_div"></div>
+						<div class="legendBody scroll_checkboxes" id="nationality_body"></div>
 						<!-- list the selected faceted criteria-->
 						<div class="legendHeader" id="criteria_header" >Search Criteria</div>
-						<div class="legendBody" id="faceted_criteria_div"></div>	
+						<div class="legendBody" id="criteria_body"></div>	
 						<p><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
 						<label for="showAllNodes">Show all nodes</label></p>
 					</div>

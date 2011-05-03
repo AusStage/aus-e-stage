@@ -78,7 +78,7 @@ ViewerControlClass.prototype.init = function() {
 		//SET UP INTERACTION 
 	//style the legend
 	createLegend("#network_properties_header", this);
-	createLegend("#selected_object", this);
+	createLegend("#selected_object_header", this);
 	createLegend("#viewer_options_header", this);
 	//style the faceted browsing optionf
 	createLegend("#functions_header", this);
@@ -346,9 +346,9 @@ ViewerControlClass.prototype.displaySelectedContributors = function(){
 	var html = ''
 	if(this.selectedContributors.id.length > 0){
 		$('#viewContributorNetwork').button('option', 'disabled', false);	
-		for(i in this.selectedContributors.id){
-			html += '<a href="' + this.selectedContributors.url[i] + '" title="View the record for ' 
-			+ this.selectedContributors.name[i] + ' in AusStage" target="_ausstage">' + this.selectedContributors.name[i] + '</a>';
+		for(x in this.selectedContributors.id){
+			html += '<a href="' + this.selectedContributors.url[x] + '" title="View the record for ' 
+			+ this.selectedContributors.name[x] + ' in AusStage" target="_ausstage">' + this.selectedContributors.name[x] + '</a>';
 			html += '<span id="'+i+'" class="contributorRemoveIcon ui-icon ui-icon-close clickable" style="display:	inline-block"></span>';		
 		}
 	}
@@ -363,24 +363,29 @@ ViewerControlClass.prototype.displaySelectedContributors = function(){
 
 //create and show the network. Parameters - type : CONTRIBUTOR_PATH, EVENT, CONTRIBUTOR or EXISTING
 //											id   : either CONTRIBUTOR_ID[], EVENT_ID, or CONTRIBUTOR_ID
-ViewerControlClass.prototype.displayNetwork = function(type, id){
+//											reset: 0 to leave the sidebar, 1 to reset sidebar.
+ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 		viewer.hideInteraction();
 		resetCheckboxes();
+		closeLegends();
 		viewer.destroy(); 
 		//show loading msg	
 		
 		$('#viewerMsg').empty().append(buildInfoMsgBox(DATA_RETRIEVAL_MSG)).show();
 			
+	if(reset==1){
+		resetLegend('#selected_object');
+		resetLegend('#network_properties');
+		resetLegend('#viewer_options');				
+	}
 	switch (type){
 		case 'CONTRIBUTOR':
 			viewer = new ContributorViewerClass(type);
 			//var obj = this;
-			console.log(BASE_URL+id+END_URL);
 			$.jsonp({
 				url:BASE_URL+id+END_URL,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
 				success:function(json){
-					console.log('success');
 					$('#viewerMsg').empty().append(buildInfoMsgBox(VIEWER_LOADING_MSG)).show();					
 					viewer.renderGraph(json);
 					$('#viewerMsg').hide();
@@ -406,4 +411,12 @@ function resetCheckboxes(){
 	$("input[name=showAllContributors]").attr('checked', false);
 	$("input[name=showRelatedContributors]").attr('checked', false);
 	$("input[name=showAllFaceted]").attr('checked', true); 
+}
+
+function closeLegends(){
+	//resets all legends for a new network
+	resetLegend('#functions');	
+	resetLegend('#gender');	
+	resetLegend('#nationality');	
+	resetLegend('#criteria');				
 }

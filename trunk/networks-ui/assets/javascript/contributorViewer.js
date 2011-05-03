@@ -215,7 +215,7 @@ ContributorViewerClass.prototype.showInteraction = function(){
 		}
 		$("#network_properties_div").show();//show network properties	
 		$("#faceted_browsing_btn_div").show();//show faceted browsing on/off		
-		$("#date_range_div").show();
+		$('#timeSlider').show();
 	}
 }
 
@@ -226,7 +226,7 @@ ContributorViewerClass.prototype.hideInteraction = function(){
 	$("#network_properties_div").hide();//show network properties	
 	$("#faceted_browsing_btn_div").hide();//show faceted browsing on/off
 	$('#faceted_browsing_div').dialog('close');			
-	$("#date_range_div").hide();
+	$('#timeSlider').hide();
 }
 
 
@@ -235,7 +235,7 @@ ContributorViewerClass.prototype.hideInteraction = function(){
 
 //double click 
 ContributorViewerClass.prototype.onDblClick = function(d){
-	viewerControl.displayNetwork('CONTRIBUTOR', d.id);	
+	viewerControl.displayNetwork('CONTRIBUTOR', d.id, 0);	
 	
 }
 
@@ -480,8 +480,8 @@ ContributorViewerClass.prototype.displayNetworkProperties = function(){
     				"<tr class=\"d1\"><td><b>Contributors </b></td><td> "+this.json.nodes.length+"</td></tr>"+					
 					"<tr class=\"d0\"><td><b>Relationships </b> </td><td>"+this.json.edges.length+"</td></tr></table>";			
 					"<tr class=\"d1\"><td><b>Collaborations </b> </td><td>"+collabCount+"</td></tr></table>";							
- 		$("#network_properties").empty();
-		$("#network_properties").append(html);
+ 		$("#network_properties_body").empty();
+		$("#network_properties_body").append(html);
 		$(".ellipsis").tipsy({gravity: $.fn.tipsy.autoNS});
 
 }
@@ -502,13 +502,12 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 	var eventList = [];
 	
 	//clear the info panel
-	$("#selected_object").empty();
-	$("#related_objects").empty();
+	$("#selected_object_header").empty();
+	$("#selected_object_body").empty();
 	
 	if (what == CLEAR){	
 		html = " "; 
 		$("#network_details_div").hide();
-		$("#related_objects").hide();
 		resetLegend("#selected_object");
 	}
 	else{$("#network_details_div").show();}
@@ -607,8 +606,8 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 		
 	}
 	
-	$("#selected_object").button( "option", "label", titleHtml );					 		  		
-	$("#related_objects").append(html); 
+	$("#selected_object_header").button( "option", "label", titleHtml );					 		  		
+	$("#selected_object_body").append(html); 
 	$(".ellipsis").tipsy({gravity: $.fn.tipsy.autoNS});		
 
 	$(".titleLink").click(function(){
@@ -766,11 +765,11 @@ ContributorViewerClass.prototype.setFacetedOptions = function(list){
 	var html = "";	
 	var tableClass = "";
 	//clear the functions list
-	$("#faceted_function_div").empty();
+	$("#functions_body").empty();
 	//clear the gender list
-	$("#faceted_gender_div").empty();
+	$("#gender_body").empty();
 	//clear the nationality list
-	$("#faceted_nationality_div").empty();
+	$("#nationality_body").empty();
 	//clear the description area
 	$("#faceted_selection_p").empty();
 
@@ -787,7 +786,7 @@ ContributorViewerClass.prototype.setFacetedOptions = function(list){
 		+'" /> <label for="'+i+'">'+list.functions[i]+'</label></td></tr>';
 	}	
 	html +="</table>";
-	$("#faceted_function_div").append(html);
+	$("#functions_body").append(html);
 	
 	//create the gender checkboxes
 	html = "<table>";
@@ -798,7 +797,7 @@ ContributorViewerClass.prototype.setFacetedOptions = function(list){
 		+'" /> <label for="'+i+'">'+list.genders[i]+'</label></td></tr>');
 	}	
 	html += "</table>";
-	$('#faceted_gender_div').append(html);
+	$('#gender_body').append(html);
 	
 	//create the nationality checkboxes
 	html = "<table>";
@@ -812,7 +811,7 @@ ContributorViewerClass.prototype.setFacetedOptions = function(list){
 		+'" /> <label for="'+i+'">'+list.nationalities[i]+'</label></td></tr>');
 	}	
 	html += "</table>";
-	$('#faceted_nationality_div').append(html);
+	$('#nationality_body').append(html);
 	
 
 	$('input#function').click(function(){
@@ -855,7 +854,7 @@ ContributorViewerClass.prototype.setFacetedOptions = function(list){
 //update the display to show what's been selected
 function updateFacetedTerms() {	
 	//empty the existing terms	
-	$("#faceted_criteria_div").empty();
+	$("#criteria_body").empty();
 	var displayStr = "";
 	var startStr = "<b>Contributors who are: </b><br>";
 	var middleStr = "<br><b>and </b>";
@@ -904,7 +903,7 @@ function updateFacetedTerms() {
 	}
 	displayStr += nationalityStr;
 	//update the display                     
-    $("#faceted_criteria_div").append(displayStr);
+    $("#criteria_body").append(displayStr);
 };
 
 ContributorViewerClass.prototype.resetFacetedVisibility = function(){

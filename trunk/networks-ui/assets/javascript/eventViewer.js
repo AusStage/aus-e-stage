@@ -119,8 +119,8 @@ EventViewerClass.prototype.displayNetworkProperties = function(){
     				"</a> <p>"+this.json.nodes[this.centreNode].venue+"</p></td></tr>"+
     				"<tr class=\"d1\"><td><b>Events</b></td><td> "+this.json.nodes.length+"</td></tr>"+					
 					"<tr class=\"d0\"><td><b>Contributors</b> </td><td>"+this.contributorCount+"</td></tr></table>";			
- 		$("#network_properties").empty();
-		$("#network_properties").append(html);	
+ 		$("#network_properties_body").empty();
+		$("#network_properties_body").append(html);	
 		
 	}	
 }
@@ -140,11 +140,10 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 	var eventList = [];
 	
 	//clear the info panel
-	$("#related_objects").empty();
+	$("#selected_object_body").empty();
 	if (what == CLEAR){	
 		html = " ";
 		$("#network_details_div").hide();
-		$("#related_objects").hide();
 		resetLegend("#selected_object");							
 	}else{
 		$("#network_details_div").show();
@@ -219,8 +218,8 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 		
 	}
 	
-	$("#selected_object").button( "option", "label", titleHtml );					 		
-	$("#related_objects").append(html);  
+	$("#selected_object_header").button( "option", "label", titleHtml );					 		
+	$("#selected_object_body").append(html);  
 	//fix to ensure the content doesn't toggle based on the link click
 	$(".titleLink").click(function(){
 		allowToggle = false;
