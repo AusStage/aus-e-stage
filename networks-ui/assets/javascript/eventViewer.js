@@ -609,7 +609,8 @@ function initEventGraph (obj){
 		.fillStyle(function(d) {return obj.getNodeFill(d, this)})
 		.strokeStyle(function(d) {return obj.getNodeStroke(d, this)})
 		.lineWidth(function(d) {return obj.getNodeLineWidth(d, this)})	
-		.size(function(d){return Math.pow(((d.linkDegree)*2), 2)* Math.pow(this.scale, -2) })
+//		.size(function(d){return Math.pow(((d.linkDegree)*2), 2)* Math.pow(this.scale, -2) })
+		.size(function(d){return Math.pow(((d.linkDegree)*2), 1.25)* Math.pow(this.scale, -2) })
 		.visible(function(d){return obj.isVisibleNode(d)})	
  	  	.event("mouseover", function() {	obj.nodeIndexPoint = this.index;
 											obj.pointingAt = NODE;										

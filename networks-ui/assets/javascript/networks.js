@@ -82,7 +82,7 @@ function addResultsClick(event){
 				break;
 			}			
 			//navigate to the viewer
-		  	alert('only static data is available for event to event netwoks at present')
+		  	alert('only static data is available for event to event netwoks at present, retrieve '+$('#eventDegree :selected').text() +' network');
 		  	$('#tabs').tabs('select', 1);	
 			viewerControl.displayNetwork('EVENT', viewerControl.selectedEvent.id[0], 1);
 			break;

@@ -326,6 +326,7 @@ ViewerControlClass.prototype.displaySelectedEvent = function(){
 	var html = ''
 	if(this.selectedEvent.id.length > 0){
 		$('#viewEventNetwork').button('option', 'disabled', false);
+		$('#eventDegree').removeAttr('disabled');
 		for(i in this.selectedEvent.id){
 			html += '<a href="' + this.selectedEvent.url[i] + '" title="View the record for ' 
 			+ this.selectedEvent.name[i] + ' in AusStage" target="_ausstage">' + this.selectedEvent.name[i] + '</a>';
@@ -334,6 +335,7 @@ ViewerControlClass.prototype.displaySelectedEvent = function(){
 	}
 	else{
 		$('#viewEventNetwork').button('option', 'disabled', true);
+		$('#eventDegree').attr('disabled', 'disabled');		
 	}	
 	
 	$('#selected_event').empty().append(html);

@@ -82,7 +82,8 @@
 		<div id="viewer_options_div">
 			<div class="legendHeader" id="viewer_options_header" >Viewer Options</div>
 			<div class="legendBody" id="viewer_options_body">
-				<div class='innerHeader'>LABEL DISPLAY</div>
+				
+				<div class='innerHeader'>Label Display</div>
 				<div id="display_labels_div">
 					<input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" />
 					<label for="showContributors">Show ALL contributor names</label>
@@ -97,7 +98,17 @@
 					<input type="checkbox" name="showEvents" class="checkbox" id="show_event_check" />
 					<label for="showEvents">Show event names</label>
 				</div>	
-				<div class='innerHeader'>CUSTOM COLORS</div>
+				
+				<div class='innerHeader'>Show/Hide Edges</div>
+				<div id='display_edges_div'>
+					<input type="checkbox" name="hideAll" class="checkbox" id="hide_all_check" />
+					<label for="hideAll">Hide all edges</label>
+					<br>
+					<input type="checkbox" name="hideUnrelated" class="checkbox" id="hide_unrelated_check" />
+					<label for="hideUnrelated">Hide unrelated edges</label>					
+				</div>
+				
+				<div class='innerHeader'>Custom Colours</div>
 				<div id="display_cust_colors_div">
 					<table>
 					<tr>
@@ -111,7 +122,7 @@
 					</tr>
 					</table>
 				</div>
-				<div class='innerHeader'>CUSTOM VISIBILITY</div>
+				<div class='innerHeader'>Custom Visibility</div>
 				<div id="display_cust_vis_div">
 					<table>
 					<tr>

@@ -115,7 +115,7 @@ SearchClass.prototype.getData = function(query) {
 	}
 	
 	query_string = searchObj.BASE_URL+'task=contributor&type='+type+'&query='+query+'&limit='+searchObj.QUERY_LIMIT+'&callback=?';
-				console.log(query_string);
+				
 	showMessage(searchObj.CONTRIBUTOR_SEARCH_MSG, '#search_status');
 	
 	//request json data for contributors
@@ -177,7 +177,9 @@ SearchClass.prototype.displayEventResults = function(data){
 	}
 	html+= '</tbody><tfoot><tr>'
 			+'<td colspan="3" style="vertical-align:middle"><div id="selected_event"></div></td>'
-			+'<td class="alignRight"><button id="viewEventNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
+			+'<td class="alignRight">'
+			+'<select id="eventDegree" disabled="disabled"> <option>1st Degree</option><option>2nd Degree</option></select>'
+			+'<button id="viewEventNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
 			+'<tr><td colspan="4"><div id="searchAddEventError"></div></td></tr>'
 			+'</tfoot></table>';
 
