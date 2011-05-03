@@ -523,7 +523,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 		
 		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
 		
-		list += '<td class="nowrap">' + data[i].venue.name + ' ';
+		list += '<td class="nowrap">' + data[i].venue.name + ', ';
 				
 		if(data[i].venue.suburb != null) {
 			list += data[i].venue.suburb + ', ';
