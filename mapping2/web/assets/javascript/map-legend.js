@@ -121,6 +121,7 @@ MapLegendClass.prototype.init = function() {
 				$("#mlce_max").empty().append(mappingObj.applyClusterLimit);
 				$("#mlce_current").empty().append(mappingObj.markerData.objects.length);
 				$("#map_legend_clustering_error").dialog('open');
+				checkbox.attr('checked','checked');
 			} else {
 				mappingObj.clusteringEnabled = false;
 				mappingObj.updateMap();
@@ -412,9 +413,9 @@ MapLegendClass.prototype.updateLegend = function() {
 	
 	// determine the text to show on the cluster button
 	if(mappingObj.clusteringEnabled == true) {
-		checkbox.attr('checked','checked');
+		$("#btn_cluster_map").attr('checked','checked');
 	} else {
-		checkbox.removeAttr('checked');
+		$("#btn_cluster_map").removeAttr('checked');
 	}
 }
 
