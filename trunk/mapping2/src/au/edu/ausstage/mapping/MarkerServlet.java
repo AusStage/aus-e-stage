@@ -67,9 +67,19 @@ public class MarkerServlet extends HttpServlet {
 		
 		// check on the id value
 		if(type.equals("state") == true) {
-			if(InputUtils.isValid(id, VALID_STATES) == false) {
-				// no valid state id was found
-				throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
+			
+			if(id.contains("-") == false ) {
+				if(InputUtils.isValid(id, VALID_STATES) == false) {
+					// no valid state id was found
+					throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
+				}
+			} else {
+				String tmp[] = id.split("-");
+				
+				if(InputUtils.isValid(tmp[0], VALID_STATES) == false) {
+					// no valid state id was found
+					throw new ServletException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(VALID_STATES));
+				}
 			}
 		} else if(type.equals("suburb") == true) {
 			if(id.indexOf("_") == -1) {
