@@ -136,7 +136,7 @@ public class MarkerManager {
 	/**
 	 * A public method to build the marker data for an international country
 	 *
-	 * @param countryId, the unique identifier for the country
+	 * @param countryId the unique identifier for the country
 	 *
 	 * @return          json encoded data as a string
 	 */
