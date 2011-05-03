@@ -1010,7 +1010,7 @@ public class MarkerManager {
 		object.put("longitude", venue.getLongitude());
 		object.put("url", venue.getUrl());
 		
-		// get the dates for comparison
+		// get the dates for comparison		
 		dates = DateUtils.getDatesForTimeline(venue.getMinEventDate(), venue.getMaxEventDate());
 		
 		object.put("minEventDate", DateUtils.getIntegerFromDate(dates[0]));
