@@ -315,7 +315,7 @@ ContributorViewerClass.prototype.getPanelColor = function(){
 //node visibility
 ContributorViewerClass.prototype.isVisibleNode = function(d){
 	if (!d.custVis && this.showCustVis){return false}
-	if (this.viewFaceted && !this.showAllFaceted){return (d.facetedMatch)?true:false;}
+	if (this.viewFaceted && !this.showAllFaceted){return (d.facetedMatch && d.withinDateRange)?true:false;}
 	if (!d.withinDateRange){return false;}
 	else return true;	
 }
@@ -323,7 +323,7 @@ ContributorViewerClass.prototype.isVisibleNode = function(d){
 ContributorViewerClass.prototype.isVisibleEdge = function(p){
 	if (!p.custVis && this.showCustVis){return false} 
 	if (this.viewFaceted && !this.showAllFaceted){
-		return (p.targetNode.facetedMatch && p.sourceNode.facetedMatch)?true:false;}
+		return (p.targetNode.facetedMatch && p.sourceNode.facetedMatch &&p.targetNode.withinDateRange && p.sourceNode.withinDateRange)?true:false;}
 	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){return false}
 	else return true;	
 }
@@ -416,7 +416,7 @@ ContributorViewerClass.prototype.getNodeFill = function(d){
 ContributorViewerClass.prototype.getNodeStroke = function(d){
 	var color = (this.viewFaceted) ? this.nodeColorsF:this.nodeColors;	
 	//if node is out of the date range
-	if (!d.withinDateRange && !viewFaceted){return color.outOfDateNodeBorder;}	
+	if (!d.withinDateRange && !this.viewFaceted){return color.outOfDateNodeBorder;}	
 	//if node is selected
 	else if (d.index == this.nodeIndex){return color.selectedNodeBorder;}
 	//if node is related to selected node
@@ -707,7 +707,6 @@ ContributorViewerClass.prototype.resetDateRangeVisibility = function(){
 	if (this.json != null){
 		var minDate =new Date(viewer.timelineObj.selectedFirstDate);
 		var maxDate =new Date(viewer.timelineObj.selectedLastDate); 
-		console.log(minDate);
 		//for each node
 		for (n in this.json.nodes){
 			var hasVisibleEdge = false;
