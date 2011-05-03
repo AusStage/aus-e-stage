@@ -203,7 +203,6 @@ SearchClass.prototype.displayEventResults = function(data){
 }
 
 SearchClass.prototype.displayContributorResults = function(data){
-	
 	var html = '<table class="searchResults"><thead><tr><th>&nbsp</th><th>Name</th><th>Event Dates</th><th>Functions</th>'+
 				'<th class="alignRight numeric">Total Events</th></tr></thead><tbody>';
 	
@@ -232,13 +231,12 @@ SearchClass.prototype.displayContributorResults = function(data){
 			+'<td colspan="4" style="vertical-align:middle"><div id="selected_contributors" style="display: inline"></div></td>'
 			+'<td class="alignRight"><button id="viewContributorNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
 			+'<tr><td colspan="5"><div id="searchAddContributorError"></div></td>';
-	
     if(i > 0) {
+
         $("#contributor_results").empty().append(html);
         styleButtons();
         viewerControl.displaySelectedContributors();
     }
-        
 	if(i == 25) {
         $("#contributor_heading").empty().append("Contributors (25+)");
     } else {

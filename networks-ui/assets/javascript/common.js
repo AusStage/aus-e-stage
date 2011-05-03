@@ -65,11 +65,12 @@ function createLegend(element){
 
 //reset the legend to its closed state 
 function resetLegend(element){
-	if ($(element).attr('class').indexOf("open") >=0){
-		$(element).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );
-		$(element).toggleClass("open");
-					
+	if ($(element+'_header').attr('class').indexOf("open") >=0){
+		$(element+'_header').button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );
+		$(element+'_header').toggleClass("open");
+		$(element+'_body').hide();
 	}
+	
 }
 
 //sorting function

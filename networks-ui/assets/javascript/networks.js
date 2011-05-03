@@ -69,7 +69,7 @@ function addResultsClick(event){
 			else if(viewerControl.selectedContributors.id.length == 1){
 				//navigate to the viewer
 				$('#tabs').tabs('select', 1);	
-				viewerControl.displayNetwork('CONTRIBUTOR', viewerControl.selectedContributors.id[0]);
+				viewerControl.displayNetwork('CONTRIBUTOR', viewerControl.selectedContributors.id[0], 1);
 			}
 			else if(viewerControl.selectedContributors.id.length == 2){
 				alert("Contributor path data not yet available for "+viewerControl.selectedContributors.name[0]+
@@ -84,7 +84,7 @@ function addResultsClick(event){
 			//navigate to the viewer
 		  	alert('only static data is available for event to event netwoks at present')
 		  	$('#tabs').tabs('select', 1);	
-			viewerControl.displayNetwork('EVENT', viewerControl.selectedEvent.id[0]);
+			viewerControl.displayNetwork('EVENT', viewerControl.selectedEvent.id[0], 1);
 			break;
 	}	
 }
