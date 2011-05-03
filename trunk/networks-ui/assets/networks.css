@@ -313,7 +313,7 @@ table.searchResults td a {
 }
 
 .legendHeader.open a{
-		background: #333333;
+		background: #333333 !important;
 } 
 
 .legendHeader p{
@@ -331,7 +331,7 @@ table.searchResults td a {
 }
 
 .legendHeader.open  {
-		background: #333333;
+		background: #333333 !important;
 }
 
 .legendBody {
