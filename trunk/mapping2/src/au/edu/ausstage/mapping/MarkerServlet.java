@@ -89,8 +89,15 @@ public class MarkerServlet extends HttpServlet {
 				if(tmp.length > 2) {
 					throw new ServletException("The id parameter is required to have a state code followed by a suburb name seperated by a \"_\" character");
 				} else {
-					if(InputUtils.isValid(tmp[0], LookupServlet.VALID_STATES) == false) {
-						throw new ServletException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+				
+					if(tmp[0].contains("-") == false) {				
+						if(InputUtils.isValid(tmp[0], LookupServlet.VALID_STATES) == false) {
+							throw new ServletException("Invalid state code. Expected one of: " + InputUtils.arrayToString(LookupServlet.VALID_STATES));
+						}
+					} else {
+						if(tmp[0].startsWith("999") == false) {
+							throw new ServletException("Invalid suburb code. Expected it to start with 999");
+						}
 					}
 				}
 			}
