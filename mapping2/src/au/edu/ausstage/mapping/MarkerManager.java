@@ -55,10 +55,21 @@ public class MarkerManager {
 	 */
 	public String getStateMarkers(String stateId) {
 	
-		// double check the parameters
-		if(InputUtils.isValid(stateId, MarkerServlet.VALID_STATES) == false) {
-			// no valid state id was found
-			throw new IllegalArgumentException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(MarkerServlet.VALID_STATES));
+		// check the parameters
+		if(stateId.contains("-") == false ) {
+			if(InputUtils.isValid(stateId, MarkerServlet.VALID_STATES) == false) {
+				// no valid state id was found
+				throw new IllegalArgumentException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(MarkerServlet.VALID_STATES));
+			}
+		} else {
+			String tmp[] = stateId.split("-");
+			
+			if(InputUtils.isValid(tmp[0], MarkerServlet.VALID_STATES) == false) {
+				// no valid state id was found
+				throw new IllegalArgumentException("Missing id parameter. Expected one of: " + InputUtils.arrayToString(MarkerServlet.VALID_STATES));
+			}
+			
+			return getInternationalMarkers(tmp[1]);
 		}
 		
 		// build the sqlParameters
@@ -120,6 +131,62 @@ public class MarkerManager {
 		
 		// build and return the JSON data
 		return venueListToJson(venues);
+	}
+	
+	/**
+	 * A public method to build the marker data for an international country
+	 *
+	 * @param countryId, the unique identifier for the country
+	 *
+	 * @return          json encoded data as a string
+	 */
+	public String getInternationalMarkers(String countryId) {
+	
+		// double check the parameters
+		if(InputUtils.isValid(countryId) == false) {
+			throw new IllegalArgumentException("the countryId parameter must be a valid string");
+		}
+	
+		// build the sqlParameters
+		String[] sqlParameters = new String[1];
+		sqlParameters[0] = countryId;
+		
+		// build the SQL
+		String sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, v.latitude, v.longitude, "
+				   + "       vd.min_event_date, vd.max_event_date "
+				   + "FROM venue v, states s , venue_min_max_event_dates vd "
+				   + "WHERE v.countryid = ? "
+				   + "AND v.state = s.stateid "
+				   + "AND latitude IS NOT NULL "
+				   + "AND v.venueid = vd.venueid";
+		
+		// get the data
+		DbObjects results = database.executePreparedStatement(sql, sqlParameters);
+		
+		// check to see that data was returned
+		if(results == null) {
+			return getEmptyArray();
+		}
+		
+		// build the dataset using internal objects
+		// build a list of venues
+		ResultSet resultSet = results.getResultSet();
+		VenueList venues = buildVenueList(resultSet);
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;		
+		
+		// check what was returned
+		if(venues == null) {
+			return getEmptyArray();
+		}
+		
+		// build and return the JSON data
+		return venueListToJson(venues);
+	
+	
 	}
 	
 	/**
