@@ -92,6 +92,10 @@ function ContributorViewerClass(type){
 	//switches - show labels and faceted view on/off
 	this.showAllContributors = false;	//set to true if related checkbox is checked. Will display all contributor labels
 	this.showRelatedContributors = false;	//set to true if related checkbox is checked. Will display related contributor labels
+	
+	this.hideAll = false;				//true if checked - hides ALL edges;
+	this.hideUnrelated = false;			//true if checked = hides all UNRELATED edges.
+	
 	this.showCustColors = true;
 	this.showCustVis = true;
 	this.viewFaceted = false;			//set to true if facteded browsing selected.
@@ -255,6 +259,7 @@ ContributorViewerClass.prototype.onClick = function(d, what){
 				break;
 		
 			case EDGE: 
+				console.log(d);
 				this.nodeIndex = -1;	
 				this.edgeTIndex = d.target;
 				this.edgeSIndex = d.source;	
@@ -321,11 +326,24 @@ ContributorViewerClass.prototype.isVisibleNode = function(d){
 }
 //edge visibility
 ContributorViewerClass.prototype.isVisibleEdge = function(p){
-	if (!p.custVis && this.showCustVis){return false} 
-	if (this.viewFaceted && !this.showAllFaceted){
+	var visible = true;
+	if (this.hideAll){return false}; //is hide all option selected then return false immediately
+	if (!p.custVis && this.showCustVis){return false} 	// if user has hidden and option 'show user hidden elements' is not selected
+	if (this.viewFaceted && !this.showAllFaceted){		// if faceted browse and option is to only show selected  	
+			visible = (p.targetNode.facetedMatch && p.sourceNode.facetedMatch)?true:false;}
+	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){visible = false} //if out of date range.					
+	if(this.hideUnrelated){
+		if(p.source != this.nodeIndex && p.target != this.nodeIndex //if not related to selected node
+			&& !(p.source == this.edgeSIndex && p.target == this.edgeTIndex)){visible = false} //and not a selected edge - not visible
+	}
+	return visible;
+/*	if (this.hideAll){return false}						// if hide all option selected, hide ALL edges
+	if (!p.custVis && this.showCustVis){return false} 	// if user has hidden and option 'show user hidden elements' is not selected
+	if (this.viewFaceted && !this.showAllFaceted){		// if faceted browse and option is to only show selected  
 		return (p.targetNode.facetedMatch && p.sourceNode.facetedMatch &&p.targetNode.withinDateRange && p.sourceNode.withinDateRange)?true:false;}
-	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){return false}
+	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){return false} //if out of date range.
 	else return true;	
+*/
 }
 
 //label visibility

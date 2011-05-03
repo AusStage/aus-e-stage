@@ -194,6 +194,31 @@ ViewerControlClass.prototype.init = function() {
     	viewer.render();
 	});  
 	
+	//set up show/hide edge checkboxes - HIDE ALL
+    $("input[name=hideAll]").click(function() { 
+
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=hideAll]").is(":checked")){
+			viewer.hideAll = true;	
+    	}
+    	else viewer.hideAll = false;
+    	viewer.render();
+    	console.log('hide all');
+	}); 
+	
+	//set up show/hide edge checkboxes - HIDE UNRELATED
+    $("input[name=hideUnrelated]").click(function() { 
+
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=hideUnrelated]").is(":checked")){
+			viewer.hideUnrelated = true;	
+    	}
+    	else viewer.hideUnrelated = false;
+    	viewer.render();
+    	console.log('hide unrelated');
+	}); 
+	
+	
 	//EVENT TO EVENT CHECKBOXES
 	//set up label on/off checkboxes for contributor and event names
     $("input[name=showContributors]").click(function() { 
