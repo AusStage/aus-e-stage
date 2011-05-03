@@ -95,6 +95,8 @@ function ContributorViewerClass(type){
 	
 	this.hideAll = false;				//true if checked - hides ALL edges;
 	this.hideUnrelated = false;			//true if checked = hides all UNRELATED edges.
+	this.hideMax = 9999999;
+	this.hideMin = 0;
 	
 	this.showCustColors = true;
 	this.showCustVis = true;
@@ -214,6 +216,7 @@ ContributorViewerClass.prototype.showInteraction = function(){
 	if(this.renderComplete){
 		$("#viewer_options_div").show();//show viewer options accordion
 		$("#display_labels_div").show();//show display label options
+		$("#display_edges_div").show();//show display edges options		
 		if (this.nodeIndex>-1 || this.edgeTIndex>-1){
 			$('#network_details_div').show();
 		}
@@ -226,6 +229,7 @@ ContributorViewerClass.prototype.showInteraction = function(){
 ContributorViewerClass.prototype.hideInteraction = function(){
 	$("#viewer_options_div").hide();
 	$("#display_labels_div").hide();//show display label options
+	$("#display_edges_div").hide();//show display edges options		
 	$('#network_details_div').hide();
 	$("#network_properties_div").hide();//show network properties	
 	$("#faceted_browsing_btn_div").hide();//show faceted browsing on/off
@@ -259,7 +263,6 @@ ContributorViewerClass.prototype.onClick = function(d, what){
 				break;
 		
 			case EDGE: 
-				console.log(d);
 				this.nodeIndex = -1;	
 				this.edgeTIndex = d.target;
 				this.edgeSIndex = d.source;	
@@ -329,6 +332,7 @@ ContributorViewerClass.prototype.isVisibleEdge = function(p){
 	var visible = true;
 	if (this.hideAll){return false}; //is hide all option selected then return false immediately
 	if (!p.custVis && this.showCustVis){return false} 	// if user has hidden and option 'show user hidden elements' is not selected
+	if ( parseInt(p.value) < parseInt(this.hideMin) || p.value > this.hideMax ){return false}
 	if (this.viewFaceted && !this.showAllFaceted){		// if faceted browse and option is to only show selected  	
 			visible = (p.targetNode.facetedMatch && p.sourceNode.facetedMatch)?true:false;}
 	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){visible = false} //if out of date range.					
@@ -650,6 +654,8 @@ ContributorViewerClass.prototype.prepareData = function(){
 	this.cleanDates();
 	//set the values for faceted browsing
 	this.setFacetedOptions(this.getFacetedOptions());
+	//set the values for the min max edge value select lists.
+	this.setEdgeValues();
 	//set visibility fields for date range and date slider
 	this.timelineObj.update();
 	this.resetDateRangeVisibility();		
@@ -960,6 +966,49 @@ false if not. Used in the graph appearance functions
 	}
 }
 
+/* SET EDGE VALUES - set the select lists max and min with edge values
+====================================================================================================================*/
+ContributorViewerClass.prototype.setEdgeValues = function(){
+	$('#minValue').change(changeEdgeValues);
+	$('#maxValue').change(changeEdgeValues);	
 
+	var edgeValues = [];
+	//clear the select lists
+	$('#minValue').empty();
+	$('#minValueLabel').empty();
+	$('#maxValue').empty();
+	$('#maxValueLabel').empty();
+	
+	for (i in this.json.edges){
+		if(!contains(edgeValues, this.json.edges[i].value)){
+				edgeValues.push(this.json.edges[i].value);
+		}	
+	}
+	edgeValues.sort(sortNumeric);
+	for(i in edgeValues) {
+    	$('#minValue').append($("<option></option>").attr("value",edgeValues[i]).text(edgeValues[i])); 
+		$('#maxValue').append($("<option></option>").attr("value",edgeValues[i]).text(edgeValues[i]));     	
+	}
 
+	this.hideMax = pv.max(edgeValues);
+	this.hideMin = pv.min(edgeValues);	
+	
+	$('#minValueLabel').append('min collaborations ('+pv.min(edgeValues)+')');
+	$('#minValue').val(this.hideMin);
+	$('#maxValueLabel').append('max collaborations ('+pv.max(edgeValues)+')');	
+	$('#maxValue').val(this.hideMax);
+}
+
+function changeEdgeValues(){
+	var min = $('#minValue option:selected').val();
+	var max = $('#maxValue option:selected').val();
+	if (parseInt(min) > parseInt(max)){
+		max = min;
+		$('#maxValue').val(max);
+
+	}		
+	viewer.hideMin = min;
+	viewer.hideMax = max;	
+	viewer.render();
+}
 
