@@ -876,7 +876,7 @@ MappingClass.prototype.buildIconographyHelp = function() {
 		if(cellCount == 1) {
 			row = '<tr><td class="b-' + i + ' mapIconImg2">&nbsp;</td>';
 		} else if(cellCount == maxCellCount) {
-			row += '</tr>';
+			row += '<td class="b-' + i + ' mapIconImg2">&nbsp;</td></tr>';
 			rows += row;
 			row = '';
 			cellCount = 0;
@@ -1651,6 +1651,9 @@ MappingClass.prototype.resetMap = function() {
 		
 		//reset the timeline object
 		timelineObj.resetTimeline();
+		
+		//recentre the map
+		mappingObj.map.setCenter(new google.maps.LatLng(mappingObj.commonLocales.unknown.lat, mappingObj.commonLocales.unknown.lng)); 
 	}
 	
 	// update the map

@@ -74,7 +74,10 @@
 		</ul>
 		<div class="mapControlsContainer js peejaboo-tohide">
 			<h2>Controls</h2>
+			<input type="checkbox" name="btn_cluster_map" id="btn_cluster_map"/> Clustering
+			<!--
 			<input type="button" name="btn_cluster_map" id="btn_cluster_map" value="Clustering On"/>
+			-->
 			<div class="accordion" id="mapLegendPanAndZoomControls">
 				<h3><a href="#" id="mapLegendPanAndZoomHeading">Pan &amp; Zoom Map</a></h3>
 				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
