@@ -80,6 +80,10 @@ function sortByName(a, b) {
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
+function sortNumeric(a, b) {
+    return a-b;
+}
+
 //used to measure and replace text with ellipses based on width.
 function constrain(text, ideal_width, className, linkClass){
 

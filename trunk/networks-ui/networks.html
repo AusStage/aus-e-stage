@@ -99,13 +99,19 @@
 					<label for="showEvents">Show event names</label>
 				</div>	
 				
-				<div class='innerHeader'>Show/Hide Edges</div>
 				<div id='display_edges_div'>
+					<div class='innerHeader'>Show/Hide Edges</div>
 					<input type="checkbox" name="hideAll" class="checkbox" id="hide_all_check" />
 					<label for="hideAll">Hide all edges</label>
 					<br>
 					<input type="checkbox" name="hideUnrelated" class="checkbox" id="hide_unrelated_check" />
-					<label for="hideUnrelated">Hide unrelated edges</label>					
+					<label for="hideUnrelated">Hide unrelated edges</label>	
+					<br>	
+					<select id='minValue'></select>
+					<label id='minValueLabel' for="minValue"></label>	
+					<br>
+					<select id='maxValue'></select>			
+					<label id='maxValueLabel' for="minValue"></label>						
 				</div>
 				
 				<div class='innerHeader'>Custom Colours</div>

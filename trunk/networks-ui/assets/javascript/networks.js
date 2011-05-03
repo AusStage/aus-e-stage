@@ -38,9 +38,7 @@ $(document).ready(function(){
 	 //initialise th viewer class
 	 viewerControl = new ViewerControlClass();
 	 viewerControl.init();	
-	 
-
-	 
+	  
 	// setup the add search result buttons
     $('.addSearchResult').live('click', addResultsClick);
 

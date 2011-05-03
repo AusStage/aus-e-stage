@@ -51,13 +51,8 @@ ViewerControlClass.prototype.init = function() {
 	//hide the ruler div
 	$("#ruler").hide();
 
-	//hide the date range
-	$("select#startDate").hide();
-	$("select#endDate").hide();
-
 	//common setup for network viewer
 	$('#viewerMsg').append(buildInfoMsgBox(VIEWER_NO_DATA_MSG));	
-	$('#date_range_div').hide();
 
 	//hide the faceted browsing button
 	$("#faceted_browsing_btn_div").hide();
@@ -69,7 +64,9 @@ ViewerControlClass.prototype.init = function() {
 	$("#viewer_options_div").hide();
 	//hide the show labels checkboxes
 	$("#display_labels_div").hide();
-	$("#display_event_labels_div").hide();	
+	$("#display_event_labels_div").hide();
+	//hide the edge display section
+	$('#display_edges_div').hide();;	
 
 	//hide the legend
 	$("#network_details_div").hide();
