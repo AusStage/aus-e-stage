@@ -108,10 +108,13 @@ MapLegendClass.prototype.init = function() {
 	
 	// setup click event on the enable clustering button
 	$("#btn_cluster_map").click(function() {
+	
+		var checkbox = $("#btn_cluster_map");
+	
 		if(mappingObj.clusteringEnabled == false) {
 			mappingObj.clusteringEnabled = true;
 			mappingObj.updateMap();
-			$("#btn_cluster_map").val('Clustering Off');
+			checkbox.attr('checked','checked');
 		} else {
 			// check to see if we can disable clustering
 			if(mappingObj.markerData.objects.length >= mappingObj.applyClusterLimit) {
@@ -121,7 +124,7 @@ MapLegendClass.prototype.init = function() {
 			} else {
 				mappingObj.clusteringEnabled = false;
 				mappingObj.updateMap();
-				$("#btn_cluster_map").val('Clustering On');
+				checkbox.removeAttr('checked');
 			}
 		}
 	});
