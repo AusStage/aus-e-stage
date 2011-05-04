@@ -36,7 +36,9 @@ The desired number of edges between the central node and the peripheral nodes of
 
 === simplify ===
 This parameter is only valid with event to event 2nd degree network (task = event-centric-network && radius = 2 )
+
 simplify = true : with each of the 1st degree nodes, only events for those contributors involved in the central node are retrieved.
+
 simplify = false: with each of the 1st degree nodes, events for all contributors are retrieved.
 
 === callback ===
