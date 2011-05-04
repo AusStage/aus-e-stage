@@ -51,6 +51,7 @@
 	<script type="text/javascript" src="assets/javascript/mapping.js"></script>
 	<script type="text/javascript" src="assets/javascript/map-legend.js"></script>
 	<script type="text/javascript" src="assets/javascript/timeline.js"></script>
+	<script type="text/javascript" src="assets/javascript/bookmark.js"></script>
 	<!-- prevent a FOUC -->
 	<script type="text/javascript">
 		$('html').addClass('js');
@@ -74,13 +75,24 @@
 		</ul>
 		<div class="mapControlsContainer js peejaboo-tohide">
 			<h2>Controls</h2>
-			<input type="checkbox" name="btn_cluster_map" id="btn_cluster_map"/> Clustering
+			<p>
+				<input type="checkbox" name="btn_cluster_map" id="btn_cluster_map"/> Clustering <br/>
+			</p>
 			<!--
 			<input type="button" name="btn_cluster_map" id="btn_cluster_map" value="Clustering On"/>
 			-->
 			<div class="accordion" id="mapLegendPanAndZoomControls">
 				<h3><a href="#" id="mapLegendPanAndZoomHeading">Pan &amp; Zoom Map</a></h3>
 				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
+				</div>
+			</div>
+			<div class="accordion" id="mapLegendAdvancedControls">
+				<h3><a href="#" id="mapLegendAdvancedControlsHeading">Bookmark &amp; KML Download</a></h3>
+				<div class="mapLegendInnerContainer">
+					<ul>
+						<li class="map-bookmark-open clickable">Bookmark this map</li>
+						<li class="map-kml-download clickable">Download this map as KML</li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -330,12 +342,45 @@
 <div id="map_legend_clustering_error" title="Unable to Disable Clustering" style="font-size: 90%">
 	<h3>Clustering cannot be disabled at this time</h3>
 	<p>
-		Clustering is automatically enabled when <span id="mlce_max"></span> markers are added to the map (including hidden markers).
+		Clustering is automatically enabled when <span class="mlce_max"></span> markers are added to the map (including hidden markers).
 		<br/>&nbsp;<br/>
-		You currently have <span id="mlce_current"></span> markers added to the map. Delete some markers and then try again.
+		You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
 		<br/>&nbsp;<br/>
 		If you feel the limit is too low, please contact the AusStage team
 	</p>
+</div>
+<div id="map_bookmark_div" title="Bookmark this Map" style="font-size: 90%">
+	<h3>Create a bookmark for this map</h3>
+	<p>
+		The link below will be a bookmark to this map including all of the contributors, organisations, venues and events that you have added to the map.
+		<br/>&nbsp;
+	</p>
+	<p>
+		It will not preserve any hidden markers or the selected time period in the time slider. 
+	</p>
+	<p>
+		&nbsp;
+	</p>
+	<p>
+		<a href="" title="Bookmark this Map" id="map_bookmark_link">Aus-e-Stage Map Bookmark</a>
+	</p>
+</div>
+<div id="map_bookmark_error_div" title="Bookmark this Map" style="font-size: 90%">
+	<h3>A bookmark cannot be created for this map</h3>
+	<p>
+		Bookmarks are only available when the map contains less than <span class="mlce_max"></span> markers (including hidden markers).
+		<br/>&nbsp;<br/>
+		You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
+	</p>
+</div>
+<div id="map_bookmark_loading_div" title="Loading Map from Bookmark" style="font-size: 90%">
+	<h3>Loading Map Data</h3>
+	<div class="ui-state-highlight ui-corner-all search-status-messages" id="status_message">
+		<p>
+			<span class="ui-icon ui-icon-info status-icon"></span>
+			 Loading data for the map, please wait...
+		</p>
+	</div>
 </div>
 </body>
 </html>

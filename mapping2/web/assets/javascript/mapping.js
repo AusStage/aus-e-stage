@@ -482,7 +482,7 @@ MappingClass.prototype.addVenueData = function(data) {
 }
 
 // function to update the list of venues with data from the browse interface
-MappingClass.prototype.addVenueBrowseData = function(data) {
+MappingClass.prototype.addVenueBrowseData = function(data, display) {
 
 	// declare helper variables
 	var hash  = null;
@@ -529,11 +529,13 @@ MappingClass.prototype.addVenueBrowseData = function(data) {
 	}
 	
 	// switch to the map tab including an update
-	$('#tabs').tabs('select', 2);
+	if(typeof(display) == "undefined") {
+		$('#tabs').tabs('select', 2);
+	}
 }
 
 // function to update the list of contributors with data from the search interface
-MappingClass.prototype.addContributorData = function(data) {
+MappingClass.prototype.addContributorData = function(data, display) {
 
 	// declare helper variables
 	var hash  = null;
@@ -617,11 +619,13 @@ MappingClass.prototype.addContributorData = function(data) {
 	}
 	
 	// switch to the map tab including an update
-	$('#tabs').tabs('select', 2);
+	if(typeof(display) == "undefined") {
+		$('#tabs').tabs('select', 2);
+	}
 }
 
 // function to update the list of contributors with data from the search interface
-MappingClass.prototype.addOrganisationData = function(data) {
+MappingClass.prototype.addOrganisationData = function(data, display) {
 
 	// declare helper variables
 	var hash  = null;
@@ -706,11 +710,13 @@ MappingClass.prototype.addOrganisationData = function(data) {
 	}
 	
 	// switch to the map tab including an update
-	$('#tabs').tabs('select', 2);
+	if(typeof(display) == "undefined") {
+		$('#tabs').tabs('select', 2);
+	}
 }
 
 // function to update the list of contributors with data from the search interface
-MappingClass.prototype.addEventData = function(data) {
+MappingClass.prototype.addEventData = function(data, display) {
 
 	// declare helper variables
 	var hash  = null;
@@ -768,7 +774,9 @@ MappingClass.prototype.addEventData = function(data) {
 	}
 	
 	// switch to the map tab including an update
-	$('#tabs').tabs('select', 2);
+	if(typeof(display) == "undefined") {
+		$('#tabs').tabs('select', 2);
+	}
 }
 
 
@@ -1549,6 +1557,36 @@ MappingClass.prototype.doMapFromLink = function() {
 		
 		if(typeof(type) != 'undefined' && typeof(id) != 'undefined') {
 			mappingObj.doSimpleMapFromLink(type, id);
+		}
+	} else {
+		param = $.getUrlVar('complex-map');
+		
+		if(typeof(param) != 'undefined') {
+		
+			// get the other parameters
+			var c = $.getUrlVar('c');
+			var o = $.getUrlVar('o');
+			var v = $.getUrlVar('v');
+			var e = $.getUrlVar('e');
+			
+			if(typeof(c) == 'undefined') {
+				c = null;
+			}
+			
+			if(typeof(o) == 'undefined') {
+				o = null;
+			}
+			
+			if(typeof(v) == 'undefined') {
+				v = null;
+			}
+			
+			if(typeof(e) == 'undefined') {
+				e = null;
+			}
+			
+			// build the map
+			bookmarkObj.doComplexMapFromLink(c, o, v, e);
 		}
 	}
 }
