@@ -118,8 +118,8 @@ MapLegendClass.prototype.init = function() {
 		} else {
 			// check to see if we can disable clustering
 			if(mappingObj.markerData.objects.length >= mappingObj.applyClusterLimit) {
-				$("#mlce_max").empty().append(mappingObj.applyClusterLimit);
-				$("#mlce_current").empty().append(mappingObj.markerData.objects.length);
+				$(".mlce_max").empty().append(mappingObj.applyClusterLimit);
+				$(".mlce_current").empty().append(mappingObj.markerData.objects.length);
 				$("#map_legend_clustering_error").dialog('open');
 				checkbox.attr('checked','checked');
 			} else {
