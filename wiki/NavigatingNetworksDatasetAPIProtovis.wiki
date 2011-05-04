@@ -22,6 +22,7 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 || task   || ego-centric-network || No || ||
 || id     || unique contributor id || No || ||
 || radius || Integer between 1 and 3 ||	 Yes || 1 ||
+|| simplify || Boolean || Yes || true ||
 || callback || function name to use for a JSONP request || Yes || ||
 
 === task ===
@@ -32,6 +33,11 @@ The id parameter defines the unique identifier of the contributor that is of int
 
 === radius ===
 The desired number of edges between the central node and the peripheral nodes of the network.
+
+=== simplify ===
+This parameter is only valid with event to event 2nd degree network (task = event-centric-network && radius = 2 )
+simplify = true : with each of the 1st degree nodes, only events for those contributors involved in the central node are retrieved.
+simplify = false: with each of the 1st degree nodes, events for all contributors are retrieved.
 
 === callback ===
 When data is requested using the [http://en.wikipedia.org/wiki/JSON JSON] format the callback parameter specifies the function name to use for a [http://en.wikipedia.org/wiki/JSON#JSONP JSONP] request.
