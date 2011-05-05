@@ -101,9 +101,9 @@ BookmarkClass.prototype.buildBookmark = function() {
 	
 	//build the url
 	
-	//var uri = "http://beta.ausstage.edu.au" + BASE_URL + "?complex-map=true&amp;";
+	var uri = "http://beta.ausstage.edu.au" + BASE_URL + "?complex-map=true";
 	
-	var uri = "http://localhost:8181" + BASE_URL + "?complex-map=true";
+	//var uri = "http://localhost:8181" + BASE_URL + "?complex-map=true";
 	
 	uri += bookmarkObj.buildUriSegment("c", recordData.contributors.ids);
 	uri += bookmarkObj.buildUriSegment("o", recordData.organisations.ids);
