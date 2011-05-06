@@ -24,7 +24,7 @@
     <description>
         Search the AusStage database and put the results on a map
     </description>
-    <!-- Servlets -->
+     <!-- Servlets -->
     <servlet>
         <servlet-name>MarkerServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mapping.MarkerServlet</servlet-class>
@@ -40,6 +40,10 @@
     <servlet>
     	<servlet-name>EventLookupServlet</servlet-name>
         <servlet-class>au.edu.ausstage.mapping.EventLookupServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<servlet-name>KmlDownloadServlet</servlet-name>
+    	<servlet-class>au.edu.ausstage.mapping.KmlDownloadServlet</servlet-class>
     </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
@@ -57,6 +61,10 @@
     <servlet-mapping>
         <servlet-name>EventLookupServlet</servlet-name>
         <url-pattern>/events/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>KmlDownloadServlet</servlet-name>
+    	<url-pattern>/kml/*</url-pattern>
     </servlet-mapping>    
     <!-- Context Params to Share Common Information-->
     <context-param>
