@@ -52,9 +52,9 @@ public class KmlDownloadManager {
 	 * @param venues a list of venue ids
 	 * @param events a list of event ids
 	 *
-	 * @param throws KmlDownloadException if something bad happens
+	 * @throws KmlDownloadException if something bad happens
 	 */
-	public void prepare(String[] contrbutors, String[] organiations, String[] venues, String[] events) throws KmlDownloadException {
+	public void prepare(String[] contributors, String[] organisations, String[] venues, String[] events) throws KmlDownloadException {
 	
 		// instantiate the required object
 		builder = new KmlDataBuilder();
@@ -67,7 +67,7 @@ public class KmlDownloadManager {
 	 *
 	 * @param writer the print writer to use to print the KML
 	 *
-	 * @param throws KmlDownloadException if something bad happens
+	 * @throws KmlDownloadException if something bad happens
 	 */
 	public void print(PrintWriter writer) throws KmlDownloadException {
 	
