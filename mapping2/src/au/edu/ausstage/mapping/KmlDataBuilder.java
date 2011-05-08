@@ -30,6 +30,9 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*; 
 import javax.xml.transform.stream.*;
 
+import java.util.Set;
+import java.util.Iterator;
+
 /**
  * a class responsible for building KML data
  */
@@ -39,6 +42,18 @@ public class KmlDataBuilder {
 	 * define the base URL for icon images
 	 */
 	public static final String ICON_BASE_URL = "http://beta.ausstage.edu.au/mapping2/assets/images/kml-icons/";
+	
+	/**
+	 * icon colour codes for contributors
+	 */
+	 public static final String[] CON_ICON_COLOUR_CODES = {"50", "49", "48", "47", "46", "45", "44", "43", "42", "41", "40", "39", "86", "85", "84", "83", "82", "81", "80", "79", "78", "77", "76", "75", "74", "73", "72", "71", "70", "69", "68", "67", "66", "65", "64", "63", "62", "61", "60", "59", "58", "57", "56", "55", "54", "53", "52", "51"};
+
+	/**
+	 * icon colour codes for organisations
+	 */
+	public static final String[] ORG_ICON_COLOUR_CODES = {"66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "60", "61", "62", "63", "64", "65", "59", "58", "57", "56", "55", "54", "53", "52", "51", "50", "49", "48", "47", "46", "45", "44", "43", "42", "41", "40", "39"};
+	
+
 
 	// declare private class variables
 	private DocumentBuilderFactory factory;
@@ -116,16 +131,211 @@ public class KmlDataBuilder {
 		// add the root folder
 		rootFolder = xmlDoc.createElement("Folder");
 		
-		// create the name element
+		// create the name and description elements
 		Element name = xmlDoc.createElement("name");
-		name.setTextContent("AusStage Map Data");				
+		name.setTextContent("AusStage Maps");
+		
+		Element description = xmlDoc.createElement("description");
+		description.setTextContent("Map data downloaded from the AusStage Mapping Service");
 		
 		// add the name element to the folder
 		rootFolder.appendChild(name);
+		rootFolder.appendChild(description);
 		
 		// add the folder to the tree
 		rootDocument.appendChild(rootFolder);
+	}
+	
+	private Element addDocument(String name, String description) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(name) == false || InputUtils.isValid(description) == false) {
+			throw new IllegalArgumentException("both parameters are required");
+		}
 		
+		// create the new folder
+		Element document = xmlDoc.createElement("Document");
+		
+		// add the name and description elements
+		Element n = xmlDoc.createElement("name");
+		n.setTextContent(name);
+		
+		Element d = xmlDoc.createElement("description");
+		d.setTextContent(description);
+		
+		document.appendChild(n);
+		document.appendChild(d);
+		
+		rootFolder.appendChild(document);
+		
+		return document;
+	}
+	
+	private Element addFolder(String name, String description) {
+	
+		// check on the parameters
+		if(InputUtils.isValid(name) == false || InputUtils.isValid(description) == false) {
+			throw new IllegalArgumentException("both parameters are required");
+		}
+		
+		// create the new folder
+		Element folder = xmlDoc.createElement("Folder");
+		
+		// add the name and description elements
+		Element n = xmlDoc.createElement("name");
+		n.setTextContent(name);
+		
+		Element d = xmlDoc.createElement("description");
+		d.setTextContent(description);
+		
+		folder.appendChild(n);
+		folder.appendChild(d);
+		
+		rootFolder.appendChild(folder);
+		
+		return folder;
+	}
+	
+	private Element addDocument(Element folder, String name, String description) {
+	
+		if(folder == null) {
+			return addDocument(name, description);
+		}
+	
+		// check on the parameters
+		if(InputUtils.isValid(name) == false || InputUtils.isValid(description) == false) {
+			throw new IllegalArgumentException("both parameters are required");
+		}
+		
+		// create the new folder
+		Element document = xmlDoc.createElement("Document");
+		
+		// add the name and description elements
+		Element n = xmlDoc.createElement("name");
+		n.setTextContent(name);
+		
+		Element d = xmlDoc.createElement("description");
+		d.setTextContent(description);
+		
+		document.appendChild(n);
+		document.appendChild(d);
+		
+		folder.appendChild(document);
+		
+		return document;
+	}
+	
+	/**
+	 * Add a document containing contributor information
+	 * 
+	 * @param list the list of contributors
+	 * 
+	 * @throws KmlDownloadException if something bad happens
+	 */
+	public void addContributors(ContributorList list) {
+	
+		if(list == null) {
+			throw new IllegalArgumentException("The contributors parameter must be a valid object");
+		}
+		
+		Set<Contributor> contributors = list.getContributors();
+		
+		if(contributors.isEmpty() == true) {
+			throw new IllegalArgumentException("There must be at least one contributor in the supplied list");
+		}
+			
+		Element folder = addFolder("Contributors", "Maps of events grouped by contributor");
+		Element document;
+		
+		Element placemark;
+		Element elem;
+		Element subElem;
+		CDATASection cdata;
+		
+		String content;
+		
+		
+		Iterator iterator = contributors.iterator();
+		Contributor contributor;
+		Event       event;
+		
+		int colourIndex = -1;
+		
+		/*
+		 <Placemark>
+                    <name>The Ballad of Angel's Alley</name>
+                    <atom:link
+                        href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=18750"/>
+                    <description><![CDATA[<p>The Old Tote Theatre, Kensington, 25 September 1963 <br/><a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=18750">More Information</a></p>]]></description>
+                    <styleUrl>basic-event</styleUrl>
+                    <Point>
+                        <coordinates>151.2283510,-33.9157990</coordinates>
+                    </Point>
+                </Placemark>
+        */
+		
+		// loop through and add the placemarks
+		while(iterator.hasNext()) {
+		
+			contributor = (Contributor)iterator.next();
+			
+			if(contributor.getEventCount() == 0) {
+				throw new KmlDownloadException("there were no events associated with contributor '" + contributor.getId() + "'");
+			}
+			
+			document = addDocument(folder, contributor.getName(), "Map of events associated with: " + contributor.getName() + " <br/> <a href=\"" + contributor.getUrl() + "\">More Information</a>");
+			
+			// determine which style to use
+			if(colourIndex ==  CON_ICON_COLOUR_CODES.length) {
+				colourIndex = 0;
+			} else {
+				colourIndex++;
+			}
+			
+			Iterator events = contributor.getEvents().iterator();
+			
+			while(events.hasNext()) {
+				event = (Event)events.next();
+				
+				placemark = xmlDoc.createElement("Placemark");
+				elem = xmlDoc.createElement("name");
+				elem.setTextContent(event.getName());
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("atom:link");
+				elem.setAttribute("href", event.getUrl());
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("description");
+				content = "<p>" + event.getVenue() + "<br/>" + "<a href=\"" + event.getUrl() + "\">More Information</a></p>";
+				elem.appendChild(xmlDoc.createCDATASection(content));
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("TimeSpan");
+				
+				subElem = xmlDoc.createElement("begin");
+				subElem.setTextContent(event.getSortFirstDate());
+				elem.appendChild(subElem);
+				
+				subElem = xmlDoc.createElement("end");
+				subElem.setTextContent(event.getSortLastDate());
+				elem.appendChild(subElem);
+				
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("styleUrl");
+				elem.setTextContent("#c-" + CON_ICON_COLOUR_CODES[colourIndex]);
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("Point");
+				subElem = xmlDoc.createElement("coordinates");
+				subElem.setTextContent(event.getLongitude() + "," + event.getLatitude());
+				elem.appendChild(subElem);
+				placemark.appendChild(elem);
+				
+				document.appendChild(placemark);
+			}			
+		}
 	}
 	
 	// private method to add the style information
@@ -259,13 +469,12 @@ public class KmlDataBuilder {
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			
 			// get a transformer and supporting classes
-			//StringWriter writer = new StringWriter();
 			StreamResult result = new StreamResult(printWriter);
 			DOMSource    source = new DOMSource(xmlDoc);
 			
-			// transform the xml document into a string
+			// transform the internal objects into XML and print it
 			transformer.transform(source, result);
-			//return writer.toString();
+
 		} catch (javax.xml.transform.TransformerException ex) {
 			throw new KmlDownloadException(ex.toString());
 		}
