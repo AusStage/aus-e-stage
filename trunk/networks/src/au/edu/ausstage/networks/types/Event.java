@@ -27,13 +27,22 @@ import org.json.simple.*;
  * for the event-centric network exports
  */
 public class Event implements JSONAware, Comparable<Event>{
-
+//public class Event implements JSONAware{
 	// declare class variables
 	private String id;
 	private String name      = null;
 	private String url       = null;
 	private String firstDate = null;
 	private String lastDate  = null;
+	private String venue 	 = null;
+
+	public String getVenue() {
+		return venue;
+	}
+
+	public void setVenue(String venue) {
+		this.venue = venue;
+	}
 
 	/**
 	 * constructor for this class
@@ -74,6 +83,9 @@ public class Event implements JSONAware, Comparable<Event>{
 		return id;
 	}
 	
+	public int getIntId(){
+		return Integer.parseInt(id);
+	}
 	/**
 	 * set a new name value for this event
 	 * 
@@ -179,7 +191,7 @@ public class Event implements JSONAware, Comparable<Event>{
 		object.put("name", name);
 		object.put("url", url);
 		object.put("firstDate", firstDate);
-		
+		//object.put("venue", venue);
 		return object;
 	}
 	
@@ -193,6 +205,21 @@ public class Event implements JSONAware, Comparable<Event>{
 	public String toJSONString() {
 		return getJSONObject().toString();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSONObj(int index, boolean central){
+		JSONObject object = new JSONObject();
+		
+		object.put("index", index);
+		object.put("id", id);
+		object.put("nodeName", name);
+		object.put("startDate", firstDate);
+		object.put("venue", venue);
+		object.put("central", central);
+		
+		return object;		
+	}
+	
 	
 	/*
 	 * methods required for ordering in collections

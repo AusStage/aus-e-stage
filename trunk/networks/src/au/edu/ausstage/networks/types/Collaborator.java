@@ -19,7 +19,7 @@
 package au.edu.ausstage.networks.types;
 
 // import additional classes
-import java.util.TreeSet;
+import java.util.*;
 import org.json.simple.*;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -44,6 +44,8 @@ public class Collaborator implements Comparable<Collaborator>{
 	private String lastDate = null;
 	private String collaborations = null;
 	private TreeSet<String> collaborators = null;
+	//the contributor has roles for each event
+	private Map<Integer, String> evt_role_map = new HashMap<Integer, String>();
 	
 	/**
 	 * Constructor for this class
@@ -58,7 +60,7 @@ public class Collaborator implements Comparable<Collaborator>{
 			throw new IllegalArgumentException("The id value must be a valid integer");
 		}
 	}
-	
+		
 	/*
 	 * declare getter and setter methods
 	 */
@@ -207,6 +209,25 @@ public class Collaborator implements Comparable<Collaborator>{
 	}
 	
 	/**
+	 * A method to set a Event Role map 
+	 *
+	 * @param value the new value
+	 */	
+	public void setEvtRoleMap(int evtId, String roles){
+		if (!evt_role_map.containsKey(evtId)){
+			evt_role_map.put(evtId, roles);
+		}
+	}
+	
+	public String getEvtRoleMap(int evtId){
+		if (evt_role_map.containsKey(evtId)){
+			return evt_role_map.get(evtId);
+		}else 
+			return "";
+	}
+	
+	
+	/**
 	 * A method to set a new function value
 	 *
 	 * @param value the new value
@@ -337,6 +358,7 @@ public class Collaborator implements Comparable<Collaborator>{
 		return gender;
 	}
 	
+	
 	/**
 	 * A method to set the number of collaborations
 	 *
@@ -449,6 +471,33 @@ public class Collaborator implements Comparable<Collaborator>{
 		object.put("functions", list);
 		
 		return object;	
+	}
+	
+	@SuppressWarnings("unchecked")
+	public org.json.simple.JSONObject toJSONObj(int source, int target, int eID) {		
+		JSONObject obj = new JSONObject();			
+		
+		// build the object
+		obj.put("id", Integer.parseInt(id));
+		obj.put("name", givenName + " " + familyName);
+		obj.put("source", source);
+		obj.put("target", target);
+		obj.put("roles", getEvtRoleMap(eID));
+		
+		//System.out.println(conDetail(source, eID));
+		return obj;	
+	}
+	
+	public String conDetail(int source, int eID){
+		StringBuilder conDetail    =  new StringBuilder("Contribtor: ");
+		conDetail.append("CID: " + getId() + " ");
+		conDetail.append("Name: " + this.givenName + " " + this.familyName + "  ");
+		conDetail.append("source: " + source + " ");
+		conDetail.append("eID: " + eID + " ");
+		conDetail.append("roles: " + getEvtRoleMap(eID));
+		
+		return conDetail.toString();
+		
 	}
 	
 	/**
