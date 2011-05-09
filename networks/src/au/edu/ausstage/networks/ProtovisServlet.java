@@ -23,8 +23,11 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+//import au.edu.ausstage.utils.DbManager;
+import au.edu.ausstage.utils.DatabaseManager;
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.utils.JSONPManager;
+
 
 /**
  * A class to respond to requests to export data
@@ -32,8 +35,10 @@ import au.edu.ausstage.utils.JSONPManager;
 public class ProtovisServlet extends HttpServlet {
 
 	// declare private variables
-	private ServletConfig servletConfig;
-	private DataManager database;
+	private DataManager RdfDatabase;
+	//private DbManager db;
+	private DatabaseManager db;
+	private String connectString = null;
 	
 	// declare constants
 	private final String[] TASK_TYPES   = {"ego-centric-network", "event-centric-network"};
@@ -45,11 +50,16 @@ public class ProtovisServlet extends HttpServlet {
 		// execute the parent objects init method
 		super.init(conf);
 		
-		// store configuration for later
-		servletConfig = conf;
+		//get database connect string from context-param in web.xml
+		connectString = conf.getServletContext().getInitParameter("databaseConnectionString");
 		
-		// instantiate a database manager object
-		database = new DataManager(conf);
+		// instantiate a RDF database manager object
+		RdfDatabase = new DataManager(conf);
+		
+		// instantiate an Oracle database manager object
+		//db = new DbManager(connectString);
+		db = new DatabaseManager(connectString);
+		
 		
 	} // end init method
 	
@@ -65,6 +75,7 @@ public class ProtovisServlet extends HttpServlet {
 		String taskType   = request.getParameter("task");
 		String id         = request.getParameter("id");
 		int radius = 0;
+		boolean simplify = true;
 		
 		// check on the taskType parameter
 		if(InputUtils.isValid(taskType, TASK_TYPES) == false) {
@@ -89,7 +100,7 @@ public class ProtovisServlet extends HttpServlet {
 		} else {
 			radius = ExportServlet.MIN_DEGREES;
 		}
-
+		
 		// check on the id parameter
 		if(InputUtils.isValidInt(id) == false) {
 			throw new ServletException("Missing or invalid id parameter.");
@@ -98,7 +109,7 @@ public class ProtovisServlet extends HttpServlet {
 		if(taskType.equals("ego-centric-network") == true) {
 		
 			// instantiate a manger object
-			ProtovisEgoCentricManager manager = new ProtovisEgoCentricManager(database);
+			ProtovisEgoCentricManager manager = new ProtovisEgoCentricManager(RdfDatabase);
 		
 			// check how to return the data
 			if(InputUtils.isValid(request.getParameter("callback")) == false) {
@@ -119,8 +130,14 @@ public class ProtovisServlet extends HttpServlet {
 			}
 		} else if(taskType.equals("event-centric-network") == true) {
 		
+			if (radius >= 2)
+				if (request.getParameter("simplify").equalsIgnoreCase("false"))
+					simplify  = false;
+				else if (request.getParameter("simplify").equalsIgnoreCase("true"))
+					simplify = true;
+			
 			// instantiate a manger object
-			ProtovisEventCentricManager manager = new ProtovisEventCentricManager(database);
+			ProtovisEventCentricManager manager = new ProtovisEventCentricManager(db);
 		
 			// check how to return the data
 			if(InputUtils.isValid(request.getParameter("callback")) == false) {
@@ -130,14 +147,14 @@ public class ProtovisServlet extends HttpServlet {
 		
 				// output the results of the export
 				PrintWriter out = response.getWriter();
-				out.print(manager.getData(id, radius));
+				out.print(manager.getData(id, radius, simplify));
 			} else {
 				// output javascript mime type
 				response.setContentType("application/javascript; charset=UTF-8");
 		
 				// output the results of the export
 				PrintWriter out = response.getWriter();
-				JSONPManager.wrapJSON(manager.getData(id, radius), request.getParameter("callback"), out);
+				JSONPManager.wrapJSON(manager.getData(id, radius, simplify), request.getParameter("callback"), out);
 			}		
 		}
 			
