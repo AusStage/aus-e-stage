@@ -519,6 +519,9 @@ MapLegendClass.prototype.buildPanAndZoom = function() {
 	// declare helper variables
 	var tableData = '<table class="mapLegendTable">';
 	
+	// add the clustering row
+	tableData += '<tr><th scope="row">Clustering</th><td><input type="checkbox" name="btn_cluster_map" id="btn_cluster_map"/></td></tr>';
+	
 	// add the contries row
 	tableData += '<tr><th scope="row">Country</th>';
 	tableData += '<td><span class="clickable mapPanAndZoom" id="mpz-australia">Australia</span> | <span class="clickable mapPanAndZoom" id="mpz-international">International</span></td></tr>';
