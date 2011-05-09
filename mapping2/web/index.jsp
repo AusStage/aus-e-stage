@@ -75,19 +75,13 @@
 		</ul>
 		<div class="mapControlsContainer js peejaboo-tohide">
 			<h2>Controls</h2>
-			<p>
-				<input type="checkbox" name="btn_cluster_map" id="btn_cluster_map"/> Clustering <br/>
-			</p>
-			<!--
-			<input type="button" name="btn_cluster_map" id="btn_cluster_map" value="Clustering On"/>
-			-->
 			<div class="accordion" id="mapLegendPanAndZoomControls">
-				<h3><a href="#" id="mapLegendPanAndZoomHeading">Pan &amp; Zoom Map</a></h3>
+				<h3><a href="#" id="mapLegendPanAndZoomHeading">Clustering and Focus</a></h3>				
 				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
 				</div>
 			</div>
 			<div class="accordion" id="mapLegendAdvancedControls">
-				<h3><a href="#" id="mapLegendAdvancedControlsHeading">Bookmark &amp; KML Download</a></h3>
+				<h3><a href="#" id="mapLegendAdvancedControlsHeading">Bookmark and Download</a></h3>
 				<div class="mapLegendInnerContainer">
 					<ul>
 						<li class="map-bookmark-open clickable">Bookmark this map</li>
