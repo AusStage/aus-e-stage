@@ -668,7 +668,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 		var venues = [];
 		
 		$('.searchVenue:checkbox').each(function() {
-			if($(this).attr('checked') == true) {
+			if($(this).is(':checked') == true) {
 				venues.push($(this).val());
 			}
 		});
@@ -707,7 +707,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 		var contributors = [];
 		
 		$('.searchContributor:checkbox').each(function() {
-			if($(this).attr('checked') == true) {
+			if($(this).is(':checked') == true) {
 				contributors.push($(this).val());
 			}
 		});
@@ -747,7 +747,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 		var organisations = [];
 		
 		$('.searchOrganisation:checkbox').each(function() {
-			if($(this).attr('checked') == true) {
+			if($(this).is(':checked') == true) {
 				organisations.push($(this).val());
 			}
 		});
@@ -787,7 +787,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 		var events = [];
 		
 		$('.searchEvent:checkbox').each(function() {
-			if($(this).attr('checked') == true) {
+			if($(this).is(':checked') == true) {
 				events.push($(this).val());
 			}
 		});
