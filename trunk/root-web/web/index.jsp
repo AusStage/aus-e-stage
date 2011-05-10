@@ -96,7 +96,7 @@
 								<img src="assets/images/networks-screengrab.jpg" width="200" height="150" alt="">
 							</a>
 							<p>
-								<strong>Visualise networks of artistic collaboration</strong>
+								<strong>Explore networks of artistic collaboration</strong>
 							</p>
 						</li>
 						<li>
