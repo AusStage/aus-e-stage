@@ -234,7 +234,7 @@
 </div>
 <jsp:include page="footer.jsp"/>
 <!-- help divs -->
-<div id="help_search_div" title="Help on Searching" style="font-size: 90%">
+<div id="help_search_div" title="Help on Searching" class="dialogs">
 	<h3>Searching the AusStage database</h3>
 	<p>
 		This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
@@ -245,7 +245,7 @@
 		that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database.			
 	</p>
 </div>
-<div id="help_add_view_div" title="Help on Adding Items and Viewing the Map" style="font-size: 90%">
+<div id="help_add_view_div" title="Help on Adding Items and Viewing the Map" class="dialogs">
 	<h3>Adding items to the map</h3>
 	<p>
 		Click the 'Add to Map' button to add the currently selected items to the map. The map will be displayed automatically.
@@ -261,7 +261,7 @@
 		Click on an item to see a list of items at the next level, tick the box to select all items at lower levels
 	</p>
 </div>
-<div id="help_map_icons_div" title="Help on Map Iconography" style="font-size: 90%">
+<div id="help_map_icons_div" title="Help on Map Iconography" class="dialogs">
 	<h3>AusStage Map Iconography</h3>
 	<p>
 		Map iconography refers to the way in which information is displayed on a map using icons. The AusStage mapping service uses a number of icons to display information on a map.
@@ -274,9 +274,6 @@
 	</p>
 	<p>
 		The iconography and colours used in AusStage maps is as follows:
-	</p>
-	<p>
-		&nbsp;
 	</p>
 	<p><strong>Map Icons and Colours</strong></p>
 	<table id="map_iconography_table" class="mapIconHelpTbl">
@@ -301,14 +298,11 @@
 			</tr>
 		</tbody>
 	</table>
-	<p><br/>&nbsp;<br/><strong>Individual Colour Pallette</strong></p>
+	<p><strong>Individual Colour Pallette</strong></p>
 	<table>
 		<tbody id="map_iconography_individual_colours">
 		</tbody>
 	</table>
-	<p>
-		&nbsp;
-	</p>
 	<p><strong>Marker Clusters</strong></p>
 	<p>
 		When Marker Clustering is enabled markers on the map are clustered together based on how close they are on the map.
@@ -326,7 +320,7 @@
 		<img src="assets/images/iconography/cluster.png" width="96" height="96" alt="Marker Cluster Icon"/>
 	</div>
 </div>
-<div id="map_legend_confirm_delete" title="Confirm Map Marker Deletion" style="font-size: 90%">
+<div id="map_legend_confirm_delete" title="Confirm Map Marker Deletion" class="dialogs">
 	<h3>Are you sure?</h3>
 	<p>
 		Are you sure you want to delete the marker from the map?
@@ -334,7 +328,7 @@
 	<div id="map_legend_confirm_delete_text">
 	</div>
 </div>
-<div id="map_legend_confirm_reset" title="Confirm Map Reset" style="font-size: 90%">
+<div id="map_legend_confirm_reset" title="Confirm Map Reset" class="dialogs">
 	<h3>Are you sure?</h3>
 	<p>
 		Are you sure you want to reset the map and delete all markers from the map?
@@ -343,7 +337,7 @@
 		Please note your search history will be preserved and is available under the 'Search History' heading on the Search tab.
 	</p>
 </div>
-<div id="map_legend_clustering_error" title="Unable to Disable Clustering" style="font-size: 90%">
+<div id="map_legend_clustering_error" title="Unable to Disable Clustering" class="dialogs">
 	<h3>Clustering cannot be disabled at this time</h3>
 	<p>
 		Clustering is automatically enabled when <span class="mlce_max"></span> markers are added to the map (including hidden markers).
@@ -355,7 +349,7 @@
 		If you feel the limit is too low, please contact the AusStage team
 	</p>
 </div>
-<div id="map_bookmark_div" title="Bookmark this Map" style="font-size: 90%">
+<div id="map_bookmark_div" title="Bookmark this Map" class="dialogs">
 	<h3>Create a bookmark for this map</h3>
 	<p>
 		The link below will be a bookmark to this map including all of the contributors, organisations, venues and events that you have added to the map.
@@ -370,7 +364,7 @@
 		<a href="" title="Bookmark this Map" id="map_bookmark_link">Aus-e-Stage Map Bookmark</a>
 	</p>
 </div>
-<div id="map_bookmark_error_div" title="Bookmark this Map" style="font-size: 90%">
+<div id="map_bookmark_error_div" title="Bookmark this Map" class="dialogs">
 	<h3>A bookmark cannot be created for this map</h3>
 	<p>
 		Bookmarks are only available when the map contains less than <span class="mlce_max"></span> markers (including hidden markers).
@@ -379,7 +373,7 @@
 		You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
 	</p>
 </div>
-<div id="map_bookmark_loading_div" title="Loading Map from Bookmark" style="font-size: 90%">
+<div id="map_bookmark_loading_div" title="Loading Map from Bookmark" class="dialogs">
 	<h3>Loading Map Data</h3>
 	<div class="ui-state-highlight ui-corner-all search-status-messages" id="status_message">
 		<p>
