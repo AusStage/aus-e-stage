@@ -29,8 +29,8 @@
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
 	<jsp:include page="analytics.jsp"/>
 	<!-- libraries -->
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.5.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.6.custom.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.6.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.12.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.64.js"></script>
 	<!-- custom code -->
@@ -44,6 +44,7 @@
 		<!-- side bar content -->
 		<div class="mainMenu">
 			<ul>
+				<li>&nbsp;</li>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a></li>
 				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
 				<li><a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a></li>
@@ -65,21 +66,13 @@
 			</ul>
 			<div>
 				<div id="tabs-1" class="tab-content">
-					<h1>Aus-e-Stage Project Overview</h1>
+					<h1 id="mainHeader">Aus-e-Stage Project Overview</h1>
 					<p>
-						<a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> fulfils a national need for public access to reliable information on the full spectrum of live performance in Australia. It delivers a dataset of national significance to researchers, postgraduate students, policy makers in government and industry practitioners. 
-					</p>
-					<p>
-						However, conventional database methods of text-based search-and-retrieval are, on their own, no longer sufficiently effective in meeting the evolving needs of research.
+						<a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> fulfils a national need for public access to reliable information on the full spectrum of live performance in Australia. It delivers a dataset of national significance to researchers, postgraduate students, policy makers in government and industry practitioners. However, conventional database methods of text-based search-and-retrieval are, on their own, no longer sufficiently effective in meeting the evolving needs of research.
 					</p>
 					<p>
 						The <a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage project</a> is developing new visual interfaces to enable researchers to interact more flexibly with the <a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> dataset. Three new services are developed to operate alongside the current <a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> search-and-retrieval service. These services are:
 					<p>
-					
-					<p>
-						<a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage</a> is funded by <a href="https://www.pfc.org.au/bin/view/Main/NeAT" title="NeAT homepage">NeAT</a>, the National eResaerch Architecture Taskforce. The source code for these services is available on the <a href="http://code.google.com/p/aus-e-stage/" title="Aus-e-Stage Project Wiki and Source Code Repository">aus-e-stage</a> project hosted on Google Code.
-					</p>
-					<h2>These services are:</h2>
 					<ul class="services">
 						<li>
 							<a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">
@@ -109,6 +102,9 @@
 							</p>
 						</li>
 					</ul>
+					<p class="clear">
+						<a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage</a> is funded by <a href="https://www.pfc.org.au/bin/view/Main/NeAT" title="NeAT homepage">NeAT</a>, the National eResaerch Architecture Taskforce. The source code for these services is available on the <a href="http://code.google.com/p/aus-e-stage/" title="Aus-e-Stage Project Wiki and Source Code Repository">aus-e-stage</a> project hosted on Google Code.
+					</p>
 				</div>
 				<div id="tabs-2" class="tab-content">
 					<div id="analytics-tabs">
