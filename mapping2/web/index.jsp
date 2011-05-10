@@ -22,7 +22,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>AusStage Mapping Service (Beta)</title>
+	<title>Aus-e-Stage Mapping Events</title>
 	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css"/>
@@ -59,22 +59,22 @@
 </head>
 <body>
 <div class="wrapper">
-	<div class="header b-187"><h1>AusStage Mapping Service</h1></div>
+	<div class="header b-187"><h1>Mapping Events</h1></div>
 	<div class="sidebar b-186 f-184">
 		<div class="peekaboo-tohide mainMenu">
-			<h2>Main Menu</h2>
 			<ul>
-				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a></li>
+				<li>&nbsp;</li>
+				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a> <span class="peekaboo clickable" style="float: right; padding-right: 1em;">[Hide]</span></li>
 				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
 				<li><a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a></li>
 				<li class="map-icon-help clickable">Map Iconography</li>
 			</ul>
 		</div>
-		<ul>
-			<li class="peekaboo clickable">Hide Menu</li>
+		<ul class="peekaboo-show peekaboo-big">
+			<li class="peekaboo clickable">&raquo;</li>
 		</ul>
 		<div class="mapControlsContainer js peejaboo-tohide">
-			<h2>Controls</h2>
+			<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184"/>
 			<div class="accordion" id="mapLegendPanAndZoomControls">
 				<h3><a href="#" id="mapLegendPanAndZoomHeading">Clustering and Focus</a></h3>				
 				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
@@ -91,7 +91,6 @@
 			</div>
 		</div>
 		<div class="mapLegendContainer js peekaboo-tohide">
-			<h2>Legend</h2>
 			<div class="accordion">
 				<h3><a href="#" id="mapLegendContributorHeading">Contributors</a></h3>
 				<div id="mapLegendContributors" class="mapLegendInnerContainer">
@@ -127,7 +126,7 @@
 			</ul>
 			<div>
 				<div id="tabs-1">
-					<p>Search the AusStage Database</p>
+					<p>Search the AusStage database</p>
 					<form action="/mapping/" method="get" id="search" name="search">
 						<table class="formTable" style="height: 60px;">
 							<tbody>
@@ -186,17 +185,16 @@
 					</div>
 				</div>
 				<div id="tabs-2">
-					<p>Browse for venues</p>
 					<div style="max-width: 990px">
 						<div id="browse_header" style="height: 30px; width=100%">
 							<div style="float:left; width: 26%; height: 100%; padding-right: 10px;">
-								<p>Countries and States</p>
+								<p style="font-weight: bold">Countries and States</p>
 							</div>
 							<div style="float:left; width: 32%; height: 100%; margin-left: 10px;">
-								<p>Cities, Suburbs and Localities</p>
+								<p style="font-weight: bold">Cities, Suburbs and Localities</p>
 							</div>
 							<div style="float: right; width: 37%; height: 100%; padding-left: 10px;">
-								<p>Venues</p>
+								<p style="font-weight: bold">Venues</p>
 							</div>
 						</div>
 						<div id="browse_content" style="height: 380px;">
@@ -213,7 +211,6 @@
 					</div>
 				</div>
 				<div id="tabs-3">
-					<p>Map of the Selected Items</p>
 					<div id="map_container_div">
 						<div id="map_div" style="height: 100%; width: 100%">
 						</div>

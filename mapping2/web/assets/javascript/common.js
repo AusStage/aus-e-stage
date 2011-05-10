@@ -161,6 +161,8 @@ $(document).ready(function() {
 	$("#show_search_help").click(function() {
 		$("#help_search_div").dialog('open');
 	});
+	
+	$('.peekaboo-show').hide();
 });
 
 $('.clickable').live('mouseenter', function() {
@@ -186,8 +188,7 @@ function resizeSidebar() {
 	if(sidebarState == 0) {
 		// hide the sidebar 
 		$('.peekaboo-tohide').hide();
-		$('.peekaboo').html('&raquo;');
-		$('.peekaboo').addClass('peekaboo-big');
+		$('.peekaboo-show').show();
 		$('.sidebar').animate({width: 15}, 'slow', function() {
 			$('.main').addClass('main-big');
 			
@@ -200,6 +201,7 @@ function resizeSidebar() {
 		// temp development width
 		$('.sidebar').animate({width: 265}, 'slow', function() {
 			$('.peekaboo-tohide').show();
+			$('.peekaboo-show').hide();
 			
 			// hide the map legend if necessary
 			var tabs = $('#tabs').tabs();
@@ -207,9 +209,7 @@ function resizeSidebar() {
 			if(selected != 2) {
 				$('.mapLegendContainer').hide();
 			}			
-			
-			$('.peekaboo').removeClass('peekaboo-big');
-			$('.peekaboo').text('Hide Menu');
+
 			$('.main').removeClass('main-big');
 	
 			// resize the map

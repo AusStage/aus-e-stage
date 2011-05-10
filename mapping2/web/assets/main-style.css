@@ -151,6 +151,11 @@ html, body {
 	font-size: 150%;
 }
 
+.peekaboo-small {
+	float: right; 
+	padding-right: 1em;
+}
+
 /* style anchor tags */
 a {
 	/* same colour as f-189 */
