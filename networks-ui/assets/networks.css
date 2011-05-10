@@ -107,7 +107,8 @@ html, body {
 
 /*anchor tags*/
 a {
-        color: #3300ff;
+		color: #001BCC;
+        /*color: #3300ff;*/
         text-decoration: none;
 }
 
@@ -117,14 +118,17 @@ a:hover {
 
 /*main*/
 .main {
-        margin-left: 275px;
+        margin-left: 300px;
         min-height: 100%;
-        width:auto;
-        padding:10px;
-        background:#ffffff;
-        font-size: 80%;
-        font-family:Helvetica,Arial;
-	    color:#333333;	    
+}
+
+.main2{
+		margin-left:275px;
+		min-height: 100%;
+}
+
+.main p {
+	margin: 1em 0;
 }
 
 /*sidebar*/
@@ -133,7 +137,7 @@ a:hover {
     padding-left: 10px;
     padding-right: 10px
     overflow: hidden;
-    width: 250px;
+    width: 265px;
     padding-bottom: 32767px;
     margin-bottom: -32767px;
 }
@@ -150,6 +154,10 @@ a:hover {
         text-decoration: none;
 }
 
+.sidebar li {
+		margin-bottom: 0.25em;
+}
+
 .sidebar a:hover {
         text-decoration: underline;
 }
@@ -161,12 +169,12 @@ a:hover {
         padding-bottom: 0px;
 }
 
-h2 {
+/*h2 {
         margin:0 0 1em;
         font-size: 110%;
 
 }
-
+*/
 /* Styles for forms */
 table.formTable{
 		padding:0px;
@@ -285,6 +293,7 @@ table.searchResults td a {
 
 /* Legend style components. */
 .legendHeader {
+		width:263px;
         font-weight:normal;
         margin:0 0 0 0;
         font-size:14px;
@@ -418,7 +427,46 @@ table.searchResults td a {
 	cursor:pointer;
 }
 
+/* Styles of the screen grab on the home page.  */
 
+ul.services {
+        display: inline;
+}
+
+ul.services img {
+        padding-top: 9px;       
+} 
+
+ul.services a img , ul.services a p {
+        text-decoration: none;
+        color: #333;
+        border: 0px;
+} 
+
+ul.services p {
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+}
+
+ul.services a:hover img , ul.services a:hover p {
+        text-decoration: none;
+        color: #333;    
+} 
+
+ul.services li {
+        float: left;
+        list-style: none;
+        width: 230px;
+        border: 1px dotted #666;
+        padding: 10px 10px 0px 10px;    
+        margin: 10px 10px 0px 10px;     
+        min-height: 250px;
+}
+
+.clear {
+        clear: both;
+        padding-top: 1em;
+}
 
 
 /* Styles for the Tipsy Library */

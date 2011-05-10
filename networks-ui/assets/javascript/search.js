@@ -115,7 +115,7 @@ SearchClass.prototype.getData = function(query) {
 	}
 	
 	query_string = searchObj.BASE_URL+'task=contributor&type='+type+'&query='+query+'&limit='+searchObj.QUERY_LIMIT+'&callback=?';
-				
+	console.log(query_string);			
 	showMessage(searchObj.CONTRIBUTOR_SEARCH_MSG, '#search_status');
 	
 	//request json data for contributors
@@ -129,6 +129,7 @@ SearchClass.prototype.getData = function(query) {
 			searchObj.displayContributorResults(json);
 			showMessage(searchObj.EVENT_SEARCH_MSG, '#search_status');
 			query_string = searchObj.BASE_URL+'task=event&type='+type+'&query='+query+'&limit='+searchObj.QUERY_LIMIT+'&callback=?';
+			console.log(query_string);
 			$.jsonp({
 				url:query_string,
 				error:function(error){hideMessage('#search_status');
