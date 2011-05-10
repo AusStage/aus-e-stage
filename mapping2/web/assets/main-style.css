@@ -522,6 +522,24 @@ table.mapLegendTable th {
 #timeSlider {
 	padding-top: 5px;
 }
+
+/* styles for the dialogs */
+
+.dialogs {
+	font-size: 90%;
+}
+
+.dialogs h3 {
+	margin-bottom: 1em;
+}
+
+.dialogs p {
+	margin-bottom: 1em;
+}
+
+.dialogs table {
+	margin-bottom: 1em;
+}
 	
 
 
