@@ -36,7 +36,7 @@
 </head>
 <body>
 <div id="wrap">
-	<div id="header"><h1>AusStage Mapping Service (Beta)</h1></div>
+	<div id="header"><h1>Mapping Events (Alpha)</h1></div>
 	<div id="nav">
 	</div>
 	<!-- Include the sidebar -->
