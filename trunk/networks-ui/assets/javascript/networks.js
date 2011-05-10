@@ -25,6 +25,9 @@ $(document).ready(function(){
 	// style the buttons
 	$("button, input:submit").button();
 	
+	// associate tipsy with the span element
+    $('.use-tipsy').tipsy({live: true})
+	
 	//style the search results accordions - different to legend accordions- legend accordions have been defined by me to be able 
 	//to use anchor links in the header
 	 $(".accordion").accordion({collapsible:true, active:false, autoHeight: false });

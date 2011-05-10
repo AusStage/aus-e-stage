@@ -42,7 +42,7 @@ function buildInfoMsgBox(text) {
  //create the legend
 function createLegend(element){
 	$(element).button({ icons: {primary:'ui-icon-triangle-1-e',secondary:null}});
-    $(element).css({'text-align':'left', width: '248px', 'padding': '0 0 0 0', 'margin':'0 0 0 0'});
+    $(element).css({'text-align':'left', 'padding': '0 0 0 0', 'margin':'0 0 0 0'});
     
     $(element).click(function () {
     	if(allowToggle){

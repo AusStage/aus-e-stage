@@ -129,6 +129,7 @@ ContributorViewerClass.prototype.destroy = function(){
 //render the graph
 ContributorViewerClass.prototype.renderGraph = function(json){
 	this.json = json;
+	console.log(json);
 	//prepare data for render
 	this.prepareData();
 	initGraph(this);

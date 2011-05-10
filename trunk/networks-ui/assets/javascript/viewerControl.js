@@ -406,6 +406,7 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 		case 'CONTRIBUTOR':
 			viewer = new ContributorViewerClass(type);
 			//var obj = this;
+			console.log(BASE_URL+id+END_URL);
 			$.jsonp({
 				url:BASE_URL+id+END_URL,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},

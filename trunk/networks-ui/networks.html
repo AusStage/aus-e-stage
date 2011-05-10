@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" lang="en">
 <head>
-	<title>AusStage Navigating Networks</title>
+	<title>Navigating Networks</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
 
 	<!-- css -->
@@ -64,11 +64,18 @@
 <span id="ruler"></span>
 
 <div class="wrapper">
-	<div class="header b-187"><h1>AusStage Navigating Networks</h1></div>
+	<div class="header b-187"><h1>Navigating Networks</h1></div>
 
 	<!-- Sidebar -->
 	<div class="sidebar b-186 f-184">
-
+		<div class="mainMenu">	
+			<ul>
+				<li>&nbsp;</li>
+				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a></li>
+				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
+				<li><a href="index.html" title="Browse Contributor Network">Navigating Networks</a> </li>			
+			</ul>
+		</div>
 		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
 		<div id="network_details_div">
 			<div class="legendHeader" id="selected_object_header" ></div>
@@ -157,7 +164,7 @@
 	</div>
 
 	<!--main display window. -->
-	<div class="main">
+	<div class="main2 b-184 f-187">
 		<div id="tabs" class="tab-container"> 
 			<ul class="fix-ui-tabs" id="fix-ui-tabs">
 				<li><a href="#tabs-0">Search</a></li>
@@ -166,7 +173,7 @@
 			
 			<!--search tab-->
 			<div id="tabs-0">
-				<h2 style="margin-bottom: -5px;">Search the AusStage Database</h2>
+				<p style="margin-bottom: -5px;">Search the AusStage database</p>
 				<form name="search" action="">
 					<table class="formTable" style="height: 60px;">
 						<tbody>
@@ -174,6 +181,7 @@
 								<td>
 									<input type="search" size="40" id="query" name="query" /> 
 									<input type="submit" name="search_btn" id="search_btn" value="Search"/> 
+									<span id="show_search_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" title="Search Help"></span>
 								</td>
 								<td>
 									<div id="search_messages" class="js">
