@@ -239,7 +239,8 @@
 	<p>
 		This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
 		alternate names, and previous names. Please wait for the search to complete before exploring the results.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
 		that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database.			
 	</p>
@@ -248,13 +249,15 @@
 	<h3>Adding items to the map</h3>
 	<p>
 		Click the 'Add to Map' button to add the currently selected items to the map. The map will be displayed automatically.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		Alternatively to view the map click the 'Map' tab at the top of the page.
 	</p>
 	<h3>Browsing Areas to Find Venues</h3>
 	<p>
 		Click on the 'Venues' tab if you have not already done so.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		Click on an item to see a list of items at the next level, tick the box to select all items at lower levels
 	</p>
 </div>
@@ -262,13 +265,18 @@
 	<h3>AusStage Map Iconography</h3>
 	<p>
 		Map iconography refers to the way in which information is displayed on a map using icons. The AusStage mapping service uses a number of icons to display information on a map.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		The colour of an icon indicates the number records associated with the location.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		When a contributor or organisation is added to a map, one of a sequence of 48 colours will be assigned to that record. This individual colour will be used when there is only one organisation or contributor associated with the location.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		The iconography and colours used in AusStage maps is as follows:
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
+		&nbsp;
 	</p>
 	<p><strong>Map Icons and Colours</strong></p>
 	<table id="map_iconography_table" class="mapIconHelpTbl">
@@ -298,14 +306,20 @@
 		<tbody id="map_iconography_individual_colours">
 		</tbody>
 	</table>
-	<p><br/>&nbsp;<br/><strong>Marker Clusters</strong></p>
+	<p>
+		&nbsp;
+	</p>
+	<p><strong>Marker Clusters</strong></p>
 	<p>
 		When Marker Clustering is enabled markers on the map are clustered together based on how close they are on the map.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		When two or more markers are close enough to each other at the current map zoom level they are clustered together.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		A marker cluster is shown on the map using the icon below. 
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		The number shown on a marker cluster icon indicates the number of markers clustered together.
 	</p>
 	<div style="background-color: #c2d2e1; width:96px; height:96px;">
@@ -316,8 +330,6 @@
 	<h3>Are you sure?</h3>
 	<p>
 		Are you sure you want to delete the marker from the map?
-		<br/>
-		&nbsp;
 	</p>
 	<div id="map_legend_confirm_delete_text">
 	</div>
@@ -326,7 +338,8 @@
 	<h3>Are you sure?</h3>
 	<p>
 		Are you sure you want to reset the map and delete all markers from the map?
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		Please note your search history will be preserved and is available under the 'Search History' heading on the Search tab.
 	</p>
 </div>
@@ -334,9 +347,11 @@
 	<h3>Clustering cannot be disabled at this time</h3>
 	<p>
 		Clustering is automatically enabled when <span class="mlce_max"></span> markers are added to the map (including hidden markers).
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		If you feel the limit is too low, please contact the AusStage team
 	</p>
 </div>
@@ -344,7 +359,6 @@
 	<h3>Create a bookmark for this map</h3>
 	<p>
 		The link below will be a bookmark to this map including all of the contributors, organisations, venues and events that you have added to the map.
-		<br/>&nbsp;
 	</p>
 	<p>
 		It will not preserve any hidden markers or the selected time period in the time slider. 
@@ -360,7 +374,8 @@
 	<h3>A bookmark cannot be created for this map</h3>
 	<p>
 		Bookmarks are only available when the map contains less than <span class="mlce_max"></span> markers (including hidden markers).
-		<br/>&nbsp;<br/>
+	</p>
+	<p>
 		You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
 	</p>
 </div>
