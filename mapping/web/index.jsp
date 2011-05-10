@@ -31,12 +31,12 @@
 </head>
 <body>
 <div class="wrapper">
-	<div class="header b-187"><h1>Map Events in the AusStage database</h1></div>
+	<div class="header b-187"><h1>Mapping Events</h1></div>
 	<div class="sidebar b-186 f-184">
 		<!-- side bar content -->
 		<div class="mainMenu">
-			<h2>Main Menu</h2>
 			<ul>
+				<li>&nbsp;</li>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
 				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project">Aus-e-Stage Project</a></li>
 				<li><a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a></li>
@@ -46,7 +46,7 @@
 	<div class="main b-184 f-187" style="margin-left: 300px;">
 		<!-- main content -->
 		<p>
-			The <a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a> service provides an interface to enables researchers to search, display and visually analyse information about live performance on a map. It introduces geographic capabilities to research applications of AusStage dataset. It is one of three <a href="https://www.pfc.org.au/bin/view/Main/NeAT" title="NeAT homepage">NeAT</a> funded services to enhance the research capabilities of the <a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage</a> database.
+			The <a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a> service provides an interface to enables researchers to search, display and visually analyse information about live performance on a map. It introduces geographic capabilities to research applications of AusStage dataset. It is one of three <a href="http://www.pfc.org.au/bin/view/Main/NeAT" title="NeAT homepage">NeAT</a> funded services to enhance the research capabilities of the <a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage</a> database.
 		</p>
 		<p>
 			The Mapping Events has developed in two distinct phases.
@@ -57,15 +57,13 @@
 		</ol>
 		<ul class="services">
 			<li>
-				<a href="index2.jsp" title="Mapping Service (Alpha)">
-					<h3>Mapping Service (Alpha)</h3>
-					<img src="/assets/images/map-alpha-screengrab.jpg" width="200" height="150" alt="">
+				<a href="index2.jsp" title="Mapping Events (Alpha)">
+					<h3>Mapping Events (Alpha)</h3><img src="/assets/images/map-alpha-screengrab.jpg" width="200" height="150" alt="">
 				</a>
 			</li>
 			<li>
-				<a href="/mapping2/" title="Mapping Service (Beta)">
-					<h3>Mapping Service (Beta)</h3>
-					<img src="/assets/images/map-screengrab.jpg" width="200" height="150" alt="">
+				<a href="/mapping2/" title="Mapping Events (Beta)">
+					<h3>Mapping Events (Beta)</h3><img src="/assets/images/map-screengrab.jpg" width="200" height="150" alt="">
 				</a>
 			</li>
 		</ul>
@@ -74,7 +72,7 @@
 		</p>
 		<ul>
 			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceAPI" title="Direct link to the wiki page">Mapping Service API</a> - Information on the API used to retrieve data for building a map on a web page and exporting data in the KML format.</li>
-			<li><a hre="http://code.google.com/p/aus-e-stage/wiki/MappingServiceFeedback" title="Direct link to the wiki page">Mapping Service Feedback</a> - Detail of user feedback received development processes.</li>
+			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceFeedback" title="Direct link to the wiki page">Mapping Service Feedback</a> - Detail of user feedback received development processes.</li>
 			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceConsultancy" title="Direct link to the wiki page">Mapping Service Consultancy</a> - Documentation on the consultancy undertaken with the University of Sydney Archaeology Computing Laboratory.</li>
 			<li><a href="http://code.google.com/p/aus-e-stage/wiki/GoogleEarthImageOverlay" title="Direct link to the wiki page">Mapping How To Article</a> - Information on how to create an overlay for use in Google Earth.</li>
 		</ul>
