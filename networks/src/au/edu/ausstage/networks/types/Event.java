@@ -44,6 +44,14 @@ public class Event implements JSONAware, Comparable<Event>{
 		this.venue = venue;
 	}
 
+	public void setMyName(String value) {
+			name = value;
+	}
+	
+	public void setMyFirstDate(String value) {		
+			firstDate = value;		
+	}
+	
 	/**
 	 * constructor for this class
 	 *
