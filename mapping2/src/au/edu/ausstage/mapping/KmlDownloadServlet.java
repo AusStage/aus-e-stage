@@ -62,19 +62,19 @@ public class KmlDownloadServlet extends HttpServlet {
 		String[] events        = new String[0];
 
 		if(InputUtils.isValid(request.getParameter("contributors")) == true) {
-			contributors = request.getParameter("contributors").split(",");
+			contributors = request.getParameter("contributors").split("-");
 		}
 		
 		if(InputUtils.isValid(request.getParameter("organisations")) == true) {
-			organisations = request.getParameter("organisations").split(",");
+			organisations = request.getParameter("organisations").split("-");
 		}
 		
 		if(InputUtils.isValid(request.getParameter("venues")) == true) {
-			venues = request.getParameter("venues").split(",");
+			venues = request.getParameter("venues").split("-");
 		}
 		
 		if(InputUtils.isValid(request.getParameter("events")) == true) {
-			events = request.getParameter("events").split(",");
+			events = request.getParameter("events").split("-");
 		}
 		
 		// instantiate a connection to the database
@@ -126,8 +126,8 @@ public class KmlDownloadServlet extends HttpServlet {
 	public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		// don't respond to get requests
-		//throw new ServletException("Invalid Request Type");
-		doPost(request, response);
+		throw new ServletException("Invalid Request Type");
+		//doPost(request, response);
 		
 	} // end doGet method
 

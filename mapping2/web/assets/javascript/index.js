@@ -28,6 +28,7 @@ $(document).ready(function(){
 	mapLegendObj = new MapLegendClass();
 	timelineObj  = new TimelineClass();
 	bookmarkObj  = new BookmarkClass();
+	downloadObj  = new DownloadClass();
 
 	/*
 	 * page setup
@@ -44,6 +45,9 @@ $(document).ready(function(){
 	
 	// initialise the bookmark class
 	bookmarkObj.init();
+	
+	// initialise the download class
+	downloadObj.init();
 	
 	// setup the tabs
 	$("#tabs").tabs();
