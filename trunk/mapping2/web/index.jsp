@@ -52,6 +52,7 @@
 	<script type="text/javascript" src="assets/javascript/map-legend.js"></script>
 	<script type="text/javascript" src="assets/javascript/timeline.js"></script>
 	<script type="text/javascript" src="assets/javascript/bookmark.js"></script>
+	<script type="text/javascript" src="assets/javascript/download.js"></script>
 	<!-- prevent a FOUC -->
 	<script type="text/javascript">
 		$('html').addClass('js');
