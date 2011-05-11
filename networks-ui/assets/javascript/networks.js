@@ -55,6 +55,30 @@ $(document).ready(function(){
 		}
 	
 	 });
+	 
+	//set up the search help
+	 $("#help_search_div").dialog({
+     	autoOpen: false,
+        height: 400,
+        width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+					$(this).dialog('close');
+				}
+    	    },
+	        open: function() {
+
+			},
+			close: function() {
+
+			}
+        });
+
+        $("#show_search_help").click(function() {
+                $("#help_search_div").dialog('open');
+        });
+	
 
 });
 
@@ -82,8 +106,6 @@ function addResultsClick(event){
 				$('#searchAddEventError').append(buildInfoMsgBox(searchObj.NO_EVENT_SELECTED));	
 				break;
 			}			
-			//navigate to the viewer
-		  	alert('only static data is available for event to event netwoks at present, retrieve '+$('#eventDegree :selected').text() +' network');
 		  	$('#tabs').tabs('select', 1);	
 			viewerControl.displayNetwork('EVENT', viewerControl.selectedEvent.id[0], 1);
 			break;

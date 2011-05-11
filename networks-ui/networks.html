@@ -17,7 +17,8 @@
 	<link rel="stylesheet" href="assets/jquery-ui/common.css" type="text/css" />
 	<!-- libraries --> 
     <script type="text/javascript" src="assets/javascript/libraries/protovis-r3.2.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<!--<script type="text/javascript" src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>-->
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.6.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.4.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
@@ -93,10 +94,10 @@
 				<div class='innerHeader'>Label Display</div>
 				<div id="display_labels_div">
 					<input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" />
-					<label for="showContributors">Show ALL contributor names</label>
+					<label for="showContributors">Show all contributor names</label>
 					<br>
 					<input type="checkbox" name="showRelatedContributors" class="checkbox" id="show_contrib_check" />
-					<label for="showContributors">Show RELATED contributor names</label>
+					<label for="showContributors">Show related contributor names</label>
 				</div>
 				<div id="display_event_labels_div">
 					<input type="checkbox" name="showContributors" class="checkbox" id="show_contrib_check" />
@@ -141,7 +142,7 @@
 					<tr>
 						<td>
 							<input type="checkbox" name="showCustVis" class="checkbox" id="show_cust_vis"/>
-							<label for="showCustVis">Show user-hidden elements</label>
+							<label for="showCustVis">Show hidden elements</label>
 						</td>
 						<td class='alignRight'>					
 							<a href='#' id='reset_cust_vis'>reset &nbsp;</a>
@@ -262,5 +263,17 @@
 </div>
 <div class="footer b-186">
 </div>
+<!-- help divs -->
+<div id="help_search_div" class='dialogs' title="Help on Searching" style="font-size: 90%">
+        <h3>Searching the AusStage database</h3>
+        <p>This is a simplified search page that returns results in the two categories outlined below. A search result will contain all of 
+        	your search terms in the search index, including such items as
+            alternate names, and previous names. Please wait for the search to complete before exploring the results.
+            <br/>&nbsp;<br/>
+          	At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search 
+          	terms.
+        </p>
+</div>
+
 </body>
 </html>
