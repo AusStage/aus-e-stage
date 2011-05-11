@@ -19,17 +19,17 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task   || ego-centric-network || No || ||
-|| id     || unique contributor id || No || ||
+|| task   || ego-centric-network / event-centric-network || No || ||
+|| id     || unique contributor id / event id || No || ||
 || radius || Integer between 1 and 3 ||	 Yes || 1 ||
 || simplify || Boolean || Yes || true ||
 || callback || function name to use for a JSONP request || Yes || ||
 
 === task ===
-The task parameter defines the type of export that is undertaken. Currently only one task is available which is an egocentric network for a contributor and their immediate collaborators. 
+The task parameter defines the type of export that is undertaken. Currently two tasks are available. They are ego-centric network and event-centric-network. 
 
 === id ===
-The id parameter defines the unique identifier of the contributor that is of interest.
+The id parameter defines the unique identifier of the contributor or event that is of interest.
 
 === radius ===
 The desired number of edges between the central node and the peripheral nodes of the network.
