@@ -109,6 +109,14 @@ public class Collaborator implements Comparable<Collaborator>{
 		return url;
 	}
 	
+	public void setGName(String value) {
+		givenName = value;
+	}
+	
+	public void setFName(String value) {
+		familyName = value;
+	}
+	
 	/**
 	 * A method to set a new givenName value
 	 *
