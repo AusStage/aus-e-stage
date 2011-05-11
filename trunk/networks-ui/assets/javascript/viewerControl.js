@@ -19,7 +19,9 @@
  /* Viewer Controller class. controls interaction elements, and viewer objects */
 
  	var BASE_URL = "http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id=";	
+ 	var BASE_URL_EVENT = "http://beta.ausstage.edu.au/networks/protovis?task=event-centric-network&id=";	 	
 	var END_URL = 	"&radius=1&callback=?"
+	var END_URL_EVENT ="&callback=?"	
  	
  	//messages
 	var VIEWER_NO_DATA_MSG = 'No data selected for network';
@@ -424,10 +426,34 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 			break;
 		case 'EVENT':
 			viewer = new EventViewerClass();
-			//build the url, use jsonp to get the data. 
-			viewer.renderGraph(events);
-			$('#viewerMsg').hide();
-			viewer.showInteraction();
+			var radius;
+			var simplify = false;
+			switch ($('#eventDegree option:selected').val()){
+				case '1': 
+					radius = 1;
+					console.log(1);
+					break;
+				case '2':
+					radius = 2;
+					console.log(1);					
+					break;					
+				case '3':	
+					radius = 2;
+					simplify = true;
+					console.log(1);					
+					break;					
+			}			
+			console.log(BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT);
+			$.jsonp({
+				url:BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT,
+				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
+				success:function(json){
+					$('#viewerMsg').empty().append(buildInfoMsgBox(VIEWER_LOADING_MSG)).show();					
+					viewer.renderGraph(json);
+					$('#viewerMsg').hide();
+					viewer.showInteraction();
+				}
+			})
 			break;	
 	}
 }

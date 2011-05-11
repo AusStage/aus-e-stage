@@ -159,7 +159,7 @@ SearchClass.prototype.displayEventResults = function(data){
 		
 		html += '<td style="text-align: center">'
 				+'<span id="'+data[i].id+'" class="eventAddIcon ui-icon ui-icon-plus clickable" style="display: inline-block;"></span></td>';
-		html += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name 				+ '</a></td>';		
+		html += '<td class="nowrap"><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name 				+ '</a></td>';		
 		html += '<td class="nowrap">' + data[i].venue.name + ' ';
         
         if(data[i].venue.suburb != null) {
@@ -178,8 +178,10 @@ SearchClass.prototype.displayEventResults = function(data){
 	}
 	html+= '</tbody><tfoot><tr>'
 			+'<td colspan="3" style="vertical-align:middle"><div id="selected_event"></div></td>'
-			+'<td class="alignRight">'
-			+'<select id="eventDegree" disabled="disabled"> <option>1st Degree</option><option>2nd Degree</option></select>'
+			+'<td colspan="1" class="alignRight nowrap">'
+			+'<select id="eventDegree" disabled="disabled"> '
+			+'<option value="1">1st Degree</option><option value="2">2nd Degree</option>'
+			+'<option value="3">2nd Degree - simple</option></select>&nbsp;'
 			+'<button id="viewEventNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
 			+'<tr><td colspan="4"><div id="searchAddEventError"></div></td></tr>'
 			+'</tfoot></table>';
@@ -231,8 +233,8 @@ SearchClass.prototype.displayContributorResults = function(data){
 		html += '</td><td class="alignRight numeric">' + data[i].totalEventCount + '</td></tr>';
 	}	
 	html+= '</tbody><tfoot><tr>'
-			+'<td colspan="4" style="vertical-align:middle"><div id="selected_contributors" style="display: inline"></div></td>'
-			+'<td class="alignRight"><button id="viewContributorNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
+			+'<td colspan="3" class="nowrap" style="vertical-align:middle"><div id="selected_contributors" style="display: inline"></div></td>'
+			+'<td colspan="2" class="alignRight"><button id="viewContributorNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
 			+'<tr><td colspan="5"><div id="searchAddContributorError"></div></td>';
     if(i > 0) {
 

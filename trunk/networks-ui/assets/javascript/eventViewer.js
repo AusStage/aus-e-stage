@@ -153,7 +153,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 	//***************/
 	//NODE
 	if (what == NODE){
-
+		console.log(this.json);
 		//set the title to the event.
 		titleHtml = "<a class=\"titleLink\" href=" + eventUrl +""+ this.json.nodes[this.nodeIndex].id+" target=\"_blank\">"+
 										this.json.nodes[this.nodeIndex].nodeName+"</a><p>"+
@@ -166,7 +166,9 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
     		var lastName = this.json.nodes[this.nodeIndex].contributor_name[i].split(" ")[1];
     		contributorList[i] = {name:lastName,
     		 					  fullName: this.json.nodes[this.nodeIndex].contributor_name[i],
-    					   		  id: this.json.nodes[this.nodeIndex].contributor_id[i]}		
+    					   		  id: this.json.nodes[this.nodeIndex].contributor_id[i],
+    					   		  roles: this.json.nodes[this.nodeIndex].contributor_roles[i],    					   		   
+    					   		 }		
     	}
     	contributorList.sort(sortByName);    	
 		//create the list of contributors
@@ -175,7 +177,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 			 else tableClass = "d1";
 			html += "<tr class=\""+tableClass+"\"><td><a href=" + contributorUrl +""+ contributorList[i].id+" target=\"_blank\">"+
 								contributorList[i].fullName +"</a>"+
-								"<p>"+"Role Not Yet Supported"+"</p></td></tr>" 	
+								"<p>"+contributorList[i].roles+"</p></td></tr>" 	
 		}
 	  
 		html += "</table><br>";	  
@@ -187,7 +189,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 	
 		titleHtml = "<a class=\"titleLink\" href=" + contributorUrl +""+ this.json.edges[this.edgeIndex].id+" target=\"_blank\">"+
 					this.json.edges[this.edgeIndex].name+"</a> <p>"+
-    				this.json.edges[this.edgeIndex].role+			
+    				this.json.edges[this.edgeIndex].roles+			
 					"</p>";		
 	
 		var x = 0;
@@ -308,6 +310,7 @@ EventViewerClass.prototype.getStats = function(){
 		this.json.nodes[i].contributor_index = [];
 		this.json.nodes[i].contributor_id = [];
 		this.json.nodes[i].contributor_name = [];
+		this.json.nodes[i].contributor_roles = [];		
 		this.json.nodes[i].neighbors = [];
 		
 		var index_count = 0;
@@ -331,6 +334,7 @@ EventViewerClass.prototype.getStats = function(){
 				if (!contains(this.json.nodes[i].contributor_id, this.json.edges[x].id)){
 					this.json.nodes[i].contributor_id[id_count] = this.json.edges[x].id;
 					this.json.nodes[i].contributor_name[id_count] = this.json.edges[x].name;
+					this.json.nodes[i].contributor_roles[id_count] = this.json.edges[x].roles;					
 					id_count++;
 				}
 				
@@ -350,6 +354,7 @@ EventViewerClass.prototype.getStats = function(){
 				if (!contains(this.json.nodes[i].contributor_id, this.json.edges[x].id)){
 					this.json.nodes[i].contributor_id[id_count] = this.json.edges[x].id;
 					this.json.nodes[i].contributor_name[id_count] = this.json.edges[x].name;
+					this.json.nodes[i].contributor_roles[id_count] = this.json.edges[x].roles;					
 					id_count++;
 				}
 
@@ -451,6 +456,8 @@ EventViewerClass.prototype.layout = function(beforeCount, afterCount){
 	var afterIndex = 2;
 	var linkDegree = 0;
 	var x = 1;
+	var xafter;
+	var iafter;
 	
 	for(i = 0;i<this.json.nodes.length; i ++){
 		
@@ -482,35 +489,40 @@ EventViewerClass.prototype.layout = function(beforeCount, afterCount){
 						}
 	    				alternate = 0; 
 						break;
-			}	
-		}
-	    
-		if (!before && (!this.json.nodes[i].central)){
-			switch (alternate){
-				case 0: 
-						if(linkDegree < this.json.nodes[i].linkDegree){
-							this.json.nodes[i].top = range - (step*(x-afterIndex));
-							x++;
-						}
-						else{						
-							this.json.nodes[i].top = range - (step*(i-afterIndex));
-						}
-		        		alternate = 1;
-		        		afterIndex = afterIndex + 2;
-		        		break;
+				}	
+			}
+		  	if(this.json.nodes[i].central){
+		  		xafter = x;
+			  	iafter = i;
+	  		}
+	  
+		  	if (!before && (!this.json.nodes[i].central)){
+				switch (alternate){
+					case 0: 
+							if(linkDegree < this.json.nodes[i].linkDegree){
+								this.json.nodes[i].top = range - (step*(xafter));
+								xafter--;
+							}
+							else{						
+								this.json.nodes[i].top = range - (step*(iafter));
+								iafter--;
+							}
+			        		alternate = 1;
+
+			        		break;
 		        				
-				case 1: 
-						if(linkDegree < this.json.nodes[i].linkDegree){
-							this.json.nodes[i].top = range + (step*(x-afterIndex));
-							x++;
-						}
-						else{				
-							this.json.nodes[i].top = range + (step*(i-afterIndex));
-						}
-		    			alternate = 0;
-		        		afterIndex = afterIndex + 2;
-						break;
-			}	
+					case 1: 
+							if(linkDegree < this.json.nodes[i].linkDegree){
+								this.json.nodes[i].top = range + (step*(xafter));
+								xafter--;
+							}
+							else{				
+								this.json.nodes[i].top = range + (step*(iafter));
+								iafter--;
+							}
+		    				alternate = 0;
+							break;
+			}	  
 		}
 		linkDegree = this.json.nodes[i].linkDegree;
 	}	
