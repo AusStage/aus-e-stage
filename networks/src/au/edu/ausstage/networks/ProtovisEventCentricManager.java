@@ -36,6 +36,7 @@ import au.edu.ausstage.networks.types.*;
 public class ProtovisEventCentricManager {
 	
 	public DatabaseManager   db    = null;
+	public DataManager rdf = null;
 	public Map<Integer, Set<Integer>> evtId_conSet_map = new HashMap<Integer, Set<Integer>>();
 	public Map<Integer, List<Event>> conId_sortedEvtList_map = new HashMap<Integer, List<Event>>();
 	public Map<Integer, Event> evtId_evtObj_map = new HashMap<Integer, Event>();
@@ -46,6 +47,7 @@ public class ProtovisEventCentricManager {
 	public Set<Integer>[][] edgeMatrix;
 	public int central_eventId;	
 	public boolean debug = false;
+	public boolean viaRDF = false;
 	
 	//first_date comparator used to sort Event nodes
 	Comparator<Event> CHRONOLOGICAL_ORDER =
@@ -84,6 +86,11 @@ public class ProtovisEventCentricManager {
 		if(db.connect() == false) {
 			throw new RuntimeException("Error: Unable to connect to the database");
 		}
+	}
+	
+	public ProtovisEventCentricManager(DataManager rdf) {
+		this.rdf = rdf;
+		this.viaRDF = true;
 	}
 	
 	/**
@@ -140,7 +147,9 @@ public class ProtovisEventCentricManager {
 			preNthDegreeNodeSet.addAll(vertexSet);
 			nthDegreeNodeSet.removeAll(preNthDegreeNodeSet);
 			vertexSet = nthDegreeNodeSet;
-				
+			/*difference = new HashSet<Integer>(nodeSet);
+			difference.removeAll(vertexSet);
+			vertexSet = difference;*/		
 		}
 				
 		if (nodeSet != null ){
@@ -298,7 +307,8 @@ public class ProtovisEventCentricManager {
 			boolean[] isVisited = new boolean[numOfNodes];
 			//cycle from start to current node
 			ArrayList<Integer> trace = new ArrayList<Integer>();
-						
+			
+			//System.out.println("Detect Cycle for contributor: " + cID);
 			for (int i = 0; i < numOfNodes; i++)
 				 findCycle(cID, i, isVisited, trace); //started from the second earliest event   
 		}		
@@ -374,11 +384,10 @@ public class ProtovisEventCentricManager {
 						
 		//add edges to JSONArray
 		for (int i = 0; i < edges.length; i++){
-			
+			//System.out.println("*** i = " + i + " ******************************");
 			eID = nodes.get(i).getIntId();
 			
 			for (int j = i + 1; j < edges[i].length; j++){
-				
 				conSet = edges[i][j];
 				if (!conSet.isEmpty()) {
 
@@ -391,7 +400,8 @@ public class ProtovisEventCentricManager {
 						} else {								
 							con = getContributorDetail(eID, cID, true);	
 						}
-				
+						//System.out.println("Source Event ID: " + eID + "   Contributor ID: " + cID);
+
 						if (con != null)
 							json_edges.add(con.toJSONObj(i, j, eID));
 						else {
@@ -421,13 +431,14 @@ public class ProtovisEventCentricManager {
 	 *
 	 * @return a completed event object
 	 */
+	@SuppressWarnings("null")
 	private Event getEventDetail(int evtId) {
 		
 		Event evt = null;
 		
 		String sql = "SELECT DISTINCT e.eventid, e.event_name, e.first_date, v.venue_name "
 					+ "FROM events e, venue v "
-					+ "WHERE e.eventid = ? " 
+					+ "WHERE e.eventid = ? " 	//+ evtId
 					+ "AND e.venueid = v.venueid "
 					+ "ORDER BY e.eventid";
 
@@ -448,13 +459,18 @@ public class ProtovisEventCentricManager {
 			while (results.next() == true) {
 				int e_id = results.getInt(1);
 				String name = results.getString(2);
-				Date date = results.getDate(3);
+				String date = results.getDate(3).toString();
 				String venue = results.getString(4);
 
 				evt = new Event(Integer.toString(e_id));
-				evt.setName(results.getString(2));
-				evt.setFirstDate(results.getDate(3).toString());
-				evt.setVenue(results.getString(4));
+				// evt.setId(resultSet.getString(1));
+				if (name != null || !name.trim().equals(""))
+					evt.setName(name);
+				
+				if (date != null || !date.trim().equals(""))
+					evt.setFirstDate(date);
+				
+				evt.setVenue(venue);
 			}
 			evtId_evtObj_map.put(evtId, evt);
 			
@@ -481,17 +497,16 @@ public class ProtovisEventCentricManager {
 		
 		String sql = "SELECT DISTINCT c.contributorid, c.first_name, c.last_name, cfp.preferredterm "
 			+ "FROM conevlink ce, contributor c, contributorfunctpreferred cfp "
-			+ "WHERE c.contributorid = ? " 
-			+ " AND ce.eventid = ? "  
+			+ "WHERE c.contributorid = ? " //+ conId
+			+ " AND ce.eventid = ? " //+ evtId 
 			+ " AND ce.contributorid = c.contributorid "	
 			+ "AND ce.function = cfp.contributorfunctpreferredid";
 		
 		String sql_1 = "SELECT DISTINCT c.contributorid, c.first_name, c.last_name, NVL(ce.function, 0) "
 			+ "FROM conevlink ce, contributor c "
-			+ "WHERE c.contributorid = ? " 
-			+ " AND ce.eventid = ? "  
+			+ "WHERE c.contributorid = ? " //+ conId
+			+ " AND ce.eventid = ? " //+ evtId 
 			+ " AND ce.contributorid = c.contributorid ";			
-				
 		
 		int[] param = {conId, evtId};
 		//execute sql statement
@@ -503,6 +518,7 @@ public class ProtovisEventCentricManager {
 				db.finalize();				
 				functionIsNull = true;
 				
+				//results = db.exeStatement(sql_1);
 				results = db.exePreparedStatement(sql_1, param);		
 				if (!results.last()){	//there is no collaborator associated with the event	
 					db.finalize();
@@ -532,8 +548,10 @@ public class ProtovisEventCentricManager {
 			if (!exist){
 				// create a new contributor
 				con = new Collaborator(c_id);
-				con.setGivenName(f_name);
-				con.setFamilyName(l_name);
+				if (f_name != null || !f_name.trim().equals(""))
+					con.setGivenName(f_name);
+				if (l_name != null || !l_name.trim().equals(""))
+					con.setFamilyName(l_name);
 				con.setEvtRoleMap(evtId, roles);
 			}else {
 				//add roles to the eventRoleMap
@@ -543,6 +561,7 @@ public class ProtovisEventCentricManager {
 			}
 			
 		} catch (java.sql.SQLException ex) {
+			//System.out.println(ex);
 			results = null;			
 		}
 		
@@ -556,7 +575,7 @@ public class ProtovisEventCentricManager {
 		
 		String sql = "SELECT DISTINCT contributorid "
 					+ "FROM conevlink "
-					+ "WHERE eventid = ? " 	 					
+					+ "WHERE eventid = ? " 	//+ eventId 					
 					+ " ORDER BY contributorid";
 
 		conSet = getResultfromDB(sql, eventId);
@@ -573,15 +592,26 @@ public class ProtovisEventCentricManager {
 		
 		String sql = "SELECT DISTINCT eventid "
 			+ "FROM conevlink "
-			+ "WHERE contributorid = ? " 	 					
+			+ "WHERE contributorid = ? " 	//+ conId 					
 			+ " ORDER BY eventid";
 
 		evtSet = getResultfromDB(sql, conId);		
 		
 		if (evtSet != null) {
 		  	List<Event> sortedEvtList = selectBatchingEventDetails(evtSet);
+		/*List<Event> sortedNodeList =  new ArrayList<Event>();
+		for (Iterator it = evtSet.iterator(); it.hasNext(); ) {
+			eID = (Integer)it.next();
+			if (eID != 0) { //the eID could be 0 after changing null to integer
+				evt = getEventDetail(eID);
+				if (evt != null)
+					sortedNodeList.add(evt);
+				else 
+					System.out.println("event ID: " + eID + " is null in conevlink table! and associated conID is: " + conId);
+			}
+		}*/
 		
-		  	//sort the events according to firstdate to select immediate-prior and after events.
+		//sort the events according to firstdate to select immediate-prior and after events.
 		  	Collections.sort(sortedEvtList, CHRONOLOGICAL_ORDER);
 		
 		  	if (debug){
@@ -612,7 +642,9 @@ public class ProtovisEventCentricManager {
 		
 		if (priorEvtID != 0 ) priorAfterSet.add(priorEvtID);
 		if (afterEvtID != 0) priorAfterSet.add(afterEvtID);
-			
+		
+		//System.out.println("Date: " + event.getFirstDate() + " --PriorEvtID: " + priorEvtID + "  PriorDate: " + priorDate + " --AfterEvtID: " + afterEvtID + "  AfterDate: "+ afterDate);
+		
 		//the priorAfterSet could be empty: no prior and after events
 		//the priorAfterSet could only have prior event or after event
 		//the priorAfterSet could have both prior and after events.
@@ -700,13 +732,18 @@ public class ProtovisEventCentricManager {
 				while (results.next() == true) {
 					int e_id = results.getInt(1);
 					String name = results.getString(2);
-					Date date = results.getDate(3);
+					String date = results.getDate(3).toString();
 					String venue = results.getString(4);
 
 					evt = new Event(Integer.toString(e_id));
-					evt.setName(results.getString(2));
-					evt.setFirstDate(results.getDate(3).toString());
-					evt.setVenue(results.getString(4));
+					// evt.setId(resultSet.getString(1));
+					if (name != null || !name.trim().equals(""))
+						evt.setName(name);
+					
+					if (date != null || !date.trim().equals(""))
+						evt.setFirstDate(date);
+					
+					evt.setVenue(venue);
 					evtList.add(evt);
 					evtId_evtObj_map.put(e_id, evt);
 					j++;
@@ -749,7 +786,12 @@ public class ProtovisEventCentricManager {
 	}
 	
 	public void printDebugInfo(){
-		
+		// print union set
+		/*System.out.println("========= nodeSet: ===========");
+		System.out.println("Number of nodes: " + nodeSet.size());
+		for (Object element : nodeSet) {
+			System.out.print(element.toString() + " ");
+		}*/
 		System.out.println("========== Sorted node list: ===========");
 		printSortedNode(sortedNodeList);
 
@@ -757,7 +799,8 @@ public class ProtovisEventCentricManager {
 		System.out.println();
 		System.out.println("=========== conId_sortedEvtList_map: ==========");
 		System.out.println("Number of contributors in the map: " + conId_sortedEvtList_map.size());
-		for (Map.Entry<Integer, List<Event>> e : conId_sortedEvtList_map.entrySet()){		    
+		for (Map.Entry<Integer, List<Event>> e : conId_sortedEvtList_map.entrySet()){
+		    //System.out.println(e.getKey() + ": " + e.getValue());
 			System.out.println("cID: " + e.getKey());
 			int numOfNodes = e.getValue().size();
 			
@@ -795,5 +838,5 @@ public class ProtovisEventCentricManager {
 		}	
 		
 	}
-	
+
 }
