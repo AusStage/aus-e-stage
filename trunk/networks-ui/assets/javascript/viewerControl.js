@@ -462,5 +462,6 @@ function closeLegends(){
 	resetLegend('#functions');	
 	resetLegend('#gender');	
 	resetLegend('#nationality');	
-	resetLegend('#criteria');				
+	resetLegend('#criteria');
+	resetLegend('#faceted');				
 }
