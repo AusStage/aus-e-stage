@@ -202,6 +202,7 @@ function initGraph(obj){
 
 //refresh network 
 ContributorViewerClass.prototype.refreshGraph = function(typeOfRefresh){
+	console.log('helloooooo');
 	if(typeOfRefresh == "dateRange"){
 		this.resetDateRangeVisibility();
 	}
@@ -222,7 +223,7 @@ ContributorViewerClass.prototype.showInteraction = function(){
 			$('#network_details_div').show();
 		}
 		$("#network_properties_div").show();//show network properties	
-		$("#faceted_browsing_btn_div").show();//show faceted browsing on/off		
+		$("#faceted_div").show();//show faceted browsing on/off		
 		$('#timeSlider').show();
 	}
 }
@@ -233,8 +234,7 @@ ContributorViewerClass.prototype.hideInteraction = function(){
 	$("#display_edges_div").hide();//show display edges options		
 	$('#network_details_div').hide();
 	$("#network_properties_div").hide();//show network properties	
-	$("#faceted_browsing_btn_div").hide();//show faceted browsing on/off
-	$('#faceted_browsing_div').dialog('close');			
+	$("#faceted_div").hide();//show faceted browsing on/off
 	$('#timeSlider').hide();
 }
 

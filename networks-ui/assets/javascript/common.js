@@ -40,7 +40,7 @@ function buildInfoMsgBox(text) {
 
 
  //create the legend
-function createLegend(element){
+function createLegend(element, openFunction, closeFunction){
 	$(element).button({ icons: {primary:'ui-icon-triangle-1-e',secondary:null}});
     $(element).css({'text-align':'left', 'padding': '0 0 0 0', 'margin':'0 0 0 0'});
     
@@ -49,8 +49,15 @@ function createLegend(element){
 			$(this).toggleClass("open");
 			if($(this).hasClass("open")){
 				$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-s',secondary:null} );
+				if(openFunction){
+					openFunction();
+				}
 			} else{
 				$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-e',secondary:null} );					
+				if(closeFunction){
+					closeFunction();
+				}
+				
 			}
 			$(element).next().slideToggle();
     	}else{

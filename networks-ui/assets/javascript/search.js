@@ -182,7 +182,10 @@ SearchClass.prototype.displayEventResults = function(data){
 			+'<select id="eventDegree" disabled="disabled"> '
 			+'<option value="1">1st Degree</option><option value="2">2nd Degree</option>'
 			+'<option value="3">2nd Degree - simple</option></select>&nbsp;'
-			+'<button id="viewEventNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
+			+'<button id="viewEventNetwork" class="addSearchResult" disabled="disabled">View Network</button>'
+			+'<span id="view_event_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" '
+			+'title="View Network Help">'
+			+'</span></td></tr>'
 			+'<tr><td colspan="4"><div id="searchAddEventError"></div></td></tr>'
 			+'</tfoot></table>';
 
@@ -234,7 +237,11 @@ SearchClass.prototype.displayContributorResults = function(data){
 	}	
 	html+= '</tbody><tfoot><tr>'
 			+'<td colspan="3" class="nowrap" style="vertical-align:middle"><div id="selected_contributors" style="display: inline"></div></td>'
-			+'<td colspan="2" class="alignRight"><button id="viewContributorNetwork" class="addSearchResult" disabled="disabled">View Network</button></td></tr>'
+			+'<td colspan="2" class="alignRight">'
+			+'<button id="viewContributorNetwork" class="addSearchResult" disabled="disabled">View Network</button>'
+			+'<span id="view_contributor_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" '
+			+'title="View Network Help"></span>'
+			+'</td></tr>'
 			+'<tr><td colspan="5"><div id="searchAddContributorError"></div></td>';
     if(i > 0) {
 

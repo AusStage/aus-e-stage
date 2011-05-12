@@ -56,11 +56,8 @@ ViewerControlClass.prototype.init = function() {
 	//common setup for network viewer
 	$('#viewerMsg').append(buildInfoMsgBox(VIEWER_NO_DATA_MSG));	
 
-	//hide the faceted browsing button
-	$("#faceted_browsing_btn_div").hide();
-
 	//hide the faceted browsing
-	$("#faceted_browsing_div").hide();
+	$("#faceted_div").hide();
 
 	//hide the viewer options
 	$("#viewer_options_div").hide();
@@ -76,23 +73,19 @@ ViewerControlClass.prototype.init = function() {
 
 		//SET UP INTERACTION 
 	//style the legend
-	createLegend("#network_properties_header", this);
-	createLegend("#selected_object_header", this);
-	createLegend("#viewer_options_header", this);
+	createLegend("#network_properties_header");
+	createLegend("#selected_object_header");
+	createLegend("#viewer_options_header");
 	//style the faceted browsing optionf
-	createLegend("#functions_header", this);
-	createLegend("#gender_header", this);
-	createLegend("#nationality_header", this);	
-	createLegend("#criteria_header", this);		
-	
-	//set up browsing button
-    $("#faceted_browsing_btn").click(function() {
-		$("#faceted_browsing_div").dialog("open");
-	    return false;
-    });
- 
+	createLegend('#faceted_header', function(){viewer.viewFaceted = true; viewer.refreshGraph('faceted');},
+				function(){viewer.viewFaceted = false; viewer.refreshGraph('dateRange');});
+	createLegend("#functions_header");
+	createLegend("#gender_header");
+	createLegend("#nationality_header");	
+	createLegend("#criteria_header");		
+    
     //set up faceted browsing dialog
-    $("#faceted_browsing_div").dialog({ 
+   /* $("#faceted_browsing_div").dialog({ 
 		autoOpen: false,
 		closeOnEscape: false,
 		maxWidth:280,
@@ -119,7 +112,7 @@ ViewerControlClass.prototype.init = function() {
 		viewer.viewFaceted= false;
 		viewer.refreshGraph("dateRange");
 		}
-	});
+	});*/
 	
     //set up custom dialog
     $("#custom_div").dialog({ 
@@ -375,7 +368,7 @@ ViewerControlClass.prototype.displaySelectedContributors = function(){
 		for(x in this.selectedContributors.id){
 			html += '<a href="' + this.selectedContributors.url[x] + '" title="View the record for ' 
 			+ this.selectedContributors.name[x] + ' in AusStage" target="_ausstage">' + this.selectedContributors.name[x] + '</a>';
-			html += '<span id="'+i+'" class="contributorRemoveIcon ui-icon ui-icon-close clickable" style="display:	inline-block"></span>';		
+			html += '<span id="'+i+'" class="contributorRemoveIcon ui-icon ui-icon-close clickable"></span>';		
 		}
 	}
 	else{

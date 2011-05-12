@@ -152,15 +152,28 @@
 				</div>				
 			</div>
 		</div>
-		<!-- Options to display labels for the graph-->
-
-
-		<br>
-		<!--faceted browsing on/off-->
-		<div id="faceted_browsing_btn_div" align=right>
-			<input type="submit" name="submit" class="button" id="faceted_browsing_btn" value="Faceted Browsing" />
+		<!-- faceted browsing div -->
+		<div id="faceted_div">
+			<div class="legendHeader" id="faceted_header">Faceted Browsing</div>
+			<div class="legendBody" id="faceted_body" >
+				<!--functions-->
+				<div class="legendHeader legendSml" id="functions_header" >Contributor Functions</div>
+				<div class="legendBody scroll_checkboxes" id="functions_body"></div>
+				<!--gender-->
+				<div class="legendHeader legendSml" id="gender_header" >Contributor Gender</div>
+				<div class="legendBody scroll_checkboxes" id="gender_body"></div>
+				<!--nationality-->					
+				<div class="legendHeader legendSml" id="nationality_header" >Contributor Nationality</div>
+				<div class="legendBody scroll_checkboxes" id="nationality_body"></div>
+				<!-- list the selected faceted criteria-->
+				<div class="legendHeader legendSml" id="criteria_header" >Search Criteria</div>
+				<div class="legendBody" id="criteria_body"></div>	
+				<br/>
+				<p><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
+				<label for="showAllNodes">Show all nodes</label></p>
+			</div>
 		</div>
-
+		<br>
 	
 	</div>
 
@@ -229,23 +242,6 @@
 						<div id="timeSlider">
 						</div>
 					</div> 
-					<!-- faceted browsing window -->
-					<div id="faceted_browsing_div" Title="Faceted Browsing">
-						<!--functions-->
-						<div class="legendHeader" id="functions_header" >Contributor Functions</div>
-						<div class="legendBody scroll_checkboxes" id="functions_body"></div>
-						<!--gender-->
-						<div class="legendHeader" id="gender_header" >Contributor Gender</div>
-						<div class="legendBody scroll_checkboxes" id="gender_body"></div>
-						<!--nationality-->					
-						<div class="legendHeader" id="nationality_header" >Contributor Nationality</div>
-						<div class="legendBody scroll_checkboxes" id="nationality_body"></div>
-						<!-- list the selected faceted criteria-->
-						<div class="legendHeader" id="criteria_header" >Search Criteria</div>
-						<div class="legendBody" id="criteria_body"></div>	
-						<p><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
-						<label for="showAllNodes">Show all nodes</label></p>
-					</div>
 					<!-- custom context menu - opens on alt click or ctrl click-->
 					<div id="custom_div">
 						<div id="color_picker" class="color_picker"></div>
@@ -272,6 +268,39 @@
             <br/>&nbsp;<br/>
           	At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search 
           	terms.
+        </p>
+</div>
+<div id="help_view_event_div" class='dialogs' title="Help on Adding Events and Viewing the Network" style="font-size: 90%">
+        <h3>Viewing an Event Network</h3>
+        <p>To view an event network click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon
+        next to the event. This will select the event. You can then the use the pull-down menu next to the 'View Network' button to further refine the 
+        network results.</p>
+        <p>
+        To remove the event from your selection simply click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span>
+        next to the event name.
+        Once an event is selected you may view the event network by clicking the 'View Network' button.
+        </p>
+        <br/>
+        <h3>Refining the Network Display</h3>
+        <p>
+        There are three options available from the pull-down menu to choose from
+        </p>
+        <p>
+        <ul>
+        	<li><strong>1st Degree</strong> - will retrieve a first degree event centric network</li>
+        	<li><strong>2nd Degree</strong> - will retrieve a second degree event centric network.</li>
+        	<li><strong>2st Degree - simple</strong> - will retrieve a simplified second degree network</li>
+        </ul>
+        </p>
+        <p>
+        In a simplified second degree network we only retrieve second degree events if they involved contributors involved in the central event.
+        </p>
+</div>
+<div id="help_view_contributor_div" class='dialogs' title="Help on Adding Contributors and Viewing the Network" style="font-size: 90%">
+        <h3>Viewing a Contributor Network</h3>
+        <p>To view a contributor network click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon
+        next to the event. This will select the event. View the selected event by clicking the 'View Network' button or to remove the event from your 
+        selection simply click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span> next to the event name.
         </p>
 </div>
 
