@@ -78,7 +78,53 @@ $(document).ready(function(){
         $("#show_search_help").click(function() {
                 $("#help_search_div").dialog('open');
         });
-	
+
+
+	//set up the view event help
+	 $("#help_view_event_div").dialog({
+     	autoOpen: false,
+        height: 450,
+        width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+					$(this).dialog('close');
+				}
+    	    },
+	        open: function() {
+
+			},
+			close: function() {
+
+			}
+        });
+
+        $("#view_event_help").live('click', function() {
+                $("#help_view_event_div").dialog('open');
+        });
+
+		//set up the search help
+	 $("#help_view_contributor_div").dialog({
+     	autoOpen: false,
+        height: 400,
+        width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+					$(this).dialog('close');
+				}
+    	    },
+	        open: function() {
+
+			},
+			close: function() {
+
+			}
+        });
+
+        $("#view_contributor_help").live('click', function() {
+                $("#help_view_contributor_div").dialog('open');
+        });
 
 });
 
