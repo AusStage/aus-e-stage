@@ -293,16 +293,17 @@ table.searchResults td a {
 
 /* Legend style components. */
 .legendHeader {
-		width:263px;
-        font-weight:normal;
+		width:100%;        
         margin:0 0 0 0;
-        font-size:14px;
         color:#fff;	
         padding:10px 10px 10px 10px;
         background: #aaaaaa;
         font-family:Helvetica, Arial, sans-serif;
         cursor:pointer;
 
+		text-align:left!important;
+		font-size: 1.17em;
+		font-weight:normal;
 }
 
 .legendSml{
@@ -351,6 +352,17 @@ table.searchResults td a {
 }
 
 .legendBody {
+		/*padding:1em 1em;
+		border-top:0;
+		margin-top:-2px;
+		top:1px;
+		margin-bottom:2px;
+		overflow:auto;
+		zoom:1;
+		max-height:200px;
+		display:none;
+		color:#000;  
+		background-color:#fff;*/
         margin:0;
         padding:0;
         max-height:200px;
@@ -388,6 +400,13 @@ table.searchResults td a {
 .legendBody table {
 	border-collapse: collapse;
 	width: 100%;
+}
+
+.legendBody th{
+		vertical-align: top;
+		color: #AAA;
+		font-weight: normal;	
+		text-align:left;
 }
 
 .legendBody tr.d1 td {

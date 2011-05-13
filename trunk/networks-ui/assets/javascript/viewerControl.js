@@ -195,7 +195,7 @@ ViewerControlClass.prototype.init = function() {
     	}
     	else viewer.hideAll = false;
     	viewer.render();
-    	console.log('hide all');
+    	
 	}); 
 	
 	//set up show/hide edge checkboxes - HIDE UNRELATED
@@ -207,7 +207,7 @@ ViewerControlClass.prototype.init = function() {
     	}
     	else viewer.hideUnrelated = false;
     	viewer.render();
-    	console.log('hide unrelated');
+    	
 	}); 
 	
 	
@@ -401,7 +401,7 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 		case 'CONTRIBUTOR':
 			viewer = new ContributorViewerClass(type);
 			//var obj = this;
-			console.log(BASE_URL+id+END_URL);
+			
 			$.jsonp({
 				url:BASE_URL+id+END_URL,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
@@ -415,7 +415,6 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 			
 			break;
 		case 'CONTRIBUTOR_PATH':
-			console.log('contributor path selected for :'+id[0]+' '+id[1]);
 			break;
 		case 'EVENT':
 			viewer = new EventViewerClass();
@@ -424,19 +423,15 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 			switch ($('#eventDegree option:selected').val()){
 				case '1': 
 					radius = 1;
-					console.log(1);
 					break;
 				case '2':
 					radius = 2;
-					console.log(1);					
 					break;					
 				case '3':	
 					radius = 2;
 					simplify = true;
-					console.log(1);					
 					break;					
 			}			
-			console.log(BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT);
 			$.jsonp({
 				url:BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
