@@ -129,7 +129,6 @@ ContributorViewerClass.prototype.destroy = function(){
 //render the graph
 ContributorViewerClass.prototype.renderGraph = function(json){
 	this.json = json;
-	console.log(json);
 	//prepare data for render
 	this.prepareData();
 	initGraph(this);
@@ -202,7 +201,6 @@ function initGraph(obj){
 
 //refresh network 
 ContributorViewerClass.prototype.refreshGraph = function(typeOfRefresh){
-	console.log('helloooooo');
 	if(typeOfRefresh == "dateRange"){
 		this.resetDateRangeVisibility();
 	}
@@ -490,7 +488,7 @@ ContributorViewerClass.prototype.displayNetworkProperties = function(){
 		var comma = "";	
 		var contribUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
 	    var html = 	"<table>"+
-	  				"<tr class=\"d0\"><td valign=top><b> Centre:</b></td><td>"+
+	  				"<tr class=\"d0\"><th scope='row'>Centre</th><td>"+
 	  				"<a href=" + contribUrl +""+ this.json.nodes[this.centralNode].id+" target=\"_blank\">"+	
 	  				this.json.nodes[this.centralNode].nodeName+"</a><p>";
     	for (var i=0; i<this.json.nodes[this.centralNode].functions.length; i++){
@@ -500,9 +498,9 @@ ContributorViewerClass.prototype.displayNetworkProperties = function(){
     	html += constrain(tempHtml, $(".sidebar").width()-70, "legendBody", "ellipsis");
     	html += "</p>";
     	html += "</td></tr>"+
-    				"<tr class=\"d1\"><td><b>Contributors </b></td><td> "+this.json.nodes.length+"</td></tr>"+					
-					"<tr class=\"d0\"><td><b>Relationships </b> </td><td>"+this.json.edges.length+"</td></tr></table>";			
-					"<tr class=\"d1\"><td><b>Collaborations </b> </td><td>"+collabCount+"</td></tr></table>";							
+    				"<tr class=\"d1\"><th scope='row'>Contributors</th><td> "+this.json.nodes.length+"</td></tr>"+					
+					"<tr class=\"d0\"><th scope='row'>Relationships</th><td>"+this.json.edges.length+"</td></tr></table>";			
+					"<tr class=\"d1\"><th scope='row'>Collaborations</th><td>"+collabCount+"</td></tr></table>";							
  		$("#network_properties_body").empty();
 		$("#network_properties_body").append(html);
 		$(".ellipsis").tipsy({gravity: $.fn.tipsy.autoNS});
