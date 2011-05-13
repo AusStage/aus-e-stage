@@ -80,16 +80,26 @@ public class KmlDownloadManager {
 		DbObjects results;
 		
 		ContributorList  contributors  = new ContributorList();
+		Contributor      contributor   = null;
+		String[]         functions     = null;
+		String           list          = null;
 					
 		// get the list of contributors
 		if(ids.length == 1) {
-			sql = "SELECT contributorid, first_name, last_name "
-			    + "FROM contributor "
-			    + "WHERE contributorid = ?";
+			sql = "SELECT c.contributorid, first_name, last_name, "
+				+ "       rtrim(xmlagg(xmlelement(t, preferredterm || '|')).extract ('//text()'), '|') AS functions "
+				+ "FROM contributor c, contfunctlink, contributorfunctpreferred "
+				+ "WHERE c.contributorid = contfunctlink.contributorid "
+				+ "AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid "
+				+ "AND c.contributorid ? "
+				+ "GROUP BY c.contributorid, first_name, last_name ";
 		} else {
-			sql = "SELECT contributorid, first_name, last_name "
-			    + "FROM contributor "
-			    + "WHERE contributorid = ANY (";
+			sql = "SELECT c.contributorid, first_name, last_name, "
+				+ "       rtrim(xmlagg(xmlelement(t, preferredterm || '|')).extract ('//text()'), '|') AS functions "
+				+ "FROM contributor c, contfunctlink, contributorfunctpreferred "
+				+ "WHERE c.contributorid = contfunctlink.contributorid "
+				+ "AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid "
+				+ "AND c.contributorid = ANY (";
 			    
 			    // add sufficient place holders for all of the ids
 				for(int i = 0; i < ids.length; i++) {
@@ -101,6 +111,7 @@ public class KmlDownloadManager {
 				
 				// finalise the sql string
 				sql += ") ";
+				sql += "GROUP BY c.contributorid, first_name, last_name ";
 		}
 		
 		// get the data
@@ -115,7 +126,22 @@ public class KmlDownloadManager {
 		ResultSet resultSet = results.getResultSet();
 		try {
 			while (resultSet.next()) {
-				contributors.addContributor(new Contributor(resultSet.getString(1), resultSet.getString(2) + " " + resultSet.getString(3), LinksManager.getContributorLink(resultSet.getString(1))));
+				contributor = new Contributor(resultSet.getString(1), resultSet.getString(2) + " " + resultSet.getString(3), LinksManager.getContributorLink(resultSet.getString(1)));
+				
+				contributor.setFunctions(resultSet.getString(4));
+				functions = contributor.getFunctionsAsArray();
+				list = "";
+				
+				for(int i = 0; i < functions.length; i++) {
+					list += functions[i] + ", ";
+				}
+				
+				list = list.substring(0, list.length() -2);
+				
+				contributor.setFunctions(list);
+				
+				contributors.addContributor(contributor);
+				
 			}
 		} catch (java.sql.SQLException ex) {
 			throw new KmlDownloadException("unable to build list of contributors: " + ex.toString());
@@ -126,10 +152,10 @@ public class KmlDownloadManager {
 		results.tidyUp();
 		results = null;
 		
+		
 		// get the events for each contributor
 		Set<Contributor> contributorSet = contributors.getContributors();
 		Iterator   iterator = contributorSet.iterator();
-		Contributor contributor;
 		Event       event;
 		String      venue;
 		String[]    sortDates;
@@ -169,7 +195,7 @@ public class KmlDownloadManager {
 					// build the event
 					event = new Event(resultSet.getString(1));
 					event.setName(resultSet.getString(2));
-					//event.setFirstDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+					event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
 					
 					sortDates = DateUtils.getDatesForTimeline(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
 					event.setSortFirstDate(sortDates[0]);
