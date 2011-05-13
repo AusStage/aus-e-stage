@@ -62,10 +62,8 @@ ViewerControlClass.prototype.init = function() {
 	//hide the viewer options
 	$("#viewer_options_div").hide();
 	//hide the show labels checkboxes
-	$("#display_labels_div").hide();
-	$("#display_event_labels_div").hide();
-	//hide the edge display section
-	$('#display_edges_div').hide();;	
+	$("#contributor_options_div").hide();
+	$("#event_options_div").hide();
 
 	//hide the legend
 	$("#network_details_div").hide();

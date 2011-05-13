@@ -77,8 +77,10 @@
 				<li><a href="index.html" title="Browse Contributor Network">Navigating Networks</a> </li>			
 			</ul>
 		</div>
+
 		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
 		<div id="network_details_div">
+			<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184">
 			<div class="legendHeader" id="selected_object_header" ></div>
 			<div class="legendBody" id="selected_object_body"></div>
 		</div>
@@ -89,88 +91,102 @@
 		</div>		
 		<div id="viewer_options_div">
 			<div class="legendHeader" id="viewer_options_header" >Viewer Options</div>
-			<div class="legendBody" id="viewer_options_body">
-				
-				<div class='innerHeader'>Label Display</div>
-				<div id="display_labels_div">
-					<input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" />
-					<label for="showContributors">Show all contributor names</label>
-					<br>
-					<input type="checkbox" name="showRelatedContributors" class="checkbox" id="show_contrib_check" />
-					<label for="showContributors">Show related contributor names</label>
-				</div>
-				<div id="display_event_labels_div">
-					<input type="checkbox" name="showContributors" class="checkbox" id="show_contrib_check" />
-					<label for="showContributors">Show contributor names</label>
-					<br>
-					<input type="checkbox" name="showEvents" class="checkbox" id="show_event_check" />
-					<label for="showEvents">Show event names</label>
-				</div>	
-				
-				<div id='display_edges_div'>
-					<div class='innerHeader'>Show/Hide Edges</div>
-					<input type="checkbox" name="hideAll" class="checkbox" id="hide_all_check" />
-					<label for="hideAll">Hide all edges</label>
-					<br>
-					<input type="checkbox" name="hideUnrelated" class="checkbox" id="hide_unrelated_check" />
-					<label for="hideUnrelated">Hide unrelated edges</label>	
-					<br>	
-					<select id='minValue'></select>
-					<label id='minValueLabel' for="minValue"></label>	
-					<br>
-					<select id='maxValue'></select>			
-					<label id='maxValueLabel' for="minValue"></label>						
-				</div>
-				
-				<div class='innerHeader'>Custom Colours</div>
-				<div id="display_cust_colors_div">
+			<div class="legendBody autoHeight" id="viewer_options_body">
+				<!--ego centric labels-->
+				<div id="contributor_options_div">						
 					<table>
-					<tr>
-						<td>				
-							<input type="checkbox" name="showCustColors" class="checkbox" id="show_cust_colors" checked="yes"/>
-							<label for="showCustColors">Show custom colors</label>
-						</td>
-						<td class='alignRight'>
-							<a href='#' id='reset_cust_colors'>reset &nbsp;</a> 
-						</td>
-					</tr>
+						<tbody>
+							<tr><th colspan='2'>Label Display</th></tr>
+							<tr>
+								<td><input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" /></td>
+								<td><label for="showContributors">Show all contributor names</label></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="showRelatedContributors" class="checkbox" id="show_contrib_check" /></td>
+								<td><label for="showContributors">Show related contributor names</label></td>
+							</tr>
+							<tr><th colspan='2'>Show | Hide Edges</th></tr>
+							<tr>
+								<td><input type="checkbox" name="hideAll" class="checkbox" id="hide_all_check" /></td>
+								<td><label for="hideAll">Hide all edges</label></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="hideUnrelated" class="checkbox" id="hide_unrelated_check" /></td>
+								<td><label for="hideUnrelated">Hide unrelated edges</label></td>													
+							</tr>				
+							<tr>
+								<td><select id='minValue'></select></td>
+								<td><label id='minValueLabel' for="minValue"></label></td>
+							</tr>
+							<tr>	
+								<td><select id='maxValue'></select></td>
+								<td><label id='maxValueLabel' for="minValue"></label></td>	
+							</tr>
+						</tbody>
 					</table>
 				</div>
-				<div class='innerHeader'>Custom Visibility</div>
-				<div id="display_cust_vis_div">
+				
+				<!-- event centric labels -->
+				<div id="event_options_div">
 					<table>
-					<tr>
-						<td>
-							<input type="checkbox" name="showCustVis" class="checkbox" id="show_cust_vis"/>
-							<label for="showCustVis">Show hidden elements</label>
-						</td>
-						<td class='alignRight'>					
-							<a href='#' id='reset_cust_vis'>reset &nbsp;</a>
-						</td>
-					</tr>
+						<tbody>
+							<tr><th colspan='2'>Label Display</th></tr>
+							<tr>
+								<td><input type="checkbox" name="showContributors" class="checkbox" id="show_contrib_check" /></td>
+								<td><label for="showContributors">Show related contributor names</label></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="showEvents" class="checkbox" id="show_event_check" /></td>
+								<td><label for="showEvents">Show event names</label></td>
+							</tr>
+						</tbody>
 					</table>
-				</div>				
+				</div>
+				<div id='custom_colors_div'>
+					<table>
+						<tbody>
+							<tr><th colspan='3'>Custom Colours</th></tr>
+							<tr>
+								<td><input type="checkbox" name="showCustColors" class="checkbox" id="show_cust_colors" checked="yes"/></td>
+								<td><label for="showCustColors">Show custom colors</label></td>
+								<td class='alignRight'><a href='#' id='reset_cust_colors'>reset &nbsp;</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id='custom_vis_div'>
+					<table>
+						<tbody>
+							<tr><th colspan='3'>Custom Visibility</th></tr>
+							<tr>
+								<td><input type="checkbox" name="showCustVis" class="checkbox" id="show_cust_vis"/></td>
+								<td><label for="showCustVis">Show hidden elements</label></td>
+								<td class='alignRight'><a href='#' id='reset_cust_vis'>reset &nbsp;</a></td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>
 			</div>
 		</div>
 		<!-- faceted browsing div -->
 		<div id="faceted_div">
 			<div class="legendHeader" id="faceted_header">Faceted Browsing</div>
 			<div class="legendBody" id="faceted_body" >
+				<div><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
+				<label for="showAllNodes">Show all nodes</label></div></br>			
 				<!--functions-->
 				<div class="legendHeader legendSml" id="functions_header" >Contributor Functions</div>
-				<div class="legendBody scroll_checkboxes" id="functions_body"></div>
+				<div class="legendBody autoHeight scroll_checkboxes" id="functions_body"></div>
 				<!--gender-->
 				<div class="legendHeader legendSml" id="gender_header" >Contributor Gender</div>
-				<div class="legendBody scroll_checkboxes" id="gender_body"></div>
+				<div class="legendBody autoHeight scroll_checkboxes" id="gender_body"></div>
 				<!--nationality-->					
 				<div class="legendHeader legendSml" id="nationality_header" >Contributor Nationality</div>
-				<div class="legendBody scroll_checkboxes" id="nationality_body"></div>
+				<div class="legendBody autoHeight scroll_checkboxes" id="nationality_body"></div>
 				<!-- list the selected faceted criteria-->
 				<div class="legendHeader legendSml" id="criteria_header" >Search Criteria</div>
-				<div class="legendBody" id="criteria_body"></div>	
+				<div class="legendBody autoHeight" id="criteria_body"></div>	
 				<br/>
-				<p><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
-				<label for="showAllNodes">Show all nodes</label></p>
 			</div>
 		</div>
 		<br>
