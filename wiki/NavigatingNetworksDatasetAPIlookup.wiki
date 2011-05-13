@@ -17,7 +17,7 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| [NavigatingNetworksDatasetAPIlookup#task task]   || key-collaborators, system-property, collaborator || No || ||
+|| [NavigatingNetworksDatasetAPIlookup#task task]   || key-collaborators, system-property, collaborator, collaboration || No || ||
 || [NavigatingNetworksDatasetAPIlookup#id id]     || Unique contributor id / system property id || No || ||
 || [NavigatingNetworksDatasetAPIlookup#format format] || html xml json || Yes || html ||
 || [NavigatingNetworksDatasetAPIlookup#sort sort]   || count id name || Yes || count || 
@@ -25,6 +25,7 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 
 === task ===
 The task parameter defines the type of lookup that is undertaken. For example key-contributors is a lookup that retrieves all of the contributors that a specified contributor has collaborated with
+Collaboration task will return a list of event details by clicking the link between two contributors in the contributor network.
 
 === id ===
 The id parameter defines the unique identifier of the contributor that is of interest.
