@@ -6,6 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import au.edu.ausstage.networks.types.Event;
 
 import oracle.jdbc.pool.OracleDataSource;
 
@@ -55,7 +62,36 @@ public class DatabaseManager {
 		return true;
 	} // end connect Method
 
+	//first_date comparator used to sort Event nodes
+	Comparator<Event> CHRONOLOGICAL_ORDER =
+        new Comparator<Event>() {
+				public int compare(Event e1, Event e2) {
+					String date_1 = e1.getFirstDate();
+					String date_2 = e2.getFirstDate();
+					if (date_1 == null || date_1.isEmpty())
+						System.out.println(e1.getName() + " ID:" + e1.getId() + " firstDate is null or empty." );
+					if (date_2 == null || date_2.isEmpty())
+						System.out.println(e2.getName() + " ID:" + e2.getId() + " firstDate is null or empty." );
+					
+					int dateCmp = date_1.compareTo(date_2);
+					if (dateCmp != 0)
+			            return dateCmp;
+										
+					String name_1 = e1.getName();
+					String name_2 = e2.getName();
+					if (name_1 == null || name_1.isEmpty())
+						System.out.println("Event ID:" + e1.getId() + " name is null or empty." );
+					if (name_2 == null || name_2.isEmpty())
+						System.out.println("Event ID:" + e2.getId() + " name is null or empty." );
+					
+					int nameCmp = name_1.compareTo(name_2);
+					if (nameCmp != 0)
+			            return nameCmp;
 
+					return e1.getVenue().compareTo(e2.getVenue());
+				}	
+		};
+		
 	public ResultSet exeStatement(String sqlQuery) {
 		
 		try {			
@@ -115,6 +151,112 @@ public class DatabaseManager {
 		}					
 	}
 	
+	//set parameters in sql, and return integer set such as eventID set or contributorId set
+	public Set<Integer> getResultfromDB(String sql, int ID){
+		Set<Integer> infoSet = new HashSet<Integer>();
+		int[] param = {ID};
+		
+		//execute sql statement
+		ResultSet results = exePreparedStatement(sql, param);				
+		
+		try {			
+			// 	check to see that data was returned
+			if (!results.last()){	
+				finalize();
+				return null;
+			}else
+				results.beforeFirst();
+		
+			// 	build the list of contributors			
+			while(results.next() == true) {
+				infoSet.add(results.getInt(1));									
+			}									
+		} catch (java.sql.SQLException ex) {	
+			System.out.println("Exception: " + ex.getMessage());
+			results = null;
+		}
+		
+		finalize();
+		return infoSet;
+	}
+	
+	public List<Event> selectBatchingEventDetails(Set<Integer> set){
+		int[] evtIDArray = new int[set.size()];
+		int x = 0;
+		for (Integer eID : set) evtIDArray[x++] = eID;
+
+		int SINGLE_BATCH = 1;
+		int SMALL_BATCH = 11;
+		int MEDIUM_BATCH = 21;
+		int LARGE_BATCH = 51;
+		int start = 0;
+		int totalNumberOfValuesLeftToBatch = set.size();
+		Event evt = null;
+		List<Event> evtList = new ArrayList<Event>();;
+		int j = 0;
+		
+		while ( totalNumberOfValuesLeftToBatch > 0 ) {
+			
+			int batchSize = SINGLE_BATCH;
+			if ( totalNumberOfValuesLeftToBatch >= LARGE_BATCH ) {
+			  batchSize = LARGE_BATCH;
+			} else if ( totalNumberOfValuesLeftToBatch >= MEDIUM_BATCH ) {
+			  batchSize = MEDIUM_BATCH;
+			} else if ( totalNumberOfValuesLeftToBatch >= SMALL_BATCH ) {
+			  batchSize = SMALL_BATCH;
+			}
+			
+			String inClause = new String("");			
+			for (int i=0; i < batchSize; i++) {
+				inClause = inClause + "? ,";
+			}
+			inClause = inClause.substring(0, inClause.length()-1);
+			
+			String sql = "SELECT DISTINCT e.eventid, e.event_name, e.first_date, v.venue_name "
+				+ "FROM events e, venue v "
+				+ "WHERE e.eventid in (" + inClause + ") "
+				+ "AND e.venueid = v.venueid "
+				+ "ORDER BY e.first_date";
+	
+			ResultSet results = exePreparedINStatement(sql, evtIDArray, start, batchSize);
+			
+			try{
+				if (!results.last()) {
+					finalize();
+					return null;
+				} else
+				results.beforeFirst();
+						
+				//build the event object
+				while (results.next() == true) {
+					int e_id = results.getInt(1);
+					String name = results.getString(2);
+					String date = results.getDate(3).toString();
+					String venue = results.getString(4);
+
+					evt = new Event(Integer.toString(e_id));
+					// evt.setId(resultSet.getString(1));
+					evt.setMyName(name);
+					evt.setMyFirstDate(date);					
+					evt.setVenue(venue);
+					evtList.add(evt);
+					//evtId_evtObj_map.put(e_id, evt);
+					j++;
+				}
+				
+				finalize();
+			} catch (SQLException e) {
+				results = null;
+				finalize();
+				e.printStackTrace();
+			}
+			totalNumberOfValuesLeftToBatch -= batchSize; 			
+			start += batchSize;
+		}
+					
+		return evtList;
+	}
+	
 	public void finalize(){
 		if (resultSet != null) {
 			try {
@@ -150,7 +292,8 @@ public class DatabaseManager {
 	
 	public void closeDB() throws Throwable {
 		try {
-			connection.close();
+			if (connection != null)
+				connection.close();
 			dataSource = null;
 		} catch(Exception e){}
 	} 
