@@ -35,10 +35,11 @@ _Note:_ if the task is a `system-property` lookup the following are valid ids
 || *id* || *Lookup Value* ||
 || datastore-create-date || The date and time that the RDF data store was created ||
 
-_Note:_ if the task is a `collaboration` lookup the following are valid ids
+_Note:_ if the task is a `collaboration` lookup, the following are valid ids
 
 || *id* || *Lookup Value* ||
 || 8374-249989 || 8374 is the first contributor id and 249989 is the second contributor id||
+
 
 
 === format ===
