@@ -228,7 +228,18 @@ public class Event implements JSONAware, Comparable<Event>{
 		return object;		
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSONObj(int index){
+		JSONObject object = new JSONObject();
+		
+		object.put("index", index);
+		object.put("id", id);
+		object.put("nodeName", name);
+		object.put("startDate", firstDate);
+		object.put("venue", venue);
+		
+		return object;		
+	}
 	/*
 	 * methods required for ordering in collections
 	 * http://java.sun.com/docs/books/tutorial/collections/interfaces/order.html
