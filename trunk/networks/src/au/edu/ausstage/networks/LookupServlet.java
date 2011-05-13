@@ -23,6 +23,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import au.edu.ausstage.utils.DatabaseManager;
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.utils.JSONPManager;
 
@@ -33,10 +34,13 @@ public class LookupServlet extends HttpServlet {
 
 	// declare private variables
 	private ServletConfig servletConfig;
-	private DataManager database;
+	private DataManager rdf;
+	
+	public DatabaseManager db;
+	public String connectString = null;
 	
 	// declare private constants
-	private final String[] TASK_TYPES        = {"key-collaborators", "system-property", "collaborator"};
+	private final String[] TASK_TYPES        = {"key-collaborators", "system-property", "collaborator", "collaboration"};
 	private final String[] FORMAT_TYPES      = {"html", "xml", "json"};
 	private final String[] SORT_TYPES        = {"count", "id", "name"};
 	private final String[] PROPERTY_ID_TYPES = {"datastore-create-date", "export-options"};
@@ -51,8 +55,12 @@ public class LookupServlet extends HttpServlet {
 		// store configuration for later
 		servletConfig = conf;
 		
+		//get database connect string from context-param in web.xml
+		connectString = conf.getServletContext().getInitParameter("databaseConnectionString");
+		db = new DatabaseManager(connectString);
+				
 		// instantiate a database manager object
-		database = new DataManager(conf);
+		rdf = new DataManager(conf);
 		
 	} // end init method
 	
@@ -77,11 +85,11 @@ public class LookupServlet extends HttpServlet {
 		}
 
 		// check on the id parameter
-		if(taskType.equals("system-property") == false) {
+		if(taskType.equals("system-property") == false && taskType.equals("collaboration") == false) {
 			if(InputUtils.isValidInt(id) == false) {
 				throw new ServletException("Missing or invalid id parameter.");
 			}
-		} else {
+		} else if (taskType.equals("system-property")){
 			if(InputUtils.isValid(id, PROPERTY_ID_TYPES) == false) {
 				throw new ServletException("Missing id parameter. Expected one of: " + java.util.Arrays.toString(PROPERTY_ID_TYPES).replaceAll("[\\]\\[]", ""));
 			}
@@ -108,7 +116,7 @@ public class LookupServlet extends HttpServlet {
 		}	
 		
 		// instantiate a lookup object
-		LookupManager lookup = new LookupManager(database);
+		LookupManager lookup = new LookupManager(rdf);
 		
 		String results = null;
 		
@@ -128,6 +136,23 @@ public class LookupServlet extends HttpServlet {
 		} else if(taskType.equals("collaborator") == true) {
 			// lookup the details of this collaborator
 			results = lookup.getCollaborator(id, formatType);
+			
+		} else if(taskType.equals("collaboration") == true){
+			LookupManager lookupManager = new LookupManager(db); 
+			
+			if (!formatType.equals("json"))
+				formatType = "json";
+			
+			int id1, id2;
+			String[] temp = id.split("-", 2);
+			
+			if(InputUtils.isValidInt(temp[0]) == false || InputUtils.isValidInt(temp[1]) == false) {
+				throw new ServletException("Invalid id parameter.");
+			}
+			
+			id1 = Integer.parseInt(temp[0].trim());
+			id2 = Integer.parseInt(temp[1].trim());
+			results = lookupManager.getCollaboration(id1, id2);
 		}
 		
 		// output the appropriate mime type
@@ -155,7 +180,12 @@ public class LookupServlet extends HttpServlet {
 		} else {
 			out.print(results);
 		}
-	
+
+		try {
+			db.closeDB();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	} // end doGet method
 	
 	/**

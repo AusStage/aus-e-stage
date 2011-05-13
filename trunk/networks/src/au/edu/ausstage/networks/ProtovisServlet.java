@@ -138,6 +138,7 @@ public class ProtovisServlet extends HttpServlet {
 			
 			// instantiate a manger object
 			ProtovisEventCentricManager manager = new ProtovisEventCentricManager(db);
+			//ProtovisEventCentricManager manager = new ProtovisEventCentricManager(RdfDatabase);
 		
 			// check how to return the data
 			if(InputUtils.isValid(request.getParameter("callback")) == false) {
@@ -157,7 +158,14 @@ public class ProtovisServlet extends HttpServlet {
 				JSONPManager.wrapJSON(manager.getData(id, radius, simplify), request.getParameter("callback"), out);
 			}		
 		}
-			
+
+		
+		try {
+			db.closeDB();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
 	} // end doGet method
 	
 	/**
