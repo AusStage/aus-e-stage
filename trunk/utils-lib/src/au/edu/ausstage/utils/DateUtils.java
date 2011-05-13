@@ -196,6 +196,27 @@ public class DateUtils {
 	}
 	
 	/**
+	 * A method to get the current date and time as an array of components
+	 * 0 = year, 1 = month, 2 = day, 3 = hour, 4 = minutes, 5 = seconds
+	 *
+	 * @return an array of strings representing the current date and time
+	 */
+	public static String[] getCurrentDateTimeAsArray() {
+	
+		GregorianCalendar calendar = new GregorianCalendar();
+		String[] fields = new String[6];
+		
+		fields[0] = Integer.toString(calendar.get(Calendar.YEAR));
+		fields[1] = String.format("%02d", calendar.get(Calendar.MONTH) + 1);
+		fields[2] = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+		fields[3] = String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY));
+		fields[4] = String.format("%02d", calendar.get(Calendar.MINUTE));
+		fields[5] = String.format("%02d", calendar.get(Calendar.SECOND));
+		
+		return fields;	
+	}
+	
+	/**
 	 * A method to get the last day of a month
 	 *
 	 * @param year  the four digit year
