@@ -133,10 +133,10 @@ public class KmlDataBuilder {
 		
 		// create the name and description elements
 		Element name = xmlDoc.createElement("name");
-		name.setTextContent("AusStage Maps");
+		name.setTextContent("AusStage");
 		
 		Element description = xmlDoc.createElement("description");
-		description.setTextContent("Map data downloaded from the AusStage Mapping Service");
+		description.setTextContent("Map data from <a href=\"http://www.ausstage.edu.au\">AusStage</a>");
 		
 		// add the name element to the folder
 		rootFolder.appendChild(name);

@@ -100,13 +100,10 @@ public class KmlDownloadServlet extends HttpServlet {
 		
 		// send the KML to the client
 		// set the appropriate content type
-		//response.setContentType("application/vnd.google-earth.kml+xml; charset=UTF-8");
-				
-		//debug code
-		response.setContentType("text/plain");
+		response.setContentType("application/vnd.google-earth.kml+xml; charset=UTF-8");
 		
-		String[] fields = DateUtils.getCurrentDateAsArray();
-		response.setHeader("Content-Disposition", "attachment;filename=" + "ausstage-map-" + fields[0] + "-" + fields[1] + "-" + fields[2] + ".kml");
+		String[] fields = DateUtils.getCurrentDateTimeAsArray();
+		response.setHeader("Content-Disposition", "attachment;filename=" + "ausstage-map-" + fields[0] + "-" + fields[1] + "-" + fields[2] + "--" + fields[3] + "-" + fields[4] + "-" + fields[5] +".kml");
 			
 		try {
 			download.print(response.getWriter());
