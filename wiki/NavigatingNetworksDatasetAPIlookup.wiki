@@ -24,7 +24,7 @@ Combining this URL with the parameters outlines below retrieves data from the [N
 || [NavigatingNetworksDatasetAPIlookup#callback callback] || function name to use for a JSONP request || Yes || ||
 
 === task ===
-The task parameter defines the type of lookup that is undertaken. For example key-contributors is a lookup that retrieves all of the contributors that a specified contributor has collaborated with
+The task parameter defines the type of lookup that is undertaken. For example key-contributors is a lookup that retrieves all of the contributors that a specified contributor has collaborated with.
 Collaboration task will return a list of event details by clicking the link between two contributors in the contributor network.
 
 === id ===
@@ -34,6 +34,12 @@ _Note:_ if the task is a `system-property` lookup the following are valid ids
 
 || *id* || *Lookup Value* ||
 || datastore-create-date || The date and time that the RDF data store was created ||
+
+_Note:_ if the task is a `collaboration`lookup the following are valid ids
+
+|| *id* || *Lookup Value* ||
+|| 8374-249989 || 8374 is the first contributor id and 249989 is the second contributor id||
+
 
 === format ===
 The format parameter defines what format the resulting data with be presented in. 
