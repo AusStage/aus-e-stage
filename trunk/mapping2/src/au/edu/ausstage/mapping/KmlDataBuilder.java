@@ -283,8 +283,8 @@ public class KmlDataBuilder {
 				throw new KmlDownloadException("there were no events associated with contributor '" + contributor.getId() + "'");
 			}
 			
-			document = addDocument(folder, contributor.getName(), "Map of events associated with: " + contributor.getName() + " <br/> <a href=\"" + contributor.getUrl() + "\">More Information</a>");
-			
+			document = addDocument(folder, contributor.getName(), "Map of events for: <a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions());
+
 			// determine which style to use
 			if(colourIndex ==  CON_ICON_COLOUR_CODES.length) {
 				colourIndex = 0;
@@ -306,8 +306,17 @@ public class KmlDataBuilder {
 				elem.setAttribute("href", event.getUrl());
 				placemark.appendChild(elem);
 				
+				elem = xmlDoc.createElement("snippet");
+				//elem.setTextContent(event.getName() + "\n" + event.getVenue());
+				elem.setTextContent(event.getVenue());
+				placemark.appendChild(elem);
+				
 				elem = xmlDoc.createElement("description");
-				content = "<p>" + event.getVenue() + "<br/>" + "<a href=\"" + event.getUrl() + "\">More Information</a></p>";
+				
+				content = "<table><tr><th><a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions() + "</th></tr>";
+				content += "<tr><td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + event.getVenue() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+				content += "</table>";
+				
 				elem.appendChild(xmlDoc.createCDATASection(content));
 				placemark.appendChild(elem);
 				
@@ -374,6 +383,7 @@ public class KmlDataBuilder {
 		
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
+			style.appendChild(createLabelStyle());
 			style.appendChild(createBalloonStyle());
 			rootDocument.appendChild(style);
 		}
@@ -402,6 +412,7 @@ public class KmlDataBuilder {
 		
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
+			style.appendChild(createLabelStyle());
 			style.appendChild(createBalloonStyle());
 			rootDocument.appendChild(style);
 		}
@@ -427,6 +438,7 @@ public class KmlDataBuilder {
 	
 		// add the icon style and style to the document
 		style.appendChild(iconStyle);
+		style.appendChild(createLabelStyle());
 		style.appendChild(createBalloonStyle());
 		rootDocument.appendChild(style);
 		
@@ -448,6 +460,7 @@ public class KmlDataBuilder {
 	
 		// add the icon style and style to the document
 		style.appendChild(iconStyle);
+		style.appendChild(createLabelStyle());
 		style.appendChild(createBalloonStyle());
 		rootDocument.appendChild(style);
 		
@@ -458,12 +471,32 @@ public class KmlDataBuilder {
 	
 		Element balloonStyle = xmlDoc.createElement("BalloonStyle");
 		
+		String styleText = "<style type=\"text/css\">\n";
+		styleText += "* {font-family: Helvetica, Verdana, Arial, sans-serif;}\n";
+		styleText += "th { background-color: #AAAAAA; color: #FFFFFF; text-align: left; font-weight: normal;}\n";
+		styleText += "th a {color: #FFFFFF; }\n";
+		styleText += "a {text-decoration: none;}\n";
+		styleText += "</style>\n";
+		styleText += "$[description]\n";
+		
 		Element text         = xmlDoc.createElement("text");
-		text.appendChild(xmlDoc.createCDATASection("$[description]"));
+		text.appendChild(xmlDoc.createCDATASection(styleText));
 		
 		balloonStyle.appendChild(text);
 		
 		return balloonStyle;	
+	}
+	
+	// private method to create the label style elements
+	private Element createLabelStyle() {
+
+		Element labelStyle = xmlDoc.createElement("LabelStyle");
+		Element scale      = xmlDoc.createElement("scale");
+		scale.setTextContent("0");
+		
+		labelStyle.appendChild(scale);
+		
+		return labelStyle;
 	}
 	
 	/**
