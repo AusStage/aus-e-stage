@@ -374,6 +374,7 @@ public class KmlDataBuilder {
 		
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
+			style.appendChild(createBalloonStyle());
 			rootDocument.appendChild(style);
 		}
 		
@@ -401,6 +402,7 @@ public class KmlDataBuilder {
 		
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
+			style.appendChild(createBalloonStyle());
 			rootDocument.appendChild(style);
 		}
 		
@@ -425,6 +427,7 @@ public class KmlDataBuilder {
 	
 		// add the icon style and style to the document
 		style.appendChild(iconStyle);
+		style.appendChild(createBalloonStyle());
 		rootDocument.appendChild(style);
 		
 		// create the main style element
@@ -445,7 +448,22 @@ public class KmlDataBuilder {
 	
 		// add the icon style and style to the document
 		style.appendChild(iconStyle);
+		style.appendChild(createBalloonStyle());
 		rootDocument.appendChild(style);
+		
+	}
+	
+	// private method to create the balloon style elements
+	private Element createBalloonStyle() {
+	
+		Element balloonStyle = xmlDoc.createElement("BalloonStyle");
+		
+		Element text         = xmlDoc.createElement("text");
+		text.appendChild(xmlDoc.createCDATASection("$[description]"));
+		
+		balloonStyle.appendChild(text);
+		
+		return balloonStyle;	
 	}
 	
 	/**
