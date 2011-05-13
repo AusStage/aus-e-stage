@@ -20,15 +20,20 @@ package au.edu.ausstage.networks;
 
 // import additional libraries
 import com.hp.hpl.jena.query.*;
+
+//import java.sql.ResultSet;
 import java.util.*;
+
 import org.json.simple.*;
 import org.apache.commons.lang.StringEscapeUtils;
 
 // import AusStage related packages
 import au.edu.ausstage.vocabularies.*;
+import au.edu.ausstage.utils.DatabaseManager;
 import au.edu.ausstage.utils.DateUtils;
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.networks.types.*;
+import au.edu.ausstage.networks.types.Event;
 
 /**
  * A class to manage the lookup of information
@@ -36,7 +41,8 @@ import au.edu.ausstage.networks.types.*;
 public class LookupManager {
 
 	// declare private class level variables
-	private DataManager database = null;
+	private DataManager rdf = null;
+	public DatabaseManager db = null;	
 
 	/**
 	 * Constructor for this class
@@ -44,9 +50,16 @@ public class LookupManager {
 	public LookupManager(DataManager database) {
 	
 		// store a reference to this DataManager for later
-		this.database = database;
+		this.rdf = database;
 	} // end constructor
 	
+	public LookupManager(DatabaseManager db){
+		this.db = db;
+		
+		if(db.connect() == false) {
+			throw new RuntimeException("Error: Unable to connect to the database");
+		}
+	}
 	
 	/**
 	 * A method to lookup the key collaborators for a contributor
@@ -102,7 +115,7 @@ public class LookupManager {
 		sparqlQuery = sparqlQuery.replaceAll("@", "<" + id + ">");
 		
 		// execute the query
-		ResultSet results = database.executeSparqlQuery(sparqlQuery);
+		ResultSet results = rdf.executeSparqlQuery(sparqlQuery);
 		
 		// build the dataset
 		// use a numeric sort order
@@ -147,7 +160,7 @@ public class LookupManager {
 		}
 		
 		// play nice and tidy up
-		database.tidyUp();
+		rdf.tidyUp();
 		
 		// sort by the id
 		if(sortType.equals("id") == true) {
@@ -380,7 +393,7 @@ public class LookupManager {
 							   + "}";
 							   
 			// execute the query
-			ResultSet results = database.executeSparqlQuery(sparqlQuery);
+			ResultSet results = rdf.executeSparqlQuery(sparqlQuery);
 			
 			// check on what was returned
 			if(results.hasNext()) {
@@ -489,7 +502,7 @@ public class LookupManager {
 		sparqlQuery = sparqlQuery.replaceAll("@", "<" + id + ">");
 		
 		// execute the query
-		ResultSet results = database.executeSparqlQuery(sparqlQuery);
+		ResultSet results = rdf.executeSparqlQuery(sparqlQuery);
 		
 		// build the dataset
 		// use a numeric sort order
@@ -531,7 +544,7 @@ public class LookupManager {
 		}
 		
 		// play nice and tidy up
-		database.tidyUp();
+		rdf.tidyUp();
 		
 		// check on what to do
 		if(collaborator == null) {
@@ -558,4 +571,51 @@ public class LookupManager {
 	
 	} // end getCollaborator method
 
+	@SuppressWarnings("unchecked")
+	public String getCollaboration(int id1, int id2){
+		
+		Set<Integer> evtSet_1 = new HashSet<Integer>();
+		Set<Integer> evtSet_2 = new HashSet<Integer>();		
+		
+		evtSet_1 = getAssociatedEvents(id1);
+		evtSet_2 = getAssociatedEvents(id2);
+		
+		Event evt = null;
+		JSONArray  evt_jsonArr  = new JSONArray();
+		//first_date comparator used to sort Event nodes
+		EvtComparator evtComp = new EvtComparator();
+		
+		if (evtSet_1 != null && evtSet_2 != null){
+			Set<Integer> intersection = new HashSet<Integer>(evtSet_1);
+			intersection.retainAll(evtSet_2);
+			
+			if (intersection != null){
+				List<Event> evtList = db.selectBatchingEventDetails(intersection);
+				// Sorting Event List on the basis of Event first Date by passing Comparator
+				Collections.sort(evtList, evtComp);
+				
+				if (evtList != null) 
+					for (int i = 0; i < evtList.size(); i++){
+						evt = evtList.get(i);
+						evt_jsonArr.add(evt.toJSONObj(i));
+					}
+			}
+		}
+				
+		return evt_jsonArr.toString();
+	}
+	
+	public Set<Integer>  getAssociatedEvents(int conId){
+		
+		Set<Integer> evtSet = new HashSet<Integer>();	
+		
+		String sql = "SELECT DISTINCT eventid "
+			+ "FROM conevlink "
+			+ "WHERE contributorid = ? " 	//+ conId 					
+			+ " ORDER BY eventid";
+
+		evtSet = db.getResultfromDB(sql, conId);				
+		return evtSet;	
+	}
+	
 } // end class definition

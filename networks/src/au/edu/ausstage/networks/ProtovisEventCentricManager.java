@@ -48,37 +48,9 @@ public class ProtovisEventCentricManager {
 	public int central_eventId;	
 	public boolean debug = false;
 	public boolean viaRDF = false;
-	
 	//first_date comparator used to sort Event nodes
-	Comparator<Event> CHRONOLOGICAL_ORDER =
-        new Comparator<Event>() {
-				public int compare(Event e1, Event e2) {
-					String date_1 = e1.getFirstDate();
-					String date_2 = e2.getFirstDate();
-					if (date_1 == null || date_1.isEmpty())
-						System.out.println(e1.getName() + " ID:" + e1.getId() + " firstDate is null or empty." );
-					if (date_2 == null || date_2.isEmpty())
-						System.out.println(e2.getName() + " ID:" + e2.getId() + " firstDate is null or empty." );
-					
-					int dateCmp = date_1.compareTo(date_2);
-					if (dateCmp != 0)
-			            return dateCmp;
-										
-					String name_1 = e1.getName();
-					String name_2 = e2.getName();
-					if (name_1 == null || name_1.isEmpty())
-						System.out.println("Event ID:" + e1.getId() + " name is null or empty." );
-					if (name_2 == null || name_2.isEmpty())
-						System.out.println("Event ID:" + e2.getId() + " name is null or empty." );
-					
-					int nameCmp = name_1.compareTo(name_2);
-					if (nameCmp != 0)
-			            return nameCmp;
-
-					return e1.getVenue().compareTo(e2.getVenue());
-				}	
-		};
-
+	public EvtComparator evtComp = new EvtComparator();
+	
 	public ProtovisEventCentricManager(DatabaseManager db) {	
 		// store a reference to this DataManager for later
 		this.db = db;
@@ -147,7 +119,9 @@ public class ProtovisEventCentricManager {
 			preNthDegreeNodeSet.addAll(vertexSet);
 			nthDegreeNodeSet.removeAll(preNthDegreeNodeSet);
 			vertexSet = nthDegreeNodeSet;
-				
+			/*difference = new HashSet<Integer>(nodeSet);
+			difference.removeAll(vertexSet);
+			vertexSet = difference;*/		
 		}
 				
 		if (nodeSet != null ){
@@ -160,8 +134,8 @@ public class ProtovisEventCentricManager {
 			}
 
 			// Sorting Event List on the basis of Event first Date by passing Comparator
-			Collections.sort(sortedNodeList, CHRONOLOGICAL_ORDER);
-
+			Collections.sort(sortedNodeList, evtComp);
+			
 			// get the no-duplicated edges (contributors) of graph
 			int numOfNodes = sortedNodeList.size();
 			edgeMatrix = new HashSet[numOfNodes][numOfNodes];
@@ -220,7 +194,7 @@ public class ProtovisEventCentricManager {
 
 				if (!conId_sortedEvtList_map.containsKey(cID)) {
 					
-					sortedEvtList  = getAssociatedEvents(cID, evt);
+					sortedEvtList  = getAssociatedEvents(cID);
 					if (sortedEvtList != null){			
 						// get the prior and after date events
 						priorAfterEvtSet = getPriorAfterEvt(sortedEvtList, evt);											
@@ -443,7 +417,6 @@ public class ProtovisEventCentricManager {
 	 *
 	 * @return a completed event object
 	 */
-	@SuppressWarnings("null")
 	private Event getEventDetail(int evtId) {
 		
 		Event evt = null;
@@ -493,7 +466,6 @@ public class ProtovisEventCentricManager {
 	
 	//given a contributor ID and its source event, 
 	//get contributor details  and return a Collaborator instance
-	@SuppressWarnings("null")
 	private Collaborator getContributorDetail(int evtId, int conId, boolean exist){
 		
 		Collaborator con = null;		
@@ -515,7 +487,13 @@ public class ProtovisEventCentricManager {
 			+ "FROM conevlink ce, contributor c "
 			+ "WHERE c.contributorid = ? " //+ conId
 			+ " AND ce.eventid = ? " //+ evtId 
-			+ " AND ce.contributorid = c.contributorid ";							
+			+ " AND ce.contributorid = c.contributorid ";			
+				
+		/*String sql_1 = "SELECT DISTINCT cfp.preferredterm "
+			+ "FROM conevlink ce, contributorfunctpreferred cfp "
+			+ "WHERE ce.contributorid = " + conId
+			+ " AND ce.eventid = " + evtId 			
+			+ "AND ce.function = cfp.contributorfunctpreferredid";*/
 		
 		int[] param = {conId, evtId};
 		//execute sql statement
@@ -585,13 +563,14 @@ public class ProtovisEventCentricManager {
 					+ "WHERE eventid = ? " 	//+ eventId 					
 					+ " ORDER BY contributorid";
 
-		conSet = getResultfromDB(sql, eventId);
+		conSet = db.getResultfromDB(sql, eventId);
 				
 		return conSet;
 	}
 	
 	//given an contributor ID, get its associated events set 
-	private List<Event>  getAssociatedEvents(int conId, Event event){
+	@SuppressWarnings("unchecked")
+	private List<Event>  getAssociatedEvents(int conId){
 		
 		Set<Integer> evtSet = new HashSet<Integer>();		
 		int eID;
@@ -602,10 +581,14 @@ public class ProtovisEventCentricManager {
 			+ "WHERE contributorid = ? " 	//+ conId 					
 			+ " ORDER BY eventid";
 
-		evtSet = getResultfromDB(sql, conId);		
+		evtSet = db.getResultfromDB(sql, conId);		
 		
 		if (evtSet != null) {
-		  	List<Event> sortedEvtList = selectBatchingEventDetails(evtSet);
+		  	List<Event> sortedEvtList = db.selectBatchingEventDetails(evtSet);
+		  	for (int i = 0; i < sortedEvtList.size(); i++) {
+		  		evtId_evtObj_map.put(sortedEvtList.get(i).getIntId(), sortedEvtList.get(i));
+			}
+		  	
 		/*List<Event> sortedNodeList =  new ArrayList<Event>();
 		for (Iterator it = evtSet.iterator(); it.hasNext(); ) {
 			eID = (Integer)it.next();
@@ -618,9 +601,9 @@ public class ProtovisEventCentricManager {
 			}
 		}*/
 		
-		//sort the events according to firstdate to select immediate-prior and after events.
-		  	Collections.sort(sortedEvtList, CHRONOLOGICAL_ORDER);
-		
+		  	//sort the events according to firstdate to select immediate-prior and after events.
+		  	Collections.sort(sortedEvtList, evtComp);
+		  	
 		  	if (debug){
 		  		System.out.println("===== sort the associated events for contributor: " + conId);
 		  		printSortedNode(sortedEvtList);
@@ -657,114 +640,6 @@ public class ProtovisEventCentricManager {
 		//the priorAfterSet could have both prior and after events.
 		return priorAfterSet;	
 	}			
-
-	//execute sql (prepared) statement to get info from database
-	private Set<Integer> getResultfromDB(String sql, int ID){
-		
-		Set<Integer> infoSet = new HashSet<Integer>();
-		int[] param = {ID};
-		
-		//execute sql statement
-		ResultSet results = db.exePreparedStatement(sql, param);				
-		
-		try {			
-			// 	check to see that data was returned
-			if (!results.last()){	
-				db.finalize();
-				return null;
-			}else
-				results.beforeFirst();
-		
-			// 	build the list of contributors			
-			while(results.next() == true) {
-				infoSet.add(results.getInt(1));									
-			}									
-		} catch (java.sql.SQLException ex) {	
-			System.out.println("Exception: " + ex.getMessage());
-			results = null;
-		}
-		
-		db.finalize();
-		return infoSet;
-	}
-	
-	@SuppressWarnings("null")
-	private List<Event> selectBatchingEventDetails(Set<Integer> set){
-		int[] evtIDArray = new int[set.size()];
-		int x = 0;
-		for (Integer eID : set) evtIDArray[x++] = eID;
-
-		int SINGLE_BATCH = 1;
-		int SMALL_BATCH = 4;
-		int MEDIUM_BATCH = 11;
-		int LARGE_BATCH = 51;
-		int start = 0;
-		int totalNumberOfValuesLeftToBatch = set.size();
-		Event evt = null;
-		List<Event> evtList = new ArrayList<Event>();;
-		int j = 0;
-		
-		while ( totalNumberOfValuesLeftToBatch > 0 ) {
-			
-			int batchSize = SINGLE_BATCH;
-			if ( totalNumberOfValuesLeftToBatch >= LARGE_BATCH ) {
-			  batchSize = LARGE_BATCH;
-			} else if ( totalNumberOfValuesLeftToBatch >= MEDIUM_BATCH ) {
-			  batchSize = MEDIUM_BATCH;
-			} else if ( totalNumberOfValuesLeftToBatch >= SMALL_BATCH ) {
-			  batchSize = SMALL_BATCH;
-			}
-			
-			String inClause = new String("");			
-			for (int i=0; i < batchSize; i++) {
-				inClause = inClause + "? ,";
-			}
-			inClause = inClause.substring(0, inClause.length()-1);
-			
-			String sql = "SELECT DISTINCT e.eventid, e.event_name, e.first_date, v.venue_name "
-				+ "FROM events e, venue v "
-				+ "WHERE e.eventid in (" + inClause + ") "
-				+ "AND e.venueid = v.venueid "
-				+ "ORDER BY e.first_date";
-	
-			ResultSet results = db.exePreparedINStatement(sql, evtIDArray, start, batchSize);
-			
-			try{
-				if (!results.last()) {
-					db.finalize();
-					return null;
-				} else
-				results.beforeFirst();
-						
-				//build the event object
-				while (results.next() == true) {
-					int e_id = results.getInt(1);
-					String name = results.getString(2);
-					String date = results.getDate(3).toString();
-					String venue = results.getString(4);
-
-					evt = new Event(Integer.toString(e_id));
-					// evt.setId(resultSet.getString(1));
-					evt.setMyName(name);
-					evt.setMyFirstDate(date);					
-					evt.setVenue(venue);
-					evtList.add(evt);
-					evtId_evtObj_map.put(e_id, evt);
-					j++;
-				}
-				
-				db.finalize();
-			} catch (SQLException e) {
-				results = null;
-				db.finalize();
-				e.printStackTrace();
-			}
-			totalNumberOfValuesLeftToBatch -= batchSize; 			
-			start += batchSize;
-		}
-					
-		return evtList;
-	}
 	
 	public void printEdgeMatrix(Set<Integer>[][] matrix){
 		Set<Integer> tmpSet = new HashSet<Integer>();
@@ -842,6 +717,4 @@ public class ProtovisEventCentricManager {
 		}	
 		
 	}
-	
-	
 }
