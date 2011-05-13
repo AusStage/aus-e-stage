@@ -113,12 +113,12 @@ EventViewerClass.prototype.displayNetworkProperties = function(){
 			
 		var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 		
 	    var html = 	"<table>"+
-	  				"<tr class=\"d0\"><td valign=top><b> Centre</b></td><td>"+
+	  				"<tr class=\"d0\"><th scope='row'>Centre</th><td>"+
 	  				"<a href=" + eventUrl +""+ this.json.nodes[this.centreNode].id+" target=\"_blank\">"+	
 	  				this.json.nodes[this.centreNode].nodeName+
     				"</a> <p>"+this.json.nodes[this.centreNode].venue+"</p></td></tr>"+
-    				"<tr class=\"d1\"><td><b>Events</b></td><td> "+this.json.nodes.length+"</td></tr>"+					
-					"<tr class=\"d0\"><td><b>Contributors</b> </td><td>"+this.contributorCount+"</td></tr></table>";			
+    				"<tr class=\"d1\"><th scope='row'>Events</th><td> "+this.json.nodes.length+"</td></tr>"+					
+					"<tr class=\"d0\"><th scope='row'>Contributors</th><td>"+this.contributorCount+"</td></tr></table>";			
  		$("#network_properties_body").empty();
 		$("#network_properties_body").append(html);	
 		
@@ -650,7 +650,7 @@ function initEventGraph (obj){
 EventViewerClass.prototype.showInteraction = function(){
 	if(this.renderComplete){
 		$("#viewer_options_div").show();//show viewer options accordion
-		$("#display_event_labels_div").show();//show display label options
+		$("#event_options_div").show();//show display label options
 		if (this.nodeIndex>-1 || this.edgeIndex>-1){
 			$('#network_details_div').show();
 		}
@@ -660,12 +660,9 @@ EventViewerClass.prototype.showInteraction = function(){
 
 EventViewerClass.prototype.hideInteraction = function(){
 	$("#viewer_options_div").hide();	
-	$("#display_event_labels_div").hide();//show display label options
+	$("#event_options_div").hide();//hide display label options
 	$('#network_details_div').hide();
-	$("#network_properties_div").hide();//show network properties	
-//	$("#faceted_browsing_btn_div").hide();//show faceted browsing on/off
-//	$('#faceted_browsing_div').dialog('close');			
-//	$("#date_range_div").hide();
+	$("#network_properties_div").hide();//hide network properties	
 }
 
 EventViewerClass.prototype.refreshGraph = function(typeOfRefresh){

@@ -215,8 +215,7 @@ ContributorViewerClass.prototype.refreshGraph = function(typeOfRefresh){
 ContributorViewerClass.prototype.showInteraction = function(){
 	if(this.renderComplete){
 		$("#viewer_options_div").show();//show viewer options accordion
-		$("#display_labels_div").show();//show display label options
-		$("#display_edges_div").show();//show display edges options		
+		$("#contributor_options_div").show();//show display options
 		if (this.nodeIndex>-1 || this.edgeTIndex>-1){
 			$('#network_details_div').show();
 		}
@@ -228,8 +227,7 @@ ContributorViewerClass.prototype.showInteraction = function(){
 
 ContributorViewerClass.prototype.hideInteraction = function(){
 	$("#viewer_options_div").hide();
-	$("#display_labels_div").hide();//show display label options
-	$("#display_edges_div").hide();//show display edges options		
+	$("#contributor_options_div").hide();//show display options	
 	$('#network_details_div').hide();
 	$("#network_properties_div").hide();//show network properties	
 	$("#faceted_div").hide();//show faceted browsing on/off
