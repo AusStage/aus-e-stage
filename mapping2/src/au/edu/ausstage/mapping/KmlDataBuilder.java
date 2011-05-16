@@ -44,6 +44,7 @@ public class KmlDataBuilder {
 	 * define the base URL for icon images
 	 */
 	public static final String ICON_BASE_URL = "http://beta.ausstage.edu.au/mapping2/assets/images/kml-icons/";
+	public static final String ALT_ICON_BASE_URL = "http://beta.ausstage.edu.au/mapping2/assets/images/iconography/";
 	
 	/**
 	 * icon colour codes for contributors
@@ -54,6 +55,11 @@ public class KmlDataBuilder {
 	 * icon colour codes for organisations
 	 */
 	public static final String[] ORG_ICON_COLOUR_CODES = {"66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "60", "61", "62", "63", "64", "65", "59", "58", "57", "56", "55", "54", "53", "52", "51", "50", "49", "48", "47", "46", "45", "44", "43", "42", "41", "40", "39"};
+	
+	/**
+	 * colour codes for use in the style of icons in the balloon content
+	 */
+	public static final String[] COLOUR_CODES = {"#276abd", "#317db9", "#3b91b5", "#44a4b1", "#4eb8ad", "#3b9d8f", "#278271", "#146853", "#004d35", "#1a6b3a", "#33893e", "#4da743", "#66c547", "#8cc43d", "#b3c333", "#d9d121", "#ffe010", "#ffd117", "#ffc11f", "#ffb320", "#ffa521", "#ff9821", "#ff8a22", "#fc792c", "#f96835", "#f6573f", "#f34648", "#dc3738", "#c52829", "#af1819", "#980909", "#a31d34", "#ad315f", "#b7458a", "#c259b5", "#b556b6", "#a754b7", "#9951b7", "#8c4eb8", "#7758c0", "#6262c7", "#4d6bcf", "#3875d7", "#2a5fd4", "#1c48d1", "#0e31cf", "#001bcc", "#1442c4", "#afc8ef", "#88ace7", "#ffcd4c"};
 	
 
 
@@ -267,19 +273,6 @@ public class KmlDataBuilder {
 		int colourIndex = -1;
 		int contentCount = 0;
 		
-		/*
-		 <Placemark>
-                    <name>The Ballad of Angel's Alley</name>
-                    <atom:link
-                        href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_event_id=18750"/>
-                    <description><![CDATA[<p>The Old Tote Theatre, Kensington, 25 September 1963 <br/><a href="http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=18750">More Information</a></p>]]></description>
-                    <styleUrl>basic-event</styleUrl>
-                    <Point>
-                        <coordinates>151.2283510,-33.9157990</coordinates>
-                    </Point>
-                </Placemark>
-        */
-		
 		// loop through and add the placemarks
 		while(iterator.hasNext()) {
 		
@@ -317,13 +310,14 @@ public class KmlDataBuilder {
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("snippet");
-				//elem.setTextContent(event.getName() + "\n" + event.getVenue());
 				elem.setTextContent(kmlVenue.getName() + ", " + kmlVenue.getAddress());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("description");
 				
-				content = "<table><tr><th><a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions() + "</th></tr>";
+				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "contributor.png\" width=\"32\" height=\"32\"/></span>";
+				
+				content += " <a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions() + "</th></tr>";
 				contentCount = 0;
 				
 				Set<Event> events = kmlVenue.getEvents();
@@ -349,22 +343,20 @@ public class KmlDataBuilder {
 				elem.appendChild(xmlDoc.createCDATASection(content));
 				placemark.appendChild(elem);
 				
-				// TODO add timespan element back
-				
-				/*
+				String[] timespanValues = kmlVenue.getTimespanValues();
+
 				elem = xmlDoc.createElement("TimeSpan");
 				
 				subElem = xmlDoc.createElement("begin");
-				subElem.setTextContent(event.getSortFirstDate());
+				subElem.setTextContent(timespanValues[0]);
 				elem.appendChild(subElem);
 				
 				subElem = xmlDoc.createElement("end");
-				subElem.setTextContent(event.getSortLastDate());
+				subElem.setTextContent(timespanValues[1]);
 				elem.appendChild(subElem);
 				
 				placemark.appendChild(elem);
-				
-				*/
+
 				
 				elem = xmlDoc.createElement("styleUrl");
 				elem.setTextContent("#c-" + CON_ICON_COLOUR_CODES[colourIndex]);
@@ -418,7 +410,7 @@ public class KmlDataBuilder {
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
 			style.appendChild(createLabelStyle());
-			style.appendChild(createBalloonStyle());
+			style.appendChild(createBalloonStyle(i));
 			rootDocument.appendChild(style);
 		}
 		
@@ -447,7 +439,7 @@ public class KmlDataBuilder {
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
 			style.appendChild(createLabelStyle());
-			style.appendChild(createBalloonStyle());
+			style.appendChild(createBalloonStyle(i));
 			rootDocument.appendChild(style);
 		}
 		
@@ -473,7 +465,7 @@ public class KmlDataBuilder {
 		// add the icon style and style to the document
 		style.appendChild(iconStyle);
 		style.appendChild(createLabelStyle());
-		style.appendChild(createBalloonStyle());
+		style.appendChild(createBalloonStyle(89));
 		rootDocument.appendChild(style);
 		
 		// create the main style element
@@ -495,22 +487,26 @@ public class KmlDataBuilder {
 		// add the icon style and style to the document
 		style.appendChild(iconStyle);
 		style.appendChild(createLabelStyle());
-		style.appendChild(createBalloonStyle());
+		style.appendChild(createBalloonStyle(88));
 		rootDocument.appendChild(style);
 		
 	}
 	
 	// private method to create the balloon style elements
-	private Element createBalloonStyle() {
+	private Element createBalloonStyle(int index) {
+		
+		index = index - 39;
 	
 		Element balloonStyle = xmlDoc.createElement("BalloonStyle");
 		
 		String styleText = "<style type=\"text/css\">\n";
 		styleText += "* {font-family: Helvetica, Verdana, Arial, sans-serif;}\n";
+		styleText += "table {width: 500px;}\n";
 		styleText += "th { background-color: #AAAAAA; color: #FFFFFF; text-align: left; font-weight: normal;}\n";
 		styleText += "th a {color: #FFFFFF; }\n";
 		styleText += "tr.odd {background-color: #eeeeee; }\n";
 		styleText += "a {text-decoration: none;}\n";
+		styleText += ".icon {width: 32px; height: 32px;	float: left; margin: 5px 5px 5px 5px; background-color: " + COLOUR_CODES[index] + "}\n";
 		styleText += "</style>\n";
 		styleText += "$[description]\n";
 		

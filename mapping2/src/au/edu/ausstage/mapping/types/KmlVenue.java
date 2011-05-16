@@ -21,6 +21,7 @@ package au.edu.ausstage.mapping.types;
 // import additional AusStage libraries
 import au.edu.ausstage.utils.*;
 import java.util.Set;
+import java.util.Iterator;
 
 
 /**
@@ -109,6 +110,37 @@ public class KmlVenue implements Comparable<KmlVenue> {
 	
 	public Set<Event> getEvents() {
 		return events.getSortedEvents(events.EVENT_DATE_SORT);
+	}
+	
+	public String[] getTimespanValues() {
+	
+		if(events == null) {
+			return null;
+		}
+		
+		int min = Integer.MAX_VALUE;
+		int max = Integer.MIN_VALUE;
+		
+		String[] values = new String[2];
+		
+		Set<Event> list = events.getEvents();
+		Iterator iterator = list.iterator();
+		
+		while(iterator.hasNext()) {
+			Event event = (Event)iterator.next();
+			
+			if(DateUtils.getIntegerFromDate(event.getSortFirstDate()) < min) {
+				min = DateUtils.getIntegerFromDate(event.getSortFirstDate());
+				values[0] = event.getSortFirstDate();
+			}
+			
+			if(DateUtils.getIntegerFromDate(event.getSortLastDate()) > max) {
+				max = DateUtils.getIntegerFromDate(event.getSortLastDate());
+				values[1] = event.getSortLastDate();
+			}
+		}
+		
+		return values;	
 	}
 	
 	
