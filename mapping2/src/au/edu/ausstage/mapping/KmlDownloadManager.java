@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import org.w3c.dom.Element;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.HashMap;
 
 /**
  * A class used to prepare KML ready for download
@@ -160,6 +161,9 @@ public class KmlDownloadManager {
 		String      venue;
 		String[]    sortDates;
 		
+		KmlVenue kmlVenue;
+		HashMap<Integer, KmlVenue> kmlVenues;
+		
 		sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 		    + "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
 			+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
@@ -175,7 +179,9 @@ public class KmlDownloadManager {
 		String sqlParameters[] = new String[1];
 		
 		while(iterator.hasNext()) {
-			contributor = (Contributor)iterator.next();
+			contributor = (Contributor)iterator.next();	
+			
+			kmlVenues = new HashMap<Integer, KmlVenue>();		
 			
 			sqlParameters[0] = contributor.getId();
 			
@@ -192,6 +198,15 @@ public class KmlDownloadManager {
 			try {
 				while (resultSet.next()) {
 				
+					// check to see if we've seen this venue before
+					if(kmlVenues.containsKey(Integer.parseInt(resultSet.getString(9))) == true) {
+						kmlVenue = kmlVenues.get(Integer.parseInt(resultSet.getString(9)));
+					} else {
+						//KmlVenue(String id, String name, String address, String latitude, String longitude)
+						kmlVenue = new KmlVenue(resultSet.getString(9), resultSet.getString(10), buildVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), buildShortVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), resultSet.getString(16), resultSet.getString(17));
+						kmlVenues.put(Integer.parseInt(resultSet.getString(9)), kmlVenue);
+					}
+									
 					// build the event
 					event = new Event(resultSet.getString(1));
 					event.setName(resultSet.getString(2));
@@ -202,15 +217,12 @@ public class KmlDownloadManager {
 					event.setSortLastDate(sortDates[1]);
 					
 					event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
-					event.setLatitude(resultSet.getString(16));
-					event.setLongitude(resultSet.getString(17));
 					
-					// build the venue info
-					event.setVenueId(resultSet.getString(9));
-					event.setVenue(resultSet.getString(10) + ", " + buildVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)));
-					
-					contributor.addEvent(event);									
+					kmlVenue.addEvent(event);								
 				}
+				
+				contributor.setKmlVenues(kmlVenues);
+				
 			} catch (java.sql.SQLException ex) {
 				throw new KmlDownloadException("unable to build list of events for contributor '" + contributor.getId() + "' " + ex.toString());
 			}
@@ -251,6 +263,39 @@ public class KmlDownloadManager {
 				address += street + ", ";
 			}
 			
+			if(InputUtils.isValid(suburb) == true) {
+				address += suburb + ", ";
+			}
+			
+			if(InputUtils.isValid(country) == true) {
+				address += country;
+			} else {
+				address = address.substring(0, address.length() - 2);
+			}
+		}
+		
+		return address;
+	}
+	
+	// private function to build the venue address
+	private String buildShortVenueAddress(String country, String street, String suburb, String state) {
+	
+		String address = "";
+		
+		if(country.equals("Australia")) {
+		
+			if(InputUtils.isValid(suburb) == true) {
+				address += suburb + ", ";
+			}
+			
+			if(InputUtils.isValid(state) == true) {
+				address += state;
+			} else {
+				address = address.substring(0, address.length() - 2);
+			}
+			
+		} else {
+		
 			if(InputUtils.isValid(suburb) == true) {
 				address += suburb + ", ";
 			}

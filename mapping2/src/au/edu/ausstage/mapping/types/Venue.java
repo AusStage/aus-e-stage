@@ -85,7 +85,7 @@ public class Venue implements Comparable<Venue>{
 		this.id = id;
 		
 		// initialise the two collections		
-		contributors = new HashSet<Contributor>();
+		contributors  = new HashSet<Contributor>();
 		organisations = new TreeSet<Organisation>();
 	} // end constructor
 	

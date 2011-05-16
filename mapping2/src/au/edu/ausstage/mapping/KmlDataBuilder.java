@@ -32,6 +32,8 @@ import javax.xml.transform.stream.*;
 
 import java.util.Set;
 import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Collection;
 
 /**
  * a class responsible for building KML data
@@ -259,7 +261,11 @@ public class KmlDataBuilder {
 		Contributor contributor;
 		Event       event;
 		
+		KmlVenue kmlVenue;
+		HashMap<Integer, KmlVenue> kmlVenues;
+		
 		int colourIndex = -1;
+		int contentCount = 0;
 		
 		/*
 		 <Placemark>
@@ -279,7 +285,7 @@ public class KmlDataBuilder {
 		
 			contributor = (Contributor)iterator.next();
 			
-			if(contributor.getEventCount() == 0) {
+			if(contributor.getKmlVenueCount() == 0) {
 				throw new KmlDownloadException("there were no events associated with contributor '" + contributor.getId() + "'");
 			}
 			
@@ -292,34 +298,60 @@ public class KmlDataBuilder {
 				colourIndex++;
 			}
 			
-			Iterator events = contributor.getEvents().iterator();
+			kmlVenues = contributor.getKmlVenues();
+			Collection<KmlVenue> venues = kmlVenues.values();
+			Iterator venueIterator = venues.iterator();
 			
-			while(events.hasNext()) {
-				event = (Event)events.next();
+			
+			while(venueIterator.hasNext()) {
+			
+				kmlVenue = (KmlVenue)venueIterator.next();
 				
 				placemark = xmlDoc.createElement("Placemark");
 				elem = xmlDoc.createElement("name");
-				elem.setTextContent(event.getName());
+				elem.setTextContent(kmlVenue.getName());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("atom:link");
-				elem.setAttribute("href", event.getUrl());
+				elem.setAttribute("href", kmlVenue.getUrl());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("snippet");
 				//elem.setTextContent(event.getName() + "\n" + event.getVenue());
-				elem.setTextContent(event.getVenue());
+				elem.setTextContent(kmlVenue.getName() + ", " + kmlVenue.getAddress());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("description");
 				
 				content = "<table><tr><th><a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions() + "</th></tr>";
-				content += "<tr><td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + event.getVenue() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+				contentCount = 0;
+				
+				Set<Event> events = kmlVenue.getEvents();
+				Iterator eventIterator = events.iterator();
+				
+				while(eventIterator.hasNext()) {
+					event = (Event)eventIterator.next();
+					
+					// check if content count is odd or not
+					if (contentCount % 2 != 0) {
+						content += "<tr class=\"odd\">";
+					} else {
+						content += "<tr>";
+					} 
+					
+					content += "<td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + kmlVenue.getName() + ", " + kmlVenue.getShortAddress() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+					
+					contentCount++;
+				}
+				
 				content += "</table>";
 				
 				elem.appendChild(xmlDoc.createCDATASection(content));
 				placemark.appendChild(elem);
 				
+				// TODO add timespan element back
+				
+				/*
 				elem = xmlDoc.createElement("TimeSpan");
 				
 				subElem = xmlDoc.createElement("begin");
@@ -332,13 +364,15 @@ public class KmlDataBuilder {
 				
 				placemark.appendChild(elem);
 				
+				*/
+				
 				elem = xmlDoc.createElement("styleUrl");
 				elem.setTextContent("#c-" + CON_ICON_COLOUR_CODES[colourIndex]);
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("Point");
 				subElem = xmlDoc.createElement("coordinates");
-				subElem.setTextContent(event.getLongitude() + "," + event.getLatitude());
+				subElem.setTextContent(kmlVenue.getLongitude() + "," + kmlVenue.getLatitude());
 				elem.appendChild(subElem);
 				placemark.appendChild(elem);
 				
@@ -475,6 +509,7 @@ public class KmlDataBuilder {
 		styleText += "* {font-family: Helvetica, Verdana, Arial, sans-serif;}\n";
 		styleText += "th { background-color: #AAAAAA; color: #FFFFFF; text-align: left; font-weight: normal;}\n";
 		styleText += "th a {color: #FFFFFF; }\n";
+		styleText += "tr.odd {background-color: #eeeeee; }\n";
 		styleText += "a {text-decoration: none;}\n";
 		styleText += "</style>\n";
 		styleText += "$[description]\n";
