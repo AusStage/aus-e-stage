@@ -38,14 +38,20 @@ public class EventList {
 	// declare public constants
 	
 	/**
-	 * Sort venues by id
+	 * Sort events by id
 	 */
 	public final static int EVENT_ID_SORT = 0;
 	
 	/**
-	 * sort venues by name
+	 * sort events by name
 	 */
 	public final static int EVENT_NAME_SORT = 1;
+	
+	/**
+	 * sort events by first date
+	 */
+	public final static int EVENT_DATE_SORT = 2;
+	
 	
 	/**
 	 * A constructor for this class
@@ -178,6 +184,9 @@ public class EventList {
 		} else if(sortType == EVENT_NAME_SORT) {
 			sortedEvents = new TreeSet<Event>(new EventNameComparator());
 			sortedEvents.addAll(events);
+		} else if(sortType == EVENT_DATE_SORT) {
+			sortedEvents = new TreeSet<Event>(new EventDateComparator());
+			sortedEvents.addAll(events);		
 		} else {
 			throw new IllegalArgumentException("Unknown sort type specified");
 		}

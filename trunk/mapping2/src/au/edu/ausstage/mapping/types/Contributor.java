@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -45,6 +46,7 @@ public class Contributor implements Comparable<Contributor>{
 	private String eventDates = null;
 	private String functions = null;
 	private Set<Event> events;
+	private HashMap<Integer, KmlVenue> kmlVenues = null;
 	
 	// private constants
 	private final String FUNCTION_SEPERATOR = "\\|";
@@ -77,6 +79,7 @@ public class Contributor implements Comparable<Contributor>{
 	
 		// initialise the collections
 		events = new HashSet<Event>();
+		kmlVenues = new HashMap<Integer, KmlVenue>();
 
 	} // end constructor
 	
@@ -105,6 +108,7 @@ public class Contributor implements Comparable<Contributor>{
 		
 		// initalise the collections		
 		events = new HashSet<Event>();
+		kmlVenues = new HashMap<Integer, KmlVenue>();
 		
 	} // end constructor
 	
@@ -399,6 +403,22 @@ public class Contributor implements Comparable<Contributor>{
 		}
 		
 		return list;
+	}
+	
+	public HashMap<Integer, KmlVenue> getKmlVenues() {
+		return kmlVenues;
+	}
+	
+	public void setKmlVenues(HashMap<Integer, KmlVenue> venues) {
+		kmlVenues = venues;
+	}
+	
+	public int getKmlVenueCount() {
+		if(kmlVenues != null) {
+			return kmlVenues.size();
+		} else {
+			return 0;
+		}
 	}
 		
 		
