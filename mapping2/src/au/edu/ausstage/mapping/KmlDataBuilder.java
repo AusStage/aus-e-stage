@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.TreeSet;
 
 /**
  * a class responsible for building KML data
@@ -144,7 +145,9 @@ public class KmlDataBuilder {
 		name.setTextContent("AusStage");
 		
 		Element description = xmlDoc.createElement("description");
-		description.setTextContent("Map data from <a href=\"http://www.ausstage.edu.au\">AusStage</a>");
+		String[] date = DateUtils.getCurrentDateTimeAsArray();
+		
+		description.setTextContent("Data from <a href=\"http://www.ausstage.edu.au\">AusStage</a> on " + DateUtils.buildDisplayDate(date[0], date[1], date[2]) + " at " + date[3] + ":" + date[4] + ":" + date[5]);
 		
 		// add the name element to the folder
 		rootFolder.appendChild(name);
@@ -182,8 +185,8 @@ public class KmlDataBuilder {
 	private Element addFolder(String name, String description) {
 	
 		// check on the parameters
-		if(InputUtils.isValid(name) == false || InputUtils.isValid(description) == false) {
-			throw new IllegalArgumentException("both parameters are required");
+		if(InputUtils.isValid(name) == false) {
+			throw new IllegalArgumentException("name parameter is required");
 		}
 		
 		// create the new folder
@@ -192,12 +195,13 @@ public class KmlDataBuilder {
 		// add the name and description elements
 		Element n = xmlDoc.createElement("name");
 		n.setTextContent(name);
-		
-		Element d = xmlDoc.createElement("description");
-		d.setTextContent(description);
-		
 		folder.appendChild(n);
-		folder.appendChild(d);
+		
+		if(InputUtils.isValid(description) == true) {
+			Element d = xmlDoc.createElement("description");
+			d.setTextContent(description);
+			folder.appendChild(d);
+		}
 		
 		rootFolder.appendChild(folder);
 		
@@ -246,13 +250,14 @@ public class KmlDataBuilder {
 			throw new IllegalArgumentException("The contributors parameter must be a valid object");
 		}
 		
-		Set<Contributor> contributors = list.getContributors();
+		//Set<Contributor> contributors = list.getContributors();
+		Set<Contributor> contributors = list.getSortedContributors(ContributorList.CONTRIBUTOR_ALT_NAME_SORT);
 		
 		if(contributors.isEmpty() == true) {
 			throw new IllegalArgumentException("There must be at least one contributor in the supplied list");
 		}
 			
-		Element folder = addFolder("Contributors", "Maps of events grouped by contributor");
+		Element folder = addFolder("Contributors", null);
 		Element document;
 		
 		Element placemark;
@@ -282,7 +287,7 @@ public class KmlDataBuilder {
 				throw new KmlDownloadException("there were no events associated with contributor '" + contributor.getId() + "'");
 			}
 			
-			document = addDocument(folder, contributor.getName(), "Map of events for: <a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions());
+			document = addDocument(folder, contributor.getName(), contributor.getFunctions());
 
 			// determine which style to use
 			if(colourIndex ==  CON_ICON_COLOUR_CODES.length) {
@@ -292,7 +297,9 @@ public class KmlDataBuilder {
 			}
 			
 			kmlVenues = contributor.getKmlVenues();
-			Collection<KmlVenue> venues = kmlVenues.values();
+			
+			Set<KmlVenue> venues = new TreeSet<KmlVenue>(new KmlVenueComparator());
+			venues.addAll(kmlVenues.values());
 			Iterator venueIterator = venues.iterator();
 			
 			
@@ -310,7 +317,7 @@ public class KmlDataBuilder {
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("snippet");
-				elem.setTextContent(kmlVenue.getName() + ", " + kmlVenue.getAddress());
+				elem.setTextContent(kmlVenue.getName() + ", " + kmlVenue.getShortAddress());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("description");
@@ -506,7 +513,9 @@ public class KmlDataBuilder {
 		styleText += "th a {color: #FFFFFF; }\n";
 		styleText += "tr.odd {background-color: #eeeeee; }\n";
 		styleText += "a {text-decoration: none;}\n";
-		styleText += ".icon {width: 32px; height: 32px;	float: left; margin: 5px 5px 5px 5px; background-color: " + COLOUR_CODES[index] + "}\n";
+		styleText += "a:visited {color: #ffffff; text-decoration: none;} \n";
+		styleText += "a:hover {color: #ffffff; text-decoration: underline;} \n";
+		styleText += ".icon {width: 32px; height: 32px;	float: left; margin: 3px 5px 5px 5px; background-color: " + COLOUR_CODES[index] + "}\n";
 		styleText += "</style>\n";
 		styleText += "$[description]\n";
 		
