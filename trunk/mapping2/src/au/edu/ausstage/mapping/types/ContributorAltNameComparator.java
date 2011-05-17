@@ -20,11 +20,12 @@ package au.edu.ausstage.mapping.types;
 
 // import additional libraries
 import java.util.Comparator;
+import au.edu.ausstage.utils.InputUtils;
 
 /**
  * A class to compare contributors based on their full name
  */
-public class ContributorNameComparator implements Comparator<Contributor>, java.io.Serializable {
+public class ContributorAltNameComparator implements Comparator<Contributor>, java.io.Serializable {
 
 	/**
 	 * Compare two events for contributors
@@ -36,9 +37,13 @@ public class ContributorNameComparator implements Comparator<Contributor>, java.
 	 */
 	public int compare(Contributor firstContributor, Contributor secondContributor) {
 	
-		// get the values
-		String firstName  = firstContributor.getName();
-		String secondName = secondContributor.getName();
+		String firstName  = firstContributor.getLastName() + " " + firstContributor.getFirstName();
+		String secondName = secondContributor.getLastName() + " " + secondContributor.getFirstName();
+		
+		if(InputUtils.isValid(firstName) == false || InputUtils.isValid(secondName) == false) {
+			firstName  = firstContributor.getName();
+			secondName = secondContributor.getName();
+		}	
 		
 		// check for legitimate duplication
 		if(firstName.equals(secondName) == true) {

@@ -24,7 +24,7 @@ import java.util.Comparator;
 /**
  * A class to compare venues using their name
  */
-public class VenueNameComparator implements Comparator<Venue>, java.io.Serializable{
+public class KmlVenueComparator implements Comparator<KmlVenue>, java.io.Serializable{
 
 	/**
 	 * Compare two venues sorting by name
@@ -34,25 +34,11 @@ public class VenueNameComparator implements Comparator<Venue>, java.io.Serializa
 	 *
 	 * @return the result of the comparison
 	 */
-	public int compare(Venue first, Venue second) {
-	
-		/*
-		 * have to use more than just the name as so many venues have the same name :(
-		 */
-		 
-	
+	public int compare(KmlVenue first, KmlVenue second) {
+
 		// get the values to compare
 		String firstValue  = first.getName();
 		String secondValue = second.getName();
-		
-		if(firstValue.equals(secondValue) == true) {
-		
-			firstValue  += first.getStreet();
-			secondValue += second.getStreet();
-		
-			firstValue += first.getSuburb();
-			secondValue += second.getSuburb();
-		}
 		
 		return firstValue.compareTo(secondValue);
 	

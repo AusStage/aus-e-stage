@@ -103,7 +103,7 @@ public class KmlDownloadServlet extends HttpServlet {
 		response.setContentType("application/vnd.google-earth.kml+xml; charset=UTF-8");
 		
 		String[] fields = DateUtils.getCurrentDateTimeAsArray();
-		response.setHeader("Content-Disposition", "attachment;filename=" + "ausstage-map-" + fields[0] + "-" + fields[1] + "-" + fields[2] + "--" + fields[3] + "-" + fields[4] + "-" + fields[5] +".kml");
+		response.setHeader("Content-Disposition", "attachment;filename=" + "ausstage-map-" + fields[0] + "-" + fields[1] + "-" + fields[2] + "-" + fields[3] + "-" + fields[4] + "-" + fields[5] +".kml");
 			
 		try {
 			download.print(response.getWriter());

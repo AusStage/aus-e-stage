@@ -129,6 +129,9 @@ public class KmlDownloadManager {
 			while (resultSet.next()) {
 				contributor = new Contributor(resultSet.getString(1), resultSet.getString(2) + " " + resultSet.getString(3), LinksManager.getContributorLink(resultSet.getString(1)));
 				
+				contributor.setFirstName(resultSet.getString(2));
+				contributor.setLastName(resultSet.getString(3));
+				
 				contributor.setFunctions(resultSet.getString(4));
 				functions = contributor.getFunctionsAsArray();
 				list = "";

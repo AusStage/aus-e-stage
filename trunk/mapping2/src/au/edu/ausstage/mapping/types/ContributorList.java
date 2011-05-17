@@ -43,6 +43,11 @@ public class ContributorList {
 	 * sort contributors by name
 	 */
 	public final static int CONTRIBUTOR_NAME_SORT = 1;
+	
+	/**
+	 * sort contributors by last name, first name
+	 */
+	public final static int CONTRIBUTOR_ALT_NAME_SORT = 3;
 
 	// declare private variables
 	private Set<Contributor> contributors;
@@ -173,6 +178,9 @@ public class ContributorList {
 			sortedContributors = new TreeSet<Contributor>(contributors);
 		} else if (sortType == CONTRIBUTOR_NAME_SORT) {
 			sortedContributors = new TreeSet<Contributor>(new ContributorNameComparator());
+			sortedContributors.addAll(contributors);
+		} else if (sortType == CONTRIBUTOR_ALT_NAME_SORT) {
+			sortedContributors = new TreeSet<Contributor>(new ContributorAltNameComparator());
 			sortedContributors.addAll(contributors);
 		} else {
 			throw new IllegalArgumentException("Unknown sort type specified");
