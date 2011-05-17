@@ -317,7 +317,7 @@ public class KmlDataBuilder {
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("snippet");
-				elem.setTextContent(kmlVenue.getName() + ", " + kmlVenue.getShortAddress());
+				elem.setTextContent(kmlVenue.getShortAddress());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("description");
@@ -510,11 +510,13 @@ public class KmlDataBuilder {
 		styleText += "* {font-family: Helvetica, Verdana, Arial, sans-serif;}\n";
 		styleText += "table {width: 500px;}\n";
 		styleText += "th { background-color: #AAAAAA; color: #FFFFFF; text-align: left; font-weight: normal;}\n";
-		styleText += "th a {color: #FFFFFF; }\n";
+		styleText += "th a {color: #FFFFFF; text-decoration: none;}\n";
+		styleText += "th a:visited {color: #ffffff; text-decoration: none;} \n";
+		styleText += "th a:hover {color: #ffffff; text-decoration: underline;} \n";
 		styleText += "tr.odd {background-color: #eeeeee; }\n";
-		styleText += "a {text-decoration: none;}\n";
-		styleText += "a:visited {color: #ffffff; text-decoration: none;} \n";
-		styleText += "a:hover {color: #ffffff; text-decoration: underline;} \n";
+		styleText += "a {color: #001bcc; text-decoration: none;}\n";
+		styleText += "a:visited {color: #001bcc; text-decoration: none;} \n";
+		styleText += "a:hover {color: #001bcc; text-decoration: underline;} \n";
 		styleText += ".icon {width: 32px; height: 32px;	float: left; margin: 3px 5px 5px 5px; background-color: " + COLOUR_CODES[index] + "}\n";
 		styleText += "</style>\n";
 		styleText += "$[description]\n";
