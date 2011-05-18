@@ -1,7 +1,7 @@
 #summary Default Sidebar for all Wiki pages
 
  * !HowTo articles
-   * [WorkingWithMaps] Working With Maps
+   * [WorkingWithMaps Working With Maps]
      * [GoogleEarthImageOverlay Image Overlays in Google Earth]
      * [MapInfoToKML Converting MapInfo Data to KML]
      * [GoogleEarthABSOverlay Preparing an ABS Overlay]
