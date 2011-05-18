@@ -1,6 +1,6 @@
 #summary Working With maps index page
 
-The pages below provide help on working with !AusStage maps
+The links below go to pages that provide help on working with !AusStage maps
 
  * [GoogleEarthImageOverlay Image Overlays in Google Earth]
  * [MapInfoToKML Converting MapInfo Data to KML]
