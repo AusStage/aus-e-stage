@@ -123,6 +123,31 @@ function MappingClass() {
 // define a function to initialise the mapping page elements
 MappingClass.prototype.init = function() {
 
+	// set up the iconography help dialog
+	$("#help_map_icons_div").dialog({ 
+		autoOpen: false,
+		height: 600,
+		width: 600,
+		modal: true,
+		buttons: {
+			Close: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			// build the legend table rows
+			mappingObj.buildIconographyHelp();			
+		},
+		close: function() {
+			
+		}
+	});
+	
+	$('.map-icon-help').click(function() {
+		$('#help_map_icons_div').dialog('open');
+	});
+
+
 	// resize the map when the tab is shown
 	$('#tabs').bind('tabsshow', function(event, ui) {
 		if (ui.panel.id == "tabs-3") { // tabs-3 == the map tab
