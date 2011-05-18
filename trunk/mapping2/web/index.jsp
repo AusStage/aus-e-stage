@@ -32,7 +32,6 @@
 	<!-- libraries -->
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.6.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.12.custom.min.js"></script>
-	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.11.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.cookie-1.0.js"></script>
@@ -65,10 +64,10 @@
 		<div class="peekaboo-tohide mainMenu">
 			<ul>
 				<li>&nbsp;</li>
-				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a> <span class="peekaboo clickable" style="float: right; padding-right: 1em;">[Hide]</span></li>
+				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a> <span style="float: right; padding-right: 1em;">[<span class="peekaboo clickable">Hide</span>]</span></li>
 				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
 				<li><a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a></li>
-				<li class="map-icon-help clickable">Map Iconography</li>
+				<li class="map-icon-help clickable">About Maps</li>
 			</ul>
 		</div>
 		<ul class="peekaboo-show peekaboo-big">
@@ -133,7 +132,7 @@
 							<tbody>
 							<tr>
 								<td style="width: 50%">
-									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/> <span id="show_search_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" title="Search Help"></span>
+									<input type="search" size="40" id="query" name="query" title="Enter a few search terms into this box"/> <input type="submit" name="submit" id="search_btn" value="Search"/> <span id="show_search_help" class="helpIcon clickable"></span>
 								</td>
 								<td style="width: 40%">
 									<div id="search_messages" class="js">
@@ -154,7 +153,6 @@
 							</tbody>
 						</table>
 					</form>
-					<h3>Search Results</h3>
 					<div class="accordion">
 						<h3><a href="#" id="contributor_heading">Contributors</a></h3>
 							<div id="contributor_results"></div>
@@ -171,13 +169,12 @@
 						<h3><a href="#" id="event_heading">Events</a></h3>
 							<div id="event_results"></div>
 					</div>
-					<h3 style="padding-top: 15px;">Search History</h3>
 					<div class="accordion">
-						<h3><a href="#" id="search_history_heading">Previous Searches</a></h3>
+						<h3><a href="#" id="search_history_heading">Search History</a></h3>
 						<table class="searchResults">
 							<thead>
 								<tr>
-									<th>Query</th><th>Persistent Link</th><th>Results</th>
+									<th>Query - click to repeat</th><th>Link - right-click to bookmark</th><th class="alignRight">Contributors</th><th class="alignRight">Organisations</th><th class="alignRight">Venues</th><th class="alignRight">Events</th>
 								</tr>
 							</thead>
 							<tbody id="search_history">
@@ -235,40 +232,31 @@
 </div>
 <jsp:include page="footer.jsp"/>
 <!-- help divs -->
-<div id="help_search_div" title="Help on Searching" class="dialogs">
+<div id="help_search_div" title="Help" class="dialogs">
 	<h3>Searching the AusStage database</h3>
 	<p>
-		This is a simplified search page that returns results in the four categories outlined below. A search result will contain all of your search terms in the search index, including such items as
-		alternate names, and previous names. Please wait for the search to complete before exploring the results.
+		This search retrieves contributors, organisations, venues and events that match all your search terms. Records with matching alternate or previous names will also be retrieved. Please wait for the search to complete before exploring the results. 
 	</p>
 	<p>
-		At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search terms. If a search result is still missing, use the main <a href="http://www.ausstage.edu.au/" title="Main AusStage website">AusStage</a> website to ensure
-		that the item you are looking for is associated with a venue which has coordinates stored in the AusStage database.			
+		A maximum of 25 search results will retrieved for each type of record. If you don't see what you're looking for, try refining your search terms. You could also try searching the main <a href="http://www.ausstage.edu.au/" title="AusStage homepage">AusStage</a> website.
 	</p>
 </div>
-<div id="help_add_view_div" title="Help on Adding Items and Viewing the Map" class="dialogs">
-	<h3>Adding items to the map</h3>
+<div id="help_add_view_div" title="Help" class="dialogs">
+	<h3>Adding Items to the Map</h3>
 	<p>
-		Click the 'Add to Map' button to add the currently selected items to the map. The map will be displayed automatically.
+		Select items by ticking the box next to the name. Click the Add to Map button to add the selected items to the map. The map will be displayed when the items have been added. 
 	</p>
 	<p>
-		Alternatively to view the map click the 'Map' tab at the top of the page.
-	</p>
-	<h3>Browsing Areas to Find Venues</h3>
-	<p>
-		Click on the 'Venues' tab if you have not already done so.
-	</p>
-	<p>
-		Click on an item to see a list of items at the next level, tick the box to select all items at lower levels
+		Switch between the Search, Browse and Map tabs across the top to continue searching, browsing and adding items to the map.
 	</p>
 </div>
-<div id="help_map_icons_div" title="Help on Map Iconography" class="dialogs">
-	<h3>AusStage Map Iconography</h3>
+<div id="help_map_icons_div" title="About Maps" class="dialogs">
+	<h3>Icons</h3>
 	<p>
-		Map iconography refers to the way in which information is displayed on a map using icons. The AusStage mapping service uses a number of icons to display information on a map.
+		AusStage uses icons to display information on the map. There are different icons for contributors, organisations, venues and events. When two or more icons are at the same location, they are grouped together in a row above a single marker.
 	</p>
 	<p>
-		The colour of an icon indicates the number records associated with the location.
+		The colour of an icon and the number beneath indicate how many records an icon represents. When an individual contributor or organisation is added to the map, an individual colour is assigned to its icon. When an icon on the map represents two or more contributors, organisations, venues or events, colour shades from light to dark indicates how many.
 	</p>
 	<p>
 		When a contributor or organisation is added to a map, one of a sequence of 48 colours will be assigned to that record. This individual colour will be used when there is only one organisation or contributor associated with the location.
@@ -304,22 +292,30 @@
 		<tbody id="map_iconography_individual_colours">
 		</tbody>
 	</table>
-	<p><strong>Marker Clusters</strong></p>
+	<h3>View</h3>
 	<p>
-		When Marker Clustering is enabled markers on the map are clustered together based on how close they are on the map.
+		Change your view of the map by using the pan and zoom controls on the map. You can also change views by clicking on one of the pre-set views for country, state and capital cities.
 	</p>
 	<p>
-		When two or more markers are close enough to each other at the current map zoom level they are clustered together.
+		Markers are clustered together to make the map easier to read. When two or more markers are close to each other, they may be replaced by a gray icon representing a cluster. The number indicates how many markers are clustered together. 
 	</p>
 	<p>
-		A marker cluster is shown on the map using the icon below. 
+		Click on a cluster to zoom in and reveal the individual markers contained in the cluster. Clustering is automatically enabled when there are 100 or more markers on the map.
 	</p>
-	<p>
-		The number shown on a marker cluster icon indicates the number of markers clustered together.
-	</p>
-	<div style="background-color: #c2d2e1; width:96px; height:96px;">
+	<p style="background-color: #c2d2e1; width:96px; height:96px;">
 		<img src="assets/images/iconography/cluster.png" width="96" height="96" alt="Marker Cluster Icon"/>
-	</div>
+	</p>
+	<h3>Save</h3>
+	<p>
+		Simple maps with less than 100 markers may be saved as a bookmark in your browser. The bookmark will retrieve the latest data from AusStage each time you reload your map.
+	</p>
+	<p>
+		Maps may be downloaded for viewing in other map software such as <a href="http://www.google.com/earth/index.html" title="More information on Google Earth">Google Earth</a>. Map files are formatted in <a href="http://code.google.com/apis/kml/documentation/" title="Documentation on KML">Keyhole Markup Language</a> (KML). 
+	</p>
+	<h3>Contributors | Organisations | Venues | Events</h3>
+	<p>
+		The legend lists the contributors, organisations, venues and events on the map. From the legend, you can show and hide icons, and delete icons from the map. Clicking on a venue or contributor in the legend will reveal the icon on the map. 
+	</p>
 </div>
 <div id="map_legend_confirm_delete" title="Confirm Map Marker Deletion" class="dialogs">
 	<h3>Are you sure?</h3>

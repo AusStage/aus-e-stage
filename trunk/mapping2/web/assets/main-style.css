@@ -103,6 +103,7 @@ html, body {
 }
 
 .footer a:hover {
+	color: #fff;
 	text-decoration: underline;
 }
 
@@ -541,6 +542,15 @@ table.mapLegendTable th {
 	margin-bottom: 1em;
 }
 	
+/* Styles for the help icons */
+.helpIcon {
+	/* based on jQueryUi icons */
+	width: 16px; 
+	height: 16px; 
+	display: inline-block; 
+	background-image: url(/assets/jquery-ui/images/ui-icons_2e83ff_256x240.png);
+	background-position: -16px -144px;
+}
 
 
 /* Styles for the Tipsy Library */

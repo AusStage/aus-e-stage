@@ -250,7 +250,6 @@ public class KmlDataBuilder {
 			throw new IllegalArgumentException("The contributors parameter must be a valid object");
 		}
 		
-		//Set<Contributor> contributors = list.getContributors();
 		Set<Contributor> contributors = list.getSortedContributors(ContributorList.CONTRIBUTOR_ALT_NAME_SORT);
 		
 		if(contributors.isEmpty() == true) {
