@@ -70,30 +70,6 @@ $(document).ready(function(){
 	// set up the menu hide / show functionality
 	$('.peekaboo').click(resizeSidebar);
 	
-	// set up the iconography help dialog
-	$("#help_map_icons_div").dialog({ 
-		autoOpen: false,
-		height: 600,
-		width: 600,
-		modal: true,
-		buttons: {
-			Close: function() {
-				$(this).dialog('close');
-			}
-		},
-		open: function() {
-			// build the legend table rows
-			mappingObj.buildIconographyHelp();			
-		},
-		close: function() {
-			
-		}
-	});
-	
-	$('.map-icon-help').click(function() {
-		$('#help_map_icons_div').dialog('open');
-	});
-	
 	// check to see if this is a persistent link search request
 	searchObj.doSearchFromLink();
 	

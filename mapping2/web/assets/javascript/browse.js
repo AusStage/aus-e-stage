@@ -51,6 +51,29 @@ BrowseClass.prototype.init = function() {
 	
 	// set up a handler for when the ajax calls finish
 	$("#browse_messages").bind('mappingBrowseAjaxQueue' + 'AjaxStop', browseObj.addDataToMap);
+	
+	// set up the browse help dialog
+	$("#help_browse_div").dialog({ 
+		autoOpen: false,
+		height: 400,
+		width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+				$(this).dialog('close');
+			}
+		},
+		open: function() {
+			
+		},
+		close: function() {
+			
+		}
+	});
+	
+	$('#show_browse_help').click(function() {
+		$('#help_browse_div').dialog('open');
+	});
 
 }
 
@@ -469,7 +492,7 @@ BrowseClass.prototype.addToMap = function() {
 	if(venues.majorAreas.length > 0 || venues.suburbs.length > 0 || venues.venues.length > 0) {
 		// add these venues to the map
 		// inform the user
-		$('#browse_messages').empty().append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+		$('#browse_messages').empty().append(buildInfoMsgBox('Adding items to the map...'));
 		
 		var ajaxQueue = $.manageAjax.create("mappingBrowseAjaxQueue", {
 			queue: true

@@ -76,12 +76,12 @@
 		<div class="mapControlsContainer js peejaboo-tohide">
 			<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184"/>
 			<div class="accordion" id="mapLegendPanAndZoomControls">
-				<h3><a href="#" id="mapLegendPanAndZoomHeading">Clustering and Focus</a></h3>				
+				<h3><a href="#" id="mapLegendPanAndZoomHeading">View</a></h3>				
 				<div id="mapLegendPanAndZoom" class="mapLegendInnerContainer">
 				</div>
 			</div>
 			<div class="accordion" id="mapLegendAdvancedControls">
-				<h3><a href="#" id="mapLegendAdvancedControlsHeading">Bookmark and Download</a></h3>
+				<h3><a href="#" id="mapLegendAdvancedControlsHeading">Save</a></h3>
 				<div class="mapLegendInnerContainer">
 					<ul>
 						<li class="map-bookmark-open clickable">Bookmark this map</li>
@@ -203,7 +203,7 @@
 						<div id="browse_footer" style="height:50px; width=100%;">
 							<div style="float:left; padding-top: 15px;" id="browse_messages"></div>
 							<div style="float:right; padding-top: 15px;">
-								<input type="button" id="browse_reset_btn" value="Reset Browse List"/><input type="button" id="browse_add_btn" value="Add To Map"/><span class="ui-icon ui-icon-help clickable use-tipsy show_add_view_help" style="display: inline-block;" title="Add to Map Help"></span>
+								<input type="button" id="browse_reset_btn" value="Reset Browse"/><input type="button" id="browse_add_btn" value="Add To Map"/> <span id="show_browse_help" class="helpIcon clickable"></span>
 							</div>
 						</div>
 					</div>
@@ -245,6 +245,18 @@
 	<h3>Adding Items to the Map</h3>
 	<p>
 		Select items by ticking the box next to the name. Click the Add to Map button to add the selected items to the map. The map will be displayed when the items have been added. 
+	</p>
+	<p>
+		Switch between the Search, Browse and Map tabs across the top to continue searching, browsing and adding items to the map.
+	</p>
+</div>
+<div id="help_browse_div" title="Help" class="dialogs">
+	<h3>Browsing for Venues</h3>
+	<p>
+		Browse for venues by clicking on the countries or states to reveal cities, suburbs and localities. Click on cities, suburbs and localities to reveal venues. Tick the box next to a name to select items at the next level down.
+	</p>
+	<p>
+		Click the Add to Map button to add venues to the map. The map will be displayed when the venues have been added. 
 	</p>
 	<p>
 		Switch between the Search, Browse and Map tabs across the top to continue searching, browsing and adding items to the map.
@@ -317,57 +329,33 @@
 		The legend lists the contributors, organisations, venues and events on the map. From the legend, you can show and hide icons, and delete icons from the map. Clicking on a venue or contributor in the legend will reveal the icon on the map. 
 	</p>
 </div>
-<div id="map_legend_confirm_delete" title="Confirm Map Marker Deletion" class="dialogs">
-	<h3>Are you sure?</h3>
-	<p>
-		Are you sure you want to delete the marker from the map?
-	</p>
+<div id="map_legend_confirm_delete" title="Confirm Delete" class="dialogs">
+	<h3>Do you want to delete this marker from the map?</h3>
 	<div id="map_legend_confirm_delete_text">
 	</div>
 </div>
-<div id="map_legend_confirm_reset" title="Confirm Map Reset" class="dialogs">
-	<h3>Are you sure?</h3>
+<div id="map_legend_confirm_reset" title="Confirm Reset" class="dialogs">
+	<h3>Do you want to reset the map?</h3>
 	<p>
-		Are you sure you want to reset the map and delete all markers from the map?
-	</p>
-	<p>
-		Please note your search history will be preserved and is available under the 'Search History' heading on the Search tab.
+		If you reset the map, all icons will be deleted, the legend will be emptied and the map will be re-centered. Your search history will remain available on the Search tab.
 	</p>
 </div>
-<div id="map_legend_clustering_error" title="Unable to Disable Clustering" class="dialogs">
-	<h3>Clustering cannot be disabled at this time</h3>
+<div id="map_legend_clustering_error" title="Clustering" class="dialogs">
+	<h3>Unable to disable clustering</h3>
 	<p>
-		Clustering is automatically enabled when <span class="mlce_max"></span> markers are added to the map (including hidden markers).
-	</p>
-	<p>
-		You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
-	</p>
-	<p>
-		If you feel the limit is too low, please contact the AusStage team
+		Clustering is automatically enabled when <span class="mlce_max"></span> markers are added to the map (including hidden markers). You currently have <span class="mlce_current"></span> markers added to the map. To disable clustering, remove some markers from the map and try again. If you feel the limit is too low, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">contact us</a>.
 	</p>
 </div>
-<div id="map_bookmark_div" title="Bookmark this Map" class="dialogs">
-	<h3>Create a bookmark for this map</h3>
+<div id="map_bookmark_div" title="Bookmark" class="dialogs">
+	<h3>Save a bookmark for this map</h3>
 	<p>
-		The link below will be a bookmark to this map including all of the contributors, organisations, venues and events that you have added to the map.
-	</p>
-	<p>
-		It will not preserve any hidden markers or the selected time period in the time slider. 
-	</p>
-	<p>
-		&nbsp;
-	</p>
-	<p>
-		<a href="" title="Bookmark this Map" id="map_bookmark_link">Aus-e-Stage Map Bookmark</a>
+		<a href="" title="Bookmark this Map" id="map_bookmark_link">AusStage Map Bookmark</a> - Add this link as a bookmark to your browser. The bookmark will retrieve the latest data from AusStage each time you reload your map. The map includes all the contributors, organisations, venues and events you have added. Hidden markers will be visible and the time-slider will be maximised.
 	</p>
 </div>
-<div id="map_bookmark_error_div" title="Bookmark this Map" class="dialogs">
-	<h3>A bookmark cannot be created for this map</h3>
+<div id="map_bookmark_error_div" title="Bookmark" class="dialogs">
+	<h3>Save a bookmark for this map</h3>
 	<p>
-		Bookmarks are only available when the map contains less than <span class="mlce_max"></span> markers (including hidden markers).
-	</p>
-	<p>
-		You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
+		Bookmarks are only available when the map contains less than <span class="mlce_max"></span> markers (including hidden markers). You currently have <span class="mlce_current"></span> markers added to the map. Delete some markers and then try again.
 	</p>
 </div>
 <div id="map_bookmark_loading_div" title="Loading Map from Bookmark" class="dialogs">

@@ -61,12 +61,12 @@ MapLegendClass.prototype.init = function() {
 		width: 400,
 		modal: true,
 		buttons: {
-			Yes: function() {
+			Cancel: function() {
+				$(this).dialog('close');
+			},
+			Delete: function() {
 				$(this).dialog('close');
 				mapLegendObj.doDeleteMarker(param);
-			},
-			No: function() {
-				$(this).dialog('close');
 			}
 		}
 	});
@@ -78,12 +78,12 @@ MapLegendClass.prototype.init = function() {
 		width: 400,
 		modal: true,
 		buttons: {
-			Yes: function() {
+			Cancel: function() {
+				$(this).dialog('close');
+			},
+			Reset: function() {
 				$(this).dialog('close');
 				mappingObj.resetMap();
-			},
-			No: function() {
-				$(this).dialog('close');
 			}
 		}
 	});
@@ -121,13 +121,16 @@ MapLegendClass.prototype.init = function() {
 				$(".mlce_max").empty().append(mappingObj.applyClusterLimit);
 				$(".mlce_current").empty().append(mappingObj.markerData.objects.length);
 				$("#map_legend_clustering_error").dialog('open');
-				checkbox.attr('checked','checked');
+						
+				// return false to stop default ui action
+				return false;
 			} else {
 				mappingObj.clusteringEnabled = false;
 				mappingObj.updateMap();
 				checkbox.removeAttr('checked');
 			}
 		}
+
 	});
 	
 	// setup an event to detect a change in the map controls and adjust legend hieght accordingly
@@ -277,10 +280,6 @@ MapLegendClass.prototype.updateLegend = function() {
 			
 			// add the icon
 			tableData += '<td class="mapLegendIcon"><span class="' + mappingObj.organisationColours.colours[idx] + ' mapLegendIconImg"><img src="' + mapIconography.organisation + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
-			
-			// build a tmp variable containing the name
-			//tmp = obj.name;
-			//tmp = tmp.replace(/\s/g, '&nbsp;');
 			
 			// add the name and functions
 			tableData += '<td class="mapLegendInfo"><a href="' + obj.url + '" target="_ausstage">' + obj.name + '</a><br/>';
@@ -519,9 +518,6 @@ MapLegendClass.prototype.buildPanAndZoom = function() {
 	// declare helper variables
 	var tableData = '<table class="mapLegendTable">';
 	
-	// add the clustering row
-	tableData += '<tr><th scope="row">Clustering</th><td><input type="checkbox" name="btn_cluster_map" id="btn_cluster_map"/></td></tr>';
-	
 	// add the contries row
 	tableData += '<tr><th scope="row">Country</th>';
 	tableData += '<td><span class="clickable mapPanAndZoom" id="mpz-australia">Australia</span> | <span class="clickable mapPanAndZoom" id="mpz-international">International</span></td></tr>';
@@ -547,6 +543,9 @@ MapLegendClass.prototype.buildPanAndZoom = function() {
 	tableData += '<span class="clickable mapPanAndZoom" id="mpz-melbourne">Melbourne</span> | ';
 	tableData += '<span class="clickable mapPanAndZoom" id="mpz-perth">Perth</span> | ';
 	tableData += '<span class="clickable mapPanAndZoom" id="mpz-sydney">Sydney</span></td></tr>';
+		
+	// add the clustering row
+	tableData += '<tr><th scope="row">Clustering</th><td><input type="checkbox" name="btn_cluster_map" id="btn_cluster_map"/></td></tr>';
 	
 	// finalise the table
 	tableData += '</table>';
@@ -909,7 +908,7 @@ MapLegendClass.prototype.showHideMarker = function() {
 	// determine which type of marker to work on
 	if(id[1] == 'contributor') {
 		// show / hide contributor markers
-		if(checkbox.attr("checked") == true) {
+		if(checkbox.is(':checked') == true) {
 			//un-hide this marker
 			idx = $.inArray(id[2], mappingObj.hiddenMarkers.contributors);
 			if(idx != -1) {
@@ -921,7 +920,7 @@ MapLegendClass.prototype.showHideMarker = function() {
 		}
 	} else if(id[1] == 'organisation') {
 		// show / hide organisation markers
-		if(checkbox.attr("checked") == true) {
+		if(checkbox.is(':checked') == true) {
 			//un-hide this marker
 			idx = $.inArray(id[2], mappingObj.hiddenMarkers.organisations);
 			if(idx != -1) {
@@ -933,7 +932,7 @@ MapLegendClass.prototype.showHideMarker = function() {
 		}
 	} else if(id[1] == 'venue') {
 		// show / hide a venue marker
-		if(checkbox.attr("checked") == true) {
+		if(checkbox.is(':checked') == true) {
 			//un-hide this marker
 			idx = $.inArray(id[2], mappingObj.hiddenMarkers.venues);
 			if(idx != -1) {
@@ -945,7 +944,7 @@ MapLegendClass.prototype.showHideMarker = function() {
 		}
 	} else {
 		// show / hide an event marker
-		if(checkbox.attr("checked") == true) {
+		if(checkbox.is(':checked') == true) {
 			//un-hide this marker
 			idx = $.inArray(id[2], mappingObj.hiddenMarkers.events);
 			if(idx != -1) {
