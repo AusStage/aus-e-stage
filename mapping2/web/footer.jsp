@@ -21,9 +21,7 @@
 <div class="footer b-186">
 	<%
 		ServletContext context = getServletContext();
-		String systemName      = (String)context.getInitParameter("systemName");
 		String systemVersion   = (String)context.getInitParameter("systemVersion");
-		String moreInfo		   = (String)context.getInitParameter("moreInfo");
 	%>
-	<p><%=systemName%> Version: <%=systemVersion%> | <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">Contact Us</a></p>
+	<p><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage homepage">Aus-e-Stage</a> | <a href="http://beta.ausstage.edu.au/mapping/" title="Mapping Events homepage">Mapping Events</a> Version: <%=systemVersion%> | <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">Contact Us</a></p>
 </div>

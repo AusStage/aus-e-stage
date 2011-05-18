@@ -55,9 +55,6 @@ $(document).ready(function(){
 	// style the buttons
 	styleButtons();
 	
-	// associate tipsy with the span element
-	$('.use-tipsy').tipsy({live: true});
-	
 	// setup the accordian
 	$(".accordion").accordion({collapsible:true, active:false, autoHeight: false });
 	

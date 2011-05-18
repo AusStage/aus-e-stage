@@ -74,13 +74,13 @@ SearchClass.prototype.init = function() {
 		// ensure that we're only working on searches
 		if(settings.url.indexOf("search?", 0) != -1) {
 			if(settings.url.indexOf("contributor", 0) != -1) {
-				$(this).text("Contributor search is underway...");
+				$(this).text("Searching for contributors...");
 			} else if(settings.url.indexOf("organisation", 0) != -1) {
-				$(this).text("Organisation search is underway...");
+				$(this).text("Searching for organisations...");
 			} else if(settings.url.indexOf("venue", 0) != -1) {
-				$(this).text("Venue search is underway...");
+				$(this).text("Searching for venues...");
 			} else if(settings.url.indexOf("event", 0) != -1) {
-				$(this).text("Event search is underway...");
+				$(this).text("Searching for events...");
 			}
 		}
 	});
@@ -578,15 +578,15 @@ SearchClass.prototype.buildEventResults = function (data) {
 		}
 	
 		// buld the new table row
-		row += '<td><a href="#" onclick="searchObj.doSearch(\'' + $("#query").val() + '\'); return false;" title="Click to Repeat this Search" class="use-tipsy">' + $("#query").val() + '</a></td>';
-		row += '<td><a href="' + BASE_URL + '?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search" class="use-tipsy">link</a></td>';
-		row += '<td><span class="use-tipsy" title="Contributors"> ' + searchObj.trackerObj.contributor_count + ' </span>/<span class="use-tipsy" title="Organisations"> ' + searchObj.trackerObj.organisation_count + ' </span>/<span class="use-tipsy" title="Venues"> ' + searchObj.trackerObj.venue_count + ' </span>/<span class="use-tipsy" title="Events"> ' + searchObj.trackerObj.event_count + '</span></td></tr>';
+		row += '<td><a href="#" onclick="searchObj.doSearch(\'' + $("#query").val() + '\'); return false;">' + $("#query").val() + '</a></td>';
+		row += '<td><a href="' + BASE_URL + '?search=true&query=' + encodeURIComponent($("#query").val()) + '" title="Persistent Link for this Search">link</a></td>';
+		row += '<td class="alignRight">' + searchObj.trackerObj.contributor_count + '</td>';
+		row += '<td class="alignRight">' + searchObj.trackerObj.organisation_count + '</td>';
+		row += '<td class="alignRight">' + searchObj.trackerObj.venue_count + '</td>';
+		row += '<td class="alignRight">' + searchObj.trackerObj.event_count + '</td></tr>';
 		
 		// insert the new row in the table
 		$(row).insertAfter('#search_history');
-		
-		$('.use-tipsy').tipsy({trigger: 'focus', gravity: 'n'});
-		
 	}
 	
 	// enable the buttons
@@ -677,7 +677,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			$("#searchAddVenueError").append(buildInfoMsgBox('No items selected, nothing added to the map'));
 		} else {
 			// add things to the map
-			$("#searchAddVenueError").append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+			$("#searchAddVenueError").append(buildInfoMsgBox('Adding items to the map...'));
 			searchObj.add_data_type = 'venue';
 			
 			// create a queue
@@ -717,7 +717,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			
 		} else {
 			// add things to the map
-			$("#searchAddContributorError").append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+			$("#searchAddContributorError").append(buildInfoMsgBox('Adding items to the map...'));
 			searchObj.add_data_type = 'contributor';
 			
 			// create a queue
@@ -757,7 +757,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			
 		} else {
 			// add things to the map
-			$("#searchAddOrganisationError").append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+			$("#searchAddOrganisationError").append(buildInfoMsgBox('Adding items to the map...'));
 			searchObj.add_data_type = 'organisation';
 			
 			// create a queue
@@ -797,7 +797,7 @@ SearchClass.prototype.addResultsClick = function(event) {
 			
 		} else {
 			// add things to the map
-			$("#searchAddEventError").append(buildInfoMsgBox('Adding selected items to the map. Please wait...'));
+			$("#searchAddEventError").append(buildInfoMsgBox('Adding items to the map...'));
 			searchObj.add_data_type = 'events';
 			
 			// create a queue
@@ -817,8 +817,6 @@ SearchClass.prototype.addResultsClick = function(event) {
 				});
 			}
 		}
-	
-	
 	}
 }
 

@@ -781,9 +781,6 @@ MapLegendClass.prototype.findObjectById = function(collection, id) {
 // a function to delete a marker from the map
 MapLegendClass.prototype.doDeleteMarker = function(param) {
 
-	// manually hide the tooltip so it isn't left hanging
-	$('#' + param).tipsy('hide');
-
 	var id   = param.split('-');
 	var mapData = mappingObj.markerData.objects;
 	var contributors;
@@ -908,9 +905,6 @@ MapLegendClass.prototype.showHideMarker = function() {
 	var id = checkbox.val();
 	id = id.split('-');
 	var idx;
-	
-	// manually hide the tooltip
-	checkbox.tipsy('hide');
 	
 	// determine which type of marker to work on
 	if(id[1] == 'contributor') {
