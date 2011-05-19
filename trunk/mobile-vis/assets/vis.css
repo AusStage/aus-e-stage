@@ -17,6 +17,16 @@
  */
 /* This shared across the whole project */
 
+#About {
+    padding-left:10px;
+    padding-right: 10px;
+
+}
+
+
+img
+{border: none;
+}
 #content {
     padding-left:12px;
     padding-top:12px;
@@ -40,7 +50,6 @@
 	color:#FFF;
 	
 }
-
 
 /* Tables
 -------------------------------------------------------------- */
@@ -89,22 +98,29 @@ caption     { background: #eee; }
 td.event {
     min-width: 80px;
 }
+
+
 /* Icon placement for the different view types */
-.view {
-    width:100px;
+td.view {
+
+    width:200px;
+    min-width: 100px;
+    display:block;
+
+    height: 60px;
+    
 }
 
-.visList, .visSign {
+.visList, .visSign, .visCloud {
     width:35px;
     font-size: .75em;
     float:left;
-    margin-left: 5px;
-
+    margin-left: 13px;
     
 }
 
 
-.visList img, .visSign img {
+.visList img, .visSign img, .visCloud img  {
  
     padding-left:-30px;
 }
@@ -113,7 +129,7 @@ td.event {
     padding-left:2px;
 }
 
-.visList a:hover , .visSign a:hover {
+.visList a:hover , .visSign a:hover , .visCloud a:hover {
     text-decoration: none;
 
 }
@@ -154,6 +170,15 @@ td.event {
     
 }
 
+#viewChoices input#chooseCloud {
+    background-image: url('../assets/images/tagcloud-icon.png');
+    background-repeat: no-repeat;
+    background-position: left;
+
+
+}
+
+
 /* relates to add button */ 
 
 .CurrentPerformance  {
@@ -168,6 +193,22 @@ td.event {
     margin-left: 10px;
     margin-top: 10px;
 }
+
+.add textarea  {
+   
+     width:80%;
+}
+
+.about {
+   
+    padding-top:8px;
+    padding-bottom: 8px;
+    
+    width:80%;
+    font-size: .85em;
+    margin-bottom: 3px;
+}
+
 
 .loading  {
 
@@ -209,3 +250,36 @@ td.event {
 #Performances #SearchResults {
        margin-top: 12px;
 }
+
+
+/*shared display what the current performance is */
+
+.info  {
+	padding-top:3px;
+	font-size:1.1em;
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;
+}
+
+.info .event {
+		font-size:1.5em;
+}
+
+ .info .organisation {
+		 font-weight:lighter;
+	 }
+
+.info .venue  {
+	 font-weight:lighter;
+	}
+
+.info .date  {
+		 font-weight:lighter;
+	}
+
+.info h4.question {
+	font-size:1.6em;
+	font-weight:bold;
+}
+
