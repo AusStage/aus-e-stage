@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Image Sequence</title>
+	
+        <link rel="stylesheet" href="assets/imagesequence.css">
+
+	<script src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<script src="assets/javascript/libraries/jquery.cycle.all.min.js"></script>
+    
+    
+        <script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
+	<!-- custom code -->
+    
+    	<script src="assets/javascript/vis-model.js"></script>
+        <script src="assets/javascript/errorController.js"></script>
+        <script src="assets/javascript/libraries/jquery.qtip.pack.js"></script>
+
+
+        <script src="assets/javascript/visControllerWordStats.js"></script>
+        <script src="assets/javascript/visControllerImageSequence.js"></script>
+
+        
+	 <script type="text/javascript" charset="utf-8">
+         
+		 /**
+		 * The Jquery document ready. Acts like the main. 
+		 */
+						   
+		   $(document).ready(function() {			
+			
+				myModel = new model();
+			        myModel.controllers.push(new visControllerWordStats(myModel)); // Add the word stats to controller to model
+                                myModel.controllers.push(new visControllerImageSequence(myModel)); // Add the timeline controller the model
+				myModel.startLoading();
+				
+		});
+		
+      </script>
+        
+        
+</head>
+<body>
+	<div id="container">
+    <div id="main">
+    
+    	
+    		<div class="ui-state-error ui-corner-all status-messages" id="search_error_message"> 
+                             <p><span class="ui-icon ui-icon-alert status-icon"></span> 
+                             <span id="error_text"></span>
+                            </p>
+		  </div>
+          
+          <div class="ui-state-highlight ui-corner-all status-messages" id="status_message" >
+						<p>
+						<span class="ui-icon ui-icon-info status-icon"></span>
+						<span id="message_text"></span>
+					    </p>
+	   	</div>    
+        
+        
+        <div id="question"><h3>The Question</h3	>
+        <p class="theQuestion"></p></div>
+                <div id="feedback">
+                         <div class="feedback_messages">
+                                  
+                         </div>
+                 </div>     
+                                
+        </div>       
+   </div>
+
+
+            
+            
+</body>
+</html>
