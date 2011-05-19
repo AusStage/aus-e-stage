@@ -45,12 +45,12 @@ function model(name) {
 			   //enddate.setDate(startdate.getDate() + 10);
                            
 			   startdate.setDate(startdate.getDate() - start);
-			   //window.console.log(startdate.toDateString());
+			   ////window.console.log(startdate.toDateString());
                            //
                            //Now formatted the into yyyy-mm-dd
 
                            startdateString = reFormatDatetoYYYYMMDD(startdate);
-			   window.console.log(startdateString);
+			   ////window.console.log(startdateString);
 
                            
                             //var today = new Date('Dec 12 2010'); // FOR TESTING
@@ -61,7 +61,7 @@ function model(name) {
 
                            //Now formatted the into yyyy-mm-dd
                             enddateString = reFormatDatetoYYYYMMDD(enddate);
-			    window.console.log(enddateString);
+			    ////window.console.log(enddateString);
                             
                             if (end == 0 && start == 0 ) {				  // build the query string
                                //don't include the end date'
@@ -84,7 +84,7 @@ function model(name) {
 				
 				var source =  host + '/mobile/lookup?' +  values;
 				
-				window.console.log(source);
+				////window.console.log(source);
 								
 				$.ajax({
 						type:   'GET',
@@ -92,12 +92,12 @@ function model(name) {
 						dataType:  mydataType,
 						cache: false,
 						success: function (data) {
-						window.console.log(data);
+						////window.console.log(data);
 						//see if we have some data only the display the current performances and load them  
 						if (data.length !=  0) {
 							//Sort by the startDateTime
 							
-							data.reverse(); 
+							//data.reverse();
 							
 							//Take the loaiding class off and the display the block inside of that 	
 							$(target).removeClass("loading");
@@ -109,7 +109,7 @@ function model(name) {
 		
 									// add the list of feedback
 									for(var i = 0; i < data.length; i++) {
-										//window.console.log(data);
+										////window.console.log(data);
 										item = data[i];
 										//$(target + ".Performances").append('<li class="arrow">' +
 										$(target + ".Performances").append('<li class="arrow">' +
@@ -130,10 +130,10 @@ function model(name) {
 								$(target).removeClass("loading");
 								$(target + ".Performances").empty();
 
-								$(target + ".Performances").append('<li class="arrow">' +
-												'<a href="#home" ' + 
-												 '  ><div class="event"> No Performances Found' +
-													'</div></a></li>');
+								$(target + ".Performances").append('<li>' +
+											
+												 '<div class="event">There are no performances currently seeking feedback' +
+													'</div></li>');
 											
 											
 								
@@ -160,7 +160,7 @@ function model(name) {
 			  //var startdate = new Date();
 
 			  // startdate.setDate( startdate.getDate() + start );
-			   //window.console.log(startdate.toDateString());
+			   ////window.console.log(startdate.toDateString());
 			
 			   //Now formatted the into yyyy-mm-dd
 			    startdateString = reFormatDatetoYYYYMMDD(startdate); 
@@ -184,7 +184,7 @@ function model(name) {
 				
 				var source =  host + '/mobile/lookup?' +  values;
 
-				window.console.log(source);
+				////window.console.log(source);
 				
 				current = this; // in the success function we normal scope this, so we put this in to current so called stuff in a few moments.
 
@@ -196,10 +196,13 @@ function model(name) {
 						success: function (data) {
 							if(current.errorStatus 	== 1) {current.errorController.turnOffError ()};
 
-							window.console.log(data);
+                                                        data.reverse();
+                                                        
+							////window.console.log(data);
 	 						current.results.push(data);
 							current.refreshControllers();							//see if we have some data only the display the current performances and load them  
 							
+                                                        
 							/*if (data.length !=  0) {
 								//Sort by the startDateTime
 								
@@ -216,7 +219,7 @@ function model(name) {
 			
 										// add the list of feedback
 										for(var i = 0; i < data.length; i++) {
-											//window.console.log(data);
+											////window.console.log(data);
 											item = data[i];
 											//$(target + ".Performances").append('<li class="arrow">' +
 											$(target + ".Performances").append('<li class="arrow">' +
@@ -267,11 +270,11 @@ function model(name) {
 		
 		this.refreshControllers = function ()
 				{
-					window.console.log('refreshing the controllers');
-					//window.console.log(this.controllers);
+					////window.console.log('refreshing the controllers');
+					////window.console.log(this.controllers);
 					//this.controllers[0].refresh(this.results);
 					
-					window.console.log(this.results);
+					////window.console.log(this.results);
 					
 					try { //inside a try because we might not controllers  
 							for (var i = 0; i < this.controllers.length; i++) { //loop over the controllers 

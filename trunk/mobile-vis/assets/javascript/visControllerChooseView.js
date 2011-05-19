@@ -16,33 +16,35 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 function visControllerChooseView(doc) {
 		
 		this.doc = doc;
 
-
-
                 // add a click method to buttons to see what view has been choose
-                $('#chooseList, #chooseSignage').click(function () {
+                $('#chooseList, #chooseSignage,#chooseCloud' ).click(function () {
                     
                     this.errorController = new errorController();// hmm not the best way to do this 
-
                     //choose the view type
-                    if (this.id == 'chooseList') {
-                        var nextView = 'list.html';
-                        //alert('Button chooseList as clicekd');
-                    }
-                    else if (this.id == 'chooseSignage') {
-                       //alert('chooseSignage ');
-                        var nextView = 'signage.html';
+                    switch (this.id)
+                        {
+                        case 'chooseList':
+                          var nextView = 'list.html';
+                          break;
+                        case 'chooseCloud':
+                             var nextView = 'tagcloud.html';
+                          break;
+                        case 'chooseSignage':
+                             var nextView = 'signage.html';
+                          break;
+                        default:
+                          this.errorController.updateMessage("Please choose the performances you would like view",9 );
+                        }
 
-                    }
 
                     this.errorController.updateMessage("Please choose the performances you would like view",9 );
 
                      var choices = $('input[name=performance]:checked');
-                     //window.console.log(choices);
+                     ////window.console.log(choices);
                      var param  = '?performance='
 
                      if (choices.length > 1) {
@@ -67,11 +69,10 @@ function visControllerChooseView(doc) {
                 });
 
 
-     
 		
 		this.refresh = function (newResults)
 		{
-			window.console.log('about to refresh the controller for this');
+			//window.console.log('about to refresh the controller for this');
 			//this.results = newResults; 
 			this.UpdateView(); // just do a simple redraw because in this case we not going to do much with data.
 		}

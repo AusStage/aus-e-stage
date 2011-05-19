@@ -29,7 +29,7 @@ function visControllerList(newModel) {
 			
 		this.refresh = function (newResults,newPerformances)
 		{
-			window.console.log('About to refresh the controller for this');
+			//window.console.log('About to refresh the controller for this');
 			//this.results = newResults; 
 			this.refreshView(newResults,newPerformances); // just do a simple redraw because in this case we not going to do much with data.
 		}
@@ -41,7 +41,7 @@ function visControllerList(newModel) {
 			
 		this.build = function ()
 		{
-			window.console.log('about to build the controller for this');
+			//window.console.log('about to build the controller for this');
 			//this.results = newResults; 
 			this.BuildView(); // just do a simple redraw because in this case we not going to do much with data.
 		}
@@ -56,9 +56,9 @@ function visControllerList(newModel) {
 		{	
 			
 			//results = this.model.results;
-                        //window.console.log(results.length);
+                        ////window.console.log(results.length);
 
-                        window.console.log(this.model.results);
+                        //window.console.log(this.model.results);
 
                         results = this.model.results;
 
@@ -75,7 +75,7 @@ function visControllerList(newModel) {
 				for(var i = 0; i < results[0].feedback.length; i++) {
 					item = results[0].feedback[i];
 					//Make the update acutally hoppen
-					//window.console.log(item);
+					////window.console.log(item);
 					$("#table_anchor").append('<tr><td class="feedback">' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');
 				}
 
@@ -92,7 +92,7 @@ function visControllerList(newModel) {
                                 for(var i = 0; i < results[a].feedback.length; i++) {
 					item = results[a].feedback[i];
 					//Make the update acutally hoppen
-					//window.console.log(item);
+					////window.console.log(item);
 					$("#table_anchor").append('<tr><td class="event">' + results[a].event + '</td><td class="feedback">' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');
 				}
                               }
@@ -109,27 +109,27 @@ function visControllerList(newModel) {
 		
 		this.refreshView  = function (newResults)
 		{	
-                     //window.console.log(newPerformance);
+                     ////window.console.log(newPerformance);
                       
                       if (newResults.length == 1 ) {// we only have one performance so don't need to worry about where that
                            $.each(newResults, function() {
-                                    //window.console.log('in the performances loop ');
-                                    //window.console.log(this);
+                                    ////window.console.log('in the performances loop ');
+                                    ////window.console.log(this);
                                      $.each(this, function() {					//Make the update acutally hoppen
                                                     //This works well if all the results are from the same peformaance
                                                     $("#table_anchor").prepend('<tr><td class="feedback">' + this.content + '</td><td class="date">' + this.date  + '</td><td class="time">' + this.time + '</td><td class="type">' + this.type + '</td></tr>');
-                                                    //window.console.log(item);
+                                                    ////window.console.log(item);
                                        });
                            });
                         } else {
                                //we have multiple results being refresh so have fit this to the first spot.
-                               //window.console.log('New Performance');
-                              // window.console.log(newPerformance);
+                               ////window.console.log('New Performance');
+                              // //window.console.log(newPerformance);
 
                               for(var a = 0; a < newResults.length; a++) {
-                                 //   window.console.log('in the performances loop ');
+                                 //   //window.console.log('in the performances loop ');
 
-                                   // window.console.log(newPerformance[a].event);
+                                   // //window.console.log(newPerformance[a].event);
 
                                     for(var i = 0; i < this.model.results.length; i++) {
                                                //look at the performance is on first piece of feedback in the ara 
@@ -151,7 +151,7 @@ function visControllerList(newModel) {
 
 
                                                     $("#table_anchor").prepend('<tr><td class="event">'  + performanceName +   '</td><td class="feedback">' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');
-                                                    //window.console.log(item);
+                                                    ////window.console.log(item);
                                        }
                             }
                         }

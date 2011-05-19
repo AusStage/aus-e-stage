@@ -25,7 +25,7 @@ function  visControllerSignage(newModel) {
 
 		//Configure for the slide show 
 		 this.fx =  'fade';  // choose your transition type, ex: fade, scrollUp, shuffle, etc...	
-		 this.speed =  300;
+		 this.speed =  3000;
 		 this.timeout =  2000;
 						
 						
@@ -35,7 +35,7 @@ function  visControllerSignage(newModel) {
 			
 		this.refresh = function (newResults)
 		{
-			window.console.log('about to refresh the controller for signage' );
+			//window.console.log('about to refresh the controller for signage' );
 			//this.results = newResults; 
 			this.refreshView(newResults); // just do a simple redraw because in this case we not going to do much with data.
 
@@ -48,7 +48,7 @@ function  visControllerSignage(newModel) {
 			
 		this.build = function (newResults)
 		{
-			window.console.log('about to build the controller for this');
+			//window.console.log('about to build the controller for this');
 			//this.results = newResults; 
 			this.BuildView(); // just do a simple redraw because in this case we not going to do much with data.
 				
@@ -84,7 +84,7 @@ function  visControllerSignage(newModel) {
 				for(var i = 0; i < results[a].feedback.length; i++) {
 					item = results[a].feedback[i];	
 					//Make the update acutally hoppen
-					//window.console.log(item);
+					////window.console.log(item);
 					
 				    $(".feedback_messages").append('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
 									
@@ -101,7 +101,7 @@ function  visControllerSignage(newModel) {
 		this.refreshView  = function (newResults,newPerformances)
 		{	
 
-                window.console.log('In the signage view refresh');
+                //window.console.log('In the signage view refresh');
 
                   $('#feedback').fadeOut('slow', function() {
 
@@ -110,11 +110,11 @@ function  visControllerSignage(newModel) {
                           );
                               
                         $.each(newResults, function() {
-                        //window.console.log('in the performances loop ');
-                        //window.console.log(this);
+                        ////window.console.log('in the performances loop ');
+                        ////window.console.log(this);
                              $.each(this, function() {
-                              //  window.console.log('in the feedback loop ');
-                                //window.console.log(this.content);
+                              //  //window.console.log('in the feedback loop ');
+                                ////window.console.log(this.content);
 
                                  $(".feedback_messages").prepend('<span class="feedback"><div class="content">' + this.content + '</div><span class="feedback-about"><span class="date">' + this.date  + '</span><span class="time">' + this.time + ' </span><span class="type">' +  this.type + ' </span></span></span>');
                               });
