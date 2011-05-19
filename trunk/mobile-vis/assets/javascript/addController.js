@@ -31,7 +31,7 @@ function  addController(newModel) {
 			
 		this.refresh = function (newResults)
 		{
-			window.console.log('about to refresh the controller for signage' );
+			////window.console.log('about to refresh the controller for signage' );
 			//this.results = newResults; 
 			this.refreshView(newResults); // just do a simple redraw because in this case we not going to do much with data.
 
@@ -44,7 +44,7 @@ function  addController(newModel) {
 			
 		this.build = function (newResults)
 		{
-			window.console.log('about to build the controller for this');
+			//window.console.log('about to build the controller for this');
 			//this.results = newResults; 
 			this.BuildView(); // just do a simple redraw because in this case we not going to do much with data.
 				
@@ -79,7 +79,7 @@ function  addController(newModel) {
 				for(var i = 0; i < results[a].feedback.length; i++) {
 					item = results[a].feedback[i];	
 					//Make the update acutally hoppen
-					//window.console.log(item);
+					////window.console.log(item);
 					
 				    //$(".feedback_messages").append('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
 									
@@ -96,7 +96,7 @@ function  addController(newModel) {
 		this.refreshView  = function (newResults,newPerformances)
 		{	
 
-                window.console.log('In the signage view refresh');
+                //window.console.log('In the signage view refresh');
 
                  
 
@@ -141,7 +141,7 @@ function  addController(newModel) {
 
                           e.preventDefault();
 
-                          //window.console.log("about to submit the form");
+                          ////window.console.log("about to submit the form");
 
                                 //do some simple validation
                                 var message =  $('[name=message]').val();
@@ -179,7 +179,7 @@ function  addController(newModel) {
 
 				 var source =  host + '/mobile/gatherer?' +  values;
 
-				window.console.log(source);
+				//window.console.log(source);
                                 var current = this;
                                 
 				//remove what is currently is being shown
@@ -190,7 +190,7 @@ function  addController(newModel) {
 						cache: false,
 						dataType: mydataType,
 						success: function (data) {
-							//window.console.log(data);
+							////window.console.log(data);
 							$(".feedbackForm").empty();
 
                                                         $("#table_anchor").empty();
@@ -199,7 +199,7 @@ function  addController(newModel) {
 							// add the list of feedback
 							for(var i = 0; i < data.feedback.length; i++) {
 								item = data.feedback[i];
-								//window.console.log(item.content);
+								////window.console.log(item.content);
 
 							         $("#table_anchor").append('<tr><td class="feedback">' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');
 

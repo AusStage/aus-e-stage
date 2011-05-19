@@ -28,7 +28,7 @@ function errorController() {
 			
 		this.updateError = function (message, error)
 		{
-			window.console.log('------- ERROR -------' + error );
+			//window.console.log('------- ERROR -------' + error );
 			$(window.$(".ui-state-error")).css('display','block');
 			$(window.$("#error_text")).html(message );
 
@@ -42,7 +42,7 @@ function errorController() {
 			
 		this.updateMessage = function (message, error)
 		{
-                        window.console.log('------- ERROR -------' + error );
+                        //window.console.log('------- ERROR -------' + error );
 			$(window.$(".ui-state-highlight")).css('display','block');
 			$(window.$("#message_text")).html(message);
 
@@ -59,7 +59,7 @@ function errorController() {
 		this.turnOffError = function ()
 		{
 			$(window.$(".ui-state-highlight")).css('display','none');//show really do this jquery ui
-			$(window.$(".ui-state-highlight")).css('display','none');
+			$(window.$(".ui-state-error")).css('display','none');
 
 		}
 		
