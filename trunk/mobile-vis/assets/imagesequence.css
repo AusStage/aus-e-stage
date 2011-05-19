@@ -1,0 +1,128 @@
+
+
+
+html, body{ 
+	color:#FFF;
+	background-color:#000;
+	font-family:Arial, Helvetica, sans-serif;
+	height: 100%;
+}
+
+a {
+ color:white;
+ text-decoration: none;
+
+}
+#container {
+	min-height: 100%;
+}
+
+
+#main {
+	overflow:visible;
+	padding-bottom: 240px;
+	height:400px;
+	padding-top:10%;
+
+
+	}  
+
+
+/*Control of the actual question*/
+
+#question {
+	float:left;
+	font-size:1.8em;
+	font-weight:bold;
+	margin-left:5%;
+	width:20%;
+	min-height:300px;
+	color:#CCC;
+ 
+}
+
+
+#question h3  {
+	margin: 0px;
+	font-size:.9em;
+	color:#999;
+}
+
+
+#question p  {
+	
+}
+
+
+
+/* Control the div that wraps around the presenation */
+#feedback {
+	width:65%;
+	margin-left:30%;
+
+}
+
+/*** Custom Aus-Stage sent up ***/
+
+.feedback {
+	width:400px; /** don't really want this to be fixed **/
+	font-size:1.8em;
+	font-weight:bold;
+	min-height:300px;
+       position:relative;
+
+}
+
+
+.word {
+
+        position:absolute;
+        
+	font-size:1.2em;
+	font-weight:bold;
+	color:#999;
+
+        
+   
+	top:5px; /* in conjunction with left property, decides the text position */
+	left:5px;
+
+        padding:5px;
+        
+        width:100%;
+
+        background-color:black;
+        opacity:0.8;
+
+}
+
+
+.Attributions  {
+
+        position:absolute;
+
+	font-size:.5em;
+	font-weight:lighter;
+	color:#999;
+
+
+
+	top:85%; /* in conjunction with left property, decides the text position */
+	left:5px;
+
+        padding:5px;
+
+        width:80%;
+
+        background-color:black;
+        opacity:0.7;
+
+}
+
+
+
+
+
+
+
+	
