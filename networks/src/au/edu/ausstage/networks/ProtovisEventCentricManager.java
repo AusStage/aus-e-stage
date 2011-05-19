@@ -112,8 +112,10 @@ public class ProtovisEventCentricManager {
 						tmpSet = getFirstDegreeNodes(evt, false);
 
 					//get union set of event nodes
-					nodeSet.addAll(tmpSet);
-					nthDegreeNodeSet.addAll(tmpSet);
+					if (tmpSet != null){
+						nodeSet.addAll(tmpSet);
+						nthDegreeNodeSet.addAll(tmpSet);
+					}
 				} 
 			}
 			preNthDegreeNodeSet.addAll(vertexSet);
@@ -216,18 +218,20 @@ public class ProtovisEventCentricManager {
 					}
 				}
 			}
+			
+			if (union != null)
+				//	for each event in the nodeSet, get its associated contributors
+				for (Iterator it = union.iterator(); it.hasNext(); ) {
+					eID = (Integer) it.next();
+					if(!evtId_conSet_map.containsKey(eID)){
+						conSet = getAssociatedContributors(eID);
+						if (conSet != null)
+							contributorSet.addAll(conSet);
+						evtId_conSet_map.put(eID, conSet);				
+					}		
+				}
 		}
-		
-		//for each event in the nodeSet, get its associated contributors
-		for (Iterator it = union.iterator(); it.hasNext(); ) {
-			eID = (Integer) it.next();
-			if(!evtId_conSet_map.containsKey(eID)){
-				conSet = getAssociatedContributors(eID);
-				if (conSet != null)
-					contributorSet.addAll(conSet);
-				evtId_conSet_map.put(eID, conSet);				
-			}		
-		}
+				
 		return union;
 	}
 	
@@ -421,10 +425,12 @@ public class ProtovisEventCentricManager {
 		
 		Event evt = null;
 		
-		String sql = "SELECT DISTINCT e.eventid, e.event_name, e.first_date, v.venue_name "
-					+ "FROM events e, venue v "
+		String sql = "SELECT DISTINCT e.eventid, e.event_name, e.first_date, v.venue_name, v.suburb, s.state, c.countryname  "
+					+ "FROM events e, venue v, states s, country c "
 					+ "WHERE e.eventid = ? " 	//+ evtId
 					+ "AND e.venueid = v.venueid "
+					+ "AND v.state = s.stateid (+) "
+					+ "AND v.countryid = c.countryid (+) "
 					+ "ORDER BY e.eventid";
 
 		int[] param = {evtId};
@@ -446,12 +452,24 @@ public class ProtovisEventCentricManager {
 				String name = results.getString(2);
 				String date = results.getDate(3).toString();
 				String venue = results.getString(4);
-
+				String suburb = results.getString(5);
+				String state = results.getString(6);
+				String country = results.getString(7);
+				String venueDetail = venue;
+				
 				evt = new Event(Integer.toString(e_id));
 				// evt.setId(resultSet.getString(1));
 				evt.setMyName(name);
 				evt.setMyFirstDate(date);				
-				evt.setVenue(venue);
+				if (suburb != null && !suburb.isEmpty())
+					venueDetail = venueDetail + ", " + suburb;
+				else if (state != null && !state.isEmpty())
+					venueDetail = venueDetail + ", " + state;
+				else if (country != null && !country.isEmpty())
+					venueDetail = venueDetail + ", " + country;
+					
+				evt.setVenue(venueDetail);
+							
 			}
 			evtId_evtObj_map.put(evtId, evt);
 			
@@ -469,7 +487,6 @@ public class ProtovisEventCentricManager {
 	private Collaborator getContributorDetail(int evtId, int conId, boolean exist){
 		
 		Collaborator con = null;		
-		boolean functionIsNull = false;		
 		String c_id = ""; // contributorid
 		String function = ""; // function
 		String f_name = ""; // first_name
@@ -481,56 +498,31 @@ public class ProtovisEventCentricManager {
 			+ "WHERE c.contributorid = ? " //+ conId
 			+ " AND ce.eventid = ? " //+ evtId 
 			+ " AND ce.contributorid = c.contributorid "	
-			+ "AND ce.function = cfp.contributorfunctpreferredid";
-		
-		String sql_1 = "SELECT DISTINCT c.contributorid, c.first_name, c.last_name, NVL(ce.function, 0) "
-			+ "FROM conevlink ce, contributor c "
-			+ "WHERE c.contributorid = ? " //+ conId
-			+ " AND ce.eventid = ? " //+ evtId 
-			+ " AND ce.contributorid = c.contributorid ";			
-				
-		/*String sql_1 = "SELECT DISTINCT cfp.preferredterm "
-			+ "FROM conevlink ce, contributorfunctpreferred cfp "
-			+ "WHERE ce.contributorid = " + conId
-			+ " AND ce.eventid = " + evtId 			
-			+ "AND ce.function = cfp.contributorfunctpreferredid";*/
-		
+			+ "AND ce.function = cfp.contributorfunctpreferredid (+)";
+			
 		int[] param = {conId, evtId};
 		//execute sql statement
 		ResultSet results = db.exePreparedStatement(sql, param);		
 				
 		// check to see that data was returned
 		try {
-			if(!results.last()) { // contributor's function in conevlink table is null				
+			if(!results.last()) { 			
 				db.finalize();				
-				functionIsNull = true;
-				
-				//results = db.exeStatement(sql_1);
-				results = db.exePreparedStatement(sql_1, param);		
-				if (!results.last()){	//there is no collaborator associated with the event	
-					db.finalize();
-					return null;
-				}else
-					results.beforeFirst();
+				return null;				
 			}else 
 				results.beforeFirst();          
 			
-			if (!functionIsNull)	//the contributor has functions
-				while (results.next()) {
-					c_id = Integer.toString(results.getInt(1));
-					f_name = results.getString(2);
-					l_name = results.getString(3);
+			while (results.next()) {
+				c_id = Integer.toString(results.getInt(1));
+				f_name = results.getString(2);
+				l_name = results.getString(3);
+				String role = results.getString(4);
+				if (role != null)	// contributor's function in conevlink table could be null	
 					if (roles.equals(""))
 						roles = results.getString(4);
 					else
 						roles = roles + " | " + results.getString(4);					
-				}
-			else 	// the contributor's function is null
-				while (results.next()) {
-					c_id = Integer.toString(results.getInt(1));
-					f_name = results.getString(2);
-					l_name = results.getString(3);
-				}
+			}
 						
 			if (!exist){
 				// create a new contributor
@@ -576,6 +568,9 @@ public class ProtovisEventCentricManager {
 		int eID;
 		Event evt;
 		
+		if (debug)
+	  		System.out.println("===== sort the associated events for contributor: " + conId);
+	  		
 		String sql = "SELECT DISTINCT eventid "
 			+ "FROM conevlink "
 			+ "WHERE contributorid = ? " 	//+ conId 					
@@ -585,6 +580,8 @@ public class ProtovisEventCentricManager {
 		
 		if (evtSet != null) {
 		  	List<Event> sortedEvtList = db.selectBatchingEventDetails(evtSet);
+		  	if (sortedEvtList == null || sortedEvtList.isEmpty())
+		  		return null;
 		  	for (int i = 0; i < sortedEvtList.size(); i++) {
 		  		evtId_evtObj_map.put(sortedEvtList.get(i).getIntId(), sortedEvtList.get(i));
 			}
@@ -605,7 +602,6 @@ public class ProtovisEventCentricManager {
 		  	Collections.sort(sortedEvtList, evtComp);
 		  	
 		  	if (debug){
-		  		System.out.println("===== sort the associated events for contributor: " + conId);
 		  		printSortedNode(sortedEvtList);
 		  	}
 		
@@ -717,4 +713,5 @@ public class ProtovisEventCentricManager {
 		}	
 		
 	}
+
 }
