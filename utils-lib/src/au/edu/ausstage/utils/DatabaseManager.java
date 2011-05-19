@@ -186,8 +186,8 @@ public class DatabaseManager {
 		for (Integer eID : set) evtIDArray[x++] = eID;
 
 		int SINGLE_BATCH = 1;
-		int SMALL_BATCH = 11;
-		int MEDIUM_BATCH = 21;
+		int SMALL_BATCH = 4;
+		int MEDIUM_BATCH = 11;
 		int LARGE_BATCH = 51;
 		int start = 0;
 		int totalNumberOfValuesLeftToBatch = set.size();
@@ -212,10 +212,12 @@ public class DatabaseManager {
 			}
 			inClause = inClause.substring(0, inClause.length()-1);
 			
-			String sql = "SELECT DISTINCT e.eventid, e.event_name, e.first_date, v.venue_name "
-				+ "FROM events e, venue v "
+			String sql = "SELECT DISTINCT e.eventid, e.event_name, e.first_date, v.venue_name, v.suburb, s.state, c.countryname "
+				+ "FROM events e, venue v, states s, country c "
 				+ "WHERE e.eventid in (" + inClause + ") "
 				+ "AND e.venueid = v.venueid "
+				+ "AND v.state = s.stateid (+) "
+				+ "AND v.countryid = c.countryid (+) "	
 				+ "ORDER BY e.first_date";
 	
 			ResultSet results = exePreparedINStatement(sql, evtIDArray, start, batchSize);
@@ -233,12 +235,23 @@ public class DatabaseManager {
 					String name = results.getString(2);
 					String date = results.getDate(3).toString();
 					String venue = results.getString(4);
-
+					String suburb = results.getString(5);
+					String state = results.getString(6);
+					String country = results.getString(7);
+					String venueDetail = venue;
+					
 					evt = new Event(Integer.toString(e_id));
 					// evt.setId(resultSet.getString(1));
 					evt.setMyName(name);
-					evt.setMyFirstDate(date);					
-					evt.setVenue(venue);
+					evt.setMyFirstDate(date);	
+					if (suburb != null && !suburb.isEmpty())
+						venueDetail = venueDetail + ", " + suburb;
+					else if (state != null && !state.isEmpty())
+						venueDetail = venueDetail + ", " + state;
+					else if (country != null && !country.isEmpty())
+						venueDetail = venueDetail + ", " + country;
+					
+					evt.setVenue(venueDetail);
 					evtList.add(evt);
 					//evtId_evtObj_map.put(e_id, evt);
 					j++;
