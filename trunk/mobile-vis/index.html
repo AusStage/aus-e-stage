@@ -49,13 +49,16 @@
 </head>
 <body>
 <div class="wrapper">
-	<div class="header b-187"><h1>Aus-e-Stage Service Development</h1></div>
+	<div class="header b-187"><h1>Researching Audiences</h1></div>
 	<div class="sidebar b-186 f-184">
 		<!-- side bar content -->
 		<div class="mainMenu">
 			<h2>Main Menu</h2>
-			<ul>
+                        <ul>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
+				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project">Aus-e-Stage Project</a></li>
+				<li><a href="index.html" title="Researching Audiences homepage">Researching Audiences</a></li>
+                                <li><a href="about.html" title="About the Research Audiences project">About</a><li>
 
 			</ul>
 		</div>
@@ -63,6 +66,19 @@
 	<div class="main b-184 f-187">
 		<!-- main content -->
                 <div id="content">
+
+                    <div id="About">
+
+<p>AusStage documents the performing arts in Australia. AusStage now provides audiences with the
+    chance to contribute to this important cultural record by letting companies know what you
+    thought of the productions.</p>
+
+<p>This project is being led by Flinders University alongside the companies and artists.  It has been funded by the National e-Research Architecture Taskforce (NeAT).
+    For more information about the service see the <a href="about.html">About Page</a></div>
+
+                    
+<p>
+                    </div>
                  <div class="ui-state-error ui-corner-all status-messages" id="search_error_message">
                                              <p><span class="ui-icon ui-icon-alert status-icon"></span>
                                              <span id="error_text"></span>
@@ -87,7 +103,7 @@
            </div>
        
         <div id="Performances">
-        <h3>Peformances that currently have feedback</h3>
+        <h3>Performances that currently have feedback</h3>
 
 
          <form action="" method="get" id="performanceForm">
@@ -101,7 +117,7 @@
                      <th scope="col">Date and Time</th>
 
                     <th scope="col">Venue</th>
-                    <th scope="col">View</th>
+                    <th scope="col View">View</th>
                     <th scope="col">Feedback Count</th>
             </tr>
           </thead>
@@ -113,6 +129,7 @@
              <div id="instructions"><strong>Choose how you would like to view the selected performances.</strong></div> <br/>
              <div id="viewChoices">
                  <input type="button" value="List View" name="ListView" id="chooseList" />
+                 <input type="button" value="Cloud View" name="CloudView" id="chooseCloud" />
              </div>
 
 
