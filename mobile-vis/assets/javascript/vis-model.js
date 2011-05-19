@@ -42,14 +42,16 @@ function model(name) {
 		* 
 		*/ 		
 		this.startLoading = function ()
-				{
+                    {
 				//alert('starting up');
+                            this.errorController.turnOffError();
+                            
                             this.CurrentPerformances = this.getUrlVars();
 				/*
 				 * check on the value of the parameters. If they're "undefined" the URL didn't include what we require to continue
 				 */
 
-                               window.console.log(this.CurrentPerformances);
+                               //window.console.log(this.CurrentPerformances);
 
 				if(typeof(this.CurrentPerformances ) == "undefined") {
 					// execute a function to show an error message
@@ -63,11 +65,11 @@ function model(name) {
 						RequestArray.push(this.getPerformanceData(this.CurrentPerformances[i]));
 
 					}
-					//window.console.log(RequestArray);
+					////window.console.log(RequestArray);
 					 
                                         this.howManyRequests = RequestArray.length;
 
-                                        //window.console.log(howManyRequests);
+                                        ////window.console.log(howManyRequests);
 
                                        /* a more elegant way to have done loading and trigger would have been to use 
                                         * jqueries when and done but that didn't seem to work 
@@ -97,13 +99,13 @@ function model(name) {
 				host = this.buildHost();
 			 	mydataType = this.getDataType(); 
 				
-				//alert(CurrentPerformance);
+				
 				
 				//now build the url/calll  for API 
 						 
 				var source =  host + '/mobile/feedback?task=initial&performance=' + CurrentPerformance  ;  //TODO code to see what server the system is running on and build this URL 
 				
-				window.console.log(source);
+				//window.console.log(source);
 				
 				//The important bit more  
 				current = this; // in the success function we normal scope this, so we put this in to current so called stuff in a few moments.
@@ -121,10 +123,10 @@ function model(name) {
                                                             return; 
                                                         };
 
-							///window.console.log(data.feedback[feedbackLength].id);
+							/////window.console.log(data.feedback[feedbackLength].id);
 							current.lastFeedbackID = data.feedback[feedbackLength].id; 
 							
-							window.console.log(data);
+							//window.console.log(data);
 							data.feedback.reverse(); //maybe should do that in cotrol  
 							current.results.push(data);
 
@@ -132,23 +134,26 @@ function model(name) {
 
                                                         current.loadedRequests ++ ;
 
-                                                         //window.console.log(current.howManyRequests);
-                                                         //window.console.log(current.loadedRequests);
+                                                         ////window.console.log(current.howManyRequests);
+                                                         ////window.console.log(current.loadedRequests);
 
                                                         if (current.loadedRequests == current.howManyRequests ){
                                                             //now are all the request the controllers can be reuild.
-                                                            window.console.log('All the requests are loaded');
+                                                            //window.console.log('All the requests are loaded');
                                                             //reset the loadRequest so that we can re use this when we are updating
                                                             current.loadedRequests = 0;
                                                             current.buildControllers();
 
-                                                            setTimeout("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
+                                                            //window.console.log(current.model.CurrentPerformances);
+                                                            setTimeout("current.model.updatePerformanceData(current.model.CurrentPerformances)", current.UPDATE_DELAY);
+
+                                                            //setTimeout("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
                                                         }
                                                        
 						},
 						
 						error:function (request,error){
-							window.console.log('-- Got an error---');
+							//window.console.log('-- Got an error---');
 							current.errorController.updateError("Something has gone wrong with the system",error);
 							current.errorStatus = 1; 
 						},	
@@ -190,7 +195,7 @@ function model(name) {
                                     this.currentLoading = CurrentPerformances[i];
                                     //alert(this.currentLoading);
 
-                                    window.console.log(source);
+                                    //window.console.log(source);
                                  
                                           // create a queue
                                      ajaxQueue.add( {
@@ -221,33 +226,33 @@ function model(name) {
 
                     if(current.errorStatus == 1) {current.errorController.turnOffError ()};
 
-                                                            //window.console.log(data);
+                                                            ////window.console.log(data);
                                                             if(data.length != 0) {
                                                                      //alert('got new data');
-                                                                     window.console.log('got new data');
+                                                                     //window.console.log('got new data');
 
                                                                      for (var a = 0; a < data.length; a++) { //loop over each bit of the array
                                                                        //current.results[i-1].feedback.push(data[a]);// TODO - this will need to change because th
                                                                      }
-                                                                       window.console.log('refresh completed for this ');
+                                                                       //window.console.log('refresh completed for this ');
                                                                        for (var a = 0; a < data.length; a++) { //loop over each bit of the array
                                                                               data[a].performanceID = this.CurrentPerformance;
                                                                        }
 
-                                                                       //window.console.log(data);
+                                                                       ////window.console.log(data);
                                                                        current.newResults.push(data);
                                                                        current.loadedRequests++;
 
-                                                                      //window.console.log(current.results[current.loadedRequests]);
+                                                                      ////window.console.log(current.results[current.loadedRequests]);
 
-                                                                       //window.console.log(current.howManyRequests);
-                                                                       //window.console.log(current.loadedRequests);
+                                                                       ////window.console.log(current.howManyRequests);
+                                                                       ////window.console.log(current.loadedRequests);
                                                                         if (current.loadedRequests == current.howManyRequests ){
                                                                             //now are all the request the controllers can be reuild.
-                                                                            window.console.log('All the requests are loaded');
+                                                                            //window.console.log('All the requests are loaded');
                                                                             //reset the loadRequest so that we can re use this when we are updating
                                                                             current.loadedRequests = 0;
-                                                                            window.console.log(current.newResults);
+                                                                            //window.console.log(current.newResults);
                                                                             current.refreshControllers(current.newResults);//BUG - this might actually an array of day because we looking at
 
                                                                             current.newResults=  [];
@@ -268,11 +273,11 @@ function model(name) {
 		
 		this.buildControllers = function ()
 				{
-                                        window.console.log('Building the controllers');
+                                        //window.console.log('Building the controllers');
 
 					try { //inside a try because we might not controllers  
 							for (var i = 0; i < this.controllers.length; i++) { //loop over the controllers 
-                                                                  window.console.log('about to try trigger the building of the view');
+                                                                  //window.console.log('about to try trigger the building of the view');
                                                                 this.controllers[i].build(this.results);
 							}	
 					}
@@ -290,11 +295,11 @@ function model(name) {
 		this.refreshControllers = function (newData)
 				{
 
-					window.console.log('refreshing the controllers');
-					//window.console.log(this.controllers);
+					//window.console.log('refreshing the controllers');
+					////window.console.log(this.controllers);
 					//this.controllers[0].refresh(this.results);
 					
-					window.console.log(this.results);
+					//window.console.log(this.results);
 					
 					try { //inside a try because we might not controllers  
 							for (var i = 0; i < this.controllers.length; i++) { //loop over the controllers 
@@ -330,7 +335,7 @@ function model(name) {
 				 
 				if(vars['performance'].indexOf("+") != -1) {
 					// yes we have more than performances 	
-					window.console.log('got muliple performances');
+					//window.console.log('got muliple performances');
 					//split that using the + sign 
 					performances = vars['performance'].split('+');
 						
