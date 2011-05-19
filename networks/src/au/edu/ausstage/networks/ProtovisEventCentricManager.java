@@ -463,9 +463,9 @@ public class ProtovisEventCentricManager {
 				evt.setMyFirstDate(date);				
 				if (suburb != null && !suburb.isEmpty())
 					venueDetail = venueDetail + ", " + suburb;
-				else if (state != null && !state.isEmpty())
+				if (state != null && !state.isEmpty())
 					venueDetail = venueDetail + ", " + state;
-				else if (country != null && !country.isEmpty())
+				if (country != null && !country.isEmpty())
 					venueDetail = venueDetail + ", " + country;
 					
 				evt.setVenue(venueDetail);
