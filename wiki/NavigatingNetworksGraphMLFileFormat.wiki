@@ -2,7 +2,7 @@
 
 == Introduction ==
 
-GraphML can be used to define the topology of a graph by declaring its nodes and edges. In addition to this, application related information of simple type for the elements of the graph can be specified through the extension [http://graphml.graphdrawing.org/primer/graphml-primer.html#Attributes GraphML-Attributes]. To look into the capability of the network analysis and visualization software (Network Workbench, Visone and Gephi) in regards to their support for GraphML format – attribute in particular, a simple actors’ network in GraphML format is prepared and examined in the software mentioned above.
+GraphML can be used to define the topology of a graph by declaring its nodes and edges. In addition to this, application related information of simple type for the elements of the graph can be specified through the extension [http://graphml.graphdrawing.org/primer/graphml-primer.html#Attributes GraphML-Attributes]. To look into the capability of the network analysis and visualization software (Network Workbench 1.0, Visone 2.6.2 and Gephi 0.7 beta) in regards to their support for GraphML format – attribute in particular, a simple actors’ network in GraphML format is prepared and examined in the software mentioned above.
 
 
 == Actors’ Network in GraphML Format ==
