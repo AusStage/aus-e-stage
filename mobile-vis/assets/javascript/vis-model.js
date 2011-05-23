@@ -22,7 +22,7 @@
 
 function model(name) {
 		
-		 this.UPDATE_DELAY = 60000;
+		 this.UPDATE_DELAY = 10000;
   
                  this.CurrentPerformances;
 
@@ -115,16 +115,29 @@ function model(name) {
 						dataType: mydataType,
 						cache: false,							
 						success: function (data, textStatus, jqXHR) {
-
+							;
+                                                        //window.console.log(data);
 							if(current.errorStatus 	== 1) {current.errorController.turnOffError ()};
-							feedbackLength =  data.feedback.length -1;
+                                                        feedbackLength =  data.feedback.length -1;
+
                                                         if(feedbackLength == - 1) {
-                                                            current.errorController.updateError("No feedback found for performance number  " + CurrentPerformance + '<br />');
-                                                            return; 
+                                                          //  current.errorController.updateError("No feedback found for performance number  " + CurrentPerformance + '<br />');
+                                                            current.loadedRequests = 0;
+                                                            setInterval("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
+
+                                                            current.buildControllers();
+                                                            //return
+                                                            //alert('got data maybe but there is now feedbakc');
+
                                                         };
 
+                                                        try {
+                                                            current.lastFeedbackID = data.feedback[feedbackLength].id;
+                                                            }
+                                                             catch (err) {
+                                                         };
+
 							/////window.console.log(data.feedback[feedbackLength].id);
-							current.lastFeedbackID = data.feedback[feedbackLength].id; 
 							
 							//window.console.log(data);
 							data.feedback.reverse(); //maybe should do that in cotrol  
@@ -145,9 +158,10 @@ function model(name) {
                                                             current.buildControllers();
 
                                                             //window.console.log(current.model.CurrentPerformances);
-                                                            setTimeout("current.model.updatePerformanceData(current.model.CurrentPerformances)", current.UPDATE_DELAY);
+                                                           // setTimeout("current.model.updatePerformanceData(current.model.CurrentPerformances)", current.UPDATE_DELAY);
 
-                                                            //setTimeout("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
+
+                                                               setInterval("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
                                                         }
                                                        
 						},
@@ -174,33 +188,58 @@ function model(name) {
 				  
 		this.updatePerformanceData = function (CurrentPerformances) {
 				
-				//alert(CurrentPerformances)
-				//find out what server we are running on make sure the data type is right 
+				//find out what server we are running on make sure the data type is right
+
+                               // window.console.log('updating -----');
+                                //setTimeout("updatePerformanceData(4)", this.UPDATE_DELAY);
+
 				host = this.buildHost();
 			 	mydataType = this.getDataType(); 
 				
                                 //this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
                                 var newData = new Array();
 
-                                 var ajaxQueue = $.manageAjax.create('updateQueue', {
+                                var ajaxQueue = $.manageAjax.create('updateQueue', {
                                            
-                                 });
+                                });
                                 
                                 for(var i = 0; i < CurrentPerformances.length; i++){
                                     
                                       var source =  host + '/mobile/feedback?task=update&performance=' + CurrentPerformances[i] + '&lastid='  + this.lastFeedbackID   ;
                                     //var source =  host + '/mobile/feedback';
                                     
+                                    //window.console.log(source);
 
                                     this.currentLoading = CurrentPerformances[i];
-                                    //alert(this.currentLoading);
+                                   //alert(this.currentLoading);
 
                                     //window.console.log(source);
                                  
-                                          // create a queue
-                                     ajaxQueue.add( {
+                                    //create a queue
+                                    var current = this;
+
+                                    /*var request = $.ajax({
+						type:   'GET',
+						url: source,
+                                                dataType: mydataType,
+						cache: false,
+						success: function (data, textStatus, jqXHR) {
+
+                                                   //window.console.log(data);
+                                                   current.processUpdate(data);
+
+                                                },
+
+					async: true
+                                    });*/
+
+
+                                     $.manageAjax.add(CurrentPerformances[i],{
                                          //success: this.processData,
-                                         success: this.processData,
+                                         //success:this.processData,
+                                         success:  function (data, textStatus, jqXHR,options) {
+                                            current.processUpdate(data);
+                                         },
                                          CurrentPerformance: CurrentPerformances[i],
                                          url: source,
                                          type:   'GET',
@@ -208,8 +247,11 @@ function model(name) {
 
                                        });
                                
-
                                      }
+
+                                     
+
+
 
 		};		
 
@@ -221,8 +263,10 @@ function model(name) {
 		*/
 
 		this.processUpdate = function (data) {
+                    
+                    ///alert('got data')
 
-                     var current = parent.myModel; //more the of weird scope stuff
+                    var current = parent.myModel; //more the of weird scope stuff
 
                     if(current.errorStatus == 1) {current.errorController.turnOffError ()};
 
@@ -235,11 +279,15 @@ function model(name) {
                                                                        //current.results[i-1].feedback.push(data[a]);// TODO - this will need to change because th
                                                                      }
                                                                        //window.console.log('refresh completed for this ');
+                                                                       window.console.log(data);
+
                                                                        for (var a = 0; a < data.length; a++) { //loop over each bit of the array
                                                                               data[a].performanceID = this.CurrentPerformance;
+                                                                              this.lastFeedbackID = data[a].id;
+
                                                                        }
 
-                                                                       ////window.console.log(data);
+                                                                     //  window.console.log(this.lastFeedbackID);
                                                                        current.newResults.push(data);
                                                                        current.loadedRequests++;
 
@@ -257,7 +305,7 @@ function model(name) {
 
                                                                             current.newResults=  [];
 
-                                                                            setTimeout("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
+                                                                            //setTimeout("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
 
                                                                         }
 

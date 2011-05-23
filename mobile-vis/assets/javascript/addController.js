@@ -22,7 +22,7 @@
 function  addController(newModel) {
 		
 		 this.model = newModel;
-                 this.errorController = new errorController();
+         this.errorController = new errorController();
 
 		
 		/*
@@ -138,7 +138,6 @@ function  addController(newModel) {
 		*/
 
 		this.submitForm  = function  (e){
-
                           e.preventDefault();
 
                           ////window.console.log("about to submit the form");
@@ -147,7 +146,10 @@ function  addController(newModel) {
                                 var message =  $('[name=message]').val();
 
 				//get the current peformance from the form.
-				gCurrentPerformance = $(".CurrentPerformance").html();
+				var CurrentPerformance = $(".CurrentPerformance").html();
+				//var CurrentPerformance = 4;
+ 
+				//alert(CurrentPerformance );
 
                                 if(message == ''){
                                          //alert('feedback has be included')
@@ -171,16 +173,17 @@ function  addController(newModel) {
                                 var params = {
 
 					 type:'mobile-web',
-					 performance:gCurrentPerformance,
+					 performance:CurrentPerformance,
 					 message:message
 
 				 };
 				 var values = jQuery.param(params);//encode those
 
 				 var source =  host + '/mobile/gatherer?' +  values;
+			     //alert(source);
 
 				//window.console.log(source);
-                                var current = this;
+                var current = this;
                                 
 				//remove what is currently is being shown
 
@@ -193,12 +196,12 @@ function  addController(newModel) {
 							////window.console.log(data);
 							$(".feedbackForm").empty();
 
-                                                        $("#table_anchor").empty();
+                            $("#table_anchor").empty();
 
 							 data.feedback.reverse();
 							// add the list of feedback
 							for(var i = 0; i < data.feedback.length; i++) {
-								item = data.feedback[i];
+								var item = data.feedback[i];
 								////window.console.log(item.content);
 
 							         $("#table_anchor").append('<tr><td class="feedback">' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');
@@ -214,8 +217,8 @@ function  addController(newModel) {
 
 						},
 						error:function (xhr, ajaxOptions, thrownError){
-							alert('the error');
-                                                        current.errorController.updateError("Something has gone wrong with the system",error);
+							//alert('some ');
+                            current.errorController.updateError("Something has gone wrong with the system",'0');
 							current.errorStatus = 1;
 
 

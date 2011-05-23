@@ -85,7 +85,7 @@ function visControllerWordStats(newModel) {
                                 for(var a = 0; a <  this.model.results.length; a++) {
                                 //now update for muliple.
                                     for(var i = 0; i < this.model.results[a].feedback.length; i++) {
-                                          feedbackWords = this.model.results[a].feedback[i].words;
+                                          var feedbackWords = this.model.results[a].feedback[i].words;
                                           //window.console.log(feedbackWords);
                                           
                                          //now loop over the words in this piece of feedback

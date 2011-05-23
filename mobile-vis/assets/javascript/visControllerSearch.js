@@ -44,7 +44,7 @@ function visControllerSearch(newModel) {
 				for(var i = 0; i < results[a].length; i++) { //loop of over results in the 
 
                                         
-					item  = results[a][i];
+					var item  = results[a][i];
 				 	 
 					 //window.console.log(item );
 							
