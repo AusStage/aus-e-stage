@@ -238,7 +238,7 @@ public class KmlDataBuilder {
 	}
 	
 	/**
-	 * Add a document containing contributor information
+	 * Add a section to the KML that includes organisation information
 	 * 
 	 * @param list the list of contributors
 	 * 
@@ -366,6 +366,148 @@ public class KmlDataBuilder {
 				
 				elem = xmlDoc.createElement("styleUrl");
 				elem.setTextContent("#c-" + CON_ICON_COLOUR_CODES[colourIndex]);
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("Point");
+				subElem = xmlDoc.createElement("coordinates");
+				subElem.setTextContent(kmlVenue.getLongitude() + "," + kmlVenue.getLatitude());
+				elem.appendChild(subElem);
+				placemark.appendChild(elem);
+				
+				document.appendChild(placemark);
+			}			
+		}
+	}
+	
+	/**
+	 * Add a section to the KML that includes organisation information
+	 * 
+	 * @param list the list of organisations
+	 * 
+	 * @throws KmlDownloadException if something bad happens
+	 */
+	public void addOrganisations(OrganisationList list) {
+	
+		if(list == null) {
+			throw new IllegalArgumentException("The organisations parameter must be a valid object");
+		}
+		
+		Set<Organisation> organisations = list.getSortedOrganisations(OrganisationList.ORGANISATION_NAME_SORT);
+		
+		if(organisations.isEmpty() == true) {
+			throw new IllegalArgumentException("There must be at least one organisation in the supplied list");
+		}
+			
+		Element folder = addFolder("Organisations", null);
+		Element document;
+		
+		Element placemark;
+		Element elem;
+		Element subElem;
+		CDATASection cdata;
+		
+		String content;
+		
+		
+		Iterator iterator = organisations.iterator();
+		Organisation organisation;
+		Event       event;
+		
+		KmlVenue kmlVenue;
+		HashMap<Integer, KmlVenue> kmlVenues;
+		
+		int colourIndex = -1;
+		int contentCount = 0;
+		
+		// loop through and add the placemarks
+		while(iterator.hasNext()) {
+		
+			organisation = (Organisation)iterator.next();
+			
+			if(organisation.getKmlVenueCount() == 0) {
+				throw new KmlDownloadException("there were no events associated with organisation '" + organisation.getId() + "'");
+			}
+			
+			document = addDocument(folder, organisation.getName(), organisation.getAddress());
+
+			// determine which style to use
+			if(colourIndex ==  ORG_ICON_COLOUR_CODES.length) {
+				colourIndex = 0;
+			} else {
+				colourIndex++;
+			}
+			
+			kmlVenues = organisation.getKmlVenues();
+			
+			Set<KmlVenue> venues = new TreeSet<KmlVenue>(new KmlVenueComparator());
+			venues.addAll(kmlVenues.values());
+			Iterator venueIterator = venues.iterator();
+			
+			
+			while(venueIterator.hasNext()) {
+			
+				kmlVenue = (KmlVenue)venueIterator.next();
+				
+				placemark = xmlDoc.createElement("Placemark");
+				elem = xmlDoc.createElement("name");
+				elem.setTextContent(kmlVenue.getName());
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("atom:link");
+				elem.setAttribute("href", kmlVenue.getUrl());
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("snippet");
+				elem.setTextContent(kmlVenue.getShortAddress());
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("description");
+				
+				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "organisation.png\" width=\"32\" height=\"32\"/></span>";
+				
+				content += " <a href=\"" + organisation.getUrl() + "\">" + organisation.getName() + "</a></th></tr>";
+				contentCount = 0;
+				
+				Set<Event> events = kmlVenue.getEvents();
+				Iterator eventIterator = events.iterator();
+				
+				while(eventIterator.hasNext()) {
+					event = (Event)eventIterator.next();
+					
+					// check if content count is odd or not
+					if (contentCount % 2 != 0) {
+						content += "<tr class=\"odd\">";
+					} else {
+						content += "<tr>";
+					} 
+					
+					content += "<td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + kmlVenue.getName() + ", " + kmlVenue.getShortAddress() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+					
+					contentCount++;
+				}
+				
+				content += "</table>";
+				
+				elem.appendChild(xmlDoc.createCDATASection(content));
+				placemark.appendChild(elem);
+				
+				String[] timespanValues = kmlVenue.getTimespanValues();
+
+				elem = xmlDoc.createElement("TimeSpan");
+				
+				subElem = xmlDoc.createElement("begin");
+				subElem.setTextContent(timespanValues[0]);
+				elem.appendChild(subElem);
+				
+				subElem = xmlDoc.createElement("end");
+				subElem.setTextContent(timespanValues[1]);
+				elem.appendChild(subElem);
+				
+				placemark.appendChild(elem);
+
+				
+				elem = xmlDoc.createElement("styleUrl");
+				elem.setTextContent("#o-" + ORG_ICON_COLOUR_CODES[colourIndex]);
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("Point");
