@@ -69,7 +69,11 @@ public class KmlDownloadManager {
 	
 		if(contributors.length > 0) {
 			addContributors(contributors);
-		}	
+		}
+		
+		if(organisations.length > 0) {
+			addOrganisations(organisations);
+		}
 	}
 	
 	//private method to add the contributors
@@ -239,6 +243,155 @@ public class KmlDownloadManager {
 		// add the data to the KML download
 		builder.addContributors(contributors);
 	}
+	
+	// private method to add organisation data to the KML
+	private void addOrganisations(String[] ids) throws KmlDownloadException {
+	
+		// declare helper variables
+		String sql;
+		
+		DbObjects results;
+		
+		OrganisationList  organisations  = new OrganisationList();
+		Organisation      organisation   = null;
+					
+		// get the list of contributors
+		if(ids.length == 1) {
+			sql = "SELECT o.organisationid, o.name, o.address, o.suburb, s.state, c.countryname "
+				+ "FROM organisation o, states s, country c "
+				+ "WHERE o.organisationid = ? "
+				+ "AND o.state = s.stateid "
+				+ "AND o.countryid = c.countryid";
+		} else {
+			sql = "SELECT o.organisationid, o.name, o.address, o.suburb, s.state, c.countryname "
+				+ "FROM organisation o, states s, country c "
+				+ "WHERE o.organisationid = ANY (";
+			    
+			    // add sufficient place holders for all of the ids
+				for(int i = 0; i < ids.length; i++) {
+					sql += "?,";
+				}
+
+				// tidy up the sql
+				sql = sql.substring(0, sql.length() -1);
+				
+				// finalise the sql string
+				sql += ") ";
+				sql += "AND o.state = s.stateid ";
+				sql += "AND o.countryid = c.countryid";
+		}
+		
+		// get the data
+		results = database.executePreparedStatement(sql, ids);
+	
+		// check to see that data was returned
+		if(results == null) {
+			throw new KmlDownloadException("unable to lookup organisation data");
+		}
+		
+		// build the list of contributors
+		ResultSet resultSet = results.getResultSet();
+		try {
+			while (resultSet.next()) {
+				organisation = new Organisation(resultSet.getString(1), resultSet.getString(2), LinksManager.getOrganisationLink(resultSet.getString(1)));
+				
+				organisation.setAddress(buildShortVenueAddress(resultSet.getString(6), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));			
+				organisations.addOrganisation(organisation);
+				
+			}
+		} catch (java.sql.SQLException ex) {
+			throw new KmlDownloadException("unable to build list of organisations: " + ex.toString());
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		
+		// get the events for each contributor
+		Set<Organisation> organisationSet = organisations.getOrganisations();
+		Iterator   iterator = organisationSet.iterator();
+		Event       event;
+		String      venue;
+		String[]    sortDates;
+		
+		KmlVenue kmlVenue;
+		HashMap<Integer, KmlVenue> kmlVenues;
+		
+		sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+			+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+			+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
+			+ "       c.countryname, v.latitude, v.longitude "
+			+ "FROM events e, orgevlink ol, venue v, country c, states s "
+			+ "WHERE ol.organisationid = ? "
+			+ "AND ol.eventid = e.eventid "
+			+ "AND e.venueid = v.venueid "
+			+ "AND v.latitude IS NOT NULL "
+			+ "AND v.countryid = c.countryid "
+			+ "AND v.state = s.stateid";
+			
+		String sqlParameters[] = new String[1];
+		
+		while(iterator.hasNext()) {
+			organisation = (Organisation)iterator.next();	
+			
+			kmlVenues = new HashMap<Integer, KmlVenue>();		
+			
+			sqlParameters[0] = organisation.getId();
+			
+			// get the data
+			results = database.executePreparedStatement(sql, sqlParameters);
+	
+			// check to see that data was returned
+			if(results == null) {
+				throw new KmlDownloadException("unable to lookup event data for organisation: " + organisation.getId());
+			}
+			
+			// build the list of events and add them to this contributor
+			resultSet = results.getResultSet();
+			try {
+				while (resultSet.next()) {
+				
+					// check to see if we've seen this venue before
+					if(kmlVenues.containsKey(Integer.parseInt(resultSet.getString(9))) == true) {
+						kmlVenue = kmlVenues.get(Integer.parseInt(resultSet.getString(9)));
+					} else {
+						//KmlVenue(String id, String name, String address, String latitude, String longitude)
+						kmlVenue = new KmlVenue(resultSet.getString(9), resultSet.getString(10), buildVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), buildShortVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), resultSet.getString(16), resultSet.getString(17));
+						kmlVenues.put(Integer.parseInt(resultSet.getString(9)), kmlVenue);
+					}
+									
+					// build the event
+					event = new Event(resultSet.getString(1));
+					event.setName(resultSet.getString(2));
+					event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+					
+					sortDates = DateUtils.getDatesForTimeline(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+					event.setSortFirstDate(sortDates[0]);
+					event.setSortLastDate(sortDates[1]);
+					
+					event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+					
+					kmlVenue.addEvent(event);								
+				}
+				
+				organisation.setKmlVenues(kmlVenues);
+				
+			} catch (java.sql.SQLException ex) {
+				throw new KmlDownloadException("unable to build list of events for organisation '" + organisation.getId() + "' " + ex.toString());
+			}
+		}
+			
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// add the data to the KML download
+		builder.addOrganisations(organisations);
+	}
+	
 	
 	// private function to build the venue address
 	private String buildVenueAddress(String country, String street, String suburb, String state) {

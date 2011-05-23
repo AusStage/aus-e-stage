@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Iterator;
+import java.util.HashMap;
 
 /**
  * A class to represent an Organisation
@@ -44,6 +45,7 @@ public class Organisation implements Comparable<Organisation> {
 	private String state = null;
 	private String postcode = null;
 	private String country = null;
+	private HashMap<Integer, KmlVenue> kmlVenues = null;
 	
 	// declare public constants
 	/**
@@ -72,6 +74,7 @@ public class Organisation implements Comparable<Organisation> {
 		this.id = id;
 		
 		events = new HashSet<Event>();
+		kmlVenues = new HashMap<Integer, KmlVenue>();
 
 	} // end constructor
 	
@@ -379,6 +382,22 @@ public class Organisation implements Comparable<Organisation> {
 		}
 		
 		country = value.trim();
+	}
+	
+	public HashMap<Integer, KmlVenue> getKmlVenues() {
+		return kmlVenues;
+	}
+	
+	public void setKmlVenues(HashMap<Integer, KmlVenue> venues) {
+		kmlVenues = venues;
+	}
+	
+	public int getKmlVenueCount() {
+		if(kmlVenues != null) {
+			return kmlVenues.size();
+		} else {
+			return 0;
+		}
 	}
 	
 	/*
