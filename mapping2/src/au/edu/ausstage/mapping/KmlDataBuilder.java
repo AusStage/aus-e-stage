@@ -62,7 +62,16 @@ public class KmlDataBuilder {
 	 */
 	public static final String[] COLOUR_CODES = {"#276abd", "#317db9", "#3b91b5", "#44a4b1", "#4eb8ad", "#3b9d8f", "#278271", "#146853", "#004d35", "#1a6b3a", "#33893e", "#4da743", "#66c547", "#8cc43d", "#b3c333", "#d9d121", "#ffe010", "#ffd117", "#ffc11f", "#ffb320", "#ffa521", "#ff9821", "#ff8a22", "#fc792c", "#f96835", "#f6573f", "#f34648", "#dc3738", "#c52829", "#af1819", "#980909", "#a31d34", "#ad315f", "#b7458a", "#c259b5", "#b556b6", "#a754b7", "#9951b7", "#8c4eb8", "#7758c0", "#6262c7", "#4d6bcf", "#3875d7", "#2a5fd4", "#1c48d1", "#0e31cf", "#001bcc", "#1442c4", "#afc8ef", "#88ace7", "#ffcd4c"};
 	
-
+	/**
+	 * icon colour code for venues
+	 */
+	public static final String VENUE_ICON_COLOUR_CODE = "133";
+	
+	/**
+	 * icon colour code for events
+	 */
+	public static final String EVENT_ICON_COLOUR_CODE = "88";
+	
 
 	// declare private class variables
 	private DocumentBuilderFactory factory;
@@ -215,8 +224,8 @@ public class KmlDataBuilder {
 		}
 	
 		// check on the parameters
-		if(InputUtils.isValid(name) == false || InputUtils.isValid(description) == false) {
-			throw new IllegalArgumentException("both parameters are required");
+		if(InputUtils.isValid(name) == false ) {
+			throw new IllegalArgumentException("the name parameter is required");
 		}
 		
 		// create the new folder
@@ -225,12 +234,14 @@ public class KmlDataBuilder {
 		// add the name and description elements
 		Element n = xmlDoc.createElement("name");
 		n.setTextContent(name);
-		
-		Element d = xmlDoc.createElement("description");
-		d.setTextContent(description);
-		
 		document.appendChild(n);
-		document.appendChild(d);
+		
+		if(InputUtils.isValid(description) == true ) {
+		
+			Element d = xmlDoc.createElement("description");
+			d.setTextContent(description);
+			document.appendChild(d);
+		}
 		
 		folder.appendChild(document);
 		
@@ -518,6 +529,115 @@ public class KmlDataBuilder {
 				
 				document.appendChild(placemark);
 			}			
+		}
+	}
+	
+	/**
+	 * Add a section to the KML that includes organisation information
+	 * 
+	 * @param list the list of organisations
+	 * 
+	 * @throws KmlDownloadException if something bad happens
+	 */
+	public void addVenues(Set<KmlVenue> list) {
+	
+		if(list == null) {
+			throw new IllegalArgumentException("The organisations parameter must be a valid object");
+		}
+		
+		if(list.size() == 0) {
+			throw new IllegalArgumentException("There must be at least one venue in the supplied list");
+		}
+			
+		//Element folder = addFolder("Venues", null);
+		Element document = addDocument(rootFolder, "Venues", null);
+		
+		Element placemark;
+		Element elem;
+		Element subElem;
+		CDATASection cdata;
+		
+		String content;
+		int    contentCount;
+		
+		Event       event;
+		
+		KmlVenue kmlVenue;
+		Iterator venueIterator = list.iterator();
+		
+		while(venueIterator.hasNext()) {
+		
+			kmlVenue = (KmlVenue)venueIterator.next();
+			
+			placemark = xmlDoc.createElement("Placemark");
+			elem = xmlDoc.createElement("name");
+			elem.setTextContent(kmlVenue.getName());
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("atom:link");
+			elem.setAttribute("href", kmlVenue.getUrl());
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("snippet");
+			elem.setTextContent(kmlVenue.getShortAddress());
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("description");
+			
+			content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "venue-arch.png\" width=\"32\" height=\"32\"/></span>";
+			
+			content += " <a href=\"" + kmlVenue.getUrl() + "\">" + kmlVenue.getName() + "</a></th></tr>";
+			contentCount = 0;
+			
+			Set<Event> events = kmlVenue.getEvents();
+			Iterator eventIterator = events.iterator();
+			
+			while(eventIterator.hasNext()) {
+				event = (Event)eventIterator.next();
+				
+				// check if content count is odd or not
+				if (contentCount % 2 != 0) {
+					content += "<tr class=\"odd\">";
+				} else {
+					content += "<tr>";
+				} 
+				
+				content += "<td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + kmlVenue.getName() + ", " + kmlVenue.getShortAddress() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+				
+				contentCount++;
+			}
+			
+			content += "</table>";
+			
+			elem.appendChild(xmlDoc.createCDATASection(content));
+			placemark.appendChild(elem);
+			
+			String[] timespanValues = kmlVenue.getTimespanValues();
+
+			elem = xmlDoc.createElement("TimeSpan");
+			
+			subElem = xmlDoc.createElement("begin");
+			subElem.setTextContent(timespanValues[0]);
+			elem.appendChild(subElem);
+			
+			subElem = xmlDoc.createElement("end");
+			subElem.setTextContent(timespanValues[1]);
+			elem.appendChild(subElem);
+			
+			placemark.appendChild(elem);
+
+			
+			elem = xmlDoc.createElement("styleUrl");
+			elem.setTextContent("#v-133");
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("Point");
+			subElem = xmlDoc.createElement("coordinates");
+			subElem.setTextContent(kmlVenue.getLongitude() + "," + kmlVenue.getLatitude());
+			elem.appendChild(subElem);
+			placemark.appendChild(elem);
+			
+			document.appendChild(placemark);
 		}
 	}
 	

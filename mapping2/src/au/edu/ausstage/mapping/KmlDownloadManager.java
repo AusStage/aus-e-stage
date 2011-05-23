@@ -29,6 +29,7 @@ import org.w3c.dom.Element;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * A class used to prepare KML ready for download
@@ -73,6 +74,10 @@ public class KmlDownloadManager {
 		
 		if(organisations.length > 0) {
 			addOrganisations(organisations);
+		}
+		
+		if(venues.length > 0) {
+			addVenues(venues);
 		}
 	}
 	
@@ -180,8 +185,8 @@ public class KmlDownloadManager {
 			+ "AND cl.eventid = e.eventid "
 			+ "AND e.venueid = v.venueid "
 			+ "AND v.latitude IS NOT NULL "
-			+ "AND v.countryid = c.countryid "
-			+ "AND v.state = s.stateid";
+			+ "AND v.countryid = c.countryid (+) "
+			+ "AND v.state = s.stateid (+)";
 			
 		String sqlParameters[] = new String[1];
 		
@@ -324,12 +329,12 @@ public class KmlDownloadManager {
 			+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
 			+ "       c.countryname, v.latitude, v.longitude "
 			+ "FROM events e, orgevlink ol, venue v, country c, states s "
-			+ "WHERE ol.organisationid = ? "
+			+ "WHERE ol.organisationid = ? " 
 			+ "AND ol.eventid = e.eventid "
 			+ "AND e.venueid = v.venueid "
 			+ "AND v.latitude IS NOT NULL "
-			+ "AND v.countryid = c.countryid "
-			+ "AND v.state = s.stateid";
+			+ "AND v.countryid = c.countryid (+) "
+			+ "AND v.state = s.stateid (+)";
 			
 		String sqlParameters[] = new String[1];
 		
@@ -392,13 +397,141 @@ public class KmlDownloadManager {
 		builder.addOrganisations(organisations);
 	}
 	
+	// private method to add organisation data to the KML
+	private void addVenues(String[] ids) throws KmlDownloadException {
+	
+		// declare helper variables
+		String sql;
+		
+		DbObjects results;
+		Event       event;
+		String[]    sortDates;
+		
+		KmlVenue kmlVenue;
+		HashMap<Integer, KmlVenue> kmlVenues = new HashMap<Integer, KmlVenue>();
+					
+		// get the list of contributors
+		if(ids.length == 1) {
+			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, c.countryname, v.latitude, v.longitude "
+				+ "FROM venue v, states s, country c "
+				+ "WHERE v.venueid = ? "
+				+ "AND v.state = s.stateid "
+				+ "AND v.countryid = c.countryid";
+		} else {
+			sql = "SELECT v.venueid, v.venue_name, v.street, v.suburb, s.state, c.countryname, v.latitude, v.longitude "
+				+ "FROM venue v, states s, country c "
+				+ "WHERE v.venueid = ANY (";
+			    
+			    // add sufficient place holders for all of the ids
+				for(int i = 0; i < ids.length; i++) {
+					sql += "?,";
+				}
+
+				// tidy up the sql
+				sql = sql.substring(0, sql.length() -1);
+				
+				// finalise the sql string
+				sql += ") ";
+				sql += "AND v.state = s.stateid ";
+				sql += "AND v.countryid = c.countryid";
+		}
+		
+		// get the data
+		results = database.executePreparedStatement(sql, ids);
+	
+		// check to see that data was returned
+		if(results == null) {
+			throw new KmlDownloadException("unable to lookup organisation data");
+		}
+		
+		// build the list of contributors
+		ResultSet resultSet = results.getResultSet();
+		try {
+			while (resultSet.next()) {
+				kmlVenue = new KmlVenue(resultSet.getString(1), resultSet.getString(2), buildVenueAddress(resultSet.getString(6), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)), buildShortVenueAddress(resultSet.getString(6), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)), resultSet.getString(7), resultSet.getString(8));
+				kmlVenues.put(Integer.parseInt(resultSet.getString(1)), kmlVenue);
+				
+			}
+		} catch (java.sql.SQLException ex) {
+			throw new KmlDownloadException("unable to build list of organisations: " + ex.toString());
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+			+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+			+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
+			+ "       c.countryname, v.latitude, v.longitude "
+			+ "FROM events e, venue v, country c, states s "
+			+ "WHERE v.venueid = ? "
+			+ "AND e.venueid = v.venueid "
+			+ "AND v.latitude IS NOT NULL "
+			+ "AND v.countryid = c.countryid (+) "
+			+ "AND v.state = s.stateid (+)";
+			
+		String sqlParameters[] = new String[1];
+		
+		Set<KmlVenue> venues = new TreeSet<KmlVenue>();
+		venues.addAll(kmlVenues.values());
+		Iterator venueIterator = venues.iterator();
+		
+		while(venueIterator.hasNext()) {
+			
+			kmlVenue = (KmlVenue)venueIterator.next();
+			
+			sqlParameters[0] = Integer.toString(kmlVenue.getId());
+			
+			// get the data
+			results = database.executePreparedStatement(sql, sqlParameters);
+	
+			// check to see that data was returned
+			if(results == null) {
+				throw new KmlDownloadException("unable to lookup event data for venue: " + kmlVenue.getId());
+			}
+			
+			// build the list of events and add them to this contributor
+			resultSet = results.getResultSet();
+			try {
+				while (resultSet.next()) {
+							
+					// build the event
+					event = new Event(resultSet.getString(1));
+					event.setName(resultSet.getString(2));
+					event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+					
+					sortDates = DateUtils.getDatesForTimeline(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+					event.setSortFirstDate(sortDates[0]);
+					event.setSortLastDate(sortDates[1]);
+					
+					event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+					
+					kmlVenue.addEvent(event);								
+				}
+				
+			} catch (java.sql.SQLException ex) {
+				throw new KmlDownloadException("unable to build list of events for venue '" + kmlVenue.getId() + "' " + ex.toString());
+			}
+		}
+			
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// add the data to the KML download
+		builder.addVenues(venues);
+	}
+	
 	
 	// private function to build the venue address
 	private String buildVenueAddress(String country, String street, String suburb, String state) {
 	
 		String address = "";
 		
-		if(country.equals("Australia")) {
+		if(InputUtils.isValid(country) && country.equals("Australia")) {
 			if(InputUtils.isValid(street) == true) {
 				address += street + ", ";
 			}
@@ -438,7 +571,7 @@ public class KmlDownloadManager {
 	
 		String address = "";
 		
-		if(country.equals("Australia")) {
+		if(InputUtils.isValid(country) && country.equals("Australia")) {
 		
 			if(InputUtils.isValid(suburb) == true) {
 				address += suburb + ", ";
