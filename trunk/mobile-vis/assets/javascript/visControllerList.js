@@ -73,7 +73,7 @@ function visControllerList(newModel) {
                              $("span.question").html(results[0].question);
 
 				for(var i = 0; i < results[0].feedback.length; i++) {
-					item = results[0].feedback[i];
+					var item = results[0].feedback[i];
 					//Make the update acutally hoppen
 					////window.console.log(item);
 					$("#table_anchor").append('<tr><td class="feedback">' + item.content + '</td><td class="date">' + item.date  + '</td><td class="time">' + item.time + '</td><td class="type">' + item.type + '</td></tr>');

@@ -109,8 +109,8 @@ function model(name) {
 		
 									// add the list of feedback
 									for(var i = 0; i < data.length; i++) {
-										////window.console.log(data);
-										item = data[i];
+										//window.console.log(data);
+										var item = data[i];
 										//$(target + ".Performances").append('<li class="arrow">' +
 										$(target + ".Performances").append('<li class="arrow">' +
 												'<a href="add.html?performance=' +

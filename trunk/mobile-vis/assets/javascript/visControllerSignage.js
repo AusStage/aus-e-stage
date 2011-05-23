@@ -78,18 +78,20 @@ function  visControllerSignage(newModel) {
 				
 				//Show the performance name etc 
 				 $('.theQuestion').html(results[a].question);
-				  $(".tag").html(results[a].tag);
+				 $(".tag").html(results[a].tag);
 
-									
-				for(var i = 0; i < results[a].feedback.length; i++) {
-					item = results[a].feedback[i];	
-					//Make the update acutally hoppen
-					////window.console.log(item);
-					
-				    $(".feedback_messages").append('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
-									
-				}
-				
+
+                                //feedbackLength =  results[a].feedback.length -1;
+                                //if(feedbackLength == - 1) {
+                                    for(var i = 0; i < results[a].feedback.length; i++) {
+                                            var item = results[a].feedback[i];
+                                            //Make the update acutally hoppen
+                                            ////window.console.log(item);
+
+                                        $(".feedback_messages").append('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
+
+                                    }
+                              // }
 			}	
 							
 		}	
