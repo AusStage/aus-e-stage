@@ -131,7 +131,7 @@
                            //Now formatted the into yyyy-mm-dd
 
                            startdateString = reFormatDatetoYYYYMMDD(startdate);
-			   window.console.log(startdateString);
+			   //window.console.log(startdateString);
 
                            
                             //var today = new Date('Dec 12 2010'); // FOR TESTING
@@ -142,7 +142,7 @@
 
                            //Now formatted the into yyyy-mm-dd
                             enddateString = reFormatDatetoYYYYMMDD(enddate);
-			    window.console.log(enddateString);
+			    //window.console.log(enddateString);
                             
                             if (end == 0 && start == 0 ) {				  // build the query string
                                //don't include the end date'
@@ -165,7 +165,7 @@
 				
 				var source =  host + '/mobile/lookup?' +  values;
 				
-				window.console.log(source);
+				//window.console.log(source);
 								
 				$.ajax({
 						type:   'GET',
@@ -173,7 +173,7 @@
 						dataType:  mydataType,
 						cache: false,
 						success: function (data) {
-						window.console.log(data);
+						//window.console.log(data);
 						//see if we have some data only the display the current performances and load them  
 						if (data.length !=  0) {
 							//Sort by the startDateTime
@@ -191,7 +191,7 @@
 									// add the list of feedback
 									for(var i = 0; i < data.length; i++) {
 										//window.console.log(data);
-										item = data[i];
+										var item = data[i];
 										//$(target + ".Performances").append('<li class="arrow">' +
 										$(target + ".Performances").append('<li class="arrow">' +
 												'<a href="#FeedbackDisplayWithForm" ' + 
@@ -283,7 +283,7 @@
 		
 		function submitForm(){
 			
-			  window.console.log("about to submit the form");
+			 // window.console.log("about to submit the form");
 			   
 			   _gaq.push(['_trackPageview', 'FormSubmitted/?performance=' + gCurrentPerformance ]);
 				$('.submit').html('Loading');
@@ -327,7 +327,7 @@
 				
 				var source =  host + '/mobile/gatherer?' +  values;
 
-				window.console.log(source);
+				//window.console.log(source);
 				
 				//remove what is currently is being shown 
 				$(".feedback").items('remove').chain();//load this data in the feedback
@@ -427,7 +427,7 @@
 				 var values = jQuery.param(params);//encode thos
 				
 				var source =  host + '/mobile/lookup?' +  values;				
-				window.console.log(source);
+				//window.console.log(source);
 								
 				$.ajax({
 						type:   'GET',
@@ -436,7 +436,7 @@
 						cache: false,
 						success: function (data) {
 							
-						window.console.log(data);
+						//window.console.log(data);
 						$(".performances").empty();
 						
 						if(data.length > 0){
@@ -444,7 +444,7 @@
 							// add the list of feedback
 							for(var i = 0; i < data.length; i++) {
 								//window.console.log(data);
-								item = data[i];
+								var item = data[i];
 								//window.console.log(item);
 	
 								$(".NearByPerformances").append('<li class="arrow">' +
@@ -599,7 +599,7 @@
 				
 				var source =  host + '/mobile/feedback?task=initial&performance=' + gCurrentPerformance  ;  //TODO code to see what server the system is running on and build this URL 
 				
-				window.console.log(source);
+				//window.console.log(source);
 				
 				//The important bit more  
 				$.ajax({
@@ -732,7 +732,12 @@
              	    </ul>
       
       
-      
+           <div class="toolbar">
+               <a class="button" id="infoButton" href="http://beta.ausstage.edu.au/mobile/mobile-vis/">View full site</a>
+
+            </div>
+
+
              <script type="text/javascript" charset="utf-8">_gaq.push(['_trackPageview', 'Home']);</script>
         </div>
    
@@ -899,7 +904,12 @@
                     
                     </li>
             </ul>
-                  
+
+                 <div class="toolbar">
+                <a class="back" href="#">Back</a>
+
+            </div>
+           
          </div>  
          
          
