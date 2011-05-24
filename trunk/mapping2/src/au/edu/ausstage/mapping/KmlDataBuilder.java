@@ -533,9 +533,9 @@ public class KmlDataBuilder {
 	}
 	
 	/**
-	 * Add a section to the KML that includes organisation information
+	 * Add a section to the KML that includes venue information
 	 * 
-	 * @param list the list of organisations
+	 * @param list the list of venues
 	 * 
 	 * @throws KmlDownloadException if something bad happens
 	 */
@@ -633,6 +633,87 @@ public class KmlDataBuilder {
 			elem = xmlDoc.createElement("Point");
 			subElem = xmlDoc.createElement("coordinates");
 			subElem.setTextContent(kmlVenue.getLongitude() + "," + kmlVenue.getLatitude());
+			elem.appendChild(subElem);
+			placemark.appendChild(elem);
+			
+			document.appendChild(placemark);
+		}
+	}
+	
+	/**
+	 * Add a section to the KML that includes venue information
+	 * 
+	 * @param list the list of venues
+	 * 
+	 * @throws KmlDownloadException if something bad happens
+	 */
+	public void addEvents(TreeSet<KmlEvent> list) {
+	
+		if(list == null) {
+			throw new IllegalArgumentException("The organisations parameter must be a valid object");
+		}
+		
+		if(list.size() == 0) {
+			throw new IllegalArgumentException("There must be at least one venue in the supplied list");
+		}
+			
+		//Element folder = addFolder("Venues", null);
+		Element document = addDocument(rootFolder, "Events", null);
+		
+		Element placemark;
+		Element elem;
+		Element subElem;
+		CDATASection cdata;
+		
+		String content;
+		int    contentCount;
+		
+		KmlEvent kmlEvent;
+		Iterator eventIterator = list.iterator();
+		
+		while(eventIterator.hasNext()) {
+		
+			kmlEvent = (KmlEvent)eventIterator.next();
+			
+			placemark = xmlDoc.createElement("Placemark");
+			elem = xmlDoc.createElement("name");
+			elem.setTextContent(kmlEvent.getName());
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("atom:link");
+			elem.setAttribute("href", kmlEvent.getUrl());
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("snippet");
+			elem.setTextContent(kmlEvent.getVenueAddress());
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("description");
+			
+			content = "<table><tr><td><a href=\"" + kmlEvent.getUrl() + "\">" + kmlEvent.getName() + "</a><br/>" + kmlEvent.getVenueName() + ", " + kmlEvent.getVenueAddress() + ", " + kmlEvent.getFirstDate() + "</td></tr></table>";
+			
+			elem.appendChild(xmlDoc.createCDATASection(content));
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("TimeSpan");
+			
+			subElem = xmlDoc.createElement("begin");
+			subElem.setTextContent(kmlEvent.getSortFirstDate());
+			elem.appendChild(subElem);
+			
+			subElem = xmlDoc.createElement("end");
+			subElem.setTextContent(kmlEvent.getSortLastDate());
+			elem.appendChild(subElem);
+			
+			placemark.appendChild(elem);
+
+			elem = xmlDoc.createElement("styleUrl");
+			elem.setTextContent("#e-88");
+			placemark.appendChild(elem);
+			
+			elem = xmlDoc.createElement("Point");
+			subElem = xmlDoc.createElement("coordinates");
+			subElem.setTextContent(kmlEvent.getLongitude() + "," + kmlEvent.getLatitude());
 			elem.appendChild(subElem);
 			placemark.appendChild(elem);
 			

@@ -75,6 +75,10 @@ public class KmlDownloadManager {
 		if(venues.length > 0) {
 			addVenues(venues);
 		}
+		
+		if(events.length > 0) {
+			addEvents(events);
+		}
 	}
 	
 	//private method to add the contributors
@@ -531,8 +535,8 @@ public class KmlDownloadManager {
 		Event       event;
 		String[]    sortDates;
 		
-		KmlVenue kmlVenue;
-		HashMap<Integer, KmlVenue> kmlVenues = new HashMap<Integer, KmlVenue>();
+		KmlEvent kmlEvent;
+		TreeSet<KmlEvent> kmlEvents = new TreeSet<KmlEvent>(new KmlEventNameComparator());
 					
 		// get the list of contributors
 		if(ids.length == 1) {
@@ -583,28 +587,22 @@ public class KmlDownloadManager {
 		try {
 			while (resultSet.next()) {
 			
-				// check to see if we've seen this venue before
-				if(kmlVenues.containsKey(Integer.parseInt(resultSet.getString(9))) == true) {
-					kmlVenue = kmlVenues.get(Integer.parseInt(resultSet.getString(9)));
-				} else {
-					//KmlVenue(String id, String name, String address, String latitude, String longitude)
-					kmlVenue = new KmlVenue(resultSet.getString(9), resultSet.getString(10), buildVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), buildShortVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), resultSet.getString(16), resultSet.getString(17));
-					kmlVenues.put(Integer.parseInt(resultSet.getString(9)), kmlVenue);
-				}
-								
-				// build the event
-				event = new Event(resultSet.getString(1));
-				event.setName(resultSet.getString(2));
-				event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
-				
 				sortDates = DateUtils.getDatesForTimeline(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
-				event.setSortFirstDate(sortDates[0]);
-				event.setSortLastDate(sortDates[1]);
+			
+				kmlEvent = new KmlEvent(resultSet.getString(1));
 				
-				event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+				kmlEvent.setName(resultSet.getString(2));
+				kmlEvent.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+				kmlEvent.setFirstDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				kmlEvent.setSortFirstDate(sortDates[0]);
+				kmlEvent.setSortLastDate(sortDates[1]);
+				kmlEvent.setVenueName(resultSet.getString(10));
+				kmlEvent.setVenueAddress(buildShortVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)));
+				kmlEvent.setLatitude(resultSet.getString(16));
+				kmlEvent.setLongitude(resultSet.getString(17));
 				
-				kmlVenue.addEvent(event);								
-			}
+				kmlEvents.add(kmlEvent);
+			}	
 		} catch (java.sql.SQLException ex) {
 				throw new KmlDownloadException("unable to build list of events: " + ex.toString());
 		}
@@ -615,9 +613,8 @@ public class KmlDownloadManager {
 		results = null;
 		
 		// add the data to the KML download
-		//builder.addEvents(kmlVenues);
+		builder.addEvents(kmlEvents);
 	}
-	
 	
 	// private function to build the venue address
 	private String buildVenueAddress(String country, String street, String suburb, String state) {
