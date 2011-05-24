@@ -332,7 +332,7 @@ public class KmlDataBuilder {
 				
 				elem = xmlDoc.createElement("description");
 				
-				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "contributor.png\" width=\"32\" height=\"32\"/></span>";
+				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "contributor.png\" width=\"32\" height=\"32\"></span>";
 				
 				content += " <a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions() + "</th></tr>";
 				contentCount = 0;
@@ -474,9 +474,9 @@ public class KmlDataBuilder {
 				
 				elem = xmlDoc.createElement("description");
 				
-				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "organisation.png\" width=\"32\" height=\"32\"/></span>";
+				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "organisation.png\" width=\"32\" height=\"32\"></span>";
 				
-				content += " <a href=\"" + organisation.getUrl() + "\">" + organisation.getName() + "</a></th></tr>";
+				content += " <a href=\"" + organisation.getUrl() + "\">" + organisation.getName() + "</a><br/>" + kmlVenue.getShortAddress() + "</th></tr>";
 				contentCount = 0;
 				
 				Set<Event> events = kmlVenue.getEvents();
@@ -584,7 +584,7 @@ public class KmlDataBuilder {
 			
 			elem = xmlDoc.createElement("description");
 			
-			content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "venue-arch.png\" width=\"32\" height=\"32\"/></span>";
+			content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "venue-arch.png\" width=\"32\" height=\"32\"></span>";
 			
 			content += " <a href=\"" + kmlVenue.getUrl() + "\">" + kmlVenue.getName() + "</a><br/>" + kmlVenue.getAddress() + "</th></tr>";
 			contentCount = 0;
@@ -690,7 +690,10 @@ public class KmlDataBuilder {
 			
 			elem = xmlDoc.createElement("description");
 			
-			content = "<table><tr><td><a href=\"" + kmlEvent.getUrl() + "\">" + kmlEvent.getName() + "</a><br/>" + kmlEvent.getVenueName() + ", " + kmlEvent.getVenueAddress() + ", " + kmlEvent.getFirstDate() + "</td></tr></table>";
+			content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "event.png\" width=\"32\" height=\"32\"></span>";
+			content += " <a href=\"" + kmlEvent.getVenueUrl() + "\">" + kmlEvent.getVenueName() + "</a><br/>" + kmlEvent.getShortVenueAddress() + "</th></tr>";
+			
+			content += "<tr><td><a href=\"" + kmlEvent.getUrl() + "\">" + kmlEvent.getName() + "</a><br/>" + kmlEvent.getVenueName() + ", " + kmlEvent.getVenueAddress() + ", " + kmlEvent.getFirstDate() + "</td></tr></table>";
 			
 			elem.appendChild(xmlDoc.createCDATASection(content));
 			placemark.appendChild(elem);

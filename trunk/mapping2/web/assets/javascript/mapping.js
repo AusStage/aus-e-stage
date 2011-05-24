@@ -1428,9 +1428,14 @@ MappingClass.prototype.buildVenueInfoWindow = function() {
 MappingClass.prototype.buildEventInfoWindow = function(data) {
 
 	// define a variable to store the infoWindow content
-	var list    = '<div class="infoWindowContent"><div class="infoWindowContentList"><ul class="infoWindowEventList">';
+	var list;
 	var idx;
 	var event;
+	
+	list = '<div class="infoWindowContent"><div class="infoWindowListHeader b-186 f-184">';
+	list += '<table class="infoWindowListHeaderLayout"><tr><td class="mapLegendIcon"><span class="infoWindowListIcon ' + mapIconography.eventColours[0] + '"><img src="'+ mapIconography.event + '" width="' + mapIconography.iconWidth + '" height="' + mapIconography.iconHeight + '"/></span></td>';
+	list += '<td><span class="infoWindowListTitle"><a href="' + data[0].venue.url + '" target="_ausstage">' + data[0].venue.name + '</a><br/>' + mappingObj.buildAddressAlt(data[0].venue.suburb, data[0].venue.state, data[0].venue.country) + '</span></td></tr></table></div>';
+	list += '<div class="infoWindowContentList"><ul class="infoWindowEventList">';
 	
 	// sort the array
 	data.sort(sortEventArray);
