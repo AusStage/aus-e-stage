@@ -597,7 +597,9 @@ public class KmlDownloadManager {
 				kmlEvent.setSortFirstDate(sortDates[0]);
 				kmlEvent.setSortLastDate(sortDates[1]);
 				kmlEvent.setVenueName(resultSet.getString(10));
+				kmlEvent.setVenueUrl(LinksManager.getVenueLink(resultSet.getString(9)));
 				kmlEvent.setVenueAddress(buildShortVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)));
+				kmlEvent.setShortVenueAddress(buildShortVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)));
 				kmlEvent.setLatitude(resultSet.getString(16));
 				kmlEvent.setLongitude(resultSet.getString(17));
 				
