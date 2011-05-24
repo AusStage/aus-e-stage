@@ -586,7 +586,7 @@ public class KmlDataBuilder {
 			
 			content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "venue-arch.png\" width=\"32\" height=\"32\"/></span>";
 			
-			content += " <a href=\"" + kmlVenue.getUrl() + "\">" + kmlVenue.getName() + "</a></th></tr>";
+			content += " <a href=\"" + kmlVenue.getUrl() + "\">" + kmlVenue.getName() + "</a><br/>" + kmlVenue.getAddress() + "</th></tr>";
 			contentCount = 0;
 			
 			Set<Event> events = kmlVenue.getEvents();
@@ -602,7 +602,7 @@ public class KmlDataBuilder {
 					content += "<tr>";
 				} 
 				
-				content += "<td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + kmlVenue.getName() + ", " + kmlVenue.getShortAddress() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+				content += "<td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + event.getFirstDisplayDate() + "</td></tr>";
 				
 				contentCount++;
 			}
@@ -626,7 +626,6 @@ public class KmlDataBuilder {
 			
 			placemark.appendChild(elem);
 
-			
 			elem = xmlDoc.createElement("styleUrl");
 			elem.setTextContent("#v-133");
 			placemark.appendChild(elem);

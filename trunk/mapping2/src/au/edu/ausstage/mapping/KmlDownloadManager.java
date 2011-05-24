@@ -63,10 +63,6 @@ public class KmlDownloadManager {
 	
 		// instantiate the required object
 		builder = new KmlDataBuilder();
-		
-		//development code
-		//String[] tmp = {"419592","427041","235821","2639","245870","1000","234296","432709","413302","427354","251818","428997","247926","8050","250333","248610","675","239426","234366","413989","424382","422736","239542"};
-		//contributors = tmp;
 	
 		if(contributors.length > 0) {
 			addContributors(contributors);
@@ -474,7 +470,7 @@ public class KmlDownloadManager {
 			
 		String sqlParameters[] = new String[1];
 		
-		Set<KmlVenue> venues = new TreeSet<KmlVenue>();
+		Set<KmlVenue> venues = new TreeSet<KmlVenue>(new KmlVenueComparator());
 		venues.addAll(kmlVenues.values());
 		Iterator venueIterator = venues.iterator();
 		
@@ -523,6 +519,103 @@ public class KmlDownloadManager {
 		
 		// add the data to the KML download
 		builder.addVenues(venues);
+	}
+	
+	// private method to add organisation data to the KML
+	private void addEvents(String[] ids) throws KmlDownloadException {
+	
+		// declare helper variables
+		String sql;
+		
+		DbObjects results;
+		Event       event;
+		String[]    sortDates;
+		
+		KmlVenue kmlVenue;
+		HashMap<Integer, KmlVenue> kmlVenues = new HashMap<Integer, KmlVenue>();
+					
+		// get the list of contributors
+		if(ids.length == 1) {
+			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
+				+ "       c.countryname, v.latitude, v.longitude "
+				+ "FROM events e, venue v, country c, states s "
+				+ "WHERE e.eventid = ? "
+				+ "AND e.venueid = v.venueid "
+				+ "AND v.latitude IS NOT NULL "
+				+ "AND v.countryid = c.countryid (+) "
+				+ "AND v.state = s.stateid (+)";
+		} else {
+			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+				+ "       e.yyyylast_date, e.mmlast_date, e.ddlast_date, "
+				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
+				+ "       c.countryname, v.latitude, v.longitude "
+				+ "FROM events e, venue v, country c, states s "
+				+ "WHERE e.eventid = ANY (";
+			    
+			    // add sufficient place holders for all of the ids
+				for(int i = 0; i < ids.length; i++) {
+					sql += "?,";
+				}
+
+				// tidy up the sql
+				sql = sql.substring(0, sql.length() -1);
+				
+				// finalise the sql string
+				sql += ") "
+					+ "AND e.venueid = v.venueid "
+					+ "AND v.latitude IS NOT NULL "
+					+ "AND v.countryid = c.countryid (+) "
+					+ "AND v.state = s.stateid (+)";
+		}
+		
+		// get the data
+		results = database.executePreparedStatement(sql, ids);
+	
+		// check to see that data was returned
+		if(results == null) {
+			throw new KmlDownloadException("unable to lookup event data");
+		}
+		
+		// build the list of events
+		ResultSet resultSet = results.getResultSet();
+		try {
+			while (resultSet.next()) {
+			
+				// check to see if we've seen this venue before
+				if(kmlVenues.containsKey(Integer.parseInt(resultSet.getString(9))) == true) {
+					kmlVenue = kmlVenues.get(Integer.parseInt(resultSet.getString(9)));
+				} else {
+					//KmlVenue(String id, String name, String address, String latitude, String longitude)
+					kmlVenue = new KmlVenue(resultSet.getString(9), resultSet.getString(10), buildVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), buildShortVenueAddress(resultSet.getString(15), resultSet.getString(11), resultSet.getString(12), resultSet.getString(13)), resultSet.getString(16), resultSet.getString(17));
+					kmlVenues.put(Integer.parseInt(resultSet.getString(9)), kmlVenue);
+				}
+								
+				// build the event
+				event = new Event(resultSet.getString(1));
+				event.setName(resultSet.getString(2));
+				event.setFirstDisplayDate(DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+				
+				sortDates = DateUtils.getDatesForTimeline(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+				event.setSortFirstDate(sortDates[0]);
+				event.setSortLastDate(sortDates[1]);
+				
+				event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+				
+				kmlVenue.addEvent(event);								
+			}
+		} catch (java.sql.SQLException ex) {
+				throw new KmlDownloadException("unable to build list of events: " + ex.toString());
+		}
+			
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// add the data to the KML download
+		//builder.addEvents(kmlVenues);
 	}
 	
 	
