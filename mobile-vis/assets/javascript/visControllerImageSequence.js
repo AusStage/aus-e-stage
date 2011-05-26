@@ -23,6 +23,7 @@ function visControllerImageSequence(newModel) {
 		
 		 this.model = newModel;
                  this.key = '8dc8cea8944f148aa635d951abf8c72d';
+                 this.MAX_IMAGE_WIDTH = 750;
 
            
              
@@ -122,6 +123,11 @@ function visControllerImageSequence(newModel) {
                                   
                                   //now actually turn the on
                                   var target = '#' + word + ' .Attributions';
+
+                                  //window.console.log($(target).width());
+
+                                
+
                                   $(target).show();
 
                                  //window.console.log(target);
@@ -171,9 +177,12 @@ function visControllerImageSequence(newModel) {
 
                      var wordObj = this.getWord(word);
                      ///window.console.log(this.getWord(word));
-                     var imageScale = wordObj.count * 40;
 
-                    $(".feedback_messages").append('<div class="feedback" id="' + word + '"\n\
+                    var imageScale = (wordObj.count / this.model.wordMaxCount) * this.MAX_IMAGE_WIDTH;
+                    imageScale = Math.round(imageScale);
+
+
+                    $(".feedback_messages").append('<div class="feedback" id="' + word + '" \n\
                        "><div class="content">\n\
                     \n\
                     <img src="' + flickrURL + '" width="' + imageScale + '">\n\
@@ -192,6 +201,7 @@ function visControllerImageSequence(newModel) {
 
                        var target = '#' + word + ' .Attributions';
                        $(target).hide();
+
                           
                       this.getUserID(imageData.owner,word);
                      }
