@@ -81,6 +81,7 @@ function visControllerWordStats(newModel) {
                 {
                            var wordsList = new Array();
                            this.model.words = new Array();
+                           this.model.wordMaxCount = 0;
 
                                 for(var a = 0; a <  this.model.results.length; a++) {
                                 //now update for muliple.
@@ -99,6 +100,14 @@ function visControllerWordStats(newModel) {
 
                                                     var index = wordsList.indexOf(feedbackWords[w]);
                                                     this.model.words[index].count ++;
+
+                                                    //see if that is larger that current workMaxCount and reset the work count if it is.
+                                                    
+                                                    if(this.model.words[index].count >  this.model.wordMaxCount ) {
+                                                      this.model.wordMaxCount =  this.model.words[index].count;
+                                                      //window.console.log(this.model.wordMaxCount);
+                                                    }
+
                                                     
                                                     //need to check to make sure we don't have this feedback already 
 
