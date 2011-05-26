@@ -97,7 +97,11 @@ function model(name) {
 				
 				//find out what server we are running on make sure the data type is right 
 				host = this.buildHost();
-			 	mydataType = this.getDataType(); 
+			 	mydataType = this.getDataType();
+
+
+                               //window.console.log(this.CurrentPerformances);
+
 				
 				
 				
@@ -108,8 +112,10 @@ function model(name) {
 				//window.console.log(source);
 				
 				//The important bit more  
-				current = this; // in the success function we normal scope this, so we put this in to current so called stuff in a few moments.
-				var request = $.ajax({
+				var current = this; // in the success function we normal scope this, so we put this in to current so called stuff in a few moments.
+			        //window.console.log(current.CurrentPerformances);
+
+                                var request = $.ajax({
 						type:   'GET',
 						url: source, 
 						dataType: mydataType,
@@ -151,17 +157,17 @@ function model(name) {
                                                          ////window.console.log(current.loadedRequests);
 
                                                         if (current.loadedRequests == current.howManyRequests ){
-                                                            //now are all the request the controllers can be reuild.
+                                                           //now are all the request the controllers can be reuild.
                                                             //window.console.log('All the requests are loaded');
                                                             //reset the loadRequest so that we can re use this when we are updating
                                                             current.loadedRequests = 0;
                                                             current.buildControllers();
 
-                                                            //window.console.log(current.model.CurrentPerformances);
+                                                            //window.console.log(current.CurrentPerformances);
                                                            // setTimeout("current.model.updatePerformanceData(current.model.CurrentPerformances)", current.UPDATE_DELAY);
 
 
-                                                               setInterval("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
+                                                            setInterval("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
                                                         }
                                                        
 						},
