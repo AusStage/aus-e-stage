@@ -65,11 +65,12 @@ a {
 /*** Custom Aus-Stage sent up ***/
 
 .feedback {
-	width:400px; /** don't really want this to be fixed **/
-	font-size:1.8em;
+	/**width:400px;  don't really want this to be fixed **/
+	font-size:1.6em;
 	font-weight:bold;
-	min-height:300px;
-       position:relative;
+	/*min-height:300px;*/
+        position:relative;
+        margin:5px;
 
 }
 
@@ -89,7 +90,7 @@ a {
 
         padding:5px;
         
-        width:100%;
+        /*width:100%;*/
 
         background-color:black;
         opacity:0.8;
@@ -107,12 +108,13 @@ a {
 
 
 
-	top:85%; /* in conjunction with left property, decides the text position */
+	/* top:80%;  in conjunction with left property, decides the text position */
 	left:5px;
+        bottom:5%;
 
         padding:5px;
 
-        width:80%;
+        width:200px;
 
         background-color:black;
         opacity:0.7;
