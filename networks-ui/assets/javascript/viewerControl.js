@@ -69,11 +69,11 @@ ViewerControlClass.prototype.init = function() {
 	$("#network_details_div").hide();
 	$("#network_properties_div").hide();	
 
-		//SET UP INTERACTION 
+		//SET UP INTERACTION $.debounce(250, false, viewer.collabSliderObj.updateNetwork(event, ui)); 
 	//style the legend
 	createLegend("#network_properties_header");
 	createLegend("#selected_object_header");
-	createLegend("#viewer_options_header");
+	createLegend("#viewer_options_header", function(){$.debounce(250, false, $(window).resize())});
 	//style the faceted browsing optionf
 	createLegend('#faceted_header', function(){viewer.viewFaceted = true; viewer.refreshGraph('faceted');},
 				function(){viewer.viewFaceted = false; viewer.refreshGraph('dateRange');});
@@ -82,36 +82,7 @@ ViewerControlClass.prototype.init = function() {
 	createLegend("#nationality_header");	
 	createLegend("#criteria_header");		
     
-    //set up faceted browsing dialog
-   /* $("#faceted_browsing_div").dialog({ 
-		autoOpen: false,
-		closeOnEscape: false,
-		maxWidth:280,
-		minWidth:280,
-		width: 280,
-		modal: false,
-		position: ["right","top"],
-		buttons: {
-			"Refresh": function() {
-				updateFacetedTerms();
-				viewer.refreshGraph("faceted");
-				return false;
-			},
-			'Close': function(){
-				$(this).dialog('close');
-				return false;
-			}
-		},
-		open: function(){
-		viewer.viewFaceted = true;
-		viewer.refreshGraph("faceted");
-		},
-	  	close: function() {
-		viewer.viewFaceted= false;
-		viewer.refreshGraph("dateRange");
-		}
-	});*/
-	
+  	
     //set up custom dialog
     $("#custom_div").dialog({ 
     	open:function(event, ui) {
@@ -140,6 +111,7 @@ ViewerControlClass.prototype.init = function() {
 							 viewer.render();							 
 							}
 	});
+
 	
 	//custom dialog buttons
 	$("#remove_color").click(function(){
@@ -185,25 +157,25 @@ ViewerControlClass.prototype.init = function() {
 	});  
 	
 	//set up show/hide edge checkboxes - HIDE ALL
-    $("input[name=hideAll]").click(function() { 
+    $("input[name=showAll]").click(function() { 
 
 		//if checked, then set showContributors to true, else set to false;
-    	if($("input[name=hideAll]").is(":checked")){
-			viewer.hideAll = true;	
+    	if($("input[name=showAll]").is(":checked")){
+			viewer.hideAll = false;	
     	}
-    	else viewer.hideAll = false;
+    	else viewer.hideAll = true;
     	viewer.render();
     	
 	}); 
 	
 	//set up show/hide edge checkboxes - HIDE UNRELATED
-    $("input[name=hideUnrelated]").click(function() { 
+    $("input[name=showUnrelated]").click(function() { 
 
 		//if checked, then set showContributors to true, else set to false;
-    	if($("input[name=hideUnrelated]").is(":checked")){
-			viewer.hideUnrelated = true;	
+    	if($("input[name=showUnrelated]").is(":checked")){
+			viewer.hideUnrelated = false;	
     	}
-    	else viewer.hideUnrelated = false;
+    	else viewer.hideUnrelated = true;
     	viewer.render();
     	
 	}); 
@@ -253,29 +225,69 @@ ViewerControlClass.prototype.init = function() {
 	}); 
 	
 	$("#reset_cust_colors").click(function() {
-		viewer.resetAllColors();
-		viewer.render();		
+        $("#cust_colors_confirm_reset").dialog('open');
 	    return false;
     });
     
 	$("#reset_cust_vis").click(function() {
-		viewer.resetHiddenElements();
-		viewer.render();		
+        $("#cust_vis_confirm_reset").dialog('open');		
 	    return false;
     });
     
-	
+    // setup the customisation reset confirmation boxes
+        $("#cust_colors_confirm_reset").dialog({
+                autoOpen: false,
+                height: 300,
+                width: 400,
+                modal: true,
+                buttons: {
+                        Cancel: function() {
+                                $(this).dialog('close');
+                        },
+                        Reset: function() {
+                                $(this).dialog('close');
+								viewer.resetAllColors();
+								viewer.render();
+                        }
+                }
+        });
+
+        $("#cust_vis_confirm_reset").dialog({
+                autoOpen: false,
+                height: 300,
+                width: 400,
+                modal: true,
+                buttons: {
+                        Cancel: function() {
+                                $(this).dialog('close');
+                        },
+                        Reset: function() {
+                                $(this).dialog('close');
+								viewer.resetHiddenElements();
+								viewer.render();
+                        }
+                }
+        });
+       	
+
+    
 	//deal with window resizing	
 	$(window).resize(function() {
 	  	viewer.w = $(window).width() - ($(".sidebar").width()+viewer.spacer);
 		viewer.h =  $(window).height() - ($(".header").height()+$(".footer").height()+$('#fix-ui-tabs').height()+viewer.hSpacer);	  
+        viewerControl.resizeLegend();
 		if(viewer.json.edges.length!=0){
 			viewer.windowResized();			
 			viewer.render();	
 		}
 	});	
-		
+	
+	viewerControl.resizeLegend();
 };
+
+ViewerControlClass.prototype.resizeLegend = function(){
+	$('.legendContainer').css('max-height', ($(window).height()-$('.legendContainer').offset().top));	
+}
 
 //add id for contributor path networking
 ViewerControlClass.prototype.addId = function(id, data){
@@ -299,8 +311,9 @@ ViewerControlClass.prototype.addId = function(id, data){
 }
 //remove id for contributor path networking
 ViewerControlClass.prototype.removeId = function(index){
-	$('#searchAddContributorError').empty()
+	$('#searchAddContributorError').empty();
 	this.selectedContributors.id.splice(index, 1);
+	
 	this.selectedContributors.name.splice(index, 1);
 	this.selectedContributors.url.splice(index, 1);	
 	this.displaySelectedContributors();	
@@ -366,7 +379,7 @@ ViewerControlClass.prototype.displaySelectedContributors = function(){
 		for(x in this.selectedContributors.id){
 			html += '<a href="' + this.selectedContributors.url[x] + '" title="View the record for ' 
 			+ this.selectedContributors.name[x] + ' in AusStage" target="_ausstage">' + this.selectedContributors.name[x] + '</a>';
-			html += '<span id="'+i+'" class="contributorRemoveIcon ui-icon ui-icon-close clickable"></span>';		
+			html += '<span id="'+x+'" class="contributorRemoveIcon ui-icon ui-icon-close clickable"></span>';		
 		}
 	}
 	else{

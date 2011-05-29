@@ -40,7 +40,8 @@
 	<script type="text/javascript" src="assets/javascript/viewerControl.js"></script>		
 	<script type="text/javascript" src="assets/javascript/eventViewer.js"></script>		
 	<script type="text/javascript" src="assets/javascript/contributorViewer.js"></script>
-	<script type="text/javascript" src="assets/javascript/timeline.js"></script>	
+	<script type="text/javascript" src="assets/javascript/timeline.js"></script>
+	<script type="text/javascript" src="assets/javascript/slider.js"></script>		
 	<script type="text/javascript" src="assets/javascript/networkExampleBasic.js"></script>			    
     <!-- Google Analytics Script -->
 <script type="text/javascript">
@@ -77,7 +78,7 @@
 				<li><a href="index.html" title="Browse Contributor Network">Navigating Networks</a> </li>			
 			</ul>
 		</div>
-
+		<div class="legendContainer">
 		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
 		<div id="network_details_div">
 			<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184">
@@ -90,10 +91,10 @@
 			<div class="legendBody" id="network_properties_body"></div>
 		</div>		
 		<div id="viewer_options_div">
-			<div class="legendHeader" id="viewer_options_header" >Viewer Options</div>
+			<div class="legendHeader" id="viewer_options_header" >Display Options</div>
 			<div class="legendBody autoHeight" id="viewer_options_body">
 				<!--ego centric labels-->
-				<div id="contributor_options_div">						
+				<div id="contributor_options_div" width='250'>						
 					<table>
 						<tbody>
 							<tr><th colspan='2'>Label Display</th></tr>
@@ -105,27 +106,26 @@
 								<td><input type="checkbox" name="showRelatedContributors" class="checkbox" id="show_contrib_check" /></td>
 								<td><label for="showContributors">Show related contributor names</label></td>
 							</tr>
-							<tr><th colspan='2'>Show | Hide Edges</th></tr>
+							<tr><th colspan='2'>Edge Display</th></tr>
 							<tr>
-								<td><input type="checkbox" name="hideAll" class="checkbox" id="hide_all_check" /></td>
-								<td><label for="hideAll">Hide all edges</label></td>
+								<td><input type="checkbox" name="showAll" class="checkbox" id="show_all_check" checked='yes' /></td>
+								<td><label for="showAll">Show all edges</label></td>
 							</tr>
 							<tr>
-								<td><input type="checkbox" name="hideUnrelated" class="checkbox" id="hide_unrelated_check" /></td>
-								<td><label for="hideUnrelated">Hide unrelated edges</label></td>													
+								<td><input type="checkbox" name="showUnrelated" class="checkbox" id="show_unrelated_check" checked='yes'/></td>
+								<td><label for="hideUnrelated">Show unrelated edges</label></td>													
 							</tr>				
 							<tr>
-								<td><select id='minValue'></select></td>
-								<td><label id='minValueLabel' for="minValue"></label></td>
-							</tr>
-							<tr>	
-								<td><select id='maxValue'></select></td>
-								<td><label id='maxValueLabel' for="minValue"></label></td>	
+								<td colspan='2'>Min and max collaborations displayed</td>
+							<tr>
+							<tr>
+								<td colspan='2'>&nbsp;</td>
+							<tr>
+								<td colspan='2'><div id="collabSlider"></div></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				
 				<!-- event centric labels -->
 				<div id="event_options_div">
 					<table>
@@ -145,26 +145,22 @@
 				<div id='custom_colors_div'>
 					<table>
 						<tbody>
-							<tr><th colspan='3'>Custom Colours</th></tr>
+							<tr><th colspan='3'>Custom Colours and Visibility</th></tr>
 							<tr>
 								<td><input type="checkbox" name="showCustColors" class="checkbox" id="show_cust_colors" checked="yes"/></td>
 								<td><label for="showCustColors">Show custom colors</label></td>
-								<td class='alignRight'><a href='#' id='reset_cust_colors'>reset &nbsp;</a></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div id='custom_vis_div'>
-					<table>
-						<tbody>
-							<tr><th colspan='3'>Custom Visibility</th></tr>
+								<td class='alignRight'>
+									<input type="submit" name="submit" class="button" id="reset_cust_colors" value="Reset" />
+								</td>
 							<tr>
 								<td><input type="checkbox" name="showCustVis" class="checkbox" id="show_cust_vis"/></td>
 								<td><label for="showCustVis">Show hidden elements</label></td>
-								<td class='alignRight'><a href='#' id='reset_cust_vis'>reset &nbsp;</a></td>
+								<td class='alignRight'>
+									<input type="submit" name="submit" class="button" id="reset_cust_vis" value="Reset" />
+								</td>
 							</tr>
 						</tbody>
-					</table>			
+					</table>
 				</div>
 			</div>
 		</div>
@@ -189,6 +185,7 @@
 				<br/>
 			</div>
 		</div>
+		</div>
 		<br>
 	
 	</div>
@@ -211,7 +208,7 @@
 								<td>
 									<input type="search" size="40" id="query" name="query" /> 
 									<input type="submit" name="search_btn" id="search_btn" value="Search"/> 
-									<span id="show_search_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" title="Search Help"></span>
+									<span id="show_search_help" class="helpIcon clickable" style="display: inline-block;"></span>
 								</td>
 								<td>
 									<div id="search_messages" class="js">
@@ -274,49 +271,64 @@
 	<div class="push"></div>
 </div>
 <div class="footer b-186">
+<p><a href="http://beta.ausstage.edu.au/">Aus-e-Stage</a> | <a href="index.html">Navigating Networks Version: 2.0 (Beta)</a>
+ | <a href="http://beta.ausstage.edu.au/?tab=contacts">Contact Us</a></p>
 </div>
 <!-- help divs -->
-<div id="help_search_div" class='dialogs' title="Help on Searching" style="font-size: 90%">
+<div id="help_search_div" class='dialogs' title="Help" style="font-size: 90%">
         <h3>Searching the AusStage database</h3>
-        <p>This is a simplified search page that returns results in the two categories outlined below. A search result will contain all of 
-        	your search terms in the search index, including such items as
-            alternate names, and previous names. Please wait for the search to complete before exploring the results.
-            <br/>&nbsp;<br/>
-          	At most 25 search results will be displayed under each category. If you find a search result is missing, refine your search 
-          	terms.
+        <p>This search retrieves contributors and events that match all your search terms. 
+        Records with matching alternate or previous names will also be retrieved. 
+        Please wait for the search to complete before exploring the results. 
+        <br/>&nbsp;<br/>
+        At most 25 search results will retrieved for each type of record. 
+		If you don't find what you're looking for, try refining your search terms. You could also try your on the main 
+		<a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> website.
         </p>
 </div>
-<div id="help_view_event_div" class='dialogs' title="Help on Adding Events and Viewing the Network" style="font-size: 90%">
+<div id="help_view_event_div" class='dialogs' title="Help" style="font-size: 90%">
         <h3>Viewing an Event Network</h3>
-        <p>To view an event network click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon
-        next to the event. This will select the event. You can then the use the pull-down menu next to the 'View Network' button to further refine the 
-        network results.</p>
+        <p>Click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon to select an event. </p>
+        <p>Choose a network type from the drop-down menu. </p>
+        <p>Click the View Network button to see the network. </p>
+        <p>Click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span> icon to remove the event from your selection. </p>
+
+<p>An event network is arranged chronologically to show the events which contributors were involved in before and after the central event. There are three types of event network.
+</p>
+<ul>
+	<li> 1st Degree (default) retrieves a network which includes, 
+	for each contributor to the central event, their links to one event before and one event after the central event.</li>
+
+	<li>2nd Degree Simple retrieves a network which includes, for each contributor to the central event, 
+	their links to two events before and two events after the central event. </li>
+	
+	<li>2nd Degree Complex retrieves a network which includes, for each contributor to the central event, 
+	their links to events before and after, and then, for each contributor to those events, all their links to events before and after.</li>
+	
+</ul>
+<p>
+These three types of event network reveal a progressively broader and more complex picture of who was collaborating on what before and after the central event. The difference between the two types of networks at the second degree is that, for the simple network, we only retrieve the events at the second degree if they involved contributors to the central event, whereas, for the complex network, we retrieve all events at the second degree which involve contributors from events at the first degree.</p>
+
+</div>
+<div id="help_view_contributor_div" class='dialogs' title="Help" style="font-size: 90%">
+        <h3>Viewing a Contributor Network</h3>
+        <p>Click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon to select a contributor.</p>
+        <p>Click the View Network button to see the network. </p>
+        <p>Click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span>
+         icon to remove the contributor from your selection. </p>
+		<p>A contributor network is centred on the selected contributor. 
+		It shows all the contributors who have collaborated with the central contributor, and all of their associations with each other. </p>
+</div>
+<div id="cust_colors_confirm_reset" title="Confirm Reset" class="dialogs">
+        <h3>Do you want to reset the custom colours?</h3>
         <p>
-        To remove the event from your selection simply click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span>
-        next to the event name.
-        Once an event is selected you may view the event network by clicking the 'View Network' button.
-        </p>
-        <br/>
-        <h3>Refining the Network Display</h3>
-        <p>
-        There are three options available from the pull-down menu to choose from
-        </p>
-        <p>
-        <ul>
-        	<li><strong>1st Degree</strong> - will retrieve a first degree event centric network</li>
-        	<li><strong>2nd Degree</strong> - will retrieve a second degree event centric network.</li>
-        	<li><strong>2st Degree - simple</strong> - will retrieve a simplified second degree network</li>
-        </ul>
-        </p>
-        <p>
-        In a simplified second degree network we only retrieve second degree events if they involved contributors involved in the central event.
+                If you reset the custom colours, all customised colouring will be deleted.
         </p>
 </div>
-<div id="help_view_contributor_div" class='dialogs' title="Help on Adding Contributors and Viewing the Network" style="font-size: 90%">
-        <h3>Viewing a Contributor Network</h3>
-        <p>To view a contributor network click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon
-        next to the event. This will select the event. View the selected event by clicking the 'View Network' button or to remove the event from your 
-        selection simply click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span> next to the event name.
+<div id="cust_vis_confirm_reset" title="Confirm Reset" class="dialogs">
+        <h3>Do you want to reset the custom visibility?</h3>
+        <p>
+                If you reset the custom visibility, all hidden settings will be deleted.
         </p>
 </div>
 

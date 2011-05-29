@@ -153,6 +153,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 	//***************/
 	//NODE
 	if (what == NODE){
+		console.log(this.json.nodes[this.nodeIndex]);
 		//set the title to the event.
 		titleHtml = "<a class=\"titleLink\" href=" + eventUrl +""+ this.json.nodes[this.nodeIndex].id+" target=\"_blank\">"+
 										this.json.nodes[this.nodeIndex].nodeName+"</a><p>"+

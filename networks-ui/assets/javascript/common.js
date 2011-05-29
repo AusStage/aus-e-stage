@@ -47,6 +47,7 @@ function createLegend(element, openFunction, closeFunction){
     $(element).click(function () {
     	if(allowToggle){
 			$(this).toggleClass("open");
+			$(element).next().slideToggle();
 			if($(this).hasClass("open")){
 				$(this).button( "option", "icons", {primary:'ui-icon-triangle-1-s',secondary:null} );
 				if(openFunction){
@@ -59,7 +60,7 @@ function createLegend(element, openFunction, closeFunction){
 				}
 				
 			}
-			$(element).next().slideToggle();
+			//$(element).next().slideToggle();
     	}else{
     		allowToggle=true;
     	}
