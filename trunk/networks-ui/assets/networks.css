@@ -36,11 +36,6 @@ html, body {
     overflow: hidden;
 }
 
-.footer {
-    clear: both;
-    height: 2em;
-}
-
 .push {
 	clear: both;
     height: 1px;
@@ -79,15 +74,18 @@ html, body {
 
 /* specific styles for the footer */
 .footer  {
+    clear: both;
     color:#fff;
     font-size: 90%;
-    margin-top: 10px;
-    padding-top: 13px;
+    height:2em;
+    margin-top: 25px;
+    padding-bottom: 5px;
+    padding-top: 3px;
 }
 
-.footer p {
-    margin: 0;
-    text-align: center;
+.footer p{
+	text-align: center;	
+	margin:0;
 }
 
 .footer a {
@@ -131,6 +129,10 @@ a:hover {
 	margin: 1em 0;
 }
 
+p {
+	margin: 1em 0;	
+}
+
 /*sidebar*/
 .sidebar {
     float: left;
@@ -169,12 +171,10 @@ a:hover {
         padding-bottom: 0px;
 }
 
-/*h2 {
-        margin:0 0 1em;
-        font-size: 110%;
-
+h2 {
+	margin-top: 1em;
 }
-*/
+
 /* Styles for forms */
 table.formTable{
 		padding:0px;
@@ -248,7 +248,7 @@ td.alignRight {
 }
 
 th.alignRight {
-        text-align: right;
+        text-align: right!important;
 }
 
 
@@ -284,9 +284,14 @@ table.searchResults td a {
 .color_picker table{background-color: #FFFFFF;border: solid 1px #ccc;}
 
 
+
 /* Legend style components. */
+.legendContainer{
+	overflow:auto;	
+}
+
 .legendHeader {
-		width:100%;        
+		width:99%;        
         margin:0 0 0 0;
         color:#fff;	
         padding:10px 10px 10px 10px;
@@ -300,7 +305,7 @@ table.searchResults td a {
 }
 
 .legendSml{
-		width:100%!important;	
+		width:99%!important;	
 }
 
 #faceted_body{
@@ -350,7 +355,7 @@ table.searchResults td a {
 		top:1px;
 		padding:1em 0.25em;
 		zoom:1;
-        max-height:200px;
+        /*max-height:200px;*/
         overflow:auto;
         background: #fff;      
         border:1px solid #fff;
@@ -373,7 +378,7 @@ table.searchResults td a {
 .legendBody p {
         font-weight:normal;
         margin:0 0 -5px 0;
-/*        font-size:9px;*/
+        font-size:10px;
         color:#000;
 }
 
@@ -491,6 +496,17 @@ ul.services li {
 .contributorRemoveIcon, .eventRemoveIcon{
 		display: inline-block!important;
 		vertical-align: bottom;	
+}
+/* Styles for the help icons */
+.helpIcon {
+        /* based on jQueryUi icons */
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        /* blue icons */
+        background-image: url(jquery-ui/images/ui-icons_2e83ff_256x240.png);
+        /* ui icon help */
+        background-position: -48px -144px;
 }
 
 

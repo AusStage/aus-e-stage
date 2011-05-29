@@ -84,7 +84,7 @@ $(document).ready(function(){
 	 $("#help_view_event_div").dialog({
      	autoOpen: false,
         height: 450,
-        width: 450,
+        width: 600,
 		modal: true,
 		buttons: {
 			Close: function() {

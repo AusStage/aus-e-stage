@@ -32,7 +32,6 @@ function ContributorViewerClass(type){
 	this.w = $(window).width() - ($(".sidebar").width()+this.spacer);
 	this.h = $(window).height() - ($(".header").height()+$(".footer").height()+$('#fix-ui-tabs').height()+this.hSpacer);
 	
-	
 	this.viewType = type;
 	
 	this.vis = new pv.Panel();
@@ -44,6 +43,10 @@ function ContributorViewerClass(type){
 	this.timelineObj = new TimelineClass();
 	this.timelineObj.init();
 
+	/*collaboration slider*/
+	this.collabSliderObj = new SliderClass();
+	this.collabSliderObj.init();
+	
 	/* appearance variables */
 	this.thickLine = 3;
 	this.thinLine = 1.5;
@@ -93,8 +96,8 @@ function ContributorViewerClass(type){
 	this.showAllContributors = false;	//set to true if related checkbox is checked. Will display all contributor labels
 	this.showRelatedContributors = false;	//set to true if related checkbox is checked. Will display related contributor labels
 	
-	this.hideAll = false;				//true if checked - hides ALL edges;
-	this.hideUnrelated = false;			//true if checked = hides all UNRELATED edges.
+	this.hideAll = false;				//true if unchecked - hides ALL edges;
+	this.hideUnrelated = false;			//true if unchecked = hides all UNRELATED edges.
 	this.hideMax = 9999999;
 	this.hideMin = 0;
 	
@@ -497,7 +500,7 @@ ContributorViewerClass.prototype.displayNetworkProperties = function(){
     	html += "</p>";
     	html += "</td></tr>"+
     				"<tr class=\"d1\"><th scope='row'>Contributors</th><td> "+this.json.nodes.length+"</td></tr>"+					
-					"<tr class=\"d0\"><th scope='row'>Relationships</th><td>"+this.json.edges.length+"</td></tr></table>";			
+					"<tr class=\"d0\"><th scope='row'>Relationships</th><td>"+this.json.edges.length+"</td></tr>"+			
 					"<tr class=\"d1\"><th scope='row'>Collaborations</th><td>"+collabCount+"</td></tr></table>";							
  		$("#network_properties_body").empty();
 		$("#network_properties_body").append(html);
@@ -511,6 +514,7 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 	var comma = "";
 	var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 
 	var contributorUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id="
+	var collaborationUrl = 'http://beta.ausstage.edu.au/networks/lookup?task=collaboration&id='
 	var titleHtml = ""
 	var html = "<table width=100%>";
 	var tempHtml = "";
@@ -587,7 +591,7 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 	//***************/
 	//EDGE
 	if (what == EDGE){
-	
+		
 		//add the target contributor
 		titleHtml = "<a class=\"titleLink\" href="+contributorUrl+this.json.nodes[this.edgeTIndex].id+" target=\"_blank\">"+
 					this.json.nodes[this.edgeTIndex].nodeName+"</a> <p>";
@@ -613,14 +617,30 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
     	tempHtml = "";    	
     	titleHtml +="</p>";					
 
-		//create the html to display the info.
-    	for( i = 0;i<5; i++ ){
-    		if(isEven(i)) tableClass = "d0";
-			else tableClass = "d1";
-			
-    		html += "<tr class=\""+tableClass+"\"><td>events not yet supported</td></tr>"
-    	}
-    	
+    	html += "<tr class=\""+tableClass+"\"><td>Loading collaborations...</td></tr>"
+		
+		//////////get event list
+		$.jsonp({
+			url:collaborationUrl+
+				this.json.nodes[this.edgeTIndex].id+'-'+this.json.nodes[this.edgeSIndex].id+'&format=json&callback=?',
+			error:function(){	html = "An error occurred loading collaborations"; 
+								$("#selected_object_body").empty(); 
+								$("#selected_object_body").append(html); },
+			success:function(json){
+				html = "<table width=100%>";
+				for (i in json){
+					if(isEven(i)) tableClass = "d0";
+					else tableClass = "d1";
+    				html += "<tr class=\""+tableClass+"\"><td><a href='"+eventUrl+json[i].id+"\' target=\'blank\'>"+
+    						json[i].nodeName+"</a><p>"+json[i].venue+", "+dateFormat.format(parseDate(json[i].startDate))+"<p></td></tr>"
+					
+				}
+				html += "</table><br>";		
+				$("#selected_object_body").empty(); 
+				$("#selected_object_body").append(html); 
+			}
+		})
+
     	html+= "</table><br>";
 		
 	}
@@ -652,10 +672,14 @@ ContributorViewerClass.prototype.prepareData = function(){
 	//set the values for faceted browsing
 	this.setFacetedOptions(this.getFacetedOptions());
 	//set the values for the min max edge value select lists.
-	this.setEdgeValues();
+	this.collabSliderObj.update(pv.min(this.json.edges, function(d){return d.value}),
+								pv.max(this.json.edges, function(d){return d.value}),
+								'#collabSlider');
+	
 	//set visibility fields for date range and date slider
 	this.timelineObj.update();
-	this.resetDateRangeVisibility();		
+	this.resetDateRangeVisibility();
+			
 	
 	
 }
@@ -961,51 +985,5 @@ false if not. Used in the graph appearance functions
 		//set the node value dependant on match found
 		this.json.nodes[i].facetedMatch = match;
 	}
-}
-
-/* SET EDGE VALUES - set the select lists max and min with edge values
-====================================================================================================================*/
-ContributorViewerClass.prototype.setEdgeValues = function(){
-	$('#minValue').change(changeEdgeValues);
-	$('#maxValue').change(changeEdgeValues);	
-
-	var edgeValues = [];
-	//clear the select lists
-	$('#minValue').empty();
-	$('#minValueLabel').empty();
-	$('#maxValue').empty();
-	$('#maxValueLabel').empty();
-	
-	for (i in this.json.edges){
-		if(!contains(edgeValues, this.json.edges[i].value)){
-				edgeValues.push(this.json.edges[i].value);
-		}	
-	}
-	edgeValues.sort(sortNumeric);
-	for(i in edgeValues) {
-    	$('#minValue').append($("<option></option>").attr("value",edgeValues[i]).text(edgeValues[i])); 
-		$('#maxValue').append($("<option></option>").attr("value",edgeValues[i]).text(edgeValues[i]));     	
-	}
-
-	this.hideMax = pv.max(edgeValues);
-	this.hideMin = pv.min(edgeValues);	
-	
-	$('#minValueLabel').append('min collaborations ('+pv.min(edgeValues)+')');
-	$('#minValue').val(this.hideMin);
-	$('#maxValueLabel').append('max collaborations ('+pv.max(edgeValues)+')');	
-	$('#maxValue').val(this.hideMax);
-}
-
-function changeEdgeValues(){
-	var min = $('#minValue option:selected').val();
-	var max = $('#maxValue option:selected').val();
-	if (parseInt(min) > parseInt(max)){
-		max = min;
-		$('#maxValue').val(max);
-
-	}		
-	viewer.hideMin = min;
-	viewer.hideMax = max;	
-	viewer.render();
 }
 

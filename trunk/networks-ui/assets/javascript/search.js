@@ -39,8 +39,8 @@ function SearchClass(){
 	this.SEARCH_ERR_EVENT = 'An error occurred searching for events';
 
 	//search in progress messages
-	this.CONTRIBUTOR_SEARCH_MSG = 'Contributor search is underway...';
-	this.EVENT_SEARCH_MSG = 'Event search is underway...';
+	this.CONTRIBUTOR_SEARCH_MSG = 'Searching for contributors...';
+	this.EVENT_SEARCH_MSG = 'Searching for events...';
 
 	//result selection messages
 	this.NO_CONTRIBUTOR_SELECTED = 'No contributor selected';
@@ -158,7 +158,7 @@ SearchClass.prototype.displayEventResults = function(data){
 		
 		html += '<td style="text-align: center">'
 				+'<span id="'+data[i].id+'" class="eventAddIcon ui-icon ui-icon-plus clickable" style="display: inline-block;"></span></td>';
-		html += '<td class="nowrap"><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name 				+ '</a></td>';		
+		html += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name 				+ '</a></td>';		
 		html += '<td class="nowrap">' + data[i].venue.name + ' ';
         
         if(data[i].venue.suburb != null) {
@@ -179,11 +179,11 @@ SearchClass.prototype.displayEventResults = function(data){
 			+'<td colspan="3" style="vertical-align:middle"><div id="selected_event"></div></td>'
 			+'<td colspan="1" class="alignRight nowrap">'
 			+'<select id="eventDegree" disabled="disabled"> '
-			+'<option value="1">1st Degree</option><option value="2">2nd Degree</option>'
-			+'<option value="3">2nd Degree - simple</option></select>&nbsp;'
+			+'<option value="1">1st Degree</option>'
+			+'<option value="3">2nd Degree - simple</option>'
+			+'<option value="2">2nd Degree - complex</option></select>&nbsp;'
 			+'<button id="viewEventNetwork" class="addSearchResult" disabled="disabled">View Network</button>'
-			+'<span id="view_event_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" '
-			+'title="View Network Help">'
+			+'<span id="view_event_help" class="helpIcon clickable" style="display: inline-block;">'
 			+'</span></td></tr>'
 			+'<tr><td colspan="4"><div id="searchAddEventError"></div></td></tr>'
 			+'</tfoot></table>';
@@ -219,7 +219,7 @@ SearchClass.prototype.displayContributorResults = function(data){
 		}else {html += '<tr class="odd">'}	
 
 		html += '<td style="text-align: center"><span id="'+data[i].id+'" class="contributorAddIcon ui-icon ui-icon-plus clickable" style="display: inline-block;"></span></td>';
-		html += '<td class="nowrap"><a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + ' ' + data[i].lastName + 
+		html += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].firstName + ' ' + data[i].lastName + 
 				' in AusStage" target="_ausstage">' + data[i].firstName + " " + data[i].lastName + '</a></td>';
 		html += '<td class="nowrap">' + data[i].eventDates + '</td><td>';
 		
@@ -238,8 +238,7 @@ SearchClass.prototype.displayContributorResults = function(data){
 			+'<td colspan="3" class="nowrap" style="vertical-align:middle"><div id="selected_contributors" style="display: inline"></div></td>'
 			+'<td colspan="2" class="alignRight">'
 			+'<button id="viewContributorNetwork" class="addSearchResult" disabled="disabled">View Network</button>'
-			+'<span id="view_contributor_help" class="ui-icon ui-icon-help clickable use-tipsy" style="display: inline-block;" '
-			+'title="View Network Help"></span>'
+			+'<span id="view_contributor_help" class="helpIcon clickable" style="display: inline-block;></span>'
 			+'</td></tr>'
 			+'<tr><td colspan="5"><div id="searchAddContributorError"></div></td>';
     if(i > 0) {
