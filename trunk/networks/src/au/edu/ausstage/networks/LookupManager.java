@@ -29,7 +29,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 // import AusStage related packages
 import au.edu.ausstage.vocabularies.*;
-import au.edu.ausstage.utils.DatabaseManager;
+//import au.edu.ausstage.networks.DatabaseManager;
 import au.edu.ausstage.utils.DateUtils;
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.networks.types.*;

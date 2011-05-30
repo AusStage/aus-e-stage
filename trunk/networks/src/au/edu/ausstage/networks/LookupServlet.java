@@ -23,7 +23,6 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import au.edu.ausstage.utils.DatabaseManager;
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.utils.JSONPManager;
 
