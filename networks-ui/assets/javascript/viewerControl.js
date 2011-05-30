@@ -125,25 +125,71 @@ ViewerControlClass.prototype.init = function() {
 		$("#custom_div").dialog("close");
 		viewer.render();
 	});
-	 	//PERSON TO PERSON CHECKBOXES
- 		//set up label on/off checkboxes for contributor names
-	$("input[name=showAllContributors]").click(function() { 
+	 	
+	//CONTRIBUTOR TO CONTRIBUTOR
+	//viewer display checkboxes
+ 	//set up label on/off checkboxes for node labels
+	$("input[name=showAllNodeLabels]").click(function() { 
 		//if checked, then set showContributors to true, else set to false;
-    	if($("input[name=showAllContributors]").is(":checked")){
-			viewer.showAllContributors = true;	
+    	if($("input[name=showAllNodeLabels]").is(":checked")){
+			viewer.showAllNodeLabels = true;	
     	}
-    	else viewer.showAllContributors = false;
+    	else viewer.showAllNodeLabels = false;
     	viewer.render();
 	}); 
 	
-	//set up label on/off checkboxes for contributor names
-	$("input[name=showRelatedContributors]").click(function() { 
+	//set up label on/off checkboxes for node labels
+	$("input[name=showRelatedNodeLabels]").click(function() { 
 		//if checked, then set showContributors to true, else set to false;
-    	if($("input[name=showRelatedContributors]").is(":checked")){
-			viewer.showRelatedContributors = true;	
+    	if($("input[name=showRelatedNodeLabels]").is(":checked")){
+			viewer.showRelatedNodeLabels = true;	
     	}
-    	else viewer.showRelatedContributors = false;
+    	else viewer.showRelatedNodeLabels = false;
     	viewer.render();
+	});  
+
+	//node on/off checkboxes ALL
+	$("input[name=showAllNodes]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showAllNodes]").is(":checked")){
+			viewer.showAllNodes = true;
+    	}
+    	else viewer.showAllNodes = false;
+    	viewer.render();
+	}); 
+	
+	//RELATED
+	$("input[name=showRelatedNodes]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showRelatedNodes]").is(":checked")){
+			viewer.showRelatedNodes = true;	
+    	}
+    	else viewer.showRelatedNodes = false;
+    	viewer.render();
+	}); 
+
+	//set up show/hide edge checkboxes - HIDE ALL
+    $("input[name=showAllEdges]").click(function() { 
+
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showAllEdges]").is(":checked")){
+			viewer.showAllEdges = true;	
+    	}
+    	else viewer.showAllEdges = false;
+    	viewer.render();
+    	
+	}); 
+	
+	//set up show/hide edge checkboxes - HIDE UNRELATED
+    $("input[name=showRelatedEdges]").click(function() { 
+
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showRelatedEdges]").is(":checked")){
+			viewer.showRelatedEdges = true;	
+    	}
+    	else viewer.showRelatedEdges = false;
+    	viewer.render();
+    	
 	}); 
 	
 	//set up display on/off checkboxes for Faceted Browse
@@ -156,53 +202,94 @@ ViewerControlClass.prototype.init = function() {
     	viewer.render();
 	});  
 	
+	
+	//EVENT TO EVENT CHECKBOXES
+	//viewer display checkboxes
+ 	//set up label on/off checkboxes for node labels
+	$("input[name=showAllNodeLabelsEvt]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showAllNodeLabelsEvt]").is(":checked")){
+			viewer.showAllNodeLabels = true;	
+    	}
+    	else viewer.showAllNodeLabels = false;
+    	viewer.render();
+	}); 
+	
+	//set up label on/off checkboxes for node labels
+	$("input[name=showRelatedNodeLabelsEvt]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showRelatedNodeLabelsEvt]").is(":checked")){
+			viewer.showRelatedNodeLabels = true;	
+    	}
+    	else viewer.showRelatedNodeLabels = false;
+    	viewer.render();
+	}); 
+
+	//set up label on/off checkboxes for edge labels
+	$("input[name=showAllEdgeLabelsEvt]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showAllEdgeLabelsEvt]").is(":checked")){
+			viewer.showAllEdgeLabels = true;
+    	}
+    	else viewer.showAllEdgeLabels = false;
+    	viewer.render();
+	}); 
+	
+	//set up label on/off checkboxes for edge labels
+	$("input[name=showRelatedEdgeLabelsEvt]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showRelatedEdgeLabelsEvt]").is(":checked")){
+			viewer.showRelatedEdgeLabels = true;	
+    	}
+    	else viewer.showRelatedEdgeLabels = false;
+    	viewer.render();
+	}); 
+
+	//node on/off checkboxes ALL
+	$("input[name=showAllNodesEvt]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showAllNodesEvt]").is(":checked")){
+			viewer.showAllNodes = true;
+    	}
+    	else viewer.showAllNodes = false;
+    	viewer.render();
+	}); 
+	
+	//RELATED
+	$("input[name=showRelatedNodesEvt]").click(function() { 
+		//if checked, then set showContributors to true, else set to false;
+    	if($("input[name=showRelatedNodesEvt]").is(":checked")){
+			viewer.showRelatedNodes = true;	
+    	}
+    	else viewer.showRelatedNodes = false;
+    	viewer.render();
+	}); 
+
 	//set up show/hide edge checkboxes - HIDE ALL
-    $("input[name=showAll]").click(function() { 
+    $("input[name=showAllEdgesEvt]").click(function() { 
 
 		//if checked, then set showContributors to true, else set to false;
-    	if($("input[name=showAll]").is(":checked")){
-			viewer.hideAll = false;	
+    	if($("input[name=showAllEdgesEvt]").is(":checked")){
+			viewer.showAllEdges = true;	
     	}
-    	else viewer.hideAll = true;
+    	else viewer.showAllEdges = false;
     	viewer.render();
     	
 	}); 
 	
 	//set up show/hide edge checkboxes - HIDE UNRELATED
-    $("input[name=showUnrelated]").click(function() { 
+    $("input[name=showRelatedEdgesEvt]").click(function() { 
 
 		//if checked, then set showContributors to true, else set to false;
-    	if($("input[name=showUnrelated]").is(":checked")){
-			viewer.hideUnrelated = false;	
+    	if($("input[name=showRelatedEdgesEvt]").is(":checked")){
+			viewer.showRelatedEdges = true;	
     	}
-    	else viewer.hideUnrelated = true;
+    	else viewer.showRelatedEdges = false;
     	viewer.render();
     	
 	}); 
-	
-	
-	//EVENT TO EVENT CHECKBOXES
-	//set up label on/off checkboxes for contributor and event names
-    $("input[name=showContributors]").click(function() { 
 
-		//if checked, then set showContributors to true, else set to false;
-    	if($("input[name=showContributors]").is(":checked")){
-			viewer.showContributors = true;	
-    	}
-    	else viewer.showContributors = false;
-    	viewer.render();
-	}); 
-
-    $("input[name=showEvents]").click(function() { 
-
-		//if checked, then set showEvents to true, else set to false;
-    	if($("input[name=showEvents]").is(":checked")){
-    		viewer.showEvents = true;	
-    	}
-    	else viewer.showEvents = false;
-    	viewer.render();
-	}); 	
-
+	//BOTH CONTRIBUTOR AND EVENT CENTRIC NETWORKS
 	//custom colors and visibility checkboxes
     $("input[name=showCustColors]").click(function() { 
 

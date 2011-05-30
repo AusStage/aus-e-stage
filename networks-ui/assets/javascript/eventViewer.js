@@ -83,8 +83,18 @@
 	this.edgeIndex = -1;			//stores the INDEX of the selected contributor - specific to the selected edge.
 	this.nodeIndex = -1;			//stores the INDEX of the selected NODE	
 
-	this.showContributors = false;
-	this.showEvents = false;
+	this.showAllNodeLabels = false;
+	this.showRelatedNodeLabels = false;
+	
+	this.showAllEventLabels = false;
+	this.showRelatedEventLabels = false;
+	
+	this.showAllNodes = true;
+	this.showRelatedNodes = true;
+
+	this.showAllEdges = true;
+	this.showRelatedEdges = true;
+	
 	this.showCustColors = true;
 	this.showCustVis = true;
 	
@@ -155,7 +165,6 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 	//***************/
 	//NODE
 	if (what == NODE){
-		console.log(this.json.nodes[this.nodeIndex]);
 		//set the title to the event.
 		titleHtml = "<a class=\"titleLink\" href=" + eventUrl +""+ this.json.nodes[this.nodeIndex].id+" target=\"_blank\">"+
 										this.json.nodes[this.nodeIndex].nodeName+"</a><p>"+
@@ -623,7 +632,6 @@ function initEventGraph (obj){
 		.fillStyle(function(d) {return obj.getNodeFill(d, this)})
 		.strokeStyle(function(d) {return obj.getNodeStroke(d, this)})
 		.lineWidth(function(d) {return obj.getNodeLineWidth(d, this)})	
-//		.size(function(d){return Math.pow(((d.linkDegree)*2), 2)* Math.pow(this.scale, -2) })
 		.size(function(d){return Math.pow(((d.linkDegree)*2), 1.25)* Math.pow(this.scale, -2) })
 		.visible(function(d){return obj.isVisibleNode(d)})	
  	  	.event("mouseover", function() {	obj.nodeIndexPoint = this.index;
@@ -631,7 +639,8 @@ function initEventGraph (obj){
 	  							 			return obj.focus;}) 
     	.event("mouseout", function() {		obj.nodeIndexPoint = -1;
 											obj.pointingAt = "";										
-	  							 			return obj.focus;}) 
+	  							 			return obj.focus;})
+		.event("dblclick", function(d){obj.onDblClick(d)})	  							 			 
 		.event("click", function(d) {		obj.onClick(d, NODE, this);
 									  		return obj.focus; } )	  						
     	.event("mousedown", pv.Behavior.drag())
@@ -769,6 +778,13 @@ EventViewerClass.prototype.onClick = function(d, what, p){
 		this.windowResized();
 	}
 }
+
+//double click - reload the graph.
+EventViewerClass.prototype.onDblClick = function(d){
+	
+	viewerControl.displayNetwork('EVENT', d.id, 0);	
+	
+}	
 
 
 /* GRAPH APPEARANCE FUNCTIONS - determine the fill, stroke and general appearance of marks
@@ -1026,12 +1042,19 @@ EventViewerClass.prototype.getNodeTextStyle = function(d, p){
 
 EventViewerClass.prototype.isVisibleNode = function(d){
 	if (!d.custVis && this.showCustVis){return false}
+	if (this.showRelatedNodes && (contains(d.neighbors, this.nodeIndex)
+		||d.index == this.nodeIndex
+		||contains(d.contributor_id, this.edgeId))){return true}
+	if (!this.showAllNodes){return false}
 	else return true
 }
 
 EventViewerClass.prototype.isVisibleEdge = function(d){
-	if (!this.json.edges[d.parentIndex].custVis && this.showCustVis){
-	return false}
+	if (!this.json.edges[d.parentIndex].custVis && this.showCustVis){return false}
+	if (this.showRelatedEdges && ((this.json.edges[d.parentIndex].source == this.nodeIndex 
+		||this.json.edges[d.parentIndex].target == this.nodeIndex)
+			||this.json.edges[d.parentIndex].id == this.edgeId)){return true}
+	if (!this.showAllEdges){return false}
 	else return true
 }
 
@@ -1042,18 +1065,37 @@ EventViewerClass.prototype.isVisible = function(d, what, p){
 	//for edges
 	if (what == EDGE){
 		if (!this.json.edges[d.parentIndex].custVis && this.showCustVis){return false}
-		if (this.showContributors){return true;}
+		
 		if(d.parentIndex == this.edgeIndexPoint){	//if current edge index == index of the object being pointed at.
 			return true;	
 		}
 		else if(d.parentIndex == this.edgeIndex){	//if current edge index == index of object selected.
 			return true;
 		}	
+		if (this.showAllEdgeLabels){
+				if (this.showRelatedEdges && ((this.json.edges[d.parentIndex].source == this.nodeIndex 
+				||this.json.edges[d.parentIndex].target == this.nodeIndex)
+				||this.json.edges[d.parentIndex].id == this.edgeId)){return true}
+				if (!this.showAllEdges){return false}
+				else return true
+		}
+		if (this.showRelatedEdgeLabels && (this.showRelatedEdges || this.showAllEdges)){
+			if((this.json.edges[d.parentIndex].source == this.nodeIndex 
+			||this.json.edges[d.parentIndex].target == this.nodeIndex)
+			||this.json.edges[d.parentIndex].id == this.edgeId){return true}
+		}
+		
 	}
 	//for Nodes
 	if (what == NODE){	
 		if (!d.custVis && this.showCustVis){return false}
-		if (this.showEvents){return true;}
+		if (this.showAllNodeLabels){
+			//if (!d.custVis && this.showCustVis){return false}
+			if (this.showRelatedNodes && (contains(d.neighbors, this.nodeIndex)||d.index == this.nodeIndex)){return true}
+			if (!this.showAllNodes){return false}
+			else return true;
+		}
+		if (this.showRelatedNodeLabels && contains(d.neighbors, this.nodeIndex)){return true}
 		if (p.index == this.nodeIndexPoint){	//if current node index == index of object selected.
 			return true;
 		}
