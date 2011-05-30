@@ -18,7 +18,9 @@
  
  /* event viewer - event to event visualiser */
  
+ 
  function EventViewerClass(){
+ 	this.dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
  	//data
  	this.json = {'edges':[],'nodes':[]};
  	this.renderComplete = false;
@@ -116,7 +118,8 @@ EventViewerClass.prototype.displayNetworkProperties = function(){
 	  				"<tr class=\"d0\"><th scope='row'>Centre</th><td>"+
 	  				"<a href=" + eventUrl +""+ this.json.nodes[this.centreNode].id+" target=\"_blank\">"+	
 	  				this.json.nodes[this.centreNode].nodeName+
-    				"</a> <p>"+this.json.nodes[this.centreNode].venue+"</p></td></tr>"+
+    				"</a> <p>"+this.json.nodes[this.centreNode].venue+", "+
+    				"<span class='date'>"+this.dateFormat(this.json.nodes[this.nodeIndex].startDate)+"</span></p></td></tr>"+
     				"<tr class=\"d1\"><th scope='row'>Events</th><td> "+this.json.nodes.length+"</td></tr>"+					
 					"<tr class=\"d0\"><th scope='row'>Contributors</th><td>"+this.contributorCount+"</td></tr></table>";			
  		$("#network_properties_body").empty();
@@ -133,7 +136,6 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 	var contributorUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id="
 	var titleHtml = ""
 	var html = "<table>";
-	var dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
 	var tableClass = "";
 	
 	var contributorList = new Array();
@@ -157,8 +159,8 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 		//set the title to the event.
 		titleHtml = "<a class=\"titleLink\" href=" + eventUrl +""+ this.json.nodes[this.nodeIndex].id+" target=\"_blank\">"+
 										this.json.nodes[this.nodeIndex].nodeName+"</a><p>"+
-										this.json.nodes[this.nodeIndex].venue+" "+
-										dateFormat(this.json.nodes[this.nodeIndex].startDate)+"</p>";
+										this.json.nodes[this.nodeIndex].venue+", "+
+										"<span class='date'>"+this.dateFormat(this.json.nodes[this.nodeIndex].startDate)+"</span></p>";
 		
 		//create an array of related contributors, sort by last name
     	for (i = 0; i < this.json.nodes[this.nodeIndex].contributor_id.length; i++){
@@ -200,7 +202,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 						eventList[x] = {event:"<a href=" + eventUrl +""+ this.json.nodes[i].id+" target=\"_blank\">"+
 										this.json.nodes[i].nodeName+"</a><p>"+
 										this.json.nodes[i].venue+", "+
-										"<span class=\"date\" >"+dateFormat(this.json.nodes[i].startDate)+"</span></p>"
+										"<span class='date' >"+this.dateFormat(this.json.nodes[i].startDate)+"</span></p>"
 						, startDate: this.json.nodes[i].startDate};
 						x++;
 					}
