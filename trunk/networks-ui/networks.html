@@ -99,21 +99,31 @@
 						<tbody>
 							<tr><th colspan='2'>Label Display</th></tr>
 							<tr>
-								<td><input type="checkbox" name="showAllContributors" class="checkbox" id="show_contrib_check" /></td>
-								<td><label for="showContributors">Show all contributor names</label></td>
+								<td><input type="checkbox" name="showAllNodeLabels" class="checkbox" id="show_all_node_labels_check" /></td>
+								<td><label for="showAllNodeLabels">Show all contributor names</label></td>
 							</tr>
 							<tr>
-								<td><input type="checkbox" name="showRelatedContributors" class="checkbox" id="show_contrib_check" /></td>
-								<td><label for="showContributors">Show related contributor names</label></td>
+								<td><input type="checkbox" name="showRelatedNodeLabels" class="checkbox" id="show_related_node_labels_check" /></td>
+								<td><label for="showRelatedNodeLabels">Show related contributor names</label></td>
 							</tr>
+							<tr><th colspan='2'>Node Display</th></tr>
+							<tr>
+								<td><input type="checkbox" name="showAllNodes" class="checkbox" id="show_all_nodes_check" checked='yes' /></td>
+								<td><label for="showAll">Show all contributors</label></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="showRelatedNodes" class="checkbox" id="show_related_nodes_check" checked='yes'/></td>
+								<td><label for="showRelatedNodes">Show related contributors</label></td>											
+							</tr>				
+							
 							<tr><th colspan='2'>Edge Display</th></tr>
 							<tr>
-								<td><input type="checkbox" name="showAll" class="checkbox" id="show_all_check" checked='yes' /></td>
-								<td><label for="showAll">Show all edges</label></td>
+								<td><input type="checkbox" name="showAllEdges" class="checkbox" id="show_all_edges_check" checked='yes' /></td>
+								<td><label for="showAll">Show all collaborations</label></td>
 							</tr>
 							<tr>
-								<td><input type="checkbox" name="showUnrelated" class="checkbox" id="show_unrelated_check" checked='yes'/></td>
-								<td><label for="hideUnrelated">Show unrelated edges</label></td>													
+								<td><input type="checkbox" name="showRelatedEdges" class="checkbox" id="show_related_edges_check" checked='yes'/></td>
+								<td><label for="showRelatedEdges">Show related collaborations</label></td>													
 							</tr>				
 							<tr>
 								<td colspan='2'>Min and max collaborations displayed</td>
@@ -132,13 +142,42 @@
 						<tbody>
 							<tr><th colspan='2'>Label Display</th></tr>
 							<tr>
-								<td><input type="checkbox" name="showContributors" class="checkbox" id="show_contrib_check" /></td>
+								<td><input type="checkbox" name="showAllEdgeLabelsEvt" class="checkbox" id="show_all_edge_labels_check" /></td>
+								<td><label for="showContributors">Show all contributor names</label></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="showRelatedEdgeLabelsEvt" class="checkbox" id="show_related_edge_labels_check" /></td>
 								<td><label for="showContributors">Show related contributor names</label></td>
 							</tr>
 							<tr>
-								<td><input type="checkbox" name="showEvents" class="checkbox" id="show_event_check" /></td>
-								<td><label for="showEvents">Show event names</label></td>
+								<td><input type="checkbox" name="showAllNodeLabelsEvt" class="checkbox" id="show_all_node_labels_check" /></td>
+								<td><label for="showContributors">Show all event names</label></td>
 							</tr>
+							<tr>
+							 <td><input type="checkbox" name="showRelatedNodeLabelsEvt" class="checkbox" id="show_related_node_labels_check" /></td>
+								<td><label for="showContributors">Show related event names</label></td>
+							</tr>
+							<tr><th colspan='2'>Node Display</th></tr>
+							<tr>
+								<td><input type="checkbox" name="showAllNodesEvt" class="checkbox" id="show_all_nodes_check" checked='yes' /></td>
+								<td><label for="showAll">Show all events</label></td>
+							</tr>
+							<tr>
+							 <td><input type="checkbox" name="showRelatedNodesEvt" class="checkbox" id="show_related_nodes_check" checked='yes'/></td>
+								<td><label for="showRelatedNodes">Show related events</label></td>											
+							</tr>
+							<tr><th colspan='2'>Edge Display</th></tr>
+							<tr>
+								<td><input type="checkbox" name="showAllEdgesEvt" class="checkbox" id="show_all_edges_check" checked='yes' /></td>
+								<td><label for="showAll">Show all contributors</label></td>
+							</tr>
+							<tr>
+							 <td><input type="checkbox" name="showRelatedEdgesEvt" class="checkbox" id="show_related_edges_check" checked='yes'/></td>
+								<td><label for="showRelatedEdges">Show related contributors</label></td>											
+							</tr>				
+											
+							
+					
 						</tbody>
 					</table>
 				</div>
