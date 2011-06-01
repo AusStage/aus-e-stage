@@ -29,6 +29,8 @@ Get Request
 || id      || unique identifier of a contributor || No || ||
 || format  || [NavigatingNetworksDatasetAPIexportGraph#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexportGraph#Format:_debug debug] || Yes || graphml ||
 || [NavigatingNetworksDatasetAPIexportGraph#Radius radius] || Integer between 1 and 3 || Yes || 1 ||
+|| simplify || Boolean || Yes || true ||
+
 
 == Parameter Definitions ==
 
