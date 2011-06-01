@@ -25,11 +25,11 @@ Get Request
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task    || [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-network-simple ego-centric-network-simple]/ event-centric-network 	|| No || ||
+|| task    || [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-network-simple ego-centric-network-simple] / event-centric-network 	|| No || ||
 || id      || unique identifier of a contributor || No || ||
 || format  || [NavigatingNetworksDatasetAPIexportGraph#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexportGraph#Format:_debug debug] || Yes || graphml ||
 || [NavigatingNetworksDatasetAPIexportGraph#Radius radius] || Integer between 1 and 3 || Yes || 1 ||
-|| simplify || Boolean || Yes || true ||
+|| [NavigatingNetworksDatasetAPIexportGraph#simplify  simplify|| Boolean || Yes || true ||
 
 
 == Parameter Definitions ==
@@ -55,6 +55,13 @@ For example:
 === Radius ===
 
 The desired number of edges between the central node and the peripheral nodes of the network
+
+=== simplify ===
+This parameter is only valid with event to event 2nd degree network (task = event-centric-network && radius = 2 )
+
+simplify = true : with each of the 1st degree nodes, only events for those contributors involved in the central node are retrieved.
+
+simplify = false: with each of the 1st degree nodes, events for all contributors are retrieved.
 
 == Sample Output ==
 
