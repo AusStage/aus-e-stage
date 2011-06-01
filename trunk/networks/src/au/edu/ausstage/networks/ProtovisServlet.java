@@ -24,7 +24,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 //import au.edu.ausstage.utils.DbManager;
-//import au.edu.ausstage.networks.DatabaseManager;
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.utils.JSONPManager;
 
@@ -157,8 +156,7 @@ public class ProtovisServlet extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				JSONPManager.wrapJSON(manager.getData(id, radius, simplify), request.getParameter("callback"), out);
 			}		
-		}
-
+		} 
 		
 		try {
 			db.closeDB();

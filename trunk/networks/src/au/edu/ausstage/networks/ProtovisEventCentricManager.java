@@ -20,9 +20,12 @@ package au.edu.ausstage.networks;
 
 //json
 import org.json.simple.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 // general java
 import java.util.*;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -32,6 +35,14 @@ import au.edu.ausstage.networks.types.*;
 
 /**
  * A class to manage the export of information
+ */
+/**
+ * @author ehlt_user
+ *
+ */
+/**
+ * @author ehlt_user
+ *
  */
 public class ProtovisEventCentricManager {
 	
@@ -45,9 +56,26 @@ public class ProtovisEventCentricManager {
 	public Set<Integer> contributorSet = new HashSet<Integer>();
 	public List<Event> sortedNodeList = new ArrayList<Event>();
 	public Set<Integer>[][] edgeMatrix;
+	public int [][] degree;
 	public int central_eventId;	
 	public boolean debug = false;
 	public boolean viaRDF = false;
+	
+	//node attribute for graphml export
+	public String [][] nodeAttr = {
+			{"EventID", "string"}, {"Label", "string"}, {"EventName", "string"}, {"Venue", "string"},
+			{"StartDate", "string"}, {"Central", "boolean"}, {"InDegree", "string"}, {"OutDegree", "string"},
+			{"EventURL", "string"}
+		};
+	//edge attribute for graphml export
+	public String [][] edgeAttr = {
+			{"ContributorID", "string"}, {"Label", "string"}, {"ContributorName", "string"}, {"Roles", "string"},
+			{"SourceEventID", "string"}, {"TargetEventID", "string"}, {"ContributorURL", "string"}
+	};
+	
+	public String evtURLprefix =  "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=";
+	public String conURLprefix = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
+		
 	//first_date comparator used to sort Event nodes
 	public EvtComparator evtComp = new EvtComparator();
 	
@@ -76,67 +104,18 @@ public class ProtovisEventCentricManager {
 	@SuppressWarnings("unchecked")
 	public String getData(String eventId, int radius, boolean simplify){
 		
-		Set<Integer> tmpSet = new HashSet<Integer>();
-		Set<Integer> preNthDegreeNodeSet = new HashSet<Integer>();
 		Set<Integer> vertexSet = new HashSet<Integer>();  //the nth degree nodes set
-		Set<Integer> conSet = new HashSet<Integer>();	
 		String event_network = null;
-		int eID = 0;
-		Event evt = null;					
-		//Set<Integer> difference;
 		
 		//add the central event node 
-		central_eventId = Integer.parseInt(eventId.trim());
-		nodeSet.add(central_eventId);
-		vertexSet.add(central_eventId);
-		
-		conSet = getAssociatedContributors(central_eventId);
-		if (conSet != null)
-			contributorSet.addAll(conSet);
-		evtId_conSet_map.put(central_eventId, conSet);		
-		evt = getEventDetail(central_eventId);
-		evtId_evtObj_map.put(central_eventId, evt);
+		vertexSet = setupCentralNode(eventId);
 		
 		//get the vertex(Event nodes) of graph
-		for (int i = 0; i < radius; i++){
-			Set<Integer> nthDegreeNodeSet = new HashSet<Integer>();  //the nth degree nodes set
-			
-			for (Iterator it = vertexSet.iterator(); it.hasNext();) {
-				eID = (Integer)it.next();
-				
-				evt = evtId_evtObj_map.get(eID);
-				if (evt != null){
-					if (i >= 1) 		//2nd degree
-						tmpSet = getFirstDegreeNodes(evt, simplify);
-					else 				//1st degree
-						tmpSet = getFirstDegreeNodes(evt, false);
-
-					//get union set of event nodes
-					if (tmpSet != null){
-						nodeSet.addAll(tmpSet);
-						nthDegreeNodeSet.addAll(tmpSet);
-					}
-				} 
-			}
-			preNthDegreeNodeSet.addAll(vertexSet);
-			nthDegreeNodeSet.removeAll(preNthDegreeNodeSet);
-			vertexSet = nthDegreeNodeSet;
-			/*difference = new HashSet<Integer>(nodeSet);
-			difference.removeAll(vertexSet);
-			vertexSet = difference;*/		
-		}
-				
+		getGraphVertex(radius, vertexSet, simplify);
+					
 		if (nodeSet != null ){
-			// get Events(Nodes) List from evtId_evtObj_map
-			sortedNodeList = new ArrayList<Event>();
-			for (Iterator it = nodeSet.iterator(); it.hasNext();) {
-				eID = (Integer) it.next();
-				if (evtId_evtObj_map.get(eID) != null)
-					sortedNodeList.add(evtId_evtObj_map.get(eID));
-			}
-
-			// Sorting Event List on the basis of Event first Date by passing Comparator
-			Collections.sort(sortedNodeList, evtComp);
+			
+			sortedNodeList = getSortedNodeList();
 			
 			// get the no-duplicated edges (contributors) of graph
 			int numOfNodes = sortedNodeList.size();
@@ -156,7 +135,85 @@ public class ProtovisEventCentricManager {
 			return "";
 		
 	} // end the getData method
+	
+	
+	//add the central event node
+	public Set<Integer> setupCentralNode(String eventId){
+		Event evt = null;
+		Set<Integer> conSet = new HashSet<Integer>();	
+		Set<Integer> vertexSet = new HashSet<Integer>();  //the nth degree nodes set
+		
+		central_eventId = Integer.parseInt(eventId.trim());
+		nodeSet.add(central_eventId);
+		vertexSet.add(central_eventId);
 
+		conSet = getAssociatedContributors(central_eventId);
+		if (conSet != null)
+			contributorSet.addAll(conSet);
+		evtId_conSet_map.put(central_eventId, conSet);
+		evt = getEventDetail(central_eventId);
+		evtId_evtObj_map.put(central_eventId, evt);
+		
+		return vertexSet;
+	}
+	
+	//get the vertex(Event nodes) of graph
+	public void getGraphVertex(int radius, Set<Integer> vertexSet, boolean simplify){
+		int eID = 0;
+		Event evt = null;	
+		Set<Integer> tmpSet = new HashSet<Integer>();
+		Set<Integer> preNthDegreeNodeSet = new HashSet<Integer>();
+		
+		for (int i = 0; i < radius; i++) {
+			Set<Integer> nthDegreeNodeSet = new HashSet<Integer>(); // the nth degree nodes set
+
+			for (Iterator it = vertexSet.iterator(); it.hasNext();) {
+				eID = (Integer) it.next();
+
+				evt = evtId_evtObj_map.get(eID);
+				if (evt != null) {
+					if (i >= 1) // 2nd degree
+						tmpSet = getFirstDegreeNodes(evt, simplify);
+					else
+						// 1st degree
+						tmpSet = getFirstDegreeNodes(evt, false);
+
+					// get union set of event nodes
+					if (tmpSet != null) {
+						nodeSet.addAll(tmpSet);
+						nthDegreeNodeSet.addAll(tmpSet);
+					}
+				}
+			}
+			preNthDegreeNodeSet.addAll(vertexSet);
+			nthDegreeNodeSet.removeAll(preNthDegreeNodeSet);
+			vertexSet = nthDegreeNodeSet;
+			/*
+			difference = new HashSet<Integer>(nodeSet);
+			difference.removeAll(vertexSet); 
+			vertexSet = difference;*/
+			 
+		}
+	}
+	
+	//get sorted events list according the first date
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ArrayList<Event> getSortedNodeList(){
+		int eID = 0;
+		ArrayList<Event> sortedNodeList = new ArrayList<Event>();
+		
+		// get Events(Nodes) List from evtId_evtObj_map
+		for (Iterator it = nodeSet.iterator(); it.hasNext();) {
+			eID = (Integer) it.next();
+			if (evtId_evtObj_map.get(eID) != null)
+				sortedNodeList.add(evtId_evtObj_map.get(eID));
+		}
+
+		// Sorting Event List on the basis of Event first Date by passing Comparator
+		Collections.sort(sortedNodeList, evtComp);
+		
+		return sortedNodeList;
+	}
 	
 	//given an event, get its 1st degree nodes 
 	public Set<Integer> getFirstDegreeNodes(Event evt, boolean simplify){
@@ -359,8 +416,6 @@ public class ProtovisEventCentricManager {
 		Set<Integer> conSet = null;
 		int eID;
 		int cID;
-		
-		//System.out.println("\n====== Print json string =======\n");
 		
 		//add nodes in the list to JSONArray		
 		for (int i = 0; i < nodes.size(); i++){
@@ -714,4 +769,250 @@ public class ProtovisEventCentricManager {
 		
 	}
 
+	
+	/**
+	 * A method to build the Graphml file for event network
+	 *
+	 * @param evtDom    org.w3c.dom.Document
+	 * @param eventId   the unique identifier of an event
+	 * @param formatType GraphML
+	 * @param radius    the number of edges from the central node
+	 * @param simplify  whether retrieve events (2nd degree nodes) for all contributors or 
+	 * 					only for those contributors involved in the central node
+	 * @param graphType directed/undirected
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	public Document toGraphMLDOM(Document evtDom, String eventId, String formatType, int radius, boolean simplify, String graphType){
+				
+		Set<Integer> vertexSet = new HashSet<Integer>();  //the nth degree nodes set
+		
+		//add the central event node 
+		vertexSet = setupCentralNode(eventId);
+		
+		//get the vertex(Event nodes) of graph
+		getGraphVertex(radius, vertexSet, simplify);
+					
+		if (nodeSet != null ){			
+			sortedNodeList = getSortedNodeList();
+			
+			// get the no-duplicated edges (contributors) of graph
+			int numOfNodes = sortedNodeList.size();
+			edgeMatrix = new HashSet[numOfNodes][numOfNodes];
+			edgeMatrix = getEdges(sortedNodeList);			
+			
+			degree = new int [numOfNodes][2];
+			degree = getNodeDegree(sortedNodeList, edgeMatrix);
+		} else 
+			return null;
+		
+		//build DOM after getting the event network internal data structure
+		// get the root element
+		Element rootElement = evtDom.getDocumentElement();
+		rootElement = createHeaderElements(evtDom, rootElement, graphType);
+		
+		Event evt = evtId_evtObj_map.get(Integer.parseInt(eventId));
+		
+		if (evt == null) return null;
+		
+		// add the graph element
+		Element graph = evtDom.createElement("graph");
+		graph.setAttribute("id", "Event Network for Event: " + evt.getName() + " ( " + eventId + " )");
+		graph.setAttribute("edgedefault", graphType);
+		rootElement.appendChild(graph);
+		
+		//create node element in DOM		
+		for (int i = 0; i < sortedNodeList.size(); i++){
+			Element node = createNodeElement(evtDom,i);			
+			graph.appendChild(node);
+		}
+		
+		int eID;
+		int cID;
+		int edgeIndex = 0;
+		Collaborator con = null;
+		Set<Integer> conSet = null;
+		
+		//create edge element in DOM
+		for (int i = 0; i < edgeMatrix.length; i++){
+			eID = sortedNodeList.get(i).getIntId();
+			
+			for (int j = i + 1; j < edgeMatrix[i].length; j++){
+				conSet = edgeMatrix[i][j];
+				if (!conSet.isEmpty()) {
+
+					for (Iterator it = conSet.iterator(); it.hasNext();) {
+						cID = (Integer) it.next();
+
+						if (!conId_conObj_map.containsKey(cID))	{											
+							con = getContributorDetail(eID, cID, false);							
+							conId_conObj_map.put(cID, con);
+						} else {								
+							con = getContributorDetail(eID, cID, true);	
+						}
+						if (con != null){
+							edgeIndex ++;
+							Element edge = createEdgeElement(evtDom, con, i, j, edgeIndex);			
+							graph.appendChild(edge);
+						}				
+					}					
+
+				} 
+			}
+		}
+		
+		return evtDom;
+			
+	} 
+	
+	public Element createHeaderElements (Document evtDom, Element rootElement, String graphType){
+		Element key;
+			
+		// add schema namespace to the root element
+		rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		
+		// add reference to the kml schema
+		rootElement.setAttribute("xsi:schemaLocation", "http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
+		
+		// add some useful comments to the file
+		rootElement.appendChild(evtDom.createComment("Graph generated on: " + DateUtils.getCurrentDateAndTime()));
+//		rootElement.appendChild(xmlDoc.createComment("Graph generated by: " + rdf.getContextParam("systemName") + " Version: " + rdf.getContextParam("systemVersion") + " Build: " + rdf.getContextParam("buildVersion")));
+		
+		//create key element for node
+		for(int row = 0; row < nodeAttr.length; row ++){
+			key = createKeyElement(evtDom, "node", nodeAttr[row][0],  nodeAttr[row][1]);
+			rootElement.appendChild(key);			
+		}
+				
+		//create key element for edge
+		for(int row = 0; row < edgeAttr.length; row ++){
+			key = createKeyElement(evtDom, "edge", edgeAttr[row][0], edgeAttr[row][1]);
+			rootElement.appendChild(key);
+		}
+				
+		return rootElement;
+	}
+	
+	public Element createKeyElement(Document evtDom, String nodeOrEdge, String name, String type){
+		Element key;
+		
+		key = evtDom.createElement("key");
+		key.setAttribute("id", name);
+		key.setAttribute("for", nodeOrEdge);
+		key.setAttribute("attr.name", name);
+		key.setAttribute("attr.type", type);
+		
+		return key;
+	}
+	
+	public Element createNodeElement(Document evtDom, int i){
+		Element data;
+		
+		Event evt = sortedNodeList.get(i);
+		Element node = evtDom.createElement("node");
+		node.setAttribute("id", evt.getId());
+		
+		for(int row = 0; row < nodeAttr.length; row ++){
+			data = evtDom.createElement("data");
+			data.setAttribute("key", nodeAttr[row][0]);
+			
+			if (nodeAttr[row][0].equalsIgnoreCase("EventID"))
+				data.setTextContent(evt.getId()); 
+			else if	(nodeAttr[row][0].equalsIgnoreCase("Label"))
+				data.setTextContent(evt.getName());
+			else if (nodeAttr[row][0].equalsIgnoreCase("EventName"))
+				data.setTextContent(evt.getName());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Venue"))
+				data.setTextContent(evt.getVenue());
+			else if (nodeAttr[row][0].equalsIgnoreCase("StartDate"))
+				data.setTextContent(evt.getFirstDate());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Central")) {
+				if (central_eventId != evt.getIntId())
+					data.setTextContent("false");
+				else 
+					data.setTextContent("true");
+			} else if (nodeAttr[row][0].equalsIgnoreCase("InDegree")){
+				data.setTextContent(Integer.toString(degree[i][0]));
+			} else if (nodeAttr[row][0].equalsIgnoreCase("OutDegree")){
+				data.setTextContent(Integer.toString(degree[i][1]));
+			} else if (nodeAttr[row][0].equalsIgnoreCase("EventURL")){
+				data.setTextContent(evtURLprefix + evt.getId());
+			}
+			
+			node.appendChild(data);			
+		}
+				
+		return node;		
+	}
+	
+	public Element createEdgeElement(Document evtDom, Collaborator con, int src, int tar, int index){
+			
+		Event srcEvt = sortedNodeList.get(src);
+		Event tarEvt = sortedNodeList.get(tar);
+		
+		Element edge = evtDom.createElement("edge");
+		edge.setAttribute("id", "e" + Integer.toString(index));
+		edge.setAttribute("source", srcEvt.getId());
+		edge.setAttribute("target", tarEvt.getId());
+		
+		for(int row = 0; row < edgeAttr.length; row ++){
+			Element data = evtDom.createElement("data");
+			data.setAttribute("key", edgeAttr[row][0]);
+			
+			if (edgeAttr[row][0].equalsIgnoreCase("ContributorID"))
+				data.setTextContent(con.getId()); 
+			else if	(edgeAttr[row][0].equalsIgnoreCase("Label"))
+				data.setTextContent(con.getGFName());
+			else if (edgeAttr[row][0].equalsIgnoreCase("ContributorName"))
+				data.setTextContent(con.getGFName());
+			else if (edgeAttr[row][0].equalsIgnoreCase("Roles"))
+				data.setTextContent(con.getEvtRoleMap(srcEvt.getIntId()));
+			else if (edgeAttr[row][0].equalsIgnoreCase("SourceEventID"))
+				data.setTextContent(srcEvt.getId());
+			else if (edgeAttr[row][0].equalsIgnoreCase("TargetEventID")) 
+				data.setTextContent(tarEvt.getId());
+			else if (edgeAttr[row][0].equalsIgnoreCase("ContributorURL"))
+				data.setTextContent(conURLprefix + con.getId());
+				
+			edge.appendChild(data);
+		}
+		return edge;
+	}
+	
+	//calulate the inDegree (degree[][0]) and outDegree (degree[][1])
+	public int[][] getNodeDegree(List<Event> sortedNodeList, Set<Integer>[][] edgeMatrix) {
+		
+		int numberOfNodes = sortedNodeList.size();
+		int degree [][] = new int[numberOfNodes][2];
+		
+		//calculate inDegree[i][0]
+		for(int i = 0; i < numberOfNodes; i++){
+			if (i == 0)
+				degree[i][0] = 0; //the first node has 0 inDegree
+			else {
+				int in = 0;
+				for (int j = 0; j < i; j++)
+					if (edgeMatrix[j][i] != null)
+						in = in + edgeMatrix[j][i].size();
+				degree[i][0] = in;
+			}
+		}
+		
+		//calculate outDegree[i][1]
+		for(int i = 0; i < numberOfNodes; i++){
+			if (i == (numberOfNodes -1))
+				degree[i][1] = 0; //the last node has 0 outDegree
+			else {
+				int out = 0;
+				for(int j = i; j < numberOfNodes; j++)
+					if (edgeMatrix[i][j] != null)
+						out = out + edgeMatrix[i][j].size();
+				degree[i][1] = out;
+			}
+			
+		}		
+		
+		return degree;
+	}	
+	
 }

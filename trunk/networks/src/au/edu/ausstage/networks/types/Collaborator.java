@@ -117,6 +117,10 @@ public class Collaborator implements Comparable<Collaborator>{
 		familyName = value;
 	}
 	
+	public String getGFName(){
+		return givenName + " " + familyName;
+	}
+	
 	/**
 	 * A method to set a new givenName value
 	 *

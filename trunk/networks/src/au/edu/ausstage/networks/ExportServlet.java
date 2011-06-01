@@ -32,10 +32,12 @@ public class ExportServlet extends HttpServlet {
 
 	// declare private variables
 	private ServletConfig servletConfig;
-	private DataManager database;
+	private DataManager rdf;
+	private DatabaseManager db;
+	private String connectString = null;
 	
 	// declare constants
-	private final String[] TASK_TYPES   = {"ego-centric-network-simple",
+	private final String[] TASK_TYPES   = {"ego-centric-network-simple", "event-centric-network",
 	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only",
 	                                       "actor-edge-list-with-dups", "actor-edge-list-no-dups", "actor-edge-list-with-dups-id-only", "actor-edge-list-no-dups-id-only"};
 	                                       
@@ -55,8 +57,10 @@ public class ExportServlet extends HttpServlet {
 		servletConfig = conf;
 		
 		// instantiate a database manager object
-		database = new DataManager(conf);
+		rdf = new DataManager(conf);
 		
+		connectString = conf.getServletContext().getInitParameter("databaseConnectionString");
+		db = new DatabaseManager(connectString);
 	} // end init method
 	
 	/**
@@ -71,7 +75,9 @@ public class ExportServlet extends HttpServlet {
 		String taskType   = request.getParameter("task");
 		String id         = request.getParameter("id");
 		String formatType = request.getParameter("format");
+		String radius = request.getParameter("radius");
 		int degrees = 0;
+		boolean simplify = true;
 		
 		// check on the taskType parameter
 		if(InputUtils.isValid(taskType, TASK_TYPES) == false) {
@@ -83,10 +89,10 @@ public class ExportServlet extends HttpServlet {
 		if(taskType.equals("ego-centric-network-simple") == true) {
 			// check the other parameters as they are required
 		
-			if(request.getParameter("radius") != null) {
+			if(radius != null) {
 				try {
 					// get the parameter and convert to an integer
-					degrees = Integer.parseInt(request.getParameter("radius"));	
+					degrees = Integer.parseInt(radius);	
 				} catch (NumberFormatException ex) {
 					// degrees must be a number
 					throw new ServletException("Radius parameter must be an integer");
@@ -117,10 +123,7 @@ public class ExportServlet extends HttpServlet {
 		} else {
 			// set some logical default parameters
 			formatType = "edge-list";
-		}	
-		
-		// instantiate a lookup object
-		ExportManager export = new ExportManager(database);
+		}			
 		
 		// output the appropriate mime type
 		if(formatType.equals("graphml")) {
@@ -138,13 +141,38 @@ public class ExportServlet extends HttpServlet {
 		
 		// determine the type of export to undertake
 		if(taskType.equals("ego-centric-network-simple")) {
+			// instantiate a lookup object
+			ExportManager export = new ExportManager(rdf);
 			export.getSimpleNetwork(id, formatType, degrees, "undirected", response.getWriter());
+			
 		} else if(taskType.startsWith("full-edge-list")) {
+			// instantiate a lookup object
+			ExportManager export = new ExportManager(rdf);
 			export.getFullEdgeList(taskType, response.getWriter());
+			
 		} else if(taskType.startsWith("actor-edge-list")) {
+			// instantiate a lookup object
+			ExportManager export = new ExportManager(rdf);
 			export.getActorEdgeList(taskType, response.getWriter());
+			
+		} else if(taskType.equals("event-centric-network")) {
+			if (degrees >= 2)
+				if (request.getParameter("simplify").equalsIgnoreCase("false"))
+					simplify  = false;
+				else if (request.getParameter("simplify").equalsIgnoreCase("true"))
+					simplify = true;
+			
+			ExportManager export = new ExportManager(db);
+			export.buildEvtNetworkGraphml(id, formatType, degrees, simplify, "directed", response.getWriter());			
+			
 		}
-	
+		
+		try {
+			db.closeDB();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}		
+		
 	} // end doGet method
 	
 	/**
