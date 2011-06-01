@@ -326,7 +326,7 @@ public class GathererManager {
 		String      performanceId = null;
 		String      questionId    = null;
 		
-		String selectSql = "SELECT performance_id, question_id, SUBSTR(hash_tag, 2) "
+		String selectSql = "SELECT performance_id, question_id, hash_tag "
 						 + "FROM mob_performances "
 						 + "WHERE deprecated_hash_tag = 'N'";
 				   
