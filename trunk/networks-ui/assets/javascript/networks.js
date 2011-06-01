@@ -35,6 +35,8 @@ $(document).ready(function(){
 	//initialise the search class.
 	 searchObj = new SearchClass();
 	 searchObj.init();
+	// check to see if this is a persistent link search request
+     searchObj.doSearchFromLink();
 	 
 	 viewer = new ContributorViewerClass(); 
 

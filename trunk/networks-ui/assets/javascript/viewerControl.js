@@ -18,7 +18,8 @@
  
  /* Viewer Controller class. controls interaction elements, and viewer objects */
 
- 	var BASE_URL = "http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id=";	
+	var BASE_URL_EXPORT = "http://beta.ausstage.edu.au/networks/export?";
+ 	var BASE_URL_CONTRIBUTOR = "http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id=";	
  	var BASE_URL_EVENT = "http://beta.ausstage.edu.au/networks/protovis?task=event-centric-network&id=";	 	
 	var END_URL = 	"&radius=1&callback=?"
 	var END_URL_EVENT ="&callback=?"	
@@ -56,6 +57,8 @@ ViewerControlClass.prototype.init = function() {
 	//common setup for network viewer
 	$('#viewerMsg').append(buildInfoMsgBox(VIEWER_NO_DATA_MSG));	
 
+	//hide the export tab
+	$("#exportContainer").hide();
 	//hide the faceted browsing
 	$("#faceted_div").hide();
 
@@ -501,13 +504,14 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 			//var obj = this;
 			
 			$.jsonp({
-				url:BASE_URL+id+END_URL,
+				url:BASE_URL_CONTRIBUTOR+id+END_URL,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
 				success:function(json){
 					$('#viewerMsg').empty().append(buildInfoMsgBox(VIEWER_LOADING_MSG)).show();					
 					viewer.renderGraph(json);
 					$('#viewerMsg').hide();
 					viewer.showInteraction();
+					buildDownloadLink(type,id);
 				}
 			})
 			
@@ -538,6 +542,7 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 					viewer.renderGraph(json);
 					$('#viewerMsg').hide();
 					viewer.showInteraction();
+					buildDownloadLink(type, id, radius, simplify)
 				}
 			})
 			break;	
@@ -557,4 +562,17 @@ function closeLegends(){
 	resetLegend('#nationality');	
 	resetLegend('#criteria');
 	resetLegend('#faceted');				
+}
+
+function buildDownloadLink(type, id, radius, simplify){
+	var exportUrl = BASE_URL_EXPORT;
+	switch(type){
+		case 'CONTRIBUTOR':
+			exportUrl += 'task=ego-centric-network-simple&id='+id+'&format=graphml';
+			break;
+		case 'EVENT':
+			exportUrl += 'task=event-centric-network&id='+id+'&format=graphml&radius='+radius+'&simplify='+simplify;
+			break;
+	}
+	$("#downloadLink").attr("href", exportUrl);
 }

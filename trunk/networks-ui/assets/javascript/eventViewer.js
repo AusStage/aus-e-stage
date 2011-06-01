@@ -661,6 +661,7 @@ function initEventGraph (obj){
 
 EventViewerClass.prototype.showInteraction = function(){
 	if(this.renderComplete){
+		$("#exportContainer").show();
 		$("#viewer_options_div").show();//show viewer options accordion
 		$("#event_options_div").show();//show display label options
 		if (this.nodeIndex>-1 || this.edgeIndex>-1){
@@ -671,6 +672,7 @@ EventViewerClass.prototype.showInteraction = function(){
 }
 
 EventViewerClass.prototype.hideInteraction = function(){
+	$("#exportContainer").hide();
 	$("#viewer_options_div").hide();	
 	$("#event_options_div").hide();//hide display label options
 	$('#network_details_div').hide();

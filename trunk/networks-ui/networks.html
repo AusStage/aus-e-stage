@@ -41,8 +41,7 @@
 	<script type="text/javascript" src="assets/javascript/eventViewer.js"></script>		
 	<script type="text/javascript" src="assets/javascript/contributorViewer.js"></script>
 	<script type="text/javascript" src="assets/javascript/timeline.js"></script>
-	<script type="text/javascript" src="assets/javascript/slider.js"></script>		
-	<script type="text/javascript" src="assets/javascript/networkExampleBasic.js"></script>			    
+	<script type="text/javascript" src="assets/javascript/slider.js"></script>				    
     <!-- Google Analytics Script -->
 <script type="text/javascript">
 
@@ -79,10 +78,18 @@
 				<li><a href="#" title="Networks Help">About Networks</a> </li>			
 			</ul>
 		</div>
+		<div id="exportContainer">
+		<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184">		
+			<div class="accordion">
+				<h3><a href="#" id="export_heading">Save</a></h3>
+				<div id="export_network">
+					<a id='downloadLink' href="#" target="_blank">Download this network as GraphML</a>
+				</div>
+			</div>
+		</div>
 		<div class="legendContainer">
 		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
 		<div id="network_details_div">
-			<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184">
 			<div class="legendHeader" id="selected_object_header" ></div>
 			<div class="legendBody" id="selected_object_body"></div>
 		</div>
@@ -281,10 +288,21 @@
 				</div>
 				<div class="accordion">
 					<h3><a href="#" id="event_heading">Search History</a></h3>
-					<div id="search_history"></div>
+					<div>
+						<table class="searchResults">
+                        	<thead>
+                            	<tr>
+									<th>Query - click to repeat</th>
+									<th>Link - right-click to bookmark</th>
+									<th class="alignRight">Contributors</th>
+									<th class="alignRight">Events</th>
+                                </tr>
+                           	</thead>
+                        	<tbody id="search_history">
+                     		</tbody>
+                  		</table>
+					</div>
 				</div>
-
-
 			</div>
 			
 	

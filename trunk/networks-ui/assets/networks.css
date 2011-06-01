@@ -166,7 +166,6 @@ p {
 
 .sidebar h3 {
         color: #000;
-        font-size: 110%;
         margin-bottom: 0px;
         padding-bottom: 0px;
 }
@@ -446,6 +445,10 @@ table.searchResults td a {
 
 .clickable{
 	cursor:pointer;
+}
+
+.clickable:hover {
+	text-decoration:underline;
 }
 
 /* Styles of the screen grab on the home page.  */
