@@ -86,7 +86,7 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		// check the other parameters dependant on the task type
-		if(taskType.equals("ego-centric-network-simple") == true) {
+		if(taskType.equalsIgnoreCase("ego-centric-network-simple") == true || taskType.equalsIgnoreCase("event-centric-network") == true) {
 			// check the other parameters as they are required
 		
 			if(radius != null) {
@@ -129,7 +129,8 @@ public class ExportServlet extends HttpServlet {
 		if(formatType.equals("graphml")) {
 			// output xml mime type
 			response.setContentType("text/xml; charset=UTF-8");
-			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + ".graphml");
+			if(taskType.equalsIgnoreCase("ego-centric-network-simple") == true)
+				response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + ".graphml");
 		} else if(formatType.equals("debug")){
 			// output plain text mime type
 			response.setContentType("text/plain; charset=UTF-8");
@@ -156,11 +157,19 @@ public class ExportServlet extends HttpServlet {
 			export.getActorEdgeList(taskType, response.getWriter());
 			
 		} else if(taskType.equals("event-centric-network")) {
-			if (degrees >= 2)
-				if (request.getParameter("simplify").equalsIgnoreCase("false"))
+			
+			String filename = "Evt-" + id + "-D-" + Integer.toString(degrees);
+			if (degrees >= 2) { 
+				if (request.getParameter("simplify").equalsIgnoreCase("false")) {				
 					simplify  = false;
-				else if (request.getParameter("simplify").equalsIgnoreCase("true"))
+					filename = filename + "-C";   //complete version
+				} else if (request.getParameter("simplify").equalsIgnoreCase("true")) { 
 					simplify = true;
+					filename = filename + "-S";	//simplified version
+				}
+			}
+			filename = filename + "." + formatType;	
+			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 			ExportManager export = new ExportManager(db);
 			export.buildEvtNetworkGraphml(id, formatType, degrees, simplify, "directed", response.getWriter());			
