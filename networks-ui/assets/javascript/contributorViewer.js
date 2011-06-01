@@ -221,6 +221,7 @@ ContributorViewerClass.prototype.refreshGraph = function(typeOfRefresh){
 
 ContributorViewerClass.prototype.showInteraction = function(){
 	if(this.renderComplete){
+		$("#exportContainer").show();
 		$("#viewer_options_div").show();//show viewer options accordion
 		$("#contributor_options_div").show();//show display options
 		if (this.nodeIndex>-1 || this.edgeTIndex>-1){
@@ -233,6 +234,7 @@ ContributorViewerClass.prototype.showInteraction = function(){
 }
 
 ContributorViewerClass.prototype.hideInteraction = function(){
+	$("#exportContainer").hide();	
 	$("#viewer_options_div").hide();
 	$("#contributor_options_div").hide();//show display options	
 	$('#network_details_div').hide();
