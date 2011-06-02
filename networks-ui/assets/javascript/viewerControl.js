@@ -78,8 +78,8 @@ ViewerControlClass.prototype.init = function() {
 	createLegend("#selected_object_header");
 	createLegend("#viewer_options_header", function(){$.debounce(250, false, $(window).resize())});
 	//style the faceted browsing optionf
-	createLegend('#faceted_header', function(){viewer.viewFaceted = true; viewer.refreshGraph('faceted');},
-				function(){viewer.viewFaceted = false; viewer.refreshGraph('dateRange');});
+	createLegend('#faceted_header', function(){viewer.facetedModeOn()},
+				function(){viewer.facetedModeOff()});
 	createLegend("#functions_header");
 	createLegend("#gender_header");
 	createLegend("#nationality_header");	
