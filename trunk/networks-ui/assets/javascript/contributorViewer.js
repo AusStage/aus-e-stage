@@ -349,18 +349,18 @@ ContributorViewerClass.prototype.isVisibleEdge = function(p){
 	
 	if ( parseInt(p.value) < parseInt(this.hideMin) || p.value > this.hideMax ){return false}
 	
-	if (this.viewFaceted && !this.showAllFaceted){		// if faceted browse and option is to only show selected  	
+	if (this.viewFaceted && !this.showAllFaceted){		// if faceted browse and option is to only show selected 
 			visible = (p.targetNode.facetedMatch && p.sourceNode.facetedMatch)?true:false;}
 			
 	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){return false} //if out of date range.					
 		
-	if (this.showAllEdges){return true}; 
+	if (this.showAllEdges && !this.viewFaceted){return true}; 
 	
-	if(this.showRelatedEdges){
+	if(this.showRelatedEdges && !this.viewFaceted){
 		if(p.source != this.nodeIndex && p.target != this.nodeIndex //if not related to selected node
 			&& !(p.source == this.edgeSIndex && p.target == this.edgeTIndex)){visible = false} //and not a selected edge - not visible
 	}
-	if (!this.showAllEdges && !this.showRelatedEdges) {return false}
+	if (!this.showAllEdges && !this.showRelatedEdges && this.viewFaceted) {return false}
 
 	return visible;
 }
@@ -643,7 +643,7 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 								$("#selected_object_body").append(html); },
 			success:function(json){
 				html = "<table width=100%>";
-				for (i in json){
+				for(var i=json.length-1; i>=0; i--){
 					if(isEven(i)) tableClass = "d0";
 					else tableClass = "d1";
     				html += "<tr class=\""+tableClass+"\"><td><a href='"+eventUrl+json[i].id+"\' target=\'blank\'>"+
@@ -1002,3 +1002,30 @@ false if not. Used in the graph appearance functions
 	}
 }
 
+//function to turn faceted mode on
+ContributorViewerClass.prototype.facetedModeOn = function(){
+	//set the faceted flag
+	this.viewFaceted = true; 
+	//refresh the graph as facted
+	this.refreshGraph('faceted');
+	//disable display options
+	$("input[name=showAllNodes]").attr('disabled', true);
+	$("input[name=showRelatedNodes]").attr('disabled', true);
+	$("input[name=showAllEdges]").attr('disabled', true);
+	$("input[name=showRelatedEdges]").attr('disabled', true);
+
+}
+
+//function to turn faceted mode off
+ContributorViewerClass.prototype.facetedModeOff = function(){
+	//set the faceted flag off
+	viewer.viewFaceted = false; 
+	//refresh the graph as normal
+	viewer.refreshGraph('dateRange');
+	//enable display options
+	$("input[name=showAllNodes]").attr('disabled', false);
+	$("input[name=showRelatedNodes]").attr('disabled', false);
+	$("input[name=showAllEdges]").attr('disabled', false);
+	$("input[name=showRelatedEdges]").attr('disabled', false);
+
+}
