@@ -1109,7 +1109,7 @@ public class SearchManager {
 		query = sanitiseQuery(query);
 		
 		// declare the sql variables
-		String sql = "SELECT events.eventid, events.event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, "
+		String sql = "SELECT DISTINCT events.eventid, events.event_name, yyyyfirst_date, mmfirst_date, ddfirst_date, events.venueid, "
 				   + "       yyyyfirst_date || mmfirst_date || ddfirst_date as fdate, "
 				   + "       yyyylast_date || mmlast_date || ddlast_date as ldate "
 				   + "FROM events, venue, search_event "
@@ -1289,17 +1289,21 @@ public class SearchManager {
 		// change search query to lower case
 		query = query.toLowerCase();
 		
-		// remove any existing search terms
-		query = query.replace(" and ", "");
-		query = query.replace(" or ", "");
-		query = query.replace(" not ", "");
+		if(query.startsWith("\"") == false && query.endsWith("\"") == false) {
 		
-		// remove any punctuation
-		//query = query.replaceAll("\\p{P}+", "");
+			// remove any existing search terms and other punctuation
+			query = query.replace(" and ", "");
+			query = query.replace(" or ", "");
+			query = query.replace(" not ", "");
+			query = query.replace("\"", "");
 		
-		// rewrite the search terms
-		query = query.replace(" ", "% and %");
-		query = "%" + query + "%";
+			// remove any punctuation
+			//query = query.replaceAll("\\p{P}+", "");
+		
+			// rewrite the search terms
+			query = query.replace(" ", "% and %");
+			query = "%" + query + "%";
+		}
 		
 		// return the sanitised query
 		return query;	
