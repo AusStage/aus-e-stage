@@ -518,9 +518,9 @@ public class ProtovisEventCentricManager {
 				evt.setMyFirstDate(date);				
 				if (suburb != null && !suburb.isEmpty())
 					venueDetail = venueDetail + ", " + suburb;
-				if (state != null && !state.isEmpty())
+				if (state != null && !state.isEmpty() && country.equalsIgnoreCase("Australia"))
 					venueDetail = venueDetail + ", " + state;
-				if (country != null && !country.isEmpty())
+				if (country != null && !country.isEmpty() && !country.equalsIgnoreCase("Australia"))
 					venueDetail = venueDetail + ", " + country;
 					
 				evt.setVenue(venueDetail);
@@ -1013,6 +1013,6 @@ public class ProtovisEventCentricManager {
 		}		
 		
 		return degree;
-	}	
+	}
 	
 }
