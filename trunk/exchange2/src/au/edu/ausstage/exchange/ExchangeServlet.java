@@ -36,7 +36,7 @@ public class ExchangeServlet extends HttpServlet {
 	
 	// declare public constants
 	public static final String[] VALID_OUTPUT_TYPES   = {"html", "json", "xml", "rss"};
-	public static final String[] VALID_REQUEST_TYPES  = {"contributor", "organisation", "venue"};
+	public static final String[] VALID_REQUEST_TYPES  = {"contributor", "organisation", "venue", "secgenre", "contentindicator", "work"};
 	public static final String   DEFAULT_RESULT_LIMIT = "10";
 
 	/*
@@ -139,9 +139,24 @@ public class ExchangeServlet extends HttpServlet {
 			results = data.getData();
 		} else if(type.equals("organisation") == true) {
 			// get event data based on organisation ids
-			
+			OrganisationData data = new OrganisationData(database, ids, output, limit);
+			results = data.getData();
 		} else if(type.equals("venue") == true) {
 			// get event data based on venue ids
+			VenueData data = new VenueData(database, ids, output, limit);
+			results = data.getData();
+		} else if(type.equals("secgenre") == true) {
+			// get event data based on venue ids
+			SecGenreData data = new SecGenreData(database, ids, output, limit);
+			results = data.getData();
+		} else if(type.equals("contentindicator") == true) {
+			// get event data based on venue ids
+			ContentIndicatorData data = new ContentIndicatorData(database, ids, output, limit);
+			results = data.getData();
+		} else if(type.equals("work") == true) {
+			// get event data based on venue ids
+			WorkData data = new WorkData(database, ids, output, limit);
+			results = data.getData();
 		}
 		
 		// ouput the data
