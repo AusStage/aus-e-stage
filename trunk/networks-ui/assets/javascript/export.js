@@ -15,11 +15,15 @@
  * along with the AusStage Mapping Service.  
  * If not, see <http://www.gnu.org/licenses/>.
 */
+var task = "contributor";
 
 // common theme actions
 $(document).ready(function() {
 	// style the buttons
 	$("button, input:submit").button();
+	
+	//setup the tabs
+	$("#tabs").tabs();
 });
 
 // determine if we need to show the OS specific warning
@@ -52,38 +56,27 @@ $(document).ready(function() {
 
 // populate the select boxes in the form
 $(document).ready(function() {
-
-	// define helper variables
-	var url = "/networks/lookup?task=system-property&id=export-options";
-
-	// get the data
-	$.get(url, function(data, textStatus, XMLHttpRequest) {
+	//populate the select boxes
+	$("#task").addOption('ego-centric-network-simple', 'Contributor Network');	
+	$("#task").addOption('event-centric-network', 'Event Network');	
 	
-		var list = data.tasks;
-		
-		for(var i = 0; i < list.length; i++) {
-			$("#task").addOption(list[i], list[i]);
-		}
-		
-		var list = data.formats;
-		
-		for(var i = 0; i < list.length; i++) {
-			$("#format").addOption(list[i], list[i]);
-		}
-		
-		var list = data.radius;
-		
-		for(var i = 0; i < list.length; i++) {
-			$("#radius").addOption(list[i], list[i]);
-		}
-		
-		// sort the options & select appropriate defaults
-		$("#task").selectOptions("simple-network-undirected");
-		$("#format").selectOptions("graphml");
-		$("#radius").sortOptions();
-		$("#radius").selectOptions("1");
+	$("#format").addOption('graphml', 'graphml');
+	$("#format").addOption('debug', 'debug');	
 	
-	});
+	$("#radius").addOption('1', '1');	
+	$("#radius").addOption('2', '2');	
+	$("#radius").addOption('3', '3');	
+	
+	$("#simplify").addOption('true', 'true');
+	$("#simplify").addOption('false', 'false');	
+			
+	// sort the options & select appropriate defaults
+	$("#task").selectOptions("ego-centric-network-simple");
+	$("#format").selectOptions("graphml");
+	$("#radius").sortOptions();
+	$("#radius").selectOptions("1");
+	$("#simplify").selectOptions('true');
+	$("#simplify_container").hide();
 	
 	// bind a focusout event to the id text field
 	$("#id").focusout(function() {
@@ -112,8 +105,6 @@ $(document).ready(function() {
 	$("#name").val("");
 	$("#id").val("");
 	
-	// associate the tipsy library with the form elements
-	$('#export_data [title]').tipsy({trigger: 'focus', gravity: 'w'});
 
 	// attach the validation plugin to the export form
 	$("#export_data").validate({
@@ -141,14 +132,48 @@ $(document).ready(function() {
 		}
 	});
 	
+	//when task is selected, alter the fields and available values 
+	$("#task").change(function(){
+		var task = $("#task").val();
+		
+		switch (task) {
+			case 'event-centric-network':
+				//change the export type
+				task = "event";
+				//change the labels
+				$("#id_label").empty().append('Event ID:');
+				$("#name_label").empty().append('Event Name:');	
+				//remove a radius option
+				$("#radius").removeOption('3');
+				//show the simplify option
+				$("#simplify_container").show();
+			break;	
+			case 'ego-centric-network-simple':
+				//change the export type
+				task = "contributor";
+				//change the labels
+				$("#id_label").empty().append('Contributor ID:');
+				$("#name_label").empty().append('Contributor Name:');				
+				//add the radius
+				$("#radius").addOption('3', '3');				
+				//hide the simplify options
+				$("#simplify_container").hide();				
+			break;	
+		}
+		//set default radius
+		$("#radius").selectOptions("1");
+	})
+	
+	
 	// define the lookup function
 	$("#lookup_btn").click(function () {
-	
+
 		// disable the export button
 		$("#export_btn").button("disable");
 	
 		// define helper variables
-		var url = "/networks/lookup?task=collaborator&format=json&id=";
+		var url = "/mapping2/search?task="+task+"&type=id&format=json&id="
+//		var url = "/networks/lookup?task=collaborator&format=json&id=";
 
 		// get the id from the text box
 		var id = $("#id").val();
@@ -162,12 +187,14 @@ $(document).ready(function() {
 			$.get(url, function(data, textStatus, XMLHttpRequest) {
 			
 				// check on what was returned
-				if(data.name == "No Collaborator Found") {
+				if(data.length()==0){
+//				if(data.name == "No Collaborator Found") {
 					$("#name").val("Contributor with that id was not found");
 				} else {
 			
 					// use the name to fill in the text box
-					$("#name").val(data.name);
+//					$("#name").val(data.name);
+					$("#name").val(data.firstName+' '+data.lastName);
 			
 					// enable the button
 					$("#export_btn").button("enable");
@@ -251,7 +278,8 @@ function showSearchResults(responseText, statusText)  {
 		contributor = responseText[i];
 		
 		// add the name and link
-		html += '<tr><td><a href="' + contributor.url + '" target="ausstage" title="View the record for ' + contributor.name + ' in AusStage">' + contributor.name + '</a></td>';
+		html += '<tr><td><a href="' + contributor.url + '" target="ausstage" title="View the record for ' + 
+		contributor.firstName +' ' +contributor.lastName/*contributor.name*/ + ' in AusStage">' + contributor.firstName +' ' +contributor.lastName + '</a></td>';
 		
 		// add the list of functions
 		html += '<td><ul>';

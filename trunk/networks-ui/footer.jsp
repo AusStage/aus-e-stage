@@ -18,13 +18,11 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 %>
-<div id="footer">
+<div class="footer b-186">
 	<%
 		ServletContext context = getServletContext();
-		String systemName      = (String)context.getInitParameter("systemName");
 		String systemVersion   = (String)context.getInitParameter("systemVersion");
-		String buildVersion    = (String)context.getInitParameter("buildVersion");
-		String moreInfo		   = (String)context.getInitParameter("moreInfo");
 	%>
-	<p><%=systemName%> Version: <%=systemVersion%> Build: <%=buildVersion%> | <a href="<%=moreInfo%>" title="More Information About the System">More Info</a> | <a href="http://beta.ausstage.edu.au/" title="Contact Project Members">Contact Us</a></p>
+	<p><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage homepage">Aus-e-Stage</a> | <a href="http://beta.ausstage.edu.au/networks/" title="Navigating Networks homepage">Navigating Networks</a> Version: <%=systemVersion%> | <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">Contact Us</a></p>
 </div>
+
