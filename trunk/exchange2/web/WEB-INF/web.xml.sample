@@ -26,13 +26,13 @@
     </description>
     <!-- Servlets -->
     <servlet>
-        <servlet-name>ExchangeServlet</servlet-name>
-        <servlet-class>au.edu.ausstage.exchange.ExchangeServlet</servlet-class>
+        <servlet-name>EventServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.exchange.EventServlet</servlet-class>
     </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
-        <servlet-name>ExchangeServlet</servlet-name>
-        <url-pattern>/data/*</url-pattern>
+        <servlet-name>EventServlet</servlet-name>
+        <url-pattern>/eventdata/*</url-pattern>
     </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
