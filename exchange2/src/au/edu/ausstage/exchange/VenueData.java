@@ -46,12 +46,8 @@ public class VenueData extends BaseData{
 		super(database, ids, outputType, recordLimit);
 	}
 	
-	/**
-	 * method to get and return the data
-	 *
-	 * @return the compiled data in the requested format
-	 */
-	public String getData() {
+	@Override
+	public String getEventData() {
 		
 		String sql;
 		DbObjects results;
@@ -164,5 +160,10 @@ public class VenueData extends BaseData{
 		}
 		
 		return data;
+	}
+	
+	@Override
+	public String getResourceData() {
+		return null;
 	}
 }

@@ -29,7 +29,7 @@ import au.edu.ausstage.utils.*;
 /**
  * The main driving class for the Exchange Data Service
  */
-public class ExchangeServlet extends HttpServlet {
+public class EventServlet extends HttpServlet {
 
 	// declare private class variables
 	private ServletConfig servletConfig;
@@ -136,27 +136,27 @@ public class ExchangeServlet extends HttpServlet {
 		if(type.equals("contributor") == true) {
 			// get event data based on contributor ids
 			ContributorData data = new ContributorData(database, ids, output, limit);
-			results = data.getData();
+			results = data.getEventData();
 		} else if(type.equals("organisation") == true) {
 			// get event data based on organisation ids
 			OrganisationData data = new OrganisationData(database, ids, output, limit);
-			results = data.getData();
+			results = data.getEventData();
 		} else if(type.equals("venue") == true) {
 			// get event data based on venue ids
 			VenueData data = new VenueData(database, ids, output, limit);
-			results = data.getData();
+			results = data.getEventData();
 		} else if(type.equals("secgenre") == true) {
 			// get event data based on venue ids
 			SecGenreData data = new SecGenreData(database, ids, output, limit);
-			results = data.getData();
+			results = data.getEventData();
 		} else if(type.equals("contentindicator") == true) {
 			// get event data based on venue ids
 			ContentIndicatorData data = new ContentIndicatorData(database, ids, output, limit);
-			results = data.getData();
+			results = data.getEventData();
 		} else if(type.equals("work") == true) {
 			// get event data based on venue ids
 			WorkData data = new WorkData(database, ids, output, limit);
-			results = data.getData();
+			results = data.getEventData();
 		}
 		
 		// ouput the data

@@ -112,9 +112,14 @@ public abstract class BaseData {
 	}
 	
 	/**
-	 * compile the data for the required data type
+	 * compile the event data for the required data type
 	 */
-	public abstract String getData();
+	public abstract String getEventData();
+	
+	/**
+	 * compile the resource data for the required data type
+	 */
+	public abstract String getResourceData();
 	
 	/**
 	 * Build the short version of the Venue Address
