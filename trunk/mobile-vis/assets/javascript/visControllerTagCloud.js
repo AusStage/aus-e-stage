@@ -94,13 +94,16 @@ function visControllerTagCloud(newModel) {
                                 if(this.model.words[a].count > 2 ) { // do this when we have more than two pieces of feedback with this work
 
                                     //render the words
+
+                                   var size = (this.model.words[a].count/this.model.wordMaxCount * 8);
+
                                    $('#tagCloud').append(
-                                   '<span class="' +
+                                   '<div class ="word" id="' +
                                        this.model.words[a].word
                                    +
-                                   '"  style = "font-size:' + this.model.words[a].count/3 + 'em" > ' +
+                                   '"  style = "font-size:' + size + 'em" > ' +
                                    this.model.words[a].word
-                                   + '</span>'
+                                   + '<span class="FeedbackList"><ul></ul></span></div>'
                                    );
 
                                   //add the tooltip to the works
@@ -145,52 +148,45 @@ function visControllerTagCloud(newModel) {
                                             htmlFeedBackList =  htmlFeedBackList +  'Via ' +  currentFeedback.type + ', ';
                                             htmlFeedBackList =  htmlFeedBackList +  currentFeedback.date  + ' ' + currentFeedback.time +  '</span>';
 
-
-
-                                          ;
-                                          
                                          
                                           
                                          htmlFeedBackList =   htmlFeedBackList +  '</li>';
+                                      };
 
 
-                                         //window.console.log(this.model.words[a].feedback[f]);
-                                     }
-                                  ;
+                                      var target = '#' + this.model.words[a].word + " .FeedbackList" ;
+
+                                       $(target).hide();
+
+                                       $(target).html(htmlFeedBackList);
+                                       $(target).highlight(this.model.words[a].word );
+
+                                        var target = '#' + this.model.words[a].word;
+                                        //window.console.log(target);
+
+                                           $(target).click(function(eventData ) {
+                                                  //window.console.log(eventData.target.id);
+                                                  var word = eventData.target.id;
+
+                                                  var myTarget = '#' + eventData.target.id + " .FeedbackList";
+                                                  //window.console.log(myTarget);
+                                                  
+                                                  $(myTarget).dialog({
+                                                        height: $(window).height() *.7,
+                                                        width: $(window).width() *.8,
+                                                        title: word,
+                                                        closeOnEscape: true,
+                                                        modal: true,
+                                                        draggable: false
+                                                     });
 
 
-                                  $('.' + this.model.words[a].word ).qtip({
-                                       
-                                        content: {
-                                            text:'<ul>' +  htmlFeedBackList + '</ul>'
-                                        },
-                                        position: {
-                                             at: 'bottom right',
-                                             viewport: $(window),
-                                             adjust: {scroll: true}
-                                         
-                                       },
+                                           });
 
-                                         style: {
-                                              classes: 'ui-tooltip-austage ui-tooltip-shadow',
-                                              tip: {
-                                                  corner:true
-                                              }
-                                           },
-                                         show: {
-                                                effect: function() { $(this).fadeIn(100); } // Show
-                                            },
-
-                                         hide: {
-                                               
-                                                effect: function() { $(this).fadeOut(100); } // Hide
-
-                                            },
-
-                                      }
+                                     
 
 
-                                                        )
+                                          
 
 
                                 }
@@ -202,6 +198,7 @@ function visControllerTagCloud(newModel) {
                 }
                 
 
+              
                 
 			
 
