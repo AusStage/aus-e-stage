@@ -121,10 +121,10 @@ function model(name) {
 						dataType: mydataType,
 						cache: false,							
 						success: function (data, textStatus, jqXHR) {
-							;
+							
                                                         //window.console.log(data);
 							if(current.errorStatus 	== 1) {current.errorController.turnOffError ()};
-                                                        feedbackLength =  data.feedback.length -1;
+                                                        var feedbackLength =  data.feedback.length -1;
 
                                                         if(feedbackLength == - 1) {
                                                           //  current.errorController.updateError("No feedback found for performance number  " + CurrentPerformance + '<br />');
@@ -148,6 +148,7 @@ function model(name) {
 							//window.console.log(data);
 							data.feedback.reverse(); //maybe should do that in cotrol  
 							current.results.push(data);
+
 
 							//set up the loop that will start the automatic updating process every x seconds
 
@@ -285,7 +286,7 @@ function model(name) {
                                                                        //current.results[i-1].feedback.push(data[a]);// TODO - this will need to change because th
                                                                      }
                                                                        //window.console.log('refresh completed for this ');
-                                                                       window.console.log(data);
+                                                                       //window.console.log(data);
 
                                                                        for (var a = 0; a < data.length; a++) { //loop over each bit of the array
                                                                               data[a].performanceID = this.CurrentPerformance;
