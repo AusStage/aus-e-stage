@@ -24,8 +24,6 @@ function visControllerImageSequence(newModel) {
 		 this.model = newModel;
                  this.key = '8dc8cea8944f148aa635d951abf8c72d';
                  this.MAX_IMAGE_WIDTH = 750;
-
-           
              
 		/*
 		* Called when the results are updated     
@@ -44,7 +42,7 @@ function visControllerImageSequence(newModel) {
 		this.build = function ()
 		{
 			//window.console.log('about to build the controller for the tag cloud');
-                        //window.console.log(this.model.words);
+                        //window.console.log(this.model);
 			//this.results = newResults;
 
                         this.buildImageSequence();
@@ -126,10 +124,9 @@ function visControllerImageSequence(newModel) {
 
                                   //window.console.log($(target).width());
 
-                                
-
                                   $(target).show();
 
+                              
                                  //window.console.log(target);
 
                               
@@ -186,7 +183,7 @@ function visControllerImageSequence(newModel) {
                        "><div class="content">\n\
                     \n\
                     <img src="' + flickrURL + '" width="' + imageScale + '">\n\
-                        </div>\n\
+                        <div class="FeedbackList"></div></div>\n\
                             <span class="word">' +
                         '' + word +
                         '</span><span class = "Attributions"> Creative Commons Licensed flickr photo shared by\n\
@@ -201,14 +198,89 @@ function visControllerImageSequence(newModel) {
 
                        var target = '#' + word + ' .Attributions';
                        $(target).hide();
+                       // Now build the feedback for the work
+
+                         var htmlFeedBackList = "<ul>";
+
+                                     for(var f = 0; f < wordObj.feedback.length; f++) {
+                                         htmlFeedBackList =   htmlFeedBackList +  '<li>' + wordObj.feedback[f];
+
+                                      //    window.console.log(this.model.words[a].performance[f]);
+                                          var PerformancePosInList = wordObj.performance[f];
+                                          //window.console.log(this.model.results[PerformancePosInList].organisation);
+
+                                          htmlFeedBackList =  htmlFeedBackList +  '<br /> <span class="feedbackInfo">';
+                                           if(this.model.results.length > 1){
+                                             htmlFeedBackList =  htmlFeedBackList +  this.model.results[PerformancePosInList].event + ', ' +
+                                             this.model.results[PerformancePosInList].organisation + ', ';
+                                            }
+
+                                            var currentFeedbackArray = this.model.results[PerformancePosInList].feedback;
+
+                                            //hmm this is not perfect but it works
+
+                                            for(var c = 0; c < currentFeedbackArray.length; c++) {
+                                               if (wordObj.feedback[f] == currentFeedbackArray[c].content) {
+                                                   var currentFeedback =  currentFeedbackArray[c];
+                                                };
+                                             };
+
+                                            //window.console.log(this.model.results[PerformancePosInList].feedback);
+                                            //window.console.log(currentFeedback);
+
+                                            htmlFeedBackList =  htmlFeedBackList +  'Via ' +  currentFeedback.type + ', ';
+                                            htmlFeedBackList =  htmlFeedBackList +  currentFeedback.date  + ' ' + currentFeedback.time +  '</span>';
+
+
+                                          ;
+
+                                         htmlFeedBackList =   htmlFeedBackList +  '</li>';
+
+                                         //window.console.log( htmlFeedBackList);
+                                }
+                                     
+
+                       //add the click hander for this div
+
+                       var target = '#' + word + " .FeedbackList" ;
+                       
+                       $(target).html(htmlFeedBackList);
+                       
+                       $(target).highlight(word);
+
+                       
+                       //window.console.log(target);
+                       $(target).hide();
+                       
+                       var target = '#' + word;
+                       
+                       $(target).click(function(eventData ) {
+                              //window.console.log(target);
+                              var word = target.replace("#", "");
+
+                                 $(target + " .FeedbackList").dialog({
+                                    height: $(window).height() *.7,
+                                    width: $(window).width() *.8,
+                                    title: word,
+                                    closeOnEscape: true,
+                                    modal: true,
+                                    draggable: false
+                                 });
+                    
+                              
+                       });
+
+
+                   
+
 
                           
-                      this.getUserID(imageData.owner,word);
+                      /// this.getUserID(imageData.owner,word);
                      }
                     
                 }
 
-
+              
                 /*
 		* Builds the image sequence
                 * @param  word the word we are looking for  
@@ -372,105 +444,14 @@ function visControllerImageSequence(newModel) {
 
                                    //The flickr URL to the word object
                                    this.model.words[a].word.flickrURL =   this.findFlickrImage(this.model.words[a].word);
-
  
-                                   $('#tagCloud').append(
-                                   '<span class="' +
-                                       this.model.words[a].word
-                                   +
-                                   '"  style = "font-size:' + this.model.words[a].count/3 + 'em" > ' +
-                                   this.model.words[a].word
-                                   + '</span>'
-                                   );
-
-                                  //add the tooltip to the works
 
                                   //build the list of feedback
-                                     var htmlFeedBackList = "";
-                                                                             
-
-                                     for(var f = 0; f <  this.model.words[a].feedback.length; f++) {
-                                         htmlFeedBackList =   htmlFeedBackList +  '<li>' + this.model.words[a].feedback[f];
-
-                                      //    window.console.log(this.model.words[a].performance[f]);
-                                          var PerformancePosInList = this.model.words[a].performance[f];
-                                          //window.console.log(this.model.results[PerformancePosInList].organisation);
-
-                                          htmlFeedBackList =  htmlFeedBackList +  '<br /> <span class="feedbackInfo">';
-                                           if(this.model.results.length > 1){
-                                             htmlFeedBackList =  htmlFeedBackList +  this.model.results[PerformancePosInList].event + ', ' +
-                                             this.model.results[PerformancePosInList].organisation + ', ';
-                                            }
-
-                                            //window.console.log(this.model.words[a].feedback[f])
-                                            // if where where feedback is on the performance
-
-                                            //var feedBackPos = this.model.results[PerformancePosInList].feedback.content.indexOf(this.model.words[a].feedback[f]);
-
-                                           // window.console.log(this.model.results[PerformancePosInList].feedback);
-
-                                            var currentFeedbackArray = this.model.results[PerformancePosInList].feedback;
-
-                                            //hmm this is not perfect but it works
-
-                                            for(var c = 0; c < currentFeedbackArray.length; c++) {
-                                               if (this.model.words[a].feedback[f] == currentFeedbackArray[c].content) {
-                                                   var currentFeedback =  currentFeedbackArray[c];
-                                                };
-                                             };
-                                              
-                                            //window.console.log(this.model.results[PerformancePosInList].feedback);
-                                            //window.console.log(currentFeedback);
-
-                                            htmlFeedBackList =  htmlFeedBackList +  'Via ' +  currentFeedback.type + ', ';
-                                            htmlFeedBackList =  htmlFeedBackList +  currentFeedback.date  + ' ' + currentFeedback.time +  '</span>';
+                                   
+                                  
 
 
-
-                                          ;
-                                          
-                                         
-                                          
-                                         htmlFeedBackList =   htmlFeedBackList +  '</li>';
-
-
-                                         //window.console.log(this.model.words[a].feedback[f]);
-                                     }
-                                  ;
-
-
-                                  $('.' + this.model.words[a].word ).qtip({
-                                       
-                                        content: {
-                                            text:'<ul>' +  htmlFeedBackList + '</ul>'
-                                        },
-                                        position: {
-                                             at: 'bottom right',
-                                             viewport: $(window),
-                                             adjust: {scroll: true}
-                                         
-                                       },
-
-                                         style: {
-                                              classes: 'ui-tooltip-austage ui-tooltip-shadow',
-                                              tip: {
-                                                  corner:true
-                                              }
-                                           },
-                                         show: {
-                                                effect: function() {$(this).fadeIn(100);} // Show
-                                            },
-
-                                         hide: {
-                                               
-                                                effect: function() {$(this).fadeOut(100);} // Hide
-
-                                            },
-
-                                      }
-
-
-                                                        )
+                                 
 
 
                                 }
@@ -482,7 +463,8 @@ function visControllerImageSequence(newModel) {
                 }
                 
 
-                
+
+
 			
 
 		
