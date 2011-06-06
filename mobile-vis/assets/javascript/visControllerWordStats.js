@@ -160,7 +160,7 @@ function visControllerWordStats(newModel) {
                                 for(var a = 0; a <  this.model.results.length; a++) {
                                 //now update for muliple.
                                     for(var i = 0; i < this.model.results[a].feedback.length; i++) {
-                                            item = this.model.results[a].feedback[i];
+                                            var item = this.model.results[a].feedback[i];
                                             var wordsString = "";
                                             //window.console.log(item);
                                            //
@@ -191,8 +191,25 @@ function visControllerWordStats(newModel) {
                                            //window.console.log(wordsString);
                                            
                                            wordsString = wordsString.replace(this.model.results[a].tag,"");
+                                          
+                                              //
+                                           //now  remove the performance name from the feedback 
+                                           var eventName =   this.model.results[a].event;
+                                           var eventLowerCase = eventName.toLowerCase();
 
-                                           
+                                           wordsString = wordsString.replace(eventLowerCase,"");// remove the whole
+
+                                           //now split the event name and remove those works
+                                            var eventWords = eventLowerCase.split(' ');
+
+                                          //loop over those words removing each pf the words
+                                          
+                                           for(var w = 0; w < eventWords.length; w++) {
+
+                                              wordsString = wordsString.replace(eventWords[w],"");// remove the whole
+
+                                           }
+
                                            var words = wordsString.split(' ');
                                            //remove all the blank bits 
                                            words = $.grep(words,function(n,i){
