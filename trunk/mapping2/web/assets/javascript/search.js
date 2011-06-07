@@ -524,7 +524,10 @@ SearchClass.prototype.buildEventResults = function (data) {
 		list += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name + '</a></td>';
 		
 		list += '<td class="nowrap">' + data[i].venue.name + ', ';
-				
+		
+		list += mappingObj.buildAddressAlt(data[i].venue.suburb, data[i].venue.state, data[i].venue.country);
+		
+		/*		
 		if(data[i].venue.suburb != null) {
 			list += data[i].venue.suburb + ', ';
 		}
@@ -536,6 +539,7 @@ SearchClass.prototype.buildEventResults = function (data) {
 		if(data[i].venue.suburb != null || data[i].venue.state != null) {
 			list = list.substr(0, list.length - 2);
 		}
+		*/
 		
 		list += '</td><td class="nowrap alignRight">' + data[i].firstDisplayDate + '</td>';
 		

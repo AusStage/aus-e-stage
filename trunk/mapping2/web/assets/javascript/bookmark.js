@@ -101,9 +101,9 @@ BookmarkClass.prototype.buildBookmark = function() {
 	
 	//build the url
 	
-	var uri = "http://beta.ausstage.edu.au" + BASE_URL + "?complex-map=true";
+	//var uri = "http://beta.ausstage.edu.au" + BASE_URL + "?complex-map=true";
 	
-	//var uri = "http://localhost:8181" + BASE_URL + "?complex-map=true";
+	var uri = "http://localhost:8181" + BASE_URL + "?complex-map=true";
 	
 	uri += bookmarkObj.buildUriSegment("c", recordData.contributors.ids);
 	uri += bookmarkObj.buildUriSegment("o", recordData.organisations.ids);
@@ -145,18 +145,27 @@ BookmarkClass.prototype.doComplexMapFromLink = function (c, o, v, e) {
 	$("#browse_messages").bind('mappingBookmarkGatherDataAjaxQueue' + 'AjaxStop', bookmarkObj.addDataToMap);
 
 	// break up the attributes into arrays
-	if(c != null) {
+	if(c != "") {
+
 		if(c.indexOf('-') != -1) {
 			c = c.split('-');
-		}
 		
-		
-		// search for the data on each of the items in turn
-		for(var i = 0; i < c.length; i++) {
+			// search for the data on each of the items in turn
+			for(var i = 0; i < c.length; i++) {
+
+				// build the url
+				var url  = BASE_URL + 'markers?type=contributor&id=' + c[i];
 	
-			// build the url
-			var url  = BASE_URL + 'markers?type=contributor&id=' + c[i];
+				ajaxQueue.add({
+					success: bookmarkObj.processAjaxData1,
+					url: url
+				});
+			}
+		} else {
 		
+			// build the url
+			var url  = BASE_URL + 'markers?type=contributor&id=' + c;
+
 			ajaxQueue.add({
 				success: bookmarkObj.processAjaxData1,
 				url: url
@@ -164,16 +173,24 @@ BookmarkClass.prototype.doComplexMapFromLink = function (c, o, v, e) {
 		}
 	}
 	
-	if(o != null) {
+	if(o != "") {
 		if(o.indexOf('-') != -1) {
 			o = o.split('-');
-		}
 		
-		for(var i = 0; i < o.length; i++) {
+			for(var i = 0; i < o.length; i++) {
 	
-			// build the url
-			var url  = BASE_URL + 'markers?type=organisation&id=' + o[i];
+				// build the url
+				var url  = BASE_URL + 'markers?type=organisation&id=' + o[i];
 		
+				ajaxQueue.add({
+					success: bookmarkObj.processAjaxData2,
+					url: url
+				});
+			}
+		} else {
+			// build the url
+			var url  = BASE_URL + 'markers?type=organisation&id=' + o;
+	
 			ajaxQueue.add({
 				success: bookmarkObj.processAjaxData2,
 				url: url
@@ -181,16 +198,24 @@ BookmarkClass.prototype.doComplexMapFromLink = function (c, o, v, e) {
 		}
 	}
 	
-	if(v != null) {
+	if(v != "") {
 		if(v.indexOf('-') != -1) {
 			v = v.split('-');
-		}
 		
-		for(var i = 0; i < v.length; i++) {
+			for(var i = 0; i < v.length; i++) {
 	
-			// build the url
-			var url  = BASE_URL + 'markers?type=venue&id=' + v[i];
+				// build the url
+				var url  = BASE_URL + 'markers?type=venue&id=' + v[i];
 		
+				ajaxQueue.add({
+					success: bookmarkObj.processAjaxData3,
+					url: url
+				});
+			}
+		} else {
+			// build the url
+			var url  = BASE_URL + 'markers?type=venue&id=' + v;
+	
 			ajaxQueue.add({
 				success: bookmarkObj.processAjaxData3,
 				url: url
@@ -198,16 +223,24 @@ BookmarkClass.prototype.doComplexMapFromLink = function (c, o, v, e) {
 		}
 	}
 	
-	if(e != null) {
+	if(e != "") {
 		if(e.indexOf('-') != -1) {
 			e = e.split('-');
-		}
 		
-		for(var i = 0; i < e.length; i++) {
+			for(var i = 0; i < e.length; i++) {
 	
-			// build the url
-			var url  = BASE_URL + 'markers?type=event&id=' + e[i];
+				// build the url
+				var url  = BASE_URL + 'markers?type=event&id=' + e[i];
 		
+				ajaxQueue.add({
+					success: bookmarkObj.processAjaxData4,
+					url: url
+				});
+			}
+		} else {
+			// build the url
+			var url  = BASE_URL + 'markers?type=event&id=' + e;
+
 			ajaxQueue.add({
 				success: bookmarkObj.processAjaxData4,
 				url: url

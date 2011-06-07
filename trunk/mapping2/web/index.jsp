@@ -169,6 +169,9 @@
 						<h3><a href="#" id="event_heading">Events</a></h3>
 							<div id="event_results"></div>
 					</div>
+					<p>
+						&nbsp;
+					</p>
 					<div class="accordion">
 						<h3><a href="#" id="search_history_heading">Search History</a></h3>
 						<table class="searchResults">
@@ -236,6 +239,9 @@
 	<h3>Searching the AusStage database</h3>
 	<p>
 		This search retrieves contributors, organisations, venues and events that match all your search terms. Records with matching alternate or previous names will also be retrieved. Please wait for the search to complete before exploring the results. 
+	</p>
+	<p>
+		To search for an exact phrase enclose the phrase in double quotation marks. For example &quot;The Ugly One&quot;. Include only keywords or an exact phrase in a single search, not both. 
 	</p>
 	<p>
 		A maximum of 25 search results will retrieved for each type of record. If you don't see what you're looking for, try refining your search terms. You could also try searching the main <a href="http://www.ausstage.edu.au/" title="AusStage homepage">AusStage</a> website.
