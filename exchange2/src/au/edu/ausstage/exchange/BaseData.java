@@ -54,9 +54,9 @@ public abstract class BaseData {
 			throw new IllegalArgumentException("all parameters to this constructor are required");
 		}
 		
-		if(InputUtils.isValid(outputType, ExchangeServlet.VALID_OUTPUT_TYPES) == false) {
+		if(InputUtils.isValid(outputType, EventServlet.VALID_OUTPUT_TYPES) == false) {
 			// no valid type was found
-			throw new IllegalArgumentException("Invalid output parameter. Expected one of: " + InputUtils.arrayToString(ExchangeServlet.VALID_OUTPUT_TYPES));
+			throw new IllegalArgumentException("Invalid output parameter. Expected one of: " + InputUtils.arrayToString(EventServlet.VALID_OUTPUT_TYPES));
 		}
 		
 		// ensure the ids are numeric

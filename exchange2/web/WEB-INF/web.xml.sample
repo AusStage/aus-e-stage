@@ -29,14 +29,26 @@
         <servlet-name>EventServlet</servlet-name>
         <servlet-class>au.edu.ausstage.exchange.EventServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LookupServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.exchange.LookupServlet</servlet-class>
+    </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>EventServlet</servlet-name>
         <url-pattern>/eventdata/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LookupServlet</servlet-name>
+        <url-pattern>/lookup/*</url-pattern>
+    </servlet-mapping>
     <!-- Context Params to Share Common Information-->
     <context-param>
         <param-name>databaseConnectionString</param-name>
         <param-value></param-value>
+    </context-param>
+    <context-param>
+       	<param-name>systemVersion</param-name>
+       	<param-value>2.0 (Beta)</param-value>
     </context-param>
 </web-app>
