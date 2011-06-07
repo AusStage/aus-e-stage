@@ -101,7 +101,7 @@ public class KmlDownloadManager {
 				+ "FROM contributor c, contfunctlink, contributorfunctpreferred "
 				+ "WHERE c.contributorid = contfunctlink.contributorid "
 				+ "AND contfunctlink.contributorfunctpreferredid = contributorfunctpreferred.contributorfunctpreferredid "
-				+ "AND c.contributorid ? "
+				+ "AND c.contributorid = ? "
 				+ "GROUP BY c.contributorid, first_name, last_name ";
 		} else {
 			sql = "SELECT c.contributorid, first_name, last_name, "
