@@ -145,7 +145,7 @@ ViewerControlClass.prototype.init = function() {
 	$("input[name=showRelatedNodeLabels]").click(function() { 
 		//if checked, then set showContributors to true, else set to false;
     	if($("input[name=showRelatedNodeLabels]").is(":checked")){
-			viewer.showRelatedNodeLabels = true;	
+			viewer.showRelatedNodeLabels = true;				
     	}
     	else viewer.showRelatedNodeLabels = false;
     	viewer.render();
@@ -156,8 +156,18 @@ ViewerControlClass.prototype.init = function() {
 		//if checked, then set showContributors to true, else set to false;
     	if($("input[name=showAllNodes]").is(":checked")){
 			viewer.showAllNodes = true;
+			//enable the show all edges checkbox
+			$("input[name=showAllEdges]").attr('disabled', false);
+			//set viewers show all edges var based on checkbox value
+			viewer.showAllEdges = ($("input[name=showAllEdges]").is(":checked"))?true:false;
     	}
-    	else viewer.showAllNodes = false;
+    	else { 
+    		viewer.showAllNodes = false;
+	    	//disable the show all edges checkbox
+    		$("input[name=showAllEdges]").attr('disabled', true);
+    		//set viewers show all edges var to false
+			viewer.showAllEdges = false;
+    	}
     	viewer.render();
 	}); 
 	
@@ -166,8 +176,18 @@ ViewerControlClass.prototype.init = function() {
 		//if checked, then set showContributors to true, else set to false;
     	if($("input[name=showRelatedNodes]").is(":checked")){
 			viewer.showRelatedNodes = true;	
+			//enable the show related edges checkbox
+			$("input[name=showRelatedEdges]").attr('disabled', false);
+			//set viewers show all edges var based on checkbox value
+			viewer.showRelatedEdges = ($("input[name=showRelatedEdges]").is(":checked"))?true:false;
     	}
-    	else viewer.showRelatedNodes = false;
+    	else {
+    		viewer.showRelatedNodes = false;
+    		//disable the show related edges checkbox
+    		$("input[name=showRelatedEdges]").attr('disabled', true);
+    		//set viewers show related edges var to false
+			viewer.showRelatedEdges = false;
+    	}
     	viewer.render();
 	}); 
 
@@ -486,7 +506,6 @@ ViewerControlClass.prototype.displaySelectedContributors = function(){
 //											reset: 0 to leave the sidebar, 1 to reset sidebar.
 ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 		viewer.hideInteraction();
-		resetCheckboxes();
 		closeLegends();
 		viewer.destroy(); 
 		//show loading msg	
@@ -547,12 +566,6 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 			})
 			break;	
 	}
-}
-
-function resetCheckboxes(){
-	$("input[name=showAllContributors]").attr('checked', false);
-	$("input[name=showRelatedContributors]").attr('checked', false);
-	$("input[name=showAllFaceted]").attr('checked', true); 
 }
 
 function closeLegends(){

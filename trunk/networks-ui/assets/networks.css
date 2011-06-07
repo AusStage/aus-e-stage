@@ -301,9 +301,7 @@ table.searchResults td a {
         background: #aaaaaa;
         font-family:Helvetica, Arial, sans-serif;
         cursor:pointer;
-
 		text-align:left!important;
-		font-size: 1.17em;
 		font-weight:normal;
 }
 
@@ -314,6 +312,11 @@ table.searchResults td a {
 #faceted_body{
 	padding:5px 5px 10px 5px;
 	}
+
+.titleLink:hover {
+	text-decoration:underline!important;
+	
+}
 
 .legendHeader:hover {
 		background: #bbbbbb;
@@ -326,7 +329,7 @@ table.searchResults td a {
 .legendHeader a{
         font-weight:normal;
         margin:0 0 0 0;
-        font-size:14px;
+		font-size:1em;
         color:#fff;
         background: #aaaaaa;
 }
@@ -338,14 +341,14 @@ table.searchResults td a {
 .legendHeader p{
         font-weight:normal;
         margin:0 0 0 0;
-        font-size:10px;
+        font-size:0.75em;
         color:#fff;
 }
 
 .legendHeader_hide{
         font-weight:normal;
         margin:0 0 0 0;
-        font-size:10px;
+        font-size:0.75em;
         color:#fff;
 }
 
@@ -374,14 +377,13 @@ table.searchResults td a {
 .legendBody a {
         font-weight:normal;
         margin:0 0 -5px 0;
- /*       font-size:11px;*/
         color:#3300ff;
 }
 
 .legendBody p {
         font-weight:normal;
         margin:0 0 -5px 0;
-        font-size:10px;
+        font-size:0.75em;
         color:#000;
 }
 
@@ -426,10 +428,10 @@ table.searchResults td a {
 #faceted_browsing_div {
 	border: 1px solid #ccc;
 	font-family:Helvetica, Arial, sans-serif;
-    font-size:14px;        
+    font-size:1em;        
 }
 #faceted_browsing_div .legendBody{
-    font-size:11px;        
+    font-size:0.8em;        
 	border: 1px solid #ccc;    
 }
 

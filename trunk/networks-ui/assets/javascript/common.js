@@ -21,6 +21,8 @@ var EDGE = "edge";
 var NODE = "node";
 var CLEAR = "clear";
 var allowToggle = true;
+//create date formatter, format = dd mmm yyyy
+var dateFormat = pv.Format.date("%e %b %Y"); 
 
 
 //function to apply correct style to buttons

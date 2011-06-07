@@ -58,6 +58,9 @@ $(document).ready(function(){
 	
 	 });
 	 
+	 //set up the find centre button
+	 $('#find_centre').live('click', function(){viewer.recentre()})
+	 
 	//set up the search help
 	 $("#help_search_div").dialog({
      	autoOpen: false,
@@ -127,6 +130,31 @@ $(document).ready(function(){
         $("#view_contributor_help").live('click', function() {
                 $("#help_view_contributor_div").dialog('open');
         });
+        
+	//set up the about networks
+	 $("#about_networks_div").dialog({
+     	autoOpen: false,
+        height: 400,
+        width: 450,
+		modal: true,
+		buttons: {
+			Close: function() {
+					$(this).dialog('close');
+				}
+    	    },
+	        open: function() {
+
+			},
+			close: function() {
+
+			}
+        });
+
+        $("#about_networks_help").click(function() {
+                $("#about_networks_div").dialog('open');
+        });
+        
+        
 
 });
 
