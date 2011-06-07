@@ -75,31 +75,13 @@
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a></li>
 				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
 				<li><a href="index.html" title="Browse Contributor Network">Navigating Networks</a> </li>			
-				<li><a href="#" title="Networks Help">About Networks</a> </li>			
+				<li><a href="#" id="about_networks_help" title="Networks Help">About Networks</a> </li>			
 			</ul>
 		</div>
-		<div id="exportContainer">
-		<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184">		
-			<div class="accordion">
-				<h3><a href="#" id="export_heading">Save</a></h3>
-				<div id="export_network">
-					<a class="f-184" id='downloadLink' href="#" target="_blank">Download this network as GraphML</a>
-				</div>
-			</div>
-		</div>
 		<div class="legendContainer">
-		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
-		<div id="network_details_div">
-			<div class="legendHeader" id="selected_object_header" ></div>
-			<div class="legendBody" id="selected_object_body"></div>
-		</div>
-		<!--Network properties - displays information about the network as a whole -->						
-		<div id="network_properties_div">
-			<div class="legendHeader" id="network_properties_header" >Network Properties</div>
-			<div class="legendBody" id="network_properties_body"></div>
-		</div>		
 		<div id="viewer_options_div">
-			<div class="legendHeader" id="viewer_options_header" >Display Options</div>
+		<hr style="width: 95%; margin-top: 5px;" class="f-184 b-184">			
+			<div class="legendHeader" id="viewer_options_header" >Display</div>
 			<div class="legendBody autoHeight" id="viewer_options_body">
 				<!--ego centric labels-->
 				<div id="contributor_options_div" width='250'>						
@@ -211,12 +193,33 @@
 				</div>
 			</div>
 		</div>
+
+		
+		<div id="exportContainer">	
+			<div class="accordion">
+				<h3><a href="#" id="export_heading">Save</a></h3>
+				<div id="export_network">
+					<a class="f-184" id='downloadLink' href="#" target="_blank">Download this network as GraphML</a>
+				</div>
+			</div>
+		</div>
+
+		<!--Network properties - displays information about the network as a whole -->						
+		<div id="network_properties_div">
+			<div class="legendHeader" id="network_properties_header" >Network</div>
+			<div class="legendBody" id="network_properties_body"></div>
+		</div>		
+		<!--Legend/ info window for the network - displays information about the selected section of the graph -->
+		<div id="network_details_div">
+			<div class="legendHeader" id="selected_object_header" ></div>
+			<div class="legendBody" id="selected_object_body"></div>
+		</div>		
 		<!-- faceted browsing div -->
 		<div id="faceted_div">
-			<div class="legendHeader" id="faceted_header">Faceted Browsing</div>
+			<div class="legendHeader" id="faceted_header">Facets</div>
 			<div class="legendBody" id="faceted_body" >
 				<div><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
-				<label for="showAllNodes">Show all nodes</label></div></br>			
+				<label for="showAllFaceted">Show all nodes</label></div></br>			
 				<!--functions-->
 				<div class="legendHeader legendSml" id="functions_header" >Contributor Functions</div>
 				<div class="legendBody autoHeight scroll_checkboxes" id="functions_body"></div>
@@ -286,6 +289,7 @@
 					<h3><a href="#" id="event_heading">Events</a></h3>
 					<div id="event_results"></div>
 				</div>
+				</br>
 				<div class="accordion">
 					<h3><a href="#" id="event_heading">Search History</a></h3>
 					<div>
@@ -337,49 +341,76 @@
  | <a href="http://beta.ausstage.edu.au/?tab=contacts">Contact Us</a></p>
 </div>
 <!-- help divs -->
+<div id="about_networks_div" class='dialogs' title="About Networks" style="font-size: 90%">
+        <p>The Navigating Networks service provides an interactive interface for exploring and analysing networks of 
+        artistic collaborations in the AusStage database.</p>
+		<p>Network visualisation and analysis can reveal patterns of collaboration between artists which have previously been unrepresentable using
+		 conventional text-based displays. This service presents existing data in new ways, allowing researchers to interrogate the collaborations 
+		 that underpin creativity in the performing arts. </p>
+		<p>Network graphs represents things and their relationships. A network graph is visualised as set of nodes linked by lines representing
+		 their relationships. There are two ways we can look at the relationship between contributors and events in AusStage.</p>
+		<h3>Contributor Network</h3>
+		<p>We can visualise a network of contributors linked by the events they have collaborated on.
+		 A contributor network is centred on one contributor. It shows all the contributors who have collaborated with the central contributor, and 
+		 all of their collaborations with each other.</p>
+		 <h3>Event Network</h3>
+		 <p>We can also visualise a network of events linked by their contributors. An event network is centered on one event. 
+		 It shows the events that contributors were working on before and after the central event.</p>
+		 <p>There are three types of event network.</p>
+		<ul>
+		<li>1st Degree (default) retrieves a network which includes, for each contributor to the central event, their links to one event before and 
+		one event after the central event.</li>
+		<li>2nd Degree Simple retrieves a network which includes, for each contributor to the central event, 
+		their links to two events before and two events after the central event.</li>
+		<li>2nd Degree Complex retrieves a network which includes, for each contributor to the central event, 
+		their links to events before and after, and then, for each contributor to those events, all their links to events before and after.</li>
+		</ul>
+		<p>These three types of event network reveal a progressively broader and more complex picture of who was collaborating on what 
+		before and after the central event. The difference between the two types of networks at the second degree is that, for the simple network,
+		 we only retrieve the events at the second degree if they involved contributors to the central event, whereas, for the complex network, we 
+		 retrieve all events at the second degree which involve contributors from events at the first degree.</p>
+</div>
+
 <div id="help_search_div" class='dialogs' title="Help" style="font-size: 90%">
         <h3>Searching the AusStage database</h3>
         <p>This search retrieves contributors and events that match all your search terms. 
         Records with matching alternate or previous names will also be retrieved. 
         Please wait for the search to complete before exploring the results. 
-        <br/>&nbsp;<br/>
+        </p><p>
+        Enclosing your search terms in double quotes will search for an exact match of the search terms.
+        </p><p>
         At most 25 search results will retrieved for each type of record. 
-		If you don't find what you're looking for, try refining your search terms. You could also try your on the main 
+		If you don't find what you're looking for, try refining your search terms. You could also try searching the main 
 		<a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage</a> website.
         </p>
 </div>
 <div id="help_view_event_div" class='dialogs' title="Help" style="font-size: 90%">
         <h3>Viewing an Event Network</h3>
-        <p>Click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon to select an event. </p>
-        <p>Choose a network type from the drop-down menu. </p>
+		<p>An event network is arranged chronologically to show the events which contributors were involved in before and after the central event.
+		</p>
+		<p>Click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon to select an event. </p>
+		<p>Choose a network type from the drop-down menu. There are three types of event network</p>
+		<ul>
+		<li> 1st Degree (default) retrieves a network which includes, 
+		for each contributor to the central event, their links to one event before and one event after the central event.</li>
+
+		<li>2nd Degree Simple retrieves a network which includes, for each contributor to the central event, 
+		their links to two events before and two events after the central event. </li>
+	
+		<li>2nd Degree Complex retrieves a network which includes, for each contributor to the central event, 
+		their links to events before and after, and then, for each contributor to those events, all their links to events before and after.</li>
+		</ul>
         <p>Click the View Network button to see the network. </p>
         <p>Click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span> icon to remove the event from your selection. </p>
-
-<p>An event network is arranged chronologically to show the events which contributors were involved in before and after the central event. There are three types of event network.
-</p>
-<ul>
-	<li> 1st Degree (default) retrieves a network which includes, 
-	for each contributor to the central event, their links to one event before and one event after the central event.</li>
-
-	<li>2nd Degree Simple retrieves a network which includes, for each contributor to the central event, 
-	their links to two events before and two events after the central event. </li>
-	
-	<li>2nd Degree Complex retrieves a network which includes, for each contributor to the central event, 
-	their links to events before and after, and then, for each contributor to those events, all their links to events before and after.</li>
-	
-</ul>
-<p>
-These three types of event network reveal a progressively broader and more complex picture of who was collaborating on what before and after the central event. The difference between the two types of networks at the second degree is that, for the simple network, we only retrieve the events at the second degree if they involved contributors to the central event, whereas, for the complex network, we retrieve all events at the second degree which involve contributors from events at the first degree.</p>
-
 </div>
 <div id="help_view_contributor_div" class='dialogs' title="Help" style="font-size: 90%">
         <h3>Viewing a Contributor Network</h3>
+        <p>A contributor network is centred on the selected contributor. It shows all the contributors who have collaborated with the central 	
+        contributor, and all of their associations with each other.</p>
         <p>Click the <span class="ui-icon ui-icon-plus clickable" style="display: inline-block;"></span> icon to select a contributor.</p>
         <p>Click the View Network button to see the network. </p>
         <p>Click the <span class="ui-icon ui-icon-close clickable" style="display: inline-block;"></span>
          icon to remove the contributor from your selection. </p>
-		<p>A contributor network is centred on the selected contributor. 
-		It shows all the contributors who have collaborated with the central contributor, and all of their associations with each other. </p>
 </div>
 <div id="cust_colors_confirm_reset" title="Confirm Reset" class="dialogs">
         <h3>Do you want to reset the custom colours?</h3>

@@ -20,12 +20,13 @@
  
  
  function EventViewerClass(){
- 	this.dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
+ 	
+ 	this.className = 'EventViewerClass';
  	//data
  	this.json = {'edges':[],'nodes':[]};
  	this.renderComplete = false;
  	//graph stats- information
- 	this.centreNode = -1;
+ 	this.centralNode = -1;
  	this.contributorCount = -1;
  	//protovis visualiser objects
  	this.vis = new pv.Panel();
@@ -121,21 +122,23 @@ EventViewerClass.prototype.renderGraph = function(json){
 
 //display the network properties
 EventViewerClass.prototype.displayNetworkProperties = function(){
-	if (this.centreNode!=-1){
+	if (this.centralNode!=-1){
 			
 		var eventUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id="; 		
 	    var html = 	"<table>"+
-	  				"<tr class=\"d0\"><th scope='row'>Centre</th><td>"+
-	  				"<a href=" + eventUrl +""+ this.json.nodes[this.centreNode].id+" target=\"_blank\">"+	
-	  				this.json.nodes[this.centreNode].nodeName+
-    				"</a> <p>"+this.json.nodes[this.centreNode].venue+", "+
-    				"<span class='date'>"+this.dateFormat(this.json.nodes[this.nodeIndex].startDate)+"</span></p></td></tr>"+
+	  				"<tr class=\"d0\"><th scope='row'><input type=\"submit\" name=\"submit\" class=\"button\" id=\"find_centre\" value=\"Centre\" /></th><td>"+
+	  				"<a href=" + eventUrl +""+ this.json.nodes[this.centralNode].id+" target=\"_blank\">"+	
+	  				this.json.nodes[this.centralNode].nodeName+
+    				"</a> <p>"+this.json.nodes[this.centralNode].venue+", "+
+    				"<span class='date'>"+dateFormat(this.json.nodes[this.nodeIndex].startDate)+"</span></p></td></tr>"+
     				"<tr class=\"d1\"><th scope='row'>Events</th><td> "+this.json.nodes.length+"</td></tr>"+					
 					"<tr class=\"d0\"><th scope='row'>Contributors</th><td>"+this.contributorCount+"</td></tr></table>";			
  		$("#network_properties_body").empty();
 		$("#network_properties_body").append(html);	
-		
+		//style the centre button
+		$('#find_centre').button();	
 	}	
+	
 }
 
 
@@ -169,7 +172,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 		titleHtml = "<a class=\"titleLink\" href=" + eventUrl +""+ this.json.nodes[this.nodeIndex].id+" target=\"_blank\">"+
 										this.json.nodes[this.nodeIndex].nodeName+"</a><p>"+
 										this.json.nodes[this.nodeIndex].venue+", "+
-										"<span class='date'>"+this.dateFormat(this.json.nodes[this.nodeIndex].startDate)+"</span></p>";
+										"<span class='date'>"+dateFormat(this.json.nodes[this.nodeIndex].startDate)+"</span></p>";
 		
 		//create an array of related contributors, sort by last name
     	for (i = 0; i < this.json.nodes[this.nodeIndex].contributor_id.length; i++){
@@ -211,13 +214,13 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 						eventList[x] = {event:"<a href=" + eventUrl +""+ this.json.nodes[i].id+" target=\"_blank\">"+
 										this.json.nodes[i].nodeName+"</a><p>"+
 										this.json.nodes[i].venue+", "+
-										"<span class='date' >"+this.dateFormat(this.json.nodes[i].startDate)+"</span></p>"
+										"<span class='date' >"+dateFormat(this.json.nodes[i].startDate)+"</span></p>"
 						, startDate: this.json.nodes[i].startDate};
 						x++;
 					}
 				}
 				//sort events, earliest to latest
-				eventList.sort(function(a, b){return a.startDate - b.startDate})		
+				eventList.sort(function(a, b){return b.startDate - a.startDate })		
 				
 		//create the html to display the info.
     	for( i = 0;i<eventList.length; i++ ){
@@ -308,7 +311,7 @@ EventViewerClass.prototype.getStats = function(){
 		}
 		if(this.json.nodes[i].central){
 			isBefore = false;
-			this.centreNode = i;
+			this.centralNode = i;
 			this.nodeIndex = i;
 			
 		}
@@ -1111,6 +1114,16 @@ EventViewerClass.prototype.isVisible = function(d, what, p){
 	}	    
 	else
 	return false;	 
+}
+
+EventViewerClass.prototype.recentre = function(){
+	this.currentFocus = NODE;
+	this.nodeIndex = this.centralNode;
+	this.edgeId = -1;
+	this.edgeIndex = -1;
+	this.displayPanelInfo(NODE);
+	this.render();
+	
 }
 
 

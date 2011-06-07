@@ -25,14 +25,16 @@ function ContributorViewerClass(){
 
 //constructor
 function ContributorViewerClass(type){
-
+	
+	this.className = 'ContributorViewerClass';
+	
 	/*sizing*/
 	this.spacer = 40;
 	this.hSpacer = 60; 	
 	this.w = $(window).width() - ($(".sidebar").width()+this.spacer);
 	this.h = $(window).height() - ($(".header").height()+$(".footer").height()+$('#fix-ui-tabs').height()+this.hSpacer);
 	
-	this.viewType = type;
+	/*this.viewType = type;*/
 	
 	this.vis = new pv.Panel();
 	this.force;//?
@@ -52,7 +54,6 @@ function ContributorViewerClass(type){
 	this.thinLine = 1.5;
 
 	this.largeFont = "8 pt sans-serif";
-	this.smallFont = "6 pt sans-serif";
 	//edge, node and background colouring for normal browsing
 	this.nodeColors = {	panelColor:			"white",
 						selectedNode:		"rgba(0,0,255,1)",				//blue
@@ -93,22 +94,25 @@ function ContributorViewerClass(type){
 					   }
 
 	//switches - show labels and faceted view on/off
-	this.showAllNodeLabels = false;	//set to true if show labels checkbox is checked. Will display all contributor labels
-	this.showRelatedNodeLabels = false;	//set to true if show labels checkbox is checked. Will display related contributor labels
 	
-	this.showAllNodes = true;
-	this.showRelatedNodes = true;
-	
-	this.showAllEdges = true;				//true if checked - shows ALL edges;
-	this.showRelatedEdges = true;			//true if unchecked = hides all UNRELATED edges.
-	
+	//display label flags
+	this.showAllNodeLabels = $("input[name=showAllNodeLabels]").is(":checked");	
+	this.showRelatedNodeLabels = $("input[name=showRelatedNodeLabels]").is(":checked");	
+	//display node flags
+	this.showAllNodes = $("input[name=showAllNodes]").is(":checked");
+	this.showRelatedNodes = $("input[name=showRelatedNodes]").is(":checked");	
+	//display edge flags
+	this.showAllEdges = (!$("input[name=showAllNodes]").is(":checked"))?false:$("input[name=showAllEdges]").is(":checked");					
+	this.showRelatedEdges = (!$("input[name=showRelatedNodes]").is(":checked"))?false:$("input[name=showRelatedEdges]").is(":checked");	
+	//edge value flags 
 	this.hideMax = 9999999;
 	this.hideMin = 0;
-	
-	this.showCustColors = true;
-	this.showCustVis = true;
-	this.viewFaceted = false;			//set to true if facteded browsing selected.
-	this.showAllFaceted = true;			//set to true if all nodes are visible in faceted search
+	//custom flags
+	this.showCustColors = $("input[name=showCustColors]").is(":checked");
+	this.showCustVis = $("input[name=showCustVis]").is(":checked");
+	//fceted browsing flags
+	this.viewFaceted = false;
+	this.showAllFaceted = $("input[name=showAllFaceted]").is(":checked");
 
 	this.centralNode = -1;
 	//MOUSE OVER VARIABLES
@@ -333,7 +337,11 @@ ContributorViewerClass.prototype.isVisibleNode = function(d){
 	if (!d.withinDateRange){return false;}
 	if (this.showAllNodes){return true;}
 	if (this.showRelatedNodes){
-			if (!contains(d.neighbors, this.nodeIndex)&& (d.index!=this.nodeIndex)){ return false;}
+			//if it's a neighbor or selected return true
+			if ((contains(d.neighbors, this.nodeIndex)|| (d.index==this.nodeIndex))){ return true;}
+			//if its attached to a selected edge return true
+			else if (d.index == this.edgeTIndex || d.index == this.edgeSIndex){return true}
+			else return false;
 	}
 	if (!this.showAllNodes && !this.showRelatedNodes){return false}
 	
@@ -343,16 +351,18 @@ ContributorViewerClass.prototype.isVisibleNode = function(d){
 //edge visibility
 ContributorViewerClass.prototype.isVisibleEdge = function(p){
 	var visible = true;
-	//if show all option selected then return false immediately
 	
-	if (!p.custVis && this.showCustVis){return false} 	// if user has hidden and option 'show user hidden elements' is not selected
-	
+	// if out of date range return false
+	if (!p.withinDateRange){return false}
+	// if user has hidden and option 'show user hidden elements' is not selected
+	if (!p.custVis && this.showCustVis){return false} 	
+	// if values have been selected on the slider
 	if ( parseInt(p.value) < parseInt(this.hideMin) || p.value > this.hideMax ){return false}
-	
-	if (this.viewFaceted && !this.showAllFaceted){		// if faceted browse and option is to only show selected 
+	// if faceted browse and option is to only show selected 
+	if (this.viewFaceted && !this.showAllFaceted){		
 			visible = (p.targetNode.facetedMatch && p.sourceNode.facetedMatch)?true:false;}
-			
-	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){return false} //if out of date range.					
+	//if out of date range.							
+	if(!p.targetNode.withinDateRange || !p.sourceNode.withinDateRange){return false} 
 		
 	if (this.showAllEdges && !this.viewFaceted){return true}; 
 	
@@ -360,7 +370,7 @@ ContributorViewerClass.prototype.isVisibleEdge = function(p){
 		if(p.source != this.nodeIndex && p.target != this.nodeIndex //if not related to selected node
 			&& !(p.source == this.edgeSIndex && p.target == this.edgeTIndex)){visible = false} //and not a selected edge - not visible
 	}
-	if (!this.showAllEdges && !this.showRelatedEdges && this.viewFaceted) {return false}
+	if (!this.showAllEdges && !this.showRelatedEdges) {return false}
 
 	return visible;
 }
@@ -388,20 +398,7 @@ ContributorViewerClass.prototype.isVisible = function(d){
 
 //determine font
 ContributorViewerClass.prototype.getFont = function(d){
-	
-	//if current node index == index of object selected.			
-	if (d.index == this.nodeIndexPoint){return this.largeFont;}
-	//if current node index == index of object selected
-	if (d.index == this.nodeIndex){return this.largeFont;}
-	//if selected contributor is related to this node
-	if (contains(d.neighbors, this.nodeIndex)){return this.largeFont;}
-	//if mouse is over a related edge
-	else if (d.index == this.edgeTIndexPoint || d.index == this.edgeSIndexPoint){return this.largeFont}
-	//if related edge is selected
-	else if (d.index == this.edgeTIndex || d.index == this.edgeSIndex){return this.largeFont}
-
-	else 
-		return this.smallFont;
+	return this.largeFont;
 }
 
 ContributorViewerClass.prototype.getTextStyle = function(d){
@@ -500,11 +497,11 @@ ContributorViewerClass.prototype.displayNetworkProperties = function(){
 		var tempHtml = "";
 		for (i=0;i<this.json.edges.length;i++){
 			collabCount = collabCount+this.json.edges[i].value;
-		}
+		}/*									<input type="submit" name="submit" class="button" id="reset_cust_colors" value="Reset" />*/
 		var comma = "";	
 		var contribUrl = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
 	    var html = 	"<table>"+
-	  				"<tr class=\"d0\"><th scope='row'>Centre</th><td>"+
+	  				"<tr class=\"d0\"><th scope='row'><input type=\"submit\" name=\"submit\" class=\"button\" id=\"find_centre\" value=\"Centre\" /></th><td>"+
 	  				"<a href=" + contribUrl +""+ this.json.nodes[this.centralNode].id+" target=\"_blank\">"+	
 	  				this.json.nodes[this.centralNode].nodeName+"</a><p>";
     	for (var i=0; i<this.json.nodes[this.centralNode].functions.length; i++){
@@ -520,7 +517,10 @@ ContributorViewerClass.prototype.displayNetworkProperties = function(){
  		$("#network_properties_body").empty();
 		$("#network_properties_body").append(html);
 		$(".ellipsis").tipsy({gravity: $.fn.tipsy.autoNS});
-
+		
+		//style the centre button
+		$('#find_centre').button();
+		
 }
 
 //display information about the selected element.
@@ -533,7 +533,6 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 	var titleHtml = ""
 	var html = "<table width=100%>";
 	var tempHtml = "";
-	var dateFormat = pv.Format.date("%d %b %Y"); //create date formatter, format = dd mmm yyyy
 	var tableClass = "";
 	
 	var contributorList = new Array();
@@ -606,13 +605,21 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 	//***************/
 	//EDGE
 	if (what == EDGE){
+		//get the contributor info, work out which comes first alphabetically Surname - firstname.
+		var list = new Array();
+		list[0] = {name: this.json.nodes[this.edgeTIndex].nodeName.split(" ")[1], 
+					index: this.edgeTIndex }
+		list[1] = {name: this.json.nodes[this.edgeSIndex].nodeName.split(" ")[1],
+					index: this.edgeSIndex }
+					
+		list.sort(sortByName);
 		
 		//add the target contributor
-		titleHtml = "<a class=\"titleLink\" href="+contributorUrl+this.json.nodes[this.edgeTIndex].id+" target=\"_blank\">"+
-					this.json.nodes[this.edgeTIndex].nodeName+"</a> <p>";
+		titleHtml = "<a class=\"titleLink\" href="+contributorUrl+this.json.nodes[list[0].index].id+" target=\"_blank\">"+
+					this.json.nodes[list[0].index].nodeName+"</a> <p>";
 		//add target contributor roles
-		for (var i=0; i<this.json.nodes[this.edgeTIndex].functions.length; i++){
-    		tempHtml+= comma + this.json.nodes[this.edgeTIndex].functions[i];
+		for (var i=0; i<this.json.nodes[list[0].index].functions.length; i++){
+    		tempHtml+= comma + this.json.nodes[list[0].index].functions[i];
     		comma = ", ";
     	}
     	titleHtml += constrain(tempHtml, $(".sidebar").width()-50, "legendHeader", "ellipsis header");
@@ -620,12 +627,12 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
     	titleHtml +="</p>";					
 
 		//add the source contributor
-		titleHtml += "<a class=\"titleLink\" href="+contributorUrl+this.json.nodes[this.edgeSIndex].id+" target=\"_blank\">"+
-					this.json.nodes[this.edgeSIndex].nodeName+"</a> <p>";
+		titleHtml += "<a class=\"titleLink\" href="+contributorUrl+this.json.nodes[list[1].index].id+" target=\"_blank\">"+
+					this.json.nodes[list[1].index].nodeName+"</a> <p>";
 		//add source contributor roles
 		comma = "";
-		for (var i=0; i<this.json.nodes[this.edgeSIndex].functions.length; i++){
-    		tempHtml+= comma + this.json.nodes[this.edgeSIndex].functions[i];
+		for (var i=0; i<this.json.nodes[list[1].index].functions.length; i++){
+    		tempHtml+= comma + this.json.nodes[list[1].index].functions[i];
     		comma = ", ";
     	}
     	titleHtml += constrain(tempHtml, $(".sidebar").width()-50, "legendHeader", "ellipsis header");
@@ -1027,5 +1034,14 @@ ContributorViewerClass.prototype.facetedModeOff = function(){
 	$("input[name=showRelatedNodes]").attr('disabled', false);
 	$("input[name=showAllEdges]").attr('disabled', false);
 	$("input[name=showRelatedEdges]").attr('disabled', false);
+
+}
+
+ContributorViewerClass.prototype.recentre = function(){
+	this.nodeIndex = this.centralNode;
+	this.edgeTIndex = -1;
+	this.edgeSIndex = -1;
+	this.displayPanelInfo(NODE);
+	this.render();
 
 }
