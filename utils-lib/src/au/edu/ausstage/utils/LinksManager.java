@@ -41,6 +41,10 @@ public class LinksManager {
 	private static final String ORGANISATION_TEMPLATE = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_org_id=[org-id]";
 	private static final String ORGANISATION_TOKEN    = "[org-id]";
 	
+	// resource / item URLs
+	private static final String RESOURCE_TEMPLATE = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_item_cat_id=[item-id]";
+	private static final String RESOURCE_TOKEN    = "[item-id]";
+	
 	/**
 	 * A method to build an event link
 	 *
@@ -59,7 +63,7 @@ public class LinksManager {
 	/**
 	 * A method to build a venue link
 	 *
-	 * @param id the event id
+	 * @param id the venue id
 	 * @return   the persistent URL for this venue
 	 */
 	public static String getVenueLink(String id) {
@@ -74,8 +78,8 @@ public class LinksManager {
 	/**
 	 * A method to build a contributor link
 	 *
-	 * @param id the event id
-	 * @return   the persistent URL for this venue
+	 * @param id the contributor id
+	 * @return   the persistent URL for this contributor
 	 */
 	public static String getContributorLink(String id) {
 		// double check the parameter
@@ -89,8 +93,8 @@ public class LinksManager {
 	/**
 	 * A method to build a contributor link
 	 *
-	 * @param id the event id
-	 * @return   the persistent URL for this venue
+	 * @param id the organisation id
+	 * @return   the persistent URL for this organisation
 	 */
 	public static String getOrganisationLink(String id) {
 		// double check the parameter
@@ -98,6 +102,21 @@ public class LinksManager {
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		} else {
 			return ORGANISATION_TEMPLATE.replace(ORGANISATION_TOKEN, id);
+		}
+	} // end the method
+	
+	/**
+	 * A method to build a resource / item link
+	 *
+	 * @param id the resource id
+	 * @return   the persistent URL for this resource
+	 */
+	public static String getResourceLink(String id) {
+		// double check the parameter
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter must be a valid integer");
+		} else {
+			return RESOURCE_TEMPLATE.replace(RESOURCE_TOKEN, id);
 		}
 	} // end the method
 	
