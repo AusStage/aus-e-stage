@@ -37,9 +37,7 @@ public class Resource implements Comparable<Event> {
 	 * constructor for this class
 	 *
 	 * @param id the unique event id
-	 * @param name the event name
-	 * @param venue the address of the venue
-	 * @param firstDate the firstDate of the event
+	 * @param citation the resource citation
 	 *
 	 * @throws IllegalArgumentException if any of the parameters are missing or do not pass validation
 	 */

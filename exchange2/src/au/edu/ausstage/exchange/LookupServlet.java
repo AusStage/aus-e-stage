@@ -35,7 +35,7 @@ public class LookupServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	
 	// declare public constants
-	public static final String[] VALID_TASK_TYPES = {"secgenre","contentindicator"};
+	public static final String[] VALID_TASK_TYPES = {"secgenre","contentindicator", "ressubtype"};
 
 	/*
 	 * initialise this instance
@@ -88,6 +88,8 @@ public class LookupServlet extends HttpServlet {
 			results = lookup.getSecondaryGenreIdentifiers();
 		} else if(task.equals("contentindicator") == true) {
 			results = lookup.getContentIndicatorIdentifiers();
+		} else if(task.equals("ressubtype") == true) {
+			results = lookup.getResourceSubTypeIdentifiers();
 		}
 		
 		// ouput the data
