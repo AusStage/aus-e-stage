@@ -150,13 +150,13 @@ public class VenueData extends BaseData{
 		
 		// build the output
 		if(getOutputType().equals("html") == true) {
-			data =  DataBuilder.buildHtml(eventList);
+			data =  EventDataBuilder.buildHtml(eventList);
 		} else if(getOutputType().equals("json")) {
-			data = DataBuilder.buildJson(eventList);
+			data = EventDataBuilder.buildJson(eventList);
 		} else if(getOutputType().equals("xml")) {
-			data = DataBuilder.buildXml(eventList);
+			data = EventDataBuilder.buildXml(eventList);
 		} else if(getOutputType().equals("rss") == true) {
-			data = DataBuilder.buildRss(eventList);
+			data = EventDataBuilder.buildRss(eventList);
 		}
 		
 		return data;
@@ -164,6 +164,96 @@ public class VenueData extends BaseData{
 	
 	@Override
 	public String getResourceData() {
-		return null;
+		String sql;
+		DbObjects results;
+		Resource resource;
+		
+		ArrayList<Resource> resourceList = new ArrayList<Resource>();
+		
+		String[] ids = getIds();
+		
+		if(ids.length == 1) {
+		
+			sql = "SELECT i.itemid, i.citation "
+				+ "FROM item i, itemvenuelink ivl "
+				+ "WHERE ivl.itemid = i.itemid "
+				+ "AND ivl.venueid = ?";
+			
+		} else {
+		
+			sql = "SELECT i.itemid, i.citation "
+				+ "FROM item i, itemvenuelink ivl "
+				+ "WHERE ivl.itemid = i.itemid "
+				+ "AND ivl.venueid =  ANY (";
+			    
+			    // add sufficient place holders for all of the ids
+				for(int i = 0; i < ids.length; i++) {
+					sql += "?,";
+				}
+
+				// tidy up the sql
+				sql = sql.substring(0, sql.length() -1);
+				
+				// finalise the sql string
+				sql += ") ";
+		}
+		
+		// get the data
+		results = getDatabase().executePreparedStatement(sql, ids);
+	
+		// check to see that data was returned
+		if(results == null) {
+			throw new RuntimeException("unable to lookup resource data");
+		}
+		
+		// build the list of contributors
+		ResultSet resultSet = results.getResultSet();
+		try {
+			while (resultSet.next()) {
+			
+				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
+				resourceList.add(resource);
+				
+			}
+		} catch (java.sql.SQLException ex) {
+			throw new  RuntimeException("unable to build list of resources: " + ex.toString());
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		// trim the arraylist if necessary
+		if(getRecordLimit().equals("all") == false) {
+			int limit = getRecordLimitAsInt();
+			
+			if(resourceList.size() > limit) {
+			
+				ArrayList<Resource> list = new ArrayList<Resource>();
+				
+				for(int i = 0; i < limit; i++) {
+					list.add(resourceList.get(i));
+				}
+				
+				resourceList = list;
+				list = null;
+			}
+		}
+		
+		String data = null;
+		
+		// build the output
+		if(getOutputType().equals("html") == true) {
+			data =  ResourceDataBuilder.buildHtml(resourceList);
+		} else if(getOutputType().equals("json")) {
+			data = ResourceDataBuilder.buildJson(resourceList);
+		} else if(getOutputType().equals("xml")) {
+			data = ResourceDataBuilder.buildXml(resourceList);
+		} else if(getOutputType().equals("rss") == true) {
+			data = ResourceDataBuilder.buildRss(resourceList);
+		}
+		
+		return data;
 	}
 }

@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.sql.ResultSet;
 
 /**
- * The main driving class for the collation of event data using contributor ids
+ * The main driving class for the collation of event data using resource sub type ids
  */
-public class WorkData extends BaseData{
+public class ResourceData extends BaseData{
 
 	/**
 	 * Constructor for this class
@@ -41,7 +41,7 @@ public class WorkData extends BaseData{
 	 * @throws IllegalArgumentException if any of the parameters are empty or do not pass validation
 	 *
 	 */
-	public WorkData(DbManager database, String[] ids, String outputType, String recordLimit) {
+	public ResourceData(DbManager database, String[] ids, String outputType, String recordLimit) {
 	
 		super(database, ids, outputType, recordLimit);
 	}
@@ -49,37 +49,35 @@ public class WorkData extends BaseData{
 	@Override
 	public String getEventData() {
 		
+		throw new UnsupportedOperationException("This method is not valid in the context of Resource data");
+	}
+	
+	@Override
+	public String getResourceData() {
+		
 		String sql;
 		DbObjects results;
-		Event event;
+		Resource resource;
 		
-		String venue;
-		String firstDate;
-		
-		ArrayList<Event> eventList = new ArrayList<Event>();
+		ArrayList<Resource> resourceList = new ArrayList<Resource>();
 		
 		String[] ids = getIds();
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
-				+ "       c.countryname "
-				+ "FROM events e, venue v, country c, states s, eventworklink ewl "
-				+ "WHERE ewl.workid = ? "
-				+ "AND e.eventid = ewl.eventid "
-				+ "AND e.venueid = v.venueid "
-				+ "AND v.countryid = c.countryid (+) "
-				+ "AND v.state = s.stateid (+) "
-				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC";
+			sql = "SELECT i.itemid, i.citation "
+				+ "FROM item i, lookup_codes lc "
+				+ "WHERE i.item_sub_type_lov_id = lc.code_lov_id "
+				+ "AND lc.code_type = 'RESOURCE_SUB_TYPE' "
+				+ "AND lc.code_lov_id = ?";
 			
 		} else {
 		
-			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
-				+ "       c.countryname "
-				+ "FROM events e, venue v, country c, states s, eventworklink ewl "
-				+ "WHERE ewl.workid = ANY (";
+			sql = "SELECT i.itemid, i.citation "
+				+ "FROM item i, lookup_codes lc "
+				+ "WHERE i.item_sub_type_lov_id = lc.code_lov_id "
+				+ "AND lc.code_type = 'RESOURCE_SUB_TYPE' "
+				+ "AND lc.code_lov_id = ANY (";
 			    
 			    // add sufficient place holders for all of the ids
 				for(int i = 0; i < ids.length; i++) {
@@ -90,12 +88,7 @@ public class WorkData extends BaseData{
 				sql = sql.substring(0, sql.length() -1);
 				
 				// finalise the sql string
-				sql += ") "
-				+ "AND e.eventid = ewl.eventid "
-				+ "AND e.venueid = v.venueid "
-				+ "AND v.countryid = c.countryid (+) "
-				+ "AND v.state = s.stateid (+) "
-				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC";
+				sql += ") ";
 		}
 		
 		// get the data
@@ -103,7 +96,7 @@ public class WorkData extends BaseData{
 	
 		// check to see that data was returned
 		if(results == null) {
-			throw new RuntimeException("unable to lookup event data");
+			throw new RuntimeException("unable to lookup resource data");
 		}
 		
 		// build the list of contributors
@@ -111,19 +104,12 @@ public class WorkData extends BaseData{
 		try {
 			while (resultSet.next()) {
 			
-				// get the venue and first date
-				venue = buildShortVenueAddress(resultSet.getString(12), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10));
-				venue = resultSet.getString(7) + ", " + venue;
-				
-				firstDate = DateUtils.buildDisplayDate(resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
-				
-				// build a new event and add it to the list
-				event = new Event(resultSet.getString(1), resultSet.getString(2), venue, firstDate);
-				eventList.add(event);
+				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
+				resourceList.add(resource);
 				
 			}
 		} catch (java.sql.SQLException ex) {
-			throw new  RuntimeException("unable to build list of events: " + ex.toString());
+			throw new  RuntimeException("unable to build list of resources: " + ex.toString());
 		}
 		
 		// play nice and tidy up
@@ -135,15 +121,15 @@ public class WorkData extends BaseData{
 		if(getRecordLimit().equals("all") == false) {
 			int limit = getRecordLimitAsInt();
 			
-			if(eventList.size() > limit) {
+			if(resourceList.size() > limit) {
 			
-				ArrayList<Event> list = new ArrayList<Event>();
+				ArrayList<Resource> list = new ArrayList<Resource>();
 				
 				for(int i = 0; i < limit; i++) {
-					list.add(eventList.get(i));
+					list.add(resourceList.get(i));
 				}
 				
-				eventList = list;
+				resourceList = list;
 				list = null;
 			}
 		}
@@ -152,20 +138,15 @@ public class WorkData extends BaseData{
 		
 		// build the output
 		if(getOutputType().equals("html") == true) {
-			data =  EventDataBuilder.buildHtml(eventList);
+			data =  ResourceDataBuilder.buildHtml(resourceList);
 		} else if(getOutputType().equals("json")) {
-			data = EventDataBuilder.buildJson(eventList);
+			data = ResourceDataBuilder.buildJson(resourceList);
 		} else if(getOutputType().equals("xml")) {
-			data = EventDataBuilder.buildXml(eventList);
+			data = ResourceDataBuilder.buildXml(resourceList);
 		} else if(getOutputType().equals("rss") == true) {
-			data = EventDataBuilder.buildRss(eventList);
+			data = ResourceDataBuilder.buildRss(resourceList);
 		}
 		
 		return data;
-	}
-	
-	@Override
-	public String getResourceData() {
-		return null;
 	}
 }
