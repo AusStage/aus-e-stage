@@ -30,13 +30,21 @@
         <servlet-class>au.edu.ausstage.exchange.EventServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ResourceServlet</servlet-name>
+        <servlet-class>au.edu.ausstage.exchange.ResourceServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>LookupServlet</servlet-name>
         <servlet-class>au.edu.ausstage.exchange.LookupServlet</servlet-class>
     </servlet>
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>EventServlet</servlet-name>
-        <url-pattern>/eventdata/*</url-pattern>
+        <url-pattern>/events/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResourceServlet</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LookupServlet</servlet-name>

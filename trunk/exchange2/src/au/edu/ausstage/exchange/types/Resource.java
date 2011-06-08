@@ -24,16 +24,14 @@ import org.json.simple.JSONObject;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
- * A class used to represent an event
+ * A class used to represent a resource
  */
-public class Event implements Comparable<Event> {
+public class Resource implements Comparable<Event> {
 
 	// private class level variables
 	private String id;
-	private String name;
+	private String citation;
 	private String url;
-	private String venue;
-	private String firstDate;
 	
 	/**
 	 * constructor for this class
@@ -45,42 +43,27 @@ public class Event implements Comparable<Event> {
 	 *
 	 * @throws IllegalArgumentException if any of the parameters are missing or do not pass validation
 	 */
-	public Event(String id, String name, String venue, String firstDate) {
+	public Resource(String id, String citation) {
 		
-		if(InputUtils.isValid(id) == false || InputUtils.isValid(name) == false || InputUtils.isValid(venue) == false || InputUtils.isValid(firstDate) == false) {
+		if(InputUtils.isValid(id) == false || InputUtils.isValid(citation) == false) {
 			throw new IllegalArgumentException("all parameters to this constructor are required");
 		}
 		
 		if(InputUtils.isValidInt(id) == false) {
-			throw new IllegalArgumentException("the event id must be a valid integer");
+			throw new IllegalArgumentException("the resource id must be a valid integer");
 		}
 		
 		this.id = id;
-		this.name = name;
-		this.venue = venue;
-		this.firstDate = firstDate;
+		this.citation = citation;
 		
-		url = LinksManager.getEventLink(id);
-	}
-	
+		url = LinksManager.getResourceLink(id);
+	}	
 	public String getId() {
 		return id;
 	}
 	
-	public String getName() {
-		return name;
-	}
-	
-	public String getVenue() {
-		return venue;
-	}
-	
-	public String getFirstDate() {
-		return firstDate;
-	}
-	
-	public String getUrl() {
-		return url;
+	public String getCitation() {
+		return citation;
 	}
 	
 	/*
@@ -90,9 +73,7 @@ public class Event implements Comparable<Event> {
 	
 		StringBuilder builder = new StringBuilder("<li>");
 		
-		builder.append("<a href=\"" + url + "\" title=\"View this record in AusStage\">" + StringEscapeUtils.escapeHtml(name) + "</a>");
-		builder.append(", " + StringEscapeUtils.escapeHtml(venue));
-		builder.append(", " + firstDate);
+		builder.append("<a href=\"" + url + "\" title=\"View this record in AusStage\">" + StringEscapeUtils.escapeHtml(citation) + "</a>");
 		builder.append("</li>");
 		
 		return builder.toString();
@@ -103,14 +84,11 @@ public class Event implements Comparable<Event> {
 	 */
 	public String toXml() {
 
-		StringBuilder builder = new StringBuilder("<event>");
+		StringBuilder builder = new StringBuilder("<resource>");
 		
-		builder.append("<id>" + id + "</id>");
 		builder.append("<url>" + url + "</url>");
-		builder.append("<name>" + StringEscapeUtils.escapeXml(name) + "</name>");
-		builder.append("<venue>" + StringEscapeUtils.escapeXml(venue) + "</venue>");
-		builder.append("<date>" + firstDate + "</date>");
-		builder.append("</event>");
+		builder.append("<citation>" + StringEscapeUtils.escapeXml(citation) + "</citation>");
+		builder.append("</resource>");
 		
 		return builder.toString();
 	}
@@ -123,11 +101,8 @@ public class Event implements Comparable<Event> {
 	
 		JSONObject object = new JSONObject();
 		
-		object.put("id", id);
 		object.put("url", url);
-		object.put("name", name);
-		object.put("venue", venue);
-		object.put("date", firstDate);
+		object.put("citation", citation);
 		
 		return object;	
 	}
@@ -149,8 +124,8 @@ public class Event implements Comparable<Event> {
 		
 		builder.append("<link>" + url + "</link>");
 		builder.append("<guid isPermaLink=\"true\">" + url + "</guid>");
-		builder.append("<title>" + StringEscapeUtils.escapeXml(name) + "</title>");
-		builder.append("<description>Venue: " + StringEscapeUtils.escapeXml(venue) + ", First Date: " + firstDate + "</description>");
+		builder.append("<title>AusStage Resource Record</title>");
+		builder.append("<description>" + StringEscapeUtils.escapeXml(citation) + "</description>");
 		builder.append("</item>");
 		
 		return builder.toString();

@@ -18,7 +18,7 @@
 
 package au.edu.ausstage.exchange;
 
-import au.edu.ausstage.exchange.types.Event;
+import au.edu.ausstage.exchange.types.*;
 
 import au.edu.ausstage.utils.DateUtils;
 
@@ -30,30 +30,30 @@ import org.json.simple.JSONArray;
 /**
  * A class used to build the dataset in various formats using Event objects
  */
-public class DataBuilder {
+public class ResourceDataBuilder {
 
-	/*
+		/*
 	 * construct a HTML list
 	 *
-	 * @param list the list of event objects to use
+	 * @param list the list of resource objects to use
 	 *
 	 * @return the constructed data
 	 *
 	 * @throws IllegalArgumentException if the list is null
 	 */
-	public static String buildHtml(ArrayList<Event> list) {
+	public static String buildHtml(ArrayList<Resource> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
 		}
 	
-		StringBuilder builder = new StringBuilder("<ul class=\"ausstage_events\">");
+		StringBuilder builder = new StringBuilder("<ul class=\"ausstage_resources\">");
 		builder.append("<!-- AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/ -->");
-		Event event;
+		Resource resource;
 		
 		for(int i = 0; i < list.size(); i++) {
-			event = (Event)list.get(i);
-			builder.append(event.toHtml());
+			resource = (Resource)list.get(i);
+			builder.append(resource.toHtml());
 		}
 		
 		builder.append("<ul>");
@@ -64,29 +64,29 @@ public class DataBuilder {
 	/*
 	 * construct a XML list
 	 *
-	 * @param list the list of event objects to use
+	 * @param list the list of resource objects to use
 	 *
 	 * @return the constructed data
 	 *
 	 * @throws IllegalArgumentException if the list is null
 	 */
-	public static String buildXml(ArrayList<Event> list) {
+	public static String buildXml(ArrayList<Resource> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
 		}
 	
-		StringBuilder builder = new StringBuilder("<events>");
+		StringBuilder builder = new StringBuilder("<resources>");
 		builder.append("<!-- AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/ -->");
 		
-		Event event;
+		Resource resource;
 		
 		for(int i = 0; i < list.size(); i++) {
-			event = (Event)list.get(i);
-			builder.append(event.toXml());
+			resource = (Resource)list.get(i);
+			builder.append(resource.toXml());
 		}
 		
-		builder.append("</events>");
+		builder.append("</resources>");
 		
 		return builder.toString();
 	}
@@ -94,14 +94,14 @@ public class DataBuilder {
 	/*
 	 * construct a JSON list
 	 *
-	 * @param list the list of event objects to use
+	 * @param list the list of resource objects to use
 	 *
 	 * @return the constructed data
 	 *
 	 * @throws IllegalArgumentException if the list is null
 	 */
 	@SuppressWarnings("unchecked")
-	public static String buildJson(ArrayList<Event> list) {
+	public static String buildJson(ArrayList<Resource> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
@@ -112,11 +112,11 @@ public class DataBuilder {
 		obj.put("_generator", "<!-- AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/ -->");
 		builder.add(obj);
 		
-		Event event;
+		Resource resource;
 		
 		for(int i = 0; i < list.size(); i++) {
-			event = (Event)list.get(i);
-			builder.add(event.toJsonObject());
+			resource = (Resource)list.get(i);
+			builder.add(resource.toJsonObject());
 		}
 		
 		return builder.toString();
@@ -125,13 +125,13 @@ public class DataBuilder {
 	/*
 	 * construct a RSS list
 	 *
-	 * @param list the list of event objects to use
+	 * @param list the list of resource objects to use
 	 *
 	 * @return the constructed data
 	 *
 	 * @throws IllegalArgumentException if the list is null
 	 */
-	public static String buildRss(ArrayList<Event> list) {
+	public static String buildRss(ArrayList<Resource> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
@@ -142,14 +142,14 @@ public class DataBuilder {
 		builder.append("<channel>");
 		builder.append("<title>AusStage - Data Exchange Service</title>");
 		builder.append("<link>http://www.ausstage.edu.au/</link>");
-		builder.append("<description>Event information sourced from the AusStage website</description>");
+		builder.append("<description>Resource information sourced from the AusStage website</description>");
 		builder.append("<generator>AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/</generator>");
 		
-		Event event;
+		Resource resource;
 		
 		for(int i = 0; i < list.size(); i++) {
-			event = (Event)list.get(i);
-			builder.append(event.toRss());
+			resource = (Resource)list.get(i);
+			builder.append(resource.toRss());
 		}
 		
 		builder.append("</channel>");
