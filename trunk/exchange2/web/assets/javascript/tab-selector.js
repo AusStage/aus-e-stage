@@ -46,8 +46,10 @@ $(document).ready(function() {
 		if(tab == 'secgenre') {
 			tabs.tabs('select', 1);
 		} else if(tab == 'contentindicator') {
-			tabs.tabs('select', 2);
-		} else {
+			tabs.tabs('select', 2); 
+		} else if(tab == 'ressubtype') {
+			tabs.tabs('select', 3);
+		}else {
 			tabs.tabs('select', 0);
 		}
 	} else {

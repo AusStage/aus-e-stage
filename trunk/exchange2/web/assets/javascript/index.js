@@ -42,6 +42,11 @@ function getIdentifiers() {
 		success: addContentIndicator,
 		url: "lookup?task=contentindicator"
 	});
+	
+	ajaxQueue.add({
+		success: addResSubType,
+		url: "lookup?task=ressubtype"
+	});
 
 }
 
@@ -81,4 +86,23 @@ var list;
 	}
 	
 	$('#contentindicator-table').empty().append(list);
+}
+
+// a function to add the resource type list
+function addResSubType(data, textStatus, xhr, options) {
+
+var list;
+
+	for(i = 0; i < data.length; i++) {
+		
+		if(i % 2 == 1) {
+			list += '<tr class="odd">'; 
+		} else {
+			list += '<tr>'; 
+		}
+		
+		list += '<td>' + data[i].id + '</td><td>' + data[i].description + '</td><td class="alignRight">' + data[i].items + '</td></tr>';
+	}
+	
+	$('#ressubtype-table').empty().append(list);
 }

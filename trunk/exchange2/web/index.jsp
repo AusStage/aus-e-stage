@@ -58,6 +58,7 @@
 				<li><a href="#tabs-1">Exchange Overview</a></li>
 				<li><a href="#tabs-2">Secondary Genres</a></li>
 				<li><a href="#tabs-3">Content Indicators</a></li>
+				<li><a href="#tabs-4">Resource Sub-Types</a></li>
 			</ul>
 			<div>
 				<div id="tabs-1" class="tab-content">
@@ -128,6 +129,38 @@
 								<td>Identifier</td>
 								<td>Description</td>
 								<td class="alignRight">Event Count</td>
+								<td class="alignRight">Resource Count</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+				<div id="tabs-4" class="tab-content">
+					<p>
+						Below is a list of resource sub type identifiers that can be used with the Data Exchange service. <a href="/exchange2/?tab=ressubtype" title="Persistent link to this tab">Persistent Link</a> to this tab.
+					</p>
+					<table class="identifiers">
+						<thead>
+							<tr>
+								<th>Identifier</th>
+								<th>Description</th>
+								<th class="alignRight">Resource Count</th>
+							</tr>
+						</thead>
+						<tbody id="ressubtype-table">
+							<tr>
+								<td colspan="4">
+									<div class="ui-state-highlight ui-corner-all search-status-messages">
+										<p>
+											<span class="ui-icon ui-icon-info status-icon"></span>Loading resource sub-type list, please wait...
+										</p>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>Identifier</td>
+								<td>Description</td>
 								<td class="alignRight">Resource Count</td>
 							</tr>
 						</tfoot>

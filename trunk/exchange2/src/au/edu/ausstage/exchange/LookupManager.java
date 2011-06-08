@@ -175,4 +175,58 @@ public class LookupManager {
 		
 		return list.toString();	
 	}
+	
+	/**
+	 * A method to build the list of content indicators
+	 *
+	 * @return a JSON string containing a list of resource sub types
+	 */
+	@SuppressWarnings("unchecked")
+	public String getResourceSubTypeIdentifiers() {
+		
+		String sql;
+		DbObjects results;
+		
+		JSONArray list = new JSONArray();
+		JSONObject obj;
+		
+		sql = "SELECT lc.code_lov_id, lc.short_code, COUNT(i.itemid) "
+			+ "FROM lookup_codes lc, item i "
+			+ "WHERE code_type = 'RESOURCE_SUB_TYPE' "
+			+ "AND lc.code_lov_id = i.item_sub_type_lov_id (+) "
+			+ "GROUP BY lc.code_lov_id, lc.short_code "
+			+ "ORDER BY short_code ASC";
+			
+		// get the data
+		results = database.executeStatement(sql);
+	
+		// check to see that data was returned
+		if(results == null) {
+			throw new RuntimeException("unable to lookup resource sub type data");
+		}
+		
+		// build the list of contributors
+		ResultSet resultSet = results.getResultSet();
+		try {
+			while (resultSet.next()) {
+			
+				obj = new JSONObject();
+				
+				obj.put("id", resultSet.getString(1));
+				obj.put("description", resultSet.getString(2));
+				obj.put("items", resultSet.getString(3));
+				
+				list.add(obj);				
+			}
+		} catch (java.sql.SQLException ex) {
+			throw new  RuntimeException("unable to build list of resource sub types: " + ex.toString());
+		}
+		
+		// play nice and tidy up
+		resultSet = null;
+		results.tidyUp();
+		results = null;
+		
+		return list.toString();	
+	}
 }
