@@ -167,6 +167,16 @@ a {
     border: none
 }
 
+.ui-dialog .ui-widget-header {
+
+    background:none;
+    color: #222222;
+    font-weight: bold;
+    font-size: 2em;
+    border: none
+}
+
+
 
 
 
