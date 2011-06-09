@@ -95,7 +95,7 @@ function visControllerTagCloud(newModel) {
 
                                     //render the words
 
-                                   var size = (this.model.words[a].count/this.model.wordMaxCount * 8);
+                                   var size = Math.round(this.model.words[a].count/this.model.wordMaxCount * 8);
 
                                    $('#tagCloud').append(
                                    '<div class ="word" id="' +
@@ -153,34 +153,45 @@ function visControllerTagCloud(newModel) {
                                          htmlFeedBackList =   htmlFeedBackList +  '</li>';
                                       };
 
-
                                       var target = '#' + this.model.words[a].word + " .FeedbackList" ;
 
-                                       $(target).hide();
+                                     //window.console.log(target);
 
-                                       $(target).html(htmlFeedBackList);
-                                       $(target).highlight(this.model.words[a].word );
+                                     $(target).hide();
+                                     $(target).html(htmlFeedBackList);
 
-                                        var target = '#' + this.model.words[a].word;
-                                        //window.console.log(target);
+                                     $(target).highlight(this.model.words[a].word );                               
 
-                                           $(target).click(function(eventData ) {
-                                                  //window.console.log(eventData.target.id);
+                                    var dlg =  $(target).dialog({
+                                                               autoOpen:false,
+                                                              //height: $(window).height() *.4,
+                                                               width: $(window).width() *.8,
+                                                                title: this.model.words[a].word,
+                                                                closeOnEscape: true,
+                                                                modal: true,
+                                                                draggable: false
+                                     });
+
+                                    var target = '#' + this.model.words[a].word;
+
+                                    $(target).data("dialog",dlg );
+                                    
+                                    //window.console.log(dlg);
+
+                                    $(target).click(function(eventData ) {
+
                                                   var word = eventData.target.id;
+                                                  //alert(word);
 
-                                                  var myTarget = '#' + eventData.target.id + " .FeedbackList";
-                                                  //window.console.log(myTarget);
+                                                  var target = '#' + eventData.target.id;
                                                   
-                                                  $(myTarget).dialog({
-                                                        height: $(window).height() *.7,
-                                                        width: $(window).width() *.8,
-                                                        title: word,
-                                                        closeOnEscape: true,
-                                                        modal: true,
-                                                        draggable: false
-                                                     });
+                                                  var myTarget = '#' + eventData.target.id + " .FeedbackList";
 
+                                                  //window.console.log($.data(myTarget));
 
+                                                   $(target).data("dialog").dialog('open');
+                                                  // window.console.log($(target).data("dialog"));
+                                                 
                                            });
 
                                      
