@@ -44,8 +44,8 @@
  //constructor
 function ViewerControlClass (){
 
-	this.selectedContributors = {'id': [], 'name': [], 'url':[]};
-	this.selectedEvent = {'id':[], 'name':[], 'url':[]};	
+	this.selectedContributors = {'id': [], 'name': [], 'url':[], 'event_dates':[], 'functions':[]};
+	this.selectedEvent = {'id':[], 'name':[], 'url':[], 'extra_info':[]};	
 
 }
 
@@ -412,7 +412,9 @@ ViewerControlClass.prototype.addId = function(id, data){
 		for(i in data){
 			if(id == data[i].id){
 				this.selectedContributors.name.push(data[i].firstName+' '+data[i].lastName);		
-				this.selectedContributors.url.push(data[i].url);						
+				this.selectedContributors.url.push(data[i].url);
+				this.selectedContributors.event_dates.push(data[i].eventDates);
+				this.selectedContributors.functions.push(data[i].functions);										
 			}	
 		}
 		viewerControl.displaySelectedContributors();
@@ -423,14 +425,17 @@ ViewerControlClass.prototype.addId = function(id, data){
 ViewerControlClass.prototype.removeId = function(index){
 	$('#searchAddContributorError').empty();
 	this.selectedContributors.id.splice(index, 1);
-	
 	this.selectedContributors.name.splice(index, 1);
-	this.selectedContributors.url.splice(index, 1);	
+	this.selectedContributors.url.splice(index, 1);
+	this.selectedContributors.event_dates.splice(index, 1);
+	this.selectedContributors.functions.splice(index, 1);										
+	
 	this.displaySelectedContributors();	
 }
 
 //add id for event selection
 ViewerControlClass.prototype.addEventId = function(id, data){
+	var info;
 	$('#searchAddEventError').empty();
 	if (this.selectedEvent.id.length == 1){
 		return TO_MANY_EVENTS_SELECTED;
@@ -439,7 +444,24 @@ ViewerControlClass.prototype.addEventId = function(id, data){
 		for(i in data){
 			if(id == data[i].id){
 				this.selectedEvent.name.push(data[i].name);		
-				this.selectedEvent.url.push(data[i].url);						
+				this.selectedEvent.url.push(data[i].url);
+				
+				info = data[i].venue.name;
+        		
+		        if(data[i].venue.suburb != null) {
+        			info += ', '+data[i].venue.suburb;
+		        }        
+		        if (data[i].venue.country == 'Australia'){
+	        		if(data[i].venue.state != null) {
+		    	    	info += ', '+data[i].venue.state;
+        			}
+		        }else{
+			        if(data[i].venue.country != null) {
+    		    		info += ', '+data[i].venue.country;
+	        		}        		
+    	    	}
+    	    	info += ', '+data[i].firstDisplayDate;
+    	    	this.selectedEvent.extra_info.push(info);    				
 			}	
 		}
 		viewerControl.displaySelectedEvent();
@@ -453,6 +475,7 @@ ViewerControlClass.prototype.removeEventId = function(index){
 	this.selectedEvent.id.splice(index, 1);
 	this.selectedEvent.name.splice(index, 1);
 	this.selectedEvent.url.splice(index, 1);	
+	this.selectedEvent.extra_info.splice(index, 1);		
 	this.displaySelectedEvent();	
 }
 
@@ -466,9 +489,11 @@ ViewerControlClass.prototype.displaySelectedEvent = function(){
 		$('#viewEventNetwork').button('option', 'disabled', false);
 		$('#eventDegree').removeAttr('disabled');
 		for(i in this.selectedEvent.id){
-			html += '<a href="' + this.selectedEvent.url[i] + '" title="View the record for ' 
-			+ this.selectedEvent.name[i] + ' in AusStage" target="_ausstage">' + this.selectedEvent.name[i] + '</a>';
 			html += '<span id="'+i+'" class="eventRemoveIcon ui-icon ui-icon-close clickable" style="display: inline-block;"></span>';			
+			html += '<a href="' + this.selectedEvent.url[i] + '" title="View the record for ' 
+			+ this.selectedEvent.name[i] + ' in AusStage" target="_ausstage">' + this.selectedEvent.name[i] + '</a>, '
+			+this.selectedEvent.extra_info[i];
+
 		}
 	}
 	else{
@@ -487,9 +512,14 @@ ViewerControlClass.prototype.displaySelectedContributors = function(){
 	if(this.selectedContributors.id.length > 0){
 		$('#viewContributorNetwork').button('option', 'disabled', false);	
 		for(x in this.selectedContributors.id){
+			html += '<span id="'+x+'" class="contributorRemoveIcon ui-icon ui-icon-close clickable"></span>';
 			html += '<a href="' + this.selectedContributors.url[x] + '" title="View the record for ' 
-			+ this.selectedContributors.name[x] + ' in AusStage" target="_ausstage">' + this.selectedContributors.name[x] + '</a>';
-			html += '<span id="'+x+'" class="contributorRemoveIcon ui-icon ui-icon-close clickable"></span>';		
+			+ this.selectedContributors.name[x] + ' in AusStage" target="_ausstage">' + this.selectedContributors.name[x] + '</a>,';
+			html += ' '+this.selectedContributors.event_dates[x];
+			for (y in this.selectedContributors.functions[x]){
+				html += ', '+this.selectedContributors.functions[x][y];	
+			}
+			html += "<br>";
 		}
 	}
 	else{
@@ -521,7 +551,6 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 		case 'CONTRIBUTOR':
 			viewer = new ContributorViewerClass(type);
 			//var obj = this;
-			
 			$.jsonp({
 				url:BASE_URL_CONTRIBUTOR+id+END_URL,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
@@ -552,7 +581,8 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 					radius = 2;
 					simplify = true;
 					break;					
-			}			
+			}		
+			console.log(BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT);	
 			$.jsonp({
 				url:BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},

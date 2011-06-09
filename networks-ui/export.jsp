@@ -23,6 +23,7 @@
 <head>
 	<title>AusStage Navigating Networks Service (Beta)</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/> 
+	<meta http-equiv="content-script-type" content="text/javascript">	
 	<link rel="stylesheet" href="assets/networks.css"/>
 	<link rel="stylesheet" href="assets/ausstage-colours.css">
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css">
@@ -33,6 +34,7 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.tipsy-1.0.0a.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.jsonp-2.1.4.min.js"></script>				
 	<script type="text/javascript" src="assets/javascript/libraries/browser-detect.js"></script>
 	<script type="text/javascript" src="assets/javascript/export.js"></script>
 </head>
@@ -96,7 +98,7 @@
 							<label id="id_label" for="id">Contributor ID: </label>
 						</th>
 						<td>
-							<input type="text" size="40" id="id" name="id" title="Enter the Contributor ID. Note: if you do not know the ID, leave this field empty and click the lookup button to do a search"/>
+							<input type="text" size="40" id="id" name="id" title=""/>
 						</td>
 					</tr>
 					<tr>
@@ -137,7 +139,7 @@
 					<tr>
 						<td colspan="2">
 							<input type="submit" name="submit" id="export_btn" value="Export"/><br/>
-							Use the lookup button to confirm the contributor id is valid before clicking on the export button.<br/>
+							Use the lookup button to confirm the id is valid before clicking on the export button.<br/>
 							Compiling the data for an export may take some time, please click the export button once only.
 						</td>
 					</tr>
@@ -146,9 +148,9 @@
 		</form>
 	</div>
 	<!-- Search form div -->
-	<div id="search_div" title="Contributor Search">
-		<p>Enter a contributor name, or part of their name, and click the search button</p>
-		<form action="/networks/search" method="get" id="search_form" name="search_form">
+	<div id="search_div" title="Search">
+		<p>Enter a name, or part of a name, and click the search button</p>
+		<form method="get" id="search_form" name="search_form">
 			<input type="hidden" name="task" id="task" value="collaborator"/>
 			<input type="hidden" name="limit" id="limit" value="5"/>
 			<input type="hidden" name="sort" id="sort" value="name"/>
@@ -156,7 +158,7 @@
 				<tbody>
 				<tr>
 					<th scope="row">
-						<label id="name_label" for="name">Contributor Name: </label>
+						<label id="search_name_label" for="name">Contributor Name: </label>
 					</th>
 					<td>
 						<input type="text" size="40" id="query" name="query" title="Enter the contributor name, or part of their name, and click the search button"/>
@@ -169,14 +171,28 @@
 			<thead>
 				<tr>
 					<th>Contributor Name</th>
+					<th>Event Dates</th>
 					<th>Functions</th>
-					<th>Collaborations</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody id="search_results_body">
 			</tbody>
 		</table>
+		<table id="search_results_evt" class="searchResults">
+			<thead>
+				<tr>
+					<th>Event Name</th>
+					<th>Venue</th>
+					<th>First Date</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body_evt">
+			</tbody>
+		</table>
+
+
 		<div id="search_waiting">
 			<p style="text-align: center;">
 				<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
@@ -186,7 +202,7 @@
 		<div id="error_message">
 		</div>
 		<p>
-		 <strong>Note: </strong>Search results are limited to 5 records. If you do not see the contributor that you expected, please refine your search. Alternatively the contributor may not be part of the Navigating Networks Dataset at this time.
+		 <strong>Note: </strong>Search results are limited to 5 records. If you do not see the results that you expected, please refine your search.
 		</p>
 	</div>
 
