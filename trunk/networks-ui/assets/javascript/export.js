@@ -16,7 +16,6 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 var task = "contributor";
-
 // common theme actions
 $(document).ready(function() {
 	// style the buttons
@@ -124,19 +123,27 @@ $(document).ready(function() {
 			}
 		},
 		submitHandler: function(form) {
-			jQuery(form).ajaxSubmit({
-				beforeSubmit: function() {$("#search_waiting").show(); $("#search_results").hide(); $("#error_message").hide();},
-				success:      showSearchResults,
-				error:        showErrorMessage
+			var url = "http://beta.ausstage.edu.au/mapping2/search?task="+task+"&type=name&format=json&query="+encodeURIComponent($('#query').val());
+
+			$("#search_waiting").show(); $("#search_results").hide(); $("#error_message").hide();
+			
+			$.jsonp({
+				url:url+'&callback=?',
+				error: showErrorMessage,
+				success: function(data){
+					showSearchResults(data);
+				}	
 			});
 		}
 	});
 	
 	//when task is selected, alter the fields and available values 
 	$("#task").change(function(){
-		var task = $("#task").val();
 		
-		switch (task) {
+		//clear the fields 
+		$("#id").val('');
+		$("#name").val('');		
+		switch ($("#task").val()) {
 			case 'event-centric-network':
 				//change the export type
 				task = "event";
@@ -146,7 +153,10 @@ $(document).ready(function() {
 				//remove a radius option
 				$("#radius").removeOption('3');
 				//show the simplify option
-				$("#simplify_container").show();
+				$("#simplify_container").show();	
+				//change the label on the search field
+				$("#search_name_label").empty().append("Event Name: ");		
+				
 			break;	
 			case 'ego-centric-network-simple':
 				//change the export type
@@ -158,6 +168,8 @@ $(document).ready(function() {
 				$("#radius").addOption('3', '3');				
 				//hide the simplify options
 				$("#simplify_container").hide();				
+				//change the label on the search field
+				$("#search_name_label").empty().append("Contributor Name: ");		
 			break;	
 		}
 		//set default radius
@@ -172,8 +184,7 @@ $(document).ready(function() {
 		$("#export_btn").button("disable");
 	
 		// define helper variables
-		var url = "/mapping2/search?task="+task+"&type=id&format=json&id="
-//		var url = "/networks/lookup?task=collaborator&format=json&id=";
+		var url = "http://beta.ausstage.edu.au/mapping2/search?task="+task+"&type=id&format=json&query="
 
 		// get the id from the text box
 		var id = $("#id").val();
@@ -184,21 +195,35 @@ $(document).ready(function() {
 			url += id;
 		
 			// lookup the id
-			$.get(url, function(data, textStatus, XMLHttpRequest) {
-			
+			//$.get(url, function(data, textStatus, XMLHttpRequest) {
+			$.jsonp({
+				url:url+'&callback=?',
+				success: function(data){
 				// check on what was returned
-				if(data.length()==0){
-//				if(data.name == "No Collaborator Found") {
-					$("#name").val("Contributor with that id was not found");
-				} else {
-			
-					// use the name to fill in the text box
-//					$("#name").val(data.name);
-					$("#name").val(data.firstName+' '+data.lastName);
-			
-					// enable the button
-					$("#export_btn").button("enable");
-				}
+					if(data.length==0){
+						switch (task){
+						case 'contributor':
+							$("#name").val("Contributor with that id was not found");
+							break;
+						case 'event':
+							$("#name").val("Event with that id was not found");
+							break;
+						}
+						
+					} else {
+						// use the name to fill in the text box
+						switch (task){
+							case 'contributor':
+								$("#name").val(data[0].firstName+' '+data[0].lastName);
+								break;
+							case 'event':
+								$("#name").val(data[0].name);
+								break;
+						}
+						// enable the button
+						$("#export_btn").button("enable");
+					}
+				}	
 			});
 		} else {
 			// show the search form
@@ -225,7 +250,9 @@ $(document).ready(function() {
 		},
 		open: function() {
 			// tidy up the form on opening
+			$("#query").val('');
 			$("#search_results_body").empty();
+			$("#search_results_evt").hide();			
 			$("#search_results").hide();
 			$("#error_message").hide();
 			showLoader("hide");
@@ -259,59 +286,96 @@ function showLoader(type) {
 }
 
 // function to show the search results
-function showSearchResults(responseText, statusText)  {
-	
+function showSearchResults(responseText)  {
+	console.log(responseText);
 	//define helper constants
 	var MAX_FUNCTIONS = 3;
 
 	// tidy up the search results
 	$("#search_results_body").empty();
 	$("#search_results").hide();
-	
+	$("#search_results_body_evt").empty();
+	$("#search_results_evt").hide();
+
 	var html = "";
-	var contributor;
-	var functions;
 	
-	// loop through the search results
-	for(i = 0; i < responseText.length; i++){
+	if (task == 'contributor'){
+	
+		var contributor;
+		var functions;
+	
+		// loop through the search results
+		for(i = 0; i < responseText.length; i++){
 		
-		contributor = responseText[i];
+			contributor = responseText[i];
 		
-		// add the name and link
-		html += '<tr><td><a href="' + contributor.url + '" target="ausstage" title="View the record for ' + 
-		contributor.firstName +' ' +contributor.lastName/*contributor.name*/ + ' in AusStage">' + contributor.firstName +' ' +contributor.lastName + '</a></td>';
+			// add the name and link
+			html += '<tr><td><a href="' + contributor.url + '" target="ausstage" title="View the record for ' + 
+			contributor.firstName +' ' +contributor.lastName/*contributor.name*/ + ' in AusStage">' + contributor.firstName +' ' +contributor.lastName + '</a></td>';
 		
-		// add the list of functions
-		html += '<td><ul>';
+			// add the event dates
+			html += '<td>' + contributor.eventDates + '</td>';
 		
-		functions = contributor.functions;
+			// add the list of functions
+			html += '<td>';
 		
-		for(x = 0; x < functions.length; x++) {
-			if(x < MAX_FUNCTIONS) {
-				html += '<li>' + functions[x] + '</li>';
-			} else {
-				html += '<li>...</li>';
-				x = functions.length + 1;
+			functions = contributor.functions;
+			var space = '';
+			for(x = 0; x < functions.length; x++) {
+					html += space + functions[x];
+					space = ', ';
 			}
+		
+			html += '</td>';
+			
+			// add the button
+			html += '<td><button id="choose_' + contributor.id + '" class="choose_button">Choose</button></td>';
+		
+			// finish the row
+			html += '</tr>';
 		}
-		
-		html += '</ul></td>';
-		
-		// add the contributor count
-		html += '<td>' + contributor.collaborations + '</td>';
-		
-		// add the button
-		html += '<td><button id="choose_' + contributor.id + '" class="choose_button">Choose</button></td>';
-		
-		// finish the row
-		html += '</tr>';
-	}
+	}else {
+//////
+		var event;
 	
+		// loop through the search results
+		for(i = 0; i < responseText.length; i++){
+		
+			event = responseText[i];
+		
+			// add the name and link
+			html += '<tr><td><a href="' + event.url + '" target="ausstage" title="View the record for ' + 
+			event.name + ' in AusStage">' + event.name + '</a></td>';
+		
+			// add the venue info
+			html += '<td>' + event.venue.name;
+			if (event.venue.suburb != null){
+				html += ', '+event.venue.suburb;	
+			}
+			if (event.venue.country == 'Australia'){
+				html += ', '+event.venue.state;
+			}else {
+				html += ', '+event.venue.country;
+			}
+			html += '</td>';
+		
+			// add the event dates
+			html += '<td>'+event.firstDisplayDate +'</td>';
+			
+			// add the button
+			html += '<td><button id="choose_' + event.id + '" class="choose_button">Choose</button></td>';
+		
+			// finish the row
+			html += '</tr>';
+		}
+//////		
+	}
 	// check to see on what was built
 	if(html != "") {
-	
-		// add the search results to the table
-		$("#search_results_body").append(html);
+		if (task == 'contributor'){
+			// add the search results to the table
+			$("#search_results_body").append(html);
+		} else $("#search_results_body_evt").append(html); 
 	
 		// hide the loader
 		showLoader("hide");
@@ -337,8 +401,11 @@ function showSearchResults(responseText, statusText)  {
 			$("#lookup_btn").trigger('click');
 		});
 	
+		if (task == 'contributor'){
 		// show the search results
-		$("#search_results").show();
+			$("#search_results").show();
+		}
+		else $("#search_results_evt").show(); 
 		
 	} else {
 		

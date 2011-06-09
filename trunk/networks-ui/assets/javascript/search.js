@@ -188,12 +188,12 @@ SearchClass.prototype.displayContributorResults = function(data){
 		html += '</td><td class="alignRight numeric">' + data[i].totalEventCount + '</td></tr>';
 	}	
 	html+= '</tbody><tfoot><tr>'
-			+'<td colspan="3" class="nowrap" style="vertical-align:middle"><div id="selected_contributors" style="display: inline"></div></td>'
-			+'<td colspan="2" class="alignRight">'
+			+'<td colspan="4" class="nowrap" style="vertical-align:middle"><div id="selected_contributors" style="display: inline"></div></td>'
+			+'<td colspan="1" class="alignRight">'
 			+'<button id="viewContributorNetwork" class="addSearchResult" disabled="disabled">View Network</button>'
-			+'<span id="view_contributor_help" class="helpIcon clickable" style="display: inline-block;></span>'
+			+'<span id="view_contributor_help" class="helpIcon clickable" style="display: inline-block"></span>'
 			+'</td></tr>'
-			+'<tr><td colspan="5"><div id="searchAddContributorError"></div></td>';
+			+'<tr><td colspan="5"><div id="searchAddContributorError"></div></td></tr></tfoot>';
     if(i > 0) {
 
         $("#contributor_results").empty().append(html);
@@ -231,18 +231,24 @@ SearchClass.prototype.displayEventResults = function(data){
 		html += '<td style="text-align: center">'
 				+'<span id="'+data[i].id+'" class="eventAddIcon ui-icon ui-icon-plus clickable" style="display: inline-block;"></span></td>';
 		html += '<td><a href="' + data[i].url + '" title="View the record for ' + data[i].name + ' in AusStage" target="_ausstage">' + data[i].name 				+ '</a></td>';		
-		html += '<td class="nowrap">' + data[i].venue.name + ' ';
+		html += '<td class="nowrap">' + data[i].venue.name;
         
         if(data[i].venue.suburb != null) {
-        	html += data[i].venue.suburb + ', ';
+        	html += ', '+data[i].venue.suburb;
         }        
-        if(data[i].venue.state != null) {
-        	html += data[i].venue.state + ', ';
-        }
-                
-        if(data[i].venue.suburb != null || data[i].venue.state != null) {
-        	html = html.substr(0, html.length - 2);
-        }        
+        if (data[i].venue.country == 'Australia'){
+	        if(data[i].venue.state != null) {
+    	    	html += ', '+data[i].venue.state;
+        	}
+        }else{
+	        if(data[i].venue.country != null) {
+    	    	html += ', '+data[i].venue.country;
+        	}        		
+        }    
+                    
+//        if(data[i].venue.suburb != null || data[i].venue.state != null) {
+  //      	html = html.substr(0, html.length - 2);
+    //    }        
         html += '</td><td class="nowrap alignRight">' + data[i].firstDisplayDate + '</td>';
                 
         html += '</tr>';				
