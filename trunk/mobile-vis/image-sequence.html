@@ -5,7 +5,7 @@
 	
 	<title>Image Sequence</title>
 
-        <link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css"/>
+	<link rel="stylesheet" href="assets/jquery-ui-1.8.6.custom.css"/>
         <link rel="stylesheet" href="assets/imagesequence.css">
 
 
@@ -47,7 +47,13 @@
                                     title: 'Introduction',
                                     closeOnEscape: true,
                                     modal: true,
-                                    draggable: false
+                                    draggable: false,
+                                    buttons: {
+                                        Ok: function() {
+                                                $( this ).dialog( "close" );
+                                        }
+                                }
+
                                  });
 
                                  
