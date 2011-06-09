@@ -248,27 +248,38 @@ function visControllerImageSequence(newModel) {
                        
                        $(target).highlight(word);
 
-                       
                        //window.console.log(target);
                        $(target).hide();
-                       
-                       var target = '#' + word;
-                       
-                       $(target).click(function(eventData ) {
-                              //window.console.log(target);
-                              var word = target.replace("#", "");
 
-                                 $(target + " .FeedbackList").dialog({
-                                    height: $(window).height() *.7,
-                                    width: $(window).width() *.8,
-                                    title: word,
-                                    closeOnEscape: true,
-                                    modal: true,
-                                    draggable: false
-                                 });
+                        var dlg =  $(target).dialog({
+                                                               autoOpen:false,
+                                                               //height: $(window).height() *.5,
+                                                                width: $(window).width() *.6,
+                                                                title: word,
+                                                                closeOnEscape: true,
+                                                                modal: true,
+                                                                draggable: false
+                         });
+
+                        var target = '#' + word;
+
+                        $(target).data("dialog",dlg);
+
+                        //window.console.log(target);
+                        
+                        $(target).click(function(eventData ) {
+                              //window.console.log(target);
+                              //
+                                //window.console.log(target   );
+                             //  var target = '#' + eventData.target.id;
+                              //alert(eventData.target.id);
+
+                             $(target).data("dialog").dialog('open');
+                                                   
+                               
+                         });
                     
                               
-                       });
 
 
                    
