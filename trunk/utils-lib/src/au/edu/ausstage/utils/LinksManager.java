@@ -45,6 +45,10 @@ public class LinksManager {
 	private static final String RESOURCE_TEMPLATE = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&amp;f_item_cat_id=[item-id]";
 	private static final String RESOURCE_TOKEN    = "[item-id]";
 	
+	// performance feedback URLs
+	private static final String PERFORMANCE_TEMPLATE = "http://beta.ausstage.edu.au/mobile/mobile-vis/list.html?performance=[performance-id]";
+	private static final String PERFORMANCE_TOKEN    = "[performance-id]";
+	
 	/**
 	 * A method to build an event link
 	 *
@@ -117,6 +121,21 @@ public class LinksManager {
 			throw new IllegalArgumentException("The id parameter must be a valid integer");
 		} else {
 			return RESOURCE_TEMPLATE.replace(RESOURCE_TOKEN, id);
+		}
+	} // end the method
+	
+	/**
+	 * A method to build a performance
+	 *
+	 * @param id the resource id
+	 * @return   the persistent URL for this resource
+	 */
+	public static String getPerformanceLink(String id) {
+		// double check the parameter
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter must be a valid integer");
+		} else {
+			return PERFORMANCE_TEMPLATE.replace(PERFORMANCE_TOKEN, id);
 		}
 	} // end the method
 	
