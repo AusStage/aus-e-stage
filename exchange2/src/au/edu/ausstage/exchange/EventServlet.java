@@ -23,8 +23,9 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-// import additional AusStage libraries
+// import additional AusStage classes
 import au.edu.ausstage.utils.*;
+import au.edu.ausstage.exchange.items.*;
 
 /**
  * The main driving class for the Exchange Data Service
