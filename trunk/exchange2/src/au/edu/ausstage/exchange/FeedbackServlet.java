@@ -36,7 +36,7 @@ public class FeedbackServlet extends HttpServlet {
 	private ServletConfig servletConfig;
 	
 	// declare public constants
-	public static final String[] VALID_OUTPUT_TYPES   = {"html", "json", "xml", "rss"};
+	public static final String[] VALID_OUTPUT_TYPES   = {"html", "json", "xml", "rss", "iframe"};
 	public static final String[] VALID_REQUEST_TYPES  = {"performance"};
 	public static final String   DEFAULT_RESULT_LIMIT = "10";
 
@@ -150,6 +150,8 @@ public class FeedbackServlet extends HttpServlet {
 				response.setContentType("application/xml; charset=UTF-8");
 			} else if(output.equals("rss") == true) {
 				response.setContentType("application/rss+xml; charset=UTF-8");
+			} else if(output.equals("iframe")) {
+				response.setContentType("text/html; charset=UTF-8");
 			}
 			out.print(results);
 		} else {

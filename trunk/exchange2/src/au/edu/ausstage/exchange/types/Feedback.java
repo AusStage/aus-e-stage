@@ -61,7 +61,7 @@ public class Feedback implements Comparable<Feedback> {
 		this.content = content;
 		this.performance = performance;
 		
-		url = LinksManager.getPerformanceLink(id);
+		url = LinksManager.getPerformanceLink(performance);
 		
 	}	
 	public String getId() {

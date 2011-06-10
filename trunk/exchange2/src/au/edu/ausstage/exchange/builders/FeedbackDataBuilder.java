@@ -32,7 +32,7 @@ import org.json.simple.JSONArray;
  */
 public class FeedbackDataBuilder {
 
-		/*
+	/*
 	 * construct a HTML list
 	 *
 	 * @param list the list of feedback objects to use
@@ -60,6 +60,33 @@ public class FeedbackDataBuilder {
 		}
 		
 		builder.append("<ul>");
+		
+		return builder.toString();
+	}
+	
+	/*
+	 * construct a HTML iframe
+	 *
+	 * @param list the list of feedback objects to use
+	 *
+	 * @return the constructed data
+	 *
+	 * @throws IllegalArgumentException if the list is null
+	 */
+	public static String buildIframe(ArrayList<Feedback> list) {
+	
+			
+		if(list == null) {
+			throw new IllegalArgumentException("the list must not be null");
+		}
+		
+		StringBuilder builder = new StringBuilder("<!DOCTYPE html>");
+		builder.append("<html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Performance Feedback Data from AusStage</title></head>");
+		builder.append("<body>");
+		
+		builder.append(buildHtml(list));
+		
+		builder.append("</body></html>");
 		
 		return builder.toString();
 	}

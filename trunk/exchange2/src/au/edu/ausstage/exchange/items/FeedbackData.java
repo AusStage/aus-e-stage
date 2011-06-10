@@ -132,6 +132,8 @@ public class FeedbackData extends BaseData {
 			data = FeedbackDataBuilder.buildXml(feedbackList);
 		} else if(getOutputType().equals("rss") == true) {
 			data = FeedbackDataBuilder.buildRss(feedbackList);
+		} else if(getOutputType().equals("iframe") == true) {
+			data = FeedbackDataBuilder.buildIframe(feedbackList);
 		}
 		
 		return data;

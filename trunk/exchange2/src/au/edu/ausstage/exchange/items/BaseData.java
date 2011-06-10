@@ -23,6 +23,7 @@ import au.edu.ausstage.utils.*;
 import au.edu.ausstage.exchange.types.*;
 import au.edu.ausstage.exchange.builders.*;
 import au.edu.ausstage.exchange.EventServlet;
+import au.edu.ausstage.exchange.FeedbackServlet;
 
 import java.util.ArrayList;
 import java.sql.ResultSet;
@@ -56,7 +57,7 @@ public abstract class BaseData {
 			throw new IllegalArgumentException("all parameters to this constructor are required");
 		}
 		
-		if(InputUtils.isValid(outputType, EventServlet.VALID_OUTPUT_TYPES) == false) {
+		if(InputUtils.isValid(outputType, EventServlet.VALID_OUTPUT_TYPES) == false  && InputUtils.isValid(outputType, FeedbackServlet.VALID_OUTPUT_TYPES) == false) {
 			// no valid type was found
 			throw new IllegalArgumentException("Invalid output parameter. Expected one of: " + InputUtils.arrayToString(EventServlet.VALID_OUTPUT_TYPES));
 		}
