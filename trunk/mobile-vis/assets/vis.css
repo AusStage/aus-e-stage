@@ -111,7 +111,7 @@ td.view {
     
 }
 
-.visList, .visSign, .visCloud {
+.visList, .visSign, .visCloud, .visImage {
     width:35px;
     font-size: .75em;
     float:left;
@@ -120,7 +120,7 @@ td.view {
 }
 
 
-.visList img, .visSign img, .visCloud img  {
+.visList img, .visSign img, .visCloud img, .visImage img  {
  
     padding-left:-30px;
 }
@@ -129,7 +129,7 @@ td.view {
     padding-left:2px;
 }
 
-.visList a:hover , .visSign a:hover , .visCloud a:hover {
+.visList a:hover , .visSign a:hover , .visCloud a:hover, .visImage a:hover  {
     text-decoration: none;
 
 }
