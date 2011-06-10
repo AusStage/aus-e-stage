@@ -63,7 +63,8 @@ function visControllerSearch(newModel) {
                                                                                                           '<span class="visCloud"><a href="tagcloud.html?performance=' + item.id + '">\n\
                                                                                                           <img src ="assets/images/tagcloud-icon.png" alt="Cloud" > <br /><span class="label">Tag Cloud</span></a></span>' +
 
-
+                                                                                                         '<span class="visImage"><a href="image-sequence.html?performance=' + item.id + '">\n\
+                                                                                                          <img src ="assets/images/imagesquence.png" alt="Image Sequence" > <br /><span class="label">Image Sequence</span></a></span>' +
 													'</td>' +
 													'<td class="totalFeedbackCount">' + item.totalFeedbackCount +' </td>' +
 
