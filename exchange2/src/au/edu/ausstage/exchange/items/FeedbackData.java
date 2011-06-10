@@ -60,7 +60,7 @@ public class FeedbackData extends BaseData {
 	/**
 	 * get the performance data using the information supplied when constructed
 	 *
-	 * @returns the required performance feedback data in the requested format
+	 * @return the required performance feedback data in the requested format
 	 */
 	public String getPerformanceData() {
 	

@@ -39,7 +39,7 @@ public class Feedback implements Comparable<Feedback> {
 	 *
 	 * @param performance the unique performance id
 	 * @param id the unique feedback id
-	 * @param citation the resource citation
+	 * @param content the content of the feedback
 	 *
 	 * @throws IllegalArgumentException if any of the parameters are missing or do not pass validation
 	 */
@@ -185,7 +185,7 @@ public class Feedback implements Comparable<Feedback> {
      * negative integer, 0, or a positive integer depending on whether the receiving object is 
      * less than, equal to, or greater than the specified object.
      *
-     * @param e the feedback object to compare this one to
+     * @param f the feedback object to compare this one to
      *
      * @return a integer indicating comparison result
      */    
