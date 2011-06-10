@@ -287,7 +287,7 @@ function showLoader(type) {
 
 // function to show the search results
 function showSearchResults(responseText)  {
-	console.log(responseText);
+
 	//define helper constants
 	var MAX_FUNCTIONS = 3;
 

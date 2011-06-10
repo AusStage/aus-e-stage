@@ -582,7 +582,6 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 					simplify = true;
 					break;					
 			}		
-			console.log(BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT);	
 			$.jsonp({
 				url:BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
