@@ -247,7 +247,9 @@ public class DatabaseManager {
 					evt.setMyFirstDate(date);	
 					if (suburb != null && !suburb.isEmpty())
 						venueDetail = venueDetail + ", " + suburb;
-					if (state != null && !state.isEmpty() && country.equalsIgnoreCase("Australia"))
+					if (country == null && state != null) 
+						venueDetail = venueDetail + ", " + state;
+					if (country != null && state != null && !state.isEmpty() && country.equalsIgnoreCase("Australia"))
 						venueDetail = venueDetail + ", " + state;
 					if (country != null && !country.isEmpty() && !country.equalsIgnoreCase("Australia"))
 						venueDetail = venueDetail + ", " + country;
