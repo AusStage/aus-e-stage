@@ -30,14 +30,14 @@ import au.edu.ausstage.exchange.items.*;
 /**
  * The main driving class for the Exchange Data Service
  */
-public class ResourceServlet extends HttpServlet {
+public class FeedbackServlet extends HttpServlet {
 
 	// declare private class variables
 	private ServletConfig servletConfig;
 	
 	// declare public constants
 	public static final String[] VALID_OUTPUT_TYPES   = {"html", "json", "xml", "rss"};
-	public static final String[] VALID_REQUEST_TYPES  = {"contributor", "organisation", "venue", "secgenre", "contentindicator", "work", "ressubtype"};
+	public static final String[] VALID_REQUEST_TYPES  = {"performance"};
 	public static final String   DEFAULT_RESULT_LIMIT = "10";
 
 	/*
@@ -84,22 +84,19 @@ public class ResourceServlet extends HttpServlet {
 			throw new ServletException("Missing id parameter.");
 		}
 		
-		// explode the ids into an array
-		String[] ids = id.split(",");
-		
-		// ensure the ids are numeric
-		for(int i = 0; i < ids.length; i++) {
-			try {
-				Integer.parseInt(ids[i]);
-			} catch(Exception ex) {
-				throw new ServletException("The id parameter must contain numeric values");
-			}
+		// ensure only one id
+		if(id.contains(",") == true) {
+			throw new ServletException("The id parameter must contain only one numeric id value");
 		}
 		
-		// impose sensible limit on id numbers
-		if(ids.length > 10) {
-			throw new ServletException("The id parameter must contain no more than 10 numbers");
+		try {
+			Integer.parseInt(id);
+		} catch(Exception ex) {
+			throw new ServletException("The id parameter must contain numeric values");
 		}
+		
+		String[] ids = new String[1];
+		ids[0] = id;
 		
 		// check the limit parameter
 		if(InputUtils.isValid(limit) == false) {
@@ -134,34 +131,10 @@ public class ResourceServlet extends HttpServlet {
 		String results = null;
 		
 		// get the results
-		if(type.equals("contributor") == true) {
+		if(type.equals("performance") == true) {
 			// get event data based on contributor ids
-			ContributorData data = new ContributorData(database, ids, output, limit);
-			results = data.getResourceData();
-		} else if(type.equals("organisation") == true) {
-			// get event data based on organisation ids
-			OrganisationData data = new OrganisationData(database, ids, output, limit);
-			results = data.getResourceData();
-		} else if(type.equals("venue") == true) {
-			// get event data based on venue ids
-			VenueData data = new VenueData(database, ids, output, limit);
-			results = data.getResourceData();
-		} else if(type.equals("secgenre") == true) {
-			// get event data based on venue ids
-			SecGenreData data = new SecGenreData(database, ids, output, limit);
-			results = data.getResourceData();
-		} else if(type.equals("contentindicator") == true) {
-			// get event data based on venue ids
-			ContentIndicatorData data = new ContentIndicatorData(database, ids, output, limit);
-			results = data.getResourceData();
-		} else if(type.equals("work") == true) {
-			// get event data based on venue ids
-			WorkData data = new WorkData(database, ids, output, limit);
-			results = data.getResourceData();
-		} else if(type.equals("ressubtype") == true) {
-			// get event data based on venue ids
-			ResourceData data = new ResourceData(database, ids, output, limit);
-			results = data.getResourceData();
+			FeedbackData data = new FeedbackData(database, ids, output, limit);
+			results = data.getPerformanceData();
 		}
 		
 		// ouput the data

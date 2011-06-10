@@ -16,33 +16,33 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-package au.edu.ausstage.exchange;
+package au.edu.ausstage.exchange.items;
 
 // import additional AusStage libraries
 import au.edu.ausstage.utils.*;
-import au.edu.ausstage.exchange.types.*;
+import au.edu.ausstage.exchange.types.Feedback;
+import au.edu.ausstage.exchange.builders.FeedbackDataBuilder;
 
 import java.util.ArrayList;
 import java.sql.ResultSet;
 
 /**
- * The main driving class for the collation of event data using resource sub type ids
+ * The main driving class for the collation of event data using contributor ids
  */
-public class ResourceData extends BaseData{
+public class FeedbackData extends BaseData {
 
 	/**
 	 * Constructor for this class
 	 *
 	 * @param database    the DbManager class used to connect to the database
-	 * @param ids         the array of unique contributor ids
+	 * @param ids         the array of unique ids
 	 * @param outputType  the output type
 	 * @param recordLimit the record limit
 	 *
 	 * @throws IllegalArgumentException if any of the parameters are empty or do not pass validation
 	 *
 	 */
-	public ResourceData(DbManager database, String[] ids, String outputType, String recordLimit) {
-	
+	public FeedbackData(DbManager database, String[] ids, String outputType, String recordLimit) {
 		super(database, ids, outputType, recordLimit);
 	}
 	
@@ -54,49 +54,35 @@ public class ResourceData extends BaseData{
 	
 	@Override
 	public String getResourceData() {
-		
+		throw new UnsupportedOperationException("This method is not valid in the context of Resource data");
+	}
+	
+	/**
+	 * get the performance data using the information supplied when constructed
+	 *
+	 * @returns the required performance feedback data in the requested format
+	 */
+	public String getPerformanceData() {
+	
 		String sql;
 		DbObjects results;
-		Resource resource;
+		Feedback feedback;
 		
-		ArrayList<Resource> resourceList = new ArrayList<Resource>();
+		ArrayList<Feedback> feedbackList = new ArrayList<Feedback>();
 		
 		String[] ids = getIds();
-		
-		if(ids.length == 1) {
-		
-			sql = "SELECT i.itemid, i.citation "
-				+ "FROM item i, lookup_codes lc "
-				+ "WHERE i.item_sub_type_lov_id = lc.code_lov_id "
-				+ "AND lc.code_type = 'RESOURCE_SUB_TYPE' "
-				+ "AND lc.code_lov_id = ?";
-			
-		} else {
-		
-			sql = "SELECT i.itemid, i.citation "
-				+ "FROM item i, lookup_codes lc "
-				+ "WHERE i.item_sub_type_lov_id = lc.code_lov_id "
-				+ "AND lc.code_type = 'RESOURCE_SUB_TYPE' "
-				+ "AND lc.code_lov_id = ANY (";
-			    
-			    // add sufficient place holders for all of the ids
-				for(int i = 0; i < ids.length; i++) {
-					sql += "?,";
-				}
-
-				// tidy up the sql
-				sql = sql.substring(0, sql.length() -1);
 				
-				// finalise the sql string
-				sql += ") ";
-		}
-		
+		sql = "SELECT feedback_id, short_content "
+			+ "FROM mob_feedback "
+			+ "WHERE performance_id = ? "
+			+ "ORDER BY received_date_time DESC";
+				
 		// get the data
 		results = getDatabase().executePreparedStatement(sql, ids);
 	
 		// check to see that data was returned
 		if(results == null) {
-			throw new RuntimeException("unable to lookup resource data");
+			throw new RuntimeException("unable to lookup feedback data");
 		}
 		
 		// build the list of contributors
@@ -104,12 +90,13 @@ public class ResourceData extends BaseData{
 		try {
 			while (resultSet.next()) {
 			
-				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
-				resourceList.add(resource);
+				// build a new feedback object and add it to the list
+				feedback = new Feedback(ids[0], resultSet.getString(1), resultSet.getString(2));
+				feedbackList.add(feedback);
 				
 			}
 		} catch (java.sql.SQLException ex) {
-			throw new  RuntimeException("unable to build list of resources: " + ex.toString());
+			throw new  RuntimeException("unable to build list of feedback items: " + ex.toString());
 		}
 		
 		// play nice and tidy up
@@ -121,15 +108,15 @@ public class ResourceData extends BaseData{
 		if(getRecordLimit().equals("all") == false) {
 			int limit = getRecordLimitAsInt();
 			
-			if(resourceList.size() > limit) {
+			if(feedbackList.size() > limit) {
 			
-				ArrayList<Resource> list = new ArrayList<Resource>();
+				ArrayList<Feedback> list = new ArrayList<Feedback>();
 				
 				for(int i = 0; i < limit; i++) {
-					list.add(resourceList.get(i));
+					list.add(feedbackList.get(i));
 				}
 				
-				resourceList = list;
+				feedbackList = list;
 				list = null;
 			}
 		}
@@ -138,13 +125,13 @@ public class ResourceData extends BaseData{
 		
 		// build the output
 		if(getOutputType().equals("html") == true) {
-			data =  ResourceDataBuilder.buildHtml(resourceList);
+			data = FeedbackDataBuilder.buildHtml(feedbackList);
 		} else if(getOutputType().equals("json")) {
-			data = ResourceDataBuilder.buildJson(resourceList);
+			data = FeedbackDataBuilder.buildJson(feedbackList);
 		} else if(getOutputType().equals("xml")) {
-			data = ResourceDataBuilder.buildXml(resourceList);
+			data = FeedbackDataBuilder.buildXml(feedbackList);
 		} else if(getOutputType().equals("rss") == true) {
-			data = ResourceDataBuilder.buildRss(resourceList);
+			data = FeedbackDataBuilder.buildRss(feedbackList);
 		}
 		
 		return data;

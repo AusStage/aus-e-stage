@@ -16,11 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-package au.edu.ausstage.exchange;
+package au.edu.ausstage.exchange.items;
 
 // import additional AusStage libraries
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.exchange.types.*;
+import au.edu.ausstage.exchange.builders.*;
 
 import java.util.ArrayList;
 import java.sql.ResultSet;

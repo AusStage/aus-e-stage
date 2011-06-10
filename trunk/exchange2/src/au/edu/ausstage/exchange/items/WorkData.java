@@ -16,11 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-package au.edu.ausstage.exchange;
+package au.edu.ausstage.exchange.items;
 
 // import additional AusStage libraries
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.exchange.types.*;
+import au.edu.ausstage.exchange.builders.*;
 
 import java.util.ArrayList;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ import java.sql.ResultSet;
 /**
  * The main driving class for the collation of event data using contributor ids
  */
-public class VenueData extends BaseData{
+public class WorkData extends BaseData{
 
 	/**
 	 * Constructor for this class
@@ -41,7 +42,7 @@ public class VenueData extends BaseData{
 	 * @throws IllegalArgumentException if any of the parameters are empty or do not pass validation
 	 *
 	 */
-	public VenueData(DbManager database, String[] ids, String outputType, String recordLimit) {
+	public WorkData(DbManager database, String[] ids, String outputType, String recordLimit) {
 	
 		super(database, ids, outputType, recordLimit);
 	}
@@ -65,8 +66,9 @@ public class VenueData extends BaseData{
 			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
 				+ "       c.countryname "
-				+ "FROM events e, venue v, country c, states s "
-				+ "WHERE v.venueid = ? "
+				+ "FROM events e, venue v, country c, states s, eventworklink ewl "
+				+ "WHERE ewl.workid = ? "
+				+ "AND e.eventid = ewl.eventid "
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.countryid = c.countryid (+) "
 				+ "AND v.state = s.stateid (+) "
@@ -77,8 +79,8 @@ public class VenueData extends BaseData{
 			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
 				+ "       c.countryname "
-				+ "FROM events e, venue v, country c, states s "
-				+ "WHERE v.venueid = ANY (";
+				+ "FROM events e, venue v, country c, states s, eventworklink ewl "
+				+ "WHERE ewl.workid = ANY (";
 			    
 			    // add sufficient place holders for all of the ids
 				for(int i = 0; i < ids.length; i++) {
@@ -90,6 +92,7 @@ public class VenueData extends BaseData{
 				
 				// finalise the sql string
 				sql += ") "
+				+ "AND e.eventid = ewl.eventid "
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.countryid = c.countryid (+) "
 				+ "AND v.state = s.stateid (+) "
@@ -164,96 +167,6 @@ public class VenueData extends BaseData{
 	
 	@Override
 	public String getResourceData() {
-		String sql;
-		DbObjects results;
-		Resource resource;
-		
-		ArrayList<Resource> resourceList = new ArrayList<Resource>();
-		
-		String[] ids = getIds();
-		
-		if(ids.length == 1) {
-		
-			sql = "SELECT i.itemid, i.citation "
-				+ "FROM item i, itemvenuelink ivl "
-				+ "WHERE ivl.itemid = i.itemid "
-				+ "AND ivl.venueid = ?";
-			
-		} else {
-		
-			sql = "SELECT i.itemid, i.citation "
-				+ "FROM item i, itemvenuelink ivl "
-				+ "WHERE ivl.itemid = i.itemid "
-				+ "AND ivl.venueid =  ANY (";
-			    
-			    // add sufficient place holders for all of the ids
-				for(int i = 0; i < ids.length; i++) {
-					sql += "?,";
-				}
-
-				// tidy up the sql
-				sql = sql.substring(0, sql.length() -1);
-				
-				// finalise the sql string
-				sql += ") ";
-		}
-		
-		// get the data
-		results = getDatabase().executePreparedStatement(sql, ids);
-	
-		// check to see that data was returned
-		if(results == null) {
-			throw new RuntimeException("unable to lookup resource data");
-		}
-		
-		// build the list of contributors
-		ResultSet resultSet = results.getResultSet();
-		try {
-			while (resultSet.next()) {
-			
-				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
-				resourceList.add(resource);
-				
-			}
-		} catch (java.sql.SQLException ex) {
-			throw new  RuntimeException("unable to build list of resources: " + ex.toString());
-		}
-		
-		// play nice and tidy up
-		resultSet = null;
-		results.tidyUp();
-		results = null;
-		
-		// trim the arraylist if necessary
-		if(getRecordLimit().equals("all") == false) {
-			int limit = getRecordLimitAsInt();
-			
-			if(resourceList.size() > limit) {
-			
-				ArrayList<Resource> list = new ArrayList<Resource>();
-				
-				for(int i = 0; i < limit; i++) {
-					list.add(resourceList.get(i));
-				}
-				
-				resourceList = list;
-				list = null;
-			}
-		}
-		
-		String data = null;
-		
-		// build the output
-		if(getOutputType().equals("html") == true) {
-			data =  ResourceDataBuilder.buildHtml(resourceList);
-		} else if(getOutputType().equals("json")) {
-			data = ResourceDataBuilder.buildJson(resourceList);
-		} else if(getOutputType().equals("xml")) {
-			data = ResourceDataBuilder.buildXml(resourceList);
-		} else if(getOutputType().equals("rss") == true) {
-			data = ResourceDataBuilder.buildRss(resourceList);
-		}
-		
-		return data;
+		return null;
 	}
 }

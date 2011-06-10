@@ -16,9 +16,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-package au.edu.ausstage.exchange;
+package au.edu.ausstage.exchange.builders;
 
-import au.edu.ausstage.exchange.types.*;
+import au.edu.ausstage.exchange.types.Event;
 
 import au.edu.ausstage.utils.DateUtils;
 

@@ -16,9 +16,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-package au.edu.ausstage.exchange;
+package au.edu.ausstage.exchange.builders;
 
-import au.edu.ausstage.exchange.types.*;
+import au.edu.ausstage.exchange.types.Feedback;
 
 import au.edu.ausstage.utils.DateUtils;
 
@@ -30,30 +30,33 @@ import org.json.simple.JSONArray;
 /**
  * A class used to build the dataset in various formats using Event objects
  */
-public class ResourceDataBuilder {
+public class FeedbackDataBuilder {
 
 		/*
 	 * construct a HTML list
 	 *
-	 * @param list the list of resource objects to use
+	 * @param list the list of feedback objects to use
 	 *
 	 * @return the constructed data
 	 *
 	 * @throws IllegalArgumentException if the list is null
 	 */
-	public static String buildHtml(ArrayList<Resource> list) {
+	public static String buildHtml(ArrayList<Feedback> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
 		}
 	
-		StringBuilder builder = new StringBuilder("<ul class=\"ausstage_resources\">");
+		StringBuilder builder = new StringBuilder("<ul class=\"ausstage_feedback\">");
 		builder.append("<!-- AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/ -->");
-		Resource resource;
+		
+		Feedback feedback = (Feedback)list.get(0);
+		
+		builder.append("<li><a id=\"ausstage_performance_link\" href=\"" + feedback.getUrl() + "\" title=\"View this performance in AusStage\">Performance Record in AusStage</a></li>");
 		
 		for(int i = 0; i < list.size(); i++) {
-			resource = (Resource)list.get(i);
-			builder.append(resource.toHtml());
+			feedback = (Feedback)list.get(i);
+			builder.append(feedback.toHtml());
 		}
 		
 		builder.append("<ul>");
@@ -64,29 +67,32 @@ public class ResourceDataBuilder {
 	/*
 	 * construct a XML list
 	 *
-	 * @param list the list of resource objects to use
+	 * @param list the list of feedback objects to use
 	 *
 	 * @return the constructed data
 	 *
 	 * @throws IllegalArgumentException if the list is null
 	 */
-	public static String buildXml(ArrayList<Resource> list) {
+	public static String buildXml(ArrayList<Feedback> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
 		}
 	
-		StringBuilder builder = new StringBuilder("<resources>");
+		StringBuilder builder = new StringBuilder("<performance>");
 		builder.append("<!-- AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/ -->");
 		
-		Resource resource;
+		Feedback feedback = (Feedback)list.get(0);
+		
+		builder.append("<id>" + feedback.getPerformanceId() + "</id>");
+		builder.append("<url>" + feedback.getUrl() + "</url>");
 		
 		for(int i = 0; i < list.size(); i++) {
-			resource = (Resource)list.get(i);
-			builder.append(resource.toXml());
+			feedback = (Feedback)list.get(i);
+			builder.append(feedback.toXml());
 		}
 		
-		builder.append("</resources>");
+		builder.append("</performance>");
 		
 		return builder.toString();
 	}
@@ -101,7 +107,7 @@ public class ResourceDataBuilder {
 	 * @throws IllegalArgumentException if the list is null
 	 */
 	@SuppressWarnings("unchecked")
-	public static String buildJson(ArrayList<Resource> list) {
+	public static String buildJson(ArrayList<Feedback> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
@@ -109,14 +115,18 @@ public class ResourceDataBuilder {
 		
 		JSONArray builder = new JSONArray();
 		JSONObject obj = new JSONObject();
+		
+		Feedback feedback = (Feedback)list.get(0);
+		
 		obj.put("_generator", "<!-- AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/ -->");
+		obj.put("_performance", feedback.getPerformanceId());
+		obj.put("_url", feedback.getUrl());
+		
 		builder.add(obj);
 		
-		Resource resource;
-		
 		for(int i = 0; i < list.size(); i++) {
-			resource = (Resource)list.get(i);
-			builder.add(resource.toJsonObject());
+			feedback = (Feedback)list.get(i);
+			builder.add(feedback.toJsonObject());
 		}
 		
 		return builder.toString();
@@ -131,7 +141,7 @@ public class ResourceDataBuilder {
 	 *
 	 * @throws IllegalArgumentException if the list is null
 	 */
-	public static String buildRss(ArrayList<Resource> list) {
+	public static String buildRss(ArrayList<Feedback> list) {
 	
 		if(list == null) {
 			throw new IllegalArgumentException("the list must not be null");
@@ -145,11 +155,11 @@ public class ResourceDataBuilder {
 		builder.append("<description>Resource information sourced from the AusStage website</description>");
 		builder.append("<generator>AusStage Data Exchange Service (" + DateUtils.getCurrentDateAndTime() + ")- http://beta.ausstage.edu.au/exchange/</generator>");
 		
-		Resource resource;
+		Feedback feedback;
 		
 		for(int i = 0; i < list.size(); i++) {
-			resource = (Resource)list.get(i);
-			builder.append(resource.toRss());
+			feedback = (Feedback)list.get(i);
+			builder.append(feedback.toRss());
 		}
 		
 		builder.append("</channel>");

@@ -16,11 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
 */
 
-package au.edu.ausstage.exchange;
+package au.edu.ausstage.exchange.items;
 
 // import additional AusStage libraries
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.exchange.types.*;
+import au.edu.ausstage.exchange.builders.*;
 
 import java.util.ArrayList;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ import java.sql.ResultSet;
 /**
  * The main driving class for the collation of event data using contributor ids
  */
-public class ContributorData extends BaseData{
+public class VenueData extends BaseData{
 
 	/**
 	 * Constructor for this class
@@ -41,7 +42,7 @@ public class ContributorData extends BaseData{
 	 * @throws IllegalArgumentException if any of the parameters are empty or do not pass validation
 	 *
 	 */
-	public ContributorData(DbManager database, String[] ids, String outputType, String recordLimit) {
+	public VenueData(DbManager database, String[] ids, String outputType, String recordLimit) {
 	
 		super(database, ids, outputType, recordLimit);
 	}
@@ -65,9 +66,8 @@ public class ContributorData extends BaseData{
 			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
 				+ "       c.countryname "
-				+ "FROM events e, conevlink cl, venue v, country c, states s "
-				+ "WHERE cl.contributorid = ? "
-				+ "AND cl.eventid = e.eventid "
+				+ "FROM events e, venue v, country c, states s "
+				+ "WHERE v.venueid = ? "
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.countryid = c.countryid (+) "
 				+ "AND v.state = s.stateid (+) "
@@ -78,8 +78,8 @@ public class ContributorData extends BaseData{
 			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
 				+ "       c.countryname "
-				+ "FROM events e, conevlink cl, venue v, country c, states s "
-				+ "WHERE cl.contributorid = ANY (";
+				+ "FROM events e, venue v, country c, states s "
+				+ "WHERE v.venueid = ANY (";
 			    
 			    // add sufficient place holders for all of the ids
 				for(int i = 0; i < ids.length; i++) {
@@ -91,7 +91,6 @@ public class ContributorData extends BaseData{
 				
 				// finalise the sql string
 				sql += ") "
-				+ "AND cl.eventid = e.eventid "
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.countryid = c.countryid (+) "
 				+ "AND v.state = s.stateid (+) "
@@ -166,7 +165,6 @@ public class ContributorData extends BaseData{
 	
 	@Override
 	public String getResourceData() {
-		
 		String sql;
 		DbObjects results;
 		Resource resource;
@@ -178,16 +176,16 @@ public class ContributorData extends BaseData{
 		if(ids.length == 1) {
 		
 			sql = "SELECT i.itemid, i.citation "
-				+ "FROM item i, itemconlink icl "
-				+ "WHERE icl.itemid = i.itemid "
-				+ "AND icl.contributorid = ?";
+				+ "FROM item i, itemvenuelink ivl "
+				+ "WHERE ivl.itemid = i.itemid "
+				+ "AND ivl.venueid = ?";
 			
 		} else {
 		
 			sql = "SELECT i.itemid, i.citation "
-				+ "FROM item i, itemconlink icl "
-				+ "WHERE icl.itemid = i.itemid "
-				+ "AND icl.contributorid = ANY (";
+				+ "FROM item i, itemvenuelink ivl "
+				+ "WHERE ivl.itemid = i.itemid "
+				+ "AND ivl.venueid =  ANY (";
 			    
 			    // add sufficient place holders for all of the ids
 				for(int i = 0; i < ids.length; i++) {
