@@ -184,6 +184,15 @@
 							</tbody>
 						</table>
 					</div>
+					<p>
+						&nbsp;
+					</p>
+					<p>
+						A draft information manual for the Mapping Events service is available for download <a href="http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Aus-e-Stage-Mapping-Events-module-for-AusStage-Manual.pdf" title="Download the PDF file">here</a>.
+					</p>
+					<p>
+						If you have any feedback, questions or queries about the Mapping Events service, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">contact us</a>.
+					</p>
 				</div>
 				<div id="tabs-2">
 					<div style="max-width: 990px">
