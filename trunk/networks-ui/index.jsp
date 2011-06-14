@@ -88,6 +88,12 @@
 				- For use with the SPARQL endpoint
 			</li>
 		</ul>
+		<p>
+			A draft information manual for the Navigating Networks service is available for download <a href="http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Aus-e-Stage-Navigating-Networks-module-for-AusStage-Manual.pdf" title="Download the PDF file">here</a>.
+		<p>
+			If you have any feedback, questions or queries about the Navigating Networks Service service, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">contact us</a>.
+		</p>
+		</p>
 	</div>
 	<!-- include the footer -->
 	<jsp:include page="footer.jsp"/>
