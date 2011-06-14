@@ -136,8 +136,8 @@ public class Feedback implements Comparable<Feedback> {
 		
 		StringBuilder builder = new StringBuilder("<item>");
 		
-		builder.append("<link>" + url + "</link>");
-		builder.append("<guid isPermaLink=\"true\">" + url + "</guid>");
+		builder.append("<link>" + url + "&amp;feedback=" + id +  "</link>");
+		builder.append("<guid isPermaLink=\"true\">" + url + "&amp;feedback=" + id + "</guid>");
 		builder.append("<title>AusStage Resesearching Audiences Feedback</title>");
 		builder.append("<description>" + StringEscapeUtils.escapeXml(content) + "</description>");
 		builder.append("</item>");
