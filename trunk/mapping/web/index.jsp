@@ -83,6 +83,9 @@
 			<li><a href="http://code.google.com/p/aus-e-stage/wiki/MappingServiceConsultancy" title="Download the document">Mapping Service Consultancy</a> - Documentation on the consultancy undertaken with the <a href="http://acl.arts.usyd.edu.au/" title="ACL homepage">Archaeology Computing Laboratory</a> at the University of Sydney.</li>
 		</ul>
 		<p>
+			A draft information manual for the Mapping Events service is available for download <a href="http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Aus-e-Stage-Mapping-Events-module-for-AusStage-Manual.pdf" title="Download the PDF file">here</a>.
+		</p>
+		<p>
 			If you have any feedback, questions or queries about the Mapping Events service, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">contact us</a>.
 		</p>
 	</div>
