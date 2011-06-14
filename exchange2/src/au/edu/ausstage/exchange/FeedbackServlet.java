@@ -109,11 +109,6 @@ public class FeedbackServlet extends HttpServlet {
 			}
 		}
 		
-		// impose the 10 limit on RSS requests
-		if(output.equals("rss") == true) {
-			limit = "10";
-		}
-		
 		// instantiate a connection to the database
 		DbManager database;
 		
