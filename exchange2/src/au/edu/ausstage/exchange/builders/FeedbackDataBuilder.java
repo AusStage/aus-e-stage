@@ -81,7 +81,7 @@ public class FeedbackDataBuilder {
 		}
 		
 		StringBuilder builder = new StringBuilder("<!DOCTYPE html>");
-		builder.append("<html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Performance Feedback Data from AusStage</title></head>");
+		builder.append("<html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Performance Feedback Data from AusStage</title><!-- optional css to go here --></head>");
 		builder.append("<body>");
 		
 		builder.append(buildHtml(list));
