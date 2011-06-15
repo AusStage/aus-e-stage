@@ -147,6 +147,13 @@ public class FeedbackServlet extends HttpServlet {
 				response.setContentType("application/rss+xml; charset=UTF-8");
 			} else if(output.equals("iframe")) {
 				response.setContentType("text/html; charset=UTF-8");
+				
+				// manipulate the results if required
+				String css = request.getParameter("css");
+				
+				if(css != null) {
+					results = results.replace("<!-- optional css to go here -->", "<link rel=\"stylesheet\" href=\"" + css + "\"/>");
+				}
 			}
 			out.print(results);
 		} else {

@@ -62,8 +62,173 @@
 			</ul>
 			<div>
 				<div id="tabs-1" class="tab-content">
+					<h2>Access AusStage data for your website</h2>
 					<p>
-						instructions on how to use the service go here
+						The AusStage Data Exchange service is a way for members of the AusStage user community to include AusStage data in their websites using specially crafted URLs.
+					</p>
+					<p>
+						AusStage data can be included in a website dynamically by using <a href="http://en.wikipedia.org/wiki/JavaScript" title="Wikipedia article on this topic">JavaScript</a>, importing the <a href="http://en.wikipedia.org/wiki/RSS" title="Wikipedia article on this topic">RSS feed</a> into your content management system, or in the case of performance feedback collected using the <a href="http://beta.ausstage.edu.au/mobile/mobile-vis/" title="Researching Audiences service homepage">Researching Audiences</a> service an iFrame.
+					</p>
+					<p>
+						There are three different types of record that can be retrieved using this service. They are:
+					</p>
+					<ul>
+						<li>Event Records</li>
+						<li>Resource Records</li>
+						<li>Performance Feedback</li>
+					</ul>
+					<p>
+						More information about retrieving records is outlined below.
+					</p>
+					<p>
+						If you have any feedback, questions or queries about the Data Exchange service, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">contact us</a>.
+					</p>						
+					<h3>Event Records</h3>
+					<p>
+						Event records associated with contributors, organisations, venues, <a href="/exchange2/?tab=secgenre" title="secondary genre list">secondary genres</a>, <a href="/exchange2/?tab=contentindicator" title="content indicator list">content indicators</a> and works can be retrieved using this service. For example to retrieve event data about organisations it is necessary to know the unique Organisation Identifier for the organisation, or organisations, that are of interest. These numbers are displayed at the bottom of the record details page in the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> website. 
+					</p>
+					<p>
+						A list of <a href="/exchange2/?tab=secgenre" title="secondary genre list">secondary genre</a> identifiers and <a href="/exchange2/?tab=contentindicator" title="content indicator list">content indicator</a> identifiers are availble on this website.
+					</p>
+					<p>
+					<p>
+						The event records are retrieved by constructing a URL with two required attributes and three optional attributes. These are outlined in the table below. If an optional attribute is missing the default value will be used. 
+					</p>
+					<p>
+						The start of the URL is always the same and it is: http://beta.ausstage.edu.au/exchange2/events?
+					</p>
+					<p>
+						Event records are always sorted in reverse chronological order (most recent first) before any record limits are applied and the data is returned.
+					</p>
+					<table class="identifiers">
+						<thead>
+							<tr>
+								<th>Attribute Name</th>
+								<th>Description</th>
+								<th>Value</th>
+								<th>Required</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>type</td>
+								<td>The type of unique identifier that is being used</td>
+								<td>
+									<ul style="padding-left:1em;">
+										<li>contributor</li>
+										<li>organisation</li>
+										<li>venue</li>
+										<li>secgenre</li>
+										<li>contentindicator</li>
+										<li>work</li>
+									</ul>
+								</td>
+								<td>
+									Yes
+								</td>
+							</tr>
+							<tr class="odd">
+								<td>
+									id
+								</td>
+								<td>
+									A unique identifier, or list of unique identifiers, for records matching the specified type
+								</td>
+								<td>
+									Up to ten unique numeric identifiers
+								</td>
+								<td>
+									Yes
+								</td>
+							</tr>
+							<tr>
+								<td>
+									output
+								</td>
+								<td>
+									The type of output used to format the data
+								</td>
+								<td>
+									<ul style="padding-left:1em;">
+										<li>html (default)</li>
+										<li>json</li>
+										<li>xml</li>
+										<li>rss</li>
+									</ul>
+								</td>
+								<td>
+									No
+								</td>
+							</tr>
+							<tr class="odd">
+								<td>
+									limit
+								</td>
+								<td>
+									The number of event records to be returned
+								</td>
+								<td>
+									<ul style="padding-left:1em;">
+										<li>10 (default)</li>
+										<li>all (all records)</li>
+										<li>an arbitary number</li>
+									</ul>
+								</td>
+								<td>
+									No
+								</td>
+							</tr>
+							<tr>
+								<td>
+									callback
+								</td>
+								<td>
+									The name of the JavaScript function used to enclose the data.<br/>
+									Most commonly used with the <a href="http://en.wikipedia.org/wiki/JSON" title="Wikipedia article on this topic">json</a> output attribute as part of using the <a href="http://en.wikipedia.org/wiki/JSONP" title="Wikipedia article on this topic">JSONP</a> technique for <a href="http://en.wikipedia.org/wiki/Ajax_%28programming%29" title="Wikipedia article on this topic">AJAX</a> requests.
+								</td>
+								<td>
+									Any valid JavaScript function name
+								</td>
+								<td>
+									No
+								</td>
+							</tr>							
+						</tbody>
+					</table>
+					<p>
+						<strong>Example URLs</strong>
+					</p>
+					<p>
+						List below are some sample URLs that demonstrate how the URL for event records can be constructed.
+					</p>
+					<ul>
+						<li>
+							Retrieve a list of 10 event record for the organisation with identifier 102, leaving all other attributes at thier defaults.<br/>
+							<a href="http://beta.ausstage.edu.au/exchange2/events?type=organisation&id=102" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=organisation&amp;id=102</a>
+						</li>
+						<li>
+							Retrieve the same list of event records as before, except using the XML output type<br/>
+							<a href="http://beta.ausstage.edu.au/exchange2/events?type=organisation&id=102&output=xml" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=organisation&amp;id=102&amp;output=xml</a>
+						</li>
+						<li>
+							Retrieve a list of event records for the organisations with id 102 and 11898 in the default format and with a limit of 20 records.<br/>
+							<a href="http://beta.ausstage.edu.au/exchange2/events?type=organisation&id=102,11898&limit=20" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=organisation&amp;id=102,11898&amp;limit=20</a>
+						</li>
+						<li>
+							Retrieve a list of events records for the contributor 6139 in the rss format<br/>
+							<a href="http://beta.ausstage.edu.au/exchange2/events?type=contributor&id=6139&output=rss" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=contributor&amp;id=6139&amp;output=rss</a>
+						</li>
+					</ul>
+					
+					
+					
+					<h3>Resource Records</h3>
+					<p>
+						instructions for resources go here
+					</p>
+					<h3>Feedback Records</h3>
+					<p>
+						instructions for performance feedback go here
 					</p>
 				</div>
 				<div id="tabs-2" class="tab-content">
