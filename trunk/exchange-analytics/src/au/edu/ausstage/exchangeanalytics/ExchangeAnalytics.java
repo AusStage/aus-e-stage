@@ -33,7 +33,7 @@ public class ExchangeAnalytics {
 	public  static final String APP_NAME   = "AusStage Exchange Analytics";
 	
 	// private helper constants
-	private static final String[] REQD_PARAMETERS = {"properties"}
+	private static final String[] REQD_PARAMETERS = {"properties"};
 	//private static final String[] REQD_PROPERTIES = {"config-dir", "username", "password", "output-dir"};
 	//private static final String[] TASK_TYPES      = {"account-data", "build-reports"};
 	
