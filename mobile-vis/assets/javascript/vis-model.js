@@ -164,11 +164,11 @@ function model(name) {
                                                             current.loadedRequests = 0;
                                                             current.buildControllers();
 
-                                                            //window.console.log(current.CurrentPerformances);
                                                            // setTimeout("current.model.updatePerformanceData(current.model.CurrentPerformances)", current.UPDATE_DELAY);
 
+                                                      
 
-                                                            setInterval("current.updatePerformanceData(current.CurrentPerformances)", current.UPDATE_DELAY);
+                                                          setInterval("myModel.updatePerformanceData(myModel.CurrentPerformances)", myModel.UPDATE_DELAY);
                                                         }
                                                        
 						},
@@ -194,14 +194,13 @@ function model(name) {
 		*/ 
 				  
 		this.updatePerformanceData = function (CurrentPerformances) {
-				
 				//find out what server we are running on make sure the data type is right
 
-                               // window.console.log('updating -----');
+                                //window.console.log('updating -----');
                                 //setTimeout("updatePerformanceData(4)", this.UPDATE_DELAY);
-
+                                
 				host = this.buildHost();
-			 	mydataType = this.getDataType(); 
+			 	mydataType = this.getDataType();
 				
                                 //this.lastFeedbackID = 100; //for testin so we don't need to keep on writing back the server.
                                 var newData = new Array();
@@ -223,28 +222,16 @@ function model(name) {
                                     //window.console.log(source);
                                  
                                     //create a queue
-                                    var current = this;
+                                      var current = this;
 
-                                    /*var request = $.ajax({
-						type:   'GET',
-						url: source,
-                                                dataType: mydataType,
-						cache: false,
-						success: function (data, textStatus, jqXHR) {
-
-                                                   //window.console.log(data);
-                                                   current.processUpdate(data);
-
-                                                },
-
-					async: true
-                                    });*/
-
+                        
+                                     //window.console('about to load the data');
 
                                      $.manageAjax.add(CurrentPerformances[i],{
                                          //success: this.processData,
                                          //success:this.processData,
                                          success:  function (data, textStatus, jqXHR,options) {
+                                            //window.console('got the data');
                                             current.processUpdate(data);
                                          },
                                          CurrentPerformance: CurrentPerformances[i],
@@ -257,7 +244,7 @@ function model(name) {
                                      }
 
                                      
-
+                                     
 
 
 		};		
@@ -271,7 +258,7 @@ function model(name) {
 
 		this.processUpdate = function (data) {
                     
-                    ///alert('got data')
+                    //alert('got data')
 
                     var current = parent.myModel; //more the of weird scope stuff
 
