@@ -108,45 +108,37 @@ public class ExchangeAnalytics {
 			System.err.println("ERROR: unable to locate any log files in the 'input-dir' directory");
 			System.exit(-1);
 		} else {
-			System.out.println("INFO: Found " + logFiles.length + " log files to process");
+			System.out.println("INFO: Found " + logFiles.length + " log files");
 		}
 		
-		// try to open a connection to the database
-		String dbDriver = "org.apache.derby.jdbc.EmbeddedDriver";
-		String dbName = properties.getValue("database-dir") + DERBY_DB;
-		String dbUrl = "jdbc:derby:" + dbName +";create=true"; 
-		Connection database = null;
 		
+		// try to open a connection to the database
+		String dbName = properties.getValue("database-dir") + DERBY_DB;
+	
 		// check the database 
 		if(FileUtils.doesDirExist(dbName) == false) {
 			System.out.println("INFO: No existing database found, a new one will be created");
 		} else {
 			System.out.println("INFO: Using existing database");
 		}
-
-		try{
-			Class.forName(dbDriver); 
-		} catch(java.lang.ClassNotFoundException e) {
-			System.err.println("ERROR: unable to load the Apache Derby classes");
-			System.err.println("       " + e.toString());
-			System.exit(-1);
-		}
-
+		
+		DbManager database = new DbManager(dbName);
+		
 		try {
-			database = DriverManager.getConnection(dbUrl); 
-		} catch (SQLException e)  {   
-			System.err.println("ERROR: unable to open a connection to the Apache Derby database");
-			System.err.println("       " + e.toString());
+			database.getConnection();
+		} catch (SQLException e) {
+			System.err.println("ERROR: unable to connect to the database");
+			System.err.println("      " + e.toString());
 			System.exit(-1);
 		}
 		
-		// play nice and tidy up
 		try {
-			database.close();
-		} catch (SQLException e)  {
-			System.err.println("ERROR: unable to close the connection to the Apache Derby database");
+			database.buildTables();
+		} catch (SQLException e) {
+			System.err.println("ERROR: unable to build the required tables");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
 			System.exit(-1);
 		}
-		
 	}
 }
