@@ -20,22 +20,28 @@ package au.edu.ausstage.exchangeanalytics;
 // import additional ausstage packages
 import au.edu.ausstage.utils.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 /**
  * Main driving class for the Exchange Analytics app which is responsible
  * for compile the analytics report for the AusStage Data Exchange website
  */
 public class ExchangeAnalytics {
 
-	// Version information 
-	public  static final String VERSION    = "1.0.0";
-	private static final String BUILD_DATE = "2011-06-x";
-	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/ExchangeAnalytics";
-	public  static final String APP_NAME   = "AusStage Exchange Analytics";
+	// version information 
+	public static final String VERSION    = "1.0.0";
+	public static final String BUILD_DATE = "2011-06-x";
+	public static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/ExchangeAnalytics";
+	public static final String APP_NAME   = "AusStage Exchange Analytics";
+	
+	// other public constants
+	public static final String DERBY_DB = "exchange.derby";
+	public static final String REPORT_FILENAME = "exchange-analytics.xml";
 	
 	// private helper constants
-	private static final String[] REQD_PARAMETERS = {"properties"};
-	//private static final String[] REQD_PROPERTIES = {"config-dir", "username", "password", "output-dir"};
-	//private static final String[] TASK_TYPES      = {"account-data", "build-reports"};
+	private static final String[] REQD_PROPERTIES = {"input-dir", "database-dir", "output-dir"};
 	
 	/**
 	 * Main driving method for the  WebsiteAnalytics app
@@ -62,5 +68,85 @@ public class ExchangeAnalytics {
 	 		System.err.println("       -properties the location of the properties file");
 	 		System.exit(-1); 		
 	 	}
+	 	
+	 	// load the properties
+	 	PropertiesManager properties = new PropertiesManager();
+	 	
+	 	if(properties.loadFile(propsPath) == false) {
+	 		System.err.println("ERROR: unable to open the specified properties file");
+	 		System.exit(-1);
+	 	}
+	 	
+		// check on the properties
+		for(int i = 0; i < REQD_PROPERTIES.length; i++) {
+			if(InputUtils.isValid(properties.getValue(REQD_PROPERTIES[i])) == false) {
+				System.err.println("ERROR: unable to read the '" + REQD_PROPERTIES[i] + "' property");
+				System.exit(-1);
+			} else {
+				if(FileUtils.doesDirExist(properties.getValue(REQD_PROPERTIES[i])) == false) {
+					System.err.println("ERROR: unable to find the directory specified by the '" + REQD_PROPERTIES[i] + "' property");
+					System.err.println("       was looking for '" + FileUtils.getAbsolutePath(properties.getValue(REQD_PROPERTIES[i])) + "'");
+					System.exit(-1);
+				}
+			}
+		}
+		
+		// check on the output
+		if(FileUtils.doesFileExist(properties.getValue("output-dir") + REPORT_FILENAME) == true) {
+			System.out.println("INFO: Deleting the old '" + REPORT_FILENAME + "' report");
+			
+			if(FileUtils.deleteFile(properties.getValue("output-dir") + REPORT_FILENAME) == false) {
+				System.err.println("ERROR: Unable to delete the old '" + REPORT_FILENAME + "' report");
+				System.exit(-1);
+			}
+		}
+		
+		// check on the log files
+		String[] logFiles = FileUtils.getFileNameListByExtension(properties.getValue("input-dir"), ".log");
+		
+		if(logFiles.length == 0) {
+			System.err.println("ERROR: unable to locate any log files in the 'input-dir' directory");
+			System.exit(-1);
+		} else {
+			System.out.println("INFO: Found " + logFiles.length + " log files to process");
+		}
+		
+		// try to open a connection to the database
+		String dbDriver = "org.apache.derby.jdbc.EmbeddedDriver";
+		String dbName = properties.getValue("database-dir") + DERBY_DB;
+		String dbUrl = "jdbc:derby:" + dbName +";create=true"; 
+		Connection database = null;
+		
+		// check the database 
+		if(FileUtils.doesDirExist(dbName) == false) {
+			System.out.println("INFO: No existing database found, a new one will be created");
+		} else {
+			System.out.println("INFO: Using existing database");
+		}
+
+		try{
+			Class.forName(dbDriver); 
+		} catch(java.lang.ClassNotFoundException e) {
+			System.err.println("ERROR: unable to load the Apache Derby classes");
+			System.err.println("       " + e.toString());
+			System.exit(-1);
+		}
+
+		try {
+			database = DriverManager.getConnection(dbUrl); 
+		} catch (SQLException e)  {   
+			System.err.println("ERROR: unable to open a connection to the Apache Derby database");
+			System.err.println("       " + e.toString());
+			System.exit(-1);
+		}
+		
+		// play nice and tidy up
+		try {
+			database.close();
+		} catch (SQLException e)  {
+			System.err.println("ERROR: unable to close the connection to the Apache Derby database");
+			System.exit(-1);
+		}
+		
 	}
 }
