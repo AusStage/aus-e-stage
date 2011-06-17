@@ -179,6 +179,15 @@ public class ResourceServlet extends HttpServlet {
 			response.setContentType("application/javascript; charset=UTF-8");
 			out.print(JSONPManager.wrapJSON(results, request.getParameter("callback")));
 		}
+		
+		// log some useful information
+		ServletContext context = servletConfig.getServletContext();
+		
+		if (request.getHeader("Referer") == null) {
+			context.log("Task: resources QueryString: " + request.getQueryString() + " RemoteAddress: " + request.getRemoteAddr() + " Referer: " + request.getHeader("Referer"));
+		} else {
+			context.log("Task: resources QueryString: " + request.getQueryString() + " RemoteAddress: null Referer: " + request.getHeader("Referer"));
+		}
 	}
 
 	/**
