@@ -34,7 +34,6 @@ public class LogParser {
 	ArrayList<Request> resourceRequests;
 	ArrayList<Request> feedbackRequests;
 	
-	
 	/**
 	 * constructor for this class
 	 *
@@ -53,6 +52,10 @@ public class LogParser {
 		}
 		
 		this.logFiles = logFiles;
+		
+		eventRequests    = new ArrayList<Request>();
+		resourceRequests = new ArrayList<Request>();
+		feedbackRequests = new ArrayList<Request>();
 	}
 
 
