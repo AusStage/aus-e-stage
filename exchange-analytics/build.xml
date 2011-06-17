@@ -24,6 +24,7 @@
     <property name="jar.dir"     value="${basedir}/jar"/>
     <property name="lib.dir"     value="${basedir}/lib"/>
     <property name="docs.dir"    value="${basedir}/docs/api"/>
+    <property name="derby.dir"   value="${basedir}/database"/>
     <property name="main-class"  value="au.edu.ausstage.exchangeanalytics.ExchangeAnalytics"/> 
     
     <!-- custom paths such as the class path -->
@@ -44,6 +45,9 @@
 		  </delete>
 		  <delete includeEmptyDirs="true">
 			<fileset dir="${jar.dir}" includes="**/*"/>
+		  </delete>
+		  <delete includeEmptyDirs="true">
+			<fileset dir="${derby.dir}" includes="**/*"/>
 		  </delete>
 	</target>
 	
