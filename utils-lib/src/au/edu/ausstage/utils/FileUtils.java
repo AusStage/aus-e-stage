@@ -363,6 +363,27 @@ public class FileUtils {
 		File file = new File(path);
 		return file.getName();
 	}
+	
+	/**
+	 * Delete the file at the given pathname
+	 *
+	 * @param path the path to the file
+	 */
+	public static boolean deleteFile(String path) {
+		
+		// check on the parameters
+		if(InputUtils.isValid(path) == false) {
+			throw new IllegalArgumentException("The path parameter is required");
+		}
+		
+		if(doesFileExist(path) == false) {
+			throw new IllegalArgumentException("Unable to locate the specified file");
+		}
+		
+		File file = new File(path);
+		
+		return file.delete();
+	}
 
 /**
  * A class used to filter a list of files by extension
