@@ -238,12 +238,12 @@ public class KmlDownloadManager {
 			} catch (java.sql.SQLException ex) {
 				throw new KmlDownloadException("unable to build list of events for contributor '" + contributor.getId() + "' " + ex.toString());
 			}
-		}
 			
-		// play nice and tidy up
-		resultSet = null;
-		results.tidyUp();
-		results = null;
+			// play nice and tidy up
+			resultSet = null;
+			results.tidyUp();
+			results = null;
+		}
 		
 		// add the data to the KML download
 		builder.addContributors(contributors);
@@ -386,12 +386,12 @@ public class KmlDownloadManager {
 			} catch (java.sql.SQLException ex) {
 				throw new KmlDownloadException("unable to build list of events for organisation '" + organisation.getId() + "' " + ex.toString());
 			}
-		}
 			
-		// play nice and tidy up
-		resultSet = null;
-		results.tidyUp();
-		results = null;
+			// play nice and tidy up
+			resultSet = null;
+			results.tidyUp();
+			results = null;
+		}
 		
 		// add the data to the KML download
 		builder.addOrganisations(organisations);
@@ -514,12 +514,12 @@ public class KmlDownloadManager {
 			} catch (java.sql.SQLException ex) {
 				throw new KmlDownloadException("unable to build list of events for venue '" + kmlVenue.getId() + "' " + ex.toString());
 			}
-		}
 			
-		// play nice and tidy up
-		resultSet = null;
-		results.tidyUp();
-		results = null;
+			// play nice and tidy up
+			resultSet = null;
+			results.tidyUp();
+			results = null;
+		}
 		
 		// add the data to the KML download
 		builder.addVenues(venues);
