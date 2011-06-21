@@ -28,7 +28,9 @@
 	var VIEWER_NO_DATA_MSG = 'No data selected for network';
 	var VIEWER_LOADING_MSG = 'Rendering network...';
 	var DATA_RETRIEVAL_MSG = 'Retrieving network data...';
-	var VIEWER_ERROR_MSG = 'An error occurred loading the network data';	
+	var VIEWER_ERROR_MSG = 'An error occurred loading the network data';
+	var NO_EVENT_DATA_MSG = 'There are no contributors associated with this event.';
+	var NO_COLLAB_DATA_MSG = 'The selected contributor has no collaborations';	
 	var TO_MANY_SELECTED = 'Only two contributors can be selected for contributor path network';
 	var TO_MANY_EVENTS_SELECTED = 'Only one event can be selected for event network';
 	var DUPLICATE_SELECTED = 'This contributor has already been selected';
@@ -555,11 +557,19 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 				url:BASE_URL_CONTRIBUTOR+id+END_URL,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
 				success:function(json){
-					$('#viewerMsg').empty().append(buildInfoMsgBox(VIEWER_LOADING_MSG)).show();					
-					viewer.renderGraph(json);
-					$('#viewerMsg').hide();
-					viewer.showInteraction();
-					buildDownloadLink(type,id);
+					//if no nodes
+					if(json.edges.length ==0){
+						$('#viewerMsg').empty().append(buildInfoMsgBox(NO_COLLAB_DATA_MSG)).show();						
+					}
+
+					//else
+					else{
+						$('#viewerMsg').empty().append(buildInfoMsgBox(VIEWER_LOADING_MSG)).show();					
+						viewer.renderGraph(json);
+						$('#viewerMsg').hide();
+						viewer.showInteraction();
+						buildDownloadLink(type,id);
+					}
 				}
 			})
 			
@@ -586,11 +596,18 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 				url:BASE_URL_EVENT+id+'&radius='+radius+'&simplify='+simplify+END_URL_EVENT,
 				error:function(){$('#viewerMsg').empty().append(buildErrorMsgBox(VIEWER_ERROR_MSG)).show();},
 				success:function(json){
-					$('#viewerMsg').empty().append(buildInfoMsgBox(VIEWER_LOADING_MSG)).show();					
-					viewer.renderGraph(json);
-					$('#viewerMsg').hide();
-					viewer.showInteraction();
-					buildDownloadLink(type, id, radius, simplify)
+					//if no contributors
+					if(json.edges.length ==0){
+						$('#viewerMsg').empty().append(buildInfoMsgBox(NO_EVENT_DATA_MSG)).show();						
+					}
+					//else
+					else{
+						$('#viewerMsg').empty().append(buildInfoMsgBox(VIEWER_LOADING_MSG)).show();					
+						viewer.renderGraph(json);
+						$('#viewerMsg').hide();
+						viewer.showInteraction();
+						buildDownloadLink(type, id, radius, simplify)
+					}
 				}
 			})
 			break;	
