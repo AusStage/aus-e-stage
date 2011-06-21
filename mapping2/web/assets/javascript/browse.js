@@ -391,7 +391,17 @@ BrowseClass.prototype.addToMap = function() {
 			idx = idx.split("_");
 			idx = idx[1] + '_' + idx[2];
 			idx = idx.split("-");
-			idx = idx[0];
+			
+			if(idx.length == 2) {
+				idx = idx[0];
+			} else {
+				var tmp_idx = ""
+				for(i = 0; i < idx.length -1; i++) {
+					tmp_idx = tmp_idx +  idx[i] + "-";
+				}
+				
+				idx = tmp_idx.substring(0, tmp_idx -1)
+			}
 		
 			idx = $.inArray(idx, venues.suburbs);
 			if(idx != -1) {
@@ -483,7 +493,10 @@ BrowseClass.prototype.addToMap = function() {
 	
 	// adjust the list of venues
 	for(var i = 0; i < venues.venues.length; i++) {
-		venues.venues[i] = venues.venues[i].split('-')[1];
+		
+		var tmp = venues.venues[i].split('-')
+		
+		venues.venues[i] = tmp[tmp.length -1];
 	}
 	
 	// reset the marker data variable

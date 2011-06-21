@@ -30,7 +30,7 @@
 	<link rel="stylesheet" href="assets/rangeslider/dev.css"/>
 	<jsp:include page="analytics.jsp"/>
 	<!-- libraries -->
-	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.6.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery-1.6.1.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.12.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.11.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>

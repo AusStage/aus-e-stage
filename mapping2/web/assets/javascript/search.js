@@ -612,7 +612,7 @@ SearchClass.prototype.selectAllClickEvent = function(event) {
 		
 		if(target.is(':checked') == false) {
 			$(".searchContributor:checkbox").each(function() {
-				$(this).attr('checked', false);
+				$(this).removeAttr('checked');
 			});
 		} else {
 			$(".searchContributor:checkbox").each(function() {
