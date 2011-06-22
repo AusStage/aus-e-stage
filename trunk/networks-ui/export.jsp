@@ -49,7 +49,7 @@
 				<li>&nbsp;</li>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Website homepage">AusStage Website</a></li>
 				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage Project</a></li>
-				<li><a href="index.html" title="Browse Contributor Network">Navigating Networks</a> </li>	
+				<li><a href="index.jsp" title="Browse Contributor Network">Navigating Networks</a> </li>	
 				<li>&nbsp;</li>
 				<li><a href="http://code.google.com/p/aus-e-stage/wiki/NetworkService" title="Technical and Development Documentation">Technical Info.</a></li>
 				<li><a href="sparql.jsp" title="SPARQL Query Form">Use SPARQL Queries</a></li>
