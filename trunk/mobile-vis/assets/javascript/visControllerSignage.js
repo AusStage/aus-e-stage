@@ -86,9 +86,40 @@ function  visControllerSignage(newModel) {
                                     for(var i = 0; i < results[a].feedback.length; i++) {
                                             var item = results[a].feedback[i];
                                             //Make the update acutally hoppen
-                                            ////window.console.log(item);
+                                           ;
+                                        var wordcount = item.content.split(' ').length/10;
 
-                                        $(".feedback_messages").append('<span class="feedback"><div class="content">' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
+                                        //with font count $(".feedback_messages").append('<span class="feedback ' + item.id + '"><div class="content" style="font-size:'+ wordcount + 'em;" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
+                                        $(".feedback_messages").append('<span class="feedback ' + item.id + '"><div class="content" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
+
+                                        var minHeight = $(".feedback." + item.id).css('min-height');
+                                       
+                                       minHeight = Number(minHeight.replace(/px$/, ''));
+
+                                       //window.console.log(minHeight);
+
+                                       /// window.console.log('new ' +$(".feedback." + item.id).height());
+                                        if($(".feedback." + item.id).height() > minHeight) {
+
+                                          //  window.console.log('old ' +$(".feedback." + item.id).height());
+
+                                           while ($(".feedback." + item.id).height() > minHeight)
+                                          {
+
+                                              var newSize =  $(".feedback." + item.id).css('font-size');
+                                              newSize = Number(newSize.replace(/px$/, ''));
+                                              newSize = newSize * .9;
+                                              
+                                             // window.console.log(newSize);
+
+                                              $(".feedback." + item.id).css('font-size',newSize);
+                                            }
+
+                                           // window.console.log('new ' +$(".feedback." + item.id).height());
+
+
+                                        }
+                                       
 
                                     }
                               // }
