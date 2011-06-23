@@ -27,7 +27,7 @@ html, body{
 
 #question {
 	float:left;
-	font-size:1.8em;
+	font-size:2.5em;
 	font-weight:bold;
 	margin-left:5%;
 	width:20%;
@@ -61,7 +61,7 @@ html, body{
 
 .feedback {
 	width:90%;
-	font-size:1.8em;
+	font-size:4em;
 	font-weight:bold;
 	min-height:300px;
 
