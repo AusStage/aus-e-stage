@@ -17,7 +17,6 @@
      * [WikiImages Using Images in the Wiki]
  * Services Under Development
    * [DataExchangeService Data Exchange Service]
-     * [DataExchangeServiceUpdate Data Exchange Service Update]
    * [MappingService Mapping Service]
      * [MappingServiceAPI Mapping Service API]
        * [MappingServiceAPIEvents Events API]
