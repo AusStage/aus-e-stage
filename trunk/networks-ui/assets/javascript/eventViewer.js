@@ -63,7 +63,7 @@
 						selectedLabel:		"rgba(0,0,255,1)",				//blue
 						unselectedLabel:	"rgba(170,170,170,1)",			//light grey
 						relatedLabel:		"rgba(46,46,46,1)",				//dark grey
-						selectedText:		"rgba(0,0,255,1)",				//blue
+						selectedText:		"rgba(25,25,112,1)",				//blue
 						unselectedText:		"rgba(170,170,170,1)",			//light grey
 						relatedText:		"rgba(46,46,46,1)",				//dark grey			
 						hoverText:			"rgba(105, 105, 105, 0.5)"		//slate grey
@@ -84,20 +84,20 @@
 	this.edgeIndex = -1;			//stores the INDEX of the selected contributor - specific to the selected edge.
 	this.nodeIndex = -1;			//stores the INDEX of the selected NODE	
 
-	this.showAllNodeLabels = false;
-	this.showRelatedNodeLabels = false;
+	this.showAllNodeLabels = $("input[name=showAllNodeLabels]").is(":checked");	
+	this.showRelatedNodeLabels = $("input[name=showRelatedNodeLabels]").is(":checked");	
 	
-	this.showAllEventLabels = false;
-	this.showRelatedEventLabels = false;
+	this.showAllEventLabels = $("input[name=showAllEdgeLabels]").is(":checked");	
+	this.showRelatedEventLabels = $("input[name=showRelatedEdgeLabels]").is(":checked");	
 	
-	this.showAllNodes = true;
-	this.showRelatedNodes = true;
+	this.showAllNodes = $("input[name=showAllNodes]").is(":checked");
+	this.showRelatedNodes = $("input[name=showRelatedNodes]").is(":checked");
 
-	this.showAllEdges = true;
-	this.showRelatedEdges = true;
-	
-	this.showCustColors = true;
-	this.showCustVis = true;
+	this.showAllEdges = (!$("input[name=showAllNodes]").is(":checked"))?false:$("input[name=showAllEdges]").is(":checked");					
+	this.showRelatedEdges = (!$("input[name=showRelatedNodes]").is(":checked"))?false:$("input[name=showRelatedEdges]").is(":checked");	
+		
+	this.showCustColors = $("input[name=showCustColors]").is(":checked");
+	this.showCustVis = $("input[name=showCustVis]").is(":checked");
 	
 	//CLASS METHODS
 	this.render = function(){this.vis.render();}
@@ -1046,7 +1046,7 @@ EventViewerClass.prototype.getNodeTextStyle = function(d, p){
 }
 
 EventViewerClass.prototype.isVisibleNode = function(d){
-	if (!d.custVis && this.showCustVis){return false}
+	if (!d.custVis && !this.showCustVis){return false}
 	if (this.showRelatedNodes && (contains(d.neighbors, this.nodeIndex)
 		||d.index == this.nodeIndex
 		||contains(d.contributor_id, this.edgeId))){return true}
@@ -1055,7 +1055,7 @@ EventViewerClass.prototype.isVisibleNode = function(d){
 }
 
 EventViewerClass.prototype.isVisibleEdge = function(d){
-	if (!this.json.edges[d.parentIndex].custVis && this.showCustVis){return false}
+	if (!this.json.edges[d.parentIndex].custVis && !this.showCustVis){return false}
 	if (this.showRelatedEdges && ((this.json.edges[d.parentIndex].source == this.nodeIndex 
 		||this.json.edges[d.parentIndex].target == this.nodeIndex)
 			||this.json.edges[d.parentIndex].id == this.edgeId)){return true}
@@ -1093,7 +1093,7 @@ EventViewerClass.prototype.isVisible = function(d, what, p){
 	}
 	//for Nodes
 	if (what == NODE){	
-		if (!d.custVis && this.showCustVis){return false}
+		if (!d.custVis && !this.showCustVis){return false}
 		if (this.showAllNodeLabels){
 			//if (!d.custVis && this.showCustVis){return false}
 			if (this.showRelatedNodes && (contains(d.neighbors, this.nodeIndex)||d.index == this.nodeIndex)){return true}
