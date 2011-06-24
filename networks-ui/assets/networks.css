@@ -103,6 +103,12 @@ html, body {
     text-decoration: underline;
 }
 
+
+/*navigation div*/
+#navigation{
+	background-color:red;	
+}
+
 /*anchor tags*/
 a {
 		color: #001BCC;

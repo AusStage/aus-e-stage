@@ -626,6 +626,7 @@ function closeLegends(){
 }
 
 
+//builds the download link for side bar
 function buildDownloadLink(type, id, radius, simplify){
 	var exportUrl = BASE_URL_EXPORT;
 	switch(type){
@@ -639,6 +640,7 @@ function buildDownloadLink(type, id, radius, simplify){
 	$("#downloadLink").attr("href", exportUrl);
 }
 
+//builds bookmark link for side bar
 function buildBookmarkLink(type, id, rs){
 	var bookmarkUrl = BASE_URL;
 	switch(type){

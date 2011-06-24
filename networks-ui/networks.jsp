@@ -334,6 +334,7 @@
 			<!--network Browser-->
 			<div id="tabs-1">
 				<div id="viewerMsg"></div>
+
 				<div id="viewer"></div>
 				<!--date slider and facteded browsing form-->
 				<div id="advanced_search_div"> 
