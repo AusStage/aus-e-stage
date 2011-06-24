@@ -23,7 +23,7 @@
  	var BASE_URL_EVENT = "http://beta.ausstage.edu.au/networks/protovis?task=event-centric-network&id=";	 	
 	var END_URL = 	"&radius=1&callback=?"
 	var END_URL_EVENT ="&callback=?"	
-	var BASE_URL = "http://localhost:8080/aus-e-stage/networks.jsp?";
+	var BASE_URL = "http://beta.ausstage.edu.au/networks/networks.jsp?";
  	
  	//messages
 	var VIEWER_NO_DATA_MSG = 'No data selected for network';
