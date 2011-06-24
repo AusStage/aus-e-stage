@@ -23,6 +23,7 @@
        * [MappingServiceAPILookup Lookup API]
        * [MappingServiceAPIMarkers Marker Data]
        * [MappingServiceAPISearch Search API]
+     * [MappingServiceDirectLinks Direct Link Syntax]
      * [MappingServiceFeedback Mapping Service Feedback]
        * [Alpha1 Alpha 1]
        * [Alpha2 Alpha 2]
