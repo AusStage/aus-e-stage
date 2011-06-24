@@ -1,0 +1,30 @@
+#summary Information on the syntax of direct links for maps
+
+<h1>Syntax for Direct Map Links</h1>
+
+A direct link for a map is a link that when used by a user automatically constructs a map and populates it with data. There are two different types of direct links:
+
+ # Simple Map Links - where only one record type and unique identifier are used
+ # Complex Map Links - where a total of up 100 unique identifiers for all of the record types can be used
+
+The simple syntax is used by the [http://beta.ausstage.edu.au/?tab=extras&section=bookmarklet Map Bookmarklet] to provide an easy way to navigate from a record in !AusStage to the Mapping Service. 
+
+The complex syntax us used to provide the map bookmark functionality.
+
+<wiki:toc max_depth="3" />
+
+= Base URL =
+
+http://beta.ausstage.edu.au/mapping2/?
+
+Combining the base URL with the parameters outlined below constructs a call to the API.
+
+= Simple Link Parameters =
+
+|| *Name* || *Possible Values* || *Optional* ||
+|| simple-map || true || No ||
+|| type || organisation, contributor, venue, event || No ||
+|| id || unique identifier of the record specified in the type parameter ||
+
+
+= Complex Link Parameters =
