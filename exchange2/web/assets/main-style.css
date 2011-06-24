@@ -162,6 +162,17 @@ a:hover {
 	color: #001bcc;
 }
 
+/* style for things that are clickable */
+.clickable {
+	color: #001bcc;
+	cursor: pointer;
+}
+
+.clickable-hover {
+	color: #001bcc;
+	text-decoration: underline;
+}
+
 /* specific styles for the main content div */
 .main {
 	margin-left: 275px;

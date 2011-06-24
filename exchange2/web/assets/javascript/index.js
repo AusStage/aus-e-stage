@@ -23,6 +23,31 @@ $(document).ready(function() {
 	
 	// bring in the extra data
 	getIdentifiers();
+	
+	$('.clickable').live('mouseenter', function() {
+		$(this).addClass('clickable-hover');
+	});
+
+	$('.clickable').live('mouseleave', function() {
+		$(this).removeClass('clickable-hover');
+	});
+	
+	$('#event-link').click(function() {
+		$.scrollTo($('#event'));	
+	});
+	
+	$('#resource-link').click(function() {
+		$.scrollTo($('#resource'));	
+	});
+	
+	$('#performance-link').click(function() {
+		$.scrollTo($('#feedback'));	
+	});
+	
+	$('.top-link').click(function() {
+		$.scrollTo($('#top'));
+	});
+	
 });
 
 // function to bring in identifiers
