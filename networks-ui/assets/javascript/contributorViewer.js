@@ -56,19 +56,19 @@ function ContributorViewerClass(type){
 	this.largeFont = "8 pt sans-serif";
 	//edge, node and background colouring for normal browsing
 	this.nodeColors = {	panelColor:			"white",
-						selectedNode:		"rgba(0,0,255,1)",				//blue
+						selectedNode:		"blue",			//
 						unselectedNode:		"rgba(170,170,170,1)",		//light grey
 						relatedNode:		"rgba(46,46,46,1)",				//dark grey	
 						outOfDateNode:		"rgba(170,170,170,0.5)",		//light grey transparent
-						selectedNodeBorder:	"rgba(0,0,255,1)",	  			//blue								
+						selectedNodeBorder:	"blue",			//
 						unselectedNodeBorder:"rgba(170,170,170,1)",			//light grey
 						relatedNodeBorder:	"rgba(46,46,46,1)",				//dark grey
 						outOfDateNodeBorder:"rgba(170,170,170,0.1)",		//light grey transparent	
-						selectedEdge:		"rgba(0,0,255,1)",				//blue				
+						selectedEdge:		"blue",			//
 						unselectedEdge:		"rgba(170,170,170,0.7)",		//light grey
 						relatedEdge:		"rgba(46,46,46,0.7)",			//dark grey
 						outOfDateEdge:		"rgba(170,170,170,0.5)",
-						selectedText:		"rgba(0,0,255,1)",				//blue
+						selectedText:		"rgba(25,25,112,1)",			//
 						unselectedText:		"rgba(170,170,170,1)",			//light grey
 						relatedText:		"rgba(46,46,46,1)",				//dark grey
 						outOfDateText:		"rgba(170,170,170,0.3)"
@@ -149,6 +149,7 @@ ContributorViewerClass.prototype.renderGraph = function(json){
 
 /*graph base code*/
 function initGraph(obj){
+	
 		obj.vis = new pv.Panel().canvas(PANEL)
 				.fillStyle(function(){return obj.getPanelColor()})
 			  	.width(function(){return obj.w})
@@ -332,7 +333,7 @@ ContributorViewerClass.prototype.getPanelColor = function(){
 
 //node visibility
 ContributorViewerClass.prototype.isVisibleNode = function(d){
-	if (!d.custVis && this.showCustVis){return false}
+	if (!d.custVis && !this.showCustVis){return false}
 	if (this.viewFaceted && !this.showAllFaceted){return (d.facetedMatch && d.withinDateRange)?true:false;}
 	if (!d.withinDateRange){return false;}
 	if (this.showAllNodes){return true;}
@@ -355,7 +356,7 @@ ContributorViewerClass.prototype.isVisibleEdge = function(p){
 	// if out of date range return false
 	if (!p.withinDateRange){return false}
 	// if user has hidden and option 'show user hidden elements' is not selected
-	if (!p.custVis && this.showCustVis){return false} 	
+	if (!p.custVis && !this.showCustVis){return false} 	
 	// if values have been selected on the slider
 	if ( parseInt(p.value) < parseInt(this.hideMin) || p.value > this.hideMax ){return false}
 	// if faceted browse and option is to only show selected 
@@ -377,7 +378,7 @@ ContributorViewerClass.prototype.isVisibleEdge = function(p){
 
 //label visibility
 ContributorViewerClass.prototype.isVisible = function(d){
-	if (!d.custVis && this.showCustVis){return false}
+	if (!d.custVis && !this.showCustVis){return false}
 	if (this.viewFaceted && !this.showAllFaceted){if (!d.facetedMatch){return false}}
 	if (!d.withinDateRange) {return false}
 	//if mouse is over the node

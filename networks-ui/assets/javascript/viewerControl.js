@@ -330,9 +330,9 @@ ViewerControlClass.prototype.init = function() {
 
 		//if checked, then set showEvents to true, else set to false;
     	if($("input[name=showCustVis]").is(":checked")){
-    		viewer.showCustVis = false;	
+    		viewer.showCustVis = true;	
     	}
-    	else viewer.showCustVis = true;
+    	else viewer.showCustVis = false;
     	viewer.render();
 	}); 
 	
