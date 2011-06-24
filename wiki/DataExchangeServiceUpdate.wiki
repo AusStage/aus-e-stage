@@ -1,5 +1,0 @@
-#summary Specification for the DataExchangeService Update
-
-= Introduction =
-
-This page will outline the specification for the updates to the  DataExchangeService.
