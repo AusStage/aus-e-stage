@@ -212,13 +212,14 @@
 				</div>
 			</div>
 		</div>
-
-		
 		<div id="exportContainer">	
 			<div class="accordion">
 				<h3><a href="#" id="export_heading">Save</a></h3>
 				<div id="export_network">
-					<a class="f-184" id='downloadLink' href="#" target="_blank">Download this network as GraphML</a>
+					<ul>
+					<li id='bookmarkLink' class='clickable'>Bookmark this network</li>
+					<li><a class="f-184" id='downloadLink' href="#" target="_blank">Download this network as GraphML</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -440,6 +441,12 @@
         <h3>Do you want to reset the custom visibility?</h3>
         <p>
                 If you reset the custom visibility, all hidden settings will be deleted.
+        </p>
+</div>
+<div id="network_bookmark_div" title="Bookmark" class="dialogs">
+        <h3>Save a bookmark for this network</h3>
+        <p>
+                <a href="" title="Bookmark this Network" id="network_bookmark_link">AusStage Network Bookmark</a> - Add this link as a bookmark to your browser. The bookmark will retrieve the latest data from AusStage each time you reload your network. Hidden elements and custom colors will be reset and the time-slider will be maximised.
         </p>
 </div>
 

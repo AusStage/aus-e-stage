@@ -23,6 +23,7 @@
  	var BASE_URL_EVENT = "http://beta.ausstage.edu.au/networks/protovis?task=event-centric-network&id=";	 	
 	var END_URL = 	"&radius=1&callback=?"
 	var END_URL_EVENT ="&callback=?"	
+	var BASE_URL = "http://localhost:8080/aus-e-stage/networks.jsp?";
  	
  	//messages
 	var VIEWER_NO_DATA_MSG = 'No data selected for network';
@@ -536,12 +537,11 @@ ViewerControlClass.prototype.displaySelectedContributors = function(){
 //create and show the network. Parameters - type : CONTRIBUTOR_PATH, EVENT, CONTRIBUTOR or EXISTING
 //											id   : either CONTRIBUTOR_ID[], EVENT_ID, or CONTRIBUTOR_ID
 //											reset: 0 to leave the sidebar, 1 to reset sidebar.
-ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
+ViewerControlClass.prototype.displayNetwork = function(type, id, reset, rad_sim){
 		viewer.hideInteraction();
 		closeLegends();
 		viewer.destroy(); 
 		//show loading msg	
-		
 		$('#viewerMsg').empty().append(buildInfoMsgBox(DATA_RETRIEVAL_MSG)).show();
 			
 	if(reset==1){
@@ -569,6 +569,7 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 						$('#viewerMsg').hide();
 						viewer.showInteraction();
 						buildDownloadLink(type,id);
+						buildBookmarkLink(type, id);
 					}
 				}
 			})
@@ -580,7 +581,7 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 			viewer = new EventViewerClass();
 			var radius;
 			var simplify = false;
-			switch ($('#eventDegree option:selected').val()){
+			switch (rad_sim){
 				case '1': 
 					radius = 1;
 					break;
@@ -606,7 +607,8 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset){
 						viewer.renderGraph(json);
 						$('#viewerMsg').hide();
 						viewer.showInteraction();
-						buildDownloadLink(type, id, radius, simplify)
+						buildDownloadLink(type, id, radius, simplify);
+						buildBookmarkLink(type, id, rad_sim);
 					}
 				}
 			})
@@ -623,6 +625,7 @@ function closeLegends(){
 	resetLegend('#faceted');				
 }
 
+
 function buildDownloadLink(type, id, radius, simplify){
 	var exportUrl = BASE_URL_EXPORT;
 	switch(type){
@@ -634,4 +637,17 @@ function buildDownloadLink(type, id, radius, simplify){
 			break;
 	}
 	$("#downloadLink").attr("href", exportUrl);
+}
+
+function buildBookmarkLink(type, id, rs){
+	var bookmarkUrl = BASE_URL;
+	switch(type){
+		case 'CONTRIBUTOR':
+			bookmarkUrl += 'task=ego-centric&id='+id;
+			break;
+		case 'EVENT':
+			bookmarkUrl += 'task=event-centric&id='+id+'&rs='+rs;
+			break;
+	}
+	$("#network_bookmark_link").attr("href", bookmarkUrl);	
 }
