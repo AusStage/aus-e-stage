@@ -69,7 +69,7 @@ $(document).ready(function(){
  	
 });
 
-//checks the url for task - ego-centric or event-centric and id
+//checks the url for task -either ego-centric or event-centric and id
 function checkUrl(){
 	
 	var task = getUrlVar('task');
