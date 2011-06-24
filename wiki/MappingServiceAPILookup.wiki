@@ -6,8 +6,6 @@ Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki
 
 The Lookup API exposes methods that can be used to lookup a variety of data elements. 
 
-_Note 1: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete._
-
 <wiki:toc max_depth="3" />
 
 = Base URL =
