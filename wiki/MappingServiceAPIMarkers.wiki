@@ -6,8 +6,6 @@ Components of the MappingService are exposed as an [http://en.wikipedia.org/wiki
 
 The Marker Data API exposes methods and data elements that can be used to construct a map on a web page. 
 
-_Note: During development of the service revisions the API will use a temporary URL which will be changed once the service revisions are complete.
-
 <wiki:toc max_depth="3" />
 
 = Base URL =
