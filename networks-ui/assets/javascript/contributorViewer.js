@@ -235,6 +235,7 @@ ContributorViewerClass.prototype.showInteraction = function(){
 		$("#network_properties_div").show();//show network properties	
 		$("#faceted_div").show();//show faceted browsing on/off		
 		$('#timeSlider').show();
+		$('#navigation').show();
 	}
 }
 
@@ -246,6 +247,7 @@ ContributorViewerClass.prototype.hideInteraction = function(){
 	$("#network_properties_div").hide();//show network properties	
 	$("#faceted_div").hide();//show faceted browsing on/off
 	$('#timeSlider').hide();
+	$('#navigation').hide();	
 }
 
 

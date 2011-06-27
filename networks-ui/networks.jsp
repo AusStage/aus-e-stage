@@ -60,7 +60,8 @@
 	<script type="text/javascript" src="assets/javascript/eventViewer.js"></script>		
 	<script type="text/javascript" src="assets/javascript/contributorViewer.js"></script>
 	<script type="text/javascript" src="assets/javascript/timeline.js"></script>
-	<script type="text/javascript" src="assets/javascript/slider.js"></script>				    
+	<script type="text/javascript" src="assets/javascript/slider.js"></script>
+	<script type="text/javascript" src="assets/javascript/navigation.js"></script>					    
     <!-- Google Analytics Script -->
 <script type="text/javascript">
 
@@ -334,7 +335,39 @@
 			<!--network Browser-->
 			<div id="tabs-1">
 				<div id="viewerMsg"></div>
-
+				<div id="navigation">
+					<table class="pan_control">
+						<tr>
+							<td></td>
+							<td class='b-186'><span id="panUp" class="ui-icon ui-icon-carat-1-n clickable" style="display: inline-block;" title='pan up'></span></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class='b-186'><span id="panLeft" class="ui-icon ui-icon-carat-1-w clickable" style="display: inline-block;" title='pan left'></span></td>
+							<td class='b-186'><span id="recentre" class="ui-icon ui-icon-home clickable" style="display: inline-block;" title='re-centre network'></span></td>
+							<td class='b-186'><span id="panRight" class="ui-icon ui-icon-carat-1-e clickable" style="display: inline-block;" title='pan right'></span></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class='b-186'><span id="panDown" class="ui-icon ui-icon-carat-1-s clickable" style="display: inline-block;" title='pan down'></span></td>
+							<td></td>
+						</tr>
+						<tr><td colspan='3'>&nbsp;</td>
+						<tr>
+							<td></td>
+							<td class='b-186'><span id="zoomIn" class="ui-icon ui-icon-zoomin clickable" style="display: inline-block;" title='zoom in'></span></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class='b-186'><span id="zoomOut" class="ui-icon ui-icon-zoomout clickable" style="display: inline-block;" title='zoom out'></span></td>
+							<td></td>
+						</tr>
+					</table>
+						
+		
+				
+				</div>
 				<div id="viewer"></div>
 				<!--date slider and facteded browsing form-->
 				<div id="advanced_search_div"> 
