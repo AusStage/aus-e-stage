@@ -16,7 +16,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
  
- /* Viewer Controller class. controls interaction elements, and viewer objects */
+ /* Viewer Controller class. controls interaction elements, and viewer objects  */
 
 	var BASE_URL_EXPORT = "http://beta.ausstage.edu.au/networks/export?";
  	var BASE_URL_CONTRIBUTOR = "http://beta.ausstage.edu.au/networks/protovis?task=ego-centric-network&id=";	
