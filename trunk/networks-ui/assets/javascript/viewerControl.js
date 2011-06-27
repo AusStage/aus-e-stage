@@ -73,7 +73,10 @@ ViewerControlClass.prototype.init = function() {
 
 	//hide the legend
 	$("#network_details_div").hide();
-	$("#network_properties_div").hide();	
+	$("#network_properties_div").hide();
+	
+	//hide the navigation controls
+	$('#navigation').hide();	
 
 		//SET UP INTERACTION $.debounce(250, false, viewer.collabSliderObj.updateNetwork(event, ui)); 
 	//style the legend

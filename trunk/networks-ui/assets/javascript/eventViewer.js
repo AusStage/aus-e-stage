@@ -671,6 +671,7 @@ EventViewerClass.prototype.showInteraction = function(){
 			$('#network_details_div').show();
 		}
 		$("#network_properties_div").show();//show network properties	
+		$('#navigation').show();
 	}
 }
 
@@ -680,6 +681,7 @@ EventViewerClass.prototype.hideInteraction = function(){
 	$("#event_options_div").hide();//hide display label options
 	$('#network_details_div').hide();
 	$("#network_properties_div").hide();//hide network properties	
+	$('#navigation').hide();
 }
 
 EventViewerClass.prototype.refreshGraph = function(typeOfRefresh){
@@ -787,7 +789,7 @@ EventViewerClass.prototype.onClick = function(d, what, p){
 //double click - reload the graph.
 EventViewerClass.prototype.onDblClick = function(d){
 	
-	viewerControl.displayNetwork('EVENT', d.id, 0);	
+	viewerControl.displayNetwork('EVENT', d.id, 0, $('#eventDegree option:selected').val());	
 	
 }	
 
