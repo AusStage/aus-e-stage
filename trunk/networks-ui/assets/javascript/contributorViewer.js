@@ -247,7 +247,7 @@ ContributorViewerClass.prototype.hideInteraction = function(){
 	$("#network_properties_div").hide();//show network properties	
 	$("#faceted_div").hide();//show faceted browsing on/off
 	$('#timeSlider').hide();
-	$('#navigation').hide();	
+	//$('#navigation').hide();	
 }
 
 

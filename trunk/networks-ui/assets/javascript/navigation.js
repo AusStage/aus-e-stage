@@ -6,20 +6,43 @@ $(document).ready(function(){
 	$('#panDown').click(function(){pan('bottom')});
 	$('#panLeft').click(function(){pan('left')});
 	$('#panRight').click(function(){pan('right')});
-	$('#zoomIn').click(function(){zoom('in');});
-	$('#zoomOut').click(function(){zoom('out');});	
-	$('#recentre').click(function(){findCentre();});		
+	
+	$('#zoomIn').click(function(){	$( "#zoomslider" ).slider( "option", "value", $("#zoomslider").slider("value")+0.5 );
+									zoom($( "#zoomslider" ).slider( "value" ));
+									});
+	$('#zoomOut').click(function(){	$( "#zoomslider" ).slider( "option", "value", $("#zoomslider").slider("value")-0.5 );
+									zoom($( "#zoomslider" ).slider( "value" ));
+									});	
+	
+	$('#recentre').click(function(){findCentre();});	
+	
+//set up the zoom slider
+	$( "#zoomslider" ).slider({
+		orientation: "vertical",
+		range: "max",
+		min: 1,
+		max: 10,
+		step: 0.5,
+		value: 1,
+		slide: function( event, ui ) {
+			zoom(ui.value );
+		}
+	});
+	checkZoomHeight();
+	//$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
+
 })
 
 function findCentre(){
 	viewer.vis.transform(pv.Transform.identity.scale(1).translate(0, 0)); 
+	$( "#zoomslider" ).slider( "option", "value", 0 );	
 	viewer.render();	
 }
 
-function zoom(type_zoom) 
+function zoom(sliderValue) 
 { 
         //I set the default zoom ratio 
-        var zoom_ratio = 0.5; 
+        var zoom_ratio = sliderValue; 
         //I extract some information about the graph before the transformation 
         var x0 = viewer.vis.transform().x; 
         var y0 = viewer.vis.transform().y; 
@@ -34,15 +57,8 @@ function zoom(type_zoom)
         var y0_central = ((h/k0) - h)/2; 
         var delta_y0 = y0_submitted - y0_central; 
         //I calculate the zoom that cannot be less then 1 
-        if (type_zoom == 'in') 
-                var k1 = k0 + zoom_ratio; 
-        else 
-        { 
-                if ((k0 > 1) && ((k0 - zoom_ratio) > 1)) 
-                        var k1 = k0 - zoom_ratio; 
-                else 
-                        var k1 = 1; 
-        } 
+        var k1 = zoom_ratio; 
+
         //I calculate the delta between the zoom in the center and the actual zoom (the pan) 
         var delta_x1 = Math.round((delta_x0 * k1) / k0); 
         var delta_y1 = Math.round((delta_y0 * k1) / k0); 
@@ -60,7 +76,7 @@ function zoom(type_zoom)
 function pan(type_pan) 
 { 
         //number of pixel to shift 
-        var pan_size = 50; 
+        var pan_size = 20; 
         //I extract some information about the graph before the transformation 
         var x0 = viewer.vis.transform().x; 
         var y0 = viewer.vis.transform().y; 
@@ -93,3 +109,11 @@ function pan(type_pan)
         viewer.vis.transform(pv.Transform.identity.scale(k0).translate(x, y)); 
         viewer.render(); 
 }; 
+
+function checkZoomHeight(){
+	if($(window).height()<480){
+		$('#zoomslider').hide();
+	}else {
+		$('#zoomslider').show();	
+	}
+}

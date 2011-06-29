@@ -52,7 +52,7 @@ function ViewerControlClass (){
 
 }
 
-ViewerControlClass.prototype.init = function() {
+ViewerControlClass.prototype.init = function() {	
 	
 	//hide the ruler div
 	$("#ruler").hide();
@@ -76,7 +76,7 @@ ViewerControlClass.prototype.init = function() {
 	$("#network_properties_div").hide();
 	
 	//hide the navigation controls
-	$('#navigation').hide();	
+	//$('#navigation').hide();	
 
 		//SET UP INTERACTION $.debounce(250, false, viewer.collabSliderObj.updateNetwork(event, ui)); 
 	//style the legend
@@ -394,7 +394,9 @@ ViewerControlClass.prototype.init = function() {
         viewerControl.resizeLegend();
 		if(viewer.json.edges.length!=0){
 			viewer.windowResized();			
-			viewer.render();	
+			viewer.render();
+			//deal with zoom element
+			checkZoomHeight();
 		}
 	});	
 	

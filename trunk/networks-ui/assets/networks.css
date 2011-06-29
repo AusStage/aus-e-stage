@@ -103,16 +103,6 @@ html, body {
     text-decoration: underline;
 }
 
-
-/*navigation div*/
-#navigation{
-	position:absolute;
-}
-.pan_control{
-	background-color:none;
-	border-collapse:collapse;
-}
-
 /*anchor tags*/
 a {
 		color: #001BCC;
