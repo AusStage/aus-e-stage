@@ -27,6 +27,7 @@
 	<meta http-equiv="content-script-type" content="text/javascript">
 	<!-- css -->
 	<link rel="stylesheet" href="assets/networks.css"/>
+	<link rel="stylesheet" href="assets/zoomslider.css"/>	
 	<link rel="stylesheet" href="assets/ausstage-colours.css">
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css">
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" />
@@ -336,35 +337,40 @@
 			<div id="tabs-1">
 				<div id="viewerMsg"></div>
 				<div id="navigation">
-					<table class="pan_control">
+					<table class="nav_control">
 						<tr>
 							<td></td>
-							<td class='b-186'><span id="panUp" class="ui-icon ui-icon-carat-1-n clickable" style="display: inline-block;" title='pan up'></span></td>
+							<td class='nav_button'><span id="panUp" class="ui-icon ui-icon-carat-1-n clickable" style="display: inline-block;" title='pan up'></span></td>
 							<td></td>
 						</tr>
 						<tr>
-							<td class='b-186'><span id="panLeft" class="ui-icon ui-icon-carat-1-w clickable" style="display: inline-block;" title='pan left'></span></td>
-							<td class='b-186'><span id="recentre" class="ui-icon ui-icon-home clickable" style="display: inline-block;" title='re-centre network'></span></td>
-							<td class='b-186'><span id="panRight" class="ui-icon ui-icon-carat-1-e clickable" style="display: inline-block;" title='pan right'></span></td>
+							<td class='nav_button'><span id="panLeft" class="ui-icon ui-icon-carat-1-w clickable" style="display: inline-block;" title='pan left'></span></td>
+							<td class='nav_button'><span id="recentre" class="ui-icon ui-icon-home clickable" style="display: inline-block;" title='re-centre network'></span></td>
+							<td class='nav_button'><span id="panRight" class="ui-icon ui-icon-carat-1-e clickable" style="display: inline-block;" title='pan right'></span></td>
 						</tr>
 						<tr>
 							<td></td>
-							<td class='b-186'><span id="panDown" class="ui-icon ui-icon-carat-1-s clickable" style="display: inline-block;" title='pan down'></span></td>
+							<td class='nav_button'><span id="panDown" class="ui-icon ui-icon-carat-1-s clickable" style="display: inline-block;" title='pan down'></span></td>
 							<td></td>
 						</tr>
 						<tr><td colspan='3'>&nbsp;</td>
 						<tr>
 							<td></td>
-							<td class='b-186'><span id="zoomIn" class="ui-icon ui-icon-zoomin clickable" style="display: inline-block;" title='zoom in'></span></td>
+							<td class='nav_button'><span id="zoomIn" class="ui-icon ui-icon-zoomin clickable" style="display: inline-block;" title='zoom in'></span></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td></td>
-							<td class='b-186'><span id="zoomOut" class="ui-icon ui-icon-zoomout clickable" style="display: inline-block;" title='zoom out'></span></td>
+							<td><div id="zoomslider"></div>	</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class='nav_button'><span id="zoomOut" class="ui-icon ui-icon-zoomout clickable" style="display: inline-block;" title='zoom out'></span></td>
 							<td></td>
 						</tr>
 					</table>
-						
+										
 		
 				
 				</div>
