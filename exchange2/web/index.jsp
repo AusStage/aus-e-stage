@@ -86,10 +86,10 @@
 					</p>						
 					<h3 id="event">Event Records</h3><span class="clickable top-link">Back to top</span>
 					<p>
-						Event records associated with contributors, organisations, venues, <a href="/exchange2/?tab=secgenre" title="secondary genre list">secondary genres</a>, <a href="/exchange2/?tab=contentindicator" title="content indicator list">content indicators</a> and works can be retrieved using this service. For example to retrieve event data about organisations it is necessary to know the unique Organisation Identifier for the organisation, or organisations, that are of interest. These numbers are displayed at the bottom of the record details page in the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> website. 
+						Event records associated with contributors, organisations, venues, <a href="/exchange/?tab=secgenre" title="secondary genre list">secondary genres</a>, <a href="/exchange/?tab=contentindicator" title="content indicator list">content indicators</a> and works can be retrieved using this service. For example to retrieve event data about organisations it is necessary to know the unique Organisation Identifier for the organisation, or organisations, that are of interest. These numbers are displayed at the bottom of the record details page in the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> website. 
 					</p>
 					<p>
-						Lists of <a href="/exchange2/?tab=secgenre" title="secondary genre list">secondary genre</a> identifiers and <a href="/exchange2/?tab=contentindicator" title="content indicator list">content indicator</a> identifiers is availble on this website.
+						Lists of <a href="/exchange/?tab=secgenre" title="secondary genre list">secondary genre</a> identifiers and <a href="/exchange/?tab=contentindicator" title="content indicator list">content indicator</a> identifiers is availble on this website.
 					</p>
 					<p>
 						The event records are retrieved by constructing a URL with two required attributes and three optional attributes. These are outlined in the table below. If an optional attribute is missing the default value will be used. 
@@ -204,19 +204,19 @@
 					<ul>
 						<li>
 							Retrieve a list of 10 event records for the organisation with identifier 102, leaving all other attributes at thier defaults.<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/events?type=organisation&id=102" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=organisation&amp;id=102</a>
+							<a href="http://beta.ausstage.edu.au/exchange/events?type=organisation&id=102" rel="nofollow">http://beta.ausstage.edu.au/exchange/events?type=organisation&amp;id=102</a>
 						</li>
 						<li>
 							Retrieve the same list of event records as before, except using the XML output type<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/events?type=organisation&id=102&output=xml" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=organisation&amp;id=102&amp;output=xml</a>
+							<a href="http://beta.ausstage.edu.au/exchange/events?type=organisation&id=102&output=xml" rel="nofollow">http://beta.ausstage.edu.au/exchange/events?type=organisation&amp;id=102&amp;output=xml</a>
 						</li>
 						<li>
 							Retrieve a list of event records for the organisations with id 102 and 11898 in the default format and with a limit of 20 records.<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/events?type=organisation&id=102,11898&limit=20" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=organisation&amp;id=102,11898&amp;limit=20</a>
+							<a href="http://beta.ausstage.edu.au/exchange/events?type=organisation&id=102,11898&limit=20" rel="nofollow">http://beta.ausstage.edu.au/exchange/events?type=organisation&amp;id=102,11898&amp;limit=20</a>
 						</li>
 						<li>
 							Retrieve a list of events records for the contributor 6139 in the rss format<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/events?type=contributor&id=6139&output=rss" rel="nofollow">http://beta.ausstage.edu.au/exchange2/events?type=contributor&amp;id=6139&amp;output=rss</a>
+							<a href="http://beta.ausstage.edu.au/exchange/events?type=contributor&id=6139&output=rss" rel="nofollow">http://beta.ausstage.edu.au/exchange/events?type=contributor&amp;id=6139&amp;output=rss</a>
 						</li>
 					</ul>
 					<p>
@@ -224,10 +224,10 @@
 					</p>
 					<h3 id="resource">Resource Records</h3><span class="clickable top-link">Back to top</span>
 					<p>
-						Resource records associated with contributors, organisations, venues, <a href="/exchange2/?tab=secgenre" title="secondary genre list">secondary genres</a>, <a href="/exchange2/?tab=contentindicator" title="content indicator list">content indicators</a>, works and <a href="http://beta.ausstage.edu.au/exchange2/?tab=ressubtype" title="resource sub type list">resource sub-types</a> can be retrieved using this service. For example to retrieve resource data about organisations it is necessary to know the unique Organisation Identifier for the organisation, or organisations, that are of interest. These numbers are displayed at the bottom of the record details page in the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> website. 
+						Resource records associated with contributors, organisations, venues, <a href="/exchange/?tab=secgenre" title="secondary genre list">secondary genres</a>, <a href="/exchange/?tab=contentindicator" title="content indicator list">content indicators</a>, works and <a href="http://beta.ausstage.edu.au/exchange/?tab=ressubtype" title="resource sub type list">resource sub-types</a> can be retrieved using this service. For example to retrieve resource data about organisations it is necessary to know the unique Organisation Identifier for the organisation, or organisations, that are of interest. These numbers are displayed at the bottom of the record details page in the <a href="http://www.ausstage.edu.au" title="AusStage homepage">AusStage</a> website. 
 					</p>
 					<p>
-						Lists of <a href="/exchange2/?tab=secgenre" title="secondary genre list">secondary genre</a> identifiers, <a href="/exchange2/?tab=contentindicator" title="content indicator list">content indicator</a> identifiers and and <a href="http://beta.ausstage.edu.au/exchange2/?tab=ressubtype" title="resource sub type list">resource sub-types</a> are availble on this website.
+						Lists of <a href="/exchange/?tab=secgenre" title="secondary genre list">secondary genre</a> identifiers, <a href="/exchange/?tab=contentindicator" title="content indicator list">content indicator</a> identifiers and and <a href="http://beta.ausstage.edu.au/exchange/?tab=ressubtype" title="resource sub type list">resource sub-types</a> are availble on this website.
 					</p>
 					<p>
 						The resource records are retrieved by constructing a URL with two required attributes and three optional attributes. These are outlined in the table below. If an optional attribute is missing the default value will be used. 
@@ -340,19 +340,19 @@
 					<ul>
 						<li>
 							Retrieve a list of 10 resource records for the organisation with identifier 102, leaving all other attributes at thier defaults.<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/resources?type=organisation&id=102" rel="nofollow">http://beta.ausstage.edu.au/exchange2/resources?type=organisation&amp;id=102</a>
+							<a href="http://beta.ausstage.edu.au/exchange/resources?type=organisation&id=102" rel="nofollow">http://beta.ausstage.edu.au/exchange/resources?type=organisation&amp;id=102</a>
 						</li>
 						<li>
 							Retrieve the same list of resource records as before, except using the XML output type<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/resources?type=organisation&id=102&output=xml" rel="nofollow">http://beta.ausstage.edu.au/exchange2/resources?type=organisation&amp;id=102&amp;output=xml</a>
+							<a href="http://beta.ausstage.edu.au/exchange/resources?type=organisation&id=102&output=xml" rel="nofollow">http://beta.ausstage.edu.au/exchange/resources?type=organisation&amp;id=102&amp;output=xml</a>
 						</li>
 						<li>
 							Retrieve a list of resource records for the organisations with id 102 and 11898 in the default format and with a limit of 20 records.<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/resources?type=organisation&id=102,11898&limit=20" rel="nofollow">http://beta.ausstage.edu.au/exchange2/resources?type=organisation&amp;id=102,11898&amp;limit=20</a>
+							<a href="http://beta.ausstage.edu.au/exchange/resources?type=organisation&id=102,11898&limit=20" rel="nofollow">http://beta.ausstage.edu.au/exchange/resources?type=organisation&amp;id=102,11898&amp;limit=20</a>
 						</li>
 						<li>
 							Retrieve a list of resource records for the contributor 6139 in the rss format<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/resources?type=contributor&id=6139&output=rss" rel="nofollow">http://beta.ausstage.edu.au/exchange2/resources?type=contributor&amp;id=6139&amp;output=rss</a>
+							<a href="http://beta.ausstage.edu.au/exchange/resources?type=contributor&id=6139&output=rss" rel="nofollow">http://beta.ausstage.edu.au/exchange/resources?type=contributor&amp;id=6139&amp;output=rss</a>
 						</li>
 					</ul>
 					<p>
@@ -483,13 +483,13 @@
 					<ul>
 						<li>
 							Retrieve a list of the 10 most recent items of feedback for the performance with identifier 102, leaving all other attributes at thier defaults.<br/>
-							<a href="http://beta.ausstage.edu.au/exchange2/feedback?type=performance&id=90" rel="nofollow">http://beta.ausstage.edu.au/exchange2/feedback?type=performance&amp;id=90</a>
+							<a href="http://beta.ausstage.edu.au/exchange/feedback?type=performance&id=90" rel="nofollow">http://beta.ausstage.edu.au/exchange/feedback?type=performance&amp;id=90</a>
 						</li>
 					</ul>
 				</div>
 				<div id="tabs-2" class="tab-content">
 					<p>
-						Below is a list of secondary genre identifiers that can be used with the Data Exchange service. <a href="/exchange2/?tab=secgenre" title="Persistent link to this tab">Persistent Link</a> to this tab.
+						Below is a list of secondary genre identifiers that can be used with the Data Exchange service. <a href="/exchange/?tab=secgenre" title="Persistent link to this tab">Persistent Link</a> to this tab.
 					</p>
 					<table class="identifiers">
 						<thead>
@@ -523,7 +523,7 @@
 				</div>
 				<div id="tabs-3" class="tab-content">
 					<p>
-						Below is a list of content indicator identifiers that can be used with the Data Exchange service. <a href="/exchange2/?tab=contentindicator" title="Persistent link to this tab">Persistent Link</a> to this tab.
+						Below is a list of content indicator identifiers that can be used with the Data Exchange service. <a href="/exchange/?tab=contentindicator" title="Persistent link to this tab">Persistent Link</a> to this tab.
 					</p>
 					<table class="identifiers">
 						<thead>
@@ -557,7 +557,7 @@
 				</div>
 				<div id="tabs-4" class="tab-content">
 					<p>
-						Below is a list of resource sub type identifiers that can be used with the Data Exchange service. <a href="/exchange2/?tab=ressubtype" title="Persistent link to this tab">Persistent Link</a> to this tab.
+						Below is a list of resource sub type identifiers that can be used with the Data Exchange service. <a href="/exchange/?tab=ressubtype" title="Persistent link to this tab">Persistent Link</a> to this tab.
 					</p>
 					<table class="identifiers">
 						<thead>
