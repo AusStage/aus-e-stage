@@ -150,7 +150,7 @@ public class Event implements Comparable<Event> {
 		builder.append("<link>" + url + "</link>");
 		builder.append("<guid isPermaLink=\"true\">" + url + "</guid>");
 		builder.append("<title>" + StringEscapeUtils.escapeXml(name) + "</title>");
-		builder.append("<description>Venue: " + StringEscapeUtils.escapeXml(venue) + ", First Date: " + firstDate + "</description>");
+		builder.append("<description>" + StringEscapeUtils.escapeXml(venue) + ", " + firstDate + "</description>");
 		builder.append("</item>");
 		
 		return builder.toString();
