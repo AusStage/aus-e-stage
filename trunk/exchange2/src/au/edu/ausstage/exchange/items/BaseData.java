@@ -38,6 +38,7 @@ public abstract class BaseData {
 	private String[]  ids;
 	private String    outputType;
 	private String    recordLimit;
+	private String    sortOrder;
 
 	/**
 	 * Constructor for this class
@@ -50,6 +51,7 @@ public abstract class BaseData {
 	 * @throws IllegalArgumentException if any of the parameters are empty or do not pass validation
 	 *
 	 */
+	@Deprecated
 	public BaseData(DbManager database, String[] ids, String outputType, String recordLimit) {
 	
 		// validate the parameters
@@ -90,6 +92,63 @@ public abstract class BaseData {
 		this.recordLimit = recordLimit;
 	}
 	
+	/**
+	 * Constructor for this class
+	 *
+	 * @param database    the DbManager class used to connect to the database
+	 * @param ids         the array of unique contributor ids
+	 * @param outputType  the output type
+	 * @param recordLimit the record limit
+	 * @param sortOrder   the order that records must be sorted in
+	 *
+	 * @throws IllegalArgumentException if any of the parameters are empty or do not pass validation
+	 *
+	 */
+	public BaseData(DbManager database, String[] ids, String outputType, String recordLimit, String sortOrder) {
+	
+		// validate the parameters
+		if(database == null || ids == null || outputType == null || recordLimit == null) {
+			throw new IllegalArgumentException("all parameters to this constructor are required");
+		}
+		
+		if(InputUtils.isValid(outputType, EventServlet.VALID_OUTPUT_TYPES) == false  && InputUtils.isValid(outputType, FeedbackServlet.VALID_OUTPUT_TYPES) == false) {
+			// no valid type was found
+			throw new IllegalArgumentException("Invalid output parameter. Expected one of: " + InputUtils.arrayToString(EventServlet.VALID_OUTPUT_TYPES));
+		}
+		
+		// ensure the ids are numeric
+		for(int i = 0; i < ids.length; i++) {
+			try {
+				Integer.parseInt(ids[i]);
+			} catch(Exception ex) {
+				throw new IllegalArgumentException("The ids parameter must contain numeric values");
+			}
+		}
+		
+		// impose sensible limit on id numbers
+		if(ids.length > 10) {
+			throw new IllegalArgumentException("The ids parameter must contain no more than 10 numbers");
+		}
+		
+		if(recordLimit.equals("all") == false) {
+			try {
+				Integer.parseInt(recordLimit);	
+			} catch(Exception ex) {
+				throw new IllegalArgumentException("The limit parameter must be 'all' or a numeric value");
+			}
+		}
+		
+		if(InputUtils.isValid(sortOrder, EventServlet.VALID_SORT_TYPES) == false) {
+			throw new IllegalArgumentException("Invalid sort parameter. Expected one of: " + InputUtils.arrayToString(EventServlet.VALID_SORT_TYPES));
+		}
+		
+		this.database = database;
+		this.ids = ids;
+		this.outputType = outputType;
+		this.recordLimit = recordLimit;
+		this.sortOrder = sortOrder;
+	}
+	
 	public final DbManager getDatabase() {
 		return database;
 	}
@@ -112,6 +171,10 @@ public abstract class BaseData {
 		} catch (NumberFormatException ex) {
 			return Integer.MAX_VALUE;
 		}
+	}
+	
+	public final String getSortOrder() {
+		return sortOrder;
 	}
 	
 	/**
