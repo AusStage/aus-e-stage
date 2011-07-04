@@ -39,6 +39,7 @@ public class ResourceServlet extends HttpServlet {
 	public static final String[] VALID_OUTPUT_TYPES   = {"html", "json", "xml", "rss"};
 	public static final String[] VALID_REQUEST_TYPES  = {"contributor", "organisation", "venue", "secgenre", "contentindicator", "work", "ressubtype"};
 	public static final String   DEFAULT_RESULT_LIMIT = "10";
+	public static final String[] VALID_SORT_TYPES     = {"firstdate", "createdate", "updatedate"};
 
 	/*
 	 * initialise this instance
@@ -65,6 +66,7 @@ public class ResourceServlet extends HttpServlet {
 		String output = request.getParameter("output");
 		String id     = request.getParameter("id");
 		String limit  = request.getParameter("limit");
+		String sort   = request.getParameter("sort");
 		
 		// validate the request parameters
 		if(InputUtils.isValid(type, VALID_REQUEST_TYPES) == false) {
@@ -112,6 +114,13 @@ public class ResourceServlet extends HttpServlet {
 			}
 		}
 		
+		// check the sort parameter
+		if(InputUtils.isValid(sort) == false) {
+			sort = VALID_SORT_TYPES[0];
+		} else if (InputUtils.isValid(sort, VALID_SORT_TYPES) == false) {
+			throw new ServletException("Invalid sort parameter. Expected one of: " + InputUtils.arrayToString(VALID_SORT_TYPES));
+		}
+		
 		// instantiate a connection to the database
 		DbManager database;
 		
@@ -131,7 +140,7 @@ public class ResourceServlet extends HttpServlet {
 		// get the results
 		if(type.equals("contributor") == true) {
 			// get event data based on contributor ids
-			ContributorData data = new ContributorData(database, ids, output, limit);
+			ContributorData data = new ContributorData(database, ids, output, limit, sort);
 			results = data.getResourceData();
 		} else if(type.equals("organisation") == true) {
 			// get event data based on organisation ids
