@@ -144,7 +144,7 @@ public class EventServlet extends HttpServlet {
 			results = data.getEventData();
 		} else if(type.equals("organisation") == true) {
 			// get event data based on organisation ids
-			OrganisationData data = new OrganisationData(database, ids, output, limit);
+			OrganisationData data = new OrganisationData(database, ids, output, limit, sort);
 			results = data.getEventData();
 		} else if(type.equals("venue") == true) {
 			// get event data based on venue ids

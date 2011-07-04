@@ -211,6 +211,14 @@ public class ContributorData extends BaseData{
 				sql += ") ";
 		}
 		
+		// adjust the order by clause
+		String sort = getSortOrder();
+		if(sort.equals("createdate") == true) {
+			sql += " ORDER BY i.entered_date DESC";
+		} else if(sort.equals("updatedate") == true) {
+			sql += "ORDER BY i.updated_date DESC";
+		}
+		
 		// get the data
 		results = getDatabase().executePreparedStatement(sql, ids);
 	
