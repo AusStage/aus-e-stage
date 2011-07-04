@@ -148,19 +148,19 @@ public class ResourceServlet extends HttpServlet {
 			results = data.getResourceData();
 		} else if(type.equals("venue") == true) {
 			// get event data based on venue ids
-			VenueData data = new VenueData(database, ids, output, limit);
+			VenueData data = new VenueData(database, ids, output, limit, sort);
 			results = data.getResourceData();
 		} else if(type.equals("secgenre") == true) {
 			// get event data based on venue ids
-			SecGenreData data = new SecGenreData(database, ids, output, limit);
+			SecGenreData data = new SecGenreData(database, ids, output, limit, sort);
 			results = data.getResourceData();
 		} else if(type.equals("contentindicator") == true) {
 			// get event data based on venue ids
-			ContentIndicatorData data = new ContentIndicatorData(database, ids, output, limit);
+			ContentIndicatorData data = new ContentIndicatorData(database, ids, output, limit, sort);
 			results = data.getResourceData();
 		} else if(type.equals("work") == true) {
 			// get event data based on venue ids
-			WorkData data = new WorkData(database, ids, output, limit);
+			WorkData data = new WorkData(database, ids, output, limit, sort);
 			results = data.getResourceData();
 		} else if(type.equals("ressubtype") == true) {
 			// get event data based on venue ids
