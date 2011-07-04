@@ -211,8 +211,17 @@
 					<p>
 						We encourage you to explore our services and provide as much feedback as you wish. Please contact us using the details below:
 					</p>
-					<p><strong>AusStage Research Co-ordinator: </strong>Dr Jonathan Bollen - <a href="http://www.flinders.edu.au/people/jonathan.bollen" title="Flinders University Staff Contact Page">Contact Information</a></p>
-					<p><strong>AusStage Project Manager: </strong>Ms Jenny Fewster - <a href="http://www.flinders.edu.au/people/jenny.fewster" title="Flinders University Staff Contact Page">Contact Information</a></p>
+					<ul>
+						<li>
+							<strong>Aus-e-Stage Project Manager: </strong>Mrs Liz Milford - <a href="http://www.flinders.edu.au/people/liz.milford" title="Flinders University Staff Contact Page">Contact Information</a>
+						</li>
+						<li>
+							<strong>AusStage Research Co-ordinator: </strong>Dr Jonathan Bollen - <a href="http://www.flinders.edu.au/people/jonathan.bollen" title="Flinders University Staff Contact Page">Contact Information</a>
+						</li>
+						<li>
+							<strong>AusStage Project Manager: </strong>Ms Jenny Fewster - <a href="http://www.flinders.edu.au/people/jenny.fewster" title="Flinders University Staff Contact Page">Contact Information</a>
+						</li>
+					</ul>
 					<p>
 						<a href="http://beta.ausstage.edu.au/?tab=contacts" title="Persistent link to this tab">Persistent Link</a> to this section.
 					</p>
