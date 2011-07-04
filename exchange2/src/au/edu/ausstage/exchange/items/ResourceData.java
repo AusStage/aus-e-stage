@@ -44,7 +44,7 @@ public class ResourceData extends BaseData{
 	 */
 	public ResourceData(DbManager database, String[] ids, String outputType, String recordLimit) {
 	
-		super(database, ids, outputType, recordLimit);
+		super(database, ids, outputType, recordLimit, null);
 	}
 	
 	@Override

@@ -43,7 +43,7 @@ public class FeedbackData extends BaseData {
 	 *
 	 */
 	public FeedbackData(DbManager database, String[] ids, String outputType, String recordLimit) {
-		super(database, ids, outputType, recordLimit);
+		super(database, ids, outputType, recordLimit, null);
 	}
 	
 	@Override
