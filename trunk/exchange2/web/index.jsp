@@ -92,7 +92,7 @@
 						Lists of <a href="/exchange/?tab=secgenre" title="secondary genre list">secondary genre</a> identifiers and <a href="/exchange/?tab=contentindicator" title="content indicator list">content indicator</a> identifiers is availble on this website.
 					</p>
 					<p>
-						The event records are retrieved by constructing a URL with two required attributes and three optional attributes. These are outlined in the table below. If an optional attribute is missing the default value will be used. 
+						The event records are retrieved by constructing a URL with two required attributes and four optional attributes. These are outlined in the table below. If an optional attribute is missing the default value will be used. 
 					</p>
 					<p>
 						The start of the URL is always the same and it is: http://beta.ausstage.edu.au/exchange/events?
@@ -179,6 +179,24 @@
 								</td>
 							</tr>
 							<tr>
+								<td>
+									sort
+								</td>
+								<td>
+									The way records are sorted. <strong>Note: </strong> records are sorted before the record limit is applied
+								</td>
+								<td>
+									<ul style="padding-left:1em;">
+										<li>firstdate (event first date)</li>
+										<li>createdate (the date the event record was created)</li>
+										<li>updatedate (the date the event record was updated)</li>
+									</ul>
+								</td>
+								<td>
+									No
+								</td>
+							</tr>
+							<tr class="odd">
 								<td>
 									callback
 								</td>
@@ -315,6 +333,23 @@
 								</td>
 							</tr>
 							<tr>
+								<td>
+									sort
+								</td>
+								<td>
+									The way records are sorted. <strong>Note: </strong> records are sorted before the record limit is applied
+								</td>
+								<td>
+									<ul style="padding-left:1em;">
+										<li>createdate (the date the event record was created)</li>
+										<li>updatedate (the date the event record was updated)</li>
+									</ul>
+								</td>
+								<td>
+									No
+								</td>
+							</tr>
+							<tr  class="odd">
 								<td>
 									callback
 								</td>
