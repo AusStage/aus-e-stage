@@ -38,13 +38,14 @@ public class OrganisationData extends BaseData{
 	 * @param ids         the array of unique contributor ids
 	 * @param outputType  the output type
 	 * @param recordLimit the record limit
+	 * @param sortOrder   the order that records must be sorted in
 	 *
 	 * @throws IllegalArgumentException if any of the parameters are empty or do not pass validation
 	 *
 	 */
-	public OrganisationData(DbManager database, String[] ids, String outputType, String recordLimit) {
+	public OrganisationData(DbManager database, String[] ids, String outputType, String recordLimit, String sortOrder) {
 	
-		super(database, ids, outputType, recordLimit);
+		super(database, ids, outputType, recordLimit, sortOrder);
 	}
 	
 	@Override
@@ -71,8 +72,7 @@ public class OrganisationData extends BaseData{
 				+ "AND ol.eventid = e.eventid "
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.countryid = c.countryid (+) "
-				+ "AND v.state = s.stateid (+) " 
-				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC";
+				+ "AND v.state = s.stateid (+) ";
 			
 		} else {
 		
@@ -95,8 +95,17 @@ public class OrganisationData extends BaseData{
 				+ "AND ol.eventid = e.eventid "
 				+ "AND e.venueid = v.venueid "
 				+ "AND v.countryid = c.countryid (+) "
-				+ "AND v.state = s.stateid (+) " 
-				+ "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC";
+				+ "AND v.state = s.stateid (+) ";
+		}
+		
+		// adjust the order by clause
+		String sort = getSortOrder();
+		if(sort.equals("firstdate") == true) {
+			sql += "ORDER BY e.yyyyfirst_date DESC, e.mmfirst_date DESC, e.ddfirst_date DESC";
+		} else if(sort.equals("createdate") == true) {
+			sql += "ORDER BY e.entered_date DESC";
+		} else if(sort.equals("updatedate") == true) {
+			sql += "ORDER BY e.updated_date DESC";
 		}
 		
 		// get the data
@@ -199,6 +208,13 @@ public class OrganisationData extends BaseData{
 				
 				// finalise the sql string
 				sql += ") ";
+		}
+		
+		String sort = getSortOrder();
+		if(sort.equals("createdate") == true) {
+			sql += " ORDER BY i.entered_date DESC";
+		} else if(sort.equals("updatedate") == true) {
+			sql += " ORDER BY i.updated_date DESC";
 		}
 		
 		// get the data
