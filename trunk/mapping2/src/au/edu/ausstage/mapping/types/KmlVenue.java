@@ -100,6 +100,11 @@ public class KmlVenue implements Comparable<KmlVenue> {
 		return LinksManager.getVenueLink(id.toString());
 	}
 	
+	public String getAtomLink() {
+	
+		return LinksManager.getVenueLink(id.toString()).replace("&amp;", "&");
+	}
+	
 	public void addEvent(Event event) {
 		if(event == null) {
 			throw new IllegalArgumentException("the event field must not be null");

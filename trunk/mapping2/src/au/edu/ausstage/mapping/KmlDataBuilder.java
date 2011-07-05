@@ -363,7 +363,7 @@ public class KmlDataBuilder {
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("atom:link");
-				elem.setAttribute("href", kmlVenue.getUrl());
+				elem.setAttribute("href", kmlVenue.getAtomLink());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("snippet");
@@ -579,7 +579,7 @@ public class KmlDataBuilder {
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("atom:link");
-				elem.setAttribute("href", kmlVenue.getUrl());
+				elem.setAttribute("href", kmlVenue.getAtomLink());
 				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("snippet");
@@ -762,7 +762,7 @@ public class KmlDataBuilder {
 			placemark.appendChild(elem);
 			
 			elem = xmlDoc.createElement("atom:link");
-			elem.setAttribute("href", kmlVenue.getUrl());
+			elem.setAttribute("href", kmlVenue.getAtomLink());
 			placemark.appendChild(elem);
 			
 			elem = xmlDoc.createElement("snippet");
@@ -868,7 +868,7 @@ public class KmlDataBuilder {
 			placemark.appendChild(elem);
 			
 			elem = xmlDoc.createElement("atom:link");
-			elem.setAttribute("href", kmlEvent.getUrl());
+			elem.setAttribute("href", kmlEvent.getAtomLink());
 			placemark.appendChild(elem);
 			
 			elem = xmlDoc.createElement("snippet");

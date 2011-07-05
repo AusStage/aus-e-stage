@@ -68,6 +68,11 @@ public class KmlEvent implements Comparable<KmlEvent> {
 		return url;
 	}
 	
+	public String getAtomLink() {
+	
+		return url.replace("&amp;", "&");
+	}
+	
 	public String getVenueUrl() {
 		return venueUrl;
 	}
