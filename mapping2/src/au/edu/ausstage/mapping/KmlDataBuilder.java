@@ -303,6 +303,7 @@ public class KmlDataBuilder {
 		}
 			
 		Element folder = addFolder("Contributors", null);
+		Element childFolder;
 		Element document;
 		
 		Element placemark;
@@ -332,7 +333,11 @@ public class KmlDataBuilder {
 				throw new KmlDownloadException("there were no events associated with contributor '" + contributor.getId() + "'");
 			}
 			
-			document = addDocument(folder, contributor.getName(), contributor.getFunctions());
+			//document = addDocument(folder, contributor.getName(), contributor.getFunctions());
+			
+			childFolder = addFolder(folder, contributor.getName(), contributor.getFunctions());
+			
+			document = addDocument(childFolder, "Markers");
 
 			// determine which style to use
 			if(colourIndex ==  CON_ICON_COLOUR_CODES.length) {
@@ -420,6 +425,80 @@ public class KmlDataBuilder {
 				placemark.appendChild(elem);
 				
 				document.appendChild(placemark);
+			}
+			
+			// add the trajectory
+			document = addDocument(childFolder, "Trajectories");
+			
+			Set<Event> sortedEvents = new TreeSet<Event>(new EventDateComparator());
+			
+			//rest the iterator
+			venueIterator = venues.iterator();
+			
+			// add all of the events
+			while(venueIterator.hasNext()) {
+			
+				kmlVenue = (KmlVenue)venueIterator.next();
+				
+				sortedEvents.addAll(kmlVenue.getEvents());
+			}
+			
+			// add all of the trajectory lines
+			Iterator sortedIterator = sortedEvents.iterator();
+			
+			// define additional helper variables
+			Event previousEvent  = null;
+			KmlVenue startVenue  = null;
+			KmlVenue finishVenue = null;
+			
+			while(sortedIterator.hasNext()) {
+			
+				// get the event
+				event = (Event)sortedIterator.next();
+				
+				if(previousEvent == null) {
+					previousEvent = event;
+					continue;
+				}
+				
+				startVenue = previousEvent.getKmlVenue();
+				finishVenue = event.getKmlVenue();
+				
+				// add a trajectory
+				placemark = xmlDoc.createElement("Placemark");
+				
+				elem = xmlDoc.createElement("TimeSpan");
+				placemark.appendChild(elem);
+				
+				subElem = xmlDoc.createElement("begin");
+				subElem.setTextContent(event.getSortFirstDate());
+				elem.appendChild(subElem);
+				
+				subElem = xmlDoc.createElement("end");
+				subElem.setTextContent(event.getSortLastDate());
+				elem.appendChild(subElem);
+				
+				placemark.appendChild(elem);
+				
+				// add style
+				elem = xmlDoc.createElement("styleUrl");
+				elem.setTextContent("#c-" + CON_ICON_COLOUR_CODES[colourIndex]);
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("LineString");
+				placemark.appendChild(elem);
+				
+				subElem = xmlDoc.createElement("tessellate");
+				subElem.setTextContent("1");
+				elem.appendChild(subElem);
+				
+				subElem = xmlDoc.createElement("coordinates");
+				subElem.setTextContent(startVenue.getLongitude() + "," + startVenue.getLatitude() + " " + finishVenue.getLongitude() + "," + finishVenue.getLatitude());
+				elem.appendChild(subElem);
+				
+				document.appendChild(placemark);
+				
+				previousEvent = event;				
 			}			
 		}
 	}
