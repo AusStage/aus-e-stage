@@ -149,6 +149,11 @@ public class Event implements Comparable<Event> {
 		url = value.trim();
 	}
 	
+	public String getAtomLink() {
+	
+		return url.replace("&amp;", "&");
+	}
+	
 	public int getFirstDateAsInt() {
 		String date = firstDate.replace("-", "");
 		return Integer.valueOf(date);
