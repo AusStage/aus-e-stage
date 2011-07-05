@@ -217,6 +217,36 @@ public class KmlDataBuilder {
 		return folder;
 	}
 	
+	private Element addFolder(Element parent, String name, String description) {
+	
+		if(parent == null) {
+			return addFolder(name, description);
+		}
+	
+		// check on the parameters
+		if(InputUtils.isValid(name) == false) {
+			throw new IllegalArgumentException("name parameter is required");
+		}
+		
+		// create the new folder
+		Element folder = xmlDoc.createElement("Folder");
+		
+		// add the name and description elements
+		Element n = xmlDoc.createElement("name");
+		n.setTextContent(name);
+		folder.appendChild(n);
+		
+		if(InputUtils.isValid(description) == true) {
+			Element d = xmlDoc.createElement("description");
+			d.setTextContent(description);
+			folder.appendChild(d);
+		}
+		
+		parent.appendChild(folder);
+		
+		return folder;
+	}
+	
 	private Element addDocument(Element folder, String name, String description) {
 	
 		if(folder == null) {
@@ -246,6 +276,11 @@ public class KmlDataBuilder {
 		folder.appendChild(document);
 		
 		return document;
+	}
+	
+	private Element addDocument(Element folder, String name) {
+	
+		return addDocument(folder, name, null);
 	}
 	
 	/**
@@ -374,7 +409,6 @@ public class KmlDataBuilder {
 				
 				placemark.appendChild(elem);
 
-				
 				elem = xmlDoc.createElement("styleUrl");
 				elem.setTextContent("#c-" + CON_ICON_COLOUR_CODES[colourIndex]);
 				placemark.appendChild(elem);
@@ -410,6 +444,7 @@ public class KmlDataBuilder {
 		}
 			
 		Element folder = addFolder("Organisations", null);
+		Element childFolder;
 		Element document;
 		
 		Element placemark;
@@ -418,7 +453,6 @@ public class KmlDataBuilder {
 		CDATASection cdata;
 		
 		String content;
-		
 		
 		Iterator iterator = organisations.iterator();
 		Organisation organisation;
@@ -439,7 +473,9 @@ public class KmlDataBuilder {
 				throw new KmlDownloadException("there were no events associated with organisation '" + organisation.getId() + "'");
 			}
 			
-			document = addDocument(folder, organisation.getName(), organisation.getAddress());
+			childFolder = addFolder(folder, organisation.getName(), organisation.getAddress());
+			
+			document = addDocument(childFolder, "Markers");
 
 			// determine which style to use
 			if(colourIndex ==  ORG_ICON_COLOUR_CODES.length) {
@@ -453,7 +489,6 @@ public class KmlDataBuilder {
 			Set<KmlVenue> venues = new TreeSet<KmlVenue>(new KmlVenueComparator());
 			venues.addAll(kmlVenues.values());
 			Iterator venueIterator = venues.iterator();
-			
 			
 			while(venueIterator.hasNext()) {
 			
@@ -516,7 +551,6 @@ public class KmlDataBuilder {
 				
 				placemark.appendChild(elem);
 
-				
 				elem = xmlDoc.createElement("styleUrl");
 				elem.setTextContent("#o-" + ORG_ICON_COLOUR_CODES[colourIndex]);
 				placemark.appendChild(elem);
@@ -528,6 +562,80 @@ public class KmlDataBuilder {
 				placemark.appendChild(elem);
 				
 				document.appendChild(placemark);
+			}
+			
+			// add the trajectory
+			document = addDocument(childFolder, "Trajectories");
+			
+			Set<Event> sortedEvents = new TreeSet<Event>(new EventDateComparator());
+			
+			//rest the iterator
+			venueIterator = venues.iterator();
+			
+			// add all of the events
+			while(venueIterator.hasNext()) {
+			
+				kmlVenue = (KmlVenue)venueIterator.next();
+				
+				sortedEvents.addAll(kmlVenue.getEvents());
+			}
+			
+			// add all of the trajectory lines
+			Iterator sortedIterator = sortedEvents.iterator();
+			
+			// define additional helper variables
+			Event previousEvent  = null;
+			KmlVenue startVenue  = null;
+			KmlVenue finishVenue = null;
+			
+			while(sortedIterator.hasNext()) {
+			
+				// get the event
+				event = (Event)sortedIterator.next();
+				
+				if(previousEvent == null) {
+					previousEvent = event;
+					continue;
+				}
+				
+				startVenue = previousEvent.getKmlVenue();
+				finishVenue = event.getKmlVenue();
+				
+				// add a trajectory
+				placemark = xmlDoc.createElement("Placemark");
+				
+				elem = xmlDoc.createElement("TimeSpan");
+				placemark.appendChild(elem);
+				
+				subElem = xmlDoc.createElement("begin");
+				subElem.setTextContent(event.getSortFirstDate());
+				elem.appendChild(subElem);
+				
+				subElem = xmlDoc.createElement("end");
+				subElem.setTextContent(event.getSortLastDate());
+				elem.appendChild(subElem);
+				
+				placemark.appendChild(elem);
+				
+				// add style
+				elem = xmlDoc.createElement("styleUrl");
+				elem.setTextContent("#o-" + ORG_ICON_COLOUR_CODES[colourIndex]);
+				placemark.appendChild(elem);
+				
+				elem = xmlDoc.createElement("LineString");
+				placemark.appendChild(elem);
+				
+				subElem = xmlDoc.createElement("tessellate");
+				subElem.setTextContent("1");
+				elem.appendChild(subElem);
+				
+				subElem = xmlDoc.createElement("coordinates");
+				subElem.setTextContent(startVenue.getLongitude() + "," + startVenue.getLatitude() + " " + finishVenue.getLongitude() + "," + finishVenue.getLatitude());
+				elem.appendChild(subElem);
+				
+				document.appendChild(placemark);
+				
+				previousEvent = event;				
 			}			
 		}
 	}
@@ -761,6 +869,7 @@ public class KmlDataBuilder {
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
 			style.appendChild(createLabelStyle());
+			style.appendChild(createLineStyle(i));
 			style.appendChild(createBalloonStyle(i));
 			rootDocument.appendChild(style);
 		}
@@ -790,6 +899,7 @@ public class KmlDataBuilder {
 			// add the icon style and style to the document
 			style.appendChild(iconStyle);
 			style.appendChild(createLabelStyle());
+			style.appendChild(createLineStyle(i));
 			style.appendChild(createBalloonStyle(i));
 			rootDocument.appendChild(style);
 		}
@@ -841,6 +951,34 @@ public class KmlDataBuilder {
 		style.appendChild(createBalloonStyle(88));
 		rootDocument.appendChild(style);
 		
+	}
+	
+	// create the line style element
+	private Element createLineStyle(int index) {
+	
+		index = index - 39;
+		
+		Element elem = xmlDoc.createElement("LineStyle");
+		
+		Element subElem = xmlDoc.createElement("color");
+		subElem.setTextContent(getKmlColourCode(COLOUR_CODES[index]));
+		elem.appendChild(subElem);
+		
+		subElem = xmlDoc.createElement("width");
+		subElem.setTextContent("2");
+		elem.appendChild(subElem);
+		
+		return elem;	
+	}
+	
+	// private method to turn a colour cold into the KML colour code
+	private String getKmlColourCode(String colour) {
+	
+		String red   = colour.substring(1, 3);
+		String green = colour.substring(3, 5);
+		String blue  = colour.substring(5, colour.length());
+		
+		return "ff" + blue + green + red;
 	}
 	
 	// private method to create the balloon style elements

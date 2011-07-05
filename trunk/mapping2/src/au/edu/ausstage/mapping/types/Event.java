@@ -39,6 +39,8 @@ public class Event implements Comparable<Event> {
 	private String sortFirstDate = null;
 	private String sortLastDate = null;
 	
+	private KmlVenue kmlVenue = null;
+	
 	/**
 	 * Constructor for this class
 	 *
@@ -223,6 +225,18 @@ public class Event implements Comparable<Event> {
 	
 	public String getSortLastDate() {
 		return sortLastDate;
+	}
+	
+	public void setKmlVenue(KmlVenue value) {
+		if(value == null) {
+			throw new IllegalArgumentException("the value parameter cannot be null");
+		}
+		
+		kmlVenue = value;
+	}
+	
+	public KmlVenue getKmlVenue() {
+		return kmlVenue;
 	}
 
 	/*

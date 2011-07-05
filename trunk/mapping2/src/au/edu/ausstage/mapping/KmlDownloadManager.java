@@ -230,6 +230,8 @@ public class KmlDownloadManager {
 					
 					event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
 					
+					event.setKmlVenue(kmlVenue);
+					
 					kmlVenue.addEvent(event);								
 				}
 				
@@ -377,6 +379,8 @@ public class KmlDownloadManager {
 					event.setSortLastDate(sortDates[1]);
 					
 					event.setUrl(LinksManager.getEventLink(resultSet.getString(1)));
+					
+					event.setKmlVenue(kmlVenue);
 					
 					kmlVenue.addEvent(event);								
 				}

@@ -43,6 +43,11 @@ public class EventDateComparator implements Comparator<Event> {
 		Integer first  = new Integer(firstDate);
 		Integer second = new Integer(secondDate);
 		
+		if(first == second) {
+			first  = Integer.parseInt(firstDate  + "" + firstEvent.getId());
+			second = Integer.parseInt(secondDate + "" + secondEvent.getId());
+		}
+		
 		return first.compareTo(second);
 
 	} // end compare method

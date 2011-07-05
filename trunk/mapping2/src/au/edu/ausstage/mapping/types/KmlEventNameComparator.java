@@ -27,7 +27,7 @@ import java.util.Comparator;
 public class KmlEventNameComparator implements Comparator<KmlEvent> {
 
 	/**
-	 * Compare two events for sorting by date in reverse chronological order
+	 * Compare two events for sorting by name
 	 *
 	 * @param firstEvent  an event object for comparison
 	 * @param secondEvent an event object for comparison
