@@ -25,6 +25,8 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 
 //json
 import org.json.simple.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 // general java
 import java.util.*;
@@ -33,6 +35,7 @@ import java.util.*;
 import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.networks.types.*;
+import au.edu.ausstage.networks.types.Event;
 
 /**
  * A class to manage the export of information
@@ -40,16 +43,37 @@ import au.edu.ausstage.networks.types.*;
 public class ProtovisEgoCentricManager {
 
 	// declare private class level variables
-	private DataManager database = null;
-
+	private DataManager rdf = null;
+	//network<contributorID, collaborator>
+	public TreeMap<Integer, Collaborator> network = new TreeMap<Integer, Collaborator>();
+	public ArrayList<Collaborator> collaborators = new ArrayList<Collaborator> ();
+	public HashMap<Integer, CollaborationList> collaborations = new HashMap<Integer, CollaborationList> ();
+	//altIndex<collaboratorID, index>
+	public TreeMap<Integer, Integer> altIndex = new TreeMap<Integer, Integer>();
+	
+	//edge attribute for graphml export
+	public String [][] edgeAttr = {
+			{"SourceContributorID", "string"}, {"TargetContributorID", "string"},
+			{"NumOfCollaboration", "int"}, {"FirstDate", "string"}, {"LastDate", "string"}
+		};
+	
+	//node attribute for graphml export
+	public String [][] nodeAttr = {
+			{"ContributorID", "string"}, {"Label", "string"}, {"ContributorName", "string"}, 
+			{"Roles", "string"}, {"Gender", "string"}, {"Nationality", "string"}, {"ContributorURL", "string"}
+	};
+	
+	//public String evtURLprefix =  "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=";
+	//public String conURLprefix = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
+	
 	/**
 	 * Constructor for this class
 	 *
-	 * @param database an already instantiated instance of the DataManager class
+	 * @param rdf an already instantiated instance of the DataManager class
 	 */
-	public ProtovisEgoCentricManager(DataManager database) {	
+	public ProtovisEgoCentricManager(DataManager rdf) {	
 		// store a reference to this DataManager for later
-		this.database = database;
+		this.rdf = rdf;
 	} // end constructor
 	
 	/**
@@ -81,16 +105,283 @@ public class ProtovisEgoCentricManager {
 		/*
 		 * get the base network data
 		 */
-		
-		// get an instance of the ExportManager class
-		ExportManager export = new ExportManager(database);
-		
 		// get the network data for this collaborator
-		java.util.TreeMap<Integer, Collaborator> network = export.getRawCollaboratorData(id, radius);
+		network = getRawCollaboratorData(id, radius);
+		
+		//add some additional required information for contributors
+		collaborators = getCollaborators(network, id);
+		
+		//get collaboration List			
+		collaborations = getCollaborations(network);
 		
 		/*
-		 * add some of the additional required information
+		 * ajust the order of the collaborators in the array
 		 */
+		
+		// find the central collaborator and move them to the head of the array
+		int networkKey = collaborators.indexOf(new Collaborator(id));
+		Collaborator collaborator = (Collaborator)collaborators.get(networkKey);
+		
+		/*
+		// add the central collaborator to the head of the list
+		collaborators.add(0, collaborator);
+		
+		// remove the old central collaborator object
+		collaborators.remove(networkKey + 1);
+		*/
+		
+		// remove the old central collaborator object
+		collaborators.remove(new Collaborator(id));
+		
+		// add the central collaborator to the end of the list
+		collaborators.add(collaborator);
+		
+		/*
+		 * build an alternate index to the array
+		 */
+		 altIndex = buildAltIndex();		
+		
+		/*
+		 * build the JSON object and array of nodes
+		 */		
+		JSONObject object = new JSONObject();		
+		
+		// build the JSON object and arrays of nodes
+		object = buildJSONNodes(object,collaborators);				
+		
+		// build the JSON array of edges
+		object = buildJSONEdges(object, id);
+	
+		return object.toString();
+
+	
+	} // end the getData method
+	
+	
+	/**
+	 * A method to build a collection of collaborator object representing a network
+	 *
+	 * @param id     the unique identifier of the root collaborator
+	 * @param radius the number of edges required from the central contributor
+	 *
+	 * @return        the collection of collaborator objects
+	 */
+	@SuppressWarnings("rawtypes")
+	public TreeMap<Integer, Collaborator> getRawCollaboratorData(String id, int radius) {
+	
+		// check the parameters
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("Error: the id parameter is required");
+		}
+		
+		if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
+			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
+		}		
+	
+		// define helper variables
+		// collection of collaborators
+		java.util.TreeMap<Integer, Collaborator> cId_cObj_map = new java.util.TreeMap<Integer, Collaborator>();
+		
+		// set of collaborators that we've already processed
+		java.util.TreeSet<Integer> foundCollaboratorsSet = new java.util.TreeSet<Integer>();
+		
+		// define other helper variables
+		QuerySolution row             = null;
+		Collaborator  collaborator    = null;
+		int           degreesFollowed = 1;
+		int           degreesToFollow = radius;
+		String        queryToExecute  = null;
+		Collection    values          = null;
+		Iterator      iterator        = null;
+		String[]      toProcess       = null;
+		
+		// define the base sparql query
+		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
+						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
+ 						   + "SELECT ?collaborator ?collabGivenName ?collabFamilyName "
+						   + "WHERE {  "
+						   + "       @ a foaf:Person ;  "
+						   + "                      ausestage:hasCollaboration ?collaboration.  "
+						   + "       ?collaboration ausestage:collaborator ?collaborator. "
+						   + "       ?collaborator  foaf:givenName ?collabGivenName; "
+						   + "                      foaf:familyName ?collabFamilyName. "
+						   + "       FILTER (?collaborator != @) "
+						   + "} ";
+						   
+		// go and get the intial batch of data
+		collaborator = new Collaborator(id);
+		cId_cObj_map.put(Integer.parseInt(id), collaborator);
+		foundCollaboratorsSet.add(Integer.parseInt(id));
+		
+		// build the query
+		queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+		
+		// execute the query
+		ResultSet results = rdf.executeSparqlQuery(queryToExecute);
+		
+		// add the first degree contributors
+		while (results.hasNext()) {
+			// loop though the resulset
+			// get a new row of data
+			row = results.nextSolution();
+			
+			// add the collaboration
+			collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+			//System.out.println(AusStageURI.getId(row.get("collaborator").toString()) + " - " + row.get("collabGivenName") + " - " + row.get("collabFamilyName"));
+		}
+		
+		// play nice and tidy up
+		rdf.tidyUp();
+		
+		// treat the one degree network as a special case
+		if(degreesToFollow == 1) {
+		
+			// get the list of contributors attached to this contributor
+			values   = collaborator.getCollaborators();
+			iterator = values.iterator();
+			
+			// loop through the list of collaborators
+			while(iterator.hasNext()) {
+			
+				// loop through the list of collaborators
+				id = (String)iterator.next();
+				
+				// add a new collaborator
+				collaborator = new Collaborator(id);
+				
+				cId_cObj_map.put(Integer.parseInt(id), collaborator);
+				
+				// build the query
+				queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+				
+				// get the data
+				results = rdf.executeSparqlQuery(queryToExecute);
+			
+				// loop though the resulset
+				while (results.hasNext()) {
+					
+					// get a new row of data
+					row = results.nextSolution();
+					
+					if(values.contains(AusStageURI.getId(row.get("collaborator").toString())) == true) {
+						collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+					}
+				}
+				// play nice and tidy up
+				rdf.tidyUp();
+
+			}		
+		
+		} else {
+		
+			// get the rest of the degrees
+			while(degreesFollowed < degreesToFollow) {
+		
+				// get all of the known collaborators
+				values = cId_cObj_map.values();
+				iterator = values.iterator();
+			
+				// loop through the list of collaborators
+				while(iterator.hasNext()) {
+					// get the collaborator
+					collaborator = (Collaborator)iterator.next();
+				
+					// get the list of contributors to process
+					toProcess = collaborator.getCollaboratorsAsArray();
+				
+					// go through them one by one
+					for(int i = 0; i < toProcess.length; i++) {
+						// have we done this collaborator already
+						if(foundCollaboratorsSet.contains(Integer.parseInt(toProcess[i])) == false) {
+							// we haven't so process them
+							collaborator = new Collaborator(toProcess[i]);
+							cId_cObj_map.put(Integer.parseInt(toProcess[i]), collaborator);
+							foundCollaboratorsSet.add(Integer.parseInt(toProcess[i]));
+						
+							// build the query
+							queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
+						
+							// get the data
+							results = rdf.executeSparqlQuery(queryToExecute);
+							
+							// loop though the resulset
+							while (results.hasNext()) {
+								// get a new row of data
+								row = results.nextSolution();
+			
+								// add the collaboration
+								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+							}
+						
+							// play nice and tidy up
+							rdf.tidyUp();
+						}
+					}
+				}
+			
+				// increment the degrees followed count
+				degreesFollowed++;
+			}
+			
+			// finalise the graph
+			// get all of the known collaborators and use a copy of the current list of collaborators
+			java.util.TreeMap clone = (java.util.TreeMap)cId_cObj_map.clone();
+			values = clone.values();
+			iterator = values.iterator();
+		
+			// loop through the list of collaborators
+			while(iterator.hasNext()) {
+				// get the collaborator
+				collaborator = (Collaborator)iterator.next();
+			
+				// get the list of contributors to process
+				toProcess = collaborator.getCollaboratorsAsArray();
+			
+				// go through them one by one
+				for(int i = 0; i < toProcess.length; i++) {
+					// have we done this collaborator already
+					if(foundCollaboratorsSet.contains(Integer.parseInt(toProcess[i])) == false) {
+						// we haven't so process them
+						collaborator = new Collaborator(toProcess[i]);
+						cId_cObj_map.put(Integer.parseInt(toProcess[i]), collaborator);
+						foundCollaboratorsSet.add(Integer.parseInt(toProcess[i]));
+					
+						// build the query
+						queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
+					
+						// get the data
+						results = rdf.executeSparqlQuery(queryToExecute);
+						
+						// loop though the resulset
+						while (results.hasNext()) {
+							// get a new row of data
+							row = results.nextSolution();
+							
+							// limit to only those collaborators we've seen before
+							if(foundCollaboratorsSet.contains(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString()))) == true) {
+		
+								// add the collaboration
+								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+							}
+						}
+					
+						// play nice and tidy up
+						rdf.tidyUp();
+					}
+				}
+			}
+			
+		}
+			
+		return cId_cObj_map;
+	
+	} // end getRawCollaboratorData method
+	
+	
+	/*
+	 * add some of the additional required information for collaborator
+	 */
+	public ArrayList<Collaborator> getCollaborators(TreeMap<Integer, Collaborator> network, String id){
 		
 		// declare helper variables
 		java.util.ArrayList<Collaborator> collaborators = new java.util.ArrayList<Collaborator>();
@@ -132,7 +423,7 @@ public class ProtovisEgoCentricManager {
 			queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(collaborator.getId()) + ">");
 			
 			// execute the query
-			results = database.executeSparqlQuery(queryToExecute);
+			results = rdf.executeSparqlQuery(queryToExecute);
 		
 			// add details to this contributor
 			while (results.hasNext()) {
@@ -153,73 +444,27 @@ public class ProtovisEgoCentricManager {
 				if(row.get("nationality") != null) {
 					collaborator.setNationality(row.get("nationality").toString());
 				}
-
+				
+				collaborator.setUrl(AusStageURI.getContributorURL(collaborator.getId()));
 			}
 			
 			// play nice and tidy
-			database.tidyUp();
+			rdf.tidyUp();
 			results = null;
 			
 			// add the collaborator to the list
 			collaborators.add(collaborator);
 		}
 		
-		/*
-		 * get a list of collaborations
-		 */
-		java.util.HashMap<Integer, CollaborationList> collaborations = new java.util.HashMap<Integer, CollaborationList>();
-		
-		// reset the iterator
-		networkKeys        = network.keySet();
-		networkKeyIterator = networkKeys.iterator();
-		networkKey         = null;
-
-		CollaborationList collaborationList;
-		
-		// loop through the list of keys
-		while(networkKeyIterator.hasNext()) {
-		
-			// get the key
-			networkKey = (Integer)networkKeyIterator.next();
-		
-			// get the list of collaborations for this user
-			collaborationList = export.getCollaborationList(networkKey);
-			
-			// add the collaborationList object to the list
-			collaborations.put(networkKey, collaborationList);
-		}
-		
-		// play nice and tidy up
-		export = null;
-		
-		/*
-		 * ajust the order of the collaborators in the array
-		 */
-		
-		// find the central collaborator and move them to the head of the array
-		networkKey   = collaborators.indexOf(new Collaborator(id));
-		collaborator = (Collaborator)collaborators.get(networkKey);
-		
-		/*
-		// add the central collaborator to the head of the list
-		collaborators.add(0, collaborator);
-		
-		// remove the old central collaborator object
-		collaborators.remove(networkKey + 1);
-		*/
-		
-		// remove the old central collaborator object
-		collaborators.remove(new Collaborator(id));
-		
-		// add the central collaborator to the end of the list
-		collaborators.add(collaborator);
-		
-		/*
-		 * build an alternate index to the array
-		 */
+		return collaborators;
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public TreeMap<Integer, Integer> buildAltIndex(){
 		
 		// build an alternate index to the array
-		java.util.TreeMap<Integer, Integer> altIndex = new java.util.TreeMap<Integer, Integer>();
+		TreeMap<Integer, Integer> index = new TreeMap<Integer, Integer>();
 		Integer altIndexer = 0;
 		
 		// build the alternate index
@@ -229,32 +474,141 @@ public class ProtovisEgoCentricManager {
 		while(iterator.hasNext()) {
 		
 			// get the next collaborator in the list
-			collaborator = (Collaborator)iterator.next();
+			Collaborator collaborator = (Collaborator)iterator.next();
 			
 			// add the collaborator id with the spot in the index
-			altIndex.put(Integer.parseInt(collaborator.getId()), altIndexer);
+			index.put(Integer.parseInt(collaborator.getId()), altIndexer);
 			
 			// increment the index count
 			altIndexer++;
 		}
+		return index;
+	}
+	
+	/*
+	 * get a list of collaborations
+	 */
+	public HashMap<Integer, CollaborationList> getCollaborations(TreeMap<Integer, Collaborator> network){
+		HashMap<Integer, CollaborationList> collaborations = new java.util.HashMap<Integer, CollaborationList>();
+
+		// reset the iterator
+		Set<Integer> networkKeys = network.keySet();
+		Iterator<Integer> networkKeyIterator = networkKeys.iterator();
+		Integer networkKey = null;
+
+		CollaborationList collaborationList;
+
+		// loop through the list of keys
+		while (networkKeyIterator.hasNext()) {
+
+			// get the key
+			networkKey = (Integer) networkKeyIterator.next();
+
+			// get the list of collaborations for this user
+			collaborationList = getCollaborationList(networkKey);
+
+			// add the collaborationList object to the list
+			collaborations.put(networkKey, collaborationList);
+		}
+	
+		return collaborations;
+	}
+	
+	/**
+	 * A method to build a list of Collaboration objects representing a list of collaborations associated with a collaborator
+	 *
+	 * @param id the unique identifier of a collaborator
+	 *
+	 * @return   a CollaborationList object containing a list of Collaboration objects
+	 */
+	public CollaborationList getCollaborationList(Integer id) {
+		return getCollaborationList(Integer.toString(id));
+	}
+	
+	/**
+	 * A method to build a list of Collaboration objects representing a list of collaborations associated with a collaborator
+	 *
+	 * @param id the unique identifier of a collaborator
+	 *
+	 * @return   a CollaborationList object containing a list of Collaboration objects
+	 */
+	public CollaborationList getCollaborationList(String id) {
+	
+		// check on the input parameters
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("The id parameter cannot be null");
+		}
 		
-		/*
-		 * build the JSON object and array of nodes
-		 */
+		// declare helper variables
+		CollaborationList list = new CollaborationList(id);
 		
-		// build the JSON object and arrays
+		// define other helper variables
+		QuerySolution row           = null;
+		Collaboration collaboration = null;
+		
+		// define other helper variables
+		String  partner   = null;
+		Integer count     = null;
+		String  firstDate = null;
+		String  lastDate  = null;
+	
+		// define the base sparql query
+		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
+						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
+ 						   + "SELECT ?collaborator ?firstDate ?lastDate ?collabCount "
+ 						   + "WHERE {  "
+ 						   + "       @ a foaf:Person ; "
+   						   + "ausestage:hasCollaboration ?collaboration. "
+ 						   + "       ?collaboration ausestage:collaborator ?collaborator; "
+ 						   + "                      ausestage:collaborationFirstDate ?firstDate; " 
+ 						   + "                      ausestage:collaborationLastDate ?lastDate; "
+ 						   + "                      ausestage:collaborationCount ?collabCount. "
+ 						   + "       FILTER (?collaborator != @) "
+ 						   + "} ";
+		
+		// build the query
+		String queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+		
+		// execute the query
+		ResultSet results = rdf.executeSparqlQuery(queryToExecute);
+		
+		// add the first degree contributors
+		while (results.hasNext()) {
+			// loop though the resulset
+			// get a new row of data
+			row = results.nextSolution();
+			
+			// get the data
+			partner   = AusStageURI.getId(row.get("collaborator").toString());
+			count     = row.get("collabCount").asLiteral().getInt();
+			firstDate = row.get("firstDate").toString();
+			lastDate  = row.get("lastDate").toString();
+			
+			// create the collaboration object
+			collaboration = new Collaboration(id, partner, count, firstDate, lastDate);
+			
+			// add the collaboration to the list
+			list.addCollaboration(collaboration); 
+		}
+		
+		// play nice and tidy up
+		rdf.tidyUp();
+		
+		// return the list of collaborations
+		return list;		
+	
+	} // end the CollaborationList method
+	
+	
+	public JSONObject buildJSONNodes(JSONObject object, ArrayList<Collaborator> collaborators){
+		
+		ListIterator<Collaborator> iterator = collaborators.listIterator();
 		JSONArray  nodes  = new JSONArray();
-		JSONArray  edges  = new JSONArray();
-		JSONObject object = new JSONObject();
-		JSONObject edge   = null;
-		
-		iterator = collaborators.listIterator();
-		
 		// add the collaborators
 		while(iterator.hasNext()) {
 		
 			// get the next collaborator in the list
-			collaborator = (Collaborator)iterator.next();
+			Collaborator collaborator = (Collaborator)iterator.next();
 			
 			// add the collaborator to the list of nodes
 			nodes.add(collaboratorToJSONObject(collaborator));
@@ -264,31 +618,35 @@ public class ProtovisEgoCentricManager {
 		// build the final object
 		object.put("nodes", nodes);
 		
-		
-		/*
-		 * build the JSON array of edges
-		 */
+		return object;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject buildJSONEdges(JSONObject object, String id){
 		
 		Collection networkValues        = network.values();
 		Iterator   networkValueIterator = networkValues.iterator();
 		String[] edgesToMake = null;
-		altIndexer = 0;
+		int altIndexer = 0;
 		Integer source = null;
 		Integer target = null;
 		Integer altSourceIndex = null;
 		Collaboration collaboration = null;
+		JSONObject edge   = null;
+		JSONArray  edges  = new JSONArray();
 		
 		// add the edges
 		while(networkValueIterator.hasNext()) {
 		
 			// get the next collaborator in the list
-			collaborator = (Collaborator)networkValueIterator.next();
+			Collaborator collaborator = (Collaborator)networkValueIterator.next();
 			source = Integer.parseInt(collaborator.getId());
 			altSourceIndex = (Integer)altIndex.get(source);
 			
 			// get the list of collaborators
 			edgesToMake = collaborator.getCollaboratorsAsArray();
 			
+			CollaborationList collaborationList;
 			// treat the edges to the central node different to the other edges
 			if(source == Integer.parseInt(id)) {
 			
@@ -347,10 +705,8 @@ public class ProtovisEgoCentricManager {
 		
 		object.put("edges", edges);
 		
-		return object.toString();
-
-	
-	} // end the getData method
+		return object;
+	}
 	
 	/**
 	 * A method to build a JSON object
@@ -402,10 +758,10 @@ public class ProtovisEgoCentricManager {
 	 * @return the database connection string
 	 */
 	private String getConnectionString() {
-		if(InputUtils.isValid(database.getContextParam("databaseConnectionString")) == false) {
+		if(InputUtils.isValid(rdf.getContextParam("databaseConnectionString")) == false) {
 			throw new RuntimeException("Unable to read the connection string parameter from the web.xml file");
 		} else {
-			return database.getContextParam("databaseConnectionString");
+			return rdf.getContextParam("databaseConnectionString");
 		}
 	}
 
@@ -610,6 +966,13 @@ public class ProtovisEgoCentricManager {
 			edge.setTarget(nodesIndex.indexOf(edge.getTarget()));
 		}
 		
+		try {
+			database.finalize();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		
 		//declare JSON related variables
 		JSONObject object     = new JSONObject();
 		JSONArray  nodesList  = new JSONArray();
@@ -627,6 +990,235 @@ public class ProtovisEgoCentricManager {
 		
 		// return the JSON string
 		return object.toString();	
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Document toGraphMLDOM(Document egoDom, String id, int radius, String graphType){
+		
+		// check on the parameters
+		if(InputUtils.isValidInt(id) == false) {
+			throw new IllegalArgumentException("Error: the id parameter is required");
+		}
+		
+		if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
+			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
+		}
+		
+		/*// determine how to build the export
+		if(radius == 1) {
+			// use the alternate method for an export with a radius of 1
+			return alternateData(id);
+		} */
+	
+		/*
+		 * get the base network data
+		 */
+		// get the network data for this collaborator
+		network = getRawCollaboratorData(id, radius);
+		
+		//add some additional required information for contributors
+		collaborators = getCollaborators(network, id);
+		
+		//get collaboration List			
+		collaborations = getCollaborations(network);
+		
+		/*
+		 * ajust the order of the collaborators in the array
+		 */
+		
+		// find the central collaborator and move them to the head of the array
+		int networkKey = collaborators.indexOf(new Collaborator(id));
+		Collaborator center_collaborator = (Collaborator)collaborators.get(networkKey);
+		
+		// remove the old central collaborator object
+		collaborators.remove(new Collaborator(id));
+		
+		// add the central collaborator to the end of the list
+		collaborators.add(center_collaborator);
+		
+		// build an alternate index to the array
+		//altIndex = buildAltIndex();
+			
+		Element rootElement = egoDom.getDocumentElement();
+		rootElement = createHeaderElements(egoDom, rootElement, graphType);
+
+		// add the graph element
+		Element graph = egoDom.createElement("graph");
+		graph.setAttribute("id", "Contributor Network for contributor: " +  center_collaborator.getName() + "( " + id + " )");
+		graph.setAttribute("edgedefault", graphType);
+		rootElement.appendChild(graph);
+		
+		//create node element in DOM		
+		for (int i = 0; i < collaborators.size(); i++){
+			Element node = createNodeElement(egoDom,i);			
+			graph.appendChild(node);
+		}
+		
+		//create edge element in DOM
+		Collection networkValues        = network.values();
+		Iterator   networkValueIterator = networkValues.iterator();
+		String[] edgesToMake = null;
+		
+		Integer source = null;
+		Integer target = null;
+		//Integer altSource = null;
+		//Integer altTarget = 0;
+		Collaboration collaboration = null;
+		int edgeIndex = 0;
+		
+		// add the edges
+		while(networkValueIterator.hasNext()) {
+		
+			// get the next collaborator in the list
+			Collaborator collaborator = (Collaborator)networkValueIterator.next();
+			source = Integer.parseInt(collaborator.getId());
+			//altSource = (Integer)altIndex.get(source);
+			
+			// get the list of collaborators
+			edgesToMake = collaborator.getCollaboratorsAsArray();
+			
+			CollaborationList collaborationList;
+			// treat the edges to the central node different to the other edges
+			if(source == Integer.parseInt(id)) {
+			
+				// edges to the central node
+				// loop through the list of collaborations
+				for(int i = 0; i < edgesToMake.length; i++) {
+					// determine the index value for this collaborator
+					target = Integer.parseInt(edgesToMake[i]);				
+					//altTarget = (Integer)altIndex.get(target);
+					
+					// get the additional data about the edge
+					collaborationList = collaborations.get(source);
+					collaboration = collaborationList.getCollaboration(Integer.parseInt(edgesToMake[i]));
+					
+					Element edge = createEdgeElement(egoDom, collaboration, source, target, edgeIndex);
+					graph.appendChild(edge);
+					edgeIndex ++;
+				}
+			} else {
+				// other edges
+				// loop through the list of collaborations
+				for(int i = 0; i < edgesToMake.length; i++) {
+					// determine the index value for this collaborator
+					target = Integer.parseInt(edgesToMake[i]);				
+					//altTarget = (Integer)altIndex.get(target);
+		
+					if(source < target) {
+										
+						// get the additional data about the edge
+						collaborationList = collaborations.get(source);
+						collaboration = collaborationList.getCollaboration(target);
+				
+						Element edge = createEdgeElement(egoDom, collaboration, source, target, edgeIndex);
+						graph.appendChild(edge);
+						edgeIndex ++;
+					}
+				}
+			}
+	
+		}
+		return egoDom;
+	}
+	
+	public Element createHeaderElements (Document egoDom, Element rootElement, String graphType){
+		Element key;
+			
+		// add schema namespace to the root element
+		rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		
+		// add reference to the kml schema
+		rootElement.setAttribute("xsi:schemaLocation", "http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
+		
+		// add some useful comments to the file
+		rootElement.appendChild(egoDom.createComment("Graph generated on: " + DateUtils.getCurrentDateAndTime()));
+//		rootElement.appendChild(xmlDoc.createComment("Graph generated by: " + rdf.getContextParam("systemName") + " Version: " + rdf.getContextParam("systemVersion") + " Build: " + rdf.getContextParam("buildVersion")));
+		
+		//create key element for node
+		for(int row = 0; row < nodeAttr.length; row ++){
+			key = createKeyElement(egoDom, "node", nodeAttr[row][0],  nodeAttr[row][1]);
+			rootElement.appendChild(key);			
+		}
+				
+		//create key element for edge
+		for(int row = 0; row < edgeAttr.length; row ++){
+			key = createKeyElement(egoDom, "edge", edgeAttr[row][0], edgeAttr[row][1]);
+			rootElement.appendChild(key);
+		}
+				
+		return rootElement;
+	}
+	
+	public Element createKeyElement(Document egoDom, String nodeOrEdge, String name, String type){
+		Element key;
+		
+		key = egoDom.createElement("key");
+		key.setAttribute("id", name);
+		key.setAttribute("for", nodeOrEdge);
+		key.setAttribute("attr.name", name);
+		key.setAttribute("attr.type", type);
+		
+		return key;
+	}
+	
+	public Element createNodeElement(Document dom, int i){
+		Element data;
+		
+		Collaborator col = collaborators.get(i);
+		Element node = dom.createElement("node");
+		node.setAttribute("id", col.getId());
+		
+		for(int row = 0; row < nodeAttr.length; row ++){
+			data = dom.createElement("data");
+			data.setAttribute("key", nodeAttr[row][0]);
+			
+			if (nodeAttr[row][0].equalsIgnoreCase("ContributorID"))
+				data.setTextContent(col.getId()); 
+			else if	(nodeAttr[row][0].equalsIgnoreCase("Label"))
+				data.setTextContent(col.getName());
+			else if (nodeAttr[row][0].equalsIgnoreCase("ContributorName"))
+				data.setTextContent(col.getName());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Roles")) 
+				data.setTextContent(col.getFunction());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Gender")) 
+				data.setTextContent(col.getGender());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Nationality")) 
+				data.setTextContent(col.getNationality());
+			else if (nodeAttr[row][0].equalsIgnoreCase("ContributorURL"))
+				data.setTextContent(col.getUrl());	
+				//data.setTextContent(conURLprefix + col.getId());			
+			
+			node.appendChild(data);			
+		}
+				
+		return node;		
+	}
+	
+	public Element createEdgeElement(Document evtDom, Collaboration collaboration, int src, int tar, int index){
+				
+		Element edge = evtDom.createElement("edge");
+		edge.setAttribute("id", "e" + Integer.toString(index));
+		edge.setAttribute("source", Integer.toString(src));
+		edge.setAttribute("target", Integer.toString(tar));
+		
+		for(int row = 0; row < edgeAttr.length; row ++){
+			Element data = evtDom.createElement("data");
+			data.setAttribute("key", edgeAttr[row][0]);
+			
+			if (edgeAttr[row][0].equalsIgnoreCase("SourceContributorID"))
+				data.setTextContent(Integer.toString(src)); 
+			else if	(edgeAttr[row][0].equalsIgnoreCase("TargetContributorID"))
+				data.setTextContent(Integer.toString(tar));
+			else if	(edgeAttr[row][0].equalsIgnoreCase("NumOfCollaboration"))
+				data.setTextContent(Integer.toString(collaboration.getCollaborationCount()));
+			else if (edgeAttr[row][0].equalsIgnoreCase("FirstDate"))
+				data.setTextContent(collaboration.getFirstDate());
+			else if (edgeAttr[row][0].equalsIgnoreCase("LastDate"))
+				data.setTextContent(collaboration.getLastDate());
+				
+			edge.appendChild(data);
+		}
+		return edge;
 	}
 	
 	/**

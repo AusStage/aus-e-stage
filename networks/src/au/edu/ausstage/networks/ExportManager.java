@@ -69,7 +69,7 @@ public class ExportManager {
 	 * @param graphType   the type of graph to created, must be one of directed / undirected
 	 * @param printWriter the output stream to use to stream the output to the client
 	 */
-	public void getSimpleNetwork(String id, String formatType, int radius, String graphType, PrintWriter printWriter) {
+	public void buildCollaboratorNetworkGraphml(String id, String formatType, int radius, String graphType, PrintWriter printWriter) {
 	
 		// check the parameters
 		if(InputUtils.isValidInt(id) == false || InputUtils.isValid(formatType) == false || InputUtils.isValid(graphType) == false || printWriter == null) {
@@ -80,232 +80,30 @@ public class ExportManager {
 			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
 		}
 		
-		java.util.TreeMap<Integer, Collaborator> collaborators = getRawCollaboratorData(id, radius);
-		
-		
-		// dataset is built so time to do something with it
 		if(formatType.equals("graphml") == true) {
-			buildGraphml(collaborators, graphType, printWriter);
+
+			//create Document 
+			Document egoDom = createXMLDoc("http://graphml.graphdrawing.org/xmlns", "graphml", null);
+				
+			ProtovisEgoCentricManager egoManager = new ProtovisEgoCentricManager(rdf);
+			egoDom = egoManager.toGraphMLDOM(egoDom, id, radius, graphType);
+		
+			if (egoDom != null)
+				domToXMLString(printWriter, egoDom);
+			else
+				throw new RuntimeException("Dom is  null !");
+			
+			//buildGraphml(network, graphType, printWriter);
+			
 		} else if(formatType.equals("debug")) {
-			buildDebugFile(collaborators, graphType, printWriter);
+			
+			ProtovisEgoCentricManager egoManager = new ProtovisEgoCentricManager(rdf);
+			TreeMap<Integer, Collaborator> network = egoManager.getRawCollaboratorData(id, radius);
+			buildDebugFile(network, graphType, printWriter);
+			
 		}	
-	} // end getSimpleNetwork method
+	}
 	
-	/**
-	 * A method to build a collection of collaborator object representing a network
-	 *
-	 * @param id     the unique identifier of the root collaborator
-	 * @param radius the number of edges required from the central contributor
-	 *
-	 * @return        the collection of collaborator objects
-	 */
-	public java.util.TreeMap<Integer, Collaborator> getRawCollaboratorData(String id, int radius) {
-	
-		// check the parameters
-		if(InputUtils.isValidInt(id) == false) {
-			throw new IllegalArgumentException("Error: the id parameter is required");
-		}
-		
-		if(InputUtils.isValidInt(radius, ExportServlet.MIN_DEGREES, ExportServlet.MAX_DEGREES) == false) {
-			throw new IllegalArgumentException("Error: the radius parameter must be between " + ExportServlet.MIN_DEGREES + " and " + ExportServlet.MAX_DEGREES);
-		}		
-	
-		// define helper variables
-		// collection of collaborators
-		java.util.TreeMap<Integer, Collaborator> collaborators = new java.util.TreeMap<Integer, Collaborator>();
-		
-		// set of collaborators that we've already processed
-		java.util.TreeSet<Integer> foundCollaborators = new java.util.TreeSet<Integer>();
-		
-		// define other helper variables
-		QuerySolution row             = null;
-		Collaborator  collaborator    = null;
-		int           degreesFollowed = 1;
-		int           degreesToFollow = radius;
-		String        queryToExecute  = null;
-		Collection    values          = null;
-		Iterator      iterator        = null;
-		String[]      toProcess       = null;
-	
-		// define the base sparql query
-		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
-						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
- 						   + "SELECT ?collaborator ?collabGivenName ?collabFamilyName "
-						   + "WHERE {  "
-						   + "       @ a foaf:Person ;  "
-						   + "                      ausestage:hasCollaboration ?collaboration.  "
-						   + "       ?collaboration ausestage:collaborator ?collaborator. "
-						   + "       ?collaborator  foaf:givenName ?collabGivenName; "
-						   + "                      foaf:familyName ?collabFamilyName. "
-						   + "       FILTER (?collaborator != @) "
-						   + "} ";
-						   
-		// go and get the intial batch of data
-		collaborator = new Collaborator(id);
-		collaborators.put(Integer.parseInt(id), collaborator);
-		foundCollaborators.add(Integer.parseInt(id));
-		
-		// build the query
-		queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
-		
-		// execute the query
-		ResultSet results = rdf.executeSparqlQuery(queryToExecute);
-		
-		// add the first degree contributors
-		while (results.hasNext()) {
-			// loop though the resulset
-			// get a new row of data
-			row = results.nextSolution();
-			
-			// add the collaboration
-			collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
-		}
-		
-		// play nice and tidy up
-		rdf.tidyUp();
-		
-		// treat the one degree network as a special case
-		if(degreesToFollow == 1) {
-		
-			// get the list of contributors attached to this contributor
-			values   = collaborator.getCollaborators();
-			iterator = values.iterator();
-			
-			// loop through the list of collaborators
-			while(iterator.hasNext()) {
-			
-				// loop through the list of collaborators
-				id = (String)iterator.next();
-				
-				// add a new collaborator
-				collaborator = new Collaborator(id);
-				collaborators.put(Integer.parseInt(id), collaborator);
-				
-				// build the query
-				queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
-				
-				// get the data
-				results = rdf.executeSparqlQuery(queryToExecute);
-			
-				// loop though the resulset
-				while (results.hasNext()) {
-					
-					// get a new row of data
-					row = results.nextSolution();
-					
-					if(values.contains(AusStageURI.getId(row.get("collaborator").toString())) == true) {
-						collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
-					}
-				}
-			}		
-		
-		} else {
-		
-			// get the rest of the degrees
-			while(degreesFollowed < degreesToFollow) {
-		
-				// get all of the known collaborators
-				values = collaborators.values();
-				iterator = values.iterator();
-			
-				// loop through the list of collaborators
-				while(iterator.hasNext()) {
-					// get the collaborator
-					collaborator = (Collaborator)iterator.next();
-				
-					// get the list of contributors to process
-					toProcess = collaborator.getCollaboratorsAsArray();
-				
-					// go through them one by one
-					for(int i = 0; i < toProcess.length; i++) {
-						// have we done this collaborator already
-						if(foundCollaborators.contains(Integer.parseInt(toProcess[i])) == false) {
-							// we haven't so process them
-							collaborator = new Collaborator(toProcess[i]);
-							collaborators.put(Integer.parseInt(toProcess[i]), collaborator);
-							foundCollaborators.add(Integer.parseInt(toProcess[i]));
-						
-							// build the query
-							queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
-						
-							// get the data
-							results = rdf.executeSparqlQuery(queryToExecute);
-							
-							// loop though the resulset
-							while (results.hasNext()) {
-								// get a new row of data
-								row = results.nextSolution();
-			
-								// add the collaboration
-								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
-							}
-						
-							// play nice and tidy up
-							rdf.tidyUp();
-						}
-					}
-				}
-			
-				// increment the degrees followed count
-				degreesFollowed++;
-			}
-			
-			// finalise the graph
-			// get all of the known collaborators and use a copy of the current list of collaborators
-			java.util.TreeMap clone = (java.util.TreeMap)collaborators.clone();
-			values = clone.values();
-			iterator = values.iterator();
-		
-			// loop through the list of collaborators
-			while(iterator.hasNext()) {
-				// get the collaborator
-				collaborator = (Collaborator)iterator.next();
-			
-				// get the list of contributors to process
-				toProcess = collaborator.getCollaboratorsAsArray();
-			
-				// go through them one by one
-				for(int i = 0; i < toProcess.length; i++) {
-					// have we done this collaborator already
-					if(foundCollaborators.contains(Integer.parseInt(toProcess[i])) == false) {
-						// we haven't so process them
-						collaborator = new Collaborator(toProcess[i]);
-						collaborators.put(Integer.parseInt(toProcess[i]), collaborator);
-						foundCollaborators.add(Integer.parseInt(toProcess[i]));
-					
-						// build the query
-						queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(toProcess[i]) + ">");
-					
-						// get the data
-						results = rdf.executeSparqlQuery(queryToExecute);
-						
-						// loop though the resulset
-						while (results.hasNext()) {
-							// get a new row of data
-							row = results.nextSolution();
-							
-							// limit to only those collaborators we've seen before
-							if(foundCollaborators.contains(Integer.parseInt(AusStageURI.getId(row.get("collaborator").toString()))) == true) {
-		
-								// add the collaboration
-								collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
-							}
-						}
-					
-						// play nice and tidy up
-						rdf.tidyUp();
-					}
-				}
-			}
-			
-		}
-		
-		// play nice and tidy up
-		rdf.tidyUp();
-		
-		return collaborators;
-	
-	} // end getRawCollaboratorData method
 	
 	/**
 	 * A method to output the export in the plain text format used for debugging
@@ -696,91 +494,7 @@ public class ExportManager {
 		rdf.tidyUp();	
 	}
 	
-	/**
-	 * A method to build a list of Collaboration objects representing a list of collaborations associated with a collaborator
-	 *
-	 * @param id the unique identifier of a collaborator
-	 *
-	 * @return   a CollaborationList object containing a list of Collaboration objects
-	 */
-	public CollaborationList getCollaborationList(Integer id) {
-		return getCollaborationList(Integer.toString(id));
-	}
-	
-	/**
-	 * A method to build a list of Collaboration objects representing a list of collaborations associated with a collaborator
-	 *
-	 * @param id the unique identifier of a collaborator
-	 *
-	 * @return   a CollaborationList object containing a list of Collaboration objects
-	 */
-	public CollaborationList getCollaborationList(String id) {
-	
-		// check on the input parameters
-		if(InputUtils.isValidInt(id) == false) {
-			throw new IllegalArgumentException("The id parameter cannot be null");
-		}
-		
-		// declare helper variables
-		CollaborationList list = new CollaborationList(id);
-		
-		// define other helper variables
-		QuerySolution row           = null;
-		Collaboration collaboration = null;
-		
-		// define other helper variables
-		String  partner   = null;
-		Integer count     = null;
-		String  firstDate = null;
-		String  lastDate  = null;
-	
-		// define the base sparql query
-		String sparqlQuery = "PREFIX foaf:       <" + FOAF.NS + ">"
-						   + "PREFIX ausestage:  <" + AuseStage.NS + "> "
- 						   + "SELECT ?collaborator ?firstDate ?lastDate ?collabCount "
- 						   + "WHERE {  "
- 						   + "       @ a foaf:Person ; "
-   						   + "ausestage:hasCollaboration ?collaboration. "
- 						   + "       ?collaboration ausestage:collaborator ?collaborator; "
- 						   + "                      ausestage:collaborationFirstDate ?firstDate; " 
- 						   + "                      ausestage:collaborationLastDate ?lastDate; "
- 						   + "                      ausestage:collaborationCount ?collabCount. "
- 						   + "       FILTER (?collaborator != @) "
- 						   + "} ";
-		
-		// build the query
-		String queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
-		
-		// execute the query
-		ResultSet results = rdf.executeSparqlQuery(queryToExecute);
-		
-		// add the first degree contributors
-		while (results.hasNext()) {
-			// loop though the resulset
-			// get a new row of data
-			row = results.nextSolution();
-			
-			// get the data
-			partner   = AusStageURI.getId(row.get("collaborator").toString());
-			count     = row.get("collabCount").asLiteral().getInt();
-			firstDate = row.get("firstDate").toString();
-			lastDate  = row.get("lastDate").toString();
-			
-			// create the collaboration object
-			collaboration = new Collaboration(id, partner, count, firstDate, lastDate);
-			
-			// add the collaboration to the list
-			list.addCollaboration(collaboration); 
-		}
-		
-		// play nice and tidy up
-		rdf.tidyUp();
-		
-		// return the list of collaborations
-		return list;		
-	
-	} // end the CollaborationList method
-	
+
 	/**
 	 * A method to build and return a actor edge list
 	 *
@@ -987,7 +701,7 @@ public class ExportManager {
 		rdf.tidyUp();	
 	}
 	
-	public void buildEvtNetworkGraphml(String id, String formatType, int radius, boolean simplify, String graphType, PrintWriter printWriter){
+	public void buildEvtNetworkGraphml(String id, int radius, boolean simplify, String graphType, PrintWriter printWriter){
 		Element rootElement;
 		Element graph;
 		
@@ -995,7 +709,7 @@ public class ExportManager {
 		Document evtDom = createXMLDoc("http://graphml.graphdrawing.org/xmlns", "graphml", null);
 			
 		ProtovisEventCentricManager evtManager = new ProtovisEventCentricManager(db);
-		evtDom = evtManager.toGraphMLDOM(evtDom, id, formatType, radius, simplify, graphType);
+		evtDom = evtManager.toGraphMLDOM(evtDom, id, radius, simplify, graphType);
 		
 		if (evtDom != null)
 			domToXMLString(printWriter, evtDom);
@@ -1008,5 +722,58 @@ public class ExportManager {
 			e.printStackTrace();
 		}
 	}
+	
+public static void main(String[] args) throws FileNotFoundException {
+	long startTime = System.currentTimeMillis();
+	
+	//export contributor network
+	DataManager rdf = new DataManager();
+	ExportManager export = new ExportManager(rdf);
+	
+	//String id = "900";
+	//String id = "242112";
+	//String id = "249989";
+	//String id = "5119";
+	//String id = "414321";
+	String id = "8072";
+	String formatType = "graphml";
+	int radius = 1;
+	String graphType = "undirected";
+	PrintWriter printWriter = new PrintWriter("C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\con-" + id + "-D-" + radius + "." + formatType);
+	
+	export.buildCollaboratorNetworkGraphml(id, formatType, radius , graphType, printWriter);
+
+/*
+	//export event network
+ 	String connectString = "jdbc:oracle:thin:ausstage_schema/ausstage@www.ausstage.edu.au:1521:drama11";		
+	DatabaseManager db = new DatabaseManager(connectString);
+	ExportManager export = new ExportManager(db);
+	
+	//String id = "82378"; //the Under Room
+	//String id = "65600"; //Euripides' Trojan Women
+	String id = "74049"; //Trouble on Planet Earth
+	//String id = "74101"; //When the Rain Stops Falling
+	//String id = "32187"; //Cloudstreet 
+	String formatType = "graphml";
+	int radius = 1;
+	boolean simplify = false;
+	String graphType = "directed";
+	//PrintWriter printWriter = new PrintWriter(System.out);
+	String filename = "";
+	if (radius == 1) 
+		filename = "C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\evt-" + id + "-D-" + radius + "." + formatType;
+	else if (simplify)
+		filename = "C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\evt-" + id + "-D-" + radius + "-s." + formatType;
+	else
+		filename = "C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\evt-" + id + "-D-" + radius + "-c." + formatType;
+	
+	PrintWriter printWriter = new PrintWriter(filename);
+
+	export.buildEvtNetworkGraphml(id, radius, simplify, graphType, printWriter);
+*/
+	long endTime = System.currentTimeMillis();
+	System.out.println("\n Total elapsed time in execution is :" + (endTime-startTime)+ "ms");
+}
+
 	
 }

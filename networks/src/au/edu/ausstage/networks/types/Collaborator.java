@@ -43,7 +43,7 @@ public class Collaborator implements Comparable<Collaborator>{
 	private String firstDate = null;
 	private String lastDate = null;
 	private String collaborations = null;
-	private TreeSet<String> collaborators = null;
+	private TreeSet<String> collaboratorsSet = null;
 	//the contributor has roles for each event
 	private Map<Integer, String> evt_role_map = new HashMap<Integer, String>();
 	
@@ -407,12 +407,12 @@ public class Collaborator implements Comparable<Collaborator>{
 		
 			// instantiate a collaborations object if required
 			// we do this late to save on resources
-			if(collaborators == null) {
-				collaborators = new TreeSet<String>();
+			if(collaboratorsSet == null) {
+				collaboratorsSet = new TreeSet<String>();
 			}
 			
 			// add to the list of collaborations			
-			collaborators.add(value);
+			collaboratorsSet.add(value);
 			
 		} else {
 			throw new IllegalArgumentException("The value cannot be null");
@@ -425,7 +425,7 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @return the list of collaborations as TeeSet
 	 */
 	public TreeSet getCollaborators() {
-		return collaborators;
+		return collaboratorsSet;
 	}
 	
 	/**
@@ -434,8 +434,8 @@ public class Collaborator implements Comparable<Collaborator>{
 	 * @return an array of collaborations
 	 */
 	public String[] getCollaboratorsAsArray() {
-		if(collaborators != null) {
-			return collaborators.toArray(new String[0]);
+		if(collaboratorsSet != null) {
+			return collaboratorsSet.toArray(new String[0]);
 		} else {
 			return new String[0];
 		}

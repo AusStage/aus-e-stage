@@ -37,7 +37,7 @@ public class ExportServlet extends HttpServlet {
 	private String connectString = null;
 	
 	// declare constants
-	private final String[] TASK_TYPES   = {"ego-centric-network-simple", "event-centric-network",
+	private final String[] TASK_TYPES   = {"ego-centric-network", "event-centric-network",
 	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only",
 	                                       "actor-edge-list-with-dups", "actor-edge-list-no-dups", "actor-edge-list-with-dups-id-only", "actor-edge-list-no-dups-id-only"};
 	                                       
@@ -141,10 +141,14 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		// determine the type of export to undertake
-		if(taskType.equals("ego-centric-network-simple")) {
+		if(taskType.equals("ego-centric-network")) {
+			String filename = "Con-" + id + "-D-" + Integer.toString(degrees);
+			filename = filename + "." + formatType;	
+			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+			
 			// instantiate a lookup object
 			ExportManager export = new ExportManager(rdf);
-			export.getSimpleNetwork(id, formatType, degrees, "undirected", response.getWriter());
+			export.buildCollaboratorNetworkGraphml(id, formatType, degrees, "undirected", response.getWriter());
 			
 		} else if(taskType.startsWith("full-edge-list")) {
 			// instantiate a lookup object
@@ -156,7 +160,7 @@ public class ExportServlet extends HttpServlet {
 			ExportManager export = new ExportManager(rdf);
 			export.getActorEdgeList(taskType, response.getWriter());
 			
-		} else if(taskType.equals("event-centric-network")) {
+		} else if(taskType.equals("event-centric-network") && formatType.equalsIgnoreCase("graphml")) {
 			
 			String filename = "Evt-" + id + "-D-" + Integer.toString(degrees);
 			if (degrees >= 2) { 
@@ -172,7 +176,7 @@ public class ExportServlet extends HttpServlet {
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 			ExportManager export = new ExportManager(db);
-			export.buildEvtNetworkGraphml(id, formatType, degrees, simplify, "directed", response.getWriter());			
+			export.buildEvtNetworkGraphml(id, degrees, simplify, "directed", response.getWriter());			
 			
 		}
 		
