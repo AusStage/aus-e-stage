@@ -723,57 +723,5 @@ public class ExportManager {
 		}
 	}
 	
-public static void main(String[] args) throws FileNotFoundException {
-	long startTime = System.currentTimeMillis();
-	
-	//export contributor network
-	DataManager rdf = new DataManager();
-	ExportManager export = new ExportManager(rdf);
-	
-	//String id = "900";
-	//String id = "242112";
-	//String id = "249989";
-	//String id = "5119";
-	//String id = "414321";
-	String id = "8072";
-	String formatType = "graphml";
-	int radius = 1;
-	String graphType = "undirected";
-	PrintWriter printWriter = new PrintWriter("C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\con-" + id + "-D-" + radius + "." + formatType);
-	
-	export.buildCollaboratorNetworkGraphml(id, formatType, radius , graphType, printWriter);
-
-/*
-	//export event network
- 	String connectString = "jdbc:oracle:thin:ausstage_schema/ausstage@www.ausstage.edu.au:1521:drama11";		
-	DatabaseManager db = new DatabaseManager(connectString);
-	ExportManager export = new ExportManager(db);
-	
-	//String id = "82378"; //the Under Room
-	//String id = "65600"; //Euripides' Trojan Women
-	String id = "74049"; //Trouble on Planet Earth
-	//String id = "74101"; //When the Rain Stops Falling
-	//String id = "32187"; //Cloudstreet 
-	String formatType = "graphml";
-	int radius = 1;
-	boolean simplify = false;
-	String graphType = "directed";
-	//PrintWriter printWriter = new PrintWriter(System.out);
-	String filename = "";
-	if (radius == 1) 
-		filename = "C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\evt-" + id + "-D-" + radius + "." + formatType;
-	else if (simplify)
-		filename = "C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\evt-" + id + "-D-" + radius + "-s." + formatType;
-	else
-		filename = "C:\\Documents and Settings\\ehlt_user\\Desktop\\network\\graphml\\evt-" + id + "-D-" + radius + "-c." + formatType;
-	
-	PrintWriter printWriter = new PrintWriter(filename);
-
-	export.buildEvtNetworkGraphml(id, radius, simplify, graphType, printWriter);
-*/
-	long endTime = System.currentTimeMillis();
-	System.out.println("\n Total elapsed time in execution is :" + (endTime-startTime)+ "ms");
-}
-
 	
 }
