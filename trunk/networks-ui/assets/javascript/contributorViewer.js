@@ -155,7 +155,8 @@ function initGraph(obj){
 			  	.width(function(){return obj.w})
 			  	.height(function(){return obj.h})
 			  	.event("mousedown", pv.Behavior.pan())
-			  	.event("mousewheel", pv.Behavior.zoom())
+			  	.event("mousewheel", pv.Behavior.zoom(0.5))
+			  	.event("zoom", function(){updateZoomSlider()})
 			  	.event("click", function(d) {obj.onClick(null, CLEAR); return obj.vis;});
 
 		//add a force layout to the Panel. 
