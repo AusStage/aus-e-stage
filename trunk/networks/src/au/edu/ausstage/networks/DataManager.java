@@ -83,6 +83,13 @@ public class DataManager {
 		
 	} // end constructor
 	
+	public DataManager (){
+		
+		accessMethod = "local";
+		datastorePath = "C:\\rdf-data\\tdb-data-store";
+			
+	}
+	
 	/**
 	 * A method to execute a SPARQL Query
 	 *
@@ -111,7 +118,7 @@ public class DataManager {
 	private ResultSet executeViaLocal(String sparqlQuery) {
 	
 		// play nice and tidy up
-		tidyUp(false);
+		//tidyUp(false);
 		
 		// connect to the dataset
 		if(dataset == null) {
@@ -141,7 +148,7 @@ public class DataManager {
 	private ResultSet executeViaEndpoint(String sparqlQuery) {
 	
 		// play nice and tidy up
-		tidyUp(false);
+		//tidyUp(false);
 	
 		// get a query execution object		
 		execution = QueryExecutionFactory.sparqlService(datastorePath, sparqlQuery);
@@ -185,8 +192,15 @@ public class DataManager {
 	 */
 	public void tidyUp() {
 	
-		tidyUp(false);
-	
+		//tidyUp(false);
+		execution.close();
+		execution = null;
+		
+		dataset.close();
+		dataset = null;
+		
+		query = null;
+		results = null;
 	} // end tidyUp method
 	
 	/**

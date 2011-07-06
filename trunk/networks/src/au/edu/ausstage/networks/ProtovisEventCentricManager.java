@@ -31,6 +31,7 @@ import java.sql.SQLException;
 
 // import AusStage related packages
 import au.edu.ausstage.utils.*;
+import au.edu.ausstage.vocabularies.AusStageURI;
 import au.edu.ausstage.networks.types.*;
 
 /**
@@ -73,8 +74,8 @@ public class ProtovisEventCentricManager {
 			{"SourceEventID", "string"}, {"TargetEventID", "string"}, {"ContributorURL", "string"}
 	};
 	
-	public String evtURLprefix =  "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=";
-	public String conURLprefix = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
+	//public String evtURLprefix =  "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id=";
+	//public String conURLprefix = "http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id=";
 		
 	//first_date comparator used to sort Event nodes
 	public EvtComparator evtComp = new EvtComparator();
@@ -518,7 +519,9 @@ public class ProtovisEventCentricManager {
 				evt.setMyFirstDate(date);				
 				if (suburb != null && !suburb.isEmpty())
 					venueDetail = venueDetail + ", " + suburb;
-				if (state != null && !state.isEmpty() && country.equalsIgnoreCase("Australia"))
+				if (country == null && state != null) 
+					venueDetail = venueDetail + ", " + state;
+				if (country != null && state != null && !state.isEmpty() && country.equalsIgnoreCase("Australia"))
 					venueDetail = venueDetail + ", " + state;
 				if (country != null && !country.isEmpty() && !country.equalsIgnoreCase("Australia"))
 					venueDetail = venueDetail + ", " + country;
@@ -783,7 +786,7 @@ public class ProtovisEventCentricManager {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public Document toGraphMLDOM(Document evtDom, String eventId, String formatType, int radius, boolean simplify, String graphType){
+	public Document toGraphMLDOM(Document evtDom, String eventId, int radius, boolean simplify, String graphType){
 				
 		Set<Integer> vertexSet = new HashSet<Integer>();  //the nth degree nodes set
 		
@@ -936,7 +939,8 @@ public class ProtovisEventCentricManager {
 			} else if (nodeAttr[row][0].equalsIgnoreCase("OutDegree")){
 				data.setTextContent(Integer.toString(degree[i][1]));
 			} else if (nodeAttr[row][0].equalsIgnoreCase("EventURL")){
-				data.setTextContent(evtURLprefix + evt.getId());
+				data.setTextContent(AusStageURI.getEventURL(evt.getId()));
+				//data.setTextContent(evtURLprefix + evt.getId());
 			}
 			
 			node.appendChild(data);			
@@ -972,7 +976,8 @@ public class ProtovisEventCentricManager {
 			else if (edgeAttr[row][0].equalsIgnoreCase("TargetEventID")) 
 				data.setTextContent(tarEvt.getId());
 			else if (edgeAttr[row][0].equalsIgnoreCase("ContributorURL"))
-				data.setTextContent(conURLprefix + con.getId());
+				data.setTextContent(AusStageURI.getContributorURL(con.getId()));
+				//data.setTextContent(conURLprefix + con.getId());
 				
 			edge.appendChild(data);
 		}
@@ -1015,4 +1020,61 @@ public class ProtovisEventCentricManager {
 		return degree;
 	}
 	
+	
+//main program for RDF access	
+/*	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
+		
+		DataManager rdf = new DataManager();
+		ProtovisEventCentricManager manager = new ProtovisEventCentricManager(rdf);
+		
+		String graph = manager.getData("82378", 1, true); //the Under Room
+		//String graph = manager.getData("80901", 1, true); //Osama The Hero
+		//String graph = manager.getData("77606", 1, true); //The Cut
+		//String graph = manager.getData("82520", 1, true); //Oleanna
+		//String graph = manager.getData("65600", 2, false); //Euripides' Trojan Women (65600)
+		//String graph = manager.getData("74049", 2, false); //Trouble on Planet Earth (74049)
+		//String graph = manager.getData("74101", 2, false); //When the Rain Stops Falling (74101)
+		//String graph = manager.getData("32187", 2, false); //Cloudstreet (32187)
+		//String graph = manager.getData("25747", 2, true); //test any event
+		
+		System.out.println(graph);
+	
+		long endTime = System.currentTimeMillis();
+		System.out.println("\n--------\n Total elapsed time in execution is :" + (endTime-startTime)+ "ms");
+	}
+	*/
+	
+	//main program for database access
+	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
+		
+		String connectString = "jdbc:oracle:thin:ausstage_schema/ausstage@www.ausstage.edu.au:1521:drama11";		
+		DatabaseManager db = new DatabaseManager(connectString);
+		ProtovisEventCentricManager manager = new ProtovisEventCentricManager(db);
+		
+		//String graph = manager.getData("78295", 2, false);
+		//String graph = manager.getData("71976", 2, false);
+		String graph = manager.getData("82378", 1, false); //the Under Room
+		//String graph = manager.getData("80901", 1, true); //Osama The Hero
+		//String graph = manager.getData("77606", 1, true); //The Cut
+		//String graph = manager.getData("82520", 1, true); //Oleanna
+		//String graph = manager.getData("65600", 3, false); //Euripides' Trojan Women (65600)
+		//String graph = manager.getData("74049", 2, false); //Trouble on Planet Earth (74049)
+		//String graph = manager.getData("74101", 2, false); //When the Rain Stops Falling (74101)
+		//String graph = manager.getData("32187", 2, false); //Cloudstreet (32187)
+		//String graph = manager.getData("25747", 2, true); //test any event
+		
+		System.out.println(graph);
+	
+		long endTime = System.currentTimeMillis();
+		System.out.println("\n--------\n Total elapsed time in execution is :" + (endTime-startTime)+ "ms");
+		
+		try {
+			db.closeDB();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+	}
 }
