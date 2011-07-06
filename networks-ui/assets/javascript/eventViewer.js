@@ -563,7 +563,7 @@ function initEventGraph (obj){
 		    .text(obj.xAxis.tickFormat);
 
 	// Use an invisible panel to capture pan & zoom events. 
- 	obj.vis.add(pv.Panel)
+ 	obj.capturePanel = obj.vis.add(pv.Panel)
     	.events("all")
 	    .event("mousedown", pv.Behavior.pan().bound(1))
 	    .event("mousewheel", pv.Behavior.zoom(0.4).bound(1))
@@ -695,7 +695,7 @@ EventViewerClass.prototype.refreshGraph = function(typeOfRefresh){
 //Couldn't work out how to combine the two. stoopid
 function transformPan(){
 	viewer.dragIndicator = true;
-	var t = this.transform().invert();
+	var t = viewer.capturePanel.transform().invert();
 		viewer.xAxis.domain(viewer.xAxis.invert(t.x + viewer.xAxis(viewer.startDate) *t.k)
 							,viewer.xAxis.invert(t.x + viewer.xAxis(viewer.endDate) * t.k));				
 		viewer.yAxis.domain(viewer.yAxis.invert(t.y + viewer.yAxis(0) *t.k), 
@@ -705,13 +705,13 @@ function transformPan(){
 
 // zoom handler 
 function transform() {
-	
-	var t = this.transform().invert();
+	var t = viewer.capturePanel.transform().invert();
 		viewer.xAxis.domain(viewer.xAxis.invert(t.x + viewer.xAxis(viewer.startDate) *t.k)
 							,viewer.xAxis.invert(t.x + viewer.xAxis(viewer.endDate) * t.k));				
 		viewer.yAxis.domain(viewer.yAxis.invert(t.y + viewer.yAxis(0) *t.k), 
 							viewer.yAxis.invert(t.y + viewer.yAxis(viewer.json.nodes.length) * t.k));
 	viewer.vis.render();
+	updateZoomSlider();
 }
 
 //window resize handler

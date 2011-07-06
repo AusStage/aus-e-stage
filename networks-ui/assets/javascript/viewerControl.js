@@ -546,6 +546,7 @@ ViewerControlClass.prototype.displayNetwork = function(type, id, reset, rad_sim)
 		viewer.hideInteraction();
 		closeLegends();
 		viewer.destroy(); 
+		updateZoomSlider(1);
 		//show loading msg	
 		$('#viewerMsg').empty().append(buildInfoMsgBox(DATA_RETRIEVAL_MSG)).show();
 			
