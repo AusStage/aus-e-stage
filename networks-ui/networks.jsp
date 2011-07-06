@@ -241,7 +241,8 @@
 			<div class="legendHeader" id="faceted_header">Facets</div>
 			<div class="legendBody" id="faceted_body" >
 				<div><input type="checkbox" name="showAllFaceted" class="checkbox" checked />
-				<label for="showAllFaceted">Show all nodes</label></div></br>			
+				<label for="showAllFaceted">Show all nodes</label></div>
+				<a class="darkLink" id='facet_color_button' href='#'>Set color for selection</a>			
 				<!--functions-->
 				<div class="legendHeader legendSml" id="functions_header" >Contributor Functions</div>
 				<div class="legendBody autoHeight scroll_checkboxes" id="functions_body"></div>
@@ -370,9 +371,6 @@
 							<td></td>
 						</tr>
 					</table>
-										
-		
-				
 				</div>
 				<div id="viewer"></div>
 				<!--date slider and facteded browsing form-->
@@ -399,6 +397,13 @@
 </div>
 	<!-- include the footer -->
 <jsp:include page="footer.jsp"/>
+
+<!-- faceted color div-->
+<div id="facet_color_div">
+	<div id="facet_color_picker" class="color_picker"></div>
+</div>
+
+
 <!-- help divs -->
 <div id="about_networks_div" class='dialogs' title="About Networks" style="font-size: 90%">
         <p>The Navigating Networks service provides an interactive interface for exploring and analysing networks of 

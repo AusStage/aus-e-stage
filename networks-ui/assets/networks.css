@@ -384,6 +384,10 @@ table.searchResults td a {
         color:#3300ff;
 }
 
+.darkLink {
+		color:#333!important;	
+}
+
 .legendBody p {
         font-weight:normal;
         margin:0 0 -5px 0;
