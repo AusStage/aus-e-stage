@@ -329,6 +329,14 @@ ContributorViewerClass.prototype.resetHiddenElements = function(){
 	}	
 }
 
+ContributorViewerClass.prototype.setFacetColor = function(c){
+	for (i in this.json.nodes){
+		if (this.json.nodes[i].facetedMatch)
+			this.json.nodes[i].custColor = c;	
+	} 
+}
+
+
 
 ContributorViewerClass.prototype.getPanelColor = function(){
 	return (this.viewFaceted) ? this.nodeColorsF.panelColor:this.nodeColors.panelColor;	

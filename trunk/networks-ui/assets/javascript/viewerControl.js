@@ -76,7 +76,7 @@ ViewerControlClass.prototype.init = function() {
 	$("#network_properties_div").hide();
 	
 	//hide the navigation controls
-	//$('#navigation').hide();	
+	$('#navigation').hide();	
 
 		//SET UP INTERACTION $.debounce(250, false, viewer.collabSliderObj.updateNetwork(event, ui)); 
 	//style the legend
@@ -120,8 +120,7 @@ ViewerControlClass.prototype.init = function() {
 							 viewer.render();							 
 							}
 	});
-
-	
+		
 	//custom dialog buttons
 	$("#remove_color").click(function(){
 		viewer.resetColor();
@@ -133,6 +132,36 @@ ViewerControlClass.prototype.init = function() {
 		viewer.hideElement();
 		$("#custom_div").dialog("close");
 		viewer.render();
+	});
+	
+	//set up facet color dialog
+    $("#facet_color_div").dialog({ 
+    	height:90,
+    	dialogClass: 'noTitle noPadding',
+		autoOpen: false,
+		resizable: false,
+		closeOnEscape: true,
+		modal: true,
+		position: function(){return ['top', 'right']}
+	});
+
+	
+	//faceted color picker
+	$("#facet_color_picker").icolor({
+		flat:true,
+		colors:CUSTOM_COLORS,
+		col:16,
+		holdColor:false,
+		onSelect:function(c){viewer.setFacetColor(c);
+							 $("#facet_color_div").dialog("close");
+							 viewer.render();							 
+							}
+	});
+
+	$('#facet_color_button').click(function(e){
+		$('#facet_color_div').dialog( "option", "position", [e.pageX,e.pageY] );
+		$('#facet_color_div').dialog('open');
+		return false;
 	});
 	 	
 	//CONTRIBUTOR TO CONTRIBUTOR
