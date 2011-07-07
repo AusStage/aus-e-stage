@@ -23,9 +23,30 @@ import au.edu.ausstage.utils.DateUtils;
 import java.util.Comparator;
 
 /**
- * A class to compare events using first dates for reverse chronological sorting
+ * A class to compare events using first dates for chronological sorting
  */
 public class EventDateComparator implements Comparator<Event> {
+
+	boolean reverse = false;
+
+	/**
+	 * constructor for this comparator
+	 * uses the default chronological sorting order
+	 */
+	public EventDateComparator() {
+		super();
+	}
+	
+	/**
+	 * constructor for this comparator
+	 *
+	 * @param reverse if set to to true reverse the chronological order of the sort;
+	 */
+	public EventDateComparator(boolean reverse) {
+		super();
+		this.reverse = reverse;
+	}
+		
 
 	/**
 	 * Compare two events for sorting by date in reverse chronological order
@@ -48,7 +69,11 @@ public class EventDateComparator implements Comparator<Event> {
 			second = Integer.parseInt(secondDate + "" + secondEvent.getId());
 		}
 		
-		return first.compareTo(second);
+		if (reverse) {
+			return (first.compareTo(second)) * -1;
+		} else {
+			return first.compareTo(second);
+		}
 
 	} // end compare method
 
