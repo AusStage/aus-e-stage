@@ -66,7 +66,7 @@ public class ResourceData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, lookup_codes lc "
 				+ "WHERE i.item_sub_type_lov_id = lc.code_lov_id "
 				+ "AND lc.code_type = 'RESOURCE_SUB_TYPE' "
@@ -74,7 +74,7 @@ public class ResourceData extends BaseData{
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, lookup_codes lc "
 				+ "WHERE i.item_sub_type_lov_id = lc.code_lov_id "
 				+ "AND lc.code_type = 'RESOURCE_SUB_TYPE' "
@@ -105,7 +105,7 @@ public class ResourceData extends BaseData{
 		try {
 			while (resultSet.next()) {
 			
-				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
+				resource = new Resource(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 				resourceList.add(resource);
 				
 			}

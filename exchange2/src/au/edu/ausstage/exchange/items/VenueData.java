@@ -184,14 +184,14 @@ public class VenueData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemvenuelink ivl "
 				+ "WHERE ivl.itemid = i.itemid "
 				+ "AND ivl.venueid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemvenuelink ivl "
 				+ "WHERE ivl.itemid = i.itemid "
 				+ "AND ivl.venueid =  ANY (";
@@ -229,7 +229,7 @@ public class VenueData extends BaseData{
 		try {
 			while (resultSet.next()) {
 			
-				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
+				resource = new Resource(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 				resourceList.add(resource);
 				
 			}

@@ -188,14 +188,14 @@ public class WorkData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemworklink iwl " 
 				+ "WHERE iwl.itemid = i.itemid "
 				+ "AND iwl.workid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemworklink iwl " 
 				+ "WHERE iwl.itemid = i.itemid "
 				+ "AND iwl.workid = ANY (";
@@ -233,7 +233,7 @@ public class WorkData extends BaseData{
 		try {
 			while (resultSet.next()) {
 			
-				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
+				resource = new Resource(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 				resourceList.add(resource);
 				
 			}

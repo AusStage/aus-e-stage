@@ -186,14 +186,14 @@ public class OrganisationData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemorglink iol "
 				+ "WHERE iol.itemid = i.itemid "
 				+ "AND iol.organisationid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemorglink iol "
 				+ "WHERE iol.itemid = i.itemid "
 				+ "AND iol.organisationid = ANY (";
@@ -230,7 +230,7 @@ public class OrganisationData extends BaseData{
 		try {
 			while (resultSet.next()) {
 			
-				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
+				resource = new Resource(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 				resourceList.add(resource);
 				
 			}

@@ -186,14 +186,14 @@ public class SecGenreData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemsecgenrelink isl "
 				+ "WHERE isl.itemid = i.itemid "
 				+ "AND isl.secgenrepreferredid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation "
+			sql = "SELECT i.itemid, i.citation, i.title "
 				+ "FROM item i, itemsecgenrelink isl "
 				+ "WHERE isl.itemid = i.itemid "
 				+ "AND isl.secgenrepreferredid = ANY (";
@@ -231,7 +231,7 @@ public class SecGenreData extends BaseData{
 		try {
 			while (resultSet.next()) {
 			
-				resource = new Resource(resultSet.getString(1), resultSet.getString(2));
+				resource = new Resource(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 				resourceList.add(resource);
 				
 			}
