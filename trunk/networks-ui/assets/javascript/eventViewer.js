@@ -163,7 +163,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 	}else{
 		$("#network_details_div").show();
 	}
-			
+
 	
 	//***************/
 	//NODE
@@ -176,7 +176,7 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 		
 		//create an array of related contributors, sort by last name
     	for (i = 0; i < this.json.nodes[this.nodeIndex].contributor_id.length; i++){
-
+		
     		var lastName = this.json.nodes[this.nodeIndex].contributor_name[i].split(" ")[1];
     		contributorList[i] = {name:lastName,
     		 					  fullName: this.json.nodes[this.nodeIndex].contributor_name[i],
@@ -184,14 +184,16 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
     					   		  roles: this.json.nodes[this.nodeIndex].contributor_roles[i],    					   		   
     					   		 }		
     	}
-    	contributorList.sort(sortByName);    	
+    	contributorList.sort(sortByName);    	    	
 		//create the list of contributors
 		for(i = 0; i < contributorList.length; i++){
 			if(isEven(i)) tableClass = "d0";
 			 else tableClass = "d1";
-			html += "<tr class=\""+tableClass+"\"><td><a href=" + contributorUrl +""+ contributorList[i].id+" target=\"_blank\">"+
-								contributorList[i].fullName +"</a>"+
-								"<p>"+contributorList[i].roles+"</p></td></tr>" 	
+			html += "<tr class=\""+tableClass+"\">"+
+					""+
+					"<td><a href=" + contributorUrl +""+ contributorList[i].id+" target=\"_blank\">"+
+					contributorList[i].fullName +"</a>"+
+				    "<p>"+contributorList[i].roles+"</p></td></tr>" 	
 		}
 	  
 		html += "</table><br>";	  

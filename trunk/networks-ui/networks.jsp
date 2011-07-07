@@ -341,23 +341,23 @@
 					<table class="nav_control">
 						<tr>
 							<td></td>
-							<td class='nav_button'><span id="panUp" class="ui-icon ui-icon-carat-1-n clickable" style="display: inline-block;" title='pan up'></span></td>
+							<td class='nav_button'><span id="panUp" class="up clickable" title='pan up'></span></td>
 							<td></td>
 						</tr>
 						<tr>
-							<td class='nav_button'><span id="panLeft" class="ui-icon ui-icon-carat-1-w clickable" style="display: inline-block;" title='pan left'></span></td>
-							<td class='nav_button'><span id="recentre" class="ui-icon ui-icon-home clickable" style="display: inline-block;" title='re-centre network'></span></td>
-							<td class='nav_button'><span id="panRight" class="ui-icon ui-icon-carat-1-e clickable" style="display: inline-block;" title='pan right'></span></td>
+							<td class='nav_button'><span id="panLeft" class="left clickable" title='pan left'></span></td>
+							<td class='nav_button'><span id="recentre" class="recentre clickable" title='re-centre network'></span></td>
+							<td class='nav_button'><span id="panRight" class="right clickable" title='pan right'></span></td>
 						</tr>
 						<tr>
 							<td></td>
-							<td class='nav_button'><span id="panDown" class="ui-icon ui-icon-carat-1-s clickable" style="display: inline-block;" title='pan down'></span></td>
+							<td class='nav_button'><span id="panDown" class="down clickable" title='pan down'></span></td>
 							<td></td>
 						</tr>
 						<tr><td colspan='3'>&nbsp;</td>
 						<tr>
 							<td></td>
-							<td class='nav_button'><span id="zoomIn" class="ui-icon ui-icon-zoomin clickable" style="display: inline-block;" title='zoom in'></span></td>
+							<td class='nav_button'><span id="zoomIn" class="zoomIn clickable" title='zoom in'></span></td>
 							<td></td>
 						</tr>
 						<tr>
@@ -367,7 +367,7 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td class='nav_button'><span id="zoomOut" class="ui-icon ui-icon-zoomout clickable" style="display: inline-block;" title='zoom out'></span></td>
+							<td class='nav_button'><span id="zoomOut" class="zoomOut clickable" title='zoom out'></span></td>
 							<td></td>
 						</tr>
 					</table>
