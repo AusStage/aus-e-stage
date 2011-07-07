@@ -190,7 +190,8 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 			if(isEven(i)) tableClass = "d0";
 			 else tableClass = "d1";
 			html += "<tr class=\""+tableClass+"\">"+
-					""+
+					"<td><div class='nav_button'><span class='selectItem clickable' id="+
+					contributorList[i].id+"_"+EDGE+"></span></div></td>"+
 					"<td><a href=" + contributorUrl +""+ contributorList[i].id+" target=\"_blank\">"+
 					contributorList[i].fullName +"</a>"+
 				    "<p>"+contributorList[i].roles+"</p></td></tr>" 	
@@ -216,8 +217,9 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
 						eventList[x] = {event:"<a href=" + eventUrl +""+ this.json.nodes[i].id+" target=\"_blank\">"+
 										this.json.nodes[i].nodeName+"</a><p>"+
 										this.json.nodes[i].venue+", "+
-										"<span class='date' >"+dateFormat(this.json.nodes[i].startDate)+"</span></p>"
-						, startDate: this.json.nodes[i].startDate};
+										"<span class='date' >"+dateFormat(this.json.nodes[i].startDate)+"</span></p>", 
+										startDate: this.json.nodes[i].startDate,
+										index:this.json.nodes[i].index};
 						x++;
 					}
 				}
@@ -229,7 +231,10 @@ EventViewerClass.prototype.displayPanelInfo = function(what){
     		if(isEven(i)) tableClass = "d0";
 			else tableClass = "d1";
 			
-    		html += "<tr class=\""+tableClass+"\"><td>"+eventList[i].event+"</td></tr>"
+    		html += "<tr class=\""+tableClass+"\">"+
+    				"<td><div class='nav_button'><span class='selectItem clickable' id="+
+					eventList[i].index+"_"+NODE+"></span></div></td>"+
+    				"<td>"+eventList[i].event+"</td></tr>"
     	}
     	
     	html+= "</table><br>";
@@ -1130,4 +1135,10 @@ EventViewerClass.prototype.recentre = function(){
 	
 }
 
-
+//used for sidebar selection of contributor. Given an id, find the first instance of the contributor and return the index.
+EventViewerClass.prototype.findFirstContributorIndex = function (id){
+	console.log(this);	
+	for(i in this.json.edges){
+		if(this.json.edges[i].id == id){console.log('found'); return this.json.edges[i].index;}	
+	}
+}
