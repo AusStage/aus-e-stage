@@ -565,7 +565,6 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 	//***************/
 	//NODE
 	if (what == NODE){
-	
 		//set the title to the contributor.
 		titleHtml = "<a class=\"titleLink\" href="+contributorUrl+this.json.nodes[this.nodeIndex].id+" target=\"_blank\">"+
 					this.json.nodes[this.nodeIndex].nodeName+"</a> <p>";
@@ -594,7 +593,10 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 			if(isEven(i)) tableClass = "d0";
 			 else tableClass = "d1";
 
-			html += "<tr class=\""+tableClass+"\"><td><a href=" 
+			html += "<tr class=\""+tableClass+"\">"
+								+"<td><div class='nav_button'><span class='selectItem clickable' id="
+								+contributorList[i].index+"_"+NODE+"></span></div></td>"
+								+"<td><a href=" 
 								+ contributorUrl +""+ this.json.nodes[contributorList[i].index].id
 								+" target=\"_blank\">"+
 								this.json.nodes[contributorList[i].index].nodeName +"</a>";
@@ -606,8 +608,8 @@ ContributorViewerClass.prototype.displayPanelInfo = function(what){
 	    	}
 	    	html += constrain(tempHtml, $(".sidebar").width()-20, "legendBody", "ellipsis");
 	    	tempHtml = "";
-			 
 			html+="</p></td></tr>";
+
 		}
 		html += "</table><br>";	  
 		

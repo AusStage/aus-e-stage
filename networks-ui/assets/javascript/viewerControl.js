@@ -414,7 +414,32 @@ ViewerControlClass.prototype.init = function() {
                 }
         });
        	
+	//sidebar select item functionality
+	$('.selectItem').live('click', function(){
+		//seperate the type from the id
+		var substr = this.id.split('_');
+		console.log(this.id);
+		console.log(substr);
 
+		if(viewer.className =='ContributorViewerClass'){
+			viewer.nodeIndex = substr[0];
+			viewer.edgeTIndex = -1;
+			viewer.edgeSIndex = -1; 
+		}else{
+			var substr1 = substr[0].split(':');
+			if (substr[1] == EDGE){
+				
+				viewer.currentFocus = EDGE;
+			    viewer.edgeId = viewer.json.edges[substr1[0]].id;
+			    viewer.edgeIndex = substr1[0];
+				viewer.nodeIndex = -1;			
+			}	
+		}
+		viewer.displayPanelInfo(substr[1]);	
+		viewer.render();
+
+	});
+	
     
 	//deal with window resizing	
 	$(window).resize(function() {
