@@ -517,7 +517,7 @@
 					</p>
 					<ul>
 						<li>
-							Retrieve a list of the 10 most recent items of feedback for the performance with identifier 102, leaving all other attributes at thier defaults.<br/>
+							Retrieve a list of the 10 most recent items of feedback for the performance with identifier 90, leaving all other attributes at thier defaults.<br/>
 							<a href="http://beta.ausstage.edu.au/exchange/feedback?type=performance&id=90" rel="nofollow">http://beta.ausstage.edu.au/exchange/feedback?type=performance&amp;id=90</a>
 						</li>
 					</ul>

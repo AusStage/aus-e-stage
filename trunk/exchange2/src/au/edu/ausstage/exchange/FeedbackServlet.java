@@ -108,7 +108,7 @@ public class FeedbackServlet extends HttpServlet {
 				throw new ServletException("The limit parameter must be 'all' or a numeric value");
 			}
 		}
-		
+	
 		// instantiate a connection to the database
 		DbManager database;
 		

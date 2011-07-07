@@ -31,6 +31,7 @@ public class Resource implements Comparable<Resource> {
 	// private class level variables
 	private String id;
 	private String citation;
+	private String title;
 	private String url;
 	
 	/**
@@ -41,9 +42,9 @@ public class Resource implements Comparable<Resource> {
 	 *
 	 * @throws IllegalArgumentException if any of the parameters are missing or do not pass validation
 	 */
-	public Resource(String id, String citation) {
+	public Resource(String id, String citation, String title) {
 		
-		if(InputUtils.isValid(id) == false || InputUtils.isValid(citation) == false) {
+		if(InputUtils.isValid(id) == false || InputUtils.isValid(citation) == false || InputUtils.isValid(title) == false) {
 			throw new IllegalArgumentException("all parameters to this constructor are required");
 		}
 		
@@ -53,15 +54,21 @@ public class Resource implements Comparable<Resource> {
 		
 		this.id = id;
 		this.citation = citation;
+		this.title = title;
 		
 		url = LinksManager.getResourceLink(id);
-	}	
+	}
+		
 	public String getId() {
 		return id;
 	}
 	
 	public String getCitation() {
 		return citation;
+	}
+	
+	public String getTitle() {
+		return title;
 	}
 	
 	/*
@@ -124,7 +131,7 @@ public class Resource implements Comparable<Resource> {
 		
 		builder.append("<link>" + url + "</link>");
 		builder.append("<guid isPermaLink=\"true\">" + url + "</guid>");
-		builder.append("<title>AusStage Resource Record</title>");
+		builder.append("<title>" + StringEscapeUtils.escapeXml(title) + "</title>");
 		builder.append("<description>" + StringEscapeUtils.escapeXml(citation) + "</description>");
 		builder.append("</item>");
 		
