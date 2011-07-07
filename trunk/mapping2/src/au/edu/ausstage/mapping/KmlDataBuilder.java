@@ -377,7 +377,13 @@ public class KmlDataBuilder {
 				content += " <a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions() + "</th></tr>";
 				contentCount = 0;
 				
+				/*
 				Set<Event> events = kmlVenue.getEvents();
+				Iterator eventIterator = events.iterator();
+				*/
+			
+				TreeSet<Event> events = new TreeSet<Event>(new EventDateComparator(true));
+				events.addAll(kmlVenue.getEvents());
 				Iterator eventIterator = events.iterator();
 				
 				while(eventIterator.hasNext()) {
@@ -466,6 +472,19 @@ public class KmlDataBuilder {
 				
 				// add a trajectory
 				placemark = xmlDoc.createElement("Placemark");
+				
+				elem = xmlDoc.createElement("description");
+				
+				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "contributor.png\" width=\"32\" height=\"32\"></span>";
+				
+				content += " <a href=\"" + contributor.getUrl() + "\">" + contributor.getName() + "</a><br/>" + contributor.getFunctions() + "</th></tr>";
+				
+				content += "<tr><td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + startVenue.getName() + ", " + startVenue.getShortAddress() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+				content += "<tr class=\"odd\"><td><a href=\"" + previousEvent.getUrl() + "\">" + previousEvent.getName() + "</a>, " + finishVenue.getName() + ", " + finishVenue.getShortAddress() + ", " + previousEvent.getFirstDisplayDate() + "</td></tr>";
+				content += "</table>";
+				
+				elem.appendChild(xmlDoc.createCDATASection(content));
+				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("TimeSpan");
 				placemark.appendChild(elem);
@@ -593,7 +612,13 @@ public class KmlDataBuilder {
 				content += " <a href=\"" + organisation.getUrl() + "\">" + organisation.getName() + "</a><br/>" + kmlVenue.getShortAddress() + "</th></tr>";
 				contentCount = 0;
 				
+				/*
 				Set<Event> events = kmlVenue.getEvents();
+				Iterator eventIterator = events.iterator();
+				*/
+			
+				TreeSet<Event> events = new TreeSet<Event>(new EventDateComparator(true));
+				events.addAll(kmlVenue.getEvents());
 				Iterator eventIterator = events.iterator();
 				
 				while(eventIterator.hasNext()) {
@@ -682,6 +707,19 @@ public class KmlDataBuilder {
 				
 				// add a trajectory
 				placemark = xmlDoc.createElement("Placemark");
+				
+				elem = xmlDoc.createElement("description");
+				
+				content = "<table><tr><th><span class=\"icon\"><img src=\"" + ALT_ICON_BASE_URL + "organisation.png\" width=\"32\" height=\"32\"></span>";
+				
+				content += " <a href=\"" + organisation.getUrl() + "\">" + organisation.getName() + "</a></th></tr>";
+				
+				content += "<tr><td><a href=\"" + event.getUrl() + "\">" + event.getName() + "</a>, " + startVenue.getName() + ", " + startVenue.getShortAddress() + ", " + event.getFirstDisplayDate() + "</td></tr>";
+				content += "<tr class=\"odd\"><td><a href=\"" + previousEvent.getUrl() + "\">" + previousEvent.getName() + "</a>, " + finishVenue.getName() + ", " + finishVenue.getShortAddress() + ", " + previousEvent.getFirstDisplayDate() + "</td></tr>";
+				content += "</table>";
+				
+				elem.appendChild(xmlDoc.createCDATASection(content));
+				placemark.appendChild(elem);
 				
 				elem = xmlDoc.createElement("TimeSpan");
 				placemark.appendChild(elem);
@@ -776,7 +814,13 @@ public class KmlDataBuilder {
 			content += " <a href=\"" + kmlVenue.getUrl() + "\">" + kmlVenue.getName() + "</a><br/>" + kmlVenue.getAddress() + "</th></tr>";
 			contentCount = 0;
 			
+			/*
 			Set<Event> events = kmlVenue.getEvents();
+			Iterator eventIterator = events.iterator();
+			*/
+			
+			TreeSet<Event> events = new TreeSet<Event>(new EventDateComparator(true));
+			events.addAll(kmlVenue.getEvents());
 			Iterator eventIterator = events.iterator();
 			
 			while(eventIterator.hasNext()) {
