@@ -31,6 +31,38 @@ $(document).ready(function(){
 		}
 	});
 	checkZoomHeight();
+	
+	//sidebar select item functionality
+	$('.selectItem').live('click', function(){
+		//seperate the type from the id
+		var substr = this.id.split('_');
+		console.log(this.id);
+		console.log(substr);
+
+		if(viewer.className =='ContributorViewerClass'){
+			viewer.nodeIndex = substr[0];
+			viewer.edgeTIndex = -1;
+			viewer.edgeSIndex = -1; 
+		}else{
+			if (substr[1] == EDGE){
+				var index = viewer.findFirstContributorIndex(substr[0]);
+
+				viewer.currentFocus = EDGE;
+			    viewer.edgeId = substr[0];
+			    viewer.edgeIndex = index
+				viewer.nodeIndex = -1;			
+			}else {
+				viewer.currentFocus = NODE;
+				viewer.edgeId = -1;
+				viewer.edgeIndex = -1;
+  	   	   		viewer.nodeIndex = substr[0];
+
+			}	
+		}
+		viewer.displayPanelInfo(substr[1]);	
+		viewer.render();
+
+	});
 })
 
 //return network to centre
