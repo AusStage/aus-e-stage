@@ -31,8 +31,8 @@ import au.edu.ausstage.utils.*;
 public class RdfExport {
 
 	// Version information 
-	private static final String VERSION    = "1.1.2";
-	private static final String BUILD_DATE = "2010-10-29";
+	private static final String VERSION    = "1.1.3";
+	private static final String BUILD_DATE = "2011-07-08";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
