@@ -86,7 +86,7 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		// check the other parameters dependant on the task type
-		if(taskType.equalsIgnoreCase("ego-centric-network-simple") == true || taskType.equalsIgnoreCase("event-centric-network") == true) {
+		if(taskType.equalsIgnoreCase("ego-centric-network-simple") == true || taskType.equalsIgnoreCase("event-centric-network") == true || taskType.equalsIgnoreCase("ego-centric-network") == true) {
 			// check the other parameters as they are required
 		
 			if(radius != null) {
@@ -148,6 +148,10 @@ public class ExportServlet extends HttpServlet {
 			
 			// instantiate a lookup object
 			ExportManager export = new ExportManager(rdf);
+			
+			//debug code
+			//throw new RuntimeException("###" + degrees + "###");
+			
 			export.buildCollaboratorNetworkGraphml(id, formatType, degrees, "undirected", response.getWriter());
 			
 		} else if(taskType.startsWith("full-edge-list")) {
