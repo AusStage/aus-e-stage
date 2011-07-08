@@ -56,21 +56,17 @@ function  visControllerSignage(newModel) {
 						
 				$('.feedback_messages').cycle({
 					fx: this.fx, 
-					speed: this.speed,
-                                        //timeout: this.timeout,
-
-                                        timeoutFn: function(currElement, nextElement, opts, isForward) {
-                                            //window.console.log($(currElement).attr('data-duration'));
-                                            var duration = parseInt($(currElement).attr('data-duration'), 10);
-                                            //this.timeout = duration;
-                                            return duration;
-
-                                          }
+					speed: this.speed, 
+					timeout: this.timeout, 	 	
 				});	
 							
 				$('.feedback_messages').show();
 
-                        
+                             $('.feedback_message').cycle({
+                              timeoutFn: function(currElement, nextElement, opts, isForward) {
+                                return parseInt($(currElement).attr('data-duration'), 10);
+                              }
+                          });
 
 
 
@@ -99,10 +95,10 @@ function  visControllerSignage(newModel) {
                                             var item = results[a].feedback[i];
                                             //Make the update acutally hoppen
                                            ;
-                                        var wordTiming = item.content.split(' ').length * 500;
+                                        var wordcount = item.content.split(' ').length/10;
 
                                         //with font count $(".feedback_messages").append('<span class="feedback ' + item.id + '"><div class="content" style="font-size:'+ wordcount + 'em;" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
-                                        $(".feedback_messages").append('<span data-duration="' + wordTiming + '" class="feedback ' + item.id + '"><div class="content" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
+                                        $(".feedback_messages").append('<span class="feedback ' + item.id + '"><div class="content" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
                                         this.reSizeFeedback(item);
                                         
                                        
@@ -161,7 +157,7 @@ function  visControllerSignage(newModel) {
 
                         $('.feedback_messages').cycle(
                                  'destroy'
-                      );
+                          );
                               
                         $.each(newResults, function() {
                         ////window.console.log('in the performances loop ');
@@ -170,31 +166,25 @@ function  visControllerSignage(newModel) {
                               //  //window.console.log('in the feedback loop ');
                                 ////window.console.log(this.content);
 
-                                         ;
-                                        var wordTiming = this.content.split(' ').length * 500;
-                                        //with font count $(".feedback_messages").append('<span class="feedback ' + item.id + '"><div class="content" style="font-size:'+ wordcount + 'em;" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
-                                        $(".feedback_messages").prepend('<span  data-duration="' + wordTiming + '" class="feedback"><div class="content">' + this.content + '</div><span class="feedback-about"><span class="date">' + this.date  + '</span><span class="time">' + this.time + ' </span><span class="type">' +  this.type + ' </span></span></span>');
+                                     $(".feedback_messages").prepend('<span class="feedback"><div class="content">' + this.content + '</div><span class="feedback-about"><span class="date">' + this.date  + '</span><span class="time">' + this.time + ' </span><span class="type">' +  this.type + ' </span></span></span>');
+                                     reSizeFeedback(item);
+
                          });
                          });
 
 
                         //REBUILD Add it back
+                       $('.feedback_messages').cycle({
+                                    fx: this.fx,
+                                    speed: this.speed,
+                                    timeout: this.timeout,
+                         });
 
-                        $('.feedback_messages').cycle({
-					fx: this.fx,
-					speed: this.speed,
-                                        //timeout: this.timeout,
-
-                                        timeoutFn: function(currElement, nextElement, opts, isForward) {
-                                            //alert('er');
-                                            //window.console.log($(currElement).attr('data-duration'));
-                                            var duration = parseInt($(currElement).attr('data-duration'), 10);
-                                            //this.timeout = duration;
-                                            return duration;
-
-                                     }
-			});
-				
+                         $('.feedback_message').cycle({
+                              timeoutFn: function(currElement, nextElement, opts, isForward) {
+                                return parseInt($(currElement).attr('data-duration'), 10);
+                              }
+                         });
 
 
             
