@@ -36,8 +36,6 @@ $(document).ready(function(){
 	$('.selectItem').live('click', function(){
 		//seperate the type from the id
 		var substr = this.id.split('_');
-		console.log(this.id);
-		console.log(substr);
 
 		if(viewer.className =='ContributorViewerClass'){
 			viewer.nodeIndex = substr[0];

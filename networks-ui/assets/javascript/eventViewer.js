@@ -1137,8 +1137,7 @@ EventViewerClass.prototype.recentre = function(){
 
 //used for sidebar selection of contributor. Given an id, find the first instance of the contributor and return the index.
 EventViewerClass.prototype.findFirstContributorIndex = function (id){
-	console.log(this);	
 	for(i in this.json.edges){
-		if(this.json.edges[i].id == id){console.log('found'); return this.json.edges[i].index;}	
+		if(this.json.edges[i].id == id){return this.json.edges[i].index;}	
 	}
 }
