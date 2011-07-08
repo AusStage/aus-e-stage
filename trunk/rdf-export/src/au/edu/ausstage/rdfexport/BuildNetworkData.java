@@ -40,10 +40,10 @@ import com.hp.hpl.jena.tdb.*;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 
 
-//debug code
-import com.hp.hpl.jena.sparql.sse.Item;
-import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
-import com.hp.hpl.jena.tdb.store.GraphTDB;
+// datastore stats code
+import com.hp.hpl.jena.tdb.solver.stats.Stats ;
+import com.hp.hpl.jena.tdb.solver.stats.StatsCollector ;
+import com.hp.hpl.jena.tdb.store.GraphTDB ;
 
 // import the AusStage classes
 import au.edu.ausstage.vocabularies.*;
@@ -1084,9 +1084,9 @@ public class BuildNetworkData {
 		 
 		// get the graph from the model 
 		GraphTDB graph = (GraphTDB) model.getGraph(); // TDB Specific graph class (Graph is a lower level representation of the data)
-		 
-		// gather the statistics
-		Item item = StatsCollector.gatherTDB(graph);
+		
+		// get the statistics
+		StatsCollector stats = Stats.gatherTDB(graph) ;
 		
 		// delete the existing stats file
 		boolean status;
@@ -1109,11 +1109,7 @@ public class BuildNetworkData {
 			// reset the opt variable to a new file
 			opt = null;
 			
-			if(FileUtils.writeNewFile(datastorePath + "/stats.opt", item.toString()) == false) {
-				System.err.println("WARN: Unable to create the TDB optimisation file:");
-			} else {
-				System.out.println("INFO: BGP optimiser file successfully written");
-			}
+			Stats.write(datastorePath + "/stats.opt", stats) ;
 		}
 		
 		// play nice and tidy up
