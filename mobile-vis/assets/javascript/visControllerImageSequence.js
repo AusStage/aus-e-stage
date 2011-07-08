@@ -24,6 +24,13 @@ function visControllerImageSequence(newModel) {
 		 this.model = newModel;
                  this.key = '8dc8cea8944f148aa635d951abf8c72d';
                  this.MAX_IMAGE_WIDTH = 750;
+
+                 //Configure for the slide show
+		 this.fx =  'fade';  // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+		 this.speed =  3000;
+		 this.timeout =  2000;
+
+
              
 		/*
 		* Called when the results are updated     
@@ -125,10 +132,8 @@ function visControllerImageSequence(newModel) {
                                   //window.console.log($(target).width());
 
                                   $(target).show();
-
                               
                                  //window.console.log(target);
-
                               
                             },
                     //Some thing has gone wrong, show the user an error screen.
@@ -179,19 +184,14 @@ function visControllerImageSequence(newModel) {
                     imageScale = Math.round(imageScale);
 
 
-                    $(".feedback_messages").append('<div class="feedback" id="' + word + '" \n\
-                       "><div class="content">\n\
-                    \n\
-                    <img src="' + flickrURL + '" width="' + imageScale + '">\n\
+                    $(".feedback_messages #" + word + " .content").append('<img src="' + flickrURL + '" width="' + imageScale + '">\n\
                         <div class="FeedbackList"></div></div>\n\
                             <span class="word">' +
                         '' + word +
                         '</span><span class = "Attributions"> Creative Commons Licensed flickr photo shared by\n\
                           <a href="http://www.flickr.com/photos/' +
                           imageData.owner +  '/' + imageData.id +
-                          '"><span class="owner"></span></a>' +
-
-                        '</div>'
+                          '"><span class="owner"></span></a>' 
                         );
 
                      //turn of the Attributions until we have the for owner info
@@ -238,14 +238,14 @@ function visControllerImageSequence(newModel) {
 
                                          //window.console.log( htmlFeedBackList);
                                 }
-                                     
+
 
                        //add the click hander for this div
 
                        var target = '#' + word + " .FeedbackList" ;
-                       
+
                        $(target).html(htmlFeedBackList);
-                       
+
                        $(target).highlight(word);
 
                        //window.console.log(target);
@@ -266,7 +266,7 @@ function visControllerImageSequence(newModel) {
                         $(target).data("dialog",dlg);
 
                         //window.console.log(target);
-                        
+
                         $(target).click(function(eventData ) {
                               //window.console.log(target);
                               //
@@ -275,16 +275,15 @@ function visControllerImageSequence(newModel) {
                               //alert(eventData.target.id);
 
                              $(target).data("dialog").dialog('open');
-                                                   
-                               
+
+
                          });
                     
-                              
+                        //* now make the slide show start to work *//
 
+                    
 
-                   
-
-
+                       ///$('.feedback_messages').show();
                           
                       /// this.getUserID(imageData.owner,word);
                      }
@@ -458,14 +457,21 @@ function visControllerImageSequence(newModel) {
  
 
                                   //build the list of feedback
-                                   
-                                  
 
+                                    $(".feedback_messages").append('<div class="feedback" id="' + this.model.words[a].word + '" \n\
+                                       "><div class="content"></div>'
+                                    );
 
-                                 
 
 
                                 }
+
+                                 $('.feedback_messages').cycle({
+                                                                        fx: this.fx,
+                                                                        speed: this.speed,
+                                                                        timeout: this.timeout,
+                                   });
+                                     
                          }
 
                     
