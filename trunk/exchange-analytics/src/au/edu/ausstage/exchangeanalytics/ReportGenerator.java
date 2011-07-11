@@ -511,10 +511,6 @@ public class ReportGenerator {
 			if(results.next() == true) {
 				eventData[currentMonth -1] = results.getString(1);
 				
-				if(Integer.parseInt(results.getString(1)) > maxRequests) {
-					maxRequests = Integer.parseInt(results.getString(1));
-				}
-				
 			} else {
 				eventData[currentMonth -1] = "0";
 			}
@@ -544,10 +540,6 @@ public class ReportGenerator {
 			
 			if(results.next() == true) {
 				resourceData[currentMonth -1] = results.getString(1);
-				
-				if(Integer.parseInt(results.getString(1)) > maxRequests) {
-					maxRequests = Integer.parseInt(results.getString(1));
-				}
 				
 			} else {
 				resourceData[currentMonth -1] = "0";
@@ -579,10 +571,6 @@ public class ReportGenerator {
 			if(results.next() == true) {
 				feedbackData[currentMonth -1] = results.getString(1);
 				
-				if(Integer.parseInt(results.getString(1)) > maxRequests) {
-					maxRequests = Integer.parseInt(results.getString(1));
-				}
-				
 			} else {
 				feedbackData[currentMonth -1] = "0";
 			}
@@ -604,11 +592,16 @@ public class ReportGenerator {
 			int b = Integer.parseInt(resourceData[i]);
 			int c = Integer.parseInt(feedbackData[i]);
 			
+			if((a + b + c) > maxRequests) {
+				maxRequests = (a + b + c);
+			}
+			
 			totalData[i] = Integer.toString((a + b + c));
 		}
 		
 		// build the chart title
 		String chartTitle = "Requests by Month for " + year;
+		
 		String chartData  = GoogleChartManager.simpleEncode(totalData, maxRequests);
 		
 		return GoogleChartManager.buildBarChart(BAR_CHART_WIDTH, BAR_CHART_HEIGHT, chartData, chartTitle, Integer.toString(maxRequests), xLabels);

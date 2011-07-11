@@ -39,7 +39,7 @@ import java.io.FileWriter;
 public class ExchangeAnalytics {
 
 	// version information 
-	public static final String VERSION    = "1.0.1";
+	public static final String VERSION    = "1.0.2";
 	public static final String BUILD_DATE = "2011-07-11";
 	public static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/ExchangeAnalytics";
 	public static final String APP_NAME   = "AusStage Exchange Analytics";
@@ -202,7 +202,7 @@ public class ExchangeAnalytics {
 		
 		if(logParser.getResourceRequestCount() > 0) {
 			try {
-				DbUpdater.addEventRequests(logParser.getResourceRequests(), database);
+				DbUpdater.addResourceRequests(logParser.getResourceRequests(), database);
 			} catch (SQLException e) {
 				System.err.println("ERROR: unable to add data to the database");
 				System.err.println("      " + e.toString());
@@ -213,7 +213,7 @@ public class ExchangeAnalytics {
 		
 		if(logParser.getFeedbackRequestCount() > 0) {
 			try {
-				DbUpdater.addEventRequests(logParser.getFeedbackRequests(), database);
+				DbUpdater.addFeedbackRequests(logParser.getFeedbackRequests(), database);
 			} catch (SQLException e) {
 				System.err.println("ERROR: unable to add data to the database");
 				System.err.println("      " + e.toString());
@@ -258,14 +258,14 @@ public class ExchangeAnalytics {
 			System.exit(-1);
 		}
 		
-		// mark all the new files as processed
-		try {
-			logParser.renameOldFiles();
-		} catch (IOException e) {
-			System.err.println("ERROR: unable to rename one of the processed log files");
-			System.err.println("      " + e.toString());
-			e.printStackTrace();
-			System.exit(-1);
-		}
+//		// mark all the new files as processed
+//		try {
+//			logParser.renameOldFiles();
+//		} catch (IOException e) {
+//			System.err.println("ERROR: unable to rename one of the processed log files");
+//			System.err.println("      " + e.toString());
+//			e.printStackTrace();
+//			System.exit(-1);
+//		}
 	}
 }
