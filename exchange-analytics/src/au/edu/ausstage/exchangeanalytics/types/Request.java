@@ -22,36 +22,37 @@ import au.edu.ausstage.utils.InputUtils;
 /**
  * a class used to represent a request to the Data Exchange service
  */
-public class Request implements Comparable<Request> {
+public class Request {
 
 	// private class level variables
-	String timestamp;
+	String date;
 	String requestType;
 	String id;
-	String outputType;
-	String recordLimit;
+	String outputType = "html";
+	String recordLimit = "10";
 	String inetAddress;
 	String referer;
+	String callback = "n";
 	
 	/**
 	 * constructor for this class
 	 *
-	 * @param timestamp the time at which this request was made
+	 * @param date the time at which this request was made
 	 *
 	 * @throws IllegalArgumentException if the timestamp is empty
 	 */
-	public Request(String timestamp) {
+	public Request(String date) {
 	
-		if(InputUtils.isValid(timestamp) == false) {
+		if(InputUtils.isValid(date) == false) {
 			throw new IllegalArgumentException("the timestamp parameter is required");
 		}
 		
-		this.timestamp = timestamp;
+		this.date = date;
 	}
 	
 	/* get and set methods */
-	public String getTimestamp() {
-		return timestamp;
+	public String getDate() {
+		return date;
 	}
 	
 	public void setRequestType(String value) {
@@ -124,57 +125,43 @@ public class Request implements Comparable<Request> {
 	
 	public String getReferer() {
 		return referer;
-	}	
-
-	/*
-	 * methods required for ordering in collections
-	 * http://java.sun.com/docs/books/tutorial/collections/interfaces/order.html
-	 */
-
-	/**
-	 * A method to determine if one event is the same as another
-	 *
-	 * @param o the object to compare this one to
-	 *
-	 * @return  true if they are equal, false if they are not
-	 */
-	public boolean equals(Object o) {
-		// check to make sure the object is an event
-		if ((o instanceof Request) == false) {
-			// o is not an event object
-		 	return false;
+	}
+	
+	public void setCallback(String value) {
+		if(InputUtils.isValid(value) == false) {
+			throw new IllegalArgumentException("the value parameter cannot be null or an empty string");
 		}
 		
-		// compare these two events
-		Request r = (Request)o;
-		
-		return timestamp.equals(r.getTimestamp());
-		
-	} // end equals method
-	
-	/**
-	 * Overide the default hashcode method
-	 * 
-	 * @return a hashcode for this object
-	 */
-	public int hashCode() {
-		return 31*timestamp.hashCode();
+		callback = value;
 	}
-    
-    /**
-     * The compareTo method compares the receiving object with the specified object and returns a 
-     * negative integer, 0, or a positive integer depending on whether the receiving object is 
-     * less than, equal to, or greater than the specified object.
-     *
-     * @param e the event to compare this one to
-     *
-     * @return a integer indicating comparison result
-     */    
-	public int compareTo(Request r) {
-		String myStamp   = timestamp;
-		String yourStamp = r.getTimestamp();
+	
+	public String getCallback() {
+		return callback;
+	}
+	
+	public String[] getParameters() {
+	
+//		String date;
+//		String requestType;
+//		String id;
+//		String outputType = "html";
+//		String recordLimit = "10";
+//		String inetAddress;
+//		String referer;
+//		String callback = "n";
+	
+		String[] parameters = new String[8];
 		
-		return myStamp.compareTo(yourStamp);
+		parameters[0] = date;
+		parameters[1] = requestType;
+		parameters[2] = id;
+		parameters[3] = outputType;
+		parameters[4] = recordLimit;
+		parameters[5] = inetAddress;
+		parameters[6] = referer;
+		parameters[7] = callback;
 		
-	} // end compareTo method
+		return parameters;
+		
+	}
 }

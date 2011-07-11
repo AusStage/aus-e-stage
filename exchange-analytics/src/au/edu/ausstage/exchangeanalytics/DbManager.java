@@ -83,13 +83,12 @@ public class DbManager {
 	
 		// see if the tables are there or if this is an empty database
 		try {
-			this.executeStatement("SELECT file_name FROM processed_files");
+			this.executeStatement("SELECT request_date FROM event_requests");
 			return;
 		} catch (SQLException e) {
 			
 			// create a table to keep track of the event requests files
-			String sql = "CREATE TABLE event_requests (request_time TIMESTAMP NOT NULL, request_type VARCHAR(20) NOT NULL, id_value INT NOT NULL, output_type VARCHAR(10) NOT NULL, record_limit VARCHAR(10) NOT NULL, ip_address VARCHAR(16), referer VARCHAR(1024), PRIMARY KEY(request_time))";
-		
+			String sql = "CREATE TABLE event_requests (request_date VARCHAR(10) NOT NULL, request_type VARCHAR(20) NOT NULL, id_value VARCHAR(100), output_type VARCHAR(10) NOT NULL, record_limit VARCHAR(10) NOT NULL, ip_address VARCHAR(16), referer VARCHAR(1024), callback CHAR(1))";
 			try {
 				Statement statement = connection.createStatement();
 				statement.execute(sql);
@@ -98,7 +97,7 @@ public class DbManager {
 			}
 			
 			// create a table to keep track of the event requests files
-			sql = "CREATE TABLE resource_requests (request_time TIMESTAMP NOT NULL, request_type VARCHAR(20) NOT NULL, id_value INT NOT NULL, output_type VARCHAR(10) NOT NULL, record_limit VARCHAR(10) NOT NULL, ip_address VARCHAR(16), referer VARCHAR(1024), PRIMARY KEY(request_time))";
+			sql = "CREATE TABLE resource_requests (request_date VARCHAR(10) NOT NULL, request_type VARCHAR(20) NOT NULL, id_value VARCHAR(100), output_type VARCHAR(10) NOT NULL, record_limit VARCHAR(10) NOT NULL, ip_address VARCHAR(16), referer VARCHAR(1024), callback CHAR(1))";
 		
 			try {
 				Statement statement = connection.createStatement();
@@ -108,7 +107,7 @@ public class DbManager {
 			}
 			
 			// create a table to keep track of the event requests files
-			sql = "CREATE TABLE feedback_requests (request_time TIMESTAMP NOT NULL, request_type VARCHAR(20) NOT NULL, id_value INT NOT NULL, output_type VARCHAR(10) NOT NULL, record_limit VARCHAR(10) NOT NULL, ip_address VARCHAR(16), referer VARCHAR(1024), PRIMARY KEY(request_time))";
+			sql = "CREATE TABLE feedback_requests (request_date VARCHAR(10) NOT NULL, request_type VARCHAR(20) NOT NULL, id_value VARCHAR(100), output_type VARCHAR(10) NOT NULL, record_limit VARCHAR(10) NOT NULL, ip_address VARCHAR(16), referer VARCHAR(1024), callback CHAR(1))";
 		
 			try {
 				Statement statement = connection.createStatement();
