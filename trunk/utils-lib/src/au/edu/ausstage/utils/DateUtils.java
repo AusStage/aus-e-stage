@@ -80,6 +80,50 @@ public class DateUtils {
 		}
 	 
 	} // end buildDisplayDate method
+	
+	/**
+	 * A method used to lookup the numeric month based on an abbreviation
+	 *
+	 * @param month the month abbreviation
+	 *
+	 * @return     a string containing the number of the month as a two digit integer
+	 */
+	public static String lookupMontByAbbr(String month) {
+	
+		if(InputUtils.isValid(month) == false) {
+			return null;
+		}
+		
+		month = month.toLowerCase();
+		
+		if(month.equals("jan")) {
+			return "01";
+		} else if(month.equals("feb")) {
+			return "02";
+		} else if(month.equals("mar")) {
+			return "03";
+		} else if(month.equals("apr")) {
+			return "04";
+		} else if(month.equals("may")) {
+			return "05";
+		} else if(month.equals("jun")) {
+			return "06";
+		} else if(month.equals("jul")) {
+			return "07";
+		} else if(month.equals("aug")) {
+			return "08";
+		} else if(month.equals("sept")) {
+			return "09";
+		} else if(month.equals("oct")) {
+			return "10";
+		} else if(month.equals("nov")) {
+			return "11";
+		} else if(month.equals("dec")) {
+			return "12";
+		} else {
+			return null;
+		}
+	}
 	 
 	/**
 	 * A method used to lookup the name of a month based on its number
