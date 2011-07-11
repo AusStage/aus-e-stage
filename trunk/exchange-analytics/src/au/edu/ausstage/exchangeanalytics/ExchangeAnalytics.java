@@ -259,13 +259,13 @@ public class ExchangeAnalytics {
 		}
 		
 		// mark all the new files as processed
-//		try {
-//			logParser.renameOldFiles();
-//		} catch (IOException e) {
-//			System.err.println("ERROR: unable to rename one of the processed log files");
-//			System.err.println("      " + e.toString());
-//			e.printStackTrace();
-//			System.exit(-1);
-//		}
+		try {
+			logParser.renameOldFiles();
+		} catch (IOException e) {
+			System.err.println("ERROR: unable to rename one of the processed log files");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 }
