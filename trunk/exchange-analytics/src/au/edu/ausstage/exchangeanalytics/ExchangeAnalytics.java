@@ -22,7 +22,15 @@ import au.edu.ausstage.utils.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+
 import java.sql.SQLException;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import org.w3c.dom.DOMException;
+
+import java.io.PrintWriter;
+import java.io.FileWriter;
 
 /**
  * Main driving class for the Exchange Analytics app which is responsible
@@ -32,7 +40,7 @@ public class ExchangeAnalytics {
 
 	// version information 
 	public static final String VERSION    = "1.0.0";
-	public static final String BUILD_DATE = "2011-06-x";
+	public static final String BUILD_DATE = "2011-07-11";
 	public static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/ExchangeAnalytics";
 	public static final String APP_NAME   = "AusStage Exchange Analytics";
 	
@@ -110,8 +118,7 @@ public class ExchangeAnalytics {
 		} else {
 			System.out.println("INFO: Found " + logFiles.length + " log files");
 		}
-		
-		
+
 		// try to open a connection to the database
 		String dbName = properties.getValue("database-dir") + DERBY_DB;
 	
@@ -140,5 +147,125 @@ public class ExchangeAnalytics {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+		
+		// instantiate a ReportGenerator object
+		ReportGenerator report = null;
+		
+		try {
+			report = new ReportGenerator(database);
+		} catch (ParserConfigurationException e) {
+			System.err.println("ERROR: unable to instantiate the ReportGenerator class");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (org.w3c.dom.DOMException ex) {
+			System.err.println("ERROR: unable to start the report");
+			System.err.println("      " + ex.toString());
+			ex.printStackTrace();
+			System.exit(-1);
+		}
+		
+		// process the log files
+		LogParser logParser = new LogParser(logFiles);
+		
+		try {
+			logParser.parseLogs();
+		} catch (IOException e) {
+			System.err.println("ERROR: unable to process the log files");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		// update the user info
+		System.out.println("INFO: " + logParser.getEventRequestCount() + " new event requests to process");
+		System.out.println("INFO: " + logParser.getResourceRequestCount() + " new resource requests to process");
+		System.out.println("INFO: " + logParser.getFeedbackRequestCount() + " new feedback requests to process");
+		
+		// check to see if we need to do anything
+		if(logParser.getEventRequestCount() == 0 && logParser.getResourceRequestCount() == 0 && logParser.getFeedbackRequestCount() == 0) {
+			System.out.println("INFO: no new requests to process");
+		} else {
+			System.out.println("INFO: adding new requests to the database");
+		}
+		
+		if(logParser.getEventRequestCount() > 0) {
+			try {
+				DbUpdater.addEventRequests(logParser.getEventRequests(), database);
+			} catch (SQLException e) {
+				System.err.println("ERROR: unable to add data to the database");
+				System.err.println("      " + e.toString());
+				e.printStackTrace();
+				System.exit(-1);
+			}
+		}
+		
+		if(logParser.getResourceRequestCount() > 0) {
+			try {
+				DbUpdater.addEventRequests(logParser.getResourceRequests(), database);
+			} catch (SQLException e) {
+				System.err.println("ERROR: unable to add data to the database");
+				System.err.println("      " + e.toString());
+				e.printStackTrace();
+				System.exit(-1);
+			}
+		}
+		
+		if(logParser.getFeedbackRequestCount() > 0) {
+			try {
+				DbUpdater.addEventRequests(logParser.getFeedbackRequests(), database);
+			} catch (SQLException e) {
+				System.err.println("ERROR: unable to add data to the database");
+				System.err.println("      " + e.toString());
+				e.printStackTrace();
+				System.exit(-1);
+			}
+		}
+		
+		// build the report
+		System.out.println("INFO: building a new report");
+		try {
+			report.buildReport();
+		} catch (SQLException e) {
+			System.err.println("ERROR: unable to build the report");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		catch (DOMException e) {
+			System.err.println("ERROR: unable to build the report");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		// write the output file
+		System.out.println("INFO: writing the report file");
+		
+		try {
+			PrintWriter printer = new PrintWriter(new FileWriter(properties.getValue("output-dir") + REPORT_FILENAME));
+			report.save(printer);
+		} catch (TransformerException e) {
+			System.err.println("ERROR: unable to transform the DOM into XML");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		catch (IOException e) {
+			System.err.println("ERROR: unable to write the report file");
+			System.err.println("      " + e.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		// mark all the new files as processed
+//		try {
+//			logParser.renameOldFiles();
+//		} catch (IOException e) {
+//			System.err.println("ERROR: unable to rename one of the processed log files");
+//			System.err.println("      " + e.toString());
+//			e.printStackTrace();
+//			System.exit(-1);
+//		}
 	}
 }
