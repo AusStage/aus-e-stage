@@ -284,9 +284,7 @@ public class ReportGenerator {
 			if(results.next() == true) {
 				data[i] = results.getString(1);
 				
-				if(Integer.parseInt(results.getString(1)) > maxRequests) {
-					maxRequests += Integer.parseInt(results.getString(1));
-				}
+				maxRequests += Integer.parseInt(results.getString(1));
 				
 			} else {
 				data[i] = "0";

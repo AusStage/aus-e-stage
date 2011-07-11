@@ -19,6 +19,7 @@ package au.edu.ausstage.exchangeanalytics;
 
 import au.edu.ausstage.utils.InputUtils;
 import au.edu.ausstage.utils.FileUtils;
+import au.edu.ausstage.utils.DateUtils;
 import au.edu.ausstage.exchangeanalytics.types.Request;
 
 import java.util.ArrayList;
@@ -109,8 +110,28 @@ public class LogParser {
 						request = new Request(tokens[2] + "-" + tokens[1] + "-" + tokens[0]);
 						
 					} catch (ArrayIndexOutOfBoundsException e) {
-						System.err.println("ERROR: unable to parse the date on line '" + lineCount + "'");
-						continue;
+					
+						// try the alternate method
+						tokens = previousLine.split(" ");
+						String year = tokens[2];
+
+						String day  = tokens[1];
+						day = day.substring(0, day.length() -1);
+						
+						if(day.length() == 1) {
+							day = "0" + day;
+						}
+						
+						String month = DateUtils.lookupMontByAbbr(tokens[0]);
+						
+						if(month == null) {
+						
+							System.err.println("ERROR: unable to parse the date on line '" + lineCount + "'");
+							continue;
+						}
+						
+						// create a new request object
+						request = new Request(year + "-" + month + "-" + day);
 					}
 					
 					// get the data from the actual line
