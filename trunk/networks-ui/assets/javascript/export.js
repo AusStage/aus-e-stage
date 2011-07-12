@@ -56,7 +56,7 @@ $(document).ready(function() {
 // populate the select boxes in the form
 $(document).ready(function() {
 	//populate the select boxes
-	$("#task").addOption('ego-centric-network-simple', 'Contributor Network');	
+	$("#task").addOption('ego-centric-network', 'Contributor Network');	
 	$("#task").addOption('event-centric-network', 'Event Network');	
 	
 	$("#format").addOption('graphml', 'graphml');
@@ -70,7 +70,7 @@ $(document).ready(function() {
 	$("#simplify").addOption('false', 'false');	
 			
 	// sort the options & select appropriate defaults
-	$("#task").selectOptions("ego-centric-network-simple");
+	$("#task").selectOptions("ego-centric-network");
 	$("#format").selectOptions("graphml");
 	$("#radius").sortOptions();
 	$("#radius").selectOptions("1");
