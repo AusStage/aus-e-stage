@@ -665,7 +665,7 @@ function buildDownloadLink(type, id, radius, simplify){
 	var exportUrl = BASE_URL_EXPORT;
 	switch(type){
 		case 'CONTRIBUTOR':
-			exportUrl += 'task=ego-centric-network-simple&id='+id+'&format=graphml';
+			exportUrl += 'task=ego-centric-network&id='+id+'&format=graphml';
 			break;
 		case 'EVENT':
 			exportUrl += 'task=event-centric-network&id='+id+'&format=graphml&radius='+radius+'&simplify='+simplify;
