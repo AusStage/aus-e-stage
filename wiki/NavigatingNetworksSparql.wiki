@@ -148,6 +148,8 @@ WHERE {
 
 ==List Contributors to Events==
 
+This example retrieves contributors to multiple events. It demonstrates SELECT DISTINCT to retrieve only one instance of each row, and UNION to nest multiple WHERE statements.
+
 {{{
 PREFIX foaf:       <http://xmlns.com/foaf/0.1/> 
 PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> 
