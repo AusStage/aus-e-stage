@@ -46,6 +46,11 @@ body html {
 h1 {
     margin:0;
 }
+
+h2 {
+    margin-top: 1em;
+}
+
 #nav {
 	padding:5px 10px;
 	background:#999999;
