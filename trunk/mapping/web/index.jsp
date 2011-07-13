@@ -22,7 +22,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Aus-e-Stage Service Development</title>
+	<title>Mapping Events</title>
 	<link rel="stylesheet" href="/assets/main-style.css"/>
 	<link rel="stylesheet" href="/assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="/assets/ausstage-background-colours.css"/>
@@ -49,7 +49,7 @@
 	</div>
 	<div class="main b-184 f-187" style="margin-left: 300px;">
 		<!-- main content -->
-		<h2>Visualise live performance on a map</h2>
+		<h2 style="margin-top: 1em;">Visualise live performance on a map</h2>
 		<p>
 			The <a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a> service enables researchers to search, display and visually analyse information about live performance on a map. It introduces new cartographic capabilities to extend research applications of the <a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage</a> dataset. It is one of three <a href="http://www.pfc.org.au/bin/view/Main/NeAT" title="NeAT homepage">NeAT</a> funded services developed by the <a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project">Aus-e-Stage</a> project.
 		</p>
