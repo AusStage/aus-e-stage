@@ -145,3 +145,35 @@ WHERE {
 	OPTIONAL {<ausstage:c:774>			ausestage:nationality 		?nationality} 
 }
 }}}
+
+===List Contributors to Events===
+
+{{{
+PREFIX foaf:       <http://xmlns.com/foaf/0.1/> 
+PREFIX ausestage:  <http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#> 
+PREFIX event:      <http://purl.org/NET/c4dm/event.owl#>
+PREFIX dcterms:    <http://purl.org/dc/terms/>
+SELECT DISTINCT ?agent ?givenName ?familyName
+WHERE {
+ {<ausstage:e:82378> a                event:Event;
+                    event:agent      ?agent.
+ ?agent             a                foaf:Person;
+                    foaf:givenName   ?givenName; 
+                    foaf:familyName  ?familyName.
+}
+UNION
+{<ausstage:e:84285> a                event:Event;
+                    event:agent      ?agent.
+ ?agent             a                foaf:Person;
+                    foaf:givenName   ?givenName; 
+                    foaf:familyName  ?familyName.
+}
+UNION
+{<ausstage:e:88155> a                event:Event;
+                    event:agent      ?agent.
+ ?agent             a                foaf:Person;
+                    foaf:givenName   ?givenName; 
+                    foaf:familyName  ?familyName.
+}
+}
+}}}
