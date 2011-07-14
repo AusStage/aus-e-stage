@@ -112,6 +112,6 @@ Below is a sample configuration file for the [MappingService AusStage Mapping Se
 </website-analytics>
 }}}
 
-== Source Code ==
+= Source Code =
 
 The source code is available for download from our [http://code.google.com/p/aus-e-stage/source/browse/#svn%2Ftrunk%2Fwebsite-analytics repository here].
