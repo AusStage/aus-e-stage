@@ -1,0 +1,27 @@
+#summary AusStage Exchange Analytics
+
+<h1> !AusStage Exchange Analytics </h1>
+
+The !AusStage Exchange Analytics app parses the log files created by the [http://beta.ausstage.edu.au/exchange/ Data Exchange] service to create a report that provides an overview of the usage of the service. 
+
+This report is available via the Aus-e-Stage website under the "Analytics Tab". A [http://beta.ausstage.edu.au/?tab=analytics&section=exchange direct link] is also available. 
+
+The report contains the following sections:
+
+ # Requests for the current month
+ # Requests for the previous month
+ # Requests for the year
+ # Requests by record type
+ # Requests for event data by request type
+ # Requests for resource data by request type
+ # Requests for event data by output type
+ # Requests for resource data by output type
+ # Requests for feedback data by output type
+
+The report is updated automatically every Monday morning, and can be run manually at other times. 
+
+<wiki:toc max_depth="3" />
+
+= Source Code =
+
+The source code is available for download from our [http://code.google.com/p/aus-e-stage/source/browse/#svn%2Ftrunk%2Fexchange-analytics repository here].
