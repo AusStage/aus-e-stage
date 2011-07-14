@@ -64,10 +64,12 @@
    * [AusStageTerminator AusStage Terminator Service]
  * Other Software Under Development
    * Applications 
-     * [AbsDataFix ABS Data Fix App]
+     * [WebsiteAnalytics Website Analytics]
+     * [ExchangeAnlytics Exchange Analytics]
      * [RdfExport RDF Export App]
-     * [AusStageTweetGatherer AusStage Tweet Gatherer]
-     * [WebsiteAnalytics AusStage Website Analytics]
+     * Deprecated 
+        * [AbsDataFix ABS Data Fix App]
+        * [AusStageTweetGatherer AusStage Tweet Gatherer]
    * Libraries
      * [UtilsPackage Utilities Package]
      * [VocabPackage Vocabularies Package]
