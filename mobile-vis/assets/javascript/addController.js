@@ -138,7 +138,8 @@ function  addController(newModel) {
 		*/
 
 		this.submitForm  = function  (e){
-                          e.preventDefault();
+
+                            e.preventDefault();
 
                           ////window.console.log("about to submit the form");
 

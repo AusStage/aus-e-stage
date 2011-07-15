@@ -65,8 +65,10 @@ function visControllerList(newModel) {
                         if(results.length == 1){
 			
                         //Show the performance name etc for just on peformance  - just is the most common way of doing this
+                            //window.console.log(results[0]);
 
-                             $("span.event").html(results[0].event);
+                             $("span.event").html('<a href='+ results[0].eventUrl + '>' + results[0].event + '</a>');
+
                              $("span.organisation").html(results[0].organisation);
                              $(".venue").html(results[0].venue);
                              $(".date").html(results[0].date);
