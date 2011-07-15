@@ -51,6 +51,8 @@ img
 	
 }
 
+
+
 /* Tables
 -------------------------------------------------------------- */
 
@@ -59,7 +61,7 @@ img
 	on table cells has to be 27px, instead of the standard 18px or 36px 
 	of other elements. 
  */ 
-table       { margin-bottom: 1.4em; width:100%; }
+table       { margin-bottom: 1.4em; width:98%; }
 
 th          { font-weight: bold; }
 
@@ -139,8 +141,20 @@ td.view {
      color:white;
 
 }
+#viewChoices .instructions {
+    padding: 12px;
+}
+
+#viewChoices {
+    float:right;
+    margin-right: 32px;
+    margin-bottom: 12px;
+}
 
 
+
+
+/*
 #viewChoices, #instructions {
     margin-left: 10px;
 }
@@ -156,6 +170,10 @@ td.view {
     color:white;
     height: 34px;
     padding-left:32px;
+    padding-right:32px;
+
+   
+    
     width:110px;
 }
 
@@ -201,12 +219,15 @@ td.view {
 
 .about {
    
-    padding-top:8px;
-    padding-bottom: 8px;
+    padding-top:12px;
+    padding-bottom: 12px;
     
     width:80%;
     font-size: .85em;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    display:block;
+
 }
 
 
@@ -244,13 +265,18 @@ td.view {
 
 
 #Performances {
-       margin-top: 12px;  
+       margin-top: 12px;
+       margin-left: 12px;
+
 }
 
 #Performances #SearchResults {
        margin-top: 12px;
 }
 
+#SearchResults {
+  
+}
 
 /*shared display what the current performance is */
 
@@ -261,7 +287,7 @@ td.view {
 	margin-right:10px;
 	margin-top:10px;
 }
-
+/*
 .info .event {
 		font-size:1.5em;
 }
@@ -277,9 +303,12 @@ td.view {
 .info .date  {
 		 font-weight:lighter;
 	}
-
+*/
 .info h4.question {
 	font-size:1.6em;
 	font-weight:bold;
 }
 
+.info p {
+	padding:3px;
+}
