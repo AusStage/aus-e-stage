@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Researching Audiences</title>
+	
+    <link rel="stylesheet" href="assets/signage.css">
+
+	<script src="assets/javascript/libraries/jquery-1.4.2.min.js"></script>
+	<script src="assets/javascript/libraries/jquery.cycle.all.min.js"></script>
+    
+    
+        <script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
+	<!-- custom code -->
+    
+    	<script src="assets/javascript/vis-model.js"></script>
+        <script src="assets/javascript/errorController.js"></script>
+	<script src="assets/javascript/visControllerSignage.js"></script>
+        
+        
+	 <script type="text/javascript" charset="utf-8">
+         
+			  /**
+			  * The Jquery document ready. Acts like the main. 
+			  */
+						   
+		   $(document).ready(function() {			
+			
+				myModel = new model();
+				myModel.controllers.push(new visControllerSignage(myModel)); // Add the timeline controller the model
+				myModel.startLoading();
+				
+		});
+		
+      </script>
+        
+        
+</head>
+<body>
+	<div id="container">
+    <div id="main">
+    
+    	
+    		<div class="ui-state-error ui-corner-all status-messages" id="search_error_message"> 
+                             <p><span class="ui-icon ui-icon-alert status-icon"></span> 
+                             <span id="error_text"></span>
+                            </p>
+		  </div>
+          
+          <div class="ui-state-highlight ui-corner-all status-messages" id="status_message" >
+						<p>
+						<span class="ui-icon ui-icon-info status-icon"></span>
+						<span id="message_text"></span>
+					    </p>
+	   	</div>    
+        
+        
+        <div id="question"><h3>The Question</h3	>
+        <p class="theQuestion"></p></div>
+                <div id="feedback">
+                         <div class="feedback_messages">
+                                    
+                                      
+                                  
+                         </div>
+                 </div>     
+                                
+        </div>       
+   </div>
+
+
+		 <div id="AddingFeedback">
+                <h3>Send your response by</h3> 
+                <div class="FeedbackMethod SMS">
+   	      <img src="assets/images/sms-icon.jpg" width="100" height="100" alt="SMS">
+          
+          <p> SMS to 0408 855 011 starting with #<span class="tag"></span> </p> </div>
+                
+                
+                 <div class="FeedbackMethod twitter">
+				<img src="assets/images/twitter-icon.jpg" width="100" height="100" alt="Twitter">
+<p>TWITTER and include the hashtag #<span class="tag"></span> </p>               
+		   </div>
+                
+                
+                 <div class="FeedbackMethod web">
+                 <img src="assets/images/phone-icon.jpg" alt="Phone" width="70" height="100">
+
+					<p>WEB at ausstage.mobi</p>
+    			  </div>
+            </div>
+            
+            
+</body>
+</html>
