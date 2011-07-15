@@ -38,7 +38,7 @@ function visControllerSearch(newModel) {
 		this.UpdateView  = function (newResults)
 		{	
 			results = this.model.results;
-			//window.console.log(results );
+			window.console.log(results );
 
 			for (var a = 0; a < results.length; a++) { //loop over the controllers 
 				for(var i = 0; i < results[a].length; i++) { //loop of over results in the 
@@ -50,23 +50,24 @@ function visControllerSearch(newModel) {
 							
 							    $("#table_anchor").after('<tr>' +
                                                                                                         '<td class="select"> <input type="checkbox"  name="performance" id="' + item.id + '" value="' + item.id + '" /> </td>' +
-                                                                                                        '<td class="event">'  + item.event + '</td>' +
-													'<td class="organisation"> ' + item.organisation  + ' </td>' +
+                                                                                                        
+                                                                                                        '<td class="event"><a href='+  item.eventUrl + '>'  + item.event + '</a>, ' + item.venue + ', ' +  item.organisation  + '</td>' +
+
 												        '<td class="startDateTime">' + item.startDateTime + '</td>' +
-													'<td class="venue">' + item.venue +' </td>' +
-													'<td class="view">\n\
+													'<td class="totalFeedbackCount">' + item.totalFeedbackCount +' </td>' +
+
+                                                                                                        '<td class="view">\n\
 \n\
-                                                                                                         <span class="visList"><a href="list.html?performance=' + item.id + '"><img src ="assets/images/list-icon.png" alt="list" > <br /><span class="label">List</span></a></span> ' +
+                                                                                                         <span class="visList"><a href="list.html?performance=' + item.id + '"><img src ="../assets/images/list-icon.png" alt="list" > <br /><span class="label">List</span></a></span> ' +
 													'<span class="visSign"><a href="signage.html?performance=' + item.id + '">\n\
-                                                                                                          <img src ="assets/images/sign-icon.png" alt="Signage" > <br /><span class="label">Signage</span></a></span>' +
+                                                                                                          <img src ="../assets/images/sign-icon.png" alt="Signage" > <br /><span class="label">Signage</span></a></span>' +
 
                                                                                                           '<span class="visCloud"><a href="tagcloud.html?performance=' + item.id + '">\n\
-                                                                                                          <img src ="assets/images/tagcloud-icon.png" alt="Cloud" > <br /><span class="label">Tag Cloud</span></a></span>' +
+                                                                                                          <img src ="../assets/images/tagcloud-icon.png" alt="Cloud" > <br /><span class="label">Tag Cloud</span></a></span>' +
 
                                                                                                          '<span class="visImage"><a href="image-sequence.html?performance=' + item.id + '">\n\
-                                                                                                          <img src ="assets/images/imagesquence.png" alt="Image Sequence" > <br /><span class="label">Image Sequence</span></a></span>' +
+                                                                                                          <img src ="../assets/images/imagesquence.png" alt="Image Sequence" > <br /><span class="label">Image Sequence</span></a></span>' +
 													'</td>' +
-													'<td class="totalFeedbackCount">' + item.totalFeedbackCount +' </td>' +
 
 													'</tr>'
 													);
