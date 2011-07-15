@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Aus-e-Stage Service Development</title>
+	<title>Researching Audiences</title>
 	<link rel="stylesheet" href="assets/main-style.css"/>
 	<link rel="stylesheet" href="assets/ausstage-colours.css"/>
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css"/>
@@ -16,14 +16,10 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.6.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.form-2.4.3.js"></script>
-        <script type="text/javascript" src="assets/javascript/chain-0.2.js" type="application/x-javascript" charset="utf-8"></script>
+        <script type="text/javacript" src="assets/javascript/chain-0.2.js" type="application/x-javascript" charset="utf-8"></script>
 
                 
-        <!-- custom code -->
-        <script src="assets/javascript/searchModel.js"></script>
-        <script src="assets/javascript/errorController.js"></script>
-        <script src="assets/javascript/visControllerSearch.js"></script>
-        <script src="assets/javascript/visControllerChooseView.js"></script>
+
 
 
         <script type="text/javascript" charset="utf-8">
@@ -34,14 +30,7 @@
 						   
 		   $(document).ready(function() {			
 			
-				myModel = new model();
-				myModel.controllers.push(new visControllerSearch(myModel)); // Add the timeline controller the model
-				myModel.controllers.push(new visControllerChooseView(this)); // Add the timeline controller the model
-                                myModel.searchPerformances();
-
-                                myModel.getPerformances (0,0,'.currentPerformancesBlock'); // See what performances are currently looking for feedback
-				myModel.getPerformances (0,0,'.currentPerformancesBlock'); // See what performances are currently looking for feedback
-
+			
 		});
 		
         </script>
@@ -52,16 +41,19 @@
 	<div class="header b-187"><h1>Researching Audiences</h1></div>
 	<div class="sidebar b-186 f-184">
 		<!-- side bar content -->
-		<div class="mainMenu">
-			<h2>Main Menu</h2>
-                        <ul>
+<div class="mainMenu">
+			<ul>
+				<li>&nbsp;</li>
 				<li><a href="http://www.ausstage.edu.au" title="AusStage Homepage">AusStage Website</a></li>
 				<li><a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project">Aus-e-Stage Project</a></li>
+				<li><a href="http://beta.ausstage.edu.au/mapping" title="Mapping Events homepage">Mapping Events</a></li>
+				<li><a href="http://beta.ausstage.edu.au/networks" title="Navigating Networks homepage">Navigating Networks</a></li>
 				<li><a href="index.html" title="Researching Audiences homepage">Researching Audiences</a></li>
-                                <li><a href="about.html" title="About the Research Audiences project">About</a><li>
-
+				<li><a href="http://code.google.com/p/aus-e-stage/wiki/StartPage" title="Aus-e-Stage Project Wiki">Project Wiki</a></li>
+				<li><a href="http://beta.ausstage.edu.au/?tab=contacts" title="Contact information">Contact Us</a></li>
 			</ul>
 		</div>
+                
 	</div>
 	<div class="main b-184 f-187">
 		<!-- main content -->
@@ -69,72 +61,51 @@
 
                     <div id="About">
 
-<p>AusStage documents the performing arts in Australia. AusStage now provides audiences with the
-    chance to contribute to this important cultural record by letting companies know what you
-    thought of the productions.</p>
+<h2>Send feedback on live performance</h2>
 
-<p>This project is being led by Flinders University alongside the companies and artists.  It has been funded by the National e-Research Architecture Taskforce (NeAT).
-    For more information about the service see the <a href="about.html">About Page</a></div>
+<p>AusStage documents the performing arts in Australia. Future generations, researchers and contemporary audiences can go to <a href="http://www.ausstage.edu.au/">AusStage</a>, search and retrieve information about company and performer histories, maps, tours and links to related material.</p>
 
-                    
-<p>
-                    </div>
-                 <div class="ui-state-error ui-corner-all status-messages" id="search_error_message">
-                                             <p><span class="ui-icon ui-icon-alert status-icon"></span>
-                                             <span id="error_text"></span>
-                                            </p>
-                                  </div>
-
-                          <div class="ui-state-highlight ui-corner-all status-messages" id="status_message" >
-                                                                <p>
-                                                                <span class="ui-icon ui-icon-info status-icon"></span>
-                                                                <span id="message_text"></span>
-                                                            </p>
-                                </div>
-
-                                                                
-           <!--<span class="currentPerformancesBlock loading">-->
-           <div id="CurrentPerformances">
-               <h3  class="currentPerformancesBlock">Performances currently seeking feedback</h3>
-
-                     <ul class="Performances currentPerformancesBlock performances">
-                        
-             	     </ul>
-           </div>
-       
-        <div id="Performances">
-        <h3>Performances that currently have feedback</h3>
+<p>AusStage now provides audiences with the chance to share their experience of performance. You can let companies know what you thought of a performance you've seen. You can use your phone to send a text message, a tweet via Twitter, or respond online via a mobile or desktop web site.</p>
 
 
-         <form action="" method="get" id="performanceForm">
+<ul class="services">
+		<li>
+			<a href="send/index.html" title="Send a response">
+				<h3>Send a response</h3>
+				
+                                <p>Performances now seeking response</p>
+			</a>
+		</li>
+		<li>
+			<a href="view/index.html" title="View response">
+				<h3>View response</h3>
+                                <p>Past performances with response you can view</p>
+			</a>
+		</li>
+</ul>
 
-          <table id="SearchResults">
-          <thead>
-        	<tr>
-                    <th scope="col"></th>
-                    <th scope="col">Event</th>
-                    <th scope="col">Organisation</th>
-                     <th scope="col">Date and Time</th>
+<p class="clear">More information on the Researching Audiences service is available in our Wiki including:</p>
 
-                    <th scope="col">Venue</th>
-                    <th scope="col View">View</th>
-                    <th scope="col">Feedback Count</th>
-            </tr>
-          </thead>
-          
-                <tr id="table_anchor"></tr>
-                <!-- Below is where the actual date goes -->
+<li><a href="http://code.google.com/p/aus-e-stage/wiki/MobileServiceSpecification
+">Mobile Service Specification</a></li>
+<li><a href="http://code.google.com/p/aus-e-stage/wiki/MobileServiceDatabaseTables
+">Mobile Service Database Tables</a></li>
+<li><a href="http://code.google.com/p/aus-e-stage/wiki/
+MobileServiceAPI">Mobile Service API<a></li>
+<li><a href="http://code.google.com/p/aus-e-stage/wiki/MobileServiceInfoCardTmpl
+">Information Card Template</a></li>
 
-		</table>
-             <div id="instructions"><strong>Choose how you would like to view the selected performances.</strong></div> <br/>
-             <div id="viewChoices">
-                 <input type="button" value="List View" name="ListView" id="chooseList" />
-                 <input type="button" value="Cloud View" name="CloudView" id="chooseCloud" />
-             </div>
+<p>This project is led by Flinders University alongside the companies and artists who are seeking feedback on their work. It has been funded by the National e-Research Architecture Taskforce (NeAT).</p>
+
+<p>This research has been approved by the Flinders University Social and Behavioural Research Ethics Committee (Project Number 4892). For more information regarding ethical approval of the project the Executive Officer of the Committee can be contacted on <a href="mailto:human.researchethics@flinders.edu.au">human.researchethics@flinders.edu.au</a> </p>
 
 
-         </form>
-        
+<p>Any enquiries you may have concerning this project should be directed to Jonathan Bollen on 8201 5874 or by email to <a href="mailto:jonathan.bollen@flinders.edu.a">jonathan.bollen@flinders.edu.au</a></p>
+
+
+<p class="clear homefooter">
+						<a href="http://beta.ausstage.edu.au/" title="Aus-e-Stage Project homepage">Aus-e-Stage</a> is funded by <a href="http://www.pfc.org.au/bin/view/Main/NeAT" title="NeAT homepage">NeAT</a>, the National eResaerch Architecture Taskforce. The source code for these services is available on the <a href="http://code.google.com/p/aus-e-stage/" title="Aus-e-Stage Project Wiki and Source Code Repository">aus-e-stage</a> project hosted on Google Code.
+					</p>
         </div>
 	</div>
 
@@ -142,6 +113,8 @@
 	<!-- always at the bottom of the content -->
 	<div class="push"></div>
 </div>
+
+                                        
 <!-- include the Google Analytics code -->
 
 
