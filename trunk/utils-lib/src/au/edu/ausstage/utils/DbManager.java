@@ -105,7 +105,7 @@ public class DbManager {
 	public boolean connect() {
 		return connect(false);
 	}
-	
+			
 	/**
 	 * A method to execute an SQL statement and return a resultset
 	 * 
@@ -138,7 +138,7 @@ public class DbManager {
 			
 			// execute the statement and get the result set
 			resultSet = statement.executeQuery(sqlQuery);
-			
+						
 		} catch (java.sql.SQLException sqlEx) {
 			return null;
 		}
@@ -146,6 +146,7 @@ public class DbManager {
 		return new au.edu.ausstage.utils.DbObjects(statement, resultSet);
 	
 	} // end executeStatement method
+	
 	
 	/**
 	 * A method to prepare and execute a prepared SQL statement and return a resultset
@@ -187,7 +188,7 @@ public class DbManager {
 			}
 			
 			// execute the statement and get the result set
-			resultSet = statement.executeQuery();
+			resultSet = statement.executeQuery();			
 			
 		} catch (java.sql.SQLException sqlEx) {
 			return null;
@@ -335,13 +336,20 @@ public class DbManager {
 	 * Finalize method to be run when the object is destroyed
 	 * plays nice and free up Oracle connection resources etc. 
 	 */
-	protected void finalize() throws Throwable {
+	 protected void finalize() throws Throwable {
 		try {
 			connection.close();
 			dataSource = null;
 		} catch(Exception e){}
 	} // end finalize method
 
-	
+	//release database resources as the garbage collector finalize() is not guaranteed to run at any specific time. 
+	//In general it's best not to rely on finalize() to do any cleaning up etc.
+	public void cleanup(){
+		try {
+			connection.close();
+			dataSource = null;
+		} catch(Exception e){}		
+	}
 	
 } // end class definition
