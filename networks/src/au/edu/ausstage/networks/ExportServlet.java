@@ -44,7 +44,6 @@ public class ExportServlet extends HttpServlet {
 	public final static String[] FORMAT_TYPES = {"graphml", "debug"};
 	public final static int      MIN_DEGREES  = 1;
 	public final static int      MAX_DEGREES  = 3;
-	public final static String[] EXPORT_TYPES_UI = {"ego-centric-network-simple"}; // valid export options via the UI
 
 	/*
 	 * initialise this instance
@@ -86,7 +85,7 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		// check the other parameters dependant on the task type
-		if(taskType.equalsIgnoreCase("ego-centric-network-simple") == true || taskType.equalsIgnoreCase("event-centric-network") == true || taskType.equalsIgnoreCase("ego-centric-network") == true) {
+		if(taskType.equalsIgnoreCase("ego-centric-network") == true || taskType.equalsIgnoreCase("event-centric-network") == true) {
 			// check the other parameters as they are required
 		
 			if(radius != null) {
@@ -129,8 +128,7 @@ public class ExportServlet extends HttpServlet {
 		if(formatType.equals("graphml")) {
 			// output xml mime type
 			response.setContentType("text/xml; charset=UTF-8");
-			if(taskType.equalsIgnoreCase("ego-centric-network-simple") == true)
-				response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + ".graphml");
+			
 		} else if(formatType.equals("debug")){
 			// output plain text mime type
 			response.setContentType("text/plain; charset=UTF-8");
@@ -141,17 +139,13 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		// determine the type of export to undertake
-		if(taskType.equals("ego-centric-network")) {
+		if(taskType.equals("ego-centric-network")&& formatType.equalsIgnoreCase("graphml")) {
 			String filename = "Con-" + id + "-D-" + Integer.toString(degrees);
 			filename = filename + "." + formatType;	
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 			// instantiate a lookup object
 			ExportManager export = new ExportManager(rdf);
-			
-			//debug code
-			//throw new RuntimeException("###" + degrees + "###");
-			
 			export.buildCollaboratorNetworkGraphml(id, formatType, degrees, "undirected", response.getWriter());
 			
 		} else if(taskType.startsWith("full-edge-list")) {
