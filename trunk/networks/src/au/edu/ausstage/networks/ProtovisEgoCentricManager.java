@@ -966,13 +966,12 @@ public class ProtovisEgoCentricManager {
 			edge.setTarget(nodesIndex.indexOf(edge.getTarget()));
 		}
 		
-//		try {
-//			// can't call finalize directly as it has protected scope
-//			//database.finalize();
-//			
-//		} catch (Throwable e) {
-//			e.printStackTrace();
-//		}
+		try {
+			//database.finalize();
+			database.cleanup();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		
 		
 		//declare JSON related variables
