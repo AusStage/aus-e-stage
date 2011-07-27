@@ -44,7 +44,8 @@ public class ExportServlet extends HttpServlet {
 	public final static String[] FORMAT_TYPES = {"graphml", "debug"};
 	public final static int      MIN_DEGREES  = 1;
 	public final static int      MAX_DEGREES  = 3;
-
+	public final static String[] EXPORT_TYPES_UI = {"ego-centric-network"}; // valid export options via the UI
+	
 	/*
 	 * initialise this instance
 	 */
