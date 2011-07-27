@@ -600,6 +600,7 @@ public class ProtovisEgoCentricManager {
 	} // end the CollaborationList method
 	
 	
+	@SuppressWarnings("unchecked")
 	public JSONObject buildJSONNodes(JSONObject object, ArrayList<Collaborator> collaborators){
 		
 		ListIterator<Collaborator> iterator = collaborators.listIterator();
