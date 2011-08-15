@@ -76,7 +76,13 @@ function visControllerSearch(newModel) {
 												
 				}
 					
-			}	
+			}
+
+                        //now add the odd and even the that table
+
+                        $("table.#SearchResults tr:nth-child(odd)").addClass("odd");
+
+
 							
 
 		}	

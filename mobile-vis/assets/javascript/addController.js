@@ -21,8 +21,8 @@
 
 function  addController(newModel) {
 		
-		 this.model = newModel;
-         this.errorController = new errorController();
+	   	 this.model = newModel;
+                 this.errorController = new errorController();
 
 		
 		/*
