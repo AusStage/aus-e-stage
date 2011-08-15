@@ -73,15 +73,9 @@ function visControllerList(newModel) {
                              //change the date format
                              
                              var perfDate = new Date(results[0].date);
-
-                             var curr_date =  perfDate.getDate();
-                             var curr_month =  perfDate.getMonth();
-                             var curr_year = perfDate.getFullYear();
-
-                             //Tue 31 Jun 2011
-                             //alert(" " + curr_date + " " + curr_month + " " + curr_year);
-
-                             $(".date").html(results[0].date);
+                             var formattedDate = this.model.reformatDate(perfDate);
+                           
+                             $(".date").html(formattedDate);
                              $("span.question").html(results[0].question);
 
 				for(var i = 0; i < results[0].feedback.length; i++) {

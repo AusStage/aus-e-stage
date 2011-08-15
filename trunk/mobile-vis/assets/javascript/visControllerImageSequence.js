@@ -228,8 +228,11 @@ function visControllerImageSequence(newModel) {
                                             //window.console.log(this.model.results[PerformancePosInList].feedback);
                                             //window.console.log(currentFeedback);
 
+                                        var perfDate = new Date(currentFeedback.date);
+                                        var formattedDate = this.model.reformatDate(perfDate)
+
                                             htmlFeedBackList =  htmlFeedBackList +  'Via ' +  currentFeedback.type + ', ';
-                                            htmlFeedBackList =  htmlFeedBackList +  currentFeedback.date  + ' ' + currentFeedback.time +  '</span>';
+                                            htmlFeedBackList =  htmlFeedBackList + formattedDate   + ' ' + currentFeedback.time +  '</span>';
 
 
                                           ;
@@ -425,10 +428,13 @@ function visControllerImageSequence(newModel) {
                         //Show the performance name etc for just on peformance  - just is the most common way of doing this
                              $(window.$(".info")).css('display','block');
 
+                             var perfDate = new Date(this.model.results[0].date);
+                             var formattedDate = this.model.reformatDate(perfDate)
+                                        
                              $("span.event").html(this.model.results[0].event);
                              $("span.organisation").html(this.model.results[0].organisation);
                              $(".venue").html(this.model.results[0].venue);
-                             $(".date").html(this.model.results[0].date);
+                             $(".date").html(formattedDate);
                              $("span.question").html(this.model.results[0].question);
 
 

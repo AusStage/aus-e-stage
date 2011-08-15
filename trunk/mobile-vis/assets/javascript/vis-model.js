@@ -394,7 +394,32 @@ function model(name) {
 		/*
 		* Get the current host name from the location string   
 		* @returns host as a string    
-		*/ 
+		*/
+
+                this.reformatDate = function (perfDate) {
+
+		
+
+                              var curr_date =  perfDate.getDate();
+                             var curr_day =  perfDate.getDay();
+                             var curr_month =  perfDate.getMonth();
+                             var curr_year = perfDate.getFullYear();
+
+                             var months = new Array('Jan','Feb','Mar','Apr','May',
+'Jun','Jul','Aug','Sept','Oct','Nov','Dec');
+
+                             var days = new Array('Sun','Mon','Tue','Wed','Thur','Fri','Sat');
+
+                             var formattedDate =  " " +days[curr_day]+ " " + curr_date + " " + months[curr_month] + " " + curr_year;
+
+
+                             //Tue 31 Jun 2011
+                             //alert( formattedDate);
+
+			     return  formattedDate;
+		}
+
+                
 		this.buildHost = function () {
 			
 			 var host = $(location).attr('host');

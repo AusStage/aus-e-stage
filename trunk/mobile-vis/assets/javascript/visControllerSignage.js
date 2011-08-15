@@ -99,9 +99,10 @@ function  visControllerSignage(newModel) {
                                         //based on http://en.wikipedia.org/wiki/Words_per_minute
 
                                         var feedbackDuration = (wordcount * .4)*10000;
-
+                                        var perfDate = new Date(item.date);
+                                        var formattedDate = this.model.reformatDate(perfDate);
                                         //with font count $(".feedback_messages").append('<span class="feedback ' + item.id + '"><div class="content" style="font-size:'+ wordcount + 'em;" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
-                                        $(".feedback_messages").append('<span class="feedback ' + item.id + '" data-duration="'+  feedbackDuration +'"><div class="content" >' + item.content + '</div><span class="feedback-about"><span class="date">' + item.date  + '</span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
+                                        $(".feedback_messages").append('<span class="feedback ' + item.id + '" data-duration="'+  feedbackDuration +'"><div class="content" >' + item.content + '</div><span class="feedback-about"><span class="date">' + formattedDate  + ' </span><span class="time">' + item.time + ' </span><span class="type">' + item.type + ' </span></span></span>');
                                         this.reSizeFeedback(item);
 
 
@@ -169,7 +170,11 @@ function  visControllerSignage(newModel) {
                               //  //window.console.log('in the feedback loop ');
                                 ////window.console.log(this.content);
 
-                                     $(".feedback_messages").prepend('<span class="feedback"><div class="content">' + this.content + '</div><span class="feedback-about"><span class="date">' + this.date  + '</span><span class="time">' + this.time + ' </span><span class="type">' +  this.type + ' </span></span></span>');
+                             var perfDate = new Date(this.date);
+                             var formattedDate = this.model.reformatDate(perfDate);
+
+
+                                     $(".feedback_messages").prepend('<span class="feedback"><div class="content">' + this.content + '</div><span class="feedback-about"><span class="date">' + formattedDate  + '</span><span class="time">' + this.time + ' </span><span class="type">' +  this.type + ' </span></span></span>');
                                      reSizeFeedback(item);
 
                          });
