@@ -132,7 +132,7 @@ function model(name) {
 
 								$(target + ".Performances").append('<li>' +
 											
-												 '<div class="event">There are no performances currently seeking feedback' +
+												 '<div class="event-not-found">There are no performances currently seeking feedback' +
 													'</div></li>');
 											
 											
