@@ -59,10 +59,9 @@ function visControllerList(newModel) {
                         ////window.console.log(results.length);
 
                         //window.console.log(this.model.results);
-
                         results = this.model.results;
 
-                        if(results.length == 1){
+                        if(results.length <= 1){
 			
                         //Show the performance name etc for just on peformance  - just is the most common way of doing this
                             //window.console.log(results[0]);
@@ -71,6 +70,17 @@ function visControllerList(newModel) {
 
                              $("span.organisation").html(results[0].organisation);
                              $(".venue").html(results[0].venue);
+                             //change the date format
+                             
+                             var perfDate = new Date(results[0].date);
+
+                             var curr_date =  perfDate.getDate();
+                             var curr_month =  perfDate.getMonth();
+                             var curr_year = perfDate.getFullYear();
+
+                             //Tue 31 Jun 2011
+                             //alert(" " + curr_date + " " + curr_month + " " + curr_year);
+
                              $(".date").html(results[0].date);
                              $("span.question").html(results[0].question);
 
@@ -99,7 +109,12 @@ function visControllerList(newModel) {
 				}
                               }
 
+
+
                         }
+
+                       $("table.#feedback_messages tr:nth-child(odd)").addClass("odd");
+
 							
 			 
 		}	
