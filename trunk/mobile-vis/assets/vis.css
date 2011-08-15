@@ -24,6 +24,14 @@
 }
 
 
+ul.services li {
+	
+	min-height:200px;
+
+}
+
+
+
 img
 {border: none;
 }
@@ -61,12 +69,19 @@ img
 	on table cells has to be 27px, instead of the standard 18px or 36px 
 	of other elements. 
  */ 
-table       { margin-bottom: 1.4em; width:98%; }
+table       {
+
+              margin-bottom: 1.4em;
+              width:98%;
+              border: 1px solid #AAA;
+
+}
 
 th          { font-weight: bold; }
 
-thead th    { background:#999;
-			text-align:left;
+thead th    { background:#333333;
+             text-align:left;
+             color:#ffffff;
 
 }
 
@@ -80,7 +95,7 @@ tr {
 }
 
 td {
-	border-bottom: 1px solid #333;	
+        padding:3px;
 }
 
 td.totalFeedbackCount {
@@ -263,6 +278,13 @@ td.view {
 
 }
 
+#CurrentPerformances .event-not-found {
+    font-size: 1.2em;
+
+}
+
+
+
 
 #Performances {
        margin-top: 12px;
@@ -311,4 +333,9 @@ td.view {
 
 .info p {
 	padding:3px;
+}
+
+
+.feedbackfooter {
+    padding:8px;
 }
