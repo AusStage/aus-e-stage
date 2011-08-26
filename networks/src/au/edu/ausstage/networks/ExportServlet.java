@@ -37,7 +37,7 @@ public class ExportServlet extends HttpServlet {
 	private String connectString = null;
 	
 	// declare constants
-	private final String[] TASK_TYPES   = {"ego-centric-network", "event-centric-network",
+	private final String[] TASK_TYPES   = {"ego-centric-network", "event-centric-network", "org-evt-network", "venue-evt-network", "ego-centric-by-organisation",
 	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only",
 	                                       "actor-edge-list-with-dups", "actor-edge-list-no-dups", "actor-edge-list-with-dups-id-only", "actor-edge-list-no-dups-id-only"};
 	                                       
@@ -84,9 +84,11 @@ public class ExportServlet extends HttpServlet {
 			// no valid task type was found
 			throw new ServletException("Missing task parameter. Expected one of: " + java.util.Arrays.toString(TASK_TYPES).replaceAll("[\\]\\[]", ""));
 		}
+				
 		
 		// check the other parameters dependant on the task type
-		if(taskType.equalsIgnoreCase("ego-centric-network") == true || taskType.equalsIgnoreCase("event-centric-network") == true) {
+		if(taskType.equalsIgnoreCase("ego-centric-network") == true || taskType.equalsIgnoreCase("event-centric-network") == true ||
+		 taskType.equalsIgnoreCase("ego-centric-by-organisation") == true) {
 			// check the other parameters as they are required
 		
 			if(radius != null) {
@@ -104,37 +106,43 @@ public class ExportServlet extends HttpServlet {
 				}
 			} else {
 				degrees = 1;
-			}
-
+			}		
+			
 			// check on the id parameter
 			if(InputUtils.isValidInt(id) == false) {
 				throw new ServletException("Missing or invalid id parameter.");
 			}
-
+			
 			// check the format parameter
 			if(InputUtils.isValid(formatType) == false) {
 				// use default value
 				formatType = "graphml";
-			} else {
-				if(InputUtils.isValid(formatType, FORMAT_TYPES) == false) {
+			} else if(InputUtils.isValid(formatType, FORMAT_TYPES) == false){ 
 					throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
-				}
 			}
+			
+		} else if (taskType.equalsIgnoreCase("org-evt-network") || taskType.equalsIgnoreCase("venue-evt-network") ) {
+			// check on the id parameter
+			if(InputUtils.isValidInt(id) == false) {
+				throw new ServletException("Missing or invalid id parameter.");
+			}
+			
 		} else {
 			// set some logical default parameters
 			formatType = "edge-list";
-		}			
+		}	
 		
 		// output the appropriate mime type
-		if(formatType.equals("graphml")) {
+		if(formatType.equalsIgnoreCase("graphml")) {
 			// output xml mime type
 			response.setContentType("text/xml; charset=UTF-8");
 			
-		} else if(formatType.equals("debug")){
+		} else if(formatType.equalsIgnoreCase("debug")){
 			// output plain text mime type
 			response.setContentType("text/plain; charset=UTF-8");
 			response.setHeader("Content-Disposition", "attachment;filename=ausstage-graph-" + id + "-degrees-" + degrees + "-debug.txt");
-		} else if(formatType.equals("edge-list")) {
+			
+		} else if(formatType.equalsIgnoreCase("edge-list")) {
 			response.setContentType("text/plain; charset=UTF-8");
 			response.setHeader("Content-Disposition", "attachment;filename=" + taskType + ".edge");
 		}
@@ -159,7 +167,7 @@ public class ExportServlet extends HttpServlet {
 			ExportManager export = new ExportManager(rdf);
 			export.getActorEdgeList(taskType, response.getWriter());
 			
-		} else if(taskType.equals("event-centric-network") && formatType.equalsIgnoreCase("graphml")) {
+		} else if(taskType.equalsIgnoreCase("event-centric-network") && formatType.equalsIgnoreCase("graphml")) {
 			
 			String filename = "Evt-" + id + "-D-" + Integer.toString(degrees);
 			if (degrees >= 2) { 
@@ -177,6 +185,19 @@ public class ExportServlet extends HttpServlet {
 			ExportManager export = new ExportManager(db);
 			export.buildEvtNetworkGraphml(id, degrees, simplify, "directed", response.getWriter());			
 			
+		} else if(taskType.equalsIgnoreCase("org-evt-network") && formatType.equalsIgnoreCase("graphml")) {
+			String filename = "org-" + id + "." + formatType;	
+			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+			
+			ExportManager export = new ExportManager(db);
+			export.buildOrgOrVenueEvtNetworkGraphml(id, "directed", "o", response.getWriter());		
+			
+		} else if (taskType.equalsIgnoreCase("venue-evt-network") && formatType.equalsIgnoreCase("graphml")){
+			String filename = "venue-" + id + "." + formatType;	
+			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+			
+			ExportManager export = new ExportManager(db);
+			export.buildOrgOrVenueEvtNetworkGraphml(id, "directed", "v", response.getWriter());	
 		}
 		
 		try {
