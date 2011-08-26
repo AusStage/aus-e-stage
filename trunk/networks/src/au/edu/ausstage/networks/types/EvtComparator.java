@@ -2,6 +2,7 @@ package au.edu.ausstage.networks.types;
 
 import java.util.Comparator;
 
+@SuppressWarnings("rawtypes")
 public class EvtComparator implements Comparator{
 	
 	public int compare(Object obj1, Object obj2) {

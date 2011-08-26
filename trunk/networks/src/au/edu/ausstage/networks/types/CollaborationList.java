@@ -124,5 +124,10 @@ public class CollaborationList {
 		
 		return collaborations.get(value);	
 	}
+	
+	/*BW 11-08-2011 returns the collaborations hash map. BW*/
+	public HashMap<Integer, Collaboration> getCollaborations() {
+		return collaborations;	
+	}	
 
 } // end class definition

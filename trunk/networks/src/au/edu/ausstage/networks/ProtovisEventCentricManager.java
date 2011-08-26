@@ -64,13 +64,13 @@ public class ProtovisEventCentricManager {
 	
 	//node attribute for graphml export
 	public String [][] nodeAttr = {
-			{"EventID", "string"}, {"Label", "string"}, {"EventName", "string"}, {"Venue", "string"},
+			{"EventID", "string"}, {"NodeLabel", "string"}, {"EventName", "string"}, {"Venue", "string"},
 			{"StartDate", "string"}, {"Central", "boolean"}, {"InDegree", "string"}, {"OutDegree", "string"},
 			{"EventURL", "string"}
 		};
 	//edge attribute for graphml export
 	public String [][] edgeAttr = {
-			{"ContributorID", "string"}, {"Label", "string"}, {"ContributorName", "string"}, {"Roles", "string"},
+			{"ContributorID", "string"}, {"EdgeLabel", "string"}, {"ContributorName", "string"}, {"Roles", "string"},
 			{"SourceEventID", "string"}, {"TargetEventID", "string"}, {"ContributorURL", "string"}
 	};
 	
@@ -497,7 +497,7 @@ public class ProtovisEventCentricManager {
 		try {
 			// 	check to see that data was returned
 			if (!results.last()){	
-				db.finalize();
+				db.tidyup();
 				return null;
 			}else
 				results.beforeFirst();
@@ -536,7 +536,7 @@ public class ProtovisEventCentricManager {
 			e.printStackTrace();
 		}
 		
-		db.finalize();
+		db.tidyup();
 		return evt;	
 	}
 	
@@ -565,7 +565,7 @@ public class ProtovisEventCentricManager {
 		// check to see that data was returned
 		try {
 			if(!results.last()) { 			
-				db.finalize();				
+				db.tidyup();				
 				return null;				
 			}else 
 				results.beforeFirst();          
@@ -600,7 +600,7 @@ public class ProtovisEventCentricManager {
 			results = null;			
 		}
 		
-		db.finalize();
+		db.tidyup();
 		return con;
 	}
 	
@@ -704,10 +704,10 @@ public class ProtovisEventCentricManager {
 				if (x > i) {
 					System.out.print("x = " + x + "  ");
 					tmpSet = matrix[i][x];
-					if (tmpSet.isEmpty())
-						System.out.println("Empty");
-					else if (tmpSet == null)
+					if (tmpSet == null)
 						System.out.println("Null");
+					else if (tmpSet.isEmpty())
+						System.out.println("Empty");
 					else {
 						for (Object element : tmpSet)
 							System.out.print(element.toString() + "  ");
@@ -842,7 +842,7 @@ public class ProtovisEventCentricManager {
 			
 			for (int j = i + 1; j < edgeMatrix[i].length; j++){
 				conSet = edgeMatrix[i][j];
-				if (!conSet.isEmpty()) {
+				if (conSet != null && !conSet.isEmpty()) {
 
 					for (Iterator it = conSet.iterator(); it.hasNext();) {
 						cID = (Integer) it.next();
@@ -921,7 +921,7 @@ public class ProtovisEventCentricManager {
 			
 			if (nodeAttr[row][0].equalsIgnoreCase("EventID"))
 				data.setTextContent(evt.getId()); 
-			else if	(nodeAttr[row][0].equalsIgnoreCase("Label"))
+			else if	(nodeAttr[row][0].equalsIgnoreCase("NodeLabel"))
 				data.setTextContent(evt.getName());
 			else if (nodeAttr[row][0].equalsIgnoreCase("EventName"))
 				data.setTextContent(evt.getName());
@@ -965,7 +965,7 @@ public class ProtovisEventCentricManager {
 			
 			if (edgeAttr[row][0].equalsIgnoreCase("ContributorID"))
 				data.setTextContent(con.getId()); 
-			else if	(edgeAttr[row][0].equalsIgnoreCase("Label"))
+			else if	(edgeAttr[row][0].equalsIgnoreCase("EdgeLabel"))
 				data.setTextContent(con.getGFName());
 			else if (edgeAttr[row][0].equalsIgnoreCase("ContributorName"))
 				data.setTextContent(con.getGFName());
@@ -1019,6 +1019,5 @@ public class ProtovisEventCentricManager {
 		
 		return degree;
 	}
-	
 	
 }
