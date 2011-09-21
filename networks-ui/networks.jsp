@@ -27,7 +27,7 @@
 	<meta http-equiv="content-script-type" content="text/javascript">
 	<!-- css -->
 	<link rel="stylesheet" href="assets/networks.css"/>
-	<link rel="stylesheet" href="assets/zoomSlider.css"/>	
+	<link rel="stylesheet" href="assets/zoom_slider.css"/>	
 	<link rel="stylesheet" href="assets/ausstage-colours.css">
 	<link rel="stylesheet" href="assets/ausstage-background-colours.css">
 	<link rel="stylesheet" href="assets/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" />

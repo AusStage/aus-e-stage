@@ -1,0 +1,82 @@
+/*
+ * This file is part of the AusStage Mapping Service
+ *
+ * The AusStage Mapping Service is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The AusStage Mapping Service is distributed in the hope that it will
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the AusStage Mapping Service.
+ * If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+/*customise jquery ui slider elements */
+/*navigation div*/
+#navigation{
+	position:absolute;
+	right:10px;
+}
+
+
+#navigation .ui-slider-vertical{
+	margin:auto;
+	margin-bottom:5px!important;
+	border:1px solid #AAAAAA!important;	
+	background:#AAAAAA!important
+}
+
+#navigation .ui-slider, #navigation .ui-slider-handle{
+	cursor:pointer;	
+}
+
+#navigation .ui-widget-header{
+	background:#AAAAAA!important
+}
+
+#navigation .ui-widget-content{
+	background:none;	
+}
+
+#navigation .ui-slider-handle{
+	height:10px;
+	border:1px solid #333333!important;	
+	background:#333333!important;
+}
+
+.nav_button{
+	width:16px;
+	border:1px solid #AAAAAA;	
+	background:#AAAAAA!important;	
+}
+
+.nav_button:hover{
+	border:1px solid #BBBBBB;
+	background:#BBBBBB!important;
+}
+
+
+.up, .down, .left, .right, .recentre, .zoomIn, .zoomOut, .selectItem  {
+        /* based on jQueryUi icons */
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        /* blue icons */
+        background-image: url(jquery-ui/images/ui-icons_ffffff_256x240.png);
+        /* ui icon help */
+}
+
+.up{background-position: 0 -16px;}
+.down{background-position: -64px -16px;}
+.left{background-position: -96px -16px;}
+.right{background-position: -32px -16px;}
+.recentre{background-position: -96px -160px;}
+.zoomIn{background-position: -16px -128px;}
+.zoomOut{background-position: -48px -128px;}
+.selectItem{background-position: -80px -144px;}
