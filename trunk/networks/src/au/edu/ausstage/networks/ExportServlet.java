@@ -186,19 +186,27 @@ public class ExportServlet extends HttpServlet {
 			export.buildEvtNetworkGraphml(id, degrees, simplify, "directed", response.getWriter());			
 			
 		} else if(taskType.equalsIgnoreCase("org-evt-network") && formatType.equalsIgnoreCase("graphml")) {
-			String filename = "org-" + id + "." + formatType;	
+			String filename = "Evt-org-" + id + "." + formatType;	
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 			ExportManager export = new ExportManager(db);
 			export.buildOrgOrVenueEvtNetworkGraphml(id, "directed", "o", response.getWriter());		
 			
 		} else if (taskType.equalsIgnoreCase("venue-evt-network") && formatType.equalsIgnoreCase("graphml")){
-			String filename = "venue-" + id + "." + formatType;	
+			String filename = "Evt-venue-" + id + "." + formatType;	
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 			ExportManager export = new ExportManager(db);
 			export.buildOrgOrVenueEvtNetworkGraphml(id, "directed", "v", response.getWriter());	
-		}
+
+		} else if (taskType.equalsIgnoreCase("ego-centric-by-organisation")){
+
+			String filename = "Con-org-" + id + "." + formatType; 	
+			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+
+			ExportManager export = new ExportManager(rdf);
+			export.buildCollaboratorNetworkByOrgGraphml(id, formatType, degrees, "undirected", response.getWriter());						
+		}  
 		
 		try {
 			db.closeDB();
