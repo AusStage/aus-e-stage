@@ -26,7 +26,7 @@ Get Request
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
 || task    || [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-network ego-centric-network] / event-centric-network / [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-by-organisation ego-centric-by-organisation]  / org-evt-network / venue-evt-network	|| No || ||
-|| id      || unique identifier of a contributor || No || ||
+|| id      || unique identifier of a contributor, or where task = ego-centric-by-organisation it is the od of the organisation || No || ||
 || format  || [NavigatingNetworksDatasetAPIexportGraph#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexportGraph#Format:_debug debug] || Yes || graphml ||
 || [NavigatingNetworksDatasetAPIexportGraph#Radius radius] || Integer between 1 and 3 || Yes || 1 ||
 || [NavigatingNetworksDatasetAPIexportGraph#simplify  simplify]|| Boolean || Yes || true ||
