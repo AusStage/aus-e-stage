@@ -25,7 +25,7 @@ Get Request
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| task    || [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-network ego-centric-network] / event-centric-network / [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-by-organisation ego-centric-by-organisation]  / org-evt-network / venue-evt-network	|| No || ||
+|| task    || [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-network ego-centric-network] / [NavigatingNetworksDatasetAPIexportGraph#Task:_event-centric-network event-centric-network] / [NavigatingNetworksDatasetAPIexportGraph#Task:_ego-centric-by-organisation ego-centric-by-organisation]  / org-evt-network / venue-evt-network	|| No || ||
 || id      || unique identifier of a contributor, or for ego-centric-by-organisation it is the id of the organisation || No || ||
 || format  || [NavigatingNetworksDatasetAPIexportGraph#Format:_graphml graphml], [NavigatingNetworksDatasetAPIexportGraph#Format:_debug debug] || Yes || graphml ||
 || [NavigatingNetworksDatasetAPIexportGraph#Radius radius] || Integer between 1 and 3 || Yes || 1 ||
@@ -37,6 +37,10 @@ Get Request
 === Task: ego-centric-network ===
 
 An ego centric network that has basic information included the central point of the network is the contributor with the supplied id. 
+
+=== Task: event-centric-network ===
+
+Retrieves a network of events based around the supplied event. Events, as nodes, are linked by contributors, illustrating the movement of contributors from one event to the next.
 
 === Task: ego-centric-by-organisation ===
 
