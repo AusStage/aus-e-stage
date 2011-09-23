@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with the AusStage Mapping Service.  
- * If not, see <http://www.gnu.org/licenses/>.
+ * If not, see <http://www.gnu.org/licenses/>
 */
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -109,7 +109,7 @@
 							<input type="text" readonly="readonly" size="40" id="name" name="name"/> <button name="lookup" id="lookup_btn">Lookup</button>
 						</td>
 					</tr>
-					<tr>
+					<tr id='format_container'>
 						<th scope="row">
 							<label id="format_label" for="format">Data Format: </label>
 						</th>
@@ -118,7 +118,7 @@
 							</select>
 						</td>
 					</tr>
-					<tr>
+					<tr id='radius_container'>
 						<th scope="row">
 							<label id="radius_label" for="radius">Radius: </label>
 						</th>
@@ -190,6 +190,27 @@
 			</thead>
 			<tbody id="search_results_body_evt">
 			</tbody>
+		<table id="search_results_org" class="searchResults">
+			<thead>
+				<tr>
+					<th>Organisation Name</th>
+					<th>Address</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body_org">
+			</tbody>			
+		</table>
+		<table id="search_results_venue" class="searchResults">
+			<thead>
+				<tr>
+					<th>Venue Name</th>
+					<th>Address</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body_venue">
+			</tbody>			
 		</table>
 
 
