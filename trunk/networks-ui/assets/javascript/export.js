@@ -546,7 +546,8 @@ function showErrorMessage() {
 
 
 function hideOptions(args) {
-	for (i in arguments){
+	var i = 0;
+	while (i<arguments.length){
 		if (arguments[i] == _FORMAT){
 			$("#format_container").hide();	
 		}
@@ -556,11 +557,17 @@ function hideOptions(args) {
 		if (arguments[i] == _SIMPLIFY){
 			$("#simplify_container").hide();	
 		}
+		i++;
 	}
+//	for (i in arguments){ doesn't seem to work in firefox?
+//	}
 }
 
 function showOptions(args){
-	for (i in arguments){
+
+//	for (i in arguments){
+	var i = 0;
+	while (i<arguments.length){	
 		if (arguments[i] == _FORMAT){
 			$("#format_container").show();	
 		}
@@ -570,6 +577,7 @@ function showOptions(args){
 		if (arguments[i] == _SIMPLIFY){
 			$("#simplify_container").show();	
 		}
+		i++;
 	}
 }
 
