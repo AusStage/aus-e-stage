@@ -163,44 +163,22 @@ public class DataManager {
 	
 	/**
 	 * A method to tidy up resources after finished with a query
-	 *
-	 * @param fullTidy true, if and only if, a full tidy is required
-	 */
-	public void tidyUp(boolean fullTidy) {
-		
-		if(fullTidy == true) {
-			if(results != null) {
-				results = null;
-			}
-		
-			if(execution != null) {
-				execution.close();
-				execution = null;
-			}
-		
-			if(query != null) {
-				query = null;
-			}		
-			if(dataset != null) {
-				dataset.close();
-				dataset = null;
-			}
-		}	
-	}
-	/**
-	 * A method to tidy up resources after finished with a query
 	 */
 	public void tidyUp() {
 	
 		//tidyUp(false);
-		execution.close();
-		execution = null;
+		if(execution != null) {
+			execution.close();
+			execution = null;
+		}
 		
-		dataset.close();
-		dataset = null;
+		if(dataset != null) {
+			dataset.close();
+			dataset = null;
+		}
 		
-		query = null;
-		results = null;
+		if(query != null) query = null;
+		if(results != null) results = null;
 	} // end tidyUp method
 	
 	/**
@@ -222,7 +200,7 @@ public class DataManager {
 	 */
 	protected void finalize() throws Throwable {
 		try {
-			tidyUp(true);
+			tidyUp();
 			
 			if(accessMethod.equals("http") == false) {
 				dataset.close();

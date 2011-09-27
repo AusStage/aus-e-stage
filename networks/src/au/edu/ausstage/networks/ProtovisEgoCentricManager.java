@@ -238,40 +238,40 @@ public class ProtovisEgoCentricManager {
 		
 			// get the list of contributors attached to this contributor
 			values   = collaborator.getCollaborators();
-			iterator = values.iterator();
-			
-			// loop through the list of collaborators
-			while(iterator.hasNext()) {
+			if (values != null) {
+				iterator = values.iterator();
 			
 				// loop through the list of collaborators
-				id = (String)iterator.next();
-				
-				// add a new collaborator
-				collaborator = new Collaborator(id);
-				
-				cId_cObj_map.put(Integer.parseInt(id), collaborator);
-				
-				// build the query
-				queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
-				
-				// get the data
-				results = rdf.executeSparqlQuery(queryToExecute);
-			
-				// loop though the resulset
-				while (results.hasNext()) {
-					
-					// get a new row of data
-					row = results.nextSolution();
-					
-					if(values.contains(AusStageURI.getId(row.get("collaborator").toString())) == true) {
-						collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
-					}
-				}
-				// play nice and tidy up
-				rdf.tidyUp();
+				while (iterator.hasNext()) {
 
-			}		
-		
+					// loop through the list of collaborators
+					id = (String) iterator.next();
+
+					// add a new collaborator
+					collaborator = new Collaborator(id);
+
+					cId_cObj_map.put(Integer.parseInt(id), collaborator);
+
+					// build the query
+					queryToExecute = sparqlQuery.replaceAll("@", "<" + AusStageURI.getContributorURI(id) + ">");
+
+					// get the data
+					results = rdf.executeSparqlQuery(queryToExecute);
+
+					// loop though the resulset
+					while (results.hasNext()) {
+
+						// get a new row of data
+						row = results.nextSolution();
+
+						if (values.contains(AusStageURI.getId(row.get("collaborator").toString())) == true) {
+							collaborator.addCollaborator(AusStageURI.getId(row.get("collaborator").toString()));
+						}
+					}
+					// play nice and tidy up
+					rdf.tidyUp();
+				}
+			}
 		} else {
 		
 			// get the rest of the degrees
