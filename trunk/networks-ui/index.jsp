@@ -120,7 +120,21 @@
 				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksSpecification" title="">Navigating Networks Specification</a> - 
 				Outline the service and provide context to the development
 			</li>
+			<li>
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksDataset" title="">Navigating Networks Dataset</a> - 
+				Information about the RDF dataset used by the Navigating Networks Service.
+			</li>
+			<li>
+				<a href="http://code.google.com/p/aus-e-stage/wiki/NavigatingNetworksGraphMLFileFormat" title="">GraphML File Format</a> - 
+				Information about the graphML file format - used to export network informaion for use with third party Network Visualisation Software.
+			</li>
 		</ul>
+		<p>
+		A draft information manual for the Mapping Events service is available for download <a href="http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Aus-e-Stage-Navigating-Networks-module-for-AusStage-Manual.pdf" title="">here</a>
+		</p>
+		<p>
+		If you have any feedback, questions or queries about the Mapping Events service, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="">contact us</a>
+		</p>
 	</div>
 	<!-- always at the bottom of the content -->
 	<div class="push"></div>
