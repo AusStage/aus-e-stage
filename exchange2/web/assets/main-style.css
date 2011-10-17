@@ -224,8 +224,68 @@ th.alignRight {
 	text-align: right;
 }
 
+/* Styles for tables */
+table.searchResults {
+        background-color: #fff;
+        text-align: left;
+        border: 1px solid #aaaaaa;
+        border-collapse: collapse;
+        width: 100%;
+}
+
+table.searchResults th {
+        border: 1px solid #aaaaaa;
+        padding: 2px;
+        text-align: left;
+       // color: #000;
+}
+
+table.searchResults td {
+        padding: 2px;
+        vertical-align: top;
+}
+
+
 .status-icon {
 	float: left; 
 	margin-right: .3em;
 	margin-left:  .5em;
+}
+
+table.formTable{
+	text-align: left!important;
+}
+
+table.formTable th{
+	vertical-align:top!important;	
+	padding-right:10px;
+	padding-bottom:10px;
+}
+
+textarea{
+	width:80%;
+	height:410px;	
+}
+
+#previewDiv{
+	width:49%;
+	float:left;	
+}
+
+#embedDiv{
+	width:49%;
+	float:right;	
+}
+
+#previewDiv, #embedDiv{
+	border:1px solid black;
+}
+
+.center{
+	text-align:center;	
+}
+
+.noBullets{
+	list-style-type:none;	
+	padding:0px
 }
