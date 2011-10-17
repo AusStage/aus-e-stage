@@ -130,10 +130,10 @@
 			</li>
 		</ul>
 		<p>
-		A draft information manual for the Mapping Events service is available for download <a href="http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Aus-e-Stage-Navigating-Networks-module-for-AusStage-Manual.pdf" title="">here</a>
+		A draft information manual for the Navigating Networks service is available for download <a href="http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Aus-e-Stage-Navigating-Networks-module-for-AusStage-Manual.pdf" title="">here</a>
 		</p>
 		<p>
-		If you have any feedback, questions or queries about the Mapping Events service, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="">contact us</a>
+		If you have any feedback, questions or queries about the Navigating Networks service, please <a href="http://beta.ausstage.edu.au/?tab=contacts" title="">contact us</a>
 		</p>
 	</div>
 	<!-- always at the bottom of the content -->
