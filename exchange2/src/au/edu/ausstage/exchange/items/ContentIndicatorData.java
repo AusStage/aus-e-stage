@@ -184,14 +184,14 @@ public class ContentIndicatorData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, COALESCE(i.title, 'Untitled') "
 				+ "FROM item i, itemcontentindlink icil "
 				+ "WHERE icil.itemid = i.itemid "
 				+ "AND icil.contentindicatorid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, COALESCE(i.title, 'Untitled') "
 				+ "FROM item i, itemcontentindlink icil "
 				+ "WHERE icil.itemid = i.itemid "
 				+ "AND icil.contentindicatorid = ANY (";

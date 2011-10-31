@@ -26,6 +26,10 @@ var types		= ["events", "resources"];
 
 var idList = [];
 
+var style = true;
+
+var loadingMessage = '<p> Retrieving AusStage records...</p>';
+var serverError = '<p> An error occurred retrieving AusStage Records</p>';
 
 // initialise the page
 $(document).ready(function() {
@@ -42,7 +46,6 @@ $(document).ready(function() {
 	//set up search dialog etc
 	initSearch();
 });
-
 
 function initEventPage(){
 	//hide the textarea to start
@@ -77,14 +80,17 @@ function initEventPage(){
 	$("#getCode").bind('click', function(){if(validateOptions()){getCode()}});
 	//if the All option is selected remove error from limit field;
 	$('#noLimit').bind('click', function(){$("#limitError").empty();});
-	
+	//if task changes, clear the selected list
 	$('#task').change(function(){
 		$("#search_name_label").empty().append($('#task option:selected').text());			
 		clearSelectedList();
 	});
-	
+	//if type changes add or remove options accordingly to the task list.
 	$('#type').change(function(){
 		addRemoveOptions()});
+	//add toggle functionality to the styleGroup radio buttons
+	$('input[name=styleGroup]:radio').change(function(){
+		toggleStyle(this)});
 		
 }
 
@@ -127,33 +133,64 @@ function getCode(){
 	
 	//first generate the preview
 	var html;
-	$("#preview").empty();
+	$("#preview").empty().append(loadingMessage);
+	
 	var styleString = "<style type='text/css'>\n"
 						+"<!-- \n"
 						+"/* You can modify these CSS styles */\n"
+						+".ausstage-data lh{font-size:110%;padding:5px;}"
 						+".ausstage-data{list-style:none;border:1px solid grey;padding:0px;margin:5px;font-size: 95%;font-family: Helvetica, Verdana, Arial, sans-serif;color:#333;}\n"
 						+".off{background-color:#FFF} \n"
 						+".on{background-color:#EEE}\n"
 						+"-->\n"
 						+"</style>\n"
-						
-			
+									
 	var recordType = $('#type').val();					
 	var type = $('#task').val();
-	var id = '';
-	for (i in idList){
-		id += idList[i].id +',';	
-	}
-	
 	var limit = $('input:radio[name=limitGroup]:checked').val();
 	var sort = $('#sortBy').val();
-	var url = 'http://beta.ausstage.edu.au/exchange/'+recordType+'?type='+type+'&id='+id+'&limit='+limit+'&sort='+sort+'&output=json&callback=?'
+		
+	var id = '';
+	var names = '';
+	var tempName = '';
+	var urlStart = 'http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&'
+	var urlOption = '';
+	var header = '';
+
+	switch (type){
+		case 'contributor':
+			urlOption = 'f_contrib_id=';
+			break;
+		case 'organisation':	
+			urlOption = 'f_org_id=';
+			break;
+		case 'venue':
+			urlOption = 'f_venue_id=';
+			break;
+	}
+	
+	for (i in idList){
+		id += idList[i].id +',';
+		if (type == 'contentindicator'||type == 'secgenre'){
+			tempName = idList[i].name;
+		}else {
+			tempName = "<a href="+urlStart+urlOption+idList[i].id+" target='_blank' title='view this record in Ausstage' >"+idList[i].name+"</a>";
+		}
+		names += (i==0)?tempName:(i<idList.length-1)?', '+tempName:' and '+tempName;
+	}
+	
+	header = "<lh>"+$('#type option:selected').text()+" for "+names+"</lh>";			
+
+//	var url = 'http://beta.ausstage.edu.au/exchange/'+recordType+'?type='+type+'&id='+id+'&limit='+limit+'&sort='+sort+'&output=json&callback=?'
+	var url = '/exchange/'+recordType+'?type='+type+'&id='+id+'&limit='+limit+'&sort='+sort+'&output=json&callback=?'
 	
 	$.getJSON(url, 
 		function(json) {
 			var row;
-			var html = styleString;	
+			var html = '';
+			html += (style)?styleString:'';	
 			html += "<ul class='ausstage-data'>";
+			html += header
 			html += json.shift()._generator;
 			if(json.length < 1){
 				html +="<li>The selected criteria returned no results from the ausstage database</li>";
@@ -164,39 +201,52 @@ function getCode(){
 					html += '<li class="'+row+'"><a href="'+value.url+'" title="View this record in AusStage">'+value.name+'</a>';
 					html += ', '+value.venue+', '+value.date+'</li>'; 	
 				}else{
-					html += '<li class="'+row+'"><a href="'+value.url+'" title="View this record in AusStage">'+value.citation+'</a>';					
+					html += '<li class="'+row+'"><a href="'+value.url+'" title="View this record in AusStage">'+value.title+'</a>, '+value.citation;			
 				}
 		});
 		html += '</ul>';
-		$("#preview").append(html);
-	});
+		$("#preview").empty().append(html);
+	}).error(function(){$('#preview').empty().append(serverError)});
 
 	//then the code to embed
-		var codeString = styleString;
-		codeString += "<script type='text/javascript' src='http://code.jquery.com/jquery-1.6.4.min.js'></script>	\n"
-		+"<script type='text/javascript'>\n"	
+	
+	//first get a unique number to use as an id incase more than one ausstage embed
+		var divId = new Date().getTime();
+		var codeString = '';
+		codeString += (style)?styleString:'';
+		codeString += "<div id='"+divId+"'>"+loadingMessage+"</div>\n"
+			+"<script type='text/javascript' src='http://code.jquery.com/jquery-1.6.4.min.js'></script>	\n"
+			+"<script type='text/javascript'>\n"
 			+"$.getJSON('"+url+"',\n" 
 				+"function(json) {\n"
 				+"var row;	\n"
 				+"var html = \"<ul class='ausstage-data'>\";\n"
+				+'html += "'+header+'";\n'
 				+"html += json.shift()._generator;\n"
 				+"if(json.length < 1){"
 				+"html +='<li>The selected criteria returned no results from the ausstage database</li>' \n}"
 				+"$.each(json, function(index, value){\n"
-					+"row = (index%2) ? 'on' : 'off'\n" 
-					+"html += '<li class=\"'+row+'\"><a href=\"'+value.url+'\" title=\"View this record in AusStage\">'+value.name+'</a>'\n"
-					+"html += ', '+value.venue+', '+value.date+'</li>'\n"
-				+"});\n"
+					+"row = (index%2) ? 'on' : 'off'\n"; 
+				if(recordType =='events'){
+					codeString+="html += '<li class=\"'+row+'\"><a href=\"'+value.url+'\" title=\"View this record in AusStage\">'+value.name+'</a>'\n"
+					+"html += ', '+value.venue+', '+value.date+'</li>'\n";
+				}else{
+					codeString+="html += '<li class=\"'+row+'\"><a href=\"'+value.url+'\" title=\"View this record in AusStage\">'+value.title+'</a>, '+value.citation";
+				}	
+				codeString+="});\n"
 				+"html += '</ul>';\n"
-				+"$('#ausstage-events').append(html);\n"
-			+"});\n"
+				+"$('#"+divId+"').empty().append(html);\n"
+			+"}).error(function(){$('#"+divId+"').empty().append('"+serverError+"')});\n"
 		+"</script>\n"
-		+"<div id='ausstage-events'></div>\n";
-		
 		$('#embedText').val(codeString);
 		$('#viewer').show();
 
 	
+}
+
+//function to toggle the css styles for embedded code. Links to the StyleGroup radio buttons
+function toggleStyle(selected){
+	style = (selected.value == "true")?true:false;
 }
 
 function initSearch(){

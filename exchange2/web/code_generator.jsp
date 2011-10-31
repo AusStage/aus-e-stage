@@ -131,7 +131,12 @@
 								</th>
 								<td>
 									<input type="button" value='Get Code' id="getCode">
+									<label id="styleOn_label" for="styleOn">Ausstage style on</label>								
+									<input type="radio" name="styleGroup" title="Ausstage style on" value="true" id="styleOn" checked/>
+									<label id="styleOff_label" for="styleOff">off</label>
+									<input type="radio" name="styleGroup" title="off" value="false" id="styleOff"/>	
 								</td>
+
 							</tr>											
 						</tbody>				
 					</table>

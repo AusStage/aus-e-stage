@@ -64,7 +64,7 @@ public class ContributorData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+			sql = "SELECT UNIQUE e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
 				+ "       c.countryname "
 				+ "FROM events e, conevlink cl, venue v, country c, states s "
@@ -76,7 +76,7 @@ public class ContributorData extends BaseData{
 			
 		} else {
 		
-			sql = "SELECT e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
+			sql = "SELECT UNIQUE e.eventid, e.event_name, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
 				+ "       v.venueid, v.venue_name, v.street, v.suburb, s.state, v.postcode, "
 				+ "       c.countryname "
 				+ "FROM events e, conevlink cl, venue v, country c, states s "
@@ -187,14 +187,14 @@ public class ContributorData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, coalesce(i.title, 'Untitled') as title "
 				+ "FROM item i, itemconlink icl "
 				+ "WHERE icl.itemid = i.itemid "
 				+ "AND icl.contributorid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, coalesce(i.title, 'Untitled') as title "
 				+ "FROM item i, itemconlink icl "
 				+ "WHERE icl.itemid = i.itemid "
 				+ "AND icl.contributorid = ANY (";
