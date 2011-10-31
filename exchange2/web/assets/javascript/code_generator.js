@@ -181,8 +181,7 @@ function getCode(){
 	
 	header = "<lh>"+$('#type option:selected').text()+" for "+names+"</lh>";			
 
-//	var url = 'http://beta.ausstage.edu.au/exchange/'+recordType+'?type='+type+'&id='+id+'&limit='+limit+'&sort='+sort+'&output=json&callback=?'
-	var url = '/exchange/'+recordType+'?type='+type+'&id='+id+'&limit='+limit+'&sort='+sort+'&output=json&callback=?'
+	var url = 'http://beta.ausstage.edu.au/exchange/'+recordType+'?type='+type+'&id='+id+'&limit='+limit+'&sort='+sort+'&output=json&callback=?'
 	
 	$.getJSON(url, 
 		function(json) {
