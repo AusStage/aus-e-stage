@@ -186,14 +186,14 @@ public class SecGenreData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, COALESCE(i.title, 'Untitled') "
 				+ "FROM item i, itemsecgenrelink isl "
 				+ "WHERE isl.itemid = i.itemid "
 				+ "AND isl.secgenrepreferredid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, COALESCE(i.title, 'Untitled') "
 				+ "FROM item i, itemsecgenrelink isl "
 				+ "WHERE isl.itemid = i.itemid "
 				+ "AND isl.secgenrepreferredid = ANY (";

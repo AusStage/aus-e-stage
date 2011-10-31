@@ -184,14 +184,14 @@ public class VenueData extends BaseData{
 		
 		if(ids.length == 1) {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, COALESCE(i.title, 'Untitled') "
 				+ "FROM item i, itemvenuelink ivl "
 				+ "WHERE ivl.itemid = i.itemid "
 				+ "AND ivl.venueid = ?";
 			
 		} else {
 		
-			sql = "SELECT i.itemid, i.citation, i.title "
+			sql = "SELECT i.itemid, i.citation, COALESCE(i.title, 'Untitled') "
 				+ "FROM item i, itemvenuelink ivl "
 				+ "WHERE ivl.itemid = i.itemid "
 				+ "AND ivl.venueid =  ANY (";

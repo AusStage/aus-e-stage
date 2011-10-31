@@ -78,7 +78,7 @@ public class Resource implements Comparable<Resource> {
 	
 		StringBuilder builder = new StringBuilder("<li>");
 		
-		builder.append("<a href=\"" + url + "\" title=\"View this record in AusStage\">" + StringEscapeUtils.escapeHtml(citation) + "</a>");
+		builder.append("<a href=\"" + url + "\" title=\"View this record in AusStage\">" + StringEscapeUtils.escapeHtml(title) + "</a>:"+StringEscapeUtils.escapeHtml(citation));
 		builder.append("</li>");
 		
 		return builder.toString();
@@ -92,6 +92,7 @@ public class Resource implements Comparable<Resource> {
 		StringBuilder builder = new StringBuilder("<resource>");
 		
 		builder.append("<id>" + id + "</id>");
+		builder.append("<title>" + StringEscapeUtils.escapeXml(title) + "</title>");		
 		builder.append("<url>" + url + "</url>");
 		builder.append("<citation>" + StringEscapeUtils.escapeXml(citation) + "</citation>");
 		builder.append("</resource>");
@@ -108,6 +109,7 @@ public class Resource implements Comparable<Resource> {
 		JSONObject object = new JSONObject();
 		
 		object.put("id", id);
+		object.put("title", title);		
 		object.put("url", url);
 		object.put("citation", citation);
 		
