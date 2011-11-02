@@ -175,7 +175,7 @@ a:hover {
 
 /* specific styles for the main content div */
 .main {
-	margin-left: 275px;
+	margin-left: 300px;
 	min-height: 100%;
 }
 
@@ -288,4 +288,8 @@ textarea{
 .noBullets{
 	list-style-type:none;	
 	padding:0px
+}
+
+h2{
+	margin-top:1em;
 }
