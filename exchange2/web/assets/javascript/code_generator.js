@@ -33,9 +33,6 @@ var serverError = '<p> An error occurred retrieving AusStage Records</p>';
 
 // initialise the page
 $(document).ready(function() {
-	
-	// set up the main tabs
-	$('#tabs').tabs();
 
 	//style the button
 	$("#getCode").button();
@@ -138,7 +135,7 @@ function getCode(){
 	var styleString = "<style type='text/css'>\n"
 						+"<!-- \n"
 						+"/* You can modify these CSS styles */\n"
-						+".ausstage-data lh{font-size:110%;padding:5px;}"
+						+".ausstage-data p{font-size:110%;padding:5px;}"
 						+".ausstage-data{list-style:none;border:1px solid grey;padding:0px;margin:5px;font-size: 95%;font-family: Helvetica, Verdana, Arial, sans-serif;color:#333;}\n"
 						+".off{background-color:#FFF} \n"
 						+".on{background-color:#EEE}\n"
@@ -179,7 +176,7 @@ function getCode(){
 		names += (i==0)?tempName:(i<idList.length-1)?', '+tempName:' and '+tempName;
 	}
 	
-	header = "<lh>"+$('#type option:selected').text()+" for "+names+"</lh>";			
+	header = "<p>"+$('#type option:selected').text()+" for "+names+"</p>";			
 
 	var url = 'http://beta.ausstage.edu.au/exchange/'+recordType+'?type='+type+'&id='+id+'&limit='+limit+'&sort='+sort+'&output=json&callback=?'
 	

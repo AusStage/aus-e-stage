@@ -57,103 +57,94 @@
 	</div>
 	<div class="main b-184 f-187">
 		<!-- main content -->
-		<div id="tabs" class="tab-container">
-			<ul class="fix-ui-tabs">
-				<li><a href="#tabs-1">Code Generator Overview</a></li>
-				<li><a href="#tabs-2">Embed Data</a></li>
-			</ul>
-			<div>
-				<div id="tabs-1" class="tab-content">
-					<h2>Embed Ausstage Data in Your Website</h2>
-					<p>
-						These pages help you generate code that will dynamically show data from the Ausstage database. The code is able to be copied and pasted directly into a web page.
-					</p>
-				</div>
-				<!--Event embed page-->
-				<div id="tabs-2" class="tab-content">
-					<table class="formTable">
-						<tbody>
-							<tr>
-								<th scope="row">
-									<label id="task_label" for="task">Records: </label>
-								</th>
-								<td>
-									<select id="type" name="type" title="Hint here">
-									</select>
-								</td>
-							</tr>
+		
+		<h2>Embed Ausstage Data in Your Website</h2>
+		<p>This page helps you generate code that will dynamically show data from the Ausstage database.</p>
+		<p>The code is able to be copied and pasted directly into a web page.
+		</p>
+		<table class="formTable">
+			<tbody>
+				<tr>
+					<th scope="row">
+						<label id="task_label" for="task">Records: </label>
+					</th>
+					<td>
+						<select id="type" name="type" title="Choose between events or resources">
+						</select>
+					</td>
+				</tr>
 						
-							<tr>
-								<th scope="row">
-									<label id="task_label" for="task">Associated with: </label>
-								</th>
-								<td>
-									<select id="task" name="task" title="Hint here">
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
-									<label id="id_label" for="id">ID: </label>
-								</th>
-								<td>
-									<ul id="selectedIds" class="noBullets">
-									</ul>
-									<span id="addEntity" class="contributorAddIcon ui-icon ui-icon-plus clickable" style="display: inline-block;" title="add a record"></span>
-								</td>
-								<td id="idError" class="error"></td>
-							</tr>
-							<tr>
-								<th scope="row">
-									<label id="limit_label" for="limit">Record Limit: </label>
-								</th>
-								<td>
-									<input type="radio" name="limitGroup" title="Return all records" value="all" id="noLimit" checked/>
-									<label id="userLimit_label" for="noLimit">All</label><br/>
+				<tr>
+					<th scope="row">
+						<label id="task_label" for="task">Associated with: </label>
+					</th>
+					<td>
+						<select id="task" name="task" title="Choose the entity associated with the events or resources">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label id="id_label" for="id">ID: </label>
+					</th>
+					<td>
+						<ul id="selectedIds" class="noBullets">
+						</ul>
+						<span id="addEntity" class="contributorAddIcon ui-icon ui-icon-plus clickable" style="display: inline-block;" title="add a record"></span>
+					</td>
+					<td id="idError" class="error"></td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label id="limit_label" for="limit">Record Limit: </label>
+					</th>
+					<td>
+						<input type="radio" name="limitGroup" title="Return all records" value="all" id="noLimit" checked/>
+						<label id="userLimit_label" for="noLimit">All</label><br/>
 
-									<input type="radio" name="limitGroup" title="Enter number of records returned" value="userEnter"/>
-									<label id="userLimit_label" for="userLimit">Select:</label>
-									<input type="text" id="userLimit" title="Enter the desired number of records returned" disabled />						
-								</td>
-								<td id="limitError" class="error"></td>
-							</tr>	
-							<tr>
-								<th scope="row">
-									<label id="sort_by_label" for="sortBy">Sort By: </label>
-								</th>
-								<td>
-									<select size="1" id="sortBy" name="SortBy" title="Select how returned records are sorted">
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
-								</th>
-								<td>
-									<input type="button" value='Get Code' id="getCode">
-									<label id="styleOn_label" for="styleOn">Ausstage style on</label>								
-									<input type="radio" name="styleGroup" title="Ausstage style on" value="true" id="styleOn" checked/>
-									<label id="styleOff_label" for="styleOff">off</label>
-									<input type="radio" name="styleGroup" title="off" value="false" id="styleOff"/>	
-								</td>
+						<input type="radio" name="limitGroup" title="Enter number of records returned" value="userEnter"/>
+						<label id="userLimit_label" for="userLimit">Select:</label>
+						<input type="text" id="userLimit" title="Enter the desired number of records returned" disabled />						
+					</td>
+					<td id="limitError" class="error"></td>
+				</tr>	
+				<tr>
+					<th scope="row">
+						<label id="sort_by_label" for="sortBy">Sort By: </label>
+					</th>
+					<td>
+						<select size="1" id="sortBy" name="SortBy" title="Select how returned records are sorted">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+					</th>
+					<td>
+						<input type="button" value='Get Code' id="getCode">
+						<label id="styleOn_label" for="styleOn">Ausstage style on</label>								
+						<input type="radio" name="styleGroup" title="Ausstage style on" value="true" id="styleOn" checked/>
+						<label id="styleOff_label" for="styleOff">off</label>
+						<input type="radio" name="styleGroup" title="off" value="false" id="styleOff"/>	
+					</td>
 
-							</tr>											
-						</tbody>				
-					</table>
-					<div id="viewer">
-						<div id='previewDiv'>
-							<p class='center'><strong>Preview</strong></p>
-							<div id='preview'></div>						
-						</div>
-						<div id='embedDiv' class="center">
-							<p>Copy the code below and paste it into your website</p>
-							<textarea id="embedText" readonly></textarea>
-						</div>
-					</div>
-				</div>
+				</tr>											
+			</tbody>				
+		</table>
+		<div id="viewer">
+			<div id='previewDiv'>
+				<p class='center'><strong>Preview</strong></p>
+				<div id='preview'></div>						
+			</div>
+			<div id='embedDiv' class="center">
+				<p>Copy the code below and paste it into your website</p>
+				<textarea id="embedText" readonly></textarea>
 			</div>
 		</div>
 	</div>
+
+
+
 	
 	<!--search div-->
 	<div id="search_div" title="Search">
