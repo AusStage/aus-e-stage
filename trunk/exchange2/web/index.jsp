@@ -33,8 +33,12 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery-ui-1.8.12.custom.min.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.ajaxmanager-3.0.9.js"></script>
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.scrollto-1.4.2.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.jsonp-2.1.4.min.js"></script>		
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.selectboxes-2.2.4.min.js"></script>
+	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>			
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/index.js"></script>
+	<script type="text/javascript" src="assets/javascript/code_generator.js"></script>	
 	<script type="text/javascript" src="assets/javascript/tab-selector.js"></script>
 </head>
 <body>
@@ -57,9 +61,10 @@
 		<div id="tabs" class="tab-container">
 			<ul class="fix-ui-tabs">
 				<li><a href="#tabs-1">Exchange Overview</a></li>
-				<li><a href="#tabs-2">Secondary Genres</a></li>
-				<li><a href="#tabs-3">Content Indicators</a></li>
-				<li><a href="#tabs-4">Resource Sub-Types</a></li>
+				<li><a href="#tabs-2">Embed Code</a></li>
+				<li><a href="#tabs-3">Secondary Genres</a></li>
+				<li><a href="#tabs-4">Content Indicators</a></li>
+				<li><a href="#tabs-5">Resource Sub-Types</a></li>
 			</ul>
 			<div>
 				<div id="tabs-1" class="tab-content">
@@ -68,7 +73,7 @@
 						The AusStage Data Exchange service is a way for members of the AusStage user community to include AusStage data in their websites using specially crafted URLs.
 					</p>
 					<p> 
-					You can use the <a href='code_generator.jsp'>Code Generator</a> to create code that can be pasted into any web page.
+					You can use the <a href='/exchange/?tab=embed'>Code Generator</a> to create code that can be pasted into any web page.
 					</p>
 					<p>
 						AusStage data can be included in a website dynamically by using <a href="http://en.wikipedia.org/wiki/JavaScript" title="Wikipedia article on this topic">JavaScript</a>, importing the <a href="http://en.wikipedia.org/wiki/RSS" title="Wikipedia article on this topic">RSS feed</a> into your content management system, or in the case of performance feedback collected using the <a href="http://beta.ausstage.edu.au/mobile/mobile-vis/" title="Researching Audiences service homepage">Researching Audiences</a> service an iFrame.
@@ -525,7 +530,97 @@
 						</li>
 					</ul>
 				</div>
+				<!--Code generator-->
 				<div id="tabs-2" class="tab-content">
+				
+					<h2>Embed Ausstage Data in Your Website</h2>
+					<p>This page helps you generate code that will dynamically show data from the Ausstage database.</p>
+					<p>The code is able to be copied and pasted directly into a web page.
+					</p>			
+					<table class="formTable">
+						<tbody>
+							<tr>
+								<th scope="row">
+									<label id="task_label" for="task">Records: </label>
+								</th>
+								<td>
+									<select id="type" name="type" title="Choose between events or resources">
+									</select>
+								</td>
+							</tr>
+						
+							<tr>
+								<th scope="row">
+									<label id="task_label" for="task">Associated with: </label>
+								</th>
+								<td>
+									<select id="task" name="task" title="Choose the entity associated with the events or resources">
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label id="id_label" for="id">ID: </label>
+								</th>
+								<td>
+									<ul id="selectedIds" class="noBullets">
+									</ul>
+									<span id="addEntity" class="contributorAddIcon ui-icon ui-icon-plus clickable" style="display: inline-block;" title="add a record"></span>
+								</td>
+								<td id="idError" class="error"></td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label id="limit_label" for="limit">Record Limit: </label>
+								</th>
+								<td>
+									<input type="radio" name="limitGroup" title="Return all records" value="all" id="noLimit" checked/>
+									<label id="userLimit_label" for="noLimit">All</label><br/>
+
+									<input type="radio" name="limitGroup" title="Enter number of records returned" value="userEnter"/>
+									<label id="userLimit_label" for="userLimit">Select:</label>
+									<input type="text" id="userLimit" title="Enter the desired number of records returned" disabled />					
+								</td>
+								<td id="limitError" class="error"></td>
+							</tr>	
+							<tr>
+								<th scope="row">
+									<label id="sort_by_label" for="sortBy">Sort By: </label>
+								</th>
+								<td>
+									<select size="1" id="sortBy" name="SortBy" title="Select how returned records are sorted">
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+								</th>
+								<td>
+									<input type="button" value='Get Code' id="getCode">
+									<label id="styleOn_label" for="styleOn">Ausstage style on</label>								
+									<input type="radio" name="styleGroup" title="Ausstage style on" value="true" id="styleOn" checked/>
+									<label id="styleOff_label" for="styleOff">off</label>
+									<input type="radio" name="styleGroup" title="off" value="false" id="styleOff"/>	
+								</td>
+
+							</tr>											
+						</tbody>				
+					</table>
+					<div id="viewer">
+						<div id='previewDiv'>
+							<p class='center'><strong>Preview</strong></p>
+							<div id='preview'></div>						
+						</div>
+						<div id='embedDiv' class="center">
+							<p>Copy the code below and paste it into your website</p>
+							<textarea id="embedText" readonly></textarea>
+						</div>
+					</div>
+	
+				
+				</div>
+				
+				<div id="tabs-3" class="tab-content">
 					<p>
 						Below is a list of secondary genre identifiers that can be used with the Data Exchange service. <a href="/exchange/?tab=secgenre" title="Persistent link to this tab">Persistent Link</a> to this tab.
 					</p>
@@ -559,7 +654,8 @@
 						</tfoot>
 					</table>
 				</div>
-				<div id="tabs-3" class="tab-content">
+
+				<div id="tabs-4" class="tab-content">
 					<p>
 						Below is a list of content indicator identifiers that can be used with the Data Exchange service. <a href="/exchange/?tab=contentindicator" title="Persistent link to this tab">Persistent Link</a> to this tab.
 					</p>
@@ -593,7 +689,7 @@
 						</tfoot>
 					</table>
 				</div>
-				<div id="tabs-4" class="tab-content">
+				<div id="tabs-5" class="tab-content">
 					<p>
 						Below is a list of resource sub type identifiers that can be used with the Data Exchange service. <a href="/exchange/?tab=ressubtype" title="Persistent link to this tab">Persistent Link</a> to this tab.
 					</p>
@@ -628,6 +724,147 @@
 			</div>
 		</div>
 	</div>
+	
+	
+		<div id="search_div" title="Search">
+		<p>Enter a name, or part of a name, and click the search button</p>
+		<p>Select an entity by clicking the 'choose' button on the right of the record. You can continue searching and add up to 10 entities.
+		Click the close button when you have finished.</p>
+		<form method="get" id="search_form" name="search_form">
+			<input type="hidden" name="task" id="task" value="collaborator"/>
+			<input type="hidden" name="limit" id="limit" value="5"/>
+			<input type="hidden" name="sort" id="sort" value="name"/>
+			<table class="formTable">
+				<tbody>
+				<tr>
+					<th scope="row">
+						<label id="search_name_label" for="name">Contributor Name: </label>
+					</th>
+					<td>
+						<input type="text" size="40" id="query" name="query" title="Enter the contributor name, or part of their name, and click the search button"/>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+		<table id="search_results" class="searchResults">
+			<thead>
+				<tr>
+					<th>Contributor Name</th>
+					<th>Event Dates</th>
+					<th>Functions</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body">
+			</tbody>
+		</table>
+		<table id="search_results_org" class="searchResults">
+			<thead>
+				<tr>
+					<th>Organisation Name</th>
+					<th>Address</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body_org">
+			</tbody>			
+		</table>
+		<table id="search_results_venue" class="searchResults">
+			<thead>
+				<tr>
+					<th>Venue Name</th>
+					<th>Address</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody id="search_results_body_venue">
+			</tbody>			
+		</table>
+
+
+		<div id="search_waiting">
+			<p style="text-align: center;">
+				<img src="assets/images/ajax-loader.gif" width="220" height="19" alt=" "/>
+				<br/>Loading Search Results...
+			</p>
+		</div>
+		<div id="error_message">
+		</div>
+		<p>
+		 <strong>Note: </strong>Search results are limited to 5 records. If you do not see the results that you expected, please refine your search.
+		</p>
+	</div>
+	
+	<div id="secgenre_select_div">
+		<table>
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th class="alignRight">Event Count</th>
+					<th class="alignRight"></th>
+				</tr>
+			</thead>		
+			<tbody id="secgenre-select-table">
+				<tr>
+					<td colspan="4">
+						<div class="ui-state-highlight ui-corner-all search-status-messages">
+							<p>
+								<span class="ui-icon ui-icon-info status-icon"></span>Loading secondary genre list, please wait...
+							</p>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="contentindicator_select_div">
+		<table>
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th class="alignRight">Event Count</th>
+					<th class="alignRight"></th>
+				</tr>
+			</thead>		
+			<tbody id="contentindicator-select-table">
+				<tr>
+					<td colspan="4">
+						<div class="ui-state-highlight ui-corner-all search-status-messages">
+							<p>
+								<span class="ui-icon ui-icon-info status-icon"></span>Loading content indicator list, please wait...
+							</p>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+		<div id="ressubtype_select_div">
+		<table>
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th class="alignRight">Event Count</th>
+					<th class="alignRight"></th>
+				</tr>
+			</thead>		
+			<tbody id="ressubtype-select-table">
+				<tr>
+					<td colspan="4">
+						<div class="ui-state-highlight ui-corner-all search-status-messages">
+							<p>
+								<span class="ui-icon ui-icon-info status-icon"></span>Loading content indicator list, please wait...
+							</p>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 	<!-- always at the bottom of the content -->
 	<div class="push"></div>
 </div>
