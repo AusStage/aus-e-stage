@@ -43,12 +43,14 @@ $(document).ready(function() {
 	
 	// was the parameter passed?
 	if(typeof(tab) != 'undefined') {
-		if(tab == 'secgenre') {
-			tabs.tabs('select', 1);
+		if(tab == 'embed'){
+			tabs.tabs('select', 1)
+		} else if(tab == 'secgenre') {
+			tabs.tabs('select', 2);
 		} else if(tab == 'contentindicator') {
-			tabs.tabs('select', 2); 
+			tabs.tabs('select', 3); 
 		} else if(tab == 'ressubtype') {
-			tabs.tabs('select', 3);
+			tabs.tabs('select', 4);
 		}else {
 			tabs.tabs('select', 0);
 		}

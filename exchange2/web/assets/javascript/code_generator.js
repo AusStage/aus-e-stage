@@ -248,9 +248,9 @@ function toggleStyle(selected){
 function initSearch(){
 
 	$('#addEntity').click(function(){
-		if($('#task').val()=='secgenre'){$('#secgenre_div').dialog('open');}
-		else if($('#task').val()=='contentindicator'){$('#contentindicator_div').dialog('open');}
-		else if($('#task').val()=='ressubtype'){$('#ressubtype_div').dialog('open');}
+		if($('#task').val()=='secgenre'){$('#secgenre_select_div').dialog('open');}
+		else if($('#task').val()=='contentindicator'){$('#contentindicator_select_div').dialog('open');}
+		else if($('#task').val()=='ressubtype'){$('#ressubtype_select_div').dialog('open');}
 		else $('#search_div').dialog('open');
 	});
 
@@ -283,7 +283,7 @@ function initSearch(){
 	});
 
 	// setup the dialog box
-	$("#contentindicator_div").dialog({ 
+	$("#contentindicator_select_div").dialog({ 
 		autoOpen: false,
 		height: 400,
 		width: 400,
@@ -312,7 +312,7 @@ function initSearch(){
 
 
 	// setup the dialog box
-	$("#secgenre_div").dialog({ 
+	$("#secgenre_select_div").dialog({ 
 		autoOpen: false,
 		height: 400,
 		width: 400,
@@ -340,7 +340,7 @@ function initSearch(){
 	});
 
 	// setup the dialog box
-	$("#ressubtype_div").dialog({ 
+	$("#ressubtype_select_div").dialog({ 
 		autoOpen: false,
 		height: 400,
 		width: 400,
@@ -632,7 +632,7 @@ function addSecGenre(data) {
 		+'<button id="choose_' + data[i].id + '_'+data[i].term+'" class="choose_button">Choose</button></td></tr>';
 	}
 	
-	$('#secgenre-table').empty().append(list);
+	$('#secgenre-select-table').empty().append(list);
 	
 	$(".choose_button").click(function(eventObject) {
 
@@ -672,7 +672,7 @@ function addContentIndicator(data) {
 		+'<button id="choose_' + data[i].id + '_'+data[i].term+'" class="choose_button">Choose</button></td></tr>';
 	}
 	
-	$('#contentindicator-table').empty().append(list);
+	$('#contentindicator-select-table').empty().append(list);
 	
 	$(".choose_button").click(function(eventObject) {
 
@@ -712,7 +712,7 @@ function addResSubType(data) {
 		+'<button id="choose_' + data[i].id + '_'+data[i].description+'" class="choose_button">Choose</button></td></tr>';
 	}
 	
-	$('#ressubtype-table').empty().append(list);
+	$('#ressubtype-select-table').empty().append(list);
 	
 	$(".choose_button").click(function(eventObject) {
 
