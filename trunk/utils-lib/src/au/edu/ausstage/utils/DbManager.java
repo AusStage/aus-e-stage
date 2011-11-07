@@ -20,6 +20,7 @@ package au.edu.ausstage.utils;
 
 // import additional libraries
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,7 +61,7 @@ public class DbManager {
 		
 		// is this a reconnection
 		if(reConnect == true) {
-			dataSource = null;
+//			dataSource = null;
 			connection = null;
 		}
 		
@@ -71,12 +72,18 @@ public class DbManager {
 			// do we need a new dataSource object
 			if(dataSource == null) {
 				// yes
+				if (connectionString.startsWith("jdbc:oracle")) {
+					// construct a new Oracle DataSource object
+					dataSource = new OracleDataSource();
+					
+					// set the connection string
+					dataSource.setURL(connectionString);
+				} else {
+					// Not Oracle, default to MySQL
+					Class.forName("com.mysql.jdbc.Driver").newInstance();
+					connection = DriverManager.getConnection(connectionString);
 
-				// construct a new Oracle DataSource object
-				dataSource = new OracleDataSource();
-				
-				// set the connection string
-				dataSource.setURL(connectionString);
+				}
 			}
 			
 			// do we need a new connection?
@@ -86,7 +93,7 @@ public class DbManager {
 				connection = dataSource.getConnection();
 				
 			}
-		} catch (java.sql.SQLException sqlEx) {
+		} catch (Exception ex) {
 			// an error occured so return false and reset the objects
 			dataSource = null;
 			connection = null;
@@ -124,7 +131,7 @@ public class DbManager {
 		try {
 		
 			// check on required objects
-			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+			if(connection == null || connection.isClosed()) {
 				
 				// try to reconnect to the database
 				if(connect(true) == false) {
@@ -167,7 +174,7 @@ public class DbManager {
 		try {
 		
 			// check on required objects
-			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+			if(connection == null || connection.isValid(5) == false) {
 				// try to reconnect to the database
 				if(connect(true) == false) {
 					// tried to do a reconnect, will attempt again next time method is called
@@ -217,7 +224,7 @@ public class DbManager {
 		try {
 		
 			// check on required objects
-			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+			if(connection == null || connection.isValid(5) == false) {
 				// try to reconnect to the database
 				if(connect(true) == false) {
 					// tried to do a reconnect, will attempt again next time method is called
@@ -268,7 +275,7 @@ public class DbManager {
 		try {
 		
 			// check on required objects
-			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+			if(connection == null || connection.isValid(5) == false) {
 				// try to reconnect to the database
 				if(connect(true) == false) {
 					// tried to do a reconnect, will attempt again next time method is called
@@ -315,7 +322,7 @@ public class DbManager {
 		try {
 		
 			// check on required objects
-			if(dataSource == null || connection == null || connection.isValid(5) == false) {
+			if(connection == null || connection.isValid(5) == false) {
 				// try to reconnect to the database
 				if(connect(true) == false) {
 					// tried to do a reconnect, will attempt again next time method is called
