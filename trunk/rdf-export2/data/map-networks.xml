@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapping>
+	<namespaces>
+		<namespace prefix='foaf'>http://xmlns.com/foaf/0.1/</namespace>
+		<namespace prefix='ausestage'>http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#</namespace>
+		<namespace prefix='event'>http://purl.org/NET/c4dm/event.owl#</namespace>
+		<namespace prefix='DCTerms'>http://purl.org/dc/terms/</namespace>
+		<namespace prefix='bio'>http://purl.org/vocab/bio/0.1/</namespace>
+		<namespace prefix='time'>http://www.w3.org/2006/time#</namespace>
+		<namespace prefix='tl'>http://purl.org/NET/c4dm/timeline.owl#</namespace>
+		<namespace prefix='org'>http://www.w3.org/ns/org#</namespace>
+		<namespace prefix='SKOS'>http://www.w3.org/2004/02/skos/core#</namespace>
+	</namespaces>
+	
+	<tables>
+		<table name='c' type='http://xmlns.com/foaf/0.1/Person' primaryKey='contributorid'>
+			<sql><![CDATA[SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender) gender, nationality, c.other_names other_names FROM contributor c LEFT JOIN gendermenu g ON (c.gender = g.genderid) INNER JOIN (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce ON c.contributorid = ce.contributorid ORDER BY contributorid]]></sql>
+			<objects>
+				<object predicate='http://xmlns.com/foaf/0.1/givenName'><![CDATA[{first_name}]]></object>
+				<object predicate='http://xmlns.com/foaf/0.1/familyName'><![CDATA[{last_name}]]></object>
+				<object predicate='http://xmlns.com/foaf/0.1/name'><![CDATA[{first_name} {last_name}]]></object>
+				<object predicate='http://xmlns.com/foaf/0.1/gender' matches='male|female'><![CDATA[{gender}]]></object>
+				<object predicate='http://xmlns.com/foaf/0.1/page'><![CDATA[http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_contrib_id={contributorid}]]></object>
+				<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#nationality'><![CDATA[{nationality}]]></object>
+				<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#otherNames'><![CDATA[{other_names}]]></object>
+			</objects>
+			<subqueries><!--subquery SQLs must return at least something matching table.primaryKey -->
+				<subquery>
+					<sql><![CDATA[SELECT c.contributorid, cp.preferredterm FROM contributor c INNER JOIN contfunctlink cl ON (c.contributorid = cl.contributorid) INNER JOIN contributorfunctpreferred cp ON (cl.contributorfunctpreferredid = cp.contributorfunctpreferredid) INNER JOIN (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce ON (c.contributorid = ce.contributorid) ORDER BY contributorid]]></sql>
+					<objects>
+						<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#function'><![CDATA[{preferredterm}]]></object>
+					</objects>
+				</subquery>
+				<subquery>
+					<sql><![CDATA[SELECT c.contributorid, count(distinct c1.contributorid) collaboratorcount FROM conevlink c INNER JOIN conevlink c1 ON (c.eventid = c1.eventid and c1.eventid IS NOT NULL and c1.contributorid != c.contributorid) WHERE c.contributorid IS NOT NULL GROUP BY c.contributorid]]></sql>
+					<objects>
+						<object type='integer' predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboratorCount'><![CDATA[{collaboratorcount}]]></object>
+					</objects>
+				</subquery>
+				
+			</subqueries>
+		</table>
+		
+		<table name='blank:BioBirth' type='http://purl.org/vocab/bio/0.1/Birth' primaryKey='contributorid'>
+			<sql><![CDATA[SELECT c.contributorid, c.yyyydate_of_birth yyyy, c.mmdate_of_birth mm, c.dddate_of_birth dd FROM contributor c INNER JOIN (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce ON (c.contributorid = ce.contributorid) WHERE c.contributorid is not null AND c.yyyydate_of_birth is not null ORDER BY contributorid]]></sql>
+			<objects>
+				<object predicate='http://purl.org/vocab/bio/0.1/date' matches='[0-9][0-9][0-9][0-9]'><![CDATA[{yyyy}{mm}{dd}]]></object><!-- year only -->
+				<object predicate='http://purl.org/vocab/bio/0.1/date' matches='[0-9][0-9][0-9][0-9]-[01]?[0-9]'><![CDATA[{yyyy}-{mm}{dd}]]></object><!-- year-month only -->
+				<object predicate='http://purl.org/vocab/bio/0.1/date' matches='[0-9][0-9][0-9][0-9]-[01]?[0-9]-[0-3]?[0-9]'><![CDATA[{yyyy}-{mm}-{dd}]]></object><!-- year-month-day only -->
+				
+				<object type='key' reversePredicate='http://purl.org/vocab/bio/0.1/event'><![CDATA[c:{contributorid}]]></object>
+			</objects>
+		</table>
+		<table name='rel' type='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaboration' primaryKey='contributors'>
+			<sql><![CDATA[SELECT concat(c.contributorid, '-', c1.contributorid) contributors, c.contributorid, c1.contributorid as collaboratorid, COUNT(c.contributorid) as collaborations, MIN(concat(e.yyyyfirst_date,if(e.mmfirst_date is null, '', concat('-',e.mmfirst_date,if(e.ddfirst_date is null, '', concat('-',e.ddfirst_date)))))) as first_date, MAX(concat(e.yyyylast_date, if(e.mmlast_date  is null, '', concat('-',e.mmlast_date, if(e.ddlast_date  is null, '', concat('-', e.ddlast_date)))))) as last_date FROM conevlink c INNER JOIN conevlink c1 ON (c.eventid = c1.eventid and c1.contributorid IS NOT NULL AND c1.eventid IS NOT NULL) INNER JOIN events e ON (c.eventid = e.eventid) WHERE c.contributorid IS NOT NULL AND c.contributorid < c1.contributorid GROUP BY concat(c.contributorid, '-', c1.contributorid), c.contributorid, c1.contributorid ORDER BY c.contributorid]]></sql>
+			<objects>
+				<object type='integer' predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationCount'><![CDATA[{collaborations}]]></object>
+				
+				<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationFirstDate'><![CDATA[{first_date}]]></object>
+				<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborationLastDate'><![CDATA[{last_date}]]></object>
+				<object type='key' predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborator' reversePredicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaboration'><![CDATA[c:{contributorid}]]></object>
+				<object type='key' predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#collaborator' reversePredicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#hasCollaboration'><![CDATA[c:{collaboratorid}]]></object>
+				
+			</objects>
+		</table>
+		
+		<table name='e' type='http://purl.org/NET/c4dm/event.owl#Event' primaryKey='eventid'>
+			<sql><![CDATA[SELECT DISTINCT e.eventid, e.event_name FROM events e WHERE e.eventid IS NOT NULL ORDER BY e.eventid]]></sql>
+			<objects>
+				<object predicate='http://purl.org/dc/terms/title'><![CDATA[{event_name}]]></object>
+				<object predicate='http://purl.org/dc/terms/identifier'><![CDATA[http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_event_id={eventid}]]></object>
+				
+			</objects>
+			<subqueries>
+				<subquery>
+					<sql><![CDATA[SELECT distinct e.eventid, c.contributorid from conevlink c INNER JOIN events e ON (c.eventid = e.eventid) where e.eventid is not null and c.contributorid is not null order by e.eventid]]></sql>
+					<objects>
+						<object type='key' predicate='http://purl.org/NET/c4dm/event.owl#agent' reversePredicate='http://purl.org/NET/c4dm/event.owl#isAgentIn'><![CDATA[c:{contributorid}]]></object>
+					</objects>
+				</subquery>
+			</subqueries>
+		</table>
+		
+		<table name='blank:TimeLine' type='http://www.w3.org/2006/time#Interval' primaryKey='eventid'>
+			<sql><![CDATA[SELECT DISTINCT e.eventid, e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, e.yyyylast_date, e.mmlast_date, e.ddlast_date FROM events e WHERE e.eventid IS NOT NULL ORDER BY e.eventid]]></sql>
+			<objects>
+				<object type='date' predicate='http://www.w3.org/2006/time#beginsAtDateTime' matches='[0-9][0-9][0-9][0-9]'><![CDATA[{yyyyfirst_date}{mmfirst_date}{ddfirst_date}]]></object><!-- year only -->
+				<object type='date' predicate='http://www.w3.org/2006/time#beginsAtDateTime' matches='[0-9][0-9][0-9][0-9]-[01]?[0-9]'><![CDATA[{yyyyfirst_date}-{mmfirst_date}{ddfirst_date}]]></object><!-- year-month only -->
+				<object type='date' predicate='http://www.w3.org/2006/time#beginsAtDateTime' matches='[0-9][0-9][0-9][0-9]-[01]?[0-9]-[0-3]?[0-9]'><![CDATA[{yyyyfirst_date}-{mmfirst_date}-{ddfirst_date}]]></object><!-- year-month-day only -->
+				
+				<object type='date' predicate='http://www.w3.org/2006/time#endsAtDateTime' matches='[0-9][0-9][0-9][0-9]'><![CDATA[{yyyylast_date}{mmlast_date}{ddlast_date}]]></object><!-- year only -->
+				<object type='date' predicate='http://www.w3.org/2006/time#endsAtDateTime' matches='[0-9][0-9][0-9][0-9]-[01]?[0-9]'><![CDATA[{yyyylast_date}-{mmlast_date}{ddlast_date}]]></object><!-- year-month only -->
+				<object type='date' predicate='http://www.w3.org/2006/time#endsAtDateTime' matches='[0-9][0-9][0-9][0-9]-[01]?[0-9]-[0-3]?[0-9]'><![CDATA[{yyyylast_date}-{mmlast_date}-{ddlast_date}]]></object><!-- year-month-day only -->
+				
+				<object type='key' reversePredicate='http://purl.org/NET/c4dm/event.owl#time'><![CDATA[e:{eventid}]]></object>
+			</objects>
+		</table>
+		
+		<table name='blank:functionAtEvent' type='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#functionAtEvent' primaryKey='primaryk'>
+			<sql><![CDATA[SELECT concat(cl.contributorid,'-',cfp.preferredterm) primaryk, cl.contributorid, cl.eventid, cfp.preferredterm FROM conevlink cl INNER JOIN contributorfunctpreferred cfp ON (cl.function = cfp.contributorfunctpreferredid) WHERE cl.eventid IS NOT NULL AND cl.contributorid IS NOT NULL ORDER BY contributorid]]></sql>
+			<objects>
+				<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#function'><![CDATA[{preferredterm}]]></object>
+				
+				<object type='key' predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#atEvent'><![CDATA[e:{eventid}]]></object>
+				<object type='key' reversePredicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#undertookFunction'><![CDATA[c:{contributorid}]]></object>
+				
+			</objects>
+		</table>
+		
+		<table name='o' type='http://www.w3.org/ns/org#organization' primaryKey='organisationid'>
+			<sql><![CDATA[SELECT organisationid, name, other_names1, other_names2, other_names3 FROM organisation]]></sql>
+			<objects>
+				<object predicate='http://www.w3.org/2004/02/skos/core#prefLabel'><![CDATA[{name}]]></object>
+				<object predicate='http://xmlns.com/foaf/0.1/page'><![CDATA[http://www.ausstage.edu.au/indexdrilldown.jsp?xcid=59&f_org_id={organisationid}]]></object>
+				<object predicate='http://www.w3.org/2004/02/skos/core#altLabel'><![CDATA[{other_names1}]]></object>
+				<object predicate='http://www.w3.org/2004/02/skos/core#altLabel'><![CDATA[{other_names2}]]></object>
+				<object predicate='http://www.w3.org/2004/02/skos/core#altLabel'><![CDATA[{other_names3}]]></object>
+				
+			</objects>
+		</table>
+		
+		<table name='blank:roleAtEvent' type='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#roleAtEvent' primaryKey='primaryk'>
+			<sql><![CDATA[SELECT concat(ol.eventid,'-',orgfunction) primaryk, ol.organisationid, ol.eventid, orgfunction FROM orgevlink ol INNER JOIN orgfunctmenu ON (ol.function = orgfunctmenu.orgfunctionid) WHERE ol.organisationid IS NOT NULL AND ol.eventid IS NOT NULL ORDER BY ol.organisationid]]></sql>
+			<objects>
+				<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#roleAtEvent'><![CDATA[{orgfunction}]]></object>
+				
+				<object type='key' predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#atEvent'><![CDATA[e:{eventid}]]></object>
+				<object type='key' reversePredicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#undertookRole'><![CDATA[o:{organisationid}]]></object>
+				
+			</objects>
+		</table>
+		
+		<table name='rdf' type='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#rdfMetadata' primaryKey='id'>
+			<sql><![CDATA[select 'metadata' id, date_format(now(),'%W, %M %e, %Y %h:%i:%s %p CST') time]]></sql>
+			<objects>
+				<object predicate='http://code.google.com/p/aus-e-stage/wiki/AuseStageOntology#tdbCreateDateTime'><![CDATA[{time}]]></object>
+			</objects>
+		</table>
+	</tables>
+</mapping>
