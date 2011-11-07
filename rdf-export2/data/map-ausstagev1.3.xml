@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapping>
+	<namespaces>
+		<namespace prefix='ausstage'>http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#</namespace>
+	</namespaces>
+	
+	<tables>
+	
+		<table name='ContentIndicator' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTOR' primaryKey='contentindicatorid'>
+			<sql>SELECT * FROM contentindicator</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTENTINDICATORhasCONTENTINDICATOR' type='string'>{contentindicator}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTENTINDICATORhasCONTENTINDICATORDESCRIPTION' type='string'>{contentindicatordescription}</object>
+			</objects>
+		</table>
+		
+		<table name='ContFunc' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTFUNC' primaryKey='contributorfunctpreferredid'>
+			<sql>SELECT * FROM contfunct</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTFUNCThasCONTFUNCTION' type='string'>{contfunction}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTFUNCThasCONTFUNCTDESCRIPTION' type='string'>{contfunctiondescription}</object>
+			</objects>
+		</table>
+		
+		<table name='Contributor' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTOR' primaryKey='contributorid'>
+			<sql>SELECT c.*, LOWER(g.gender) gendername, s.state statename FROM contributor c LEFT JOIN gendermenu g ON (c.gender = g.genderid) LEFT JOIN states s ON (s.stateid = c.state) ORDER BY contributorid</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasCONTRIBUTORCOUNTRY' type='string'>{contributorcountry}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasDATE_OF_DEATH' type='dateTime'>{date_of_death}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasDDDATE_OF_DEATH' type='string'>{dddate_of_death}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasDISPLAY_NAME' type='string'>{first_name} {last_name}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasFIRST_NAME' type='string'>{first_name}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasGENDER' type='string' matches='male|female'>{gendername}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasLAST_NAME' type='string'>{last_name}</object>
+				<!-- <object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasMIDDLE_NAME' type='string'>{middle_name}</object> -->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasMMDATE_OF_DEATH' type='string'>{mmdate_of_death}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasNATIONALITY' type='string'>{nationality}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasNOTES' type='string'>{notes}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasOTHER_NAMES' type='string'>{other_names}</object>
+				<!-- <object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasPLACE_OF_BIRTH' type='key'>Venue:{place_of_birth}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasPLACE_OF_DEATH' type='key'>Venue:{place_of_death}</object> -->
+				<!-- <object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasPREFIX' type='string'>{prefix}</object> -->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasSTATE' type='string' matches='[^U].*'>{statename}</object>
+				<!-- <object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasSUFFIX' type='string'>{suffix}</object> -->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasYYYYDATE_OF_DEATH' type='string'>{yyyydate_of_death}</object>
+				
+				
+			</objects>
+			
+			<subqueries>
+				<subquery>
+					<sql>SELECT * FROM contfunctlink ORDER BY contributorid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasCONTFUNCT' type='key'>ContFunc:{contributorfunctpreferredid}</object>
+					</objects>
+				</subquery>
+				
+				<!--
+				<subquery>
+					<sql>SELECT contribnationlink.contributorid contributorid, country.countryname countryname FROM contribnationlink INNER JOIN country ON contribnationlink.countryid = country.countryid ORDER BY contribnationlink.contributorid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasNATIONLINK' type='string'>{countryname}</object>
+					</objects>
+				</subquery>
+				-->
+				
+				<subquery>
+					<sql>SELECT * FROM conorglink ORDER BY contributorid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasORGANISATIONLINK' type='key'>Organisation:{organisationid}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql><![CDATA[SELECT distinct a.contributorid contributorid, b.contributorid collaboratorid FROM conevlink a INNER JOIN conevlink b ON a.eventid = b.eventid and a.contributorid < b.contributorid order by a.contributorid]]></sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasCONTRIBUTORLINK' type='key' reversePredicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#CONTRIBUTORhasCONTRIBUTORLINK'>Contributor:{collaboratorid}</object>
+					</objects>
+				</subquery>
+			</subqueries>
+		</table>
+		
+		<table name='DescriptionSrc' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#DESCRIPTIONSRC' primaryKey='descriptionsourceid'>
+			<sql>SELECT * FROM descriptionsrc</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#DESCRIPTIONSRChasDESCRIPTIONSOURCE' type='string'>{descriptionsource}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#DESCRIPTIONSRChasDESCRIPTIONDESCRIPTION' type='string'>{descriptiondescription}</object>
+			</objects>
+		</table>
+		
+		<table name='Events' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENTS' primaryKey='eventid'>
+			<sql>SELECT events.*, d1.datasource datasource1, d2.datasource datasource2, d3.datasource datasource3, prigenreclass.genreclass genre FROM events LEFT JOIN datasource d1 ON events.data_source1 = d1.datasourceid AND events.data_source1 IS NOT NULL LEFT JOIN datasource d2 ON events.data_source1 = d2.datasourceid AND events.data_source2 IS NOT NULL LEFT JOIN datasource d3 ON events.data_source1 = d3.datasourceid AND events.data_source3 IS NOT NULL LEFT JOIN prigenreclass ON events.primary_genre = prigenreclass.genreclassid</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasCOLLECTION1' type='string'>{collection1}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasCOLLECTION2' type='string'>{collection2}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasCOLLECTION3' type='string'>{collection3}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasCONTENT_INDICATOR' type='key'>ContentIndicator:{content_indicator}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDATA_SOURCE1' type='string'>{datasource1}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDATA_SOURCE2' type='string'>{datasource2}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDATA_SOURCE3' type='string'>{datasource3}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDATA_SOURCE_DESCRIPTION1' type='string'>{data_source_description1}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDATA_SOURCE_DESCRIPTION2' type='string'>{data_source_description2}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDATA_SOURCE_DESCRIPTION3' type='string'>{data_source_description3}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDDDATE_ENTERED' type='string'>{dddate_entered}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDDDATE_UPDATED' type='string'>{dddate_updated}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDDFIRST_DATE' type='string'>{ddfirst_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDDLAST_DATE' type='string'>{ddlast_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDDOPENING_NIGHT' type='string'>{ddopening_night}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDESCRIPTION' type='string'>{description}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDESCRIPTION_SOURCE' type='key'>DescriptionSrc:{description_source}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasENTERED_BY' type='nonNegativeInteger'>{entered_by}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasENTERED_BY_USER' type='string'>{entered_by_user}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasENTERED_DATE' type='dateTime'>{entered_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasESTIMATED_DATES' type='string'>{estimated_dates}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasEVENT_NAME' type='string'>{event_name}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasFIRST_DATE' type='dateTime'>{first_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasFURTHER_INFORMATION' type='string'>{further_information}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasINTERESTING_PERF_HISTORY' type='string'>{interesting_perf_history}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasLAST_DATE' type='dateTime'>{last_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasMMDATE_ENTERED' type='string'>{mmdate_entered}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasMMDATE_UPDATED' type='string'>{mmdate_updated}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasMMFIRST_DATE' type='string'>{mmfirst_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasMMLAST_DATE' type='string'>{mmlast_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasMMOPENING_NIGHT' type='string'>{mmopening_night}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasOPENING_NIGHT_DATE' type='dateTime'>{opening_night_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasPRIMARY_GENRE' type='string'>{genre}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasSNDDATE_ENTERED' type='nonNegativeInteger'>{snddate_entered}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasSNDDATE_UPDATED' type='nonNegativeInteger'>{snddate_updated}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasSNDFIRST_DATE' type='nonNegativeInteger'>{sndfirst_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasSNDLAST_DATE' type='nonNegativeInteger'>{sndlast_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasSNDOPENING_NIGHT' type='nonNegativeInteger'>{sndopening_night}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasSTATUS' type='key'>StatusMenu:{status}</object>
+				<!--<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasUMBRELLAEVENT' type='key'>Event:{umbrella}</object>-->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasUPDATED_DATE' type='dateTime'>{updated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasVENUEID' type='key'>Venue:{venueid}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasWORLD_PREMIER' type='string'>{world_premier}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasYYYYFIRST_DATE' type='string'>{yyyyfirst_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasYYYYLAST_DATE' type='string'>{yyyylast_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasYYYYOPENING_NIGHT' type='string'>{yyyyopening_night}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasYYYYDATE_ENTERED' type='string'>{yyyydate_entered}</object>
+			</objects>
+			
+			<subqueries>
+				<subquery>
+					<sql>SELECT * FROM eventworklink ORDER BY eventid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasWORKLINK' reversePredicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasEVENTLINK' type='key'>Work:{workid}</object>
+					</objects>
+				</subquery>
+			
+				<subquery>
+					<sql>select datasourceevlink.eventid eventid, datasource.datasource from datasourceevlink inner join datasource on datasourceevlink.datasourceid = datasource.datasourceid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasDATA_SOURCE' type='string'>{datasource}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>select secgenreclasslink.eventid eventid, secgenrepreferred.preferredterm from secgenreclasslink inner join secgenrepreferred on secgenreclasslink.secgenrepreferredid = secgenrepreferred.secgenrepreferredid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasSECONDARYGENRE' type='string'>{preferredterm}</object>
+					</objects>
+				</subquery>
+			</subqueries>
+		</table>
+		
+				
+		<table name='Item' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEM' primaryKey='itemid'>
+			<sql>SELECT item.*, lang.description language, itemtype.description item_type_old, itemsubtype.description item_sub_type_old, descsrc.descriptionsource source, condition.condition, organisation.name organisationname FROM item LEFT JOIN organisation ON organisation.organisationid = item.institutionid LEFT JOIN descriptionsrc descsrc ON item.sourceid = descsrc.descriptionsourceid LEFT JOIN lookup_codes lang ON item.language_lov_id = lang.code_lov_id LEFT JOIN lookup_codes itemtype ON item.item_type_lov_id = itemtype.code_lov_id LEFT JOIN lookup_codes itemsubtype ON item.item_sub_type_lov_id = itemsubtype.code_lov_id LEFT JOIN `condition` ON item.item_condition_id = condition.condition_id</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasACCESSIONED_DATE' type='dateTime'>{accessioned_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasAQUIRED_FROM' type='string'>{aquired_from}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasCATALOGUEID' type='string'>{catalogueid}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasCITATION' type='string'>{citation}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasCOMMENTS' type='string'>{comments}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasCONDITION' type='string'>{condition}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasCOPYRIGHT_DATE' type='dateTime'>{copyright_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasCREATED_DATE' type='dateTime'>{created_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDATE_NOTES' type='string'>{date_notes}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDC_CREATOR' type='string'>{dc_creator}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDDACCESSIONED_DATE' type='string'>{ddaccessioned_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDDCOPYRIGHT_DATE' type='string'>{ddcopyright_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDDCREATED_DATE' type='string'>{ddcreated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDDISSUED_DATE' type='string'>{ddissued_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDDTERMINATED_DATE' type='string'>{ddterminated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDESCRIPTION_ABSTRACT' type='string'>{description_abstract}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDETAIL_COMMENTS' type='string'>{detail_comments}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasDONATED_PURCHASED' type='string'>{donated_purchased}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasENTERED_BY_USER' type='string'>{entered_by_user}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasENTERED_DATE' type='dateTime'>{entered_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasFORMAT' type='string'>{format}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasFORMAT_EXTENT' type='string'>{format_extent}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasFORMAT_MEDIUM' type='string'>{format_medium}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasFORMAT_MIMETYPE' type='string'>{format_mimetype}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasIDENT_ISBN' type='string'>{ident_isbn}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasIDENT_ISMN' type='string'>{ident_ismn}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasIDENT_ISSN' type='string'>{ident_issn}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasIDENT_SICI' type='string'>{ident_sici}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasINSTITUTION' type='string'>{organisationname}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasISSUE' type='string'>{issue}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasISSUED_DATE' type='dateTime'>{issued_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasITEM_DESCRIPTION' type='string'>{item_description}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasITEM_TYPE_OLD' type='string'>{item_type_lov_id}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasITEM_URL' type='anyURI'>{item_url}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasLANGUAGE' type='string'>{language}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasLOOKUP' type='string'>{item_type_old}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasMMACCESSIONED_DATE' type='string'>{mmaccessioned_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasMMCOPYRIGHT_DATE' type='string'>{mmcopyright_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasMMCREATED_DATE' type='string'>{mmcreated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasMMISSUED_DATE' type='string'>{mmissued_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasMMTERMINATED_DATE' type='string'>{mmterminated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasMODIFIED_BY_USER' type='string'>{modified_by_user}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasMODIFIED_DATE' type='dateTime'>{modified_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasPAGE' type='string'>{page}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasPROVENANCE' type='string'>{provenance}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasPUBLISHER' type='string'>{publisher}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasPUBLISHER_LOCATION' type='string'>{publisher_location}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasRIGHTS' type='string'>{rights}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasRIGHTS_ACCESS_RIGHTS' type='string'>{rights_access_rights}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasRIGHTS_HOLDER' type='string'>{rights_holder}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasSIGNIFICANCE' type='string'>{significance}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasSOURCE' type='string'>{source}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasSTORAGE' type='string'>{storage}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasSUB_LOOKUP' type='string'>{item_sub_type_old}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasTERMINATED_DATE' type='dateTime'>{terminated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasTITLE' type='string'>{title}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasTITLE_ALTERNATIVE' type='string'>{title_alternative}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasUPDATED_DATE' type='dateTime'>{updated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasVOLUME' type='string'>{volume}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasYYYYACCESSIONED_DATE' type='string'>{yyyyaccessioned_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasYYYYCOPYRIGHT_DATE' type='string'>{yyyycopyright_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasYYYYCREATED_DATE' type='string'>{yyyycreated_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasYYYYISSUED_DATE' type='string'>{yyyyissued_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasYYYYTERMINATED_DATE' type='string'>{yyyyterminated_date}</object>
+			</objects>
+			
+			<subqueries>
+				<subquery>
+					<sql>SELECT * FROM itemconlink ORDER BY itemid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasCONTRIBUTORLINK' type='key'>Contributor:{contributorid}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>SELECT * FROM itemitemlink ORDER BY itemid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasChildItem' reversePredicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasParentItem' type='key'>Item:{childid}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasITEMLINK' reversePredicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasITEMLINK' type='key'>Item:{childid}</object>
+						
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>SELECT * FROM itemevlink ORDER BY itemid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasEVLINK' type='key'>Event:{eventid}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>SELECT * FROM itemorglink ORDER BY itemid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasORGANISATIONLINK' type='key'>Organisation:{organisationid}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>SELECT * FROM itemvenuelink ORDER BY itemid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasVENUELINK' type='key'>Venue:{venueid}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>SELECT * FROM itemworklink ORDER BY itemid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ITEMhasWORKLINK' type='key'>Work:{workid}</object>
+					</objects>
+				</subquery>
+			</subqueries>
+		</table>
+			
+		<table name='Organisation' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATION' primaryKey='organisationid'>
+			<sql>SELECT organisation.*, country.countryname, organisation_type.Type type, states.state statename FROM organisation LEFT JOIN country on organisation.countryid = country.countryid LEFT JOIN states on organisation.state = states.stateid LEFT JOIN organisation_type on organisation.organisation_type_id = organisation_type.organisation_type_id</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasADDRESS' type='string'>{address}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasCOUNTRYNAME' type='string'>{countryname}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasNAME' type='string'>{name}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasNOTES' type='string'>{notes}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasORGANISATIONCOUNTRY' type='string'>{organisationcountry}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasOTHER_NAMES1' type='string'>{other_names1}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasOTHER_NAMES2' type='string'>{other_names2}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasOTHER_NAMES3' type='string'>{other_names3}</object>
+				<!--
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasPLACE_OF_DEMISE' type='key'>Venue:{place_of_demise}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasPLACE_OF_ORIGIN' type='key'>Venue:{place_of_origin}</object>
+				-->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasPOSTCODE' type='nonNegativeInteger'>{postcode}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasSTATE' type='string' matches='[^U].*'>{statename}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasSUBURB' type='string'>{suburb}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasTYPE' type='string'>{type}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasWEB_LINKS' type='anyURI'>{web_links}</object>
+			</objects>
+			
+			<subqueries>
+				<subquery>
+					<sql><![CDATA[SELECT o.organisationid, date_format(min(e.first_date), "%d") ddfirst, date_format(max(e.last_date), "%d") ddlast, date_format(min(e.first_date), "%m") mmfirst, date_format(max(e.last_date), "%m") mmlast, date_format(min(e.first_date), "%Y") yyyyfirst, date_format(max(e.last_date), "%Y") yyyylast, min(e.first_date) firstdate, max(e.last_date) lastdate FROM organisation o INNER JOIN orgevlink oe ON (o.organisationid = oe.organisationid and o.organisationid IS NOT NULL) INNER JOIN events e ON (oe.eventid = e.eventid) GROUP BY o.organisationid]]></sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasDDFIRST_DATE' type='string'>{ddfirst}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasDDLAST_DATE' type='string'>{ddlast}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasFIRST_DATE' type='dateTime'>{firstdate}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasLAST_DATE' type='dateTime'>{lastdate}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasMMFIRST_DATE' type='string'>{mmfirst}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasMMLAST_DATE' type='string'>{mmlast}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasYYYYFIRST_DATE' type='string'>{yyyyfirst}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasYYYYLAST_DATE' type='string'>{yyyylast}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>SELECT * FROM orgevlink ORDER BY organisationid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasEVLINK' reversePredicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#EVENThasORGANISATIONLINK' type='key'>Event:{eventid}</object>
+					</objects>
+				</subquery>
+				
+				<!--
+				<subquery>
+					<sql>SELECT * FROM orgorglink ORDER BY organisationid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasORGANISATIONLINK' reversePredicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#ORGANISATIONhasORGANISATIONLINK' type='key'>Organisation:{childid}</object>
+					</objects>
+				</subquery>
+				-->
+			</subqueries>
+		</table>
+		
+		<table name='StatusMenu' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#STATUSMENU' primaryKey='statusid'>
+			<sql>SELECT * FROM statusmenu</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#STATUSMENUhasSTATUS' type='string'>{status}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#STATUSMENUhasSTATUSID' type='nonNegativeInteger'>{statusid}</object>
+			</objects>
+		</table>
+		
+		<table name='Venue' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUE' primaryKey='venueid'>
+			<sql>SELECT venue.*, country.countryname country, states.state statename FROM venue LEFT JOIN country on venue.countryid = country.countryid LEFT JOIN states on venue.state = states.stateid</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasCAPACITY' type='nonNegativeInteger' matches='[0-9]*'>{capacity}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasCOUNTRY' type='string'>{country}</object>
+				<!--<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasELEVATION' type='decimal'>{elevation}</object>-->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasLATITUDE' type='decimal'>{latitude}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasLONGITUDE' type='decimal'>{longitude}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasNOTES' type='string'>{notes}</object>
+				<!--
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasOTHER_NAMES1' type='string'>{other_names1}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasOTHER_NAMES2' type='string'>{other_names2}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasOTHER_NAMES3' type='string'>{other_names3}</object>
+				-->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasPOSTCODE' type='string'>{postcode}</object>
+				<!--<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasRADIUS' type='decimal'>{radius}</object>-->
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasSTATE' type='string' matches='[^U].*'>{statename}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasSTREET' type='string'>{street}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasSUBURB' type='string'>{suburb}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasVENUE_NAME' type='string'>{venue_name}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasWEB_LINKS' type='anyURI'>{web_links}</object>
+			</objects>
+			
+			<subqueries>
+				<subquery>
+					<sql><![CDATA[SELECT v.venueid, date_format(min(e.first_date), "%d") ddfirst, date_format(max(e.last_date), "%d") ddlast, date_format(min(e.first_date), "%m") mmfirst, date_format(max(e.last_date), "%m") mmlast, date_format(min(e.first_date), "%Y") yyyyfirst, date_format(max(e.last_date), "%Y") yyyylast, min(e.first_date) firstdate, max(e.last_date) lastdate FROM venue v INNER JOIN events e ON (v.venueid = e.venueid) GROUP BY v.venueid]]></sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasDDFIRST_DATE' type='string'>{ddfirst}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasDDLAST_DATE' type='string'>{ddlast}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasFIRST_DATE' type='dateTime'>{firstdate}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasLAST_DATE' type='dateTime'>{lastdate}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasMMFIRST_DATE' type='string'>{mmfirst}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasMMLAST_DATE' type='string'>{mmlast}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasYYYYFIRST_DATE' type='string'>{yyyyfirst}</object>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#VENUEhasYYYYLAST_DATE' type='string'>{yyyylast}</object>
+					</objects>
+				</subquery>
+			</subqueries>
+		</table>
+		
+		<table name='Work' type='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORK' primaryKey='workid'>
+			<sql>SELECT * FROM work</sql>
+			<objects>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasALTER_WORK_TITLE' type='string'>{alter_work_title}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasENTERED_BY_USER' type='string'>{entered_by_user}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasENTERED_DATE' type='dateTime'>{entered_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasMODIFIED_BY_USER' type='string'>{modified_by_user}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasMODIFIED_DATE' type='dateTime'>{modified_date}</object>
+				<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasWORK_TITLE' type='string'>{work_title}</object>
+			</objects>
+			
+			<subqueries>
+				<subquery>
+					<sql>SELECT * FROM workconlink ORDER BY workid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasCONTRIBUTORLINK' type='key'>Contributor:{contributorid}</object>
+					</objects>
+				</subquery>
+				
+				<subquery>
+					<sql>SELECT * FROM workorglink ORDER BY workid</sql>
+					<objects>
+						<object predicate='http://www.semanticweb.org/ontologies/2011/6/AusStagev1-3.owl#WORKhasORGANISATIONLINK' type='key'>Organisation:{organisationid}</object>
+					</objects>
+				</subquery>
+			</subqueries>
+		</table>
+	
+	</tables>
+</mapping>
