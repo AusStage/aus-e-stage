@@ -31,8 +31,8 @@ import au.edu.ausstage.utils.*;
 public class RdfExport {
 
 	// Version information 
-	private static final String VERSION    = "1.1.3";
-	private static final String BUILD_DATE = "2011-07-08";
+	private static final String VERSION    = "2.0.0";
+	private static final String BUILD_DATE = "2011-09-16";
 	private static final String INFO_URL   = "http://code.google.com/p/aus-e-stage/wiki/RdfExport";
 	
 	// Valid tasks
@@ -63,9 +63,12 @@ public class RdfExport {
 		
 		// get the parameters
 		String taskType   = parser.getValue("task");
+		String mapPath    = parser.getValue("map");
 		String propsPath  = parser.getValue("properties");
 		String dataFormat = parser.getValue("format");
 		String output     = parser.getValue("output");
+		boolean interactive = false;
+		if (parser.getValue("mode") != null && parser.getValue("mode").equals("interactive")) interactive = true;
 		
 		// check on the parameters
 		if(InputUtils.isValid(taskType, TASK_TYPES) == false || InputUtils.isValid(propsPath) == false) {
@@ -73,8 +76,10 @@ public class RdfExport {
 			System.err.println("ERROR: the following parameters are expected");
 			System.err.println("-task   the type of task to undertake");
 			System.err.println("-properties the location of the properties file");
+			System.err.println("-map        (required for build-network-data) the location of the mapping file");
 			System.err.println("-format     (optional) the data format used in an export task");
 			System.err.println("-output     (optional) the output file to create for an export task");
+			System.err.println("\n-mode interactive     (optional) receive a dialogue whenever an error is encountered");
 			System.err.println("\nValid task types are:");
 			System.err.println(InputUtils.arrayToString(TASK_TYPES));
 			System.err.println("\nValid data formats are:");
@@ -84,6 +89,12 @@ public class RdfExport {
 		
 		if(taskType.equals("export-network-data")) {
 		
+			if(InputUtils.isValid(output) == false) {
+				// format is missing so use a default
+				System.err.println("ERROR: No output file specified. Use -output path/to/file.xml to set it");
+				System.exit(-1);
+			}
+			
 			if(InputUtils.isValid(dataFormat) == false) {
 				// format is missing so use a default
 				System.out.println("INFO: No data format specified. Using 'RDF/XML' by default");
@@ -112,7 +123,12 @@ public class RdfExport {
 	 	
 	 	// execute the appropriate task		
 		if(taskType.equals("build-network-data") == true) {
-				
+			// Check for a map
+			if (!InputUtils.isValid(mapPath)) {
+				System.err.println("ERROR: You haven't specified a mapping file");
+				System.exit(-1);
+			}
+			
 			// instantiate the database classes
 			DbManager database = new DbManager(properties.getProperty("db-connection-string"));
 		
@@ -137,12 +153,15 @@ public class RdfExport {
 				System.exit(-1);
 			}
 			
-			status = task.doTask();
+			status = task.doTask(new File(mapPath), interactive);
+			
 	 		
 		} 
 		else if(taskType.equals("export-network-data")) {
 			// do the export-network-data task
 			ExportNetworkData task = new ExportNetworkData(properties);
+			
+			
 			
 			// check to ensure the file doesn't exist yet
 			if(FileUtils.doesFileExist(output) == false) {

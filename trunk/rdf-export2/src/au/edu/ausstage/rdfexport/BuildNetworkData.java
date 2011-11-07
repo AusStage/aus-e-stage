@@ -20,25 +20,22 @@
 package au.edu.ausstage.rdfexport;
 
 // import additional packages
-import java.sql.ResultSet;
+import java.sql.*;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Map;
+import java.util.HashMap;
 
 // import the Jena related packages
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.tdb.*;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-
 
 // datastore stats code
 import com.hp.hpl.jena.tdb.solver.stats.Stats ;
@@ -48,6 +45,13 @@ import com.hp.hpl.jena.tdb.store.GraphTDB ;
 // import the AusStage classes
 import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.*;
+
+// import the XML parser 
+import org.w3c.dom.*;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+
+
 
 /**
  * A Class used to build an RDF based dataset of contributor information
@@ -61,13 +65,24 @@ public class BuildNetworkData {
 	private PropertiesManager      settings;             // access the properties / settings
 	private String                 datastorePath = null; // directory for the tdb datastore
 	
-	// declare private class level constants
-	private final int RECORD_NOTIFY_COUNT = 10000;
-	
 	// declare other private variables
 	// pattern derived from the com.hp.hpl.jena.rdf.model.impl.Util class
 	private final Pattern invalidContentPattern = Pattern.compile( "<|>|&|[\0-\37&&[^\n\t]]|\uFFFF|\uFFFE" );
 	
+	
+	// Start a map so that we have somewhere to cache the objects that we've loaded from Jena 
+	Map<String, Property> usedVocab = new HashMap<String, Property>();
+	Map<String, XSDDatatype> usedTypeVocab = new HashMap<String, XSDDatatype>();
+	
+	// Set interactive boolean up here so we don't need to keep passing it between functions
+	boolean interactive = false;
+	
+	// Load the model we use to generate the Properties
+	OntModel ontModel = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM, null );
+
+	// create an empty persistent model
+	Model model = null;
+
 	/**
 	 * A constructor for this class
 	 *
@@ -156,34 +171,282 @@ public class BuildNetworkData {
 	} // end the doReset method
 	
 	/**
+	 * Returns what the user types in interactive mode
+	 * 
+	 * @param prompt  The prompt to present to the user
+	 * @return  The next line the user types
+	 */
+	private String promptUser(String prompt) {
+		java.util.Scanner input = new java.util.Scanner(System.in);
+		System.out.print(prompt + " > ");
+		return input.nextLine();
+	}
+	
+	/**
+	 * A function to parse a given XML file and return the root element
+	 * 
+	 *  @param file  The path to the XML file
+	 *  @return   An Element object containing the root element of the XML document
+	 *  		  or null if there was an error
+	 */
+	private Element parseXmlFile(String file){
+		//get the factory
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+		try {
+			//Using factory get an instance of document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+
+			return db.parse(file).getDocumentElement();
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * A function to return the text value of an element, empty string otherwise
+	 * 
+	 * @param element  The element containing text
+	 * @return   A string containing the text inside the element
+	 */
+	private String getTextValue(Element element) {
+		String retVal = element.getFirstChild().getNodeValue();
+		if (retVal == null) return "";
+		return retVal;
+	}
+	
+	/**
+	 * A function to check that a field value matches a regex
+	 * 
+	 * @param matches  A regular expression that should match the entire input string
+	 * @param finalValue  The input string you wish to match
+	 * @return true if the expression matches, false otherwise
+	 */
+	private boolean validateField(String matches, String finalValue) {
+		// validate value against "matches", if applicable
+		if (matches != null && !matches.equals("")) {
+			try {
+				Pattern validPattern = Pattern.compile(matches);
+				Matcher validMatcher = validPattern.matcher(finalValue);
+				return validMatcher.matches();
+			} catch (Exception e) {
+				System.err.println("ERROR: Invalid regular expression '" + matches + "', dropping this property.");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Removes characters that can't be written into the RDF document from a field
+	 * 
+	 * @param finalValue  The value of the field
+	 * @return  finalValue, minus any invalid characters
+	 */
+	private String checkField(String finalValue) {
+		try {
+			// use this method that encodes entities to check the content of the title
+			// if it throws an exception the value will not make it into the XML serialised content
+			com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(finalValue);
+		
+		} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
+			// the value will not make it into the XML serialised content-- need to automatically/manually fix it
+			
+			if (this.interactive) {
+				System.err.println("ERROR: An object contains invalid characters. Please fix them or hit Enter to automatically fix.");
+				System.err.println("       The object is: " + finalValue);
+				
+				String inFromUser = promptUser("New value");
+				if (inFromUser == "") {
+					Matcher invalidContentMatch = invalidContentPattern.matcher(finalValue);
+					finalValue = invalidContentMatch.replaceAll("");
+				} else {
+					finalValue = checkField(inFromUser); // Recursive check to make sure the user didn't type something invalid
+				}
+				
+			} else {
+				System.err.println("ERROR: An object contains invalid characters. They have been removed.");
+				System.err.println("       The object is: " + finalValue);
+			
+				Matcher invalidContentMatch = invalidContentPattern.matcher(finalValue);
+
+				finalValue = invalidContentMatch.replaceAll("");
+			}
+		}
+		return finalValue;
+	}
+	
+	/**
+	 * Stores and retreives Jena properties from a hashmap so that we're not constantly creating new objects
+	 * 
+	 * @param predicateUri  The full URI of the predicate to retrieve
+	 * @param predicateType  The datatype of the predicate ("key" for foreign keys, datatype or null otherwise)
+	 * @return  The existing property object from the hashmap, or a new one if there isn't one there already
+	 */
+	private Property getPredicateFromUri(String predicateUri, String predicateType) {
+		if (!this.usedVocab.containsKey(predicateUri)) {
+			try {
+				if (predicateType != null && predicateType.equals("key")) {
+					this.usedVocab.put(predicateUri, ontModel.createObjectProperty(predicateUri));
+				} else {
+					this.usedVocab.put(predicateUri, ontModel.createDatatypeProperty(predicateUri));
+				}
+			} catch (Exception e) {
+				System.err.println("ERROR: Could not create predicate from URI '" + predicateUri + "'");
+				return null;
+			}
+		}
+		return this.usedVocab.get(predicateUri);
+		
+	}
+	
+	/**
+	 * Stores and retreives Jena datatypes from a hashmap so that we're not constantly creating new objects
+	 * 
+	 * @param datatype  The type name (eg. "integer", "date")
+	 * @return  The existing datatype from the hashmap, or a new one if there isn't one there already
+	 */
+	private XSDDatatype getDatatypeFromUri(String datatype) {
+		if (!this.usedTypeVocab.containsKey(datatype)) {
+			try {
+				this.usedTypeVocab.put(datatype, new XSDDatatype(datatype));
+			} catch (Exception e) {
+				System.err.println("ERROR: Could not create datatype '" + datatype + "'");
+				return null;
+			}
+		}
+		return this.usedTypeVocab.get(datatype);
+		
+	}
+	
+	/**
+	 * Replaces values in {curly_braces} with the corresponding value from a database 
+	 * 
+	 * @param object  The element containing a specification for the data
+	 * @param resultSet  The ResultSet, cued up to the appropriate record
+	 * @return  The specification with things in curly braces replaced with values from the ResultSet
+	 * @throws SQLException
+	 */
+	private String parseDatabaseFields(Element object, java.sql.ResultSet resultSet) throws SQLException {
+		// parse specification for field names, substitute them in
+
+		String specification = getTextValue(object);
+		String finalValue = specification;
+
+		Pattern fieldPattern = Pattern.compile("\\{([^\\}]*)\\}");
+		Matcher fieldMatcher = fieldPattern.matcher(specification);
+		
+		while (fieldMatcher.find()) {
+			String val = fieldMatcher.group(1);
+			String data = null;
+			try {
+				data = resultSet.getString(val);
+			} catch (Exception e) {
+				System.err.println("ERROR: Object spec '" + specification + "' contains invalid database field '" + val + "'");
+			}
+			if (data == null) data = "";
+			finalValue = finalValue.replace("{" + val + "}", data);
+		}
+		
+		// If the field matches the regex return it
+		if (validateField(object.getAttribute("matches"), finalValue)) return finalValue;
+		// Otherwise don't
+		return "";
+	}
+	
+	/**
+	 * Fills an RDF subject with the data specified by a NodeList of objects
+	 * 
+	 * @param subject  An existing Jena subject to add the objects to
+	 * @param objects  A NodeList of objects to loop through and add to subject
+	 * @param resultSet  A ResultSet containing all relevant data for the subject in question
+	 * @return  false if any errors were detected, true otherwise
+	 * @throws SQLException
+	 */
+	private boolean processObjects(Resource subject, NodeList objects, java.sql.ResultSet resultSet) throws SQLException {
+		if (objects != null && objects.getLength() > 0) {
+			for (int i = 0; i < objects.getLength(); i++) {
+				Element object = (Element) objects.item(i);
+				
+				String predicateUri = object.getAttribute("predicate");
+				String predicateType = object.getAttribute("type");
+				Property predicate = getPredicateFromUri(predicateUri, predicateType);
+				if (predicate == null) {
+					System.out.println("ERROR: Invalid predicate.");
+					return false;
+				}
+				String databaseValue = parseDatabaseFields(object, resultSet);
+				String finalValue = checkField(databaseValue);
+				
+				if (!this.interactive && !databaseValue.equals(finalValue)) { 
+					// If these are different we've just printed out an invalid message, now we can give them their subject ID 
+					System.err.println("       The subject is: " + subject.getNameSpace());
+				}
+				
+				if (!finalValue.equals("")) {
+					if (predicateType == null || predicateType.equals("")) {
+						// No datatype specified, so don't write one
+						subject.addProperty(predicate, finalValue);
+					} else {
+						if (predicateType.equals("key")) {
+							if (!finalValue.endsWith(":")) { // If the finalValue ends with ":" then the database field was null
+								// Datatype of "key", run foreign key code
+								Resource foreign = null;
+								if (finalValue.startsWith("blank:")) {
+									foreign = this.model.createResource(new AnonId(finalValue));
+								} else {
+									foreign = this.model.createResource("ausstage:" + finalValue);
+								}
+								
+								if (predicateUri != null && !predicateUri.equals("")) {
+									subject.addProperty(getPredicateFromUri(predicateUri, "key"), foreign);
+								}
+								if (object.getAttribute("reversePredicate") != null && !object.getAttribute("reversePredicate").equals("")) {
+									Property reversePredicate = getPredicateFromUri(object.getAttribute("reversePredicate"), "key");
+									if (reversePredicate == null) {
+										System.out.println("ERROR: Invalid predicate.");
+										return false;
+									}
+									foreign.addProperty(reversePredicate, subject);
+								}
+							}
+						} else {
+							try {
+								// Datatype unknown, create it from the XSDDatatypes
+								XSDDatatype type = getDatatypeFromUri(predicateType);
+								subject.addProperty(predicate, model.createTypedLiteral(finalValue, type));
+							} catch (Exception e) {
+								System.err.println("ERROR: Datatype '" + predicateType + "' is not valid, or does not match value '" + finalValue +"'");
+								return false;
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * A method to undertake the task of building the dataset
-	 *
+	 * 
+	 * @param inputFile  The XML file to use as a map between the database and the RDF document
+	 * @param interactive  true if interactive mode is enabled
 	 * @return true if, and only if, the task completes successfully
 	 */
-	public boolean doTask() {
-	
+	public boolean doTask(File inputFile, boolean interactive) {
+	    
 		// turn off the TDB logging
 		org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("com.hp.hpl.jena.tdb.info");
 		logger.setLevel(org.apache.log4j.Level.OFF);
 		
-		// declare some helper variables
-		int contributorCount       = 0;
-		int functionCount          = 0;
-		int collaboratorCount      = 0;
-		int collaborationCount     = 0;
-		int eventCount             = 0;
-		int functionsAtEventsCount = 0;
-		int organisationCount      = 0;
-		int rolesAtEventsCount     = 0;
-		int recordNotifyDelimCount = 0;
+		// just for output purposes
+		int counter       = 0;
 		
-		// sets of ids that we've processed to stop rogue resources
-		gnu.trove.TIntHashSet contributors  = new gnu.trove.TIntHashSet();
-		gnu.trove.TIntHashSet events        = new gnu.trove.TIntHashSet();
-		gnu.trove.TIntHashSet organisations = new gnu.trove.TIntHashSet();
-
-		// create an empty persistent model
-		Model model = null;
+		this.interactive = interactive;
 		
 		if(InputUtils.isValid(datastorePath) == false) {
 			System.err.println("ERROR: the doReset() method must be run before building the network datastore");
@@ -192,867 +455,186 @@ public class BuildNetworkData {
 			model = TDBFactory.createModel(datastorePath) ;
 		}
 		
-		// set a namespace prefixes
-		model.setNsPrefix("foaf"     , FOAF.NS);
-		model.setNsPrefix("event"    , Event.NS);
-		model.setNsPrefix("dcterms"  , DCTerms.NS);
-		model.setNsPrefix("time"     , Time.NS);
-		model.setNsPrefix("tl"       , Timeline.NS);
-		model.setNsPrefix("xsd"      , XSDDatatype.XSD);
-		model.setNsPrefix("ausestage", AuseStage.NS);
-		model.setNsPrefix("bio"      , Bio.NS);
-		model.setNsPrefix("org"      , Org.NS);
-		model.setNsPrefix("skos"     , SKOS.NS);
-		
-		/*
-		 * add base contributor information
-		 */
-		 	   
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding contributor data to the datastore...");
-			
-			// define the sql
-			String sql = "SELECT c.contributorid, c.first_name, c.last_name, LOWER(g.gender), nationality, "
-					   + "       c.yyyydate_of_birth, c.mmdate_of_birth, c.dddate_of_birth, "
-					   + "       c.other_names "
-					   + "FROM contributor c, gendermenu g, "
-					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
-					   + "WHERE c.gender = g.genderid(+) "
-					   + "AND c.contributorid = ce.contributorid "
-					   + "ORDER BY contributorid";
-			
-			// get the data from the database
-			DbObjects dbObject = database.executeStatement(sql);				   
-			java.sql.ResultSet resultSet = dbObject.getResultSet();
-			
-			// declare helper variables
-			String   firstName   = null;
-			String   lastName    = null;
-			String   otherName   = null;
-			String   nationality = null;
-			Resource contributor = null;
-			Resource bioBirth    = null;
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// get the attributes
-				firstName = resultSet.getString(2);
-				lastName  = resultSet.getString(3);
-				
-				// double check the attributes
-				if(firstName == null) {
-					firstName = "";
-				} 
-				
-				if(lastName == null) {
-					lastName = "";
-				}
-				
-				// double check the name variables
-				try {
-					// use this method that encodes entities to check the content of the title
-					// if it throws an exception the title will not make it into the XML serialised content
-					com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(firstName);
-				
-				} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-					// the title will not make it into the XML serialised content
-					System.err.println("ERROR: A contributor first name contains invalid content that must be manually fixed.");
-					System.err.println("       The contributor id is: " + resultSet.getString(1));
-					System.err.println("       The contributor first name is: " + firstName);
-				
-					Matcher invalidContentMatch = invalidContentPattern.matcher(firstName);
-					firstName = invalidContentMatch.replaceAll("");
-				}
-				
-				try {
-					// use this method that encodes entities to check the content of the title
-					// if it throws an exception the title will not make it into the XML serialised content
-					com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(lastName);
-				
-				} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-					// the title will not make it into the XML serialised content
-					System.err.println("ERROR: A contributor last name contains invalid content that must be manually fixed.");
-					System.err.println("       The contributor id is: " + resultSet.getString(1));
-					System.err.println("       The contributor last name is: " + lastName);
-				
-					Matcher invalidContentMatch = invalidContentPattern.matcher(lastName);
-					lastName = invalidContentMatch.replaceAll("");
-				}
-	
-				// create a new contributor
-				contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-				contributor.addProperty(RDF.type, FOAF.Person);
-				
-				// add the name properties
-				contributor.addProperty(FOAF.name, firstName + " " + lastName);
-				contributor.addProperty(FOAF.givenName, firstName);
-				contributor.addProperty(FOAF.familyName, lastName);
-				
-				// add the url to the contributor page
-				contributor.addProperty(FOAF.page, AusStageURI.getContributorURL(resultSet.getString(1)));
-				
-				// add the gender
-				if(resultSet.getString(4) != null) {
-					if(resultSet.getString(4).equals("male") == true || resultSet.getString(4).equals("female") == true) {
-						contributor.addProperty(FOAF.gender, resultSet.getString(4));
-					}
-				}
-				
-				// add the nationality
-				if(resultSet.getString(5) != null) {
-				
-					nationality = resultSet.getString(5);
-				
-					try {
-						// use this method that encodes entities to check the content of the title
-						// if it throws an exception the title will not make it into the XML serialised content
-						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(nationality);
-				
-					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-						// the title will not make it into the XML serialised content
-						System.err.println("ERROR: A contributor nationality contains invalid content that must be manually fixed.");
-						System.err.println("       The contributor id is: " + resultSet.getString(1));
-						System.err.println("       The contributor nationality is: " + nationality);
-				
-						Matcher invalidContentMatch = invalidContentPattern.matcher(nationality);
-						nationality = invalidContentMatch.replaceAll("");
-					}
-					contributor.addProperty(AuseStage.nationality, nationality);
-				}
-				
-				// add the date of birth
-				if(resultSet.getString(6) != null) {
-					
-					bioBirth = model.createResource(Bio.Birth);
-					bioBirth.addProperty(Bio.date, DateUtils.buildDate(resultSet.getString(6), resultSet.getString(7), resultSet.getString(8)));	
-					contributor.addProperty(Bio.event, bioBirth);
-				}		
-				
-				// add other names
-				if(resultSet.getString(9) != null) {
-				
-					otherName = resultSet.getString(9);
-				
-					try {
-						// use this method that encodes entities to check the content of the title
-						// if it throws an exception the title will not make it into the XML serialised content
-						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(otherName);
-				
-					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-						// the title will not make it into the XML serialised content
-						System.err.println("ERROR: A contributor other name contains invalid content that must be manually fixed.");
-						System.err.println("       The contributor id is: " + resultSet.getString(1));
-						System.err.println("       The contributor other name is: " + otherName);
-				
-						Matcher invalidContentMatch = invalidContentPattern.matcher(otherName);
-						otherName = invalidContentMatch.replaceAll("");
-					}
-					contributor.addProperty(AuseStage.otherNames, otherName);
-				}
-				
-				// store a reference to this contributor
-				contributors.add(Integer.parseInt(resultSet.getString(1)));
-				
-				// increment the counter
-				contributorCount++;				
-			}
-			
-			// play nice and tidy up
-			dbObject.tidyUp();
-			dbObject = null;
-			System.out.format("INFO: %,d contributors successfully added to the datastore%n", contributorCount);
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
+		// Parse the XML file
+		String xmlFile = inputFile.getAbsolutePath();
+		Element xmlDoc = parseXmlFile(xmlFile);
+		if(xmlDoc == null) {
+			System.err.println("ERROR: the XML file " + xmlFile + " could not be parsed.");
 			return false;
 		}
-		
-		/*
-		 * add functions
-		 */
-		 
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding contributor functions...");
-			
-			// declare helper variables
-			String currentId = "";
-			Resource contributor = null;
-			
-			// define the sql
-			String sql = "SELECT c.contributorid, cp.preferredterm "
-					   + "FROM contributor c, contributorfunctpreferred cp, contfunctlink cl, "
-					   + "     (SELECT DISTINCT contributorid FROM conevlink WHERE eventid IS NOT NULL) ce "
-					   + "WHERE c.contributorid = cl.contributorid "
-					   + "AND cl.contributorfunctpreferredid = cp.contributorfunctpreferredid "
-					   + "AND c.contributorid = ce.contributorid "
-					   + "ORDER BY contributorid";
-			
-			// get the data from the database				   
-			DbObjects dbObject = database.executeStatement(sql);				   
-			java.sql.ResultSet resultSet = dbObject.getResultSet();
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// store a copy of the current id, so we don't have to go through the 
-				// collection of contributors too much
-				if(currentId.equals(resultSet.getString(1)) == false) {
-					// store this id
-					currentId = resultSet.getString(1);
-					
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-						
-						// add the function
-						contributor.addProperty(AuseStage.function, resultSet.getString(2));
-					
-						// increment the count
-						functionCount++;
-					} else {
-						// missing contributor
-						System.err.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-						contributor = null;
-					}	
-				} else {
-					// add the function
-					contributor.addProperty(AuseStage.function, resultSet.getString(2));
-				
-					// increment the count
-					functionCount++;
-				}						
-			}
-			
-			// play nice and tidy up
-			dbObject.tidyUp();
-			dbObject = null;
-			System.out.format("INFO: %,d contributor functions successfully added%n", functionCount);
-			
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * add relationships
-		 */
-		 	   
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding collaborator relationships...");
-			System.out.format("INFO: Each '#' below represents %,d collaborations%n", RECORD_NOTIFY_COUNT);
-			
-			// declare helper variables
-			String   currentId     = "";
-			Resource contributor   = null;
-			Resource collaborator  = null;
-			Resource collaboration = null;			
-			String   firstDate     = null;
-			String   lastDate      = null;
-			
-			// define the sql
-			String sql = "SELECT c.contributorid, c1.collaboratorid, COUNT(c.contributorid) as collaborations, "
-					   + "       MIN(CONCAT(e.yyyyfirst_date, CONCAT('-', CONCAT(e.mmfirst_date, CONCAT('-', e.ddfirst_date))))) as first_date, "
-					   + "       MAX(CONCAT(e.yyyylast_date, CONCAT('-', CONCAT(e.mmlast_date, CONCAT('-', e.ddlast_date))))) as last_date "
-					   + "FROM conevlink c, "
-					   + "     (SELECT eventid, contributorid AS collaboratorid FROM conevlink WHERE contributorid IS NOT NULL AND eventid IS NOT NULL) c1, "
-					   + "     events e "
-					   + "WHERE c.eventid = c1.eventid "
-					   + "AND c.contributorid IS NOT NULL "
-					   + "AND c.eventid = e.eventid "
-					   + "AND c.contributorid < c1.collaboratorid "
-					   + "GROUP BY c.contributorid, c1.collaboratorid "
-					   + "ORDER BY contributorid ";
-			
-			// get the data from the database				   
-			DbObjects dbObject = database.executeStatement(sql);				   
-			java.sql.ResultSet resultSet = dbObject.getResultSet();
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// store a copy of the current id, so we don't have to go through the 
-				// collection of contributors too much
-				if(currentId.equals(resultSet.getString(1)) == false) {
-					// store this id
-					currentId = resultSet.getString(1);
-					
-					// add the collaborator count
-					if(contributor != null) {
-						//collaboration.addProperty(AuseStage.collaborationCount, model.createTypedLiteral(resultSet.getString(3), XSDDatatype.XSDinteger));
-						contributor.addProperty(AuseStage.collaboratorCount, model.createTypedLiteral(Integer.toString(collaboratorCount), XSDDatatype.XSDinteger));
 
-						// reset the collaborator count
-						collaboratorCount = 0;
-					}
-										
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-					} else {
-						// missing contributor
-						System.err.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-						contributor = null;
-					}
+		// Loop through our xmlDoc and set all the namespace prefixes
+		NodeList namespaces = ((Element)(xmlDoc.getElementsByTagName("namespaces")).item(0)).getElementsByTagName("namespace");
+		
+		if (namespaces != null && namespaces.getLength() > 0) {
+			for (int i = 0; i < namespaces.getLength(); i++) {
+				// get the namespace element from the nodelist
+				Element namespace = (Element) namespaces.item(i);
+
+				// set it in the Jena model
+				model.setNsPrefix(namespace.getAttribute("prefix"), namespace.getFirstChild().getNodeValue());
+			}
+		}
+		
+		
+		NodeList tables = ((Element)(xmlDoc.getElementsByTagName("tables")).item(0)).getElementsByTagName("table");
+
+		if (tables != null && tables.getLength() > 0) {
+			for (int i = 0; i < tables.getLength(); i++) {
+				// get the table settings from the mapping file
+				Element table = (Element) tables.item(i);
+				
+				String tableName = table.getAttribute("name");
+				
+				String tablePrefix = tableName + ":";
+				if (!tablePrefix.startsWith("blank:")) tablePrefix = "ausstage:" + tablePrefix;
+				
+				String sql = getTextValue((Element) table.getElementsByTagName("sql").item(0));
+				String type = table.getAttribute("type");
+				String primaryKey = table.getAttribute("primaryKey");
+				Property typeObject = getPredicateFromUri(type, null);
+				
+				if (typeObject == null) {
+					System.out.println("ERROR: Invalid table type.");
+					return false;
+				}
+				System.out.println("INFO: Processing table " + tableName + "...");
+				
+				counter = 0;
+				
+				DbObjects dbObject = null;
+				java.sql.ResultSet resultSet = null;
+				try {
+					// get the data from the database
+					dbObject = database.executeStatement(sql);				   
+					resultSet = dbObject.getResultSet();
+				} catch (Exception e) {
+					System.err.println("ERROR: Couldn't process the SQL query:");
+					System.err.println(sql);
+					return false;
 				}
 				
-				// double check the contributor
-				if(contributor != null) {
-				
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(2))) == true) {
-						// get the collaborator
-						collaborator = model.createResource(AusStageURI.getContributorURI(resultSet.getString(2)));
-				
-						// increment the collaborator count
-						collaboratorCount++;
+				// declare helper variables
+				Resource subject = null;
 					
-						// create a new collaboration
-						collaboration = model.createResource(AusStageURI.getRelationshipURI(resultSet.getString(1) + "-" + resultSet.getString(2)));
-						collaboration.addProperty(RDF.type, AuseStage.collaboration);
-				
-						// add the two collaborators
-						collaboration.addProperty(AuseStage.collaborator, contributor);
-						collaboration.addProperty(AuseStage.collaborator, collaborator);
-				
-						// add the count
-						collaboration.addProperty(AuseStage.collaborationCount, model.createTypedLiteral(resultSet.getString(3), XSDDatatype.XSDinteger));
-						//collaboration.addProperty(AuseStage.collaborationCount, resultSet.getString(3));
-					
-						// add the link to the contributors
-						contributor.addProperty(AuseStage.hasCollaboration, collaboration);
-						collaborator.addProperty(AuseStage.hasCollaboration, collaboration);
-					
-						// add the dates of the collaboration
-						firstDate = resultSet.getString(4);
-						lastDate  = resultSet.getString(5);
-	
-						// double check the dates
-						if(firstDate == null) {
-							System.err.println("WARN: A valid time period for '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "' could not be determined");
+				// loop through the resultset 
+				try {
+					while (resultSet.next()) {
+						// create a new subject in Jena
+						String subjectId = tablePrefix + resultSet.getString(primaryKey);
+						
+						// handle creation of blank nodes
+						if (tablePrefix.startsWith("blank:")) {
+							subject = model.createResource(new AnonId(subjectId));
+						} else { //regular nodes
+							subject = model.createResource(subjectId);
+						}
+						
+						subject.addProperty(RDF.type, typeObject);
+						
+						// loop through the table's objects in the XML file
+						NodeList objects = ((Element)(table.getElementsByTagName("objects")).item(0)).getElementsByTagName("object");
+
+						if (processObjects(subject, objects, resultSet)) {
+							counter++;
 						} else {
-							// check on the format of the date
-							if(firstDate.length() != 10) {
-		
-								// first date is shorter than expected
-								if(firstDate.length() == 6) {
-									// year only so get rid of the '--'
-									firstDate = firstDate.substring(0, 4);
-								} else if(firstDate.length() == 8) {
-									// year and month parameter
-									firstDate = firstDate.substring(0, 7);
-								}									
+							System.err.println("ERROR: Failed on subject " + subjectId);
+							if (interactive && promptUser("Type 'exit' to quit, or press Enter to continue").equals("exit")) {
+								return false;
 							}
-		
-							// check on the last date
-							if(lastDate == null) {
-								lastDate = firstDate;
-							} else if (lastDate.equals("--")) {
-								lastDate = firstDate;
-							} else if(lastDate.length() != 10) {									
-								// last date is shorter than expected
-								if(lastDate.length() == 6) {
-									// year only so get rid of the '--'
-									lastDate = lastDate.substring(0, 4);
-								} else if(firstDate.length() == 8) {
-									// year and month parameter
-									lastDate = lastDate.substring(0, 7);
-								}									
-							}
-										
-							// add the time interval to the collaboration
-							collaboration.addProperty(AuseStage.collaborationFirstDate, firstDate);
-							collaboration.addProperty(AuseStage.collaborationLastDate, lastDate);
 						}
-					
-						// count the number of collaborations
-						collaborationCount++;
-					
-						// determine if we need to do a sync
-						if ((collaborationCount % RECORD_NOTIFY_COUNT) == 0)
-						{
-							// keep the user informed
-							System.out.print("#");
-						
-							// keep track of the number of syncs
-							recordNotifyDelimCount++;
-						
-							if(recordNotifyDelimCount == 10) {
-								System.out.print("|");
-								recordNotifyDelimCount = 0;
-							}
-						}							
-					
-					} else {
-						System.err.println("WARN: Unable to add the collaboration between '" + resultSet.getString(1) + "' & '" + resultSet.getString(2) + "'");					
+						if (counter % 10000 == 0) TDB.sync(model);
+						objects = null;
 					}
-				}				
-			}
-			
-			// play nice and tidy up
-			dbObject.tidyUp();
-			dbObject = null;
-			
-			System.out.format("%nINFO: %,d collaborations successfully added to the datastore%n", collaborationCount);
-			
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * add events
-		 */
-	 
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding event data to the datastore...");
-			
-			// declare helper variables
-			String   currentId    = "";
-			Resource contributor  = null;
-			Resource event        = null;
-			Resource timeInterval = null;
-			String   title        = null;
-			String   firstDate    = null;
-			String   lastDate     = null;
-			
-			// define the sql
-			String sql = "SELECT DISTINCT e.eventid, e.event_name, c.contributorid, "
-					   + "                e.yyyyfirst_date, e.mmfirst_date, e.ddfirst_date, "
-					   + "                e.yyyylast_date, e.mmlast_date, e.ddlast_date "
-					   + "FROM events e, conevlink c " 
-					   + "WHERE e.eventid = c.eventid "
-					   + "AND e.eventid IS NOT NULL "
-					   + "AND c.contributorid IS NOT NULL "
-					   + "ORDER BY e.eventid";
-			
-			// get the data from the database				   
-			DbObjects dbObject = database.executeStatement(sql);				   
-			java.sql.ResultSet resultSet = dbObject.getResultSet();
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// have we seen this event id before?
-				if(currentId.equals(resultSet.getString(1)) == true) {
-					// yes we have
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(3))) == true) {
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(3)));
-						
-						// add the relationships
-						contributor.addProperty(Event.isAgentIn, event);
-						event.addProperty(Event.agent, contributor);
-						
-					} else {
-						// missing contributor
-						System.err.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
-						contributor = null;
-					}
-										
-				} else {
-					// no we haven't so create a new event
-					event = model.createResource(AusStageURI.getEventURI(resultSet.getString(1)));
-					event.addProperty(RDF.type, Event.Event);
+				} catch (SQLException e) {
+					System.err.println("ERROR: There was a SQL error processing the table '" + tableName + "'. Probably due to an invalid primary key in the mapping file.");
+					System.err.println("       The query was:");
+					System.err.println("       " + sql);
+					return false;
+				} catch (Exception e) {
+					System.err.println("ERROR: There was an error processing the table '" + tableName + "'");
+					return false;
+				}
+				
+				// play nice and tidy up
+				dbObject.tidyUp();
+				dbObject = null;
+				System.out.println("INFO: " + counter + " " + tableName + " records successfully added to the datastore");
+				
+				counter = 0;
+				
+				// SUBQUERIES
+				if (table.getElementsByTagName("subqueries").getLength() == 1) { // There should be a "subqueries" element container
+					System.out.println("INFO: Processing " + tableName + " subqueries...");
 					
-					// check the event title
-					try {
-						// use this method that encodes entities to check the content of the title
-						// if it throws an exception the title will not make it into the XML serialised content
-						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(2));
-						title = resultSet.getString(2);
-						
-					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-						// the title will not make it into the XML serialised content
-						System.err.println("ERROR: An event name contains invalid content that must be manually fixed.");
-						System.err.println("       The event id for this event is: " + resultSet.getString(1));
-						System.err.println("       The name for this event is: " + resultSet.getString(2));
-						
-						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(2));
-						title = invalidContentMatch.replaceAll("");
-					}
-					
-					// add the title and Url
-					event.addProperty(DCTerms.title, title);
-					event.addProperty(DCTerms.identifier, AusStageURI.getEventURL(resultSet.getString(1)));
-					
-					// reset the dates
-					firstDate = null;
-					lastDate  = null;
-					
-					// first date
-					if(resultSet.getString(4) != null) {
-						firstDate = DateUtils.buildDate(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
-					}
-					
-					// last date
-					if(resultSet.getString(7) != null) {
-						lastDate = DateUtils.buildDate(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
-					}
-					
-					// check on the first date
-					if(firstDate == null) {
-						// inform user of error
-						System.out.println("INFO: A valid first date for event: " + resultSet.getString(1)  + " could not be determined");
-					} else {
-					
-						// adjust the last date if required
-						if(lastDate == null) {
-							lastDate = firstDate;
-						}
-						
-						// add date information
-						 
-						// construct a new timeInterval resource
-						timeInterval = model.createResource(Time.Interval);
+					NodeList subqueries = ((Element)(table.getElementsByTagName("subqueries")).item(0)).getElementsByTagName("subquery");
 
-						// add the timeline properties
-						// add the typed literals
-						timeInterval.addProperty(Timeline.beginsAtDateTime, model.createTypedLiteral(firstDate, XSDDatatype.XSDdate));
-						timeInterval.addProperty(Timeline.endsAtDateTime, model.createTypedLiteral(lastDate, XSDDatatype.XSDdate));
-
-						// andd the timeInterval to the Event
-						event.addProperty(Event.time, timeInterval);
-					}
-					
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(3))) == true) {
-					
-						// get the contributor
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(3)));
-						
-						// add the relationships
-						contributor.addProperty(Event.isAgentIn, event);
-						event.addProperty(Event.agent, contributor);
-						
-					} else {
-						// missing contributor
-						contributor = null;
-						System.err.println("WARN: Unable to locate contributor with id: " + resultSet.getString(3) + " associated with event with id: " + resultSet.getString(1));
-					} 
+					if (subqueries != null && subqueries.getLength() > 0) {
+						for (int k = 0; k < subqueries.getLength(); k++) {
+							System.out.println("INFO: Processing subquery " + (k+1) + "...");
+							Element subquery = (Element) subqueries.item(k);
+							sql = getTextValue((Element) subquery.getElementsByTagName("sql").item(0));
 							
-					// increment the event count 
-					eventCount++;
-					
-					// store a reference to this event
-					events.add(Integer.parseInt(resultSet.getString(1)));
-					
-					// store this id
-					currentId = resultSet.getString(1);
-				}	
-			}
+							java.sql.ResultSet subqueryResultSet = null;
+							try {
+								// get the data from the database
+								dbObject = database.executeStatement(sql);				   
+								subqueryResultSet = dbObject.getResultSet();
+							} catch (Exception e) {
+								System.err.println("ERROR: Couldn't process the SQL query:");
+								System.err.println(sql);
+								return false;
+							}
+							// loop through the resultset 
+							String lastKey = null;
+							try {
+								while (subqueryResultSet.next()) {
+									String subjectId = tablePrefix + subqueryResultSet.getString(primaryKey);
+									
+									if (!subjectId.equals(lastKey)) {
+										// create a new subject in Jena
+										if (tablePrefix.startsWith("blank:")) {
+											subject = model.createResource(new AnonId(subjectId));
+										} else {
+											subject = model.createResource(subjectId);	
+										}
+										
+										lastKey = subjectId;
+									}
+									// loop through the subquery's objects in the mapping file
+									NodeList objects = ((Element)(subquery.getElementsByTagName("objects")).item(0)).getElementsByTagName("object");
 			
-			// play nice and tidy up
-			dbObject.tidyUp();
-			dbObject = null;
-			System.out.format("INFO: %,d events successfully added to the datastore%n", eventCount);
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * Add functions at events
-		 */
-		 
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding contributor functions at event records...");
-			
-			// declare helper variables
-			String currentId         = "";
-			Resource contributor     = null;
-			Resource functionAtEvent = null;
-			
-			// define the sql
-			String sql = "SELECT cl.contributorid, cl.eventid, cfp.preferredterm "
-					   + "FROM conevlink cl, contributorfunctpreferred cfp "
-					   + "WHERE cl.eventid IS NOT NULL "
-					   + "AND cl.contributorid IS NOT NULL "
-					   + "AND cl.function = cfp.contributorfunctpreferredid "
-					   + "ORDER BY contributorid";
-			
-			// get the data from the database				   
-			DbObjects dbObject = database.executeStatement(sql);				   
-			java.sql.ResultSet resultSet = dbObject.getResultSet();
+									if (processObjects(subject, objects, subqueryResultSet)) {
+										counter++;
+									} else {
+										System.err.println("ERROR: Failed on subject " + subjectId);
+										if (interactive && promptUser("Type 'exit' to quit, or press Enter to continue").equals("exit")) {
+											return false;
+										}
+									}
+									if (counter % 10000 == 0) TDB.sync(model);
 	
-			// loop through the 
-			while (resultSet.next()) {
+									objects = null;
 			
-				// have we seen this contributor before
-				if(currentId.equals(resultSet.getString(1)) != true) {
-					
-					// lookup the contributor
-					if(contributors.contains(Integer.parseInt(resultSet.getString(1))) == true) {
-
-						// get the contributor
-						contributor = model.createResource(AusStageURI.getContributorURI(resultSet.getString(1)));
-						
-						// store the id to reduce number of lookups
-						currentId = resultSet.getString(1);
-					} else {
-						contributor = null;
-						System.err.println("WARN: Unable to locate contributor with id: " + resultSet.getString(1));
-					}
-				} else {
-					// yes we have so use the found contributor if available
-					if(contributor != null) {
-					
-						// lookup the event
-						if(events.contains(Integer.parseInt(resultSet.getString(2))) == true) {
-					
-							// construct a new functionAtEvent
-							functionAtEvent = model.createResource(AuseStage.functionAtEvent);
-						
-							// add the on event property
-							functionAtEvent.addProperty(AuseStage.atEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
-							functionAtEvent.addProperty(AuseStage.function, resultSet.getString(3));
-						
-							// add the collaborates property to the contributor
-							contributor.addProperty(AuseStage.undertookFunction, functionAtEvent);
-						
-							// increment the count
-							functionsAtEventsCount++;
-						} else {
-							System.err.println("WARN: Unable to locate event with id: " + resultSet.getString(2));
+								}
+							} catch (SQLException e) {
+								System.err.println("ERROR: There was a SQL error processing a subquery on the table '" + tableName + "'.");
+								System.err.println("       The query was:");
+								System.err.println("       " + sql);
+								return false;
+							} catch (Exception e) {
+								System.err.println("ERROR: There was an error processing the table '" + tableName + "'");
+								return false;
+							}
+							System.out.println("INFO: " + counter + " modifications made to the datastore");
+							counter = 0;
+							// play nice and tidy up
+							dbObject.tidyUp();
+							dbObject = null;
 						}
 					}
-				}				
+				}
 			}
-			
-			// play nice and tidy up
-			dbObject.tidyUp();
-			dbObject = null;
-			System.out.format("INFO: %,d contributor function at event records added%n", functionsAtEventsCount);
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * add base organisation information
-		 */
-		 	   
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding organisation data to the datastore...");
-			
-			// define the sql
-			String sql = "SELECT organisationid, name, other_names1, other_names2, other_names3 "
-					   + "FROM organisation";
-			
-			// get the data from the database				   
-			DbObjects dbObject = database.executeStatement(sql);				   
-			java.sql.ResultSet resultSet = dbObject.getResultSet();
-			
-			// declare helper variables
-			Resource organisation = null;
-			String name = null;
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// create a new organisation
-				organisation = model.createResource(AusStageURI.getOrganisationURI(resultSet.getString(1)));
-				organisation.addProperty(RDF.type, Org.Organization);
-				
-				// add the name
-				// check the name
-				try {
-					// use this method that encodes entities to check the content of the title
-					// if it throws an exception the title will not make it into the XML serialised content
-					com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(2));
-					name = resultSet.getString(2);
-					
-				} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-					// the title will not make it into the XML serialised content
-					System.err.println("ERROR: An organisation name contains invalid content that must be manually fixed.");
-					System.err.println("       The organisation id is: " + resultSet.getString(1));
-					System.err.println("       The organisation name is: " + resultSet.getString(2));
-					
-					Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(2));
-					name = invalidContentMatch.replaceAll("");
-				}
-				// add the name
-				organisation.addProperty(SKOS.prefLabel, name);
-				
-				// add the url
-				organisation.addProperty(FOAF.page, AusStageURI.getOrganisationURL(resultSet.getString(1)));
-				
-				// add any other names if present
-				if(resultSet.getString(3) != null) {
-					try {
-						// use this method that encodes entities to check the content of the title
-						// if it throws an exception the title will not make it into the XML serialised content
-						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(3));
-						name = resultSet.getString(3);
-					
-					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-						// the title will not make it into the XML serialised content
-						System.err.println("ERROR: An organisation other name contains invalid content that must be manually fixed.");
-						System.err.println("       The organisation id is: " + resultSet.getString(1));
-						System.err.println("       The organisation name is: " + resultSet.getString(3));
-					
-						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(3));
-						name = invalidContentMatch.replaceAll("");
-					}
-					organisation.addProperty(SKOS.altLabel, name);
-				}
-				
-				if(resultSet.getString(4) != null) {
-					try {
-						// use this method that encodes entities to check the content of the title
-						// if it throws an exception the title will not make it into the XML serialised content
-						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(4));
-						name = resultSet.getString(4);
-					
-					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-						// the title will not make it into the XML serialised content
-						System.err.println("ERROR: An organisation other name contains invalid content that must be manually fixed.");
-						System.err.println("       The organisation id is: " + resultSet.getString(1));
-						System.err.println("       The organisation name is: " + resultSet.getString(4));
-					
-						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(4));
-						name = invalidContentMatch.replaceAll("");
-					}
-					organisation.addProperty(SKOS.altLabel, name);
-				}
-				
-				if(resultSet.getString(5) != null) {
-					try {
-						// use this method that encodes entities to check the content of the title
-						// if it throws an exception the title will not make it into the XML serialised content
-						com.hp.hpl.jena.rdf.model.impl.Util.substituteEntitiesInElementContent(resultSet.getString(5));
-						name = resultSet.getString(5);
-					
-					} catch(com.hp.hpl.jena.shared.CannotEncodeCharacterException ex) {
-						// the title will not make it into the XML serialised content
-						System.err.println("ERROR: An organisation other name contains invalid content that must be manually fixed.");
-						System.err.println("       The organisation id is: " + resultSet.getString(1));
-						System.err.println("       The organisation name is: " + resultSet.getString(5));
-					
-						Matcher invalidContentMatch = invalidContentPattern.matcher(resultSet.getString(5));
-						name = invalidContentMatch.replaceAll("");
-					}
-					organisation.addProperty(SKOS.altLabel, name);
-				}
-				
-				// store a reference to this organisation
-				organisations.add(Integer.parseInt(resultSet.getString(1)));
-				
-				// increment the count
-				organisationCount++;				
-			}
-			
-			// play nice and tidy up
-			dbObject.tidyUp();
-			dbObject = null;
-			System.out.format("INFO: %,d organisations successfully added to the datastore%n", organisationCount);
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
-		}
-		
-		/*
-		 * Add Roles at events
-		 */
-		 
-		try {
-		
-			// keep the user informed
-			System.out.println("INFO: Adding organisation roles at event records...");
-			
-			// declare helper variables
-			String currentId      = "";
-			Resource organisation = null;
-			Resource roleAtEvent  = null;
-			
-			// define the sql
-			String sql = "SELECT ol.organisationid, ol.eventid, orgfunction "
-					   + "FROM orgevlink ol, orgfunctmenu "
-					   + "WHERE ol.function = orgfunctionid "
-					   + "AND ol.organisationid IS NOT NULL "
-					   + "AND ol.eventid IS NOT NULL "
-					   + "ORDER BY ol.organisationid";
-			
-			// get the data from the database				   
-			DbObjects dbObject = database.executeStatement(sql);				   
-			java.sql.ResultSet resultSet = dbObject.getResultSet();
-	
-			// loop through the 
-			while (resultSet.next()) {
-			
-				// have we seen this contributor before
-				if(currentId.equals(resultSet.getString(1)) != true) {
-					
-					// lookup the contributor
-					if(organisations.contains(Integer.parseInt(resultSet.getString(1))) == true) {
-
-						// get the organisation
-						organisation = model.createResource(AusStageURI.getOrganisationURI(resultSet.getString(1)));
-						
-						// store the id to reduce number of lookups
-						currentId = resultSet.getString(1);
-					} else {
-						organisation = null;
-						System.err.println("WARN: Unable to locate organisation with id: " + resultSet.getString(1));
-					}
-				} else {
-					// yes we have so use the found contributor if available
-					if(organisation != null) {
-					
-						// lookup the event
-						if(events.contains(Integer.parseInt(resultSet.getString(2))) == true) {
-					
-							// construct a new functionAtEvent
-							roleAtEvent = model.createResource(AuseStage.roleAtEvent);
-						
-							// add the on event property
-							roleAtEvent.addProperty(AuseStage.atEvent, model.createResource(AusStageURI.getEventURI(resultSet.getString(2))));
-							roleAtEvent.addProperty(AuseStage.roleAtEvent, resultSet.getString(3));
-						
-							// add the collaborates property to the contributor
-							organisation.addProperty(AuseStage.undertookRole, roleAtEvent);
-						
-							// increment the count
-							rolesAtEventsCount++;
-						} else {
-							//System.err.println("WARN: Unable to locate event with id: " + resultSet.getString(2));
-						}
-					}
-				}				
-			}
-			
-			// play nice and tidy up
-			dbObject.tidyUp();
-			dbObject = null;
-			System.out.format("INFO: %,d organisation roles at event records added%n", rolesAtEventsCount);
-			
-		} catch (java.sql.SQLException sqlEx) {
-			System.err.println("ERROR: An SQL related error has occured");
-			System.err.println("       " + sqlEx.getMessage());
-			return false;
 		}
 		
 		/*
