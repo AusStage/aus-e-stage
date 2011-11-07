@@ -1,4 +1,4 @@
 The libraries that need to be in this directory are:
  - TDB (0.8.10) http://openjena.org/TDB/
  - Other libraries required by the AusStage Utils Package http://code.google.com/p/aus-e-stage/wiki/UtilsPackage
- 
+ - MySQL connector (5.0.7) http://dev.mysql.com/downloads/connector/j/5.0.html
