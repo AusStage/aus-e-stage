@@ -1,4 +1,4 @@
-/*
+/**
  * This file is part of the AusStage Navigating Networks Service
  *
  * The AusStage Navigating Networks Service is free software: you can redistribute
@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with the AusStage Navigating Networks Service.  
  * If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ */
 package au.edu.ausstage.networks;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,38 +32,38 @@ import au.edu.ausstage.networks.types.Network;
 import au.edu.ausstage.utils.DateUtils;
 import au.edu.ausstage.vocabularies.AusStageURI;
 
-//Event Network manager
-public class EvtManager extends NetworkManager {
-	//node attribute for graphml export
-	public String [][] nodeAttr = {
-			{"EventID", "string"}, {"NodeLabel", "string"}, {"EventName", "string"}, {"Venue", "string"},
-			{"StartDate", "string"}, {"InDegree", "string"}, {"OutDegree", "string"},
-			{"EventURL", "string"}
-		};
+/**
+ * Contributor by venue Network Manager
+ */
+public class ContributorNetworkManager extends NetworkManager{
 	//edge attribute for graphml export
 	public String [][] edgeAttr = {
-			{"ContributorID", "string"}, {"EdgeLabel", "string"}, {"ContributorName", "string"}, {"Roles", "string"},
-			{"SourceEventID", "string"}, {"TargetEventID", "string"}, {"ContributorURL", "string"}
+			{"EventID", "string"}, {"EdgeLabel", "string"}, {"EventName", "string"}, {"Venue", "string"},
+			{"StartDate", "string"}, {"SourceContributorID", "string"}, {"TargetContributorID", "string"},
+			{"EventURL", "string"}
+		};
+	//node attribute for graphml export
+	public String [][] nodeAttr = {
+			{"ContributorID", "string"}, {"NodeLabel", "string"}, {"ContributorName", "string"},
+			{"Roles", "string"}, {"Gender", "string"}, {"Nationality", "string"},
+			{"ContributorURL", "string"}
 	};
 	
-		
 	/**
 	 * @param db DatabaseManager
-	 * @param id Organisation ID / Venue ID
-	 * @param type 'o' organisation-based event network / 'v' venue-based event network 
+	 * @param id venue ID
+	 * @param type 'o' organisation-based contributor network / 'v' venue-based contributor network 
 	 * @param graphType directed/undirected
 	 */
-	public EvtManager(DatabaseManager db, String id, String type, String graphType){
+	public ContributorNetworkManager(DatabaseManager db, String id, String type, String graphType) {
 		super(db, new Network());
 		network.setId(id);
 		network.setType(type);		
 		network.setGraphType(graphType);
-		
 	}
 	
-	@SuppressWarnings({ "unchecked", "unused" })
-	public Network createOrgOrVenueEvtNetwork(){
-
+	@SuppressWarnings("unchecked")
+	public Network createVenueConNetwork(){
 		long startTime = System.currentTimeMillis();
 		//get node set for the network
 		Set<Integer> nodeSet = getNodes();
@@ -76,22 +74,37 @@ public class EvtManager extends NetworkManager {
 		else {
 			network.setNodeSet(nodeSet);
 			String name = getName();
-			network.setName(name);		
+			network.setName(name);				
 			
-			//get Event detail (node)					
+			//get contributor detail (node)					
 			if (!nodeSet.isEmpty())
-			  	getEventsDetail(nodeSet);
+			  	getContributorsDetail(nodeSet);
 			
-			network.setSortedEventList(network.sortedNode());
-			//network.printSortedNode();
-			
+			network.setContributorList(network.getContributors());
 		}
 		
 		long getNodeTime = System.currentTimeMillis();
-		System.out.println("\n time to get sorted Nodes is :" + (getNodeTime-startTime)+ "ms");
+		System.out.println("\n time to get Nodes is :" + (getNodeTime-startTime)+ "ms");
 		
 		//get edge Matrix for the network
 		int numOfNodes = nodeSet.size();
+				
+		if (numOfNodes != network.contributorList.size()) {
+			System.out.println("******* Number of Node is " + numOfNodes);
+			System.out.println("******* Number of Contributors is " + network.contributorList.size());
+		}
+		
+/*		int i = 0;
+		for(int cID : nodeSet){
+			
+			if (i >= network.contributorList.size())
+				System.out.println(cID);
+			else
+				System.out.println(cID + "   " + network.contributorList.get(i).getId());
+			i++;
+		}
+		*/
+		
 		Set<Integer>[][] edgeMatrix = new HashSet[numOfNodes][numOfNodes];
 		edgeMatrix = getEdges();
 		network.setEdgeMatrix(edgeMatrix);
@@ -99,11 +112,6 @@ public class EvtManager extends NetworkManager {
 		long matrixTime = System.currentTimeMillis();
 		//network.printEdgeMatrix();
 		System.out.println("\n time to create matrix is :" + (matrixTime - getNodeTime)+ "ms");
-		
-		deleteCycle();
-		long delcycleTime = System.currentTimeMillis();	
-		//network.printEdgeMatrix();
-		System.out.println("\n time to delete cycle is :" + (delcycleTime - matrixTime)+ "ms");
 				
 		//get contributor detail (edge)
 /*		for (int i = 0; i < numOfNodes; i++){
@@ -126,6 +134,7 @@ public class EvtManager extends NetworkManager {
 		return network;
 	}
 	
+	@SuppressWarnings("unused")
 	public Set<Integer> getNodes(){
 		Set<Integer> evtSet = new HashSet<Integer>();	
 		String sql = "";
@@ -148,34 +157,46 @@ public class EvtManager extends NetworkManager {
 			return null;
 			
 		evtSet = db.getResultfromDB(sql, Integer.parseInt(network.id));
-				
-		return evtSet;
+		
+		//for each event in evtSet, get its associated contributors
+		//calculate the contributor union to get contributorSet as network nodes
+		for (int  evtId: evtSet){
+			Set<Integer> conSet = new HashSet<Integer>();			
+			conSet = getAssociatedContributors(evtId);
+			/*if (conSet != null)
+				System.out.println("eID: " + evtId + "   " + conSet.toString());
+			else
+				System.out.println("eID: " + evtId + "   NULL");*/
+		}		
+		
+		return network.contributorSet;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public Set<Integer>[][] getEdges(){		
 		
-		int numOfNodes = network.sortedEventList.size();		
-		Set<Integer> src_con = new HashSet<Integer>();
-		Set<Integer> tar_con = new HashSet<Integer>();
+		int numOfNodes = network.nodeSet.size();		
+		Set<Integer> src_evt = new HashSet<Integer>();
+		Set<Integer> tar_evt = new HashSet<Integer>();
 		Set<Integer>[][] edgeMatrix = new HashSet[numOfNodes][numOfNodes];
+		List<Integer> nodeList = new ArrayList<Integer>(network.nodeSet);
 		               
 		for (int i = 0; i < numOfNodes; i++){
 			//System.out.println("i = " + i + "  =============");
-			int src_evt_id = network.sortedEventList.get(i).getIntId();
-			src_con = getAssociatedContributors(src_evt_id);			
+			int src_con_id = nodeList.get(i);
+			src_evt = getAssociatedEvents(src_con_id);			
 			
 			for (int j = i + 1; j < numOfNodes; j++){
 				//System.out.print("j = " + j + "  ");
-				//since the nodeSet is already sorted according to the start_time (chronological order)
-				//and the earlier event should flow to the later event.
-				//so there will be no edges from later event to earlier event.
-				int tar_evt_id = network.sortedEventList.get(j).getIntId();	
-				tar_con = getAssociatedContributors(tar_evt_id);				
+				//since the contributor network is undirected, the edges between node1 and node2 
+				//is the same as edges between node2 and node1
+				//so only half of the edge matrix is kept. 
+				int tar_con_id = nodeList.get(j);	
+				tar_evt = getAssociatedEvents(tar_con_id);				
 				
-				if (tar_con != null && !tar_con.isEmpty() && src_con != null) {
-					Set<Integer> intersection = new HashSet<Integer>(tar_con);
-					intersection.retainAll(src_con);
+				if (tar_evt != null && !tar_evt.isEmpty() && src_evt != null) {
+					Set<Integer> intersection = new HashSet<Integer>(tar_evt);
+					intersection.retainAll(src_evt);
 					edgeMatrix[i][j] = intersection;
 					/*for (Object element : intersection)
 						System.out.print(element.toString() + "  ");*/					
@@ -187,72 +208,18 @@ public class EvtManager extends NetworkManager {
 		return edgeMatrix;
 	}
 	
-	public void deleteCycle(){
+	@SuppressWarnings("rawtypes")
+	public Document toGraphMLDOM(Document dom){
 		
-		int numOfNodes = network.nodeSet.size();
-		for (int cID : network.contributorSet) {
-			boolean[] isVisited = new boolean[numOfNodes];
-			// cycle from start to current node
-			ArrayList<Integer> trace = new ArrayList<Integer>();
-
-			// System.out.println("Detect Cycle for contributor: " + cID);
-			for (int i = 0; i < numOfNodes; i++)
-				network.findCycle(cID, i, isVisited, trace); // started from the second earliest event
-		}
-	}
-	
-	//calulate the inDegree (degree[][0]) and outDegree (degree[][1])
-	public int[][] getNodeDegree() {
-		
-		int numberOfNodes = network.nodeSet.size();
-		degree  = new int[numberOfNodes][2];
-		
-		//calculate inDegree[i][0]
-		for(int i = 0; i < numberOfNodes; i++){
-			if (i == 0)
-				degree[i][0] = 0; //the first node has 0 inDegree
-			else {
-				int in = 0;
-				for (int j = 0; j < i; j++)
-					if (network.edgeMatrix[j][i] != null)
-						in = in + network.edgeMatrix[j][i].size();
-				degree[i][0] = in;
-			}
-		}
-		
-		//calculate outDegree[i][1]
-		for(int i = 0; i < numberOfNodes; i++){
-			if (i == (numberOfNodes -1))
-				degree[i][1] = 0; //the last node has 0 outDegree
-			else {
-				int out = 0;
-				for(int j = i; j < numberOfNodes; j++)
-					if (network.edgeMatrix[i][j] != null)
-						out = out + network.edgeMatrix[i][j].size();
-				degree[i][1] = out;
-			}
-			
-		}		
-		
-		return degree;
-	}
-
-	public Document toGraphMLDOM(Document evtDom){
-		
-		if (network.nodeSet != null ){			
-				
-			int numOfNodes = network.nodeSet.size();
-			int [][] degree = new int [numOfNodes][2];
-			degree = getNodeDegree();
-		} else 
+		if (network.nodeSet == null )			
 			return null;
 		
 		// get the root element
-		Element rootElement = evtDom.getDocumentElement();
-		rootElement = createHeaderElements(evtDom, rootElement);
+		Element rootElement = dom.getDocumentElement();
+		rootElement = createHeaderElements(dom, rootElement);
 				
 		// add the graph element
-		Element graph = evtDom.createElement("graph");
+		Element graph = dom.createElement("graph");
 		
 		String type = "";
 		if (network.getType().equalsIgnoreCase("o"))
@@ -265,35 +232,35 @@ public class EvtManager extends NetworkManager {
 		rootElement.appendChild(graph);
 		
 		//create node element in DOM	
-		for (int i = 0; i < network.sortedEventList.size(); i++){
-			Event evt = network.sortedEventList.get(i);
-			if (evt != null) {
-				Element node = createNodeElement(evtDom,i, evt);			
+		for (int i = 0; i < network.contributorList.size(); i++){
+			Collaborator con = network.contributorList.get(i);
+			if (con != null) {
+				Element node = createNodeElement(dom, con);			
 				graph.appendChild(node);
 			}
 		}
 		
 		//create edge element in DOM
+		//int cID;
 		int eID;
-		int cID;
 		int edgeIndex = 0;
-		Collaborator con = null;
-		Set<Integer> conSet = null;
+		Event evt = null;
+		Set<Integer> evtSet = null;
 		
 		for (int i = 0; i < network.edgeMatrix.length; i++){
-			eID = network.sortedEventList.get(i).getIntId();
+			//cID = network.contributorList.get(i).getIntId();
 			
 			for (int j = i + 1; j < network.edgeMatrix[i].length; j++){
-				conSet = network.edgeMatrix[i][j];
-				if (conSet != null && !conSet.isEmpty()) {
+				evtSet = network.edgeMatrix[i][j];
+				if (evtSet != null && !evtSet.isEmpty()) {
 
-					for (Iterator it = conSet.iterator(); it.hasNext();) {
-						cID = (Integer) it.next();													
-						con = getContributorDetail(eID, cID);														
-						
-						if (con != null){
+					for (Iterator it = evtSet.iterator(); it.hasNext();) {
+						eID = (Integer) it.next();																		
+						evt = getEventDetail(eID);														
+																		
+						if (evt != null){
 							edgeIndex ++;
-							Element edge = createEdgeElement(evtDom, con, i, j, edgeIndex);			
+							Element edge = createEdgeElement(dom, evt, i, j, edgeIndex);			
 							graph.appendChild(edge);
 						}															
 							
@@ -302,7 +269,7 @@ public class EvtManager extends NetworkManager {
 			}
 		}
 		
-		return evtDom;
+		return dom;
 		
 	}
 	
@@ -353,32 +320,30 @@ public class EvtManager extends NetworkManager {
 		return key;
 	}
 	
-	public Element createNodeElement(Document evtDom, int i, Event evt){
+	public Element createNodeElement(Document dom, Collaborator con){
 		Element data;
 		
-		Element node = evtDom.createElement("node");
-		node.setAttribute("id", evt.getId());
+		Element node = dom.createElement("node");
+		node.setAttribute("id", con.getId());
 		
 		for(int row = 0; row < nodeAttr.length; row ++){
-			data = evtDom.createElement("data");
+			data = dom.createElement("data");
 			data.setAttribute("key", nodeAttr[row][0]);
 			
-			if (nodeAttr[row][0].equalsIgnoreCase("EventID"))
-				data.setTextContent(evt.getId()); 
+			if (nodeAttr[row][0].equalsIgnoreCase("ContributorID"))
+				data.setTextContent(con.getId()); 
 			else if	(nodeAttr[row][0].equalsIgnoreCase("NodeLabel"))
-				data.setTextContent(evt.getName());
-			else if (nodeAttr[row][0].equalsIgnoreCase("EventName"))
-				data.setTextContent(evt.getName());
-			else if (nodeAttr[row][0].equalsIgnoreCase("Venue"))
-				data.setTextContent(evt.getVenue());
-			else if (nodeAttr[row][0].equalsIgnoreCase("StartDate"))
-				data.setTextContent(evt.getFirstDate());
-			else if (nodeAttr[row][0].equalsIgnoreCase("InDegree"))
-				data.setTextContent(Integer.toString(degree[i][0]));
-			else if (nodeAttr[row][0].equalsIgnoreCase("OutDegree"))
-				data.setTextContent(Integer.toString(degree[i][1]));
-			else if (nodeAttr[row][0].equalsIgnoreCase("EventURL"))
-				data.setTextContent(AusStageURI.getEventURL(evt.getId()));
+				data.setTextContent(con.getGFName());
+			else if (nodeAttr[row][0].equalsIgnoreCase("ContributorName"))
+				data.setTextContent(con.getGFName());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Roles"))
+				data.setTextContent(con.getFunction());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Gender"))
+				data.setTextContent(con.getGender());
+			else if (nodeAttr[row][0].equalsIgnoreCase("Nationality"))
+				data.setTextContent(con.getNationality());
+			else if (nodeAttr[row][0].equalsIgnoreCase("ContributorURL"))
+				data.setTextContent(AusStageURI.getContributorURL(con.getId()));
 				//data.setTextContent(evtURLprefix + evt.getId());
 			
 			node.appendChild(data);			
@@ -387,39 +352,41 @@ public class EvtManager extends NetworkManager {
 		return node;		
 	}
 	
-	public Element createEdgeElement(Document evtDom, Collaborator con, int src, int tar, int index){
+	public Element createEdgeElement(Document dom, Event evt, int src, int tar, int index){
 		
-		Event srcEvt = network.sortedEventList.get(src);
-		Event tarEvt = network.sortedEventList.get(tar);
+		Collaborator srcCon = network.contributorList.get(src);
+		Collaborator tarCon = network.contributorList.get(tar);
 		
-		Element edge = evtDom.createElement("edge");
+		Element edge = dom.createElement("edge");
 		edge.setAttribute("id", "e" + Integer.toString(index));
-		edge.setAttribute("source", srcEvt.getId());
-		edge.setAttribute("target", tarEvt.getId());
+		edge.setAttribute("source", srcCon.getId());
+		edge.setAttribute("target", tarCon.getId());
 		
 		for(int row = 0; row < edgeAttr.length; row ++){
-			Element data = evtDom.createElement("data");
+			Element data = dom.createElement("data");
 			data.setAttribute("key", edgeAttr[row][0]);
 			
-			if (edgeAttr[row][0].equalsIgnoreCase("ContributorID"))
-				data.setTextContent(con.getId()); 
+			if (edgeAttr[row][0].equalsIgnoreCase("EventID"))
+				data.setTextContent(evt.getId()); 
 			else if	(edgeAttr[row][0].equalsIgnoreCase("EdgeLabel"))
-				data.setTextContent(con.getGFName());
-			else if (edgeAttr[row][0].equalsIgnoreCase("ContributorName"))
-				data.setTextContent(con.getGFName());
-			else if (edgeAttr[row][0].equalsIgnoreCase("Roles"))
-				data.setTextContent(con.getEvtRoleMap(srcEvt.getIntId()));
-			else if (edgeAttr[row][0].equalsIgnoreCase("SourceEventID"))
-				data.setTextContent(srcEvt.getId());
-			else if (edgeAttr[row][0].equalsIgnoreCase("TargetEventID")) 
-				data.setTextContent(tarEvt.getId());
-			else if (edgeAttr[row][0].equalsIgnoreCase("ContributorURL"))
-				data.setTextContent(AusStageURI.getContributorURL(con.getId()));
+				data.setTextContent(evt.getName());
+			else if (edgeAttr[row][0].equalsIgnoreCase("EventName"))
+				data.setTextContent(evt.getName());
+			else if (edgeAttr[row][0].equalsIgnoreCase("Venue"))
+				data.setTextContent(evt.getVenue());
+			else if (edgeAttr[row][0].equalsIgnoreCase("StartDate"))
+				data.setTextContent(evt.getFirstDate());
+			else if (edgeAttr[row][0].equalsIgnoreCase("SourceContributorID"))
+				data.setTextContent(srcCon.getId());
+			else if (edgeAttr[row][0].equalsIgnoreCase("TargetContributorID")) 
+				data.setTextContent(tarCon.getId());
+			else if (edgeAttr[row][0].equalsIgnoreCase("EventURL"))
+				data.setTextContent(AusStageURI.getEventURL(evt.getId()));
 				//data.setTextContent(conURLprefix + con.getId());
 				
 			edge.appendChild(data);
 		}
 		return edge;
 	}
-	
+
 }

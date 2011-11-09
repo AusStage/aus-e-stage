@@ -37,7 +37,7 @@ public class ExportServlet extends HttpServlet {
 	private String connectString = null;
 	
 	// declare constants
-	private final String[] TASK_TYPES   = {"ego-centric-network", "event-centric-network", "org-evt-network", "venue-evt-network", "ego-centric-by-organisation",
+	private final String[] TASK_TYPES   = {"ego-centric-network", "event-centric-network", "org-evt-network", "venue-evt-network", "ego-centric-by-organisation", "ego-centric-by-venue",
 	                                       "full-edge-list-with-dups", "full-edge-list-no-dups", "full-edge-list-with-dups-id-only", "full-edge-list-no-dups-id-only",
 	                                       "actor-edge-list-with-dups", "actor-edge-list-no-dups", "actor-edge-list-with-dups-id-only", "actor-edge-list-no-dups-id-only"};
 	                                       
@@ -87,8 +87,8 @@ public class ExportServlet extends HttpServlet {
 				
 		
 		// check the other parameters dependant on the task type
-		if(taskType.equalsIgnoreCase("ego-centric-network") == true || taskType.equalsIgnoreCase("event-centric-network") == true ||
-		 taskType.equalsIgnoreCase("ego-centric-by-organisation") == true) {
+		if(taskType.equalsIgnoreCase("ego-centric-network") || taskType.equalsIgnoreCase("event-centric-network") ||
+				 taskType.equalsIgnoreCase("ego-centric-by-organisation") || taskType.equalsIgnoreCase("ego-centric-by-venue")) {
 			// check the other parameters as they are required
 		
 			if(radius != null) {
@@ -121,7 +121,8 @@ public class ExportServlet extends HttpServlet {
 					throw new ServletException("Missing format type. Expected: " + java.util.Arrays.toString(FORMAT_TYPES).replaceAll("[\\]\\[]", ""));
 			}
 			
-		} else if (taskType.equalsIgnoreCase("org-evt-network") || taskType.equalsIgnoreCase("venue-evt-network") ) {
+		} else if (taskType.equalsIgnoreCase("org-evt-network") || taskType.equalsIgnoreCase("venue-evt-network") ||
+				taskType.equalsIgnoreCase("ego-centric-by-organisation") || taskType.equalsIgnoreCase("ego-centric-by-venue")) {
 			// check on the id parameter
 			if(InputUtils.isValidInt(id) == false) {
 				throw new ServletException("Missing or invalid id parameter.");
@@ -190,22 +191,30 @@ public class ExportServlet extends HttpServlet {
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 			ExportManager export = new ExportManager(db);
-			export.buildOrgOrVenueEvtNetworkGraphml(id, "directed", "o", response.getWriter());		
+			export.buildOrgOrVenueEvtNetworkGraphml(id, "o", "directed", response.getWriter());		
 			
 		} else if (taskType.equalsIgnoreCase("venue-evt-network") && formatType.equalsIgnoreCase("graphml")){
 			String filename = "Evt-venue-" + id + "." + formatType;	
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 			ExportManager export = new ExportManager(db);
-			export.buildOrgOrVenueEvtNetworkGraphml(id, "directed", "v", response.getWriter());	
-
+			export.buildOrgOrVenueEvtNetworkGraphml(id, "v", "directed", response.getWriter());	
+			
 		} else if (taskType.equalsIgnoreCase("ego-centric-by-organisation")){
 
 			String filename = "Con-org-" + id + "." + formatType; 	
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 
+			ExportManager export = new ExportManager(rdf, db);
+			export.buildCollaboratorNetworkByOrgGraphml(id, formatType, degrees, "undirected", response.getWriter());
+			
+		}  else if (taskType.equalsIgnoreCase("ego-centric-by-venue")){
+
+			String filename = "Con-venue-" + id + "." + formatType; 	
+			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+
 			ExportManager export = new ExportManager(rdf);
-			export.buildCollaboratorNetworkByOrgGraphml(id, formatType, degrees, "undirected", response.getWriter());						
+			export.buildVenueConNetworkGraphml(id, "v", "undirected", response.getWriter());						
 		}  
 		
 		try {

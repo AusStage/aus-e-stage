@@ -17,10 +17,13 @@ public class Network {
 	
 	public Set<Integer> nodeSet = new HashSet<Integer>();
 	public Set<Integer>[][] edgeMatrix;
-	public List<Event> sortedNodeList = new ArrayList<Event>();
+	public List<Event> sortedEventList = new ArrayList<Event>();
+	public List<Collaborator> contributorList = new ArrayList<Collaborator>();
 	public Set<Integer> contributorSet = new HashSet<Integer>();
+	public Set<Integer> eventSet = new HashSet<Integer>();
 	public Map<Integer, Event> evtId_evtObj_map = new HashMap<Integer, Event>();	
 	public Map<Integer, Set<Integer>> evtId_conSet_map = new HashMap<Integer, Set<Integer>>();
+	public Map<Integer, Set<Integer>> conId_evtSet_map = new HashMap<Integer, Set<Integer>>();
 	public Map<Integer, Collaborator> conId_conObj_map = new HashMap<Integer, Collaborator>();
 	
 	public Network(){}
@@ -103,16 +106,16 @@ public class Network {
 		this.conId_conObj_map = conId_conObj_map;
 	}	
 
-	public List<Event> getSortedNodeList() {
-		return sortedNodeList;
+	public List<Event> getSortedEventList() {
+		return sortedEventList;
 	}
 
-	public void setSortedNodeList(List<Event> sortedNodeList) {
-		this.sortedNodeList = sortedNodeList;
+	public void setSortedEventList(List<Event> sortedEventList) {
+		this.sortedEventList = sortedEventList;
 	}
 
 	@SuppressWarnings("unchecked")
-	public ArrayList<Event> sortedNode(){
+	public List<Event> sortedNode(){
 		int eID = 0;
 		ArrayList<Event> sortedNodeList = new ArrayList<Event>();
 		
@@ -130,6 +133,26 @@ public class Network {
 		return sortedNodeList;
 	}
 	
+	
+	public void setContributorList(List<Collaborator> contributorList) {
+		this.contributorList = contributorList;
+	}	
+	
+	public List<Collaborator> getContributorList() {
+		return contributorList;
+	}
+
+	public List<Collaborator> getContributors(){
+		ArrayList<Collaborator> conList = new ArrayList<Collaborator>();
+		
+		for(int cID : nodeSet){
+			Collaborator con = conId_conObj_map.get(cID);
+			if (con != null)
+				conList.add(con);			
+		}
+		return conList;
+	}
+		
 	//use depth first degree algorithm to detect cycle (redundant edge) in the graph
 	//and delete it from edgeMatrix 
 	public void findCycle(int cID, int nodeIndex, boolean[] isVisited, ArrayList<Integer> trace){
@@ -144,7 +167,7 @@ public class Network {
 		
 		isVisited[nodeIndex] = true;	  
 	        
-	    for(int i = nodeIndex + 1; i < sortedNodeList.size(); i++) {
+	    for(int i = nodeIndex + 1; i < sortedEventList.size(); i++) {
 	    	if (edgeMatrix[nodeIndex][i] != null && edgeMatrix[nodeIndex][i].contains(cID)){
 	    		
 	    		//contains both nodes -- a cycle detected, delete the edge from the edge set
@@ -164,15 +187,21 @@ public class Network {
 	
 	
 	public void printSortedNode(){
-		int numOfNodes = sortedNodeList.size();
+		int numOfNodes = sortedEventList.size();
 		System.out.println("-----Sorted Node List------");
 		for (int i = 0; i < numOfNodes; i++) {
 			System.out.print(i + " ");
-			System.out.print(sortedNodeList.get(i).getId());
-			System.out.print("	" + sortedNodeList.get(i).getFirstDate());
-			System.out.println("  " + sortedNodeList.get(i).getName());
+			System.out.print(sortedEventList.get(i).getId());
+			System.out.print("	" + sortedEventList.get(i).getFirstDate());
+			System.out.println("  " + sortedEventList.get(i).getName());
 		}	
 		
+	}
+	
+	public void printNodes(){
+		for(int node : nodeSet){
+			System.out.println(node);
+		}
 	}
 	
 	public void printEdgeMatrix(){
