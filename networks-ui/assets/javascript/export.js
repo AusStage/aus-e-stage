@@ -65,6 +65,7 @@ $(document).ready(function() {
 	$("#task").addOption('ego-centric-network',   		'Contributor Network');	
 	$("#task").addOption('event-centric-network', 		'Event Network');
 	$("#task").addOption('ego-centric-by-organisation', 'Contributor Network by Organisation');
+	$("#task").addOption('ego-centric-by-venue', 		'Contributor Network by Venue');			
 	$("#task").addOption('org-evt-network', 			'Event Network by Organisation');		
 	$("#task").addOption('venue-evt-network', 			'Event Network by Venue');	
 	
@@ -179,6 +180,15 @@ $(document).ready(function() {
 				task = 'organisation';
 				//change the labels
 				changeLabels('organisation');
+				//hide unnecessary fields
+				hideOptions(_FORMAT,_RADIUS,_SIMPLIFY);	
+			break;
+
+			case 'ego-centric-by-venue' :
+				//change the export type
+				task = 'venue';
+				//change the labels
+				changeLabels('venue');
 				//hide unnecessary fields
 				hideOptions(_FORMAT,_RADIUS,_SIMPLIFY);	
 			break;
