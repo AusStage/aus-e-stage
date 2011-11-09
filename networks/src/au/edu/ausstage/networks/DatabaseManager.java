@@ -140,7 +140,8 @@ public class DatabaseManager {
 		
 			// 	build the list of contributors			
 			while(results.next() == true) {
-				infoSet.add(results.getInt(1));									
+				if (results.getInt(1)!= 0)  //if returned result is NULL, then getInt(1) = 0
+					infoSet.add(results.getInt(1));									
 			}									
 		} catch (java.sql.SQLException ex) {	
 			System.out.println("Exception: " + ex.getMessage());

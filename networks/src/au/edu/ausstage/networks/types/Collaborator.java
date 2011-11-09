@@ -87,6 +87,10 @@ public class Collaborator implements Comparable<Collaborator>{
 		return id;
 	}
 	
+	public int getIntId(){
+		return Integer.parseInt(id);
+	}
+	
 	/**
 	 * A method to set a new URL value
 	 *
@@ -254,6 +258,10 @@ public class Collaborator implements Comparable<Collaborator>{
 		} else {
 			throw new IllegalArgumentException("Value cannot be null or an empty string");
 		}
+	}
+	
+	public void setRoles(String roles){
+		function = roles;
 	}
 	
 	/**

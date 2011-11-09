@@ -21,8 +21,6 @@ package au.edu.ausstage.networks;
 // import additional libraries
 //jena
 import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.tdb.TDBFactory;
-
 // general java
 import java.util.*;
 import java.io.*;
@@ -34,8 +32,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*; 
 import javax.xml.transform.stream.*;
 
-// import AusStage related packages
-import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.networks.types.*;
 
@@ -57,6 +53,11 @@ public class ExportManager {
 	} // end constructor
 	
 	public ExportManager(DatabaseManager db){
+		this.db = db;
+	}
+	
+	public ExportManager(DataManager rdf, DatabaseManager db){
+		this.rdf = rdf;
 		this.db = db;
 	}
 	
@@ -130,14 +131,13 @@ public class ExportManager {
 
 		// Create a new EgoCentricByOrgManager
 		//Call toGraphMLDOM_org()
-		EgoCentricByOrgManager egoManager = new EgoCentricByOrgManager(rdf);
+		EgoCentricByOrgManager egoManager = new EgoCentricByOrgManager(rdf, db);
 		egoDom = egoManager.toGraphMLDOM_org(egoDom, id, radius, graphType);		
 		domToXMLString(printWriter, egoDom);	
 				
+	}
 	
-	}		
-
-
+	
 	/**
 	 * A method to output the export in the plain text format used for debugging
 	 *
@@ -339,6 +339,8 @@ public class ExportManager {
 			
 			// transform the xml document into a string
 			transformer.transform(source, result);
+			
+			printWriter.close();
 		} catch (javax.xml.transform.TransformerException ex) {
 			throw new RuntimeException("Unable to create the graphml");
 		}
@@ -734,13 +736,14 @@ public class ExportManager {
 		rdf.tidyUp();	
 	}
 	
+	
 	/**
 	 * A method to build the event centric network
 	 *
 	 * @param id          the unique id of the central event
 	 * @param radius      the required number of edges from the central event
-	 * @param simplify    true: with each of the 1st degree nodes, only events for those contributors involved in the central node are retrieved.
-	 * 		      false: with each of the 1st degree nodes, events for all contributors are retrieved.  
+	 * @param simplify	  true: with each of the 1st degree nodes, only events for those contributors involved in the central node are retrieved.
+	 * 					  false: with each of the 1st degree nodes, events for all contributors are retrieved.  
 	 * @param graphType   the type of graph to created, must be one of directed / undirected
 	 * @param printWriter the output stream to use to stream the output to the client
 	 */
@@ -749,42 +752,72 @@ public class ExportManager {
 		//create Document 
 		Document evtDom = createXMLDoc("http://graphml.graphdrawing.org/xmlns", "graphml", null);
 			
-		ProtovisEventCentricManager evtManager = new ProtovisEventCentricManager(db);
-		evtDom = evtManager.toGraphMLDOM(evtDom, id, radius, simplify, graphType);
+		ProtovisEventCentricManager manager = new ProtovisEventCentricManager(db);
+		evtDom = manager.toGraphMLDOM(evtDom, id, radius, simplify, graphType);
 		
 		if (evtDom != null)
 			domToXMLString(printWriter, evtDom);
 		else
 			throw new RuntimeException("Dom is  null !");
-				
-	}
 
+	}
+	
+	
 	/**
 	 * A method to build the event network based on organisation or venue
 	 * 
 	 * @param id:	organisation id or venue id
-	 * @param graphType:  directed/undirected
 	 * @param type: organisation-based event network "o" / venue-based event network "v"  
+	 * @param graphType:  directed/undirected
 	 * @param printWriter the output stream to use to stream the output to the client
 	 * 
 	 */
-	public void buildOrgOrVenueEvtNetworkGraphml(String id, String graphType, String type, PrintWriter printWriter){
+	public void buildOrgOrVenueEvtNetworkGraphml(String id, String type, String graphType, PrintWriter printWriter){
 				
 		//create Document 
-		Document evtDom = createXMLDoc("http://graphml.graphdrawing.org/xmlns", "graphml", null);
+		Document dom = createXMLDoc("http://graphml.graphdrawing.org/xmlns", "graphml", null);
 			
-		EvtManager evtManager = new EvtManager(db, id, type, graphType);
-		Network ntwk = evtManager.createOrgOrVenueEvtNetwork();		
+		EvtManager manager = new EvtManager(db, id, type, graphType);
+		Network ntwk = manager.createOrgOrVenueEvtNetwork();		
 		if (ntwk == null)
 			throw new RuntimeException("Network node set is null !");			
 			
-		evtDom = evtManager.toGraphMLDOM(evtDom);
+		dom = manager.toGraphMLDOM(dom);
 		
-		if (evtDom != null)
-			domToXMLString(printWriter, evtDom);
+		if (dom != null)
+			domToXMLString(printWriter, dom);
 		else
 			throw new RuntimeException("Dom is  null !");
 		
-	}	
+	}
+	
+	/**
+	 * A method to build the contributor network based on venue
+	 * 
+	 * @param id:	venue id
+	 * @param graphType:  directed/undirected
+	 * @param type: venue-based contribtor network "v"  
+	 * @param printWriter the output stream to use to stream the output to the client
+	 * 
+	 */
+	public void buildVenueConNetworkGraphml(String id, String type, String graphType, PrintWriter printWriter){
+				
+		//create Document 
+		Document dom = createXMLDoc("http://graphml.graphdrawing.org/xmlns", "graphml", null);
+			
+		ContributorNetworkManager manager = new ContributorNetworkManager(db, id, type, graphType);
+		Network ntwk = manager.createVenueConNetwork();		
+		if (ntwk == null)
+			throw new RuntimeException("Network node set is null !");			
+			
+		dom = manager.toGraphMLDOM(dom);
+		
+		if (dom != null)
+			domToXMLString(printWriter, dom);
+		else
+			throw new RuntimeException("Dom is  null !");
+
+		//System.out.println("\n Num of Nodes: " + ntwk.nodeSet.size());
+	}
 	
 }

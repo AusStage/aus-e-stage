@@ -21,10 +21,6 @@ package au.edu.ausstage.networks;
 // import additional libraries
 //jena
 import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.tdb.TDBFactory;
-
-//json
-import org.json.simple.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -35,15 +31,7 @@ import java.util.*;
 import au.edu.ausstage.vocabularies.*;
 import au.edu.ausstage.utils.*;
 import au.edu.ausstage.networks.types.*;
-import au.edu.ausstage.networks.types.Event;
 
-//brads testing imports
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.File;
-import java.io.Writer;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * A class to manage the export of information
@@ -52,6 +40,7 @@ public class EgoCentricByOrgManager {
 
 	// declare private class level variables
 	private DataManager rdf = null;
+	private DatabaseManager db = null;
 	//network<contributorID, collaborator>
 	public TreeMap<Integer, Collaborator> network = new TreeMap<Integer, Collaborator>();
 	public ArrayList<Collaborator> collaborators = new ArrayList<Collaborator> ();
@@ -76,9 +65,10 @@ public class EgoCentricByOrgManager {
 	 *
 	 * @param rdf an already instantiated instance of the DataManager class
 	 */
-	public EgoCentricByOrgManager(DataManager rdf) {	
+	public EgoCentricByOrgManager(DataManager rdf, DatabaseManager db) {	
 		// store a reference to this DataManager for later
 		this.rdf = rdf;
+		this.db = db;
 	} // end constructor
 	
 	
@@ -114,41 +104,38 @@ public class EgoCentricByOrgManager {
 		// define other helper variables
 		String		  contributor_id  = null;
 		QuerySolution row             = null;
-		QuerySolution row2            = null;		
-		Collaborator  collaborator    = null;
-		int           degreesFollowed = 1;
-		int           degreesToFollow = radius;
-		String        queryToExecute  = null;
-		Collection    values          = null;
-		Iterator      iterator        = null;
-		String[]      toProcess       = null;
+		Collaborator  collaborator    = null;	
 		
-		// instantiate a connection to the database
-		DbManager database = new DbManager(getConnectionString());
-		
-		if(database.connect() == false) {
-			throw new RuntimeException("Unable to connect to the database");
-		}
 		String sql = "SELECT DISTINCT b.eventid   "
 					+"FROM events a, orgevlink b "
-					+"WHERE b.organisationid = "+id
+					+"WHERE b.organisationid = ? "  //+id
 					+"AND a.eventid = b.eventid";
 
-		java.sql.ResultSet resultSet = database.executeStatement(sql).getResultSet();	
+		int[] param = { Integer.parseInt(id) };
+		java.sql.ResultSet resultSet = db.exePreparedStatement(sql, param);	
 
 		ArrayList<String> eventResults = new ArrayList<String>();	
 		
 		try {
-		
+//		 	check to see that data was returned
+			if (!resultSet.last()){	
+				db.tidyup();
+				return null;
+			}else
+				resultSet.beforeFirst();
+			
 			// loop through the resultset
 			while(resultSet.next() == true) {
 				eventResults.add(resultSet.getString(1));
 			}
 		
 		} catch (java.sql.SQLException ex) {
-			//not doing anything just yet.
+			System.out.println("Exception: " + ex.getMessage());
+			resultSet = null;
 		}
 
+		db.tidyup();
+		
 		//helper
 		int first = 0;
 		
@@ -190,6 +177,9 @@ public class EgoCentricByOrgManager {
 			foundCollaboratorsSet.add(Integer.parseInt(contributor_id));
 		
 		}	
+		
+		rdf.tidyUp();
+		
 		return cId_cObj_map;
 	
 	} // end getRawCollaboratorData_org method
@@ -242,7 +232,6 @@ public class EgoCentricByOrgManager {
 		CollaborationList list = new CollaborationList(id);
 		
 		// define other helper variables
-		QuerySolution row           = null;
 		Collaboration collaboration = null;
 		
 		// define other helper variables
@@ -254,29 +243,35 @@ public class EgoCentricByOrgManager {
 		// define the base sql query
 		String sqlQuery = "SELECT distinct count(*), con.contributorid, min(e.first_date), max(e.first_date) "
 						+ "FROM contributor con, conevlink c , conevlink c2, orgevlink o, events e "
-						+ "WHERE o.organisationid = " + org_id + " "
+						+ "WHERE o.organisationid = ? " //+ org_id + " "
 						+ "AND c.eventid = O.EVENTID "
 						+ "AND e.eventid = O.EVENTID "						
 						+ "AND e.eventid = c.EVENTID "						
-						+ "AND c.contributorid != "+ id + " "
+						+ "AND c.contributorid != ?" //+ id + " "
 						+ "AND con.contributorid = c.contributorid "
-						+ "AND c2.contributorid = "+ id + " "
+						+ "AND c2.contributorid = ? " //+ id + " "
 						+ "AND c2.eventid = c.eventid "
 						+ "GROUP BY con.contributorid, con.first_name ";
 		
-		// instantiate a connection to the database
-		DbManager database = new DbManager(getConnectionString());
+		int[] param = { Integer.parseInt(org_id), Integer.parseInt(id), Integer.parseInt(id) };
 		// execute the query
-		java.sql.ResultSet resultSet = database.executeStatement(sqlQuery).getResultSet();	
+		java.sql.ResultSet resultSet = db.exePreparedStatement(sqlQuery, param);	
 
-		try {		
+		try {	
+//		 	check to see that data was returned
+			if (!resultSet.last()){	
+				db.tidyup();
+				return null;
+			}else
+				resultSet.beforeFirst();
+			
 			// loop though the resulset
 			while (resultSet.next()) {
 				// get the data
 				partner   = resultSet.getString(2);
 				count     = resultSet.getInt(1);
-				firstDate = resultSet.getString(3);
-				lastDate  = resultSet.getString(4);
+				firstDate = resultSet.getDate(3).toString();
+				lastDate  = resultSet.getDate(4).toString();
 				
 				// create the collaboration object
 				collaboration = new Collaboration(id, partner, count, firstDate, lastDate);
@@ -286,9 +281,11 @@ public class EgoCentricByOrgManager {
 			}
 		
 		} catch (java.sql.SQLException ex) {
-			//not doing anything just yet.
+			System.out.println("Exception: " + ex.getMessage());
+			resultSet = null;
 		}
 		
+		db.tidyup();
 		// return the list of collaborations
 		return list;		
 	
@@ -397,28 +394,31 @@ public class EgoCentricByOrgManager {
 	public Document toGraphMLDOM_org(Document egoDom, String id, int radius, String graphType){
 		
 		Collaborator collaborator = null;
-		
-		DbManager database = new DbManager(getConnectionString());
-		boolean con = database.connect();
-		
-		
-		network = getRawCollaboratorData_org(id, radius);
-		
-		//add some additional required information for contributors
-		collaborators = getCollaborators(network, "0");
-		
-		//get collaboration List			
-		collaborations = getCollaborations_org(id, network);
-		
+				
+		if(db.connect() == false) {
+			throw new RuntimeException("Unable to connect to the database");
+		}
+
 		// add the graph element
 		Element rootElement = egoDom.getDocumentElement();
 		rootElement = createHeaderElements(egoDom, rootElement, graphType);
 
 		Element graph = egoDom.createElement("graph");
-		graph.setAttribute("id", "Contributor Network for organisation:" + con + " ( " + id + " )");
+		graph.setAttribute("id", "Contributor Network for organisation:" + " ( " + id + " )");
 		graph.setAttribute("edgedefault", graphType);
 		rootElement.appendChild(graph);
 		
+		network = getRawCollaboratorData_org(id, radius);
+		
+		if (network != null) {
+			//add some additional required information for contributors
+			collaborators = getCollaborators(network, "0");
+		
+			//get collaboration List			
+			collaborations = getCollaborations_org(id, network);
+		}else
+			return egoDom; 
+			
 		//create node element in DOM		
 		for (int i = 0; i < collaborators.size(); i++){
 			Element node = createNodeElement(egoDom,i);			
@@ -439,25 +439,25 @@ public class EgoCentricByOrgManager {
 		while(contributorIter.hasNext()){
 			CollaborationList list = (CollaborationList)contributorIter.next();	
 			//get the actual collaborations
-			Iterator collaborationIter = list.getCollaborations().values().iterator();
-			//loop through the hashmap of collaborations
-			while(collaborationIter.hasNext()){
+			if (list != null) {
 				
-				Collaboration collaboration = (Collaboration)collaborationIter.next();
+				Iterator collaborationIter = list.getCollaborations().values().iterator();
+				//	loop through the hashmap of collaborations
+				while(collaborationIter.hasNext()){
 				
-				if (!collabCheck.contains(collaboration.getPartner()+"-"+collaboration.getCollaborator())){
-					//create an edge for each of them
-					Element edge = createEdgeElement(egoDom, collaboration, Integer.parseInt(collaboration.getCollaborator())
+					Collaboration collaboration = (Collaboration)collaborationIter.next();
+				
+					if (!collabCheck.contains(collaboration.getPartner()+"-"+collaboration.getCollaborator())){
+						//create an edge for each of them
+						Element edge = createEdgeElement(egoDom, collaboration, Integer.parseInt(collaboration.getCollaborator())
 													, Integer.parseInt(collaboration.getPartner()), edgeIndex);	
-					graph.appendChild(edge);
-					//add the collaboration to the list for checking.
-					collabCheck.add(collaboration.getCollaborator()+"-"+collaboration.getPartner());
-					edgeIndex++;
+						graph.appendChild(edge);
+						//	add the collaboration to the list for checking.
+						collabCheck.add(collaboration.getCollaborator()+"-"+collaboration.getPartner());
+						edgeIndex++;
+					}
 				}
-			}
-
-			
-			
+			}						
 		}
 		
 		return egoDom;
