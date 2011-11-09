@@ -213,7 +213,7 @@ public class ExportServlet extends HttpServlet {
 			String filename = "Con-venue-" + id + "." + formatType; 	
 			response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 
-			ExportManager export = new ExportManager(rdf);
+			ExportManager export = new ExportManager(db);
 			export.buildVenueConNetworkGraphml(id, "v", "undirected", response.getWriter());						
 		}  
 		
