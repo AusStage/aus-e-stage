@@ -88,7 +88,7 @@ public class EvtManager extends NetworkManager {
 		}
 		
 		long getNodeTime = System.currentTimeMillis();
-		System.out.println("\n time to get sorted Nodes is :" + (getNodeTime-startTime)+ "ms");
+		//System.out.println("\n time to get sorted Nodes is :" + (getNodeTime-startTime)+ "ms");
 		
 		//get edge Matrix for the network
 		int numOfNodes = nodeSet.size();
@@ -98,12 +98,12 @@ public class EvtManager extends NetworkManager {
 		
 		long matrixTime = System.currentTimeMillis();
 		//network.printEdgeMatrix();
-		System.out.println("\n time to create matrix is :" + (matrixTime - getNodeTime)+ "ms");
+		//System.out.println("\n time to create matrix is :" + (matrixTime - getNodeTime)+ "ms");
 		
 		deleteCycle();
 		long delcycleTime = System.currentTimeMillis();	
 		//network.printEdgeMatrix();
-		System.out.println("\n time to delete cycle is :" + (delcycleTime - matrixTime)+ "ms");
+		//System.out.println("\n time to delete cycle is :" + (delcycleTime - matrixTime)+ "ms");
 				
 		//get contributor detail (edge)
 /*		for (int i = 0; i < numOfNodes; i++){

@@ -64,7 +64,7 @@ public class ContributorNetworkManager extends NetworkManager{
 	
 	@SuppressWarnings("unchecked")
 	public Network createVenueConNetwork(){
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 		//get node set for the network
 		Set<Integer> nodeSet = getNodes();
 		//List<Integer> evtList;		
@@ -83,9 +83,9 @@ public class ContributorNetworkManager extends NetworkManager{
 			network.setContributorList(network.getContributors());
 		}
 		
-		long getNodeTime = System.currentTimeMillis();
+		/*long getNodeTime = System.currentTimeMillis();
 		System.out.println("\n time to get Nodes is :" + (getNodeTime-startTime)+ "ms");
-		
+		*/
 		//get edge Matrix for the network
 		int numOfNodes = nodeSet.size();
 				
@@ -109,9 +109,9 @@ public class ContributorNetworkManager extends NetworkManager{
 		edgeMatrix = getEdges();
 		network.setEdgeMatrix(edgeMatrix);
 		
-		long matrixTime = System.currentTimeMillis();
+	/*	long matrixTime = System.currentTimeMillis();
 		//network.printEdgeMatrix();
-		System.out.println("\n time to create matrix is :" + (matrixTime - getNodeTime)+ "ms");
+		System.out.println("\n time to create matrix is :" + (matrixTime - getNodeTime)+ "ms");*/
 				
 		//get contributor detail (edge)
 /*		for (int i = 0; i < numOfNodes; i++){
