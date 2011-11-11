@@ -25,12 +25,14 @@ package au.edu.ausstage.networks;
 // servlets
 import javax.servlet.ServletConfig;
 
-// Jena & TDB related packages
-import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.tdb.TDBFactory;
-
-// import the AusStage vocabularies package
-import au.edu.ausstage.vocabularies.*;
 
 /**
  * A class to manage access to data stored in the RDF model
@@ -85,9 +87,13 @@ public class DataManager {
 	
 	public DataManager (){
 		
-		accessMethod = "local";
-		datastorePath = "C:\\rdf-data\\tdb-data-store";
-			
+//		accessMethod = "local";
+//		datastorePath = "C:\\rdf-data\\tdb-data-store";
+		
+		accessMethod = "http";
+//		datastorePath = "http://beta.ausstage.edu.au/networks/sparql";
+//		datastorePath = "http://gamma.ausstage.edu.au/joseki/sparql";
+		datastorePath = "http://rdf.csem.flinders.edu.au/joseki/networks";
 	}
 	
 	/**
@@ -126,7 +132,7 @@ public class DataManager {
 		}
 		
 		// build the query and query execution objects
-		query = QueryFactory.create(sparqlQuery);
+		query = QueryFactory.create(sparqlQuery, Syntax.syntaxARQ);
 		execution = QueryExecutionFactory.create(query, dataset);
 		
 		// execute the query
@@ -151,7 +157,8 @@ public class DataManager {
 		//tidyUp(false);
 	
 		// get a query execution object		
-		execution = QueryExecutionFactory.sparqlService(datastorePath, sparqlQuery);
+		query = QueryFactory.create(sparqlQuery, Syntax.syntaxARQ);
+		execution = QueryExecutionFactory.sparqlService(datastorePath, query);
 		
 		// execute the query
 		results = execution.execSelect();
@@ -163,22 +170,47 @@ public class DataManager {
 	
 	/**
 	 * A method to tidy up resources after finished with a query
+	 *
+	 * @param fullTidy true, if and only if, a full tidy is required
+	 */
+	public void tidyUp(boolean fullTidy) {
+		
+		if(fullTidy == true) {
+			if(results != null) {
+				results = null;
+			}
+		
+			if(execution != null) {
+				execution.close();
+				execution = null;
+			}
+		
+			if(query != null) {
+				query = null;
+			}		
+			if(dataset != null) {
+				dataset.close();
+				dataset = null;
+			}
+		}	
+	}
+	/**
+	 * A method to tidy up resources after finished with a query
 	 */
 	public void tidyUp() {
 	
-		//tidyUp(false);
-		if(execution != null) {
+		if (execution != null) {
 			execution.close();
 			execution = null;
 		}
 		
-		if(dataset != null) {
+		if (dataset != null) {
 			dataset.close();
 			dataset = null;
 		}
 		
-		if(query != null) query = null;
-		if(results != null) results = null;
+		query = null;
+		results = null;
 	} // end tidyUp method
 	
 	/**
@@ -200,7 +232,7 @@ public class DataManager {
 	 */
 	protected void finalize() throws Throwable {
 		try {
-			tidyUp();
+			tidyUp(true);
 			
 			if(accessMethod.equals("http") == false) {
 				dataset.close();
