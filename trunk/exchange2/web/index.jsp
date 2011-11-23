@@ -38,7 +38,8 @@
 	<script type="text/javascript" src="assets/javascript/libraries/jquery.validate-1.7.min.js"></script>			
 	<!-- custom code -->
 	<script type="text/javascript" src="assets/javascript/index.js"></script>
-	<script type="text/javascript" src="assets/javascript/code_generator.js"></script>	
+	<script type="text/javascript" src="assets/javascript/code_generator.js"></script>
+	<script type="text/javascript" src="assets/javascript/aus_exchange.js"></script>		
 	<script type="text/javascript" src="assets/javascript/tab-selector.js"></script>
 </head>
 <body>
