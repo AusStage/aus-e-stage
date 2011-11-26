@@ -226,7 +226,7 @@ function initSearch(){
 				url:url+'&callback=?',
 				error: showErrorMessage,
 				success: function(data){
-					addContentIndicator(data);
+					addContentIndicatorDialog(data);
 				}	
 	});
 
@@ -255,7 +255,7 @@ function initSearch(){
 				url:url+'&callback=?',
 				error: showErrorMessage,
 				success: function(data){
-					addSecGenre(data);
+					addSecGenreDialog(data);
 				}	
 	});
 
@@ -283,7 +283,7 @@ function initSearch(){
 				url:url+'&callback=?',
 				error: showErrorMessage,
 				success: function(data){
-					addResSubType(data);
+					addResSubTypeDialog(data);
 				}	
 	});
 
@@ -538,7 +538,7 @@ function clearSelectedList(){
 	updateSelectedList();	
 }
 
-function addSecGenre(data) {
+function addSecGenreDialog(data) {
 	var list;
 	for(i = 0; i < data.length; i++) {
 		
@@ -578,7 +578,7 @@ function addSecGenre(data) {
 
 }
 
-function addContentIndicator(data) {
+function addContentIndicatorDialog(data) {
 	var list;
 	for(i = 0; i < data.length; i++) {
 		
@@ -618,7 +618,7 @@ function addContentIndicator(data) {
 
 }
 
-function addResSubType(data) {
+function addResSubTypeDialog(data) {
 	var list;
 	for(i = 0; i < data.length; i++) {
 		
