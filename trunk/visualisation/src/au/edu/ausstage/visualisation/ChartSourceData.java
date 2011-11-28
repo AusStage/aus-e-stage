@@ -1,7 +1,5 @@
 package au.edu.ausstage.visualisation;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.json.simple.JSONArray;
@@ -122,6 +120,9 @@ public class ChartSourceData {
 	}
 	
 	public void toCSV(PrintWriter writer){
+		
+		if (columnName == null || dataArr == null)
+			return ;
 		
 		for (int i = 0; i < columnName.length; i++) {
 			if (i != 0)

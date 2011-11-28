@@ -236,29 +236,24 @@ public class ChartManager {
 								{"Contributors-Contributors:Weights", "0"}
 							  };
 		
-		int events_count = 0;
-		String sql_events = "select count(eventid) Events from events";
-		
-		int contributors_count = 0;
-		String sql_contributors = "select count(contributorid) Contributors from contributor";
-		
-		int events_contributors_count = 0;
-		String sql_events_contributors = "select count(conevlinkid) \"Events-Contributors\" from conevlink";
-
 		//get Events count
-		ResultSet results = db.exeStatement(sql_events);
-		events_count = getResult(results);
-		infoArr[0][1] = Integer.toString(events_count);
-			
+		int count = 0;
+		String sql = "select count(eventid) as Events from events";
+		ResultSet results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[0][1] = Integer.toString(count);
+		
 		//get contributors count
-		results = db.exeStatement(sql_contributors);
-		contributors_count = getResult(results);
-		infoArr[1][1] = Integer.toString(contributors_count);
-			
+		sql = "select count(contributorid) as Contributors from contributor";
+		results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[1][1] = Integer.toString(count);
+				
 		//get events-contributors count
-		results = db.exeStatement(sql_events_contributors);
-		events_contributors_count = getResult(results);
-		infoArr[2][1] = Integer.toString(events_contributors_count);
+		sql = "select count(conevlinkid) as \"Events-Contributors\" from conevlink";
+		results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[2][1] = Integer.toString(count);
 	
 		//get contributors-contributors edges
 		QuerySolution row  = null;
@@ -933,6 +928,108 @@ public class ChartManager {
 		return infoArr;
 	}
 	
+	public void getRecordCountsInFiveTables(){
+		String[]columnName = {"Table", "RecordCounts"};
+		String[][] infoArr = {
+								{"Events", "0"},
+								{"Contributors", "0"},
+								{"Venues", "0"},
+								{"Organisations", "0"},
+								{"Resources", "0"}
+							  };
+		
+		//get Events count
+		int count = 0;
+		String sql = "select count(eventid) Events from events";
+		ResultSet results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[0][1] = Integer.toString(count);
+		
+		//get contributors count
+		sql = "select count(contributorid) Contributors from contributor";
+		results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[1][1] = Integer.toString(count);
+
+		//get venues count
+		sql = "select count(venueid) as Venues from venue";
+		results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[2][1] = Integer.toString(count);
+		
+		//get organisations count
+		sql = "select count(organisationid) as Organisations from organisation";
+		results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[3][1] = Integer.toString(count);
+		
+		//get resources count
+		sql = "select count(itemid) as Resources from item";
+		results = db.exeStatement(sql);
+		count = getResult(results);
+		infoArr[4][1] = Integer.toString(count);
+		
+		if (infoArr != null)
+			sourceData = new ChartSourceData("RecordCountsInFiveTables", columnName, infoArr);
+	}
+	
+	public void	getNumOfContributorsByFunction(){
+		String sql = "SELECT cfp.preferredterm as Function, count(c.contributorid) as Count " +
+					 "FROM contributor c, contfunctlink cfl,  contributorfunctpreferred cfp " + 
+					 "WHERE c.contributorid = cfl.contributorid " +
+					 "AND cfl.contributorfunctpreferredid = cfp.contributorfunctpreferredid " +
+					 "AND cfp.preferredterm is not null " +
+					 "GROUP BY cfp.preferredterm " +
+					 "order by Count desc";
+
+		ResultSet results = db.exeStatement(sql);
+		String[] columnName = getColumnName(results);
+		if (columnName == null)
+			return;
+		String[][] infoArr = getResultsToArray(results, columnName.length);
+		if (infoArr != null)
+			sourceData = new ChartSourceData("NumOfContributorsByFunction", columnName, infoArr);
+
+	}
+	
+	public void getNumOfEventsBySecGenre() {
+		String sql = "SELECT sgp.preferredterm as \"Secondary Genre\", count(e.eventid) as Count " +
+					 "FROM events e, secgenreclasslink sgl,  secgenrepreferred sgp " + 
+					 "WHERE e.eventid = sgl.eventid " +
+					 "AND sgl.secgenrepreferredid = sgp.secgenrepreferredid " +
+					 "AND sgp.preferredterm is not null " +
+					 "GROUP BY sgp.preferredterm " +
+					 "order by Count desc";
+
+		ResultSet results = db.exeStatement(sql);
+		String[] columnName = getColumnName(results);
+		if (columnName == null)
+			return;
+		String[][] infoArr = getResultsToArray(results, columnName.length);
+		if (infoArr != null)
+			sourceData = new ChartSourceData("NumOfEventsBySecondaryGenre",	columnName, infoArr);
+
+	}
+	
+	public void getNumOfEventsByContentIndicator(){
+		String sql = "SELECT c.contentindicator as \"Content Indicator\", count(DISTINCT e.eventid) as Count " +
+					 "FROM events e, primcontentindicatorevlink p,  contentindicator c " + 
+					 "WHERE e.eventid = p.eventid " +
+					 "AND p.primcontentindicatorid = c.contentindicatorid " +
+					 "AND c.contentindicator is not null " +
+					 "AND NOT c.contentindicator = 'Not known' " + 
+					 "GROUP BY c.contentindicator " +
+					 "order by Count desc";				
+
+		ResultSet results = db.exeStatement(sql);
+		String[] columnName = getColumnName(results);
+		if (columnName == null)
+			return;
+		String[][] infoArr = getResultsToArray(results, columnName.length);
+		if (infoArr != null)
+			sourceData = new ChartSourceData("NumOfEventsByContentIndicator",	columnName, infoArr);
+
+	}
 	
 	public String[] getColumnName(ResultSet result) {
 		
@@ -1041,6 +1138,6 @@ public class ChartManager {
 		}
 		
 		return sql;
-	}
+	}	
 	
 }

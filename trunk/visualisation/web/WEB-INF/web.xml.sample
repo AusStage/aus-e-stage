@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>Visualisation</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description>Get the initialization params and call ChartManager class to return JSON array or CSV file</description>
+    <display-name>ChartServlet</display-name>
+    <servlet-name>ChartServlet</servlet-name>
+    <servlet-class>au.edu.ausstage.visualisation.ChartServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChartServlet</servlet-name>
+    <url-pattern>/chart/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SPARQL service processor</servlet-name>
+    <servlet-class>org.joseki.http.Servlet</servlet-class>
+    <init-param>
+      <param-name>org.joseki.rdfserver.config</param-name>
+      <param-value>C:\\rdf-data\\joseki\\joseki-aussstage-config.ttl</param-value>
+    </init-param>
+  </servlet>
+  <servlet>
+    <servlet-name>Validator</servlet-name>
+    <servlet-class>
+            org.joseki.validator.Validator
+        </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SPARQL service processor</servlet-name>
+    <url-pattern>/sparql</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SPARQL service processor</servlet-name>
+    <url-pattern>/sparql/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SPARQL service processor</servlet-name>
+    <url-pattern>/service/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Validator</servlet-name>
+    <url-pattern>/validator</url-pattern>
+  </servlet-mapping>
+  <context-param>
+    <param-name>databaseConnectionString</param-name>
+    <param-value></param-value>
+  </context-param>
+  <context-param>
+    <param-name>rdfAccessMethod</param-name>
+    <param-value>http</param-value>
+  </context-param>
+  <context-param>
+    <param-name>sparqlEndpoint</param-name>
+    <param-value>http://rdf.csem.flinders.edu.au/joseki/networks</param-value>
+  </context-param>
+  <context-param>
+    <param-name>localDataStore</param-name>
+    <param-value>C:\\rdf-data\\tdb-data-store</param-value>
+  </context-param>
+  <mime-mapping>
+    <extension>vue</extension>
+    <mime-type>text/xml</mime-type>
+  </mime-mapping>
+</web-app>
