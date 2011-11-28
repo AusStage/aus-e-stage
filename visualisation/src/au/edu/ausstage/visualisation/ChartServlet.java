@@ -27,7 +27,8 @@ public class ChartServlet extends HttpServlet {
 	private final String[] TASK_TYPES   = {"EventsByStatusAndPrimaryGenre", "EventsByStateAndPrimaryGenre",
 			"EventsByStateAndStatus", "EventsCountByYear", "EventsCountByYearAndState", 
 			"EventsCountBySecondaryGenreAndYear", "RecordCountNodeEdgeWeight", "DistributionOfDegree",
-			"EventsCount", "ResourceCount", "ADSJoin", "OnStageJoin", "BooksJoin", "ResourceTypeCount"
+			"EventsCount", "ResourceCount", "ADSJoin", "OnStageJoin", "BooksJoin", "ResourceTypeCount",
+			"RecordCountsInFiveTables", "NumOfConsByFunction", "NumOfEvtsBySecGenre", "NumOfEvtsByContentIndi"
 			};
 	
 	private HashMap<String, Integer> codeMap = new HashMap<String, Integer>();
@@ -145,6 +146,19 @@ public class ChartServlet extends HttpServlet {
 		//ADSA 2011/Resource-Type.xls
 		if (task.equalsIgnoreCase("ResourceTypeCount")) 
 			manager.getResourceTypeCount();
+				
+		//ADSA 2011/AusStageRecordCount.pdf
+		if (task.equalsIgnoreCase("RecordCountsInFiveTables")) 
+			manager.getRecordCountsInFiveTables();
+				
+		if (task.equalsIgnoreCase("NumOfConsByFunction")) 
+			manager.getNumOfContributorsByFunction();
+		
+		if (task.equalsIgnoreCase("NumOfEvtsBySecGenre")) 
+			manager.getNumOfEventsBySecGenre();
+		
+		if (task.equalsIgnoreCase("NumOfEvtsByContentIndi")) 
+			manager.getNumOfEventsByContentIndicator();
 				
 		if(formatType.equalsIgnoreCase("csv")){
 			String filename = manager.sourceData.chartName + ".csv";

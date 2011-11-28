@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Visualisation for AusStage statistical information</title>
+</head>
+<body>
+
+<p><font color="red"> // Metric Visualisations / AusStageMatrices.xlsx </font></p>
+<table width="800" border="1">
+
+<!-- Events By Status And Primary Genre  -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Events By Status And Primary Genre 
+	<input type="hidden" name="task" size=80 value="EventsByStatusAndPrimaryGenre"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+
+<!-- Events By State And Primary Genre -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Events By State And Primary Genre 
+	<input type="hidden" name="task" size=80 value="EventsByStateAndPrimaryGenre"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+
+<!-- Events By State And Status -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Events By State And Status 
+	<input type="hidden" name="task" size=80 value="EventsByStateAndStatus"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table> 
+<br>
+
+<p><font color="red"> // Metric Visualisations / Event-count.xlsx </font></p>
+<table width="800" border="1">
+
+<!-- Events Count By year  -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="30%">Events Count By Year 
+	<input type="hidden" name="task" size=80 value="EventsCountByYear"> 
+</td>
+<td with="20%">Start Year
+	<input type="text" name="start" size=4 value="2000">
+</td>
+<td with="20%">End Year
+	<input type="text" name="end" size=4 value="2011">
+</td>
+<td width="20%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<p><font color="red"> // Metric Visualisations / Event-count-state.xlsx </font></p>
+<table width="800" border="1">
+<!-- Events Count By Year And State  -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="30%">Events Count By Year And State
+	<input type="hidden" name="task" size=80 value="EventsCountByYearAndState"> 
+</td>
+<td with="20%">Start Year
+	<input type="text" name="start" size=4 value="2000">
+</td>
+<td with="20%">End Year
+	<input type="text" name="end" size=4 value="2011">
+</td>
+<td width="20%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<p><font color="red"> // Metric Visualisations / secondary-genre-matrix2.xls </font></p>
+<table width="800" border="1">
+<!-- Events Count By Secondary Genre And Year  -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="30%">Events Count By Secondary Genre And Year
+	<input type="hidden" name="task" size=80 value="EventsCountBySecondaryGenreAndYear"> 
+</td>
+<td with="20%">Start Year
+	<input type="text" name="start" size=4 value="2000">
+</td>
+<td with="20%">End Year
+	<input type="text" name="end" size=4 value="2011">
+</td>
+<td width="20%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<p><font color="red"> // Metric Visualisations / record-count.xls</font></p>
+<table width="800" border="1">
+
+<!-- Record Count: Node, Edge and Weight  -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Record Count: Node, Edge and Weight 
+	<input type="hidden" name="task" size=80 value="RecordCountNodeEdgeWeight"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<p><font color="red"> // Metric Visualisations / distribution-of-degree.png </font></p>
+<table width="800" border="1">
+
+<!-- Distribution Of Degree   -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Distribution Of Degree 
+	<input type="hidden" name="task" size=80 value="DistributionOfDegree"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+<hr />
+
+<p><font color="red"> // ADSA 2011 / Event-Resource-Count.xls </font></p>
+<table width="800" border="1">
+
+<!-- Events Count -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Events Count 
+	<input type="hidden" name="task" size=80 value="EventsCount"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+
+<!-- Resource Count -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Resource Count
+	<input type="hidden" name="task" size=80 value="ResourceCount"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<p><font color="red"> // ADSA 2011 / ADS_Joins-new.xls </font><br>
+<!-- <font color="red"> // ADSA 2011 / OnStage_Joins.xls </font> -->
+</p>
+
+<table width="800" border="1">
+
+<!-- ADS Joins -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">ADS Joins
+	<input type="hidden" name="task" size=80 value="ADSJoin"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+ 
+<!-- OnStage Joins -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">OnStage Joins 
+	<input type="hidden" name="task" size=80 value="OnStageJoin"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+
+<!-- Books Join -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Books Join 
+	<input type="hidden" name="task" size=80 value="BooksJoin"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<p><font color="red"> // ADSA 2011 / Resource-Type.xls </font></p>
+<table width="800" border="1">
+
+<!-- Resource Type Count -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Resource Type Count
+	<input type="hidden" name="task" size=80 value="ResourceTypeCount"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<p><font color="red"> // ADSA 2011 / AusStageRecordCount.pdf </font></p>
+<table width="800" border="1">
+
+<!-- record counts in tables: Event, Venue, Contributor, Organisation, Item -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Record counts in tables: Event, Venue, Contributor, Organisation, Resource
+	<input type="hidden" name="task" size=80 value="RecordCountsInFiveTables"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+<table width="800" border="1">
+
+<!-- Numbers of Contributors by Function, Numbers of Events by Secondary Genre and Numbers of Events by Content Indicator -->
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Numbers of Contributors by Function
+	<input type="hidden" name="task" size=80 value="NumOfConsByFunction"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Numbers of Events by Secondary Genre
+	<input type="hidden" name="task" size=80 value="NumOfEvtsBySecGenre"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+
+<tr>
+<form action="/visualisation/chart" method="get" >
+<td width="60%">Numbers of Events by Content Indicator
+	<input type="hidden" name="task" size=80 value="NumOfEvtsByContentIndi"> 
+</td>
+<td width="30%">
+	<input type="radio" name="format" value="csv" checked="checked"/> CSV
+	<input type="radio" name="format" value="json" /> JSON
+</td>
+<td width="10%">
+	<input type="submit" name="submit" value="Go"/>
+</td>
+</form>
+</tr>
+</table>
+<br>
+
+</body>
+</html>
