@@ -4,4 +4,25 @@
 
 The Visualisation Service is designed to display the statistical information on AusStage data in variant charts.
 
-The way of retrieving data is by using the Visualisation API. Then [http://mbostock.github.com/d3/ d3.js] is used to create charts.
+The way of retrieving data is by using the chart API. Then [http://mbostock.github.com/d3/ d3.js] is used to create charts.
+
+<h1> Chart API </h1>
+
+The Chart API provide the functionality to retrieve data for a given task. The details of the API are as follows:
+
+== Base URL ==
+
+The base URL for the Chart API is as follows:
+
+http://beta.ausstage.edu.au/visualisation/chart?
+
+Combining this URL with the parameters outlines below retrieves data from AusStage database and RDF datastore.
+
+== Available Parameters ==
+
+|| *Name* || *Possible Values* || *Optional* || *Default* ||
+|| [NavigatingNetworksDatasetAPIlookup#task task]   || key-collaborators, system-property, collaborator, collaboration || No || ||
+|| [NavigatingNetworksDatasetAPIlookup#id id]     || Unique contributor id / system property id || No || ||
+|| [NavigatingNetworksDatasetAPIlookup#format format] || html xml json || Yes || html ||
+|| [NavigatingNetworksDatasetAPIlookup#sort sort]   || count id name || Yes || count || 
+|| [NavigatingNetworksDatasetAPIlookup#callback callback] || function name to use for a JSONP request || Yes || ||
