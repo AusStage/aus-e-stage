@@ -62,7 +62,7 @@
      * [NavigatingNetworksGraphMLFileFormat GraphML File Format]
      * [NavigatingNetworksServiceFeedback Networks Service Feedback]
    * [AusStageTerminator AusStage Terminator Service]
-   * [Visualisation Service]
+   * [VisualisationService Visualisation Service]
  * Other Software Under Development
    * Applications 
      * [WebsiteAnalytics Website Analytics]
