@@ -4,7 +4,7 @@
 
 The Visualisation Service is designed to display the statistical information on AusStage data in variant charts.
 
-The way of retrieving data is by using the chart API. Then [http://mbostock.github.com/d3/ d3.js] is used to create charts.
+The way of retrieving data is by using the chart API. Then [http://mbostock.github.com/d3/ d3.js] is used to create charts.More examples of charts can be found at [http://www.verisi.com/resources/d3-tutorial-basic-charts.htm d3.js:Examples of Basic Charts]
 
 <h1> Chart API </h1>
 
