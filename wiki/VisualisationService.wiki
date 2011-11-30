@@ -21,8 +21,7 @@ Combining this URL with the parameters outlines below retrieves data from AusSta
 == Available Parameters ==
 
 || *Name* || *Possible Values* || *Optional* || *Default* ||
-|| [NavigatingNetworksDatasetAPIlookup#task task]   || key-collaborators, system-property, collaborator, collaboration || No || ||
-|| [NavigatingNetworksDatasetAPIlookup#id id]     || Unique contributor id / system property id || No || ||
-|| [NavigatingNetworksDatasetAPIlookup#format format] || html xml json || Yes || html ||
-|| [NavigatingNetworksDatasetAPIlookup#sort sort]   || count id name || Yes || count || 
-|| [NavigatingNetworksDatasetAPIlookup#callback callback] || function name to use for a JSONP request || Yes || ||
+|| task   || key-collaborators, system-property, collaborator, collaboration || No || ||
+|| format ||  CSV / JSON || No || ||
+|| start  || 2000 || yes || 2000 ||
+|| end    || 2011 || yes || 2011 ||
