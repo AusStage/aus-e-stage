@@ -28,21 +28,21 @@ Combining this URL with the parameters outlines below retrieves data from AusSta
 
 === All Possible Values for task ===
 
-!EventsByStatusAndPrimaryGenre, 
-!EventsByStateAndPrimaryGenre,
-EventsByStateAndStatus,
-EventsCountByYear, 
-EventsCountByYearAndState, 
-EventsCountBySecondaryGenreAndYear,
-RecordCountNodeEdgeWeight, 
-DistributionOfDegree,
-EventsCount,
-ResourceCount, 
-ADSJoin, 
-OnStageJoin,
-BooksJoin,
-ResourceTypeCount,
-RecordCountsInFiveTables,
-NumOfConsByFunction,
-NumOfEvtsBySecGenre,
-NumOfEvtsByContentIndi
+ * !EventsByStatusAndPrimaryGenre 
+ * !EventsByStateAndPrimaryGenre
+ * !EventsByStateAndStatus
+ * !EventsCountByYear
+ * !EventsCountByYearAndState
+ * !EventsCountBySecondaryGenreAndYear
+ * !RecordCountNodeEdgeWeight
+ * !DistributionOfDegree
+ * !EventsCount
+ * !ResourceCount
+ * !ADSJoin
+ * !OnStageJoin
+ * !BooksJoin
+ * !ResourceTypeCount
+ * !RecordCountsInFiveTables
+ * !NumOfConsByFunction
+ * !NumOfEvtsBySecGenre
+ * !NumOfEvtsByContentIndi
