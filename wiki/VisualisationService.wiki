@@ -38,7 +38,7 @@ Combining this URL with the parameters outlines below retrieves data from AusSta
  * !DistributionOfDegree
  * !EventsCount
  * !ResourceCount
- * !ADSJoin
+ * ADSJoin
  * !OnStageJoin
  * !BooksJoin
  * !ResourceTypeCount
