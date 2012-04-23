@@ -2,6 +2,7 @@ package au.edu.ausstage.visualisation;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.servlet.ServletConfig;
@@ -23,6 +24,7 @@ public class ChartServlet extends HttpServlet {
 	private DataManager rdf;
 	private DatabaseManager db;
 	private String connectString = null;
+	private int earliest_year = 1700;
 	
 	private final String[] TASK_TYPES   = {"EventsByStatusAndPrimaryGenre", "EventsByStateAndPrimaryGenre",
 			"EventsByStateAndStatus", "EventsCountByYear", "EventsCountByYearAndState", 
@@ -86,8 +88,19 @@ public class ChartServlet extends HttpServlet {
 		
 		//Metric Visualisations/Event-count.xlsx
 		if (task.equalsIgnoreCase("EventsCountByYear")) {
-			y1 = getYearParam(request.getParameter("start"));						
-			y2 = getYearParam(request.getParameter("end"));
+			String start = request.getParameter("start");
+			String end = request.getParameter("end");
+			
+			if (start != null && !start.isEmpty())
+				y1 = getYearParam(start);						
+			else
+				y1 = earliest_year;
+			
+			if (end !=null && !end.isEmpty())
+				y2 = getYearParam(end);
+			else
+				y2 = Calendar.getInstance().get(Calendar.YEAR);
+
 			if (y1 > y2)
 				throw new ServletException("End year should be greater than start year!");
 			manager.getEventsByYear(y1, y2);

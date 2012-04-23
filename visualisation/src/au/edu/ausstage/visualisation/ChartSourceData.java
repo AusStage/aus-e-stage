@@ -126,7 +126,8 @@ public class ChartSourceData {
 		
 		for (int i = 0; i < columnName.length; i++) {
 			if (i != 0)
-				writer.append('\t');  
+				writer.append(',');
+				//writer.append('\t');  
 			writer.append(columnName[i]);			    			   
 		}
 		writer.append('\n');
@@ -134,7 +135,8 @@ public class ChartSourceData {
 		for (int i = 0; i < dataArr.length; i++){
 			for (int j = 0; j < dataArr[i].length; j++){
 				if (j != 0)
-					writer.append('\t');
+					//writer.append('\t');
+					writer.append(',');
 				writer.append(dataArr[i][j]);					
 			}	
 			writer.append('\n');

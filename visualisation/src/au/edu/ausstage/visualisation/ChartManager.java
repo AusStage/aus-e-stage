@@ -57,6 +57,8 @@ public class ChartManager {
 					 "ORDER BY Total";
 		
 		ResultSet results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return;
@@ -83,6 +85,8 @@ public class ChartManager {
 					 "ORDER BY Total";
 		
 		ResultSet results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);		
 		if (columnName == null)
 			return;
@@ -115,6 +119,8 @@ public class ChartManager {
 					 "order by Total";
 		
 		ResultSet results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);		
 		if (columnName == null)
 			return;
@@ -127,7 +133,7 @@ public class ChartManager {
 	public void getEventsByYear(int y1, int y2){
 		//String[] columnName = {"Year", "NumOfEvents"}; 
 			
-		String sql = "select yyyyfirst_date as \"Year\", count(eventid) as \"Num Of Events\" " +
+		String sql = "select yyyyfirst_date as \"Year\", count(eventid) as \"NumOfEvents\" " +
 					 "from events " + 
 					 "where yyyyfirst_date between ? and ? " +
 					 "group by yyyyfirst_date " +
@@ -136,6 +142,8 @@ public class ChartManager {
 		int param[] = {y1, y2};
 		
 		ResultSet results = db.exePreparedStatement(sql, param);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);			
 		if (columnName == null)
 			return;
@@ -171,6 +179,8 @@ public class ChartManager {
 		int param[] = {y1, y2};
 		
 		ResultSet results = db.exePreparedStatement(sql, param);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);			
 		if (columnName == null)
 			return;
@@ -215,7 +225,8 @@ public class ChartManager {
 		int param[] = {y1, y2};
 		
 		ResultSet results = db.exePreparedStatement(sql, param);
-		
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);	
 		if (columnName == null)
 			return;
@@ -246,12 +257,16 @@ public class ChartManager {
 		//get contributors count
 		sql = "select count(contributorid) as Contributors from contributor";
 		results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		count = getResult(results);
 		infoArr[1][1] = Integer.toString(count);
 				
 		//get events-contributors count
 		sql = "select count(conevlinkid) as \"Events-Contributors\" from conevlink";
 		results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		count = getResult(results);
 		infoArr[2][1] = Integer.toString(count);
 	
@@ -346,7 +361,8 @@ public class ChartManager {
 					 "order by Year";
 
 		ResultSet results_evtAdded = db.exeStatement(sql_evtAdded);
-	
+		if (results_evtAdded == null)
+			return;
 		String[] evtadded_columnName = getColumnName(results_evtAdded);	
 		if (evtadded_columnName == null)
 			return;
@@ -361,7 +377,8 @@ public class ChartManager {
 								"order by Year";
 
 		ResultSet results_evtUpdated = db.exeStatement(sql_evtUpdated);
-		
+		if (results_evtUpdated == null)
+			return;
 		String[] evtupdated_columnName = getColumnName(results_evtUpdated);	
 		if (evtupdated_columnName == null)
 			return;
@@ -393,7 +410,8 @@ public class ChartManager {
 						"order by Year";
 
 		ResultSet results_evtAdded = db.exeStatement(sql_evtAdded);
-
+		if (results_evtAdded == null)
+			return;
 		String[] evtadded_columnName = getColumnName(results_evtAdded);	
 		if (evtadded_columnName == null)
 			return;
@@ -403,6 +421,8 @@ public class ChartManager {
 		//get the total number of resource added during 2001 and 2005
 		String sql = "select count(itemid) from item where entered_date is null ";
 		ResultSet results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		int numOfResource2001_2005 = getResult(results);
 		
 		//get the number of estimated article from 2001 to 2005 
@@ -419,7 +439,8 @@ public class ChartManager {
 					 "order by Year";
 
 		ResultSet results_rscAdded = db.exeStatement(sql_rscAdded);
-		
+		if (results_rscAdded == null)
+			return;
 		String[] rscadded_columnName = getColumnName(results_rscAdded);	
 		if (rscadded_columnName == null)
 			return;
@@ -438,7 +459,8 @@ public class ChartManager {
 								"order by Year";
 
 		ResultSet results_rscUpdated = db.exeStatement(sql_rscUpdated);
-
+		if (results_rscUpdated == null)
+			return;
 		String[] rscUpdated_columnName = getColumnName(results_rscUpdated);	
 		if (rscUpdated_columnName == null)
 			return;
@@ -526,7 +548,8 @@ public class ChartManager {
 					 "order by count(item.itemid)";
 		
 		ResultSet results = db.exeStatement(sql);
-		
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);	
 		if (columnName == null)
 			return;
@@ -545,7 +568,8 @@ public class ChartManager {
 			return;
 			
 		ResultSet results = db.exePreparedStatement(sql, param);
-		
+		if (results == null)
+			return;
 		String[] columnJoinName = new String[9]; 
 		String[] columnName = getColumnName(results);
 		
@@ -647,7 +671,8 @@ public class ChartManager {
 		int[] param = {code};
 		
 		ResultSet results = db.exePreparedStatement(sql, param);
-
+		if (results == null)
+			return null;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)	return null;
 		
@@ -689,7 +714,8 @@ public class ChartManager {
 		
 		int[] param = {code};
 		ResultSet results = db.exePreparedStatement(sql, param);
-
+		if (results == null)
+			return null;
 		String[] columnName = getColumnName(results);
 		if (columnName == null) return null;
 		
@@ -728,7 +754,8 @@ public class ChartManager {
 		
 		int[] param = {code};
 		ResultSet results = db.exePreparedStatement(sql, param);
-
+		if (results == null)
+			return null;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)	return null;
 		
@@ -765,7 +792,8 @@ public class ChartManager {
 		
 		int[] param = {code};
 		ResultSet results = db.exePreparedStatement(sql, param);
-
+		if (results == null)
+			return null;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return null;
@@ -802,7 +830,8 @@ public class ChartManager {
 		
 		int[] param = {code};
 		ResultSet results = db.exePreparedStatement(sql, param);
-
+		if (results == null)
+			return null;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return null;
@@ -841,7 +870,8 @@ public class ChartManager {
 		
 		int[] param = {code};
 		ResultSet results = db.exePreparedStatement(sql, param);
-
+		if (results == null)
+			return null;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return null;
@@ -879,7 +909,8 @@ public class ChartManager {
 		
 		int[] param = {code};
 		ResultSet results = db.exePreparedStatement(sql, param);
-
+		if (results == null)
+			return null;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return null;
@@ -983,6 +1014,8 @@ public class ChartManager {
 					 "order by Count desc";
 
 		ResultSet results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return;
@@ -1002,6 +1035,8 @@ public class ChartManager {
 					 "order by Count desc";
 
 		ResultSet results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return;
@@ -1022,6 +1057,8 @@ public class ChartManager {
 					 "order by Count desc";				
 
 		ResultSet results = db.exeStatement(sql);
+		if (results == null)
+			return;
 		String[] columnName = getColumnName(results);
 		if (columnName == null)
 			return;
@@ -1039,6 +1076,8 @@ public class ChartManager {
 		
 		try {
 			rsmd = result.getMetaData();
+			if (rsmd == null)
+				return null;
 			numberOfColumns = rsmd.getColumnCount();
 			columnName = new String[numberOfColumns];
 			for (int i = 1; i < numberOfColumns + 1; i++){
@@ -1058,6 +1097,11 @@ public class ChartManager {
 		String[][] infoArr = null;
 		
 		try {			
+			if (results == null){
+				db.tidyup();
+				return null;
+			}
+				
 			// 	check to see that data was returned
 			if (!results.last()){	
 				db.tidyup();
@@ -1138,6 +1182,49 @@ public class ChartManager {
 		}
 		
 		return sql;
-	}	
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
+	
+		String connectString = "jdbc:oracle:thin:ausstage_schema/ausstage@www.ausstage.edu.au:1521:drama11";		
+		DatabaseManager db = new DatabaseManager(connectString);
+		ChartManager manager = new ChartManager(db);
+		//manager.getEventsByStatusAndPrimaryGenre();
+		//manager.getEventsByStateAndPrimaryGenre();
+		//manager.getEventsByStateAndStatus();
+		/*int y1 = 1950;
+		int y2 = 2011;*/
+		//manager.getEventsByYear(y1, y2);	
+		//manager.getEventsByYearAndState(y1, y2);
+		//manager.getEventsByYearAndSecondaryGenre(y1, y2);
+
+/*		DataManager rdf = new DataManager();
+		ChartManager manager = new ChartManager(db, rdf);*/
+		//manager.getRecordCountNodeEdgeWeight();
+		//manager.getDistributionOfDegree();
+		//manager.getEventsCount();
+		//manager.getResourceCount();
+		//manager.getResourceTypeCount();
+		manager.getJoin(43166, "OnStage_Join");
+		//manager.getJoin(5451, "ADS_Join");;
+		//manager.getADSContributor();
+		
+		String filename = "C:\\Documents and Settings\\ehlt_user\\Desktop\\Visualisation\\csv\\" + manager.sourceData.chartName + ".csv";
+		PrintWriter writer = new PrintWriter(filename);
+		manager.sourceData.toCSV(writer);
+		
+		if (manager.sourceData == null)
+			throw new RuntimeException("Chart source data is null!");			
+		
+		//manager.sourceData.printDataArr();
+		String json = manager.sourceData.toJSON(); 
+		System.out.println(json);				
+				
+		try {
+			db.closeDB();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
 	
 }
