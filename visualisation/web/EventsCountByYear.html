@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Events Count By Year</title>
+<script type="text/javascript" src="assets/d3.js"></script>
+</head>
+<body>
+<center>
+<div id="EventsCountByYear">
+<script type="text/javascript">
+var query = location.search.substring(1);
+var params = {};
+var keyValues = query.split(/&/);
+
+for(var i = 0; i< keyValues.length; i++){
+
+    var keyValuePairs = keyValues[i].split(/=/);
+    var key = keyValuePairs[0];
+    var value = keyValuePairs[1];
+    params[key] = value;
+} 
+
+var url = "chart?task=EventsCountByYear&format=json&" + query; 
+var start = parseInt(params['start']),
+	end = parseInt(params['end']);
+
+
+var w = 960,
+h = 500,
+p = 80,
+x = d3.scale.linear().range([0, w - 2*p]),
+y = d3.scale.linear().range([0, h - 2*p], .1);
+
+var vis = d3.select("#EventsCountByYear")
+	.append("svg")
+	.attr("class", "chart")  
+	.attr("width", "100%")
+	.attr("height", "100%")
+	.attr("viewBox", "0 0 960 500");
+
+//title
+vis.append("text")
+	.attr("class", "title")
+	.attr("x", 300)
+	.attr("y", p/2)
+	.attr("font-size", "20")
+	.text("AusStage: Events By Year");
+
+//year axis title
+vis.append("text")
+	.attr("class", "title")
+	.attr("x", w-2*p)
+	.attr("y", h - p/3)
+	.attr("font-size", "20")
+	.text("Year");
+
+//events axis title
+vis.append("text")
+	.attr("class", "title")
+	.attr("x", p/4)
+	.attr("y", 200)
+	.attr("font-size", "20")
+	.attr("transform", "rotate(-90, 20, 200)")
+	.text("Events");
+	
+	
+d3.json(url, function(data){	
+	var	sampSize = data.length;
+	
+	var x_year_label = new Array(),		
+		val_array = new Array();
+
+	for (var i=0; i < sampSize; i++) {
+		x_year_label[i] = parseInt(data[i].Year);	    
+	    val_array[i] = parseInt(data[i].NumOfEvents);
+	} 
+
+	 data.forEach(function(d) { 
+		d.Year = +d.Year; 
+		d.NumOfEvents = +d.NumOfEvents;	
+	});
+	 
+	// Compute the extent of the data set in years and events count.	 
+	 var year0 = d3.min(data, function(d) { return d.Year; }),
+	 	 year1 = d3.max(data, function(d) { return d.Year; });
+	 
+	 var evtCount0 = d3.min(data, function(d) { return d.NumOfEvents; })
+	 	 max_NumOfEvt = d3.max(data, function(d) { return d.NumOfEvents; });
+	 
+	 if (max_NumOfEvt >= 1000)
+	 	var evtCount1 = Math.ceil(max_NumOfEvt / 100) * 100;
+	 else
+	 	var evtCount1 = Math.ceil(max_NumOfEvt /10) * 10; 
+	 	 
+	// Update the scale domains.	
+	x.domain([year0, year1]);
+	y.domain([0, evtCount1]); 
+	
+ 	// Place y axis tick labels
+ 	var rule_y = vis.selectAll("g.rule_y")
+ 					.data(y.ticks(10))
+					.enter().append("g")
+					.attr("class", "rule_y")		
+					.attr("transform", function(d) { return "translate(40," + (y(d) + p) + ")"; });
+ 					
+ 	rule_y.append("line")
+ 		.attr("x1", 40)
+ 	    .attr("x2", w-p)
+ 	    .attr("stroke", "grey")
+ 	    .attr("stroke-width", "0.2");
+	
+ 	rule_y.append("text")
+ 	     .attr("x", 30) 	    
+ 	     .attr("dy", ".35em")
+ 	     .attr("font-size", "13")
+  	     .attr("fill", "blue") 
+  	     .attr("text-anchor", "end")
+ 	     .text(function(d) { return evtCount1 - Math.round(d); });
+  	
+ 	// Place x axis (year) tick labels
+ 	var continued_year_tick = new Array();
+ 	var continued_value = new Array();
+ 	
+	var j = 0;
+	//Since there is no event recorded in some years, x_year_label is not continued 
+	for (var i = year0; i <= end; i ++) {
+		continued_year_tick[j] = i;
+		var index = x_year_label.indexOf(i);
+		if (index != -1)
+			continued_value[j] = val_array[index];
+		else
+			continued_value[j] = 0;
+		
+		j++;
+	}
+	
+	var continue_sample_size = j - 1;
+ 	var year_tick = new Array();
+ 	
+	if (continue_sample_size <= 15) 
+	    year_tick = continued_year_tick.slice(0);
+	
+ 	else if (continue_sample_size > 15 && continue_sample_size <= 100) {
+ 		var j = 0;
+ 		for (var i=0; i < continue_sample_size; i = i+5) { 		
+ 			year_tick[j] = continued_year_tick[i];
+ 			j++;
+ 		}
+  	}else if(continue_sample_size > 100) {
+   		var j = 0;
+ 		for (var i=0; i < continue_sample_size; i = i + 20) { 			 			
+ 			year_tick[j] = continued_year_tick[i];
+ 			j++; 			
+ 		}
+	} 
+ 	
+ 	var rule_x = vis.selectAll("g.rule_x")
+    	.data(year_tick)
+    	.enter().append("g")
+     	.attr("class", "rule_x")
+     	.attr("transform", function(d, i) { return "translate(" + (p + x(year_tick[i])) + " ," + (h - p) + ")"; });		
+ 	
+ 	 rule_x.append("text")
+	    .attr("x", 0)
+	    .attr("y", 10)
+	    .attr("dy", ".35em")
+	    .attr("font-size", "13")
+	    .attr("fill", "blue") 
+	    .attr("text-anchor", "middle")
+	    .text(function(d, i) { 	return year_tick[i];    });	    
+	 
+ 	 rule_x.append("line")
+ 	 	.attr("x1", 0)
+ 	 	.attr("x2", 0)
+ 	 	.attr("y1", 0)
+ 	 	.attr("y2", 3)
+ 	 	.attr("stroke", "blue")
+ 	 	.attr("stroke-width", "1");
+	 
+	var barWidth = (w-2*p)/continue_sample_size/1.5;
+	
+ 	var rect = vis.selectAll("rect")
+ 	     	.data(continued_value)
+ 	     	.enter().append("rect") 	     	
+ 	     	.attr("x", function(d, i) {	return p + x(continued_year_tick[i]);  })
+ 	     	.attr("y", function(d, i) {	return h - p - y(continued_value[i]);		})
+ 	     	.attr("fill", "steelblue")
+ 	     	.attr("title", function(d, i) { return continued_value[i] + " / Yr " + continued_year_tick[i] ; })
+ 	     	.attr("width", barWidth)
+ 	     	.attr("height", function(d, i) { return y(continued_value[i]); });
+	
+});
+
+</script>
+</div>
+</center>
+</body>
+</html>
