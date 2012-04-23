@@ -3,87 +3,146 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Visualisation for AusStage statistical information</title>
+<script type="text/javascript" src="assets/d3.js"></script>
 </head>
 <body>
 
-<p><font color="red"> // Metric Visualisations / AusStageMatrices.xlsx </font></p>
-<table width="800" border="1">
+<!-- <p><font color="red"> // Metric Visualisations / AusStageMatrices.xlsx </font></p>-->
 
 <!-- Events By Status And Primary Genre  -->
-<tr>
-<form action="/visualisation/chart" method="get" >
-<td width="60%">Events By Status And Primary Genre 
-	<input type="hidden" name="task" size=80 value="EventsByStatusAndPrimaryGenre"> 
-</td>
-<td width="30%">
-	<input type="radio" name="format" value="csv" checked="checked"/> CSV
-	<input type="radio" name="format" value="json" /> JSON
-</td>
-<td width="10%">
-	<input type="submit" name="submit" value="Go"/>
-</td>
-</form>
-</tr>
+<table width="800"><tr>
+<td width="50%"><b>Events By Status And Primary Genre</b></td>
+<td width="10%"><a href="javascript:void(0)" onclick="open_win_EventsByStatusAndPrimaryGenre()">Chart</a></td>
+<td width="20%"><a href="chart?task=EventsByStatusAndPrimaryGenre&format=csv">Download CSV</a></td>
+<td width="20%"><a href="chart?task=EventsByStatusAndPrimaryGenre&format=json">Download JSON</a></td>  
+</tr></table>
+<script type="text/javascript">
+function open_win_EventsByStatusAndPrimaryGenre(){
+	window.open("EventsByStatusAndPrimaryGenre.html","Events By Status And Primary Genre", "width=800,height=500");
+}
+</script>
 
+<br>
 <!-- Events By State And Primary Genre -->
-<tr>
-<form action="/visualisation/chart" method="get" >
-<td width="60%">Events By State And Primary Genre 
-	<input type="hidden" name="task" size=80 value="EventsByStateAndPrimaryGenre"> 
-</td>
-<td width="30%">
-	<input type="radio" name="format" value="csv" checked="checked"/> CSV
-	<input type="radio" name="format" value="json" /> JSON
-</td>
-<td width="10%">
-	<input type="submit" name="submit" value="Go"/>
-</td>
-</form>
-</tr>
+<table width="800"><tr>
+<td width="50%"><b>Events By State And Primary Genre</b></td>
+<td width="10%"><a href="javascript:void(0)" onclick="open_win_EventsByStateAndPrimaryGenre()">Chart</a></td> 
+<td width="20%"><a href="chart?task=EventsByStateAndPrimaryGenre&format=csv">Download CSV</a></td>
+<td width="20%"><a href="chart?task=EventsByStateAndPrimaryGenre&format=json">Download JSON</a></td>
+</tr></table>
+<script type="text/javascript">
+function open_win_EventsByStateAndPrimaryGenre(){
+	window.open("EventsByStateAndPrimaryGenre.html","Events By State And Primary Genre", "width=700,height=500");
+}
+</script>
 
+<br>
 <!-- Events By State And Status -->
-<tr>
-<form action="/visualisation/chart" method="get" >
-<td width="60%">Events By State And Status 
-	<input type="hidden" name="task" size=80 value="EventsByStateAndStatus"> 
-</td>
-<td width="30%">
-	<input type="radio" name="format" value="csv" checked="checked"/> CSV
-	<input type="radio" name="format" value="json" /> JSON
-</td>
-<td width="10%">
-	<input type="submit" name="submit" value="Go"/>
-</td>
-</form>
-</tr>
-</table> 
+<table width="800"><tr>
+<td width="50%"><b>Events By State And Status</b></td> 
+<td width="10%"><a href="javascript:void(0)" onclick="open_win_EventsByStateAndStatus()">Chart</a></td> 
+<td width="20%"><a href="chart?task=EventsByStateAndStatus&format=csv">Download CSV</a></td>
+<td width="20%"><a href="chart?task=EventsByStateAndStatus&format=json">Download JSON</a></td>
+</tr></table> 
+<script type="text/javascript">
+function open_win_EventsByStateAndStatus(){
+	window.open("EventsByStateAndStatus.html","Events By State And Status", "width=1000,height=500");
+}
+</script>
 <br>
 
-<p><font color="red"> // Metric Visualisations / Event-count.xlsx </font></p>
-<table width="800" border="1">
-
+<!-- <p><font color="red"> // Metric Visualisations / Event-count.xlsx </font></p> -->
 <!-- Events Count By year  -->
-<tr>
-<form action="/visualisation/chart" method="get" >
-<td width="30%">Events Count By Year 
-	<input type="hidden" name="task" size=80 value="EventsCountByYear"> 
+<table width="800"><tr>
+<td width="20%"><b>Events Count By Year</b></td>
+<td width="15%">Start Year:
+	<input type="text" name="start" id="start" size=4 value="2000" onChange="setStartYear(0)">
 </td>
-<td with="20%">Start Year
-	<input type="text" name="start" size=4 value="2000">
+<td width="15%">End Year:
+	<input type="text" name="end" id="end" size=4 value="2011" onChange="setEndYear(0)">
 </td>
-<td with="20%">End Year
-	<input type="text" name="end" size=4 value="2011">
-</td>
-<td width="20%">
-	<input type="radio" name="format" value="csv" checked="checked"/> CSV
-	<input type="radio" name="format" value="json" /> JSON
-</td>
-<td width="10%">
-	<input type="submit" name="submit" value="Go"/>
-</td>
-</form>
-</tr>
-</table>
+<td width="10%"><a href="javascript:void(0)" onclick="open_win_EventCountByYear(0)">Chart</a></td>
+<td width="15%"><a id="EventCountCSV" onclick="setQueryString('EventCountCSV', 'CSV',0)">Download CSV</a></td>
+<td width="15%"><a id="EventCountJSON" onclick="setQueryString('EventCountJSON', 'JSON', 0)">Download JSON</a></td>  
+</tr></table> 
+
+<script type="text/javascript">
+	function setStartYear(i){
+		var start = document.getElementsByName('start')[i].value;
+		validateYear(start);
+	}
+	
+	function setEndYear(i){		
+		var end = document.getElementsByName('end')[i].value;
+		validateYear(end);
+	}
+	
+	function setQueryString(id, format, i){
+		var start = document.getElementsByName('start')[i].value,
+			end = document.getElementsByName('end')[i].value;
+		
+		var queryStr;
+		
+		if (validateYear(start) && validateYear(end) && isLess(start, end)){
+		
+			switch(id){
+			case "EventCountCSV":
+				queryStr = "chart?task=EventsCountByYear&format=" + format + "&start=" + start + "&end=" + end;
+				break;
+			case "EventCountJSON":
+				queryStr = "chart?task=EventsCountByYear&format=" + format + "&start=" + start + "&end=" + end;
+				break;
+			
+			}
+		
+			document.getElementById(id).setAttribute("href", queryStr);
+		} else {
+			alert("End year should be greater than start year!");
+		}
+	}
+	
+	function open_win_EventCountByYear(i){
+		var start = document.getElementsByName('start')[i].value,
+			end = document.getElementsByName('end')[i].value;
+	
+		if (validateYear(start) && validateYear(end) && isLess(start, end)){	
+			if (end == ""){ 
+				var d = new Date();
+				end = d.getFullYear();
+			}
+			window.open("EventsCountByYear.html?start=" + start + "&end=" + end,"Events Count by Year", "width=1000,height=500");
+		}else{
+			alert("End year should be greater than start year!");
+		}		
+	}	
+	
+	function validateYear(obj){
+		if (obj.length !=0)    {
+			var text = /^[0-9]+$/;
+			
+			if ((obj != "") && (!text.test(obj))){
+				alert("Please Enter Numeric Values Only");
+				return false;
+			}
+			if ((obj.length>4) || (obj.length<4)){ 
+				alert("Year is not proper. Please check");
+				return false;
+			}	
+		}
+		return true;
+	}
+	
+	function isLess(start, end){
+		if (start < end) {			
+			return true;
+		}else if (end == ""){			
+			return true;						
+		} else
+			return false;
+	}
+</script>
+
+
 <br>
 
 <p><font color="red"> // Metric Visualisations / Event-count-state.xlsx </font></p>

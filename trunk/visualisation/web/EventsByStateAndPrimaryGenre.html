@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Events By State And Primary Genre</title>
+<script type="text/javascript" src="assets/d3.js"></script>
+</head>
+<body>
+<!-- Events By State And Primary Genre -->
+
+<center>
+<div id="EventsByStateAndPrimaryGenre">
+
+<script type="text/javascript">
+
+d3.json("chart?task=EventsByStateAndPrimaryGenre&format=json", function(data) {
+	/*  first row => State, Theatre_Spoken_word, Music_Theatre, Dance, Music, Other */
+	var	sampSize = 0;
+	
+	var y_state_label = new Array(),
+		x_genre_label = ["Other", "Music", "Dance", "Music Theatre", "Theatre Spoken word"],
+		genre_color = ["blue", "red", "olivedrab", "blueviolet", "maroon" ],
+		val_array = new Array();
+		
+	sampSize = data.length;
+
+	for (var i=0; i < sampSize; i++) {
+		y_state_label[i] = data[i].State;	    
+	    val_array[i] = [parseInt(data[i].Other), parseInt(data[i].Music), parseInt(data[i].Dance), parseInt(data[i].Music_Theatre), parseInt(data[i].Theatre_Spoken_Word)  ];
+	}
+	    
+	var w = 500,
+    h = 300,
+    p = 80,
+    x = d3.scale.ordinal().domain(d3.range(x_genre_label.length)).rangeBands([0, w], .2),   
+    y = d3.scale.ordinal().domain(d3.range(sampSize)).rangeBands([0, h], .2);
+    
+	var vis = d3.select("#EventsByStateAndPrimaryGenre")
+		.append("svg")
+		  .attr("class", "chart")
+		  //.attr("width", w + p*2)
+		  //.attr("height", h + p)
+		  .attr("width", "100%")
+		  .attr("height", "100%")
+		  .attr("viewBox", "0 0 700 500")
+		.append("g");
+	
+	//title
+	vis.append("text")
+    .attr("x", 200)
+    .attr("y", 25)
+    //.attr("font-family", "serif")
+    //.attr("font-weight", "bold")
+    .attr("font-size", "20")
+    .attr("text-anchor", "left")
+    .text("Events By State And Primary Genre");
+	
+	var rule_x = vis.selectAll("g.rule_x")
+    	.data(x_genre_label)
+    .enter().append("g")
+     	.attr("class", "rule_x")
+		.attr("transform", function(d) { return "translate(" + x(d) + ", " + p + ")"; })
+		.append("g")
+		.attr("transform", "rotate(-20)");
+	
+	// Place x axis tick labels
+	   rule_x.append("text")
+	    .attr("x", 10)
+	    .attr("y", h+p/2)
+	    .attr("text-anchor", "middle")
+	    .text(function(d, i) { return x_genre_label[i]; });
+	
+	var rule_y = vis.selectAll("g.rule_y")
+		.data(y_state_label)
+		.enter().append("g")
+		.attr("class", "rule_y")		
+		.attr("transform", function(d) { return "translate(0, " + p + ")"; });
+	
+	// Place y axis tick labels
+	rule_y.append("text")
+		.attr("x", p)
+	    .attr("y", y)
+	    //.attr("font-weight", "bold")
+	    .attr("text-anchor", "end")
+	    .text(function(d, i) { return y_state_label[i]; });
+	
+	//draw circle
+	var circle_center = p * 1.5;
+	
+	for (var i = 0; i < sampSize; i++) {
+		var circle = vis.selectAll("g.circle_" + i)
+    		.data(x_genre_label)
+    		.enter().append("g")
+     		.attr("class", "circle_" + i)
+			//.attr("transform", function(d) { return "translate(" + x(d) + "," + i*p + ")"; });     		
+     		.attr("transform", function(d) { return "translate(" + x(d) + "," + i*p/2 + ")"; });
+     		
+			circle.append("circle")
+			.attr("title", function(d, j) { return val_array[i][j]; })
+			.attr("cx", circle_center)
+	    	.attr("cy", p - i*7)
+	    	.attr("r", function(d, j) { return Math.sqrt( val_array[i][j] / Math.PI) / 2; })	    	
+	    	.attr("fill", function(d, j){ return genre_color[j]; } )
+	    	.attr("fill-opacity", 0.8);
+			
+			/* circle.append("text")
+			 .attr("text-anchor", "middle")
+	         .attr("x", function(d, j) { return circle_center + Math.sqrt( val_array[i][j] / Math.PI) / 2 + i * 3; })
+	         .attr("y", p - i * 7)	    
+	         .attr("fill", "black")
+	         .text(function(d, j) {  return val_array[i][j]; }); */
+	}
+	
+});
+
+</script>
+</div>
+</center>
+</body>
+</html>
