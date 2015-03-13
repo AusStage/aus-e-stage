@@ -1,0 +1,1 @@
+Notes relating to the demonstration of the [Mapping Service (Mapping2)](http://beta.ausstage.edu.au/mapping2/) during the Beta Testing phase are [available for download](http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/Demonstration_of_the_New_Aus-e-Stage_Mapping_Service_March_7_2011.pdf) as a PDF file.

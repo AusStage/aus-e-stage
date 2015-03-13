@@ -1,0 +1,1 @@
+The report based on the feedback to the Alpha 2 Testing phase for the Mapping Service is now [available for download](http://aus-e-stage.googlecode.com/svn/trunk/wiki-assets/mapping-alpha-2-testing-report-july-2010.pdf) as a PDF file.
